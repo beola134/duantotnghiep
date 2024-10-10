@@ -1,13 +1,20 @@
 var createError = require('http-errors');
 var express = require('express');
+const cors = require("cors");
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
+var sequelize = require('./config/database'); // Import sequelize instance
+var cateRouter = require('./routes/cateRouters');
+var productRouter = require('./routes/productRouters');
+var userRouter = require('./routes/usersRouters');
+var commentRouter = require('./routes/commentRouters');
+var donhangRouter = require('./routes/donhangRouters');
+var ptttRouter = require('./routes/ptttRouters');
+var voucherRouter = require('./routes/voucherRouters');
+var saleRouter = require('./routes/saleRouters');
 var app = express();
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -19,8 +26,34 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/cate', cateRouter);
+app.use('/product', productRouter);
+app.use('/users', userRouter);
+app.use('/comment', commentRouter);
+app.use('/donhang', donhangRouter);
+app.use('/pttt', ptttRouter);
+app.use('/voucher', voucherRouter);
+app.use('/sale', saleRouter);
+
+
+sequelize.authenticate()
+  .then(() => {
+    console.log('Kết nối đến cơ sở dữ liệu đã được thiết lập thành công.');
+
+    // Đồng bộ các mô hình và khởi động server
+    sequelize.sync()
+      .then(() => {
+        app.listen(3000, () => {
+          console.log('Server đang chạy trên http://localhost:5000');
+        });
+      })
+      .catch(err => {
+        console.error('Không thể đồng bộ cơ sở dữ liệu:', err);
+      });
+  })
+  .catch(err => {
+    console.error('Không thể kết nối với cơ sở dữ liệu:', err);
+  });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
