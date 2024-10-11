@@ -1,15 +1,26 @@
 const Cate = require("../models/cate");
 const upload = require("../config/update");
+const { Op } = require('sequelize'); // Import Op từ sequelize
 
 // Lấy tất cả danh mục
 exports.getAllCates = async (req, res) => {
   try {
-    const cates = await Cate.findAll();
-    res.json({cates});
+    const cates = await Cate.findAll({
+      where: {
+        _id: {
+          [Op.notIn]: [
+            '09204055-d105-4c21-90e3-58ee82d2f65a', 
+            '92ad8d9a-fba0-48db-a93d-6974bb5a9ed9'
+          ]
+        }
+      }
+    });
+    res.json({ cates });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 // Hàm xử lý việc thêm danh mục với hình ảnh
 exports.addCate = async (req, res) => {
