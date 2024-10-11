@@ -84,6 +84,9 @@ router.get("/allsp/getXuatXuTS", productController.getXuatXuTS);
 //http://localhost:5000/product/allsp/getXuatXuNB"
 router.get("/allsp/getXuatXuNB", productController.getXuatXuNB);
 
+// Show sản phẩm theo id danh mục  vòng tay trang sức
+//http://localhost:5000/product/category/loai/:id/"
+router.get("/category/loai/:id/", productController.getProdctsCateLoai);
 
 //show tất cả sản phẩm
 //http://localhost:5000/product/allsp

@@ -150,7 +150,7 @@ exports.getProductsUnderTwoMillion = async (req, res) => {
     const products = await Product.findAll({
       where: {
         gia_san_pham: {
-          [Op.lt]: 2000000, // Sản phẩm có giá nhỏ hơn 2 triệu
+          [Op.lt]: 2000000,
         },
       },
     });
@@ -374,6 +374,31 @@ exports.getXuatXuNB = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// Show sản phẩm theo id danh mục  vòng tay trang sức
+exports.getProdctsCateLoai = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        id_danh_muc: req.params.id,
+        loai: {
+          [Op.in]: ["Vòng Tay", "Trang Sức"],
+        },
+      },
+    });
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
+    }
+
+    const cate = await Category.findOne({ where: { _id: req.params.id } });
+
+    res.json({ products, cate });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 
 // Lấy tất cả sản phẩm
