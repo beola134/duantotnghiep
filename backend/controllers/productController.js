@@ -357,9 +357,16 @@ exports.getAllProducts = async (req, res) => {
 exports.getProductsByCate = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { id_danh_muc: req.params.id },
+      where: {
+        id_danh_muc: req.params.id,
+        loai: {
+          [Op.notIn]: ["Vòng Tay", "Trang Sức"],
+        },
+      },
     });
+
     const cate = await Category.findOne({ where: { _id: req.params.id } });
+
     res.json({ products, cate });
   } catch (error) {
     res.status(500).json({ error: error.message });
