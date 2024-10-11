@@ -8,7 +8,10 @@ const { Op } = require("sequelize");
 exports.getNewProductsMale = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { gioi_tinh: "Nam" },
+      where: {
+        gioi_tinh: "Nam",
+        loai: { [Op.not]: "Vòng Tay" }
+      },
       order: [["createdAt", "DESC"]],
       limit: 10,
     });
@@ -26,7 +29,10 @@ exports.getNewProductsMale = async (req, res) => {
 exports.getNewProductsFeMale = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { gioi_tinh: "Nữ" },
+      where: {
+        gioi_tinh: "Nữ",
+        loai: { [Op.not]: "Vòng Tay" }
+      },
       order: [["createdAt", "DESC"]],
       limit: 10,
     });
@@ -44,7 +50,10 @@ exports.getNewProductsFeMale = async (req, res) => {
 exports.getNewProductsCouple = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { gioi_tinh: "Đồng Hồ Đôi" },
+      where: {
+        gioi_tinh: "Đồng Hồ Đôi",
+        loai: { [Op.not]: "Vòng Tay" },
+      },
       order: [["createdAt", "DESC"]],
       limit: 10,
     });
@@ -336,6 +345,29 @@ exports.getChatLieuDayDu = async (req, res) => {
   try {
     const cates = await Product.findAll({
       where: { chat_lieu_day: "Dây dù" }, // Ensure the value matches the ENUM casing
+    });
+    res.json(cates);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Lấy danh mục theo xuatxuTS
+exports.getXuatXuTS = async (req, res) => {
+  try {
+    const cates = await Product.findAll({
+      where: { xuat_xu: "Thụy Sỹ" }, // Ensure the value matches the ENUM casing
+    });
+    res.json(cates);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+// Lấy danh mục theo xuatxuNB
+exports.getXuatXuNB = async (req, res) => {
+  try {
+    const cates = await Product.findAll({
+      where: { xuat_xu: "Nhật Bản" }, // Ensure the value matches the ENUM casing
     });
     res.json(cates);
   } catch (error) {

@@ -76,6 +76,14 @@ router.get("/allsp/getChatLieuDayDa", productController.getChatLieuDayDa);
 //http://localhost:5000/product/allsp/getChatLieuDayDu"
 router.get("/allsp/getChatLieuDayDu", productController.getChatLieuDayDu)
 
+// show sản phẩm thêm Xuất xứ TS
+//http://localhost:5000/product/allsp/getXuatXuTS"
+router.get("/allsp/getXuatXuTS", productController.getXuatXuTS);
+
+// show sản phẩm thêm Xuất xứ NB
+//http://localhost:5000/product/allsp/getXuatXuNB"
+router.get("/allsp/getXuatXuNB", productController.getXuatXuNB);
+
 
 //show tất cả sản phẩm
 //http://localhost:5000/product/allsp
