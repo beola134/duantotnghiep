@@ -146,26 +146,19 @@ exports.resetPassword = async (req, res) => {
 };
 
 // Đăng ký tài khoản
+
 exports.register = async (req, res) => {
   try {
-    const {
-      ten_dang_nhap,
-      mat_khau,
-      nhap_lai_mat_khau,
-      email,
-    } = req.body;
-    
-    const hinh_anh = req.file ? req.file.filename : null; // Lấy tên tệp hình ảnh đã tải lên
-    const quyen = req.body.quyen || "2"; // Đặt giá trị mặc định là '2' nếu không được cung cấp
-
-    // Kiểm tra mật khẩu và nhập lại mật khẩu có khớp hay không
+    const { ten_dang_nhap, mat_khau, nhap_lai_mat_khau, email } = req.body;
+    const hinh_anh = req.file ? req.file.filename : null;
+    const quyen = req.body.quyen || "2";
+    // Kiểm tra mật khẩu và nhập lại mật khẩu có khớp không
     if (mat_khau !== nhap_lai_mat_khau) {
       return res.status(400).json({
         message: "Mật khẩu và nhập lại mật khẩu không khớp",
       });
     }
-
-    // Kiểm tra xem email đã được sử dụng chưa
+    // Kiểm tra email đã tồn tại
     const emailExist = await Users.findOne({ where: { email } });
     if (emailExist) {
       return res.status(400).json({
@@ -175,18 +168,49 @@ exports.register = async (req, res) => {
     // Tạo mật khẩu bảo mật
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(mat_khau, salt);
-    // Tạo người dùng mới
+    // Tạo mã OTP ngẫu nhiên
+    const otp = crypto.randomInt(100000, 999999);
+    // Tạo thời gian hết hạn cho mã OTP 10 phút
+    const otpExpires = Date.now() + 10 * 60 * 1000;
+    // Tạo người dùng mới và lưu mã OTP vào cơ sở dữ liệu
     const user = await Users.create({
       ten_dang_nhap,
       mat_khau: hashPassword,
       email,
       hinh_anh,
       quyen,
+      otp,
+      otpExpires,
     });
 
+    // Cấu hình gửi email OTP
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: "nguyentantai612004@gmail.com",
+        pass: "dmez voqj ozar xfzw",
+      },
+    });
+
+    const mailOptions = {
+      from: 'nguyentantai612004@gmail.com',
+      to: email,
+      subject: 'Mã OTP xác thực tài khoản',
+      text: `Mã OTP của bạn là: ${otp}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+     // Thiết lập hẹn giờ xóa tài khoản sau 10phút nếu không được xác thực
+    setTimeout(async () => {
+      const user = await Users.findOne({ where: { email } });
+      if (user.otpExpires < Date.now()) {
+        await user.destroy();
+      }
+    }
+    , 10 * 60 * 1000);
+
     res.status(200).json({
-      message: "Đăng ký tài khoản thành công",
-      data: user,
+      message: "Đăng ký tài khoản thành công. Vui lòng kiểm tra email để nhận mã OTP.",
     });
   } catch (error) {
     res.status(500).json({
@@ -194,6 +218,40 @@ exports.register = async (req, res) => {
     });
   }
 };
+
+//kiểm tra mã otp và xác thực tài khoản
+exports.verifyOtp = async (req, res) => {
+  try {
+    const { otp } = req.body;
+    // Tìm người dùng với mã OTP
+    const user = await Users.findOne({ where: { otp } });
+    if (!user) {
+      return res.status(400).json({
+        message: "Mã OTP không đúng",
+      });
+    }
+    // Kiểm tra thời gian hết hạn của OTP
+    if (user.otpExpires < Date.now()) {
+      return res.status(400).json({
+        message: "Mã OTP đã hết hạn",
+      });
+    }
+    // Xác thực thành công, xóa mã OTP sau khi xác thực
+    user.otp = null;
+    user.otpExpires = null;
+    await user.save();
+    res.status(200).json({
+      message: "Xác thực OTP thành công",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+
+
 
 // login tài khoản bằng email và mật khẩu
 exports.login = async (req, res) => {
