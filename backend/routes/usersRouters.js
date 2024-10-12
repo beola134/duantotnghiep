@@ -15,6 +15,9 @@ router.get('/', usersController.getAllUsers);
 // Đăng ký tài khoản
 //http://localhost:5000/users/register
 router.post('/register', upload.single('hinh_anh'), usersController.register);
+//kiểm tra mã otp có đúng không
+//http://localhost:5000/users/verifyotp
+router.post('/verifyotp', usersController.verifyOtp);
 
 // Đăng nhập tài khoản
 //http://localhost:5000/users/login
