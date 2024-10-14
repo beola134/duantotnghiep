@@ -43,6 +43,10 @@ const User = sequelize.define('User', {
         allowNull: true,
         defaultValue: '2'
     },
+    googleId:{
+        type: DataTypes.STRING(255),
+        allowNull: true
+    },
     resetPasswordToken: {
         type: DataTypes.STRING(255),
         allowNull: true
