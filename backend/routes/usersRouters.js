@@ -3,6 +3,7 @@ const router = express.Router();
 const usersController = require('../controllers/userController');
 const upload = require('../config/update');
 const crypto = require('crypto');
+const googleLogin = require('../controllers/logingoogleController');
 
 // Lấy thông tin người dùng theo id
 //http://localhost:5000/users/:id
@@ -48,4 +49,7 @@ router.put('/update/:id', upload.single('hinh_anh'), usersController.updateUser)
 //http://localhost:5000/users/sendotp
 // router.post('/sendotp', usersController.sendOTP);
 
+//api đăng nhập bằng google
+//http://localhost:5000/users/auth/google
+router.post('/auth/google', googleLogin.googleLogin);
 module.exports = router;
