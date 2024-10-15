@@ -386,4 +386,3 @@ exports.updateUser = async (req, res) => {
 
 
 // API xóa người dùng theo id
-// Path: DELETE /api/users/:id
