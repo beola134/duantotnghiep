@@ -1,24 +1,24 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const usersController = require('../controllers/userController');
-const upload = require('../config/update');
-const crypto = require('crypto');
-const googleLogin = require('../controllers/logingoogleController');
+const usersController = require("../controllers/userController");
+const upload = require("../config/update");
+const crypto = require("crypto");
+const googleLogin = require("../controllers/logingoogleController");
 
 // Lấy thông tin người dùng theo id
 //http://localhost:5000/users/:id
-router.get('/:id', usersController.getUserById);
+router.get("/:id", usersController.getUserById);
 
 //show tất cả người dùng
 //http://localhost:5000/users
-router.get('/', usersController.getAllUsers);
+router.get("/", usersController.getAllUsers);
 
 // Đăng ký tài khoản
 //http://localhost:5000/users/register
-router.post('/register', upload.single('hinh_anh'), usersController.register);
+router.post("/register", upload.single("hinh_anh"), usersController.register);
 //kiểm tra mã otp có đúng không
 //http://localhost:5000/users/verifyotp
-router.post('/verifyotp', usersController.verifyOtp);
+router.post("/verifyotp", usersController.verifyOtp);
 
 // Đăng nhập tài khoản
 //http://localhost:5000/users/login
@@ -26,24 +26,23 @@ router.post('/verifyotp', usersController.verifyOtp);
 //     "email": "nguyentai12a72122@gmail.com",
 //     "mat_khau": "1111111111"
 // }
-router.post('/login', usersController.login);
+router.post("/login", usersController.login);
 
 //quên mật khẩu
 //http://localhost:5000/users/forgotpassword
-router.post('/forgotpassword', usersController.forgotPassword);
+router.post("/forgotpassword", usersController.forgotPassword);
 
 //đặt lại mật khẩu
 //http://localhost:5000/users/resetpassword/:resetToken
-router.put('/resetpassword/:resetToken', usersController.resetPassword);
+router.put("/resetpassword/:resetToken", usersController.resetPassword);
 
 //đổi mật khẩu
 //http://localhost:5000/users/changepassword
-router.put('/changepassword', usersController.changePassword);
-
+router.put("/changepassword", usersController.changePassword);
 
 //cap nhat thong tin nguoi dung
 //http://localhost:5000/users/update/:id
-router.put('/update/:id', upload.single('hinh_anh'), usersController.updateUser);
+router.put("/update/:id", upload.single("hinh_anh"), usersController.updateUser);
 
 //api gửi mã về số điện thoại
 //http://localhost:5000/users/sendotp
@@ -51,5 +50,5 @@ router.put('/update/:id', upload.single('hinh_anh'), usersController.updateUser)
 
 //api đăng nhập bằng google
 //http://localhost:5000/users/auth/google
-router.post('/auth/google', googleLogin.googleLogin);
+router.post("/auth/google", googleLogin.googleLogin);
 module.exports = router;
