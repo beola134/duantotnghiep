@@ -383,3 +383,6 @@ exports.updateUser = async (req, res) => {
     });
   }
 };
+
+
+// API xóa người dùng theo id
