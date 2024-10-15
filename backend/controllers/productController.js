@@ -19,7 +19,7 @@ exports.getNewProductsMale = async (req, res) => {
     if (products.length === 0) {
       return res.status(404).json({ message: "Không có sản phẩm nào" });
     }
-    res.json(products);
+    res.json({products});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -40,7 +40,7 @@ exports.getNewProductsFeMale = async (req, res) => {
     if (products.length === 0) {
       return res.status(404).json({ message: "Không có sản phẩm nào" });
     }
-    res.json(products);
+    res.json({products});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -61,7 +61,7 @@ exports.getNewProductsCouple = async (req, res) => {
     if (products.length === 0) {
       return res.status(404).json({ message: "Không có sản phẩm nào" });
     }
-    res.json(products);
+    res.json({products});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -72,10 +72,10 @@ exports.getNewProductsCouple = async (req, res) => {
 // Lấy danh mục theo giới tính "Nam"
 exports.getMale = async (req, res) => {
   try {
-    const cates = await Product.findAll({
+    const products = await Product.findAll({
       where: { gioi_tinh: "Nam" },
     });
-    res.json(cates);
+    res.json({products});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -84,11 +84,11 @@ exports.getMale = async (req, res) => {
 // Lấy danh mục theo giới tính "Nam" 10sp
 exports.getMale10sp = async (req, res) => {
   try {
-    const cates = await Product.findAll({
+    const products = await Product.findAll({
       where: { gioi_tinh: "Nam" },
       limit:10
     });
-    res.json(cates);
+    res.json({products});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -97,10 +97,10 @@ exports.getMale10sp = async (req, res) => {
 // Lấy danh mục theo giới tính "Nữ"
 exports.getFeMale = async (req, res) => {
   try {
-    const cates = await Product.findAll({
+    const products = await Product.findAll({
       where: { gioi_tinh: "Nữ" },
     });
-    res.json(cates);
+    res.json({products});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -109,11 +109,11 @@ exports.getFeMale = async (req, res) => {
 // Lấy danh mục theo giới tính "Nữ"10sp
 exports.getFeMale10sp = async (req, res) => {
   try {
-    const cates = await Product.findAll({
+    const products = await Product.findAll({
       where: { gioi_tinh: "Nữ" },
       limit:10
     });
-    res.json(cates);
+    res.json({products});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -122,10 +122,10 @@ exports.getFeMale10sp = async (req, res) => {
 // Lấy danh mục theo "Đôi"
 exports.getCouple = async (req, res) => {
   try {
-    const cates = await Product.findAll({
+    const products = await Product.findAll({
       where: { gioi_tinh: "Đồng Hồ Đôi" },
     });
-    res.json(cates);
+    res.json({products});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -134,11 +134,11 @@ exports.getCouple = async (req, res) => {
 // Lấy danh mục theo giới tính "đồng hồ đôi"
 exports.getCouple10sp = async (req, res) => {
   try {
-    const cates = await Product.findAll({
+    const products = await Product.findAll({
       where: { gioi_tinh: "Đồng Hồ Đôi" },
       limit:10
     });
-    res.json(cates);
+    res.json({products});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -159,7 +159,7 @@ exports.getProductsUnderTwoMillion = async (req, res) => {
       return res.status(404).json({ message: "Không tìm thấy sản phẩm nào dưới 2 triệu" });
     }
 
-    res.json(products);
+    res.json({products});
   } catch (error) {
     console.error("sản phẩm dưới 2 triệu", error.message);
     res.status(500).json({ error: error.message });
@@ -181,7 +181,7 @@ exports.getProductstu2den5trieu= async (req, res) => {
       return res.status(404).json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
     }
 
-    res.json(products);
+    res.json({products});
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: error.message });
@@ -205,7 +205,7 @@ exports.getProductstu5den10trieu = async (req, res) => {
         .json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
     }
 
-    res.json(products);
+    res.json({products});
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: error.message });
@@ -229,7 +229,7 @@ exports.getProductstu10den20trieu = async (req, res) => {
         .json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
     }
 
-    res.json(products);
+    res.json({products});
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: error.message });
@@ -253,7 +253,7 @@ exports.getProductstu20den30trieu = async (req, res) => {
         .json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
     }
 
-    res.json(products);
+    res.json({products});
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: error.message });
@@ -276,7 +276,7 @@ exports.getProductstu30den50trieu = async (req, res) => {
         .json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
     }
 
-    res.json(products);
+    res.json({products});
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: error.message });
@@ -299,7 +299,7 @@ exports.getProductstu50den100trieu = async (req, res) => {
         .json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
     }
 
-    res.json(products);
+    res.json({products});
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: error.message });
@@ -322,7 +322,7 @@ exports.getProductsOver100trieu = async (req, res) => {
         .json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
     }
 
-    res.json(products);
+    res.json({products});
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: error.message });
@@ -332,10 +332,10 @@ exports.getProductsOver100trieu = async (req, res) => {
 // Lấy danh mục theo chat liệu dây da
 exports.getChatLieuDayDa = async (req, res) => {
   try {
-    const cates = await Product.findAll({
-      where: { chat_lieu_day: "Dây da" }, // Ensure the value matches the ENUM casing
+    const products = await Product.findAll({
+      where: { chat_lieu_day: "Dây da" }, 
     });
-    res.json(cates);
+    res.json({products});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -343,10 +343,22 @@ exports.getChatLieuDayDa = async (req, res) => {
 // Lấy danh mục theo chat liệu dây dù
 exports.getChatLieuDayDu = async (req, res) => {
   try {
-    const cates = await Product.findAll({
-      where: { chat_lieu_day: "Dây dù" }, // Ensure the value matches the ENUM casing
+    const products = await Product.findAll({
+      where: { chat_lieu_day: "Dây dù" }, 
     });
-    res.json(cates);
+    res.json({products});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Lấy danh mục theo chat liệu dây caosu
+exports.getChatLieuDayCaoSu = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: { chat_lieu_day: "Dây cao su" }, 
+    });
+    res.json({products});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -355,10 +367,21 @@ exports.getChatLieuDayDu = async (req, res) => {
 // Lấy danh mục theo xuatxuTS
 exports.getXuatXuTS = async (req, res) => {
   try {
-    const cates = await Product.findAll({
-      where: { xuat_xu: "Thụy Sỹ" }, // Ensure the value matches the ENUM casing
+    const products = await Product.findAll({
+      where: { xuat_xu: "Thụy Sỹ" }, 
     });
-    res.json(cates);
+    res.json({products});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+// Lấy danh mục theo xuatxuTD
+exports.getXuatXuTD = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: { xuat_xu: "Thụy Điển" }, 
+    });
+    res.json({products});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -366,10 +389,21 @@ exports.getXuatXuTS = async (req, res) => {
 // Lấy danh mục theo xuatxuNB
 exports.getXuatXuNB = async (req, res) => {
   try {
-    const cates = await Product.findAll({
-      where: { xuat_xu: "Nhật Bản" }, // Ensure the value matches the ENUM casing
+    const products = await Product.findAll({
+      where: { xuat_xu: "Nhật Bản" }, 
     });
-    res.json(cates);
+    res.json({products});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+// Lấy danh mục theo xuatxuNB
+exports.getXuatXuMy = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: { xuat_xu: "Mỹ" }, 
+    });
+    res.json({products});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -405,7 +439,7 @@ exports.getProdctsCateLoai = async (req, res) => {
 exports.getAllProducts = async (req, res) => {
   try {
     const products = await Product.findAll();
-    res.json(products);
+    res.json({products});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
