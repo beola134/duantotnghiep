@@ -250,31 +250,65 @@ exports.verifyOtp = async (req, res) => {
   }
 };
 
-
-
-
 // login tài khoản bằng email và mật khẩu
 exports.login = async (req, res) => {
   try {
     const { email, mat_khau } = req.body;
-    // Kiểm tra xem email đã được sử dụng chưa
+
+    // Kiểm tra xem email có tồn tại hay không
     const user = await Users.findOne({ where: { email } });
     if (!user) {
+      return res.status(400).json({ message: "Email không tồn tại" });
+    }
+
+    // Kiểm tra xem tài khoản có bị khóa không
+    if (user.lock_until && user.lock_until > new Date()) {
+      const remainingTime = Math.ceil((user.lock_until - new Date()) / 1000 / 60); // Thời gian còn lại tính bằng phút
       return res.status(400).json({
-        message: "Email không tồn tại",
+        message: `Tài khoản của bạn đã bị khóa. Vui lòng thử lại sau ${remainingTime} phút.`,
       });
     }
+
     // Kiểm tra mật khẩu
     const validPass = await bcrypt.compare(mat_khau, user.mat_khau);
     if (!validPass) {
-      return res.status(400).json({
-        message: "Mật khẩu không hợp lệ",
-      });
+      // Tăng số lần thử đăng nhập thất bại
+      user.login_attempts += 1;
+      // Nếu quá số lần cho phép thì khóa tài khoản
+      const maxLoginAttempts = 3; // Giới hạn số lần thử sai
+       // Thời gian khóa là 60 giây
+      const lockTime = 2 * 60 * 1000; // 2 phút
+      //
+      if (user.login_attempts >= maxLoginAttempts) {
+        user.lock_until = new Date(Date.now() + lockTime);
+        await user.save();
+        return res.status(400).json({
+          message: `Bạn đã nhập sai quá nhiều lần. Tài khoản bị khóa trong 15 phút.`,
+        });
+      }
+
+      await user.save();
+      return res.status(400).json({ message: "Mật khẩu không hợp lệ" });
     }
-    // Tạo và gửi token
-    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
+
+    // Đặt lại số lần thử đăng nhập khi đăng nhập thành công
+    user.login_attempts = 0;
+    user.lock_until = null;
+    await user.save();
+
+    // Tạo token
+    const token = jwt.sign({ _id: user._id, id_quyen: user.id_quyen }, process.env.TOKEN_SECRET, {
       expiresIn: "1h",
     });
+
+    // Cài đặt cookie chứa token
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000,
+      sameSite: 'strict',
+    });
+
+    // Thông tin người dùng trả về
     const userInfo = {
       _id: user._id,
       ten_dang_nhap: user.ten_dang_nhap,
@@ -291,12 +325,14 @@ exports.login = async (req, res) => {
       token,
       user: userInfo,
     });
+
   } catch (error) {
     res.status(500).json({
       message: error.message,
     });
   }
 };
+
 
 // API đổi mật khẩu theo email và mat_khau
 exports.changePassword = async (req, res) => {
