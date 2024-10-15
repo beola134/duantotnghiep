@@ -7,7 +7,6 @@ const crypto = require("crypto");
 const { Op } = require("sequelize"); // Import Op từ Sequelize
 require("dotenv").config();
 
-
 //// API lấy thông tin người dùng theo id
 exports.getUserById = async (req, res) => {
   try {
@@ -18,7 +17,7 @@ exports.getUserById = async (req, res) => {
         message: "Người dùng không tồn tại",
       });
     }
-    res.status(200).json({user});
+    res.status(200).json({ user });
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -30,12 +29,11 @@ exports.getUserById = async (req, res) => {
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await Users.findAll();
-    res.json({users});
+    res.json({ users });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}
-
+};
 
 // Quên mật khẩu
 exports.forgotPassword = async (req, res) => {
@@ -47,13 +45,10 @@ exports.forgotPassword = async (req, res) => {
       return res.status(404).json({ message: "Người dùng không tồn tại" });
     }
     const resetToken = crypto.randomBytes(20).toString("hex");
-    const resetPasswordToken = crypto
-      .createHash("sha256")
-      .update(resetToken)
-      .digest("hex");
-    const resetPasswordExpire = Date.now() + 2 * 60 * 1000; 
+    const resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    const resetPasswordExpire = Date.now() + 2 * 60 * 1000;
     user.resetPasswordToken = resetPasswordToken;
-    user.resetPasswordExpires = new Date(resetPasswordExpire);//
+    user.resetPasswordExpires = new Date(resetPasswordExpire); //
     await user.save();
 
     const resetUrl = `http://localhost:3000/users/resetpassword/${resetToken}`;
@@ -109,10 +104,7 @@ exports.forgotPassword = async (req, res) => {
 // Đặt lại mật khẩu
 exports.resetPassword = async (req, res) => {
   try {
-    const resetPasswordToken = crypto
-      .createHash("sha256")
-      .update(req.params.resetToken)
-      .digest("hex");
+    const resetPasswordToken = crypto.createHash("sha256").update(req.params.resetToken).digest("hex");
 
     const user = await Users.findOne({
       where: {
@@ -122,9 +114,7 @@ exports.resetPassword = async (req, res) => {
     });
 
     if (!user) {
-      return res
-        .status(400)
-        .json({ message: "Token không hợp lệ hoặc đã hết hạn" });
+      return res.status(400).json({ message: "Token không hợp lệ hoặc đã hết hạn" });
     }
 
     const { mat_khau } = req.body;
@@ -185,7 +175,7 @@ exports.register = async (req, res) => {
 
     // Cấu hình gửi email OTP
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
         user: "nguyentantai612004@gmail.com",
         pass: "dmez voqj ozar xfzw",
@@ -193,21 +183,20 @@ exports.register = async (req, res) => {
     });
 
     const mailOptions = {
-      from: 'nguyentantai612004@gmail.com',
+      from: "nguyentantai612004@gmail.com",
       to: email,
-      subject: 'Mã OTP xác thực tài khoản',
+      subject: "Mã OTP xác thực tài khoản",
       text: `Mã OTP của bạn là: ${otp}`,
     };
 
     await transporter.sendMail(mailOptions);
-     // Thiết lập hẹn giờ xóa tài khoản sau 10phút nếu không được xác thực
+    // Thiết lập hẹn giờ xóa tài khoản sau 10phút nếu không được xác thực
     setTimeout(async () => {
       const user = await Users.findOne({ where: { email } });
       if (user.otpExpires < Date.now()) {
         await user.destroy();
       }
-    }
-    , 10 * 60 * 1000);
+    }, 10 * 60 * 1000);
 
     res.status(200).json({
       message: "Đăng ký tài khoản thành công. Vui lòng kiểm tra email để nhận mã OTP.",
@@ -254,61 +243,24 @@ exports.verifyOtp = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, mat_khau } = req.body;
-
-    // Kiểm tra xem email có tồn tại hay không
+    // Kiểm tra xem email đã được sử dụng chưa
     const user = await Users.findOne({ where: { email } });
     if (!user) {
-      return res.status(400).json({ message: "Email không tồn tại" });
-    }
-
-    // Kiểm tra xem tài khoản có bị khóa không
-    if (user.lock_until && user.lock_until > new Date()) {
-      const remainingTime = Math.ceil((user.lock_until - new Date()) / 1000 / 60); // Thời gian còn lại tính bằng phút
       return res.status(400).json({
-        message: `Tài khoản của bạn đã bị khóa. Vui lòng thử lại sau ${remainingTime} phút.`,
+        message: "Email không tồn tại",
       });
     }
-
     // Kiểm tra mật khẩu
     const validPass = await bcrypt.compare(mat_khau, user.mat_khau);
     if (!validPass) {
-      // Tăng số lần thử đăng nhập thất bại
-      user.login_attempts += 1;
-      // Nếu quá số lần cho phép thì khóa tài khoản
-      const maxLoginAttempts = 3; // Giới hạn số lần thử sai
-       // Thời gian khóa là 60 giây
-      const lockTime = 2 * 60 * 1000; // 2 phút
-      //
-      if (user.login_attempts >= maxLoginAttempts) {
-        user.lock_until = new Date(Date.now() + lockTime);
-        await user.save();
-        return res.status(400).json({
-          message: `Bạn đã nhập sai quá nhiều lần. Tài khoản bị khóa trong 15 phút.`,
-        });
-      }
-
-      await user.save();
-      return res.status(400).json({ message: "Mật khẩu không hợp lệ" });
+      return res.status(400).json({
+        message: "Mật khẩu không hợp lệ",
+      });
     }
-
-    // Đặt lại số lần thử đăng nhập khi đăng nhập thành công
-    user.login_attempts = 0;
-    user.lock_until = null;
-    await user.save();
-
-    // Tạo token
-    const token = jwt.sign({ _id: user._id, id_quyen: user.id_quyen }, process.env.TOKEN_SECRET, {
+    // Tạo và gửi token
+    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
       expiresIn: "1h",
     });
-
-    // Cài đặt cookie chứa token
-    res.cookie("token", token, {
-      httpOnly: true,
-      maxAge: 60 * 60 * 1000,
-      sameSite: 'strict',
-    });
-
-    // Thông tin người dùng trả về
     const userInfo = {
       _id: user._id,
       ten_dang_nhap: user.ten_dang_nhap,
@@ -325,14 +277,12 @@ exports.login = async (req, res) => {
       token,
       user: userInfo,
     });
-
   } catch (error) {
     res.status(500).json({
       message: error.message,
     });
   }
 };
-
 
 // API đổi mật khẩu theo email và mat_khau
 exports.changePassword = async (req, res) => {
@@ -397,4 +347,4 @@ exports.updateUser = async (req, res) => {
       message: error.message,
     });
   }
-}
+};
