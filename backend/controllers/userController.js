@@ -106,7 +106,7 @@ exports.forgotPassword = async (req, res) => {
   }
 };
 
-// Đặt lại mật khẩu
+// Đặt lại mật khẩu bằng email
 exports.resetPassword = async (req, res) => {
   try {
     const resetPasswordToken = crypto
