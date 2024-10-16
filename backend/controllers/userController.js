@@ -161,7 +161,7 @@ exports.login = async (req, res) => {
       user.login_attempts += 1;
       // Nếu quá số lần cho phép thì khóa tài khoản
       const maxLoginAttempts = 3; // Giới hạn số lần thử sai
-       // Thời gian khóa là 60 giây
+      // Thời gian khóa là 60 giây
       const lockTime = 2 * 60 * 1000; // 2 phút
       //
       if (user.login_attempts >= maxLoginAttempts) {
@@ -190,7 +190,7 @@ exports.login = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       maxAge: 60 * 60 * 1000,
-      sameSite: 'strict',
+      sameSite: "strict",
     });
 
     // Thông tin người dùng trả về
@@ -210,7 +210,6 @@ exports.login = async (req, res) => {
       token,
       user: userInfo,
     });
-
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -383,6 +382,5 @@ exports.updateUser = async (req, res) => {
     });
   }
 };
-
 
 // API xóa người dùng theo id
