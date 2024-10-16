@@ -182,7 +182,7 @@ exports.login = async (req, res) => {
     await user.save();
 
     // Tạo token
-    const token = jwt.sign({ _id: user._id, id_quyen: user.id_quyen }, process.env.TOKEN_SECRET, {
+    const token = jwt.sign({ _id: user._id, quyen: user.quyen }, process.env.TOKEN_SECRET, {
       expiresIn: "1h",
     });
 
