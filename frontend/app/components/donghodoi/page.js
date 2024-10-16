@@ -15,7 +15,7 @@ export default function DonghoDoi() {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
         const data = await response.json();
-        setProducts(data);
+        setProducts(data.products);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -1604,7 +1604,7 @@ export default function DonghoDoi() {
                       <div className={styles["cat-title"]}>
                         <div className={styles["cat-title-main"]} id="cat-dong-ho">
                           <div className={styles["title-icon"]}>
-                            <h1>Đồng hồ nam</h1>
+                            <h1>Đồng hồ đôi</h1>
                           </div>
                         </div>
                         <div className={styles.clear}></div>
