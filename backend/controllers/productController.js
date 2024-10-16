@@ -368,7 +368,10 @@ exports.getXuatXuTS = async (req, res) => {
 exports.getXuatXuTD = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { xuat_xu: "Thụy Điển" },
+      where: {
+        xuat_xu: "Thụy Điển",
+        loai: { [Op.not]: "Trang sức" }
+     },
     });
     res.json({ products });
   } catch (error) {
@@ -379,7 +382,12 @@ exports.getXuatXuTD = async (req, res) => {
 exports.getXuatXuNB = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { xuat_xu: "Nhật Bản" },
+      where: {
+        xuat_xu: "Nhật Bản",
+        loai: {
+          [Op.notIn]: ["Đồng hồ để bàn","Đồng hồ báo thức"]
+        }
+      },
     });
     res.json({ products });
   } catch (error) {
