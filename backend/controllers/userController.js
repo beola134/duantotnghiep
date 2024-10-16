@@ -182,7 +182,7 @@ exports.login = async (req, res) => {
     await user.save();
 
     // Tạo token
-    const token = jwt.sign({ _id: user._id, id_quyen: user.id_quyen }, process.env.TOKEN_SECRET, {
+    const token = jwt.sign({ _id: user._id, quyen: user.quyen }, process.env.TOKEN_SECRET, {
       expiresIn: "1h",
     });
 
@@ -202,7 +202,7 @@ exports.login = async (req, res) => {
       dia_chi: user.dia_chi,
       dien_thoai: user.dien_thoai,
       hinh_anh: user.hinh_anh,
-      id_quyen: user.id_quyen,
+      quyen: user.quyen,
     };
 
     res.status(200).json({
