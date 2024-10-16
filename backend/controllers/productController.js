@@ -98,7 +98,10 @@ exports.getMale10sp = async (req, res) => {
 exports.getFeMale = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { gioi_tinh: "Nữ" },
+      where: {
+        gioi_tinh: "Nữ",
+        loai: {[Op.not]:"Vòng Tay"}
+       },
     });
     res.json({products});
   } catch (error) {
