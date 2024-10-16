@@ -389,6 +389,9 @@ exports.getXuatXuNB = async (req, res) => {
         xuat_xu: "Nhật Bản",
         loai: {
           [Op.notIn]: ["Đồng hồ để bàn","Đồng hồ báo thức"]
+        },
+        thuong_hieu:{
+          [Op.notIn]: ["Đồng hồ treo tường RHYTHM","Đồng hồ treo tường SEIKO"]
         }
       },
     });

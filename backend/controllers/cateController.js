@@ -10,7 +10,9 @@ exports.getAllCates = async (req, res) => {
         _id: {
           [Op.notIn]: [
             '09204055-d105-4c21-90e3-58ee82d2f65a', 
-            '92ad8d9a-fba0-48db-a93d-6974bb5a9ed9'
+            '92ad8d9a-fba0-48db-a93d-6974bb5a9ed9',
+            '14257815-7fd6-41ac-9cd1-6a5d54f0eaa4',
+            'ba2c7104-9bb0-448b-920a-3baffebbb7d6'
           ]
         }
       }
@@ -31,8 +33,10 @@ exports.addCate = async (req, res) => {
         return res.status(400).json({ error: err.message });
       }
       const { danh_muc, mo_ta } = req.body;
-      const hinh_anh = req.files.hinh_anh ? req.files.hinh_anh[0].originalname : "";
-      const hinh_anh2 = req.files.hinh_anh2 ? req.files.hinh_anh2[0].originalname : "";
+      // Kiểm tra nếu req.files tồn tại
+      const hinh_anh = req.files && req.files.hinh_anh ? req.files.hinh_anh[0].originalname : "";
+      const hinh_anh2 = req.files && req.files.hinh_anh2 ? req.files.hinh_anh2[0].originalname : "";
+      // Tạo đối tượng cate
       const cate = new Cate({ danh_muc, mo_ta, hinh_anh, hinh_anh2 });
       await cate.save();
       res.json({ cate });
@@ -41,6 +45,7 @@ exports.addCate = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 // Hàm xử lý việc xóa danh mục
 exports.deleteCate = async (req, res) => {
