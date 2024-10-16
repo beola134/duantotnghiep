@@ -50,19 +50,16 @@ export default function Login() {
         // Chuyển trang theo role
         const token = data.token;
         const payload = jwtDecode(token);
-        if (payload.id_quyen === 2) {
+        if (payload.quyen === 2) {
           //chuyển hướng user
           // window.location.href = "http://localhost:3001";
           alert("Đăng nhập thành công đây là tài khoản user");
-        } else if (payload.id_quyen === 1) {
+        } else if (payload.quyen === 1) {
           //chuyển hướng admin
           // window.location.href = "/admin";
           alert("Đăng nhập thành công đây là tài khoản admin");
-        } else if (payload.id_quyen === undefined) {
-          //Trường hợp không phải user hoặc admin
-          alert("Không xác định được quyền từ token. Token có thể bị lỗi ");
         } else {
-          alert("Không xác định được quyền . Liên hệ quản trị viên để được hỗ trợ");
+          alert("Đăng nhập thất bại ");
         }
       } catch (error) {
         if (error.message.includes("Mật khẩu")) {

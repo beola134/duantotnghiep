@@ -15,7 +15,7 @@ export default function DonghoDoi() {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
         const data = await response.json();
-        setProducts(data);
+        setProducts(data.products);
       } catch (error) {
         setError(error.message);
       } finally {
