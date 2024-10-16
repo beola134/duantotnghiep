@@ -202,7 +202,7 @@ exports.login = async (req, res) => {
       dia_chi: user.dia_chi,
       dien_thoai: user.dien_thoai,
       hinh_anh: user.hinh_anh,
-      id_quyen: user.id_quyen,
+      quyen: user.quyen,
     };
 
     res.status(200).json({
@@ -383,4 +383,4 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-// API xóa người dùng theo id
+// sửa lỗi pull về
