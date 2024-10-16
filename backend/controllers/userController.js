@@ -7,7 +7,7 @@ const crypto = require("crypto");
 const { Op } = require("sequelize"); // Import Op từ Sequelize
 require("dotenv").config();
 
-//// API lấy thông tin người dùng theo id
+// API lấy thông tin người dùng theo id
 exports.getUserById = async (req, res) => {
   try {
     const id = req.params.id;
