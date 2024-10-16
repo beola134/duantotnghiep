@@ -1,7 +1,7 @@
 "use client";
-
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
 import styles from "./login.module.css";
 
@@ -49,7 +49,7 @@ export default function Login() {
         document.cookie = `token=${data.token}; path=/; max-age=${60 * 60}`;
         // Chuyển trang theo role
         const token = data.token;
-        const payload = JSON.parse(atob(token.split(".")[1]));
+        const payload = jwtDecode(token);
         if (payload.id_quyen === 2) {
           //chuyển hướng user
           // window.location.href = "http://localhost:3001";
@@ -58,15 +58,20 @@ export default function Login() {
           //chuyển hướng admin
           // window.location.href = "/admin";
           alert("Đăng nhập thành công đây là tài khoản admin");
-        } else {
+        } else if (payload.id_quyen === undefined) {
           //Trường hợp không phải user hoặc admin
-          alert("Không xác định được quyền");
+          alert("Không xác định được quyền từ token. Token có thể bị lỗi ");
+        } else {
+          alert("Không xác định được quyền . Liên hệ quản trị viên để được hỗ trợ");
         }
       } catch (error) {
         if (error.message.includes("Mật khẩu")) {
           setFieldError("password", error.message);
-        } else {
+        } else if (error.message.includes("email")) {
           setFieldError("email", error.message);
+        } else {
+          // Xử lý lỗi khác
+          alert(`Lỗi đăng nhập: ${errorData.message}`);
         }
 
         setSubmitting(false);

@@ -7,7 +7,7 @@ const crypto = require("crypto");
 const { Op } = require("sequelize"); // Import Op từ Sequelize
 require("dotenv").config();
 
-//// API lấy thông tin người dùng theo id
+// API lấy thông tin người dùng theo id
 exports.getUserById = async (req, res) => {
   try {
     const id = req.params.id;
@@ -45,10 +45,7 @@ exports.forgotPassword = async (req, res) => {
       return res.status(404).json({ message: "Người dùng không tồn tại" });
     }
     const resetToken = crypto.randomBytes(20).toString("hex");
-    const resetPasswordToken = crypto
-      .createHash("sha256")
-      .update(resetToken)
-      .digest("hex");
+    const resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
     const resetPasswordExpire = Date.now() + 2 * 60 * 1000;
     user.resetPasswordToken = resetPasswordToken;
     user.resetPasswordExpires = new Date(resetPasswordExpire); //
@@ -107,10 +104,7 @@ exports.forgotPassword = async (req, res) => {
 // Đặt lại mật khẩu bằng email
 exports.resetPassword = async (req, res) => {
   try {
-    const resetPasswordToken = crypto
-      .createHash("sha256")
-      .update(req.params.resetToken)
-      .digest("hex");
+    const resetPasswordToken = crypto.createHash("sha256").update(req.params.resetToken).digest("hex");
 
     const user = await Users.findOne({
       where: {
@@ -120,9 +114,7 @@ exports.resetPassword = async (req, res) => {
     });
 
     if (!user) {
-      return res
-        .status(400)
-        .json({ message: "Token không hợp lệ hoặc đã hết hạn" });
+      return res.status(400).json({ message: "Token không hợp lệ hoặc đã hết hạn" });
     }
 
     const { mat_khau } = req.body;
@@ -156,9 +148,7 @@ exports.login = async (req, res) => {
 
     // Kiểm tra xem tài khoản có bị khóa không
     if (user.lock_until && user.lock_until > new Date()) {
-      const remainingTime = Math.ceil(
-        (user.lock_until - new Date()) / 1000 / 60
-      ); // Thời gian còn lại tính bằng phút
+      const remainingTime = Math.ceil((user.lock_until - new Date()) / 1000 / 60); // Thời gian còn lại tính bằng phút
       return res.status(400).json({
         message: `Tài khoản của bạn đã bị khóa. Vui lòng thử lại sau ${remainingTime} phút.`,
       });
@@ -192,13 +182,9 @@ exports.login = async (req, res) => {
     await user.save();
 
     // Tạo token
-    const token = jwt.sign(
-      { _id: user._id, quyen: user.quyen },
-      process.env.TOKEN_SECRET,
-      {
-        expiresIn: "1h",
-      }
-    );
+    const token = jwt.sign({ _id: user._id, id_quyen: user.id_quyen }, process.env.TOKEN_SECRET, {
+      expiresIn: "1h",
+    });
 
     // Cài đặt cookie chứa token
     res.cookie("token", token, {
@@ -216,7 +202,7 @@ exports.login = async (req, res) => {
       dia_chi: user.dia_chi,
       dien_thoai: user.dien_thoai,
       hinh_anh: user.hinh_anh,
-      quyen: user.quyen,
+      id_quyen: user.id_quyen,
     };
 
     res.status(200).json({
@@ -293,8 +279,7 @@ exports.register = async (req, res) => {
     }, 10 * 60 * 1000);
 
     res.status(200).json({
-      message:
-        "Đăng ký tài khoản thành công. Vui lòng kiểm tra email để nhận mã OTP.",
+      message: "Đăng ký tài khoản thành công. Vui lòng kiểm tra email để nhận mã OTP.",
     });
   } catch (error) {
     res.status(500).json({
@@ -398,4 +383,4 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-//api xóa user
+// API xóa người dùng theo id
