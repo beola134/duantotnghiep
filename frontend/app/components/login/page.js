@@ -50,8 +50,6 @@ export default function Login() {
         // Chuyển trang theo role
         const token = data.token;
         const payload = jwtDecode(token);
-        console.log("Payload", payload);
-
         if (payload.quyen === 2) {
           //chuyển hướng user
           // window.location.href = "http://localhost:3001";
@@ -60,11 +58,8 @@ export default function Login() {
           //chuyển hướng admin
           // window.location.href = "/admin";
           alert("Đăng nhập thành công đây là tài khoản admin");
-        } else if (payload.quyen === undefined) {
-          //Trường hợp không phải user hoặc admin
-          alert("Không xác định được quyền từ token. Token có thể bị lỗi ");
         } else {
-          alert("Không xác định được quyền . Liên hệ quản trị viên để được hỗ trợ");
+          alert("Đăng nhập thất bại ");
         }
       } catch (error) {
         if (error.message.includes("Mật khẩu")) {
