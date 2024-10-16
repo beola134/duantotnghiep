@@ -357,7 +357,10 @@ exports.getChatLieuDayCaoSu = async (req, res) => {
 exports.getXuatXuTS = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { xuat_xu: "Thụy Sỹ" },
+      where: {
+        xuat_xu: "Thụy Sỹ",
+        loai: { [Op.not]: "Trang sức" }
+      },
     });
     res.json({ products });
   } catch (error) {
