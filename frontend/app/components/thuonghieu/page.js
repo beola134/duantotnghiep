@@ -33,42 +33,26 @@ export default function Thuonghieu() {
   return (
     <>
       <div className={styles.container}>
-      <h3>THƯƠNG HIỆU NỔI BẬT</h3>
-      <br />
-      <div className={styles.thuonghieu + ' owl-carousel'}>
-        {cates.map((item) => {
-          const { _id, hinh_anh2 } = item;
-          return (
-            <div className={styles.item} key={_id}>
-              <Link href="/components/donghonam">
-                <img
-                  src={`http://localhost:5000/images/${hinh_anh2}`}
-                  alt={`Hình ảnh thương hiệu ${_id}`}
-                />
-              </Link>
-            </div>
-          );
-        })}
+        <h3>THƯƠNG HIỆU NỔI BẬT</h3>
+        <br />
+        <h3>TẤT CẢ THƯƠNG HIỆU</h3>
+        <br />
+        <div className={styles.thuonghieu}>
+          {cates.map((item) => {
+            const { _id, hinh_anh2 } = item;
+            return (
+              <div className={styles.item} key={_id}>
+                <Link href={`/chitietdanhmuc/${_id}`}>
+                  <img
+                    src={`http://localhost:5000/images/${hinh_anh2}`}
+                    alt={`Hình ảnh thương hiệu ${_id}`}
+                  />
+                </Link>
+              </div>
+            );
+          })}
+        </div>
       </div>
-      <br />
-      <h3>TẤT CẢ THƯƠNG HIỆU</h3>
-      <br />
-      <div className={styles.thuonghieu}>
-        {cates.map((item) => {
-          const { _id, hinh_anh2 } = item;
-          return (
-            <div className={styles.item} key={_id}>
-              <Link href={`/danh_muc/${_id}`}>
-                <img
-                  src={`http://localhost:5000/images/${hinh_anh2}`}
-                  alt={`Hình ảnh thương hiệu ${_id}`}
-                />
-              </Link>
-            </div>
-          );
-        })}
-      </div>
-    </div>
     </>
   );
 }
