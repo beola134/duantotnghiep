@@ -6,8 +6,8 @@ export default function Home() {
   return (
     <>
     {/* <Thuonghieu /> */}
-      <DonghoDoi />
-      {/* <Daydongho /> */}
+      {/* <DonghoDoi /> */}
+      <Daydongho />
     </>
   );
 }

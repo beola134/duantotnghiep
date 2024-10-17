@@ -40,7 +40,7 @@ export default function Thuonghieu() {
           const { _id, hinh_anh2 } = item;
           return (
             <div className={styles.item} key={_id}>
-              <Link href="/components/daydongho">
+              <Link href="/components/donghonam">
                 <img
                   src={`http://localhost:5000/images/${hinh_anh2}`}
                   alt={`Hình ảnh thương hiệu ${_id}`}
