@@ -1,13 +1,9 @@
-import Daydongho from "./components/daydongho/page";
-import DonghoDoi from "./components/donghodoi/page";
-import Thuonghieu from "./components/thuonghieu/page";
+import Login from "./components/login/page";
 
 export default function Home() {
   return (
     <>
-    {/* <Thuonghieu /> */}
-      {/* <DonghoDoi /> */}
-      <Daydongho />
+      <Login />
     </>
   );
 }
