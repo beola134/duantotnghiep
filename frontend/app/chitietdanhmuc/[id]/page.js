@@ -1,35 +1,41 @@
 "use client";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import styles from "./donghodoi.module.css";
-
-export default function DonghoDoi() {
+import Link from "next/link";
+import styles from "./chitietdanhmuc.module.css";
+export default function DanhMuc({ params }) {
+  const { id } = params;  // Lấy id từ params
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/product/allsp/doi");
-        if (!response.ok) {
-          throw new Error("Lỗi không thể tải dữ liệu");
+    if (id) {
+      const fetchProducts = async () => {
+        try {
+          const response = await fetch(`http://localhost:5000/product/category/${id}`);
+          if (!response.ok) {
+            throw new Error("Lỗi không thể tải dữ liệu");
+          }
+          const data = await response.json();
+          setProducts(data.products);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
         }
-        const data = await response.json();
-        setProducts(data.products);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, []);
+      };
+      fetchProducts();
+    }
+  }, [id]);
+
   if (loading) {
-    return <p>Loading...</p>;
+    return <p>Đang tải...</p>;
   }
+
   if (error) {
-    return <p>Error:{error}</p>;
+    return <p>Lỗi: {error}</p>;
   }
+
   return (
     <>
       <div className={styles["container-header"]}>
@@ -1628,66 +1634,63 @@ export default function DonghoDoi() {
                   {/*Danh sách sản phẩm */}
 
                   <section className={styles["products-cat-frame"]}>
-                    <div className={styles["products-cat-frame-inner"]}>
-                      <div className={styles["product-grid"]}>
-                        {/* item-1 */}
-                        {products.map((product) => {
-                          const {
-                            _id,
-                            ten,
-                            ten_san_pham,
-                            ma_san_pham,
-                            gia_san_pham,
-                            gia_giam,
-                            hinh_anh,
-                            loai,
-                            duong_kinh,
-                          } = product;
+  <div className={styles["products-cat-frame-inner"]}>
+    <div className={styles["product-grid"]}>
+      {/* item-1 */}
+      {products.map((product) => {
+        const {
+          _id,
+          ten,
+          ten_san_pham,
+          ma_san_pham,
+          gia_san_pham,
+          gia_giam,
+          hinh_anh,
+          loai,
+          duong_kinh,
+        } = product;
 
-                          return (
-                            <div key={_id} className={styles.item}>
-                              <div className={styles["frame-inner"]}>
-                                <figure className={styles["product-image"]}>
-                                  <Link href="#">
-                                    <img
-                                      src={`http://localhost:5000/images/${hinh_anh}`}
-                                      alt={ten}
-                                      width="300"
-                                      height="363"
-                                      style={{ display: "inline-block", opacity: "1" }}
-                                    />
-                                  </Link>
-                                </figure>
-                                <h3>
-                                  <Link className={styles.name} href="#" title={ten}>
-                                    <span className={styles["cat-name"]}>{ten_san_pham}</span>
-                                    {ma_san_pham}
-                                  </Link>
-                                </h3>
-                                <span className={styles["loai-may"]}>{loai}</span>
-                                <span className={styles["row-lm"]}>|</span>
-                                <span className={styles["duong-kinh"]}>{duong_kinh}</span>
-                                <div className={styles["price-area"]}>
-                                  <div className={styles["price-old"]}>
-                                    Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
-                                  </div>
-                                  <div className={styles["price-current"]}>
-                                    Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
-                                  </div>
-                                </div>
-                                <div className={styles.discount}>
-                                  <span>-20%</span>
-                                </div>
-                                <div className={styles.clear}></div>
-                              </div>
-                              {/* end .frame-inner */}
-                              <div className={styles.clear}></div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </section>
+        return (
+          <div key={_id} className={styles.item}>
+            <div className={styles["frame-inner"]}>
+              <figure className={styles["product-image"]}>
+                <Link href={`/san_pham/${_id}`}>
+                  <img
+                    src={`http://localhost:5000/images/${hinh_anh}`}
+                    alt={ten}
+                    width="300"
+                    height="363"
+                    style={{ display: "inline-block", opacity: "1" }}
+                  />
+                </Link>
+              </figure>
+              <h3>
+                <Link className={styles.name} href={`/san_pham/${_id}`} title={ten}>
+                  <span className={styles["cat-name"]}>{ten_san_pham}</span>
+                  {ma_san_pham}
+                </Link>
+              </h3>
+              <span className={styles["loai-may"]}>{loai}</span>
+              <span className={styles["row-lm"]}>|</span>
+              <span className={styles["duong-kinh"]}>{duong_kinh}</span>
+              <div className={styles["price-area"]}>
+                <div className={styles["price-old"]}>
+                  Giá: <span>{gia_san_pham ? gia_san_pham.toLocaleString("vi-VN") : "N/A"}₫</span>
+                </div>
+                <div className={styles["price-current"]}>
+                  Giá KM: {gia_giam ? gia_giam.toLocaleString("vi-VN") : "N/A"} ₫
+                </div>
+              </div>
+              <div className={styles.clear}></div>
+            </div>
+            {/* end .frame-inner */}
+            <div className={styles.clear}></div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
 
                   {/* phân trang*/}
                   <div className={styles.pagination}>
