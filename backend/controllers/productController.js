@@ -96,7 +96,10 @@ exports.getMale10sp = async (req, res) => {
 exports.getFeMale = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { gioi_tinh: "Nữ" },
+      where: {
+        gioi_tinh: "Nữ",
+        loai: {[Op.not]:"Vòng Tay"}
+       },
     });
     res.json({ products });
   } catch (error) {
@@ -354,7 +357,10 @@ exports.getChatLieuDayCaoSu = async (req, res) => {
 exports.getXuatXuTS = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { xuat_xu: "Thụy Sỹ" },
+      where: {
+        xuat_xu: "Thụy Sỹ",
+        loai: { [Op.not]: "Trang sức" }
+      },
     });
     res.json({ products });
   } catch (error) {
@@ -365,7 +371,10 @@ exports.getXuatXuTS = async (req, res) => {
 exports.getXuatXuTD = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { xuat_xu: "Thụy Điển" },
+      where: {
+        xuat_xu: "Thụy Điển",
+        loai: { [Op.not]: "Trang sức" }
+     },
     });
     res.json({ products });
   } catch (error) {
@@ -376,7 +385,15 @@ exports.getXuatXuTD = async (req, res) => {
 exports.getXuatXuNB = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { xuat_xu: "Nhật Bản" },
+      where: {
+        xuat_xu: "Nhật Bản",
+        loai: {
+          [Op.notIn]: ["Đồng hồ để bàn","Đồng hồ báo thức"]
+        },
+        thuong_hieu:{
+          [Op.notIn]: ["Đồng hồ treo tường RHYTHM","Đồng hồ treo tường SEIKO"]
+        }
+      },
     });
     res.json({ products });
   } catch (error) {
