@@ -1,9 +1,9 @@
-import Detail from "./components/product-detail/[id]/page";
+import DonghoNam from "./components/donghonam/page";
 
 export default function Home() {
   return (
     <>
-      <Detail />
+      <DonghoNam />
     </>
   );
 }
