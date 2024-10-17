@@ -1,9 +1,9 @@
-import Login from "./components/login/page";
+import Detail from "./components/product-detail/[id]/page";
 
 export default function Home() {
   return (
     <>
-      <Login />
+      <Detail />
     </>
   );
 }

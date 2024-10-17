@@ -40,6 +40,14 @@ option {
   font-style: inherit;
   font-weight: inherit;
 }
+input[type="text"],
+input[type="number"],
+input[type="password"],
+textarea,
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
 figure {
   margin: 0;
 }
@@ -57,6 +65,22 @@ b {
 }
 li {
   list-style: none;
+}
+table {
+  font-size: inherit;
+  border-collapse: collapse;
+}
+tbody {
+  display: table-row-group;
+  vertical-align: middle;
+  unicode-bidi: isolate;
+  border-color: inherit;
+}
+i {
+  font-style: italic;
+}
+form {
+  position: relative;
 }
 #fixedBar {
   margin: 0;
