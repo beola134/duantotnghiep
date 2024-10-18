@@ -1,12 +1,36 @@
-import Product from "../product/page";
+"use client";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import styles from "../donghonu/donghonu.module.css";
-export default async function TrangsucDW() {
-  const sp4 = await fetch(
-    `http://localhost:5000/product/category/loai/902a8bb2-fdea-473d-8779-6f815503e8c2`
-  );
-  const data4 = await sp4.json();
-  console.log(data4);
+export default function TrangsucDW() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/product/category/loai/902a8bb2-fdea-473d-8779-6f815503e8c2"
+        );
+        if (!response.ok) {
+          throw new Error("Lỗi không thể tải dữ liệu");
+        }
+        const data = await response.json();
+        setProducts(data.products);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (error) {
+    return <p>Error:{error}</p>;
+  }
   return (
     <>
       <div className={styles["container-header"]}>
@@ -58,11 +82,75 @@ export default async function TrangsucDW() {
                     <div className={styles["products-cat-frame-inner"]}>
                       <div className={styles["product-grid"]}>
                         {/* item-1 */}
-                        <Product data={data4.products}></Product>
+                        {products.map((product) => {
+                          const {
+                            _id,
+                            ten,
+                            ten_san_pham,
+                            ma_san_pham,
+                            gia_san_pham,
+                            gia_giam,
+                            hinh_anh,
+                            loai,
+                            duong_kinh,
+                          } = product;
+
+                          return (
+                            <div key={_id} className={styles.item}>
+                              <div className={styles["frame-inner"]}>
+                                <figure className={styles["product-image"]}>
+                                  <Link href="#">
+                                    <img
+                                      src={`http://localhost:5000/images/${hinh_anh}`}
+                                      alt={ten}
+                                      width="300"
+                                      height="363"
+                                      style={{
+                                        display: "inline-block",
+                                        opacity: "1",
+                                      }}
+                                    />
+                                  </Link>
+                                </figure>
+                                <h3>
+                                  <Link
+                                    className={styles.name}
+                                    href="#"
+                                    title={ten}>
+                                    <span className={styles["cat-name"]}>
+                                      {ten_san_pham}
+                                    </span>
+                                    {ma_san_pham}
+                                  </Link>
+                                </h3>
+                                <span className={styles["loai-may"]}>
+                                  {loai}
+                                </span>
+                                <span className={styles["row-lm"]}>|</span>
+                                <span className={styles["duong-kinh"]}>
+                                  {duong_kinh}
+                                </span>
+                                <div className={styles["price-area"]}>
+                                  <div className={styles["price-old"]}>
+                                    Giá:{" "}
+                                    <span>
+                                      {gia_san_pham.toLocaleString("vi-VN")}₫
+                                    </span>
+                                  </div>
+                                  <div className={styles["price-current"]}>
+                                    Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
+                                  </div>
+                                </div>
+                                <div className={styles.clear}></div>
+                              </div>
+                              {/* end .frame-inner */}
+                              <div className={styles.clear}></div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </section>
-
                   {/* phân trang*/}
                   <div className={styles.pagination}>
                     <span title="Page 1" className={styles.current}>

@@ -1,12 +1,36 @@
-import Product from "../product/page";
+"use client";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import styles from "../donghonu/donghonu.module.css";
-export default async function Donghobaothuc() {
-  const sp1 = await fetch(
-    `http://localhost:5000/product/category/ba2c7104-9bb0-448b-920a-3baffebbb7d6`
-  );
-  const data1 = await sp1.json();
-  console.log(data1);
+export default function Donghobaothuc() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/product/category/ba2c7104-9bb0-448b-920a-3baffebbb7d6"
+        );
+        if (!response.ok) {
+          throw new Error("Lỗi không thể tải dữ liệu");
+        }
+        const data = await response.json();
+        setProducts(data.products);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (error) {
+    return <p>Error:{error}</p>;
+  }
   return (
     <>
       <div className={styles["container-header"]}>
@@ -32,118 +56,18 @@ export default async function Donghobaothuc() {
                         </div>
                         <div
                           id="brand"
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-3-column"]} ${styles["filter-brand"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]}  ${styles["filter-brand"]}`}>
                           <span className={styles.close}>x</span>
                           <div
                             className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="LONGINES">
-                                LONGINES
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="TISSOT">
-                                TISSOT
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="MIDO">
-                                MIDO
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="CERTINA">
-                                CERTINA
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="HAMILTON">
-                                HAMILTON
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="TITONI">
-                                TITONI
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="FREDERIQUE CONSTANT">
-                                FREDERIQUE CONSTANT
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="CALVIN KLEIN">
-                                CALVIN KLEIN
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="EDOX">
-                                EDOX
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="CLAUDE BERNARD">
-                                CLAUDE BERNARD
-                              </Link>
-                            </div>
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="SEIKO">
                                 SEIKO
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="CITIZEN">
-                                CITIZEN
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="ORIENT">
-                                ORIENT
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="CASIO">
-                                CASIO
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="OLYM PIANUS">
-                                OLYM PIANUS
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="DANIEL WELLINGTON">
-                                DANIEL WELLINGTON
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="FOSSIL">
-                                FOSSIL
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="SKAGEN">
-                                SKAGEN
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="MICHAEL KORS">
-                                MICHAEL KORS
+                              <Link rel="nofollow" href="#" title="LONGINES">
+                                RHYTHM
                               </Link>
                             </div>
                           </div>
@@ -184,59 +108,8 @@ export default async function Donghobaothuc() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="Eco-Drive (Năng lượng ánh sáng)">
-                                Eco-Drive (Năng lượng ánh sáng)
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Quartz Chronograph (Máy pin bấm giờ thể thao)">
-                                Quartz Chronograph (Máy pin bấm giờ thể thao)
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)">
-                                Automatic Chronometer (Máy cơ tự động chuẩn
-                                COSC)
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Quartz Chronometer (Máy pin chuẩn COSC)">
-                                Quartz Chronometer (Máy pin chuẩn COSC)
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)">
-                                Automatic Chronograph (Máy cơ tự động bấm giờ
-                                thể thao)
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
                                 title="Quartz Solar (Năng lượng ánh sáng)">
                                 Quartz Solar (Năng lượng ánh sáng)
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )">
-                                Đồng hồ cơ lên giây cót bằng tay ( Manual
-                                winding )
                               </Link>
                             </div>
                           </div>
@@ -280,7 +153,62 @@ export default async function Donghobaothuc() {
                     <div className={styles["products-cat-frame-inner"]}>
                       <div className={styles["product-grid"]}>
                         {/* item-1 */}
-                        <Product data={data1.products}></Product>
+                        {products.map((product) => {
+                          const {
+                            _id,
+                            ten,
+                            ten_san_pham,
+                            ma_san_pham,
+                            gia_san_pham,
+
+                            hinh_anh,
+                          } = product;
+
+                          return (
+                            <div key={_id} className={styles.item}>
+                              <div className={styles["frame-inner"]}>
+                                <figure className={styles["product-image"]}>
+                                  <Link href="#">
+                                    <img
+                                      src={`http://localhost:5000/images/${hinh_anh}`}
+                                      alt={ten}
+                                      width="300"
+                                      height="363"
+                                      style={{
+                                        display: "inline-block",
+                                        opacity: "1",
+                                      }}
+                                    />
+                                  </Link>
+                                </figure>
+                                <h3>
+                                  <Link
+                                    className={styles.name}
+                                    href="#"
+                                    title={ten}>
+                                    <span className={styles["cat-name"]}>
+                                      {ten_san_pham}
+                                    </span>
+                                    {ma_san_pham}
+                                  </Link>
+                                </h3>
+
+                                <div className={styles["price-area"]}>
+                                  <div className={styles["price-current"]}>
+                                    Giá:{" "}
+                                    <span>
+                                      {gia_san_pham.toLocaleString("vi-VN")}₫
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div className={styles.clear}></div>
+                              </div>
+                              {/* end .frame-inner */}
+                              <div className={styles.clear}></div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </section>
