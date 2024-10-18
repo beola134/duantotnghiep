@@ -1,12 +1,36 @@
-import Product from "../product/page";
+"use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "../donghonu/donghonu.module.css";
-export default async function Donghodeban() {
-  const sp3 = await fetch(
-    `http://localhost:5000/product/category/09204055-d105-4c21-90e3-58ee82d2f65a`
-  );
-  const data3 = await sp3.json();
-  console.log(data3);
+export default function Donghodeban() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/product/category/09204055-d105-4c21-90e3-58ee82d2f65a"
+        );
+        if (!response.ok) {
+          throw new Error("Lỗi không thể tải dữ liệu");
+        }
+        const data = await response.json();
+        setProducts(data.products);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (error) {
+    return <p>Error:{error}</p>;
+  }
   return (
     <>
       <div className={styles["container-header"]}>
@@ -280,7 +304,60 @@ export default async function Donghodeban() {
                     <div className={styles["products-cat-frame-inner"]}>
                       <div className={styles["product-grid"]}>
                         {/* item-1 */}
-                        <Product data={data3.products}></Product>
+                        {products.map((product) => {
+                          const {
+                            _id,
+                            ten,
+                            ten_san_pham,
+                            ma_san_pham,
+                            gia_san_pham,
+
+                            hinh_anh,
+                          } = product;
+
+                          return (
+                            <div key={_id} className={styles.item}>
+                              <div className={styles["frame-inner"]}>
+                                <figure className={styles["product-image"]}>
+                                  <Link href="#">
+                                    <img
+                                      src={`http://localhost:5000/images/${hinh_anh}`}
+                                      alt={ten}
+                                      width="300"
+                                      height="363"
+                                      style={{
+                                        display: "inline-block",
+                                        opacity: "1",
+                                      }}
+                                    />
+                                  </Link>
+                                </figure>
+                                <h3>
+                                  <Link
+                                    className={styles.name}
+                                    href="#"
+                                    title={ten}>
+                                    <span className={styles["cat-name"]}>
+                                      {ten_san_pham}
+                                    </span>
+                                    {ma_san_pham}
+                                  </Link>
+                                </h3>
+
+                                <div className={styles["price-area"]}>
+                                  <div className={styles["price-current"]}>
+                                    Giá: {gia_san_pham.toLocaleString("vi-VN")}{" "}
+                                    ₫
+                                  </div>
+                                </div>
+
+                                <div className={styles.clear}></div>
+                              </div>
+                              {/* end .frame-inner */}
+                              <div className={styles.clear}></div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </section>
