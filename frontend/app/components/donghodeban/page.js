@@ -56,69 +56,10 @@ export default function Donghodeban() {
                         </div>
                         <div
                           id="brand"
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-3-column"]} ${styles["filter-brand"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]}  ${styles["filter-brand"]}`}>
                           <span className={styles.close}>x</span>
                           <div
                             className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="LONGINES">
-                                LONGINES
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="TISSOT">
-                                TISSOT
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="MIDO">
-                                MIDO
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="CERTINA">
-                                CERTINA
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="HAMILTON">
-                                HAMILTON
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="TITONI">
-                                TITONI
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="FREDERIQUE CONSTANT">
-                                FREDERIQUE CONSTANT
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="CALVIN KLEIN">
-                                CALVIN KLEIN
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="EDOX">
-                                EDOX
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="CLAUDE BERNARD">
-                                CLAUDE BERNARD
-                              </Link>
-                            </div>
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="SEIKO">
                                 SEIKO
@@ -126,48 +67,7 @@ export default function Donghodeban() {
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="CITIZEN">
-                                CITIZEN
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="ORIENT">
-                                ORIENT
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="CASIO">
-                                CASIO
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="OLYM PIANUS">
-                                OLYM PIANUS
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="DANIEL WELLINGTON">
-                                DANIEL WELLINGTON
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="FOSSIL">
-                                FOSSIL
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="SKAGEN">
-                                SKAGEN
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="MICHAEL KORS">
-                                MICHAEL KORS
+                                RHYTHM
                               </Link>
                             </div>
                           </div>
@@ -192,38 +92,6 @@ export default function Donghodeban() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="Automatic (Máy cơ tự động)">
-                                Automatic (Máy cơ tự động)
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Quartz (Máy pin - điện tử)">
-                                Quartz (Máy pin - điện tử)
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Eco-Drive (Năng lượng ánh sáng)">
-                                Eco-Drive (Năng lượng ánh sáng)
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Quartz Chronograph (Máy pin bấm giờ thể thao)">
-                                Quartz Chronograph (Máy pin bấm giờ thể thao)
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
                                 title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)">
                                 Automatic Chronometer (Máy cơ tự động chuẩn
                                 COSC)
@@ -235,32 +103,6 @@ export default function Donghodeban() {
                                 href="#"
                                 title="Quartz Chronometer (Máy pin chuẩn COSC)">
                                 Quartz Chronometer (Máy pin chuẩn COSC)
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)">
-                                Automatic Chronograph (Máy cơ tự động bấm giờ
-                                thể thao)
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Quartz Solar (Năng lượng ánh sáng)">
-                                Quartz Solar (Năng lượng ánh sáng)
-                              </Link>
-                            </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )">
-                                Đồng hồ cơ lên giây cót bằng tay ( Manual
-                                winding )
                               </Link>
                             </div>
                           </div>

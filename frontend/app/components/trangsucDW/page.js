@@ -131,14 +131,11 @@ export default function TrangsucDW() {
                                   {duong_kinh}
                                 </span>
                                 <div className={styles["price-area"]}>
-                                  <div className={styles["price-old"]}>
+                                  <div className={styles["price-current"]}>
                                     Giá:{" "}
                                     <span>
                                       {gia_san_pham.toLocaleString("vi-VN")}₫
                                     </span>
-                                  </div>
-                                  <div className={styles["price-current"]}>
-                                    Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
                                   </div>
                                 </div>
                                 <div className={styles.clear}></div>
