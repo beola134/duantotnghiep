@@ -106,6 +106,7 @@ export default function Login() {
           <span className={styles.forgotPassword}>
             <Link href="#">Forgot password</Link>
           </span>
+
           <input type="submit" className={styles.loginButton} value="Sign In" />
         </form>
 
@@ -121,7 +122,7 @@ export default function Login() {
         <div className={styles.signUpNow}>
           <span className={styles.dontHaveAnAccount}>
             Don't have an account?
-            <Link href="/dangky" id="gotoSignup">
+            <Link href="../components/register" id="gotoSignup">
               Sign up now
             </Link>
           </span>
