@@ -809,8 +809,8 @@ export default function DonghoDoi() {
                 <div className={styles["all-summary"]}>
                   <div className={styles["summary-content-filter"]} style={{ description: true }}>
                     <p>
-                      Đến với thế giới <strong>đồng hồ nam</strong> của Duy Anh Watch, bạn sẽ được sở hữu hàng nghìn sản
-                      phẩm chất lượng, thiết kế bắt mắt đến từ các thương hiệu
+                      Đến với thế giới <strong>đồng hồ nam, nữ</strong> của Wristly, bạn sẽ được sở hữu hàng nghìn sản
+                      phẩm chất lượng, thiết kế bắt mắt đến từ các thương hiệu&nbsp;
                       <em>
                         <strong>
                           <Link href="#" target="_blank">
@@ -818,7 +818,7 @@ export default function DonghoDoi() {
                           </Link>
                         </strong>
                       </em>
-                      , Nhật Bản, Pháp, Mỹ…danh tiếng trên thế giới. Mọi sản phẩm đều đảm bảo
+                      , Nhật Bản, Pháp, Mỹ…danh tiếng trên thế giới. Mọi sản phẩm đều đảm bảo&nbsp;
                       <strong>100% hàng chính hãng</strong> kèm theo <strong>chế độ bảo hành chính hãng</strong> đặc
                       biệt với mức giá hợp lý sẽ đem đến cho bạn phụ kiện hoàn hảo nhất; khẳng định đẳng cấp, phong cách
                       riêng của bản thân
