@@ -2,7 +2,7 @@ const Cate = require("../models/cate");
 const upload = require("../config/update");
 const { Op } = require('sequelize'); // Import Op từ sequelize
 
-// Lấy tất cả danh mục
+// Lấy tất cả thương hiệu
 exports.getAllCates = async (req, res) => {
   try {
     const cates = await Cate.findAll({

@@ -472,7 +472,9 @@ exports.getProductById = async (req, res) => {
     if (!product) {
       return res.status(404).json({ error: "Không tìm thấy sản phẩm" });
     }
-    res.json({ product });
+    //show lun danh mục sản phẩm
+    const cate = await Category.findOne({ where: { _id: product.id_danh_muc } });
+    res.json({ product, cate });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
