@@ -6,6 +6,14 @@ const cateController = require("../controllers/cateController");
 //http://localhost:5000/cate/allcate
 router.get("/allcate", cateController.getAllCates);
 
+//show tất cả cate
+//http://localhost:5000/cate/allcatess
+router.get("/allcatess", cateController.getAllCatess);
+
+//show cate theo id
+//http://localhost:5000/cate/allcatess/:id
+router.get("/allcatess/:id", cateController.getCateById);
+
 //thêm danh mục
 //http://localhost:5000/cate/addcate
 router.post("/addcate", cateController.addCate);
