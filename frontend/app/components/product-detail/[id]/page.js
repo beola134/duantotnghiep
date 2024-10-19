@@ -408,9 +408,7 @@ export default function Detail({ params }) {
                 <div className={styles.titlePriceCurrent}>Giá KM:</div>
                 <div className={styles.numberPriceCurrent}>
                   <input type="hidden" value="1" className={styles.bkProductQty} />
-                  <span className={styles.bkProductPrice} >
-                  {product.gia_giam.toLocaleString("vi-VN")}₫
-                  </span>
+                  <span className={styles.bkProductPrice}>{product.gia_giam.toLocaleString("vi-VN")}₫</span>
                 </div>
                 <div className={styles.noteVat}>(Giá trên đã bao gồm VAT)</div>
               </div>
@@ -1918,7 +1916,7 @@ export default function Detail({ params }) {
                   <span>
                     Có <strong>0</strong> bình luận, đánh giá
                   </span>
-                  <strong>về Đồng hồ nam Tissot Chemin des Tourelles Powermatic 80 T139.807.22.038.00</strong>
+                  <strong> về {product.ten}</strong>
                 </div>
                 {/* <!--  --> */}
                 <form className="formComment">

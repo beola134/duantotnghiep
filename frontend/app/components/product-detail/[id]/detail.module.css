@@ -8,14 +8,7 @@
 .clear {
   clear: both;
 }
-.cls::after,
-.cls::before,
-.clearfix::after,
-.clearfix::before {
-  content: "";
-  display: block;
-  clear: both;
-}
+
 /* detail */
 /* top-product-detail */
 /* frame-left */
