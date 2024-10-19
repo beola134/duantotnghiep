@@ -269,8 +269,7 @@ export default function Daydongho() {
                   >
                     <div className={styles["banner-cat-manuf"]}>
                       <img
-                        src="/frontend/img/banner-daydongho.jpg
-                      "
+                        src="/image/item/banner-daydongho.jpg"
                         alt=""
                       />
                     </div>
