@@ -1,35 +1,45 @@
 "use client";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import styles from "./donghodoi.module.css";
-
-export default function DonghoDoi() {
+import Link from "next/link";
+import styles from "./chitietdanhmuc.module.css";
+export default function DanhMuc({ params }) {
+  const { id } = params; 
   const [products, setProducts] = useState([]);
+  const [cate, setCate] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/product/allsp/doi");
-        if (!response.ok) {
-          throw new Error("Lỗi không thể tải dữ liệu");
+    if (id) {
+      const fetchProducts = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:5000/product/category/${id}`
+          );
+          console.log(response);
+          if (!response.ok) {
+            throw new Error("Lỗi không thể tải dữ liệu");
+          }
+          const data = await response.json();
+          setProducts(data.products);
+          setCate(data.cate);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
         }
-        const data = await response.json();
-        setProducts(data.products);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, []);
+      };
+      fetchProducts();
+    }
+  }, [id]);
+
   if (loading) {
-    return <p>Loading...</p>;
+    return <p>Đang tải...</p>;
   }
+
   if (error) {
-    return <p>Error:{error}</p>;
+    return <p>Lỗi: {error}</p>;
   }
+
   return (
     <>
       <div className={styles["container-header"]}>
@@ -41,13 +51,21 @@ export default function DonghoDoi() {
                 <div className={styles.clear}></div>
                 <div className={styles["block-product-filter"]}>
                   {/* Giới tính */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
-                    <div className={`${styles["field-name"]} ${styles.normal} ${styles.field}`}>Giới tính</div>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
+                    <div
+                      className={`${styles["field-name"]} ${styles.normal} ${styles.field}`}
+                    >
+                      Giới tính
+                    </div>
                     <div
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <Link rel="nofollow" href="#" title="Đồng hồ nam">
                           <span>Đồng hồ nam</span>
                         </Link>
@@ -64,7 +82,9 @@ export default function DonghoDoi() {
                     </div>
                   </div>
                   {/* Thương hiệu  */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                     >
@@ -75,7 +95,9 @@ export default function DonghoDoi() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-3-column"]} ${styles["filter-brand"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="LONGINES">
                             LONGINES
@@ -107,7 +129,11 @@ export default function DonghoDoi() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="FREDERIQUE CONSTANT">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="FREDERIQUE CONSTANT"
+                          >
                             FREDERIQUE CONSTANT
                           </Link>
                         </div>
@@ -152,7 +178,11 @@ export default function DonghoDoi() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="DANIEL WELLINGTON">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="DANIEL WELLINGTON"
+                          >
                             DANIEL WELLINGTON
                           </Link>
                         </div>
@@ -176,7 +206,9 @@ export default function DonghoDoi() {
                   </div>
 
                   {/* Mức giá */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                     >
@@ -187,39 +219,65 @@ export default function DonghoDoi() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-price"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Dưới 2 triệu">
                             Dưới 2 triệu
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Từ 2 triệu đến 5 triệu">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Từ 2 triệu đến 5 triệu"
+                          >
                             Từ 2 triệu đến 5 triệu
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Từ 5 triệu đến 10 triệu">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Từ 5 triệu đến 10 triệu"
+                          >
                             Từ 5 triệu đến 10 triệu
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Từ 10 triệu đến 20 triệu">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Từ 10 triệu đến 20 triệu"
+                          >
                             Từ 10 triệu đến 20 triệu
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Từ 20 triệu đến 30 triệu">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Từ 20 triệu đến 30 triệu"
+                          >
                             Từ 20 triệu đến 30 triệu
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Từ 30 triệu đến 50 triệu">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Từ 30 triệu đến 50 triệu"
+                          >
                             Từ 30 triệu đến 50 triệu
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Từ 50 triệu đến 100 triệu">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Từ 50 triệu đến 100 triệu"
+                          >
                             Từ 50 triệu đến 100 triệu
                           </Link>
                         </div>
@@ -233,7 +291,9 @@ export default function DonghoDoi() {
                   </div>
 
                   {/* Khuyến mãi */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                       data-id="id-field-discount"
@@ -245,7 +305,9 @@ export default function DonghoDoi() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-discount"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Giảm 10%">
                             Giảm 10%
@@ -286,7 +348,9 @@ export default function DonghoDoi() {
                   </div>
 
                   {/* Loại máy */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                       data-id="id-field-loai-may"
@@ -298,49 +362,88 @@ export default function DonghoDoi() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-loai-may"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Automatic (Máy cơ tự động)">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Automatic (Máy cơ tự động)"
+                          >
                             Automatic (Máy cơ tự động)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Quartz (Máy pin - điện tử)">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Quartz (Máy pin - điện tử)"
+                          >
                             Quartz (Máy pin - điện tử)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Eco-Drive (Năng lượng ánh sáng)">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Eco-Drive (Năng lượng ánh sáng)"
+                          >
                             Eco-Drive (Năng lượng ánh sáng)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Quartz Chronograph (Máy pin bấm giờ thể thao)">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Quartz Chronograph (Máy pin bấm giờ thể thao)"
+                          >
                             Quartz Chronograph (Máy pin bấm giờ thể thao)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)"
+                          >
                             Automatic Chronometer (Máy cơ tự động chuẩn COSC)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Quartz Chronometer (Máy pin chuẩn COSC)">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Quartz Chronometer (Máy pin chuẩn COSC)"
+                          >
                             Quartz Chronometer (Máy pin chuẩn COSC)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)">
-                            Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)"
+                          >
+                            Automatic Chronograph (Máy cơ tự động bấm giờ thể
+                            thao)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Quartz Solar (Năng lượng ánh sáng)">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Quartz Solar (Năng lượng ánh sáng)"
+                          >
                             Quartz Solar (Năng lượng ánh sáng)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )"
+                          >
                             Đồng hồ cơ lên giây cót bằng tay ( Manual winding )
                           </Link>
                         </div>
@@ -349,7 +452,9 @@ export default function DonghoDoi() {
                   </div>
 
                   {/*Đường kính */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                       data-id="id-field-duong-kinh"
@@ -361,7 +466,9 @@ export default function DonghoDoi() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-duong-kinh"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Dưới 25mm">
                             Dưới 25mm
@@ -407,7 +514,9 @@ export default function DonghoDoi() {
                   </div>
 
                   {/*Chất liệu dây  */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                       data-id="id-field-chat-lieu-day"
@@ -419,29 +528,47 @@ export default function DonghoDoi() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-chat-lieu-day"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Dây da">
                             Dây da
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Thép không gỉ 316L"
+                          >
                             Thép không gỉ 316L
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L mạ vàng công nghệ PVD">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Thép không gỉ 316L mạ vàng công nghệ PVD"
+                          >
                             Thép không gỉ 316L mạ vàng công nghệ PVD
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L dạng lưới">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Thép không gỉ 316L dạng lưới"
+                          >
                             Thép không gỉ 316L dạng lưới
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L dạng lắc">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Thép không gỉ 316L dạng lắc"
+                          >
                             Thép không gỉ 316L dạng lắc
                           </Link>
                         </div>
@@ -451,17 +578,29 @@ export default function DonghoDoi() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Vàng 18K">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Thép không gỉ 316L/ Vàng 18K"
+                          >
                             Thép không gỉ 316L/ Vàng 18K
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Ceramic">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Thép không gỉ 316L/ Ceramic"
+                          >
                             Thép không gỉ 316L/ Ceramic
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Thép không gỉ mạ công nghệ PVD">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Thép không gỉ mạ công nghệ PVD"
+                          >
                             Thép không gỉ mạ công nghệ PVD
                           </Link>
                         </div>
@@ -481,7 +620,11 @@ export default function DonghoDoi() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Titanium mạ vàng công nghệ PVD">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Titanium mạ vàng công nghệ PVD"
+                          >
                             Titanium mạ vàng công nghệ PVD
                           </Link>
                         </div>
@@ -495,7 +638,9 @@ export default function DonghoDoi() {
                   </div>
 
                   {/*Chất liệu vỏ */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                       data-id="id-field-chat-lieu-vo"
@@ -507,14 +652,24 @@ export default function DonghoDoi() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-chat-lieu-vo"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Thép không gỉ 316L"
+                          >
                             Thép không gỉ 316L
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Thép không gỉ mạ vàng công nghệ PVD">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Thép không gỉ mạ vàng công nghệ PVD"
+                          >
                             Thép không gỉ mạ vàng công nghệ PVD
                           </Link>
                         </div>
@@ -524,7 +679,11 @@ export default function DonghoDoi() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Vàng 18K">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Thép không gỉ 316L/ Vàng 18K"
+                          >
                             Thép không gỉ 316L/ Vàng 18K
                           </Link>
                         </div>
@@ -534,7 +693,11 @@ export default function DonghoDoi() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Titanium mạ công nghệ PVD">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Titanium mạ công nghệ PVD"
+                          >
                             Titanium mạ công nghệ PVD
                           </Link>
                         </div>
@@ -544,12 +707,20 @@ export default function DonghoDoi() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Ceramic">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Thép không gỉ 316L/ Ceramic"
+                          >
                             Thép không gỉ 316L/ Ceramic
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Thép không gỉ mạ công nghệ PVD">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Thép không gỉ mạ công nghệ PVD"
+                          >
                             Thép không gỉ mạ công nghệ PVD
                           </Link>
                         </div>
@@ -559,7 +730,11 @@ export default function DonghoDoi() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Titanium/ Vàng 18K">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Titanium/ Vàng 18K"
+                          >
                             Titanium/ Vàng 18K
                           </Link>
                         </div>
@@ -568,7 +743,9 @@ export default function DonghoDoi() {
                   </div>
 
                   {/* Mặt kính */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                       data-id="id-field-mat-kinh"
@@ -580,7 +757,9 @@ export default function DonghoDoi() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-mat-kinh"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Sapphire">
                             Sapphire
@@ -611,7 +790,9 @@ export default function DonghoDoi() {
                   </div>
 
                   {/*Màu mặt */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                       data-id="id-field-mau-mat"
@@ -623,7 +804,9 @@ export default function DonghoDoi() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-mau-mat"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Trắng">
                             Trắng
@@ -684,7 +867,9 @@ export default function DonghoDoi() {
                   </div>
 
                   {/*Phong cách */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                       data-id="id-field-phong-cach"
@@ -696,7 +881,9 @@ export default function DonghoDoi() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-phong-cach"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Sang trọng">
                             Sang trọng
@@ -708,7 +895,11 @@ export default function DonghoDoi() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link rel="nofollow" href="#" title="Thể thao sang trọng">
+                          <Link
+                            rel="nofollow"
+                            href="#"
+                            title="Thể thao sang trọng"
+                          >
                             Thể thao sang trọng
                           </Link>
                         </div>
@@ -732,7 +923,9 @@ export default function DonghoDoi() {
                   </div>
 
                   {/*Kiểu dáng */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                       data-id="id-field-kieu-dang"
@@ -744,7 +937,9 @@ export default function DonghoDoi() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-kieu-dang"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Mặt vuông">
                             Mặt vuông
@@ -775,7 +970,9 @@ export default function DonghoDoi() {
                   </div>
 
                   {/*Xuất xứ thương hiệu */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                       data-id="id-field-xuat-xu-thuong-hieu"
@@ -787,7 +984,9 @@ export default function DonghoDoi() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]} ${styles["filter-4-xuat-xu-thuong-hieu"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Nhật Bản">
                             Nhật Bản
@@ -807,10 +1006,14 @@ export default function DonghoDoi() {
               <div className={styles.container}>
                 <div className={styles.clear}></div>
                 <div className={styles["all-summary"]}>
-                  <div className={styles["summary-content-filter"]} style={{ description: true }}>
+                  <div
+                    className={styles["summary-content-filter"]}
+                    style={{ description: true }}
+                  >
                     <p>
-                      Đến với thế giới <strong>đồng hồ nam, nữ</strong> của Wristly, bạn sẽ được sở hữu hàng nghìn sản
-                      phẩm chất lượng, thiết kế bắt mắt đến từ các thương hiệu&nbsp;
+                      Đến với thế giới <strong>đồng hồ nam, nữ</strong> của
+                      Wristly, bạn sẽ được sở hữu hàng nghìn sản phẩm chất
+                      lượng, thiết kế bắt mắt đến từ các thương hiệu &nbsp;
                       <em>
                         <strong>
                           <Link href="#" target="_blank">
@@ -818,10 +1021,12 @@ export default function DonghoDoi() {
                           </Link>
                         </strong>
                       </em>
-                      , Nhật Bản, Pháp, Mỹ…danh tiếng trên thế giới. Mọi sản phẩm đều đảm bảo&nbsp;
-                      <strong>100% hàng chính hãng</strong> kèm theo <strong>chế độ bảo hành chính hãng</strong> đặc
-                      biệt với mức giá hợp lý sẽ đem đến cho bạn phụ kiện hoàn hảo nhất; khẳng định đẳng cấp, phong cách
-                      riêng của bản thân
+                      , Nhật Bản, Pháp, Mỹ…danh tiếng trên thế giới. Mọi sản
+                      phẩm đều đảm bảo
+                      <strong> &nbsp;100% hàng chính hãng&nbsp;</strong> kèm
+                      theo <strong>chế độ bảo hành chính hãng</strong> đặc biệt
+                      với mức giá hợp lý sẽ đem đến cho bạn phụ kiện hoàn hảo
+                      nhất; khẳng định đẳng cấp, phong cách riêng của bản thân
                     </p>
                   </div>
 
@@ -832,13 +1037,21 @@ export default function DonghoDoi() {
                   <div className={styles["block-products-filter"]}>
                     <div className={styles["block-product-filter"]}>
                       {/* Giới tính */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
-                        <div className={`${styles["field-name"]} ${styles.normal} ${styles.field}`}>Giới tính</div>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
+                        <div
+                          className={`${styles["field-name"]} ${styles.normal} ${styles.field}`}
+                        >
+                          Giới tính
+                        </div>
                         <div
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <Link rel="nofollow" href="#" title="Đồng hồ nam">
                               <span>Đồng hồ nam</span>
                             </Link>
@@ -848,14 +1061,20 @@ export default function DonghoDoi() {
                             <Link rel="nofollow" href="#" title="Đồng hồ đôi">
                               <span>Đồng hồ đôi</span>
                             </Link>
-                            <Link rel="nofollow" href="#" title="Đồng hồ unisex">
+                            <Link
+                              rel="nofollow"
+                              href="#"
+                              title="Đồng hồ unisex"
+                            >
                               <span>Đồng hồ unisex</span>
                             </Link>
                           </div>
                         </div>
                       </div>
                       {/* Thương hiệu  */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                         >
@@ -866,7 +1085,9 @@ export default function DonghoDoi() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-3-column"]} ${styles["filter-brand"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="LONGINES">
                                 LONGINES
@@ -898,12 +1119,20 @@ export default function DonghoDoi() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="FREDERIQUE CONSTANT">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="FREDERIQUE CONSTANT"
+                              >
                                 FREDERIQUE CONSTANT
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="CALVIN KLEIN">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="CALVIN KLEIN"
+                              >
                                 CALVIN KLEIN
                               </Link>
                             </div>
@@ -913,7 +1142,11 @@ export default function DonghoDoi() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="CLAUDE BERNARD">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="CLAUDE BERNARD"
+                              >
                                 CLAUDE BERNARD
                               </Link>
                             </div>
@@ -943,7 +1176,11 @@ export default function DonghoDoi() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="DANIEL WELLINGTON">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="DANIEL WELLINGTON"
+                              >
                                 DANIEL WELLINGTON
                               </Link>
                             </div>
@@ -958,7 +1195,11 @@ export default function DonghoDoi() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="MICHAEL KORS">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="MICHAEL KORS"
+                              >
                                 MICHAEL KORS
                               </Link>
                             </div>
@@ -967,7 +1208,9 @@ export default function DonghoDoi() {
                       </div>
 
                       {/* Mức giá */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                         >
@@ -978,44 +1221,78 @@ export default function DonghoDoi() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-price"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Dưới 2 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Dưới 2 triệu"
+                              >
                                 Dưới 2 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Từ 2 triệu đến 5 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Từ 2 triệu đến 5 triệu"
+                              >
                                 Từ 2 triệu đến 5 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Từ 5 triệu đến 10 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Từ 5 triệu đến 10 triệu"
+                              >
                                 Từ 5 triệu đến 10 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Từ 10 triệu đến 20 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Từ 10 triệu đến 20 triệu"
+                              >
                                 Từ 10 triệu đến 20 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Từ 20 triệu đến 30 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Từ 20 triệu đến 30 triệu"
+                              >
                                 Từ 20 triệu đến 30 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Từ 30 triệu đến 50 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Từ 30 triệu đến 50 triệu"
+                              >
                                 Từ 30 triệu đến 50 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Từ 50 triệu đến 100 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Từ 50 triệu đến 100 triệu"
+                              >
                                 Từ 50 triệu đến 100 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Trên 100 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Trên 100 triệu"
+                              >
                                 Trên 100 triệu
                               </Link>
                             </div>
@@ -1024,7 +1301,9 @@ export default function DonghoDoi() {
                       </div>
 
                       {/* Khuyến mãi */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-discount"
@@ -1036,7 +1315,9 @@ export default function DonghoDoi() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-discount"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Giảm 10%">
                                 Giảm 10%
@@ -1077,7 +1358,9 @@ export default function DonghoDoi() {
                       </div>
 
                       {/* Loại máy */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-loai-may"
@@ -1089,34 +1372,61 @@ export default function DonghoDoi() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-loai-may"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Automatic (Máy cơ tự động)">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Automatic (Máy cơ tự động)"
+                              >
                                 Automatic (Máy cơ tự động)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Quartz (Máy pin - điện tử)">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Quartz (Máy pin - điện tử)"
+                              >
                                 Quartz (Máy pin - điện tử)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Eco-Drive (Năng lượng ánh sáng)">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Eco-Drive (Năng lượng ánh sáng)"
+                              >
                                 Eco-Drive (Năng lượng ánh sáng)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Quartz Chronograph (Máy pin bấm giờ thể thao)">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Quartz Chronograph (Máy pin bấm giờ thể thao)"
+                              >
                                 Quartz Chronograph (Máy pin bấm giờ thể thao)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)">
-                                Automatic Chronometer (Máy cơ tự động chuẩn COSC)
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)"
+                              >
+                                Automatic Chronometer (Máy cơ tự động chuẩn
+                                COSC)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Quartz Chronometer (Máy pin chuẩn COSC)">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Quartz Chronometer (Máy pin chuẩn COSC)"
+                              >
                                 Quartz Chronometer (Máy pin chuẩn COSC)
                               </Link>
                             </div>
@@ -1126,17 +1436,27 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)"
                               >
-                                Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)
+                                Automatic Chronograph (Máy cơ tự động bấm giờ
+                                thể thao)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Quartz Solar (Năng lượng ánh sáng)">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Quartz Solar (Năng lượng ánh sáng)"
+                              >
                                 Quartz Solar (Năng lượng ánh sáng)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )">
-                                Đồng hồ cơ lên giây cót bằng tay ( Manual winding )
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )"
+                              >
+                                Đồng hồ cơ lên giây cót bằng tay ( Manual
+                                winding )
                               </Link>
                             </div>
                           </div>
@@ -1144,7 +1464,9 @@ export default function DonghoDoi() {
                       </div>
 
                       {/*Đường kính */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-duong-kinh"
@@ -1156,44 +1478,74 @@ export default function DonghoDoi() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-duong-kinh"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Dưới 25mm">
                                 Dưới 25mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="25mm đến 30mm">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="25mm đến 30mm"
+                              >
                                 25mm đến 30mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="30mm đến 35mm">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="30mm đến 35mm"
+                              >
                                 30mm đến 35mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="35mm đến 38mm">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="35mm đến 38mm"
+                              >
                                 35mm đến 38mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="38mm đến 40mm">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="38mm đến 40mm"
+                              >
                                 38mm đến 40mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="40mm đến 42mm">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="40mm đến 42mm"
+                              >
                                 40mm đến 42mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="42mm đến 45mm">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="42mm đến 45mm"
+                              >
                                 42mm đến 45mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Từ 45mm trở lên">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Từ 45mm trở lên"
+                              >
                                 Từ 45mm trở lên
                               </Link>
                             </div>
@@ -1202,7 +1554,9 @@ export default function DonghoDoi() {
                       </div>
 
                       {/*Chất liệu dây  */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-chat-lieu-day"
@@ -1214,29 +1568,47 @@ export default function DonghoDoi() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-chat-lieu-day"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Dây da">
                                 Dây da
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L"
+                              >
                                 Thép không gỉ 316L
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L mạ vàng công nghệ PVD">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L mạ vàng công nghệ PVD"
+                              >
                                 Thép không gỉ 316L mạ vàng công nghệ PVD
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L dạng lưới">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L dạng lưới"
+                              >
                                 Thép không gỉ 316L dạng lưới
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L dạng lắc">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L dạng lắc"
+                              >
                                 Thép không gỉ 316L dạng lắc
                               </Link>
                             </div>
@@ -1246,17 +1618,29 @@ export default function DonghoDoi() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Vàng 18K">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L/ Vàng 18K"
+                              >
                                 Thép không gỉ 316L/ Vàng 18K
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Ceramic">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L/ Ceramic"
+                              >
                                 Thép không gỉ 316L/ Ceramic
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ mạ công nghệ PVD">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ mạ công nghệ PVD"
+                              >
                                 Thép không gỉ mạ công nghệ PVD
                               </Link>
                             </div>
@@ -1276,7 +1660,11 @@ export default function DonghoDoi() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Titanium mạ vàng công nghệ PVD">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Titanium mạ vàng công nghệ PVD"
+                              >
                                 Titanium mạ vàng công nghệ PVD
                               </Link>
                             </div>
@@ -1290,7 +1678,9 @@ export default function DonghoDoi() {
                       </div>
 
                       {/*Chất liệu vỏ */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-chat-lieu-vo"
@@ -1302,14 +1692,24 @@ export default function DonghoDoi() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-chat-lieu-vo"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L"
+                              >
                                 Thép không gỉ 316L
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ mạ vàng công nghệ PVD">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ mạ vàng công nghệ PVD"
+                              >
                                 Thép không gỉ mạ vàng công nghệ PVD
                               </Link>
                             </div>
@@ -1319,7 +1719,11 @@ export default function DonghoDoi() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Vàng 18K">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L/ Vàng 18K"
+                              >
                                 Thép không gỉ 316L/ Vàng 18K
                               </Link>
                             </div>
@@ -1329,7 +1733,11 @@ export default function DonghoDoi() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Titanium mạ công nghệ PVD">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Titanium mạ công nghệ PVD"
+                              >
                                 Titanium mạ công nghệ PVD
                               </Link>
                             </div>
@@ -1339,12 +1747,20 @@ export default function DonghoDoi() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Ceramic">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L/ Ceramic"
+                              >
                                 Thép không gỉ 316L/ Ceramic
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ mạ công nghệ PVD">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ mạ công nghệ PVD"
+                              >
                                 Thép không gỉ mạ công nghệ PVD
                               </Link>
                             </div>
@@ -1354,7 +1770,11 @@ export default function DonghoDoi() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Titanium/ Vàng 18K">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Titanium/ Vàng 18K"
+                              >
                                 Titanium/ Vàng 18K
                               </Link>
                             </div>
@@ -1363,7 +1783,9 @@ export default function DonghoDoi() {
                       </div>
 
                       {/* Mặt kính */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-mat-kinh"
@@ -1375,19 +1797,29 @@ export default function DonghoDoi() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-mat-kinh"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Sapphire">
                                 Sapphire
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Mặt kính cứng">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Mặt kính cứng"
+                              >
                                 Mặt kính cứng
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Hardlex Crystal">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Hardlex Crystal"
+                              >
                                 Hardlex Crystal
                               </Link>
                             </div>
@@ -1406,7 +1838,9 @@ export default function DonghoDoi() {
                       </div>
 
                       {/*Màu mặt */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-mau-mat"
@@ -1418,7 +1852,9 @@ export default function DonghoDoi() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-mau-mat"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Trắng">
                                 Trắng
@@ -1479,7 +1915,9 @@ export default function DonghoDoi() {
                       </div>
 
                       {/*Phong cách */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-phong-cach"
@@ -1491,7 +1929,9 @@ export default function DonghoDoi() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-phong-cach"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Sang trọng">
                                 Sang trọng
@@ -1503,7 +1943,11 @@ export default function DonghoDoi() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thể thao sang trọng">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thể thao sang trọng"
+                              >
                                 Thể thao sang trọng
                               </Link>
                             </div>
@@ -1527,7 +1971,9 @@ export default function DonghoDoi() {
                       </div>
 
                       {/*Kiểu dáng */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-kieu-dang"
@@ -1539,7 +1985,9 @@ export default function DonghoDoi() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-kieu-dang"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Mặt vuông">
                                 Mặt vuông
@@ -1551,7 +1999,11 @@ export default function DonghoDoi() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Mặt chữ nhật">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Mặt chữ nhật"
+                              >
                                 Mặt chữ nhật
                               </Link>
                             </div>
@@ -1570,7 +2022,9 @@ export default function DonghoDoi() {
                       </div>
 
                       {/*Xuất xứ thương hiệu */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-xuat-xu-thuong-hieu"
@@ -1582,7 +2036,9 @@ export default function DonghoDoi() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]} ${styles["filter-4-xuat-xu-thuong-hieu"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Nhật Bản">
                                 Nhật Bản
@@ -1602,16 +2058,20 @@ export default function DonghoDoi() {
                   <div className={styles["field-title"]}>
                     <div className={styles["title-name"]}>
                       <div className={styles["cat-title"]}>
-                        <div className={styles["cat-title-main"]} id="cat-dong-ho">
-                          <div className={styles["title-icon"]}>
-                            <h1>Đồng hồ đôi</h1>
-                          </div>
+                        <div
+                          className={styles["cat-title-main"]}
+                          id="cat-dong-ho"
+                        >
+                          <h1>{cate.danh_muc}</h1>
                         </div>
                         <div className={styles.clear}></div>
                       </div>
                     </div>
 
-                    <select className={styles["order-select"]} name="order-select">
+                    <select
+                      className={styles["order-select"]}
+                      name="order-select"
+                    >
                       <option value="">Sắp xếp theo</option>
                       <option value="#">Bán chạy nhất</option>
                       <option value="#">Khuyến mãi</option>
@@ -1648,35 +2108,55 @@ export default function DonghoDoi() {
                             <div key={_id} className={styles.item}>
                               <div className={styles["frame-inner"]}>
                                 <figure className={styles["product-image"]}>
-                                  <Link href="#">
+                                  <Link href={`/san_pham/${_id}`}>
                                     <img
                                       src={`http://localhost:5000/images/${hinh_anh}`}
                                       alt={ten}
                                       width="300"
                                       height="363"
-                                      style={{ display: "inline-block", opacity: "1" }}
+                                      style={{
+                                        display: "inline-block",
+                                        opacity: "1",
+                                      }}
                                     />
                                   </Link>
                                 </figure>
                                 <h3>
-                                  <Link className={styles.name} href="#" title={ten}>
-                                    <span className={styles["cat-name"]}>{ten_san_pham}</span>
+                                  <Link
+                                    className={styles.name}
+                                    href={`/san_pham/${_id}`}
+                                    title={ten}
+                                  >
+                                    <span className={styles["cat-name"]}>
+                                      {ten_san_pham}
+                                    </span>
                                     {ma_san_pham}
                                   </Link>
                                 </h3>
-                                <span className={styles["loai-may"]}>{loai}</span>
+                                <span className={styles["loai-may"]}>
+                                  {loai}
+                                </span>
                                 <span className={styles["row-lm"]}>|</span>
-                                <span className={styles["duong-kinh"]}>{duong_kinh}</span>
+                                <span className={styles["duong-kinh"]}>
+                                  {duong_kinh}
+                                </span>
                                 <div className={styles["price-area"]}>
                                   <div className={styles["price-old"]}>
-                                    Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                                    Giá:{" "}
+                                    <span>
+                                      {gia_san_pham
+                                        ? gia_san_pham.toLocaleString("vi-VN")
+                                        : "N/A"}
+                                      ₫
+                                    </span>
                                   </div>
                                   <div className={styles["price-current"]}>
-                                    Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
+                                    Giá KM:{" "}
+                                    {gia_giam
+                                      ? gia_giam.toLocaleString("vi-VN")
+                                      : "N/A"}{" "}
+                                    ₫
                                   </div>
-                                </div>
-                                <div className={styles.discount}>
-                                  <span>-20%</span>
                                 </div>
                                 <div className={styles.clear}></div>
                               </div>
@@ -1694,20 +2174,40 @@ export default function DonghoDoi() {
                     <span title="Page 1" className={styles.current}>
                       <span>1</span>
                     </span>
-                    <Link className={styles["other-page"]} title="Page 2" href="#">
+                    <Link
+                      className={styles["other-page"]}
+                      title="Page 2"
+                      href="#"
+                    >
                       <span>2</span>
                     </Link>
-                    <Link className={styles["other-page"]} title="Page 3" href="#">
+                    <Link
+                      className={styles["other-page"]}
+                      title="Page 3"
+                      href="#"
+                    >
                       <span>3</span>
                     </Link>
-                    <Link className={styles["other-page"]} title="Page 4" href="#">
+                    <Link
+                      className={styles["other-page"]}
+                      title="Page 4"
+                      href="#"
+                    >
                       <span>4</span>
                     </Link>
                     <b>...</b>
-                    <Link className={styles["next-page"]} title="Next page" href="#">
+                    <Link
+                      className={styles["next-page"]}
+                      title="Next page"
+                      href="#"
+                    >
                       ›
                     </Link>
-                    <Link className={styles["last-page"]} title="Last page" href="#">
+                    <Link
+                      className={styles["last-page"]}
+                      title="Last page"
+                      href="#"
+                    >
                       ››
                     </Link>
                   </div>
@@ -1718,18 +2218,42 @@ export default function DonghoDoi() {
                 <div className={styles.evaluateCat}>
                   <div className={`${styles.ratingArea} ${styles.cls}`}>
                     <span id="ratings">
-                      <i className={` ${styles.starOn}`} id="rate_1" value="1"></i>
-                      <i className={` ${styles.starOn}`} id="rate_2" value="2"></i>
-                      <i className={` ${styles.starOn}`} id="rate_3" value="3"></i>
-                      <i className={` ${styles.starOff}`} id="rate_4" value="4"></i>
-                      <i className={` ${styles.starOff}`} id="rate_5" value="5"></i>
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_1"
+                        value="1"
+                      ></i>
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_2"
+                        value="2"
+                      ></i>
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_3"
+                        value="3"
+                      ></i>
+                      <i
+                        className={` ${styles.starOff}`}
+                        id="rate_4"
+                        value="4"
+                      ></i>
+                      <i
+                        className={` ${styles.starOff}`}
+                        id="rate_5"
+                        value="5"
+                      ></i>
                     </span>
-                    <span className={styles.ratingNote}>Nhấn vào đây để đánh giá</span>
+                    <span className={styles.ratingNote}>
+                      Nhấn vào đây để đánh giá
+                    </span>
                   </div>
                 </div>
 
                 <div className={styles.clear}></div>
-                <div className={`${styles.aq_relates} ${styles.content_li}`}></div>
+                <div
+                  className={`${styles.aq_relates} ${styles.content_li}`}
+                ></div>
               </div>
             </div>
             {/* end đồng hồ nam   */}

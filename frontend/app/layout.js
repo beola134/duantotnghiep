@@ -1,8 +1,10 @@
+
 "use client";
 import { useEffect } from "react";
 import Footer from "./components/layout/footer/page";
 import "./globals.css";
 import Script from "next/script";
+
 
 export default function RootLayout({ children }) {
   useEffect(() => {
@@ -28,6 +30,7 @@ export default function RootLayout({ children }) {
         {children}
         <Footer />
       </body>
+
     </html>
   );
 }
