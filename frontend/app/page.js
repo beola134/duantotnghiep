@@ -1,4 +1,3 @@
-
 import DonghoDoi from "./components/donghodoi/page";
 import Donghonu from "./components/donghonu/page";
 import Login from "./components/login/page";
@@ -12,8 +11,7 @@ export default function Home() {
       {/*<Thuonghieu />*/}
       {/* <DonghoDoi /> */}
       {/*<Donghonu/>*/}
-      <Sanphamkhac/>
-      
+      <Sanphamkhac />
     </>
   );
 }
