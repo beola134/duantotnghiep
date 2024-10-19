@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styles from "./detail.module.css";
 export default function Detail({ params }) {
   const [product, setProducts] = useState(null);
+  const [cate, setCate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -14,6 +15,7 @@ export default function Detail({ params }) {
         }
         const data = await response.json();
         setProducts(data.product);
+        setCate(data.cate);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -95,7 +97,11 @@ export default function Detail({ params }) {
         <div className={styles.frameCenter}>
           <div className={`${styles.nameTable} ${styles.mt20}`}>
             <div className={styles.logoManufactory}>
-              <img className={styles.imageGiftCat} src="/image/item/brand1.png" alt="" />
+              <img
+                className={styles.imageGiftCat}
+                src={`http://localhost:5000/images/${cate.hinh_anh}`}
+                alt={cate.danh_muc}
+              />
             </div>
             <div className={styles.productName}>
               <h1 className={styles.bkProductName}>{product.ten}</h1>
