@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const cateController = require("../controllers/cateController");
+//test sua lôi push cho son
+//test sua loi push cho son 2
 
 //show tất cả thương hiệu
 //http://localhost:5000/cate/allcate
