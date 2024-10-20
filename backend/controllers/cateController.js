@@ -1,6 +1,6 @@
 const Cate = require("../models/cate");
 const upload = require("../config/update");
-const { Op } = require('sequelize'); // Import Op từ sequelize
+const { Op, where } = require('sequelize'); // Import Op từ sequelize
 
 // Lấy tất cả thương hiệu
 exports.getAllCates = async (req, res) => {
@@ -22,6 +22,7 @@ exports.getAllCates = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 // Lấy tất cả danh mục
 exports.getAllCatess = async (req, res) => {

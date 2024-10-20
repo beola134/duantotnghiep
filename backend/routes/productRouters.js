@@ -3,6 +3,10 @@ const router = express.Router();
 const productController = require("../controllers/productController");
 
 //show sản phẩm mới nhất theo gioi_tinh nam
+//http://localhost:5000/product/filtersanphamdongho
+router.get("/filtersanphamdongho", productController.filtersanphamdongho);
+
+//show sản phẩm mới nhất theo gioi_tinh nam
 //http://localhost:5000/product/new/gioitinh-nam
 router.get("/new/gioitinh-nam", productController.getNewProductsMale);
 
