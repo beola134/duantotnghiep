@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
 import styles from "./register.module.css";
 import OTP from "../OTP/page";
 
@@ -72,8 +73,13 @@ export default function Register() {
             throw new Error(errorData.message || "Đăng ký thất bại");
           }
         } else {
-          alert("Đăng ký thành công");
-          setIsModalOpen(true); // mở modal xác thực OTP khi xác thực thành công
+          Swal.fire({
+            icon: "success",
+            title: "Đăng ký thành công",
+            text: "Vui lòng kiểm tra email để xác nhận mã OTP",
+          }).then(() => {
+            setIsModalOpen(true); // mở modal xác thực OTP khi xác thực thành công
+          });
         }
       } catch (error) {
         setFieldError("general", error.message);

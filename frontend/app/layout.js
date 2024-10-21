@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import Footer from "./components/layout/footer/page";
 import "./globals.css";
 import Script from "next/script";
-import Header from "./components/layout/header/page";
 
 export default function RootLayout({ children }) {
   useEffect(() => {
@@ -24,11 +23,8 @@ export default function RootLayout({ children }) {
           crossOrigin="anonymous"
           nonce="uaRZ9ATs"
         />
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
       </head>
       <body>
-        <Header />
         {children}
         <Footer />
       </body>
