@@ -4,7 +4,7 @@ const axios = require('axios');
 const Users = require("../models/users");
 
 //client_id của google
-const client_id = process.env.GOOGLE_CLIENT_ID;
+const client_id = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(client_id);
 
 // 
