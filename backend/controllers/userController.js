@@ -220,7 +220,7 @@ exports.login = async (req, res) => {
 exports.register = async (req, res) => {
   try {
     const { ten_dang_nhap, mat_khau, nhap_lai_mat_khau, email } = req.body;
-    const hinh_anh = req.file ? req.file.filename : null;
+    const hinh_anh = "219986.png";
     const quyen = req.body.quyen || "2";
     // Kiểm tra mật khẩu và nhập lại mật khẩu có khớp không
     if (mat_khau !== nhap_lai_mat_khau) {
