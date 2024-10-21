@@ -88,7 +88,7 @@ export default function Login() {
 
       Swal.fire({
         title: "Đăng nhập thành công",
-        text: "Chào mừng bạn đến với ứng dụng!",
+        text: "Chào mừng bạn đến với Website!",
         icon: "success",
         showConfirmButton: true,
       }).then(() => {
@@ -156,9 +156,11 @@ export default function Login() {
               onFailure={handleLoginFailure}
               render={(renderProps) => (
                 <div className={styles.socialAccounts}>
-                  <button className={styles.socialButton} onClick={renderProps.onClick} disabled={renderProps.disabled}>
-                    <img src="/image/item/icon-gg-login.png" alt="Google Icon" />
-                  </button>
+                  <button
+                    className={styles.socialButton}
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                  ></button>
                 </div>
               )}
             />
