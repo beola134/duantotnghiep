@@ -170,7 +170,6 @@
 
 .socialAccountContainer .socialAccounts .socialButton:hover {
   transform: scale(1.2);
-  background: #333; /* Đổi màu khi hover */
 }
 
 .socialAccountContainer .socialAccounts .socialButton:active {
