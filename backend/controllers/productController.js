@@ -4,6 +4,125 @@ const Cate = require("../models/cate");
 const Category = require("../models/cate");
 const { Op } = require("sequelize");
 
+// xử lí phần trăm giá giảm
+exports.filtersanphamdongho = async (req, res) => {
+  try {
+    const {
+      gioi_tinh,
+      muc_gia,
+      khuyenmai,
+      loai_may,
+      duong_kinh,
+      chat_lieu_day,
+      chat_lieu_vo,
+      mat_kinh,
+      mau_ma,
+      phong_cach,
+      kieu_dang,
+      xuat_xu,
+      danh_muc
+    } = req.query;
+    console.log(req.query);
+    
+    let filter = {
+      [Op.and]: [],
+    };
+    filter.loai = { [Op.notIn]: ["Vòng tay", "Trang sức", "Đồng hồ để bàn", "Đồng hồ báo thức"] };
+    if (gioi_tinh) {
+      filter.gioi_tinh = gioi_tinh;
+    }
+    if (loai_may) {
+      filter.loai_may = loai_may;
+    }
+    if (duong_kinh) {
+      filter.duong_kinh = duong_kinh;
+    }
+    if (chat_lieu_day) {
+      filter.chat_lieu_day = chat_lieu_day;
+    }
+    if (chat_lieu_vo) {
+      filter.chat_lieu_vo = chat_lieu_vo;
+    }
+    if (mat_kinh) {
+      filter.mat_kinh = mat_kinh;
+    }
+    if (mau_ma) {
+      filter.mau_ma = mau_ma;
+    }
+    if (phong_cach) {
+      filter.phong_cach = phong_cach;
+    }
+    if (kieu_dang) {
+      filter.kieu_dang = kieu_dang;
+    }
+    if (xuat_xu) {
+      filter.xuat_xu = xuat_xu;
+    }
+    if (danh_muc) {
+      const category = await Cate.findOne({ where: { danh_muc: danh_muc } });
+      console.log("category result",category);
+      if (category) {
+        filter.id_danh_muc = category._id;
+      } else {
+        return res.status(404).json({ message:"Danh mục không tồn tại"})
+      }
+    }
+    if (muc_gia) {
+      let priceRange;
+      switch (muc_gia) {
+        case "duoi_2_trieu":
+          priceRange = { [Op.lt]: 2000000 };
+          break;
+        case "tu_2_den_5_trieu":
+          priceRange = { [Op.between]: [2000000, 5000000] };
+          break;
+        case "tu_5_den_10_trieu":
+          priceRange = { [Op.between]: [5000000, 10000000] };
+          break;
+        case "tu_10_den_20_trieu":
+          priceRange = { [Op.between]: [10000000, 20000000] };
+          break;
+        case "tu_20_den_30_trieu":
+          priceRange = { [Op.between]: [20000000, 30000000] };
+          break;
+        case "tu_30_den_50_trieu":
+          priceRange = { [Op.between]: [30000000, 50000000] };
+          break;
+        case "tu_50_den_100_trieu":
+          priceRange = { [Op.between]: [50000000, 100000000] };
+          break;
+        case "tren_100_trieu":
+          priceRange = { [Op.gt]: 100000000 };
+          break;
+        default:
+          priceRange = null
+          break;
+      }
+      if (priceRange) {
+        if (khuyenmai === "true") {
+          filter.gia_giam = priceRange;
+        } else {
+          filter.gia_san_pham = priceRange;
+        }
+      }
+    }    
+    if (khuyenmai) {
+      filter[Op.and].push(
+        { gia_giam: { [Op.ne]: null } },
+        { gia_giam: { [Op.ne]: 0 } },
+        Sequelize.literal(
+          `ROUND(((gia_san_pham - gia_giam) / gia_san_pham ) * 100, 2 ) = ${khuyenmai}`)
+      );
+    }
+    const products = await Product.findAll({where: filter});
+    res.json({ products });
+  } catch (error) {
+    console.log("Error: " ,error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 // show sản phẩm mới nhất Nam
 exports.getNewProductsMale = async (req, res) => {
   try {
@@ -13,7 +132,6 @@ exports.getNewProductsMale = async (req, res) => {
         loai: { [Op.not]: "Vòng Tay" },
       },
       order: [["createdAt", "DESC"]],
-      limit: 10,
     });
 
     if (products.length === 0) {
@@ -34,7 +152,6 @@ exports.getNewProductsFeMale = async (req, res) => {
         loai: { [Op.not]: "Vòng Tay" },
       },
       order: [["createdAt", "DESC"]],
-      limit: 10,
     });
 
     if (products.length === 0) {
@@ -48,6 +165,68 @@ exports.getNewProductsFeMale = async (req, res) => {
 
 // show sản phẩm mới nhất Đôi
 exports.getNewProductsCouple = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        gioi_tinh: "Đồng Hồ Đôi",
+        loai: { [Op.not]: "Vòng Tay" },
+      },
+      order: [["createdAt", "DESC"]],
+    });
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
+    }
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+ 
+// show sản phẩm mới nhất Nam giới hạn 10 sp
+exports.getNewLimitMale = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        gioi_tinh: "Nam",
+        loai: { [Op.not]: "Vòng Tay" },
+      },
+      order: [["createdAt", "DESC"]],
+      limit: 10,
+    });
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
+    }
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// show sản phẩm mới nhất nu giới hạn 10 sp
+exports.getNewLimitFeMale = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        gioi_tinh: "Nữ",
+        loai: { [Op.not]: "Vòng Tay" },
+      },
+      order: [["createdAt", "DESC"]],
+      limit: 10,
+    });
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
+    }
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// show sản phẩm mới nhất Đôi giới hạn 10 sp
+exports.getNewLimitCouple = async (req, res) => {
   try {
     const products = await Product.findAll({
       where: {
