@@ -307,8 +307,10 @@ exports.getFeMale = async (req, res) => {
 
    const { rows: products, count: totalProducts } =
      await Product.findAndCountAll({
-       where: { gioi_tinh: "Nữ" },
-       loai: {[Op.not]:"Vòng Tay"},
+       where: {
+         gioi_tinh: "Nữ",
+         loai: {[Op.not]:"Vòng Tay"}
+        },
        order: [["createdAt", "DESC"]],
        limit,
        offset,
