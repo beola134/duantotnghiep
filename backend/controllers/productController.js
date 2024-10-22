@@ -249,10 +249,33 @@ exports.getNewLimitCouple = async (req, res) => {
 // Lấy danh mục theo giới tính "Nam"
 exports.getMale = async (req, res) => {
   try {
-    const products = await Product.findAll({
+    let { limit = 10, page = 1 } = req.query
+    limit = parseInt(limit);
+    page = parseInt(page);
+    if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
+      return res.status(400).json({ message: "Itham số không hợp lệ" });
+    }
+    const offset = (page - 1) * limit;
+
+    const { rows: products, count: totalProducts } = await Product.findAndCountAll({
       where: { gioi_tinh: "Nam" },
+      order: [["createdAt", "DESC"]],
+      limit,
+      offset,
     });
-    res.json({ products });
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
+    }
+    const totalPages = Math.ceil(totalProducts / limit);
+    if (page > totalPages) {
+      return res.status(404).json({ message: "Trang không tồn tại" });
+    }
+    res.json({
+      products,
+      currentPage: page,
+      totalPages,
+      totalProducts,
+     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
