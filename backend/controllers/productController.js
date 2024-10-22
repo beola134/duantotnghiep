@@ -290,7 +290,9 @@ exports.getFeMale = async (req, res) => {
 exports.getFeMale10sp = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { gioi_tinh: "Nữ" },
+      where: { gioi_tinh: "Nữ",
+      loai: {[Op.not]:"Vòng Tay"}
+       },
       limit: 10,
     });
     res.json({ products });
