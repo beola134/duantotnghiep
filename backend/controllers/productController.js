@@ -9,7 +9,6 @@ exports.filtersanphamdongho = async (req, res) => {
   try {
     const {
       gioi_tinh,
-      thuong_hieu,
       muc_gia,
       khuyenmai,
       loai_may,
@@ -31,9 +30,6 @@ exports.filtersanphamdongho = async (req, res) => {
     filter.loai = { [Op.notIn]: ["Vòng tay", "Trang sức", "Đồng hồ để bàn", "Đồng hồ báo thức"] };
     if (gioi_tinh) {
       filter.gioi_tinh = gioi_tinh;
-    }
-    if (thuong_hieu) {
-      filter.thuong_hieu = thuong_hieu;
     }
     if (loai_may) {
       filter.loai_may = loai_may;
@@ -176,6 +172,69 @@ exports.getNewProductsCouple = async (req, res) => {
         loai: { [Op.not]: "Vòng Tay" },
       },
       order: [["createdAt", "DESC"]],
+    });
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
+    }
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+ 
+// show sản phẩm mới nhất Nam giới hạn 10 sp
+exports.getNewLimitMale = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        gioi_tinh: "Nam",
+        loai: { [Op.not]: "Vòng Tay" },
+      },
+      order: [["createdAt", "DESC"]],
+      limit: 10,
+    });
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
+    }
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// show sản phẩm mới nhất nu giới hạn 10 sp
+exports.getNewLimitFeMale = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        gioi_tinh: "Nữ",
+        loai: { [Op.not]: "Vòng Tay" },
+      },
+      order: [["createdAt", "DESC"]],
+      limit: 10,
+    });
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
+    }
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// show sản phẩm mới nhất Đôi giới hạn 10 sp
+exports.getNewLimitCouple = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        gioi_tinh: "Đồng Hồ Đôi",
+        loai: { [Op.not]: "Vòng Tay" },
+      },
+      order: [["createdAt", "DESC"]],
+      limit: 10,
     });
 
     if (products.length === 0) {

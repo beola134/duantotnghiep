@@ -6,6 +6,10 @@ const productController = require("../controllers/productController");
 //http://localhost:5000/product/filtersanphamdongho
 router.get("/filtersanphamdongho", productController.filtersanphamdongho);
 
+//show sản phẩm mới nhất theo gioi_tinh nam limit 10
+//http://localhost:5000/product/limit/gioitinh-nam
+router.get("/limit/gioitinh-nam", productController.getNewLimitMale);
+
 //show sản phẩm mới nhất theo gioi_tinh nam
 //http://localhost:5000/product/new/gioitinh-nam
 router.get("/new/gioitinh-nam", productController.getNewProductsMale);
@@ -17,6 +21,10 @@ router.get("/allsp/gioitinh-nam", productController.getMale);
 //show sản phẩm theo giới tính nam10sp
 //http://localhost:5000/product/allsp/gioitinh-nam10sp
 router.get("/allsp/gioitinh-nam10sp", productController.getMale10sp);
+
+//show sản phẩm mới nhất theo gioi_tinh nu limit 10
+//http://localhost:5000/product/limit/gioitinh-nu
+router.get("/limit/gioitinh-nu", productController.getNewLimitFeMale);
 
 //show sản phẩm mới nhất theo gioi_tinh nữ
 //http://localhost:5000/product/new/gioitinh-nu
@@ -35,6 +43,10 @@ router.get("/allsp/doi", productController.getCouple);
 
 //http://localhost:5000/product/allsp/doi10sp"
 router.get("/allsp/doi10sp", productController.getCouple10sp);
+
+//show sản phẩm mới nhất theo gioi_tinh doi limit 10
+//http://localhost:5000/product/limit/doi
+router.get("/limit/doi", productController.getNewLimitCouple);
 
 //show sản phẩm mới nhất theo doi
 //http://localhost:5000/product/new/doi
