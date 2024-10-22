@@ -737,7 +737,6 @@ exports.addProduct = async (req, res) => {
         size_day,
         mau_day,
         do_dai_day,
-        createdAt,
         id_danh_muc: categoryId,
       } = req.body;
       const hinh_anh = req.file ? req.file.originalname : "";
@@ -771,7 +770,6 @@ exports.addProduct = async (req, res) => {
         size_day,
         mau_day,
         do_dai_day,
-        createdAt,
         id_danh_muc: categoryId,
       });
       res.json({ product });
@@ -810,11 +808,17 @@ exports.updateProduct = async (req, res) => {
       }
       const {
         ten_san_pham,
+        ten,
         gia_san_pham,
+        gia_giam,
         mo_ta,
+        ma_san_pham,
+        do_chiu_nuoc,
+        xuat_xu,
         gioi_tinh,
         so_luong,
         loai_may,
+        loai,
         duong_kinh,
         chat_lieu_day,
         chat_lieu_vo,
@@ -822,6 +826,10 @@ exports.updateProduct = async (req, res) => {
         mau_mat,
         phong_cach,
         kieu_dang,
+        thuong_hieu,
+        size_day,
+        mau_day,
+        do_dai_day,
         id_danh_muc: categoryId,
       } = req.body;
       const hinh_anh = req.file ? req.file.originalname : product.hinh_anh;
@@ -832,12 +840,18 @@ exports.updateProduct = async (req, res) => {
       // Cập nhật sản phẩm
       await product.update({
         ten_san_pham,
+        ten,
         gia_san_pham,
+        gia_giam,
         hinh_anh,
         mo_ta,
+        ma_san_pham,
+        do_chiu_nuoc,
+        xuat_xu,
         gioi_tinh,
         so_luong,
         loai_may,
+        loai,
         duong_kinh,
         chat_lieu_day,
         chat_lieu_vo,
@@ -845,6 +859,10 @@ exports.updateProduct = async (req, res) => {
         mau_mat,
         phong_cach,
         kieu_dang,
+        thuong_hieu,
+        size_day,
+        mau_day,
+        do_dai_day,
         id_danh_muc: categoryId,
       });
       res.json({ product });
