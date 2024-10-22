@@ -296,38 +296,39 @@ exports.getMale10sp = async (req, res) => {
 
 // Lấy danh mục theo giới tính "Nữ"
 exports.getFeMale = async (req, res) => {
-   try {
-     let { limit = 10, page = 1 } = req.query;
-     limit = parseInt(limit);
-     page = parseInt(page);
-     if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
-       return res.status(400).json({ message: "Itham số không hợp lệ" });
-     }
-     const offset = (page - 1) * limit;
-
-     const { rows: products, count: totalProducts } =
-       await Product.findAndCountAll({
-         where: { gioi_tinh: "Nữ" },
-         order: [["createdAt", "DESC"]],
-         limit,
-         offset,
-       });
-     if (products.length === 0) {
-       return res.status(404).json({ message: "Không có sản phẩm nào" });
-     }
-     const totalPages = Math.ceil(totalProducts / limit);
-     if (page > totalPages) {
-       return res.status(404).json({ message: "Trang không tồn tại" });
-     }
-     res.json({
-       products,
-       currentPage: page,
-       totalPages,
-       totalProducts,
-     });
-   } catch (error) {
-     res.status(500).json({ error: error.message });
+ try {
+   let { limit = 10, page = 1 } = req.query;
+   limit = parseInt(limit);
+   page = parseInt(page);
+   if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
+     return res.status(400).json({ message: "Itham số không hợp lệ" });
    }
+   const offset = (page - 1) * limit;
+
+   const { rows: products, count: totalProducts } =
+     await Product.findAndCountAll({
+       where: { gioi_tinh: "Nữ" },
+       loai: {[Op.not]:"Vòng Tay"},
+       order: [["createdAt", "DESC"]],
+       limit,
+       offset,
+     });
+   if (products.length === 0) {
+     return res.status(404).json({ message: "Không có sản phẩm nào" });
+   }
+   const totalPages = Math.ceil(totalProducts / limit);
+   if (page > totalPages) {
+     return res.status(404).json({ message: "Trang không tồn tại" });
+   }
+   res.json({
+     products,
+     currentPage: page,
+     totalPages,
+     totalProducts,
+   });
+ } catch (error) {
+   res.status(500).json({ error: error.message });
+ }
 };
 
 // Lấy danh mục theo giới tính "Nữ"10sp
@@ -335,7 +336,6 @@ exports.getFeMale10sp = async (req, res) => {
   try {
     const products = await Product.findAll({
       where: { gioi_tinh: "Nữ",
-      loai: {[Op.not]:"Vòng Tay"}
        },
       limit: 10,
     });
@@ -347,38 +347,14 @@ exports.getFeMale10sp = async (req, res) => {
 
 // Lấy danh mục theo "Đôi"
 exports.getCouple = async (req, res) => {
-   try {
-     let { limit = 10, page = 1 } = req.query;
-     limit = parseInt(limit);
-     page = parseInt(page);
-     if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
-       return res.status(400).json({ message: "Itham số không hợp lệ" });
-     }
-     const offset = (page - 1) * limit;
-
-     const { rows: products, count: totalProducts } =
-       await Product.findAndCountAll({
-         where: { gioi_tinh: "Đồng hồ đôi" },
-         order: [["createdAt", "DESC"]],
-         limit,
-         offset,
-       });
-     if (products.length === 0) {
-       return res.status(404).json({ message: "Không có sản phẩm nào" });
-     }
-     const totalPages = Math.ceil(totalProducts / limit);
-     if (page > totalPages) {
-       return res.status(404).json({ message: "Trang không tồn tại" });
-     }
-     res.json({
-       products,
-       currentPage: page,
-       totalPages,
-       totalProducts,
-     });
-   } catch (error) {
-     res.status(500).json({ error: error.message });
-   }
+  try {
+    const products = await Product.findAll({
+      where: { gioi_tinh: "Đồng Hồ Đôi" },
+    });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 // Lấy danh mục theo giới tính "đồng hồ đôi"
