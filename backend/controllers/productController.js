@@ -2,7 +2,7 @@ const Product = require("../models/product");
 const upload = require("../config/update");
 const Cate = require("../models/cate");
 const Category = require("../models/cate");
-const { Op } = require("sequelize");
+const { Sequelize,Op } = require("sequelize");
 
 // xử lí phần trăm giá giảm
 exports.filtersanphamdongho = async (req, res) => {
