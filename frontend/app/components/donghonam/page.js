@@ -5,6 +5,7 @@ import styles from "../donghonam/donghonam.module.css";
 
 export default function DonghoNam() {
   const [products, setProducts] = useState([]);
+  const [categoryName, setCategoryName] = useState("Đồng hồ nam");
   const [selectedFilter, setSelectedFilter] = useState([]); // Lưu trữ các filter đã chọn
   const [sortOption, setSortOption] = useState("");
   const [loading, setLoading] = useState(true);
@@ -23,7 +24,6 @@ export default function DonghoNam() {
     kieu_dang: "",
     xuat_xu: "",
   });
-
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -59,6 +59,7 @@ export default function DonghoNam() {
     }
     setSelectedFilter(newFilters);
     setFilter(newFilter);
+    setCategoryName(value);
   };
 
   // button xoá hết bộ lọc
@@ -121,8 +122,8 @@ export default function DonghoNam() {
                 <div className={styles["all-summary"]}>
                   <div className={styles["summary-content-filter"]} style={{ description: true }}>
                     <p>
-                      Đến với thế giới <strong>đồng hồ nam</strong> của Duy Anh Watch, bạn sẽ được sở hữu hàng nghìn sản
-                      phẩm chất lượng, thiết kế bắt mắt đến từ các thương hiệu
+                      Đến với thế giới <strong>đồng hồ nam</strong> của Wristly, bạn sẽ được sở hữu hàng nghìn sản phẩm
+                      chất lượng, thiết kế bắt mắt đến từ các thương hiệu
                       <em>
                         <strong>
                           <Link href="#" target="_blank">
@@ -233,77 +234,152 @@ export default function DonghoNam() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="HAMILTON">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="HAMILTON"
+                                onClick={() => handleFilterChange("danh_muc", "HAMILTON")}
+                              >
                                 HAMILTON
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="TITONI">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="TITONI"
+                                onClick={() => handleFilterChange("danh_muc", "TITONI")}
+                              >
                                 TITONI
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="FREDERIQUE CONSTANT">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="FREDERIQUE CONSTANT"
+                                onClick={() => handleFilterChange("danh_muc", "FREDERIQUE CONSTANT")}
+                              >
                                 FREDERIQUE CONSTANT
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="CALVIN KLEIN">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="CALVIN KLEIN"
+                                onClick={() => handleFilterChange("danh_muc", "CALVIN KLEIN")}
+                              >
                                 CALVIN KLEIN
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="EDOX">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="EDOX"
+                                onClick={() => handleFilterChange("danh_muc", "EDOX")}
+                              >
                                 EDOX
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="CLAUDE BERNARD">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="CLAUDE BERNARD"
+                                onClick={() => handleFilterChange("danh_muc", "CLAUDE BERNARD")}
+                              >
                                 CLAUDE BERNARD
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="SEIKO">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="SEIKO"
+                                onClick={() => handleFilterChange("danh_muc", "SEIKO")}
+                              >
                                 SEIKO
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="CITIZEN">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="CITIZEN"
+                                onClick={() => handleFilterChange("danh_muc", "CITIZEN")}
+                              >
                                 CITIZEN
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="ORIENT">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="ORIENT"
+                                onClick={() => handleFilterChange("danh_muc", "ORIENT")}
+                              >
                                 ORIENT
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="CASIO">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="CASIO"
+                                onClick={() => handleFilterChange("danh_muc", "CASIO")}
+                              >
                                 CASIO
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="OLYM PIANUS">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="OLYM PIANUS"
+                                onClick={() => handleFilterChange("danh_muc", "OLYM PIANUS")}
+                              >
                                 OLYM PIANUS
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="DANIEL WELLINGTON">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="DANIEL WELLINGTON"
+                                onClick={() => handleFilterChange("danh_muc", "DANIEL WELLINGTON")}
+                              >
                                 DANIEL WELLINGTON
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="FOSSIL">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="FOSSIL"
+                                onClick={() => handleFilterChange("danh_muc", "FOSSIL")}
+                              >
                                 FOSSIL
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="SKAGEN">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="SKAGEN"
+                                onClick={() => handleFilterChange("danh_muc", "SKAGEN")}
+                              >
                                 SKAGEN
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="MICHAEL KORS">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="MICHAEL KORS"
+                                onClick={() => handleFilterChange("danh_muc", "MICHAEL KORS")}
+                              >
                                 MICHAEL KORS
                               </Link>
                             </div>
@@ -329,43 +405,78 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Dưới 2 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Dưới 2 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "dưới 2 triệu")}
                               >
                                 Dưới 2 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Từ 2 triệu đến 5 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Từ 2 triệu đến 5 triệu"
+                                onClick={() => handleFilterChange("muc_gia", "từ 2 đến 5 triệu")}
+                              >
                                 Từ 2 triệu đến 5 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Từ 5 triệu đến 10 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Từ 5 triệu đến 10 triệu"
+                                onClick={() => handleFilterChange("muc_gia", "từ 5 đến 10 triệu")}
+                              >
                                 Từ 5 triệu đến 10 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Từ 10 triệu đến 20 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Từ 10 triệu đến 20 triệu"
+                                onClick={() => handleFilterChange("muc_gia", "từ 10 đến 20 triệu")}
+                              >
                                 Từ 10 triệu đến 20 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Từ 20 triệu đến 30 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Từ 20 triệu đến 30 triệu"
+                                onClick={() => handleFilterChange("muc_gia", "từ 20 đến 30 triệu")}
+                              >
                                 Từ 20 triệu đến 30 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Từ 30 triệu đến 50 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Từ 30 triệu đến 50 triệu"
+                                onClick={() => handleFilterChange("muc_gia", "từ 30 đến 50 triệu")}
+                              >
                                 Từ 30 triệu đến 50 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Từ 50 triệu đến 100 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Từ 50 triệu đến 100 triệu"
+                                onClick={() => handleFilterChange("muc_gia", "từ 50 đến 100 triệu")}
+                              >
                                 Từ 50 triệu đến 100 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Trên 100 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Trên 100 triệu"
+                                onClick={() => handleFilterChange("muc_gia", "trên 100 triệu")}
+                              >
                                 Trên 100 triệu
                               </Link>
                             </div>
@@ -954,7 +1065,7 @@ export default function DonghoNam() {
                       <div className={styles["cat-title"]}>
                         <div className={styles["cat-title-main"]} id="cat-dong-ho">
                           <div className={styles["title-icon"]}>
-                            <h1>Đồng hồ nam</h1>
+                            <h1> {categoryName === "Đồng hồ nam" ? categoryName : `Đồng hồ ${categoryName}`}</h1>
                           </div>
                         </div>
                         <div className={styles.clear}></div>
