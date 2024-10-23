@@ -5,14 +5,31 @@ import styles from "../donghonam/donghonam.module.css";
 
 export default function DonghoNam() {
   const [products, setProducts] = useState([]);
+  const [selectedFilter, setSelectedFilter] = useState([]); // Lưu trữ các filter đã chọn
   const [sortOption, setSortOption] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filter, setFilter] = useState({
+    gioi_tinh: "Nam",
+    danh_muc: "",
+    muc_gia: "",
+    khuyen_mai: "",
+    loai_may: "",
+    chat_lieu_day: "",
+    chat_lieu_vo: "",
+    mat_kinh: "",
+    mau_mat: "",
+    phong_cach: "",
+    kieu_dang: "",
+    xuat_xu: "",
+  });
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       try {
-        const response = await fetch("http://localhost:5000/product/allsp/gioitinh-nam");
+        const queryParams = new URLSearchParams(filter);
+        const response = await fetch(`http://localhost:5000/product/filtersanphamdongho?${queryParams}`);
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -25,7 +42,50 @@ export default function DonghoNam() {
       }
     };
     fetchProducts();
-  }, []);
+  }, [filter]); // Chạy lại khi filter thay đổi
+
+  const handleFilterChange = (filterType, value) => {
+    // Tạo một bản sao của selectedFilter và filter
+    const newFilters = [...selectedFilter];
+    const newFilter = { ...filter, [filterType]: value }; // Cập nhật giá trị của filter
+
+    // Kiểm tra xem bộ lọc đã có trong danh sách hay chưa
+    const filterIndex = newFilters.findIndex((filter) => filter.startsWith(`${filterType}=`));
+
+    if (filterIndex !== -1) {
+      newFilters[filterIndex] = `${filterType}=${value}`; // Cập nhật bộ lọc
+    } else {
+      newFilters.push(`${filterType}=${value}`); // Thêm bộ lọc mới
+    }
+    setSelectedFilter(newFilters);
+    setFilter(newFilter);
+  };
+
+  // button xoá hết bộ lọc
+  const handleClearFilters = () => {
+    setSelectedFilter([]); // Xóa tất cả các bộ lọc
+    setFilter({
+      gioi_tinh: "Nam", // Đặt lại mặc định đồng hồ nam
+      danh_muc: "",
+      muc_gia: "",
+      khuyen_mai: "",
+      loai_may: "",
+      chat_lieu_day: "",
+      chat_lieu_vo: "",
+      mat_kinh: "",
+      mau_mat: "",
+      phong_cach: "",
+      kieu_dang: "",
+      xuat_xu: "",
+    });
+  };
+
+  // Xoá bộ lọc cụ thể
+  const handleRemoveFilter = (filterToRemove) => {
+    // Loại bỏ bộ lọc cụ thể khỏi selectedFilter
+    const newFilters = selectedFilter.filter((filter) => filter !== filterToRemove);
+    setSelectedFilter(newFilters);
+  };
 
   // Gía từ thấp đến cao và ngược lại
   const sortProducts = (products) => {
@@ -79,6 +139,19 @@ export default function DonghoNam() {
 
                   <div className={styles["view-more"]}>Xem thêm</div>
                 </div>
+                {selectedFilter.length > 0 && (
+                  <div className={styles.choosedfilter}>
+                    {selectedFilter.map((filter, index) => (
+                      <Link key={index} rel="nofollow" href="#" onClick={() => handleRemoveFilter(filter)}>
+                        {filter.split("=")[1]} {/*Hiển thị các bộ lọc đã chọn*/}
+                      </Link>
+                    ))}
+                    <Link rel="nofollow" className={styles.reset} href="#" onClick={handleClearFilters}>
+                      Xoá hết
+                    </Link>
+                  </div>
+                )}
+
                 <div className={styles.clear}></div>
                 <div className={styles["products-cat"]}>
                   <div className={styles["block-products-filter"]}>
@@ -91,16 +164,16 @@ export default function DonghoNam() {
                         >
                           <span className={styles.close}>x</span>
                           <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
-                            <Link rel="nofollow" href="#" title="Đồng hồ nam">
+                            <Link rel="nofollow" href="../components/donghonam" title="Đồng hồ nam">
                               <span>Đồng hồ nam</span>
                             </Link>
-                            <Link rel="nofollow" href="#" title="Đồng hồ nữ">
+                            <Link rel="nofollow" href="../components/donghonu" title="Đồng hồ nữ">
                               <span>Đồng hồ nữ</span>
                             </Link>
-                            <Link rel="nofollow" href="#" title="Đồng hồ đôi">
+                            <Link rel="nofollow" href="../components/donghodoi" title="Đồng hồ đôi">
                               <span>Đồng hồ đôi</span>
                             </Link>
-                            <Link rel="nofollow" href="#" title="Đồng hồ unisex">
+                            <Link rel="nofollow" href="../components/donghounisex" title="Đồng hồ unisex">
                               <span>Đồng hồ unisex</span>
                             </Link>
                           </div>
@@ -120,22 +193,42 @@ export default function DonghoNam() {
                           <span className={styles.close}>x</span>
                           <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="LONGINES">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="LONGINES"
+                                onClick={() => handleFilterChange("danh_muc", "LONGINES")}
+                              >
                                 LONGINES
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="TISSOT">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="TISSOT"
+                                onClick={() => handleFilterChange("danh_muc", "TISSOT")}
+                              >
                                 TISSOT
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="MIDO">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="MIDO"
+                                onClick={() => handleFilterChange("danh_muc", "MIDO")}
+                              >
                                 MIDO
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="CERTINA">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="CERTINA"
+                                onClick={() => handleFilterChange("danh_muc", "CERTINA")}
+                              >
                                 CERTINA
                               </Link>
                             </div>
@@ -232,7 +325,12 @@ export default function DonghoNam() {
                           <span className={styles.close}>x</span>
                           <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Dưới 2 triệu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Dưới 2 triệu"
+                                onClick={() => handleFilterChange("muc_gia", "Dưới 2 triệu")}
+                              >
                                 Dưới 2 triệu
                               </Link>
                             </div>
