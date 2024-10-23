@@ -956,7 +956,7 @@ export default function Detail({ params }) {
                       <span>
                         <span>
                           <span>
-                            <img alt="" height="500" src="../public/img/item/detail-hinh1.jpg" width="850" />
+                            <img alt="" height="500" src="/public/img/item/detail-hinh1.jpg" width="850" />
                           </span>
                         </span>
                       </span>
@@ -1212,7 +1212,7 @@ export default function Detail({ params }) {
                         class="lazy"
                         alt=""
                         style={{ display: "inline-block", opacity: "1" }}
-                        src="../public/img/item/detail-hinh3.jpg"
+                        src="/public/img/item/detail-hinh3.jpg"
                       />
                     </p>
 
@@ -1227,7 +1227,7 @@ export default function Detail({ params }) {
                         class="lazy"
                         alt=""
                         style={{ display: "inline-block", opacity: "1" }}
-                        src="../public/img/item/detail-hinh4.jpg"
+                        src="/public/img/item/detail-hinh4.jpg"
                       />
                     </p>
 
