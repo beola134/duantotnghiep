@@ -305,8 +305,7 @@ exports.getFeMale = async (req, res) => {
    }
    const offset = (page - 1) * limit;
 
-   const { rows: products, count: totalProducts } =
-     await Product.findAndCountAll({
+   const { rows: products, count: totalProducts } = await Product.findAndCountAll({
        where: {
          gioi_tinh: "Nữ",
          loai: {[Op.not]:"Vòng Tay"}
@@ -375,12 +374,22 @@ exports.getCouple10sp = async (req, res) => {
 // lấy sản phẩm dưới 2 c
 exports.getProductsUnderTwoMillion = async (req, res) => {
   try {
+     const { loai, loai_may, phong_cach, chat_lieu_day } = req.query;
     const products = await Product.findAll({
       where: {
         gia_san_pham: {
           [Op.lt]: 2000000,
         },
+        gioi_tinh: "nam",
+        ...(loai && { loai }),
+        ...(loai_may && { loai_may }),
+        ...(phong_cach && { phong_cach }),
+        ...(chat_lieu_day && { chat_lieu_day }),
       },
+      order: [
+        ["gia_giam", "ASC"],
+        ["gia_san_pham", "ASC"],
+      ],
     });
 
     if (products.length === 0) {
@@ -389,7 +398,7 @@ exports.getProductsUnderTwoMillion = async (req, res) => {
 
     res.json({ products });
   } catch (error) {
-    console.error("sản phẩm dưới 2 triệu", error.message);
+    console.error("sản phẩm nam dưới 2 triệu", error.message);
     res.status(500).json({ error: error.message });
   }
 };
