@@ -38,7 +38,7 @@ function OtpModal({ isOpen, onRequestClose }) {
       const data = await response.json();
       alert(data.message);
       onRequestClose();
-      window.location.href = "../components/login";
+      window.location.href = "/components/login";
     } catch (error) {
       setError(error.message);
     } finally {
