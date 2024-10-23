@@ -70,32 +70,32 @@ exports.filtersanphamdongho = async (req, res) => {
     if (muc_gia) {
       let priceRange;
       switch (muc_gia) {
-        case "duoi_2_trieu":
+        case "dưới 2 triệu":
           priceRange = { [Op.lt]: 2000000 };
           break;
-        case "tu_2_den_5_trieu":
+        case "từ 2 đến 5 triệu":
           priceRange = { [Op.between]: [2000000, 5000000] };
           break;
-        case "tu_5_den_10_trieu":
+        case "từ 5 đến 10 triệu":
           priceRange = { [Op.between]: [5000000, 10000000] };
           break;
-        case "tu_10_den_20_trieu":
+        case "từ 10 đến 20 triệu":
           priceRange = { [Op.between]: [10000000, 20000000] };
           break;
-        case "tu_20_den_30_trieu":
+        case "từ 20 đến 30 triệu":
           priceRange = { [Op.between]: [20000000, 30000000] };
           break;
-        case "tu_30_den_50_trieu":
+        case "từ 30 đến 50 triệu":
           priceRange = { [Op.between]: [30000000, 50000000] };
           break;
-        case "tu_50_den_100_trieu":
+        case "từ 50 đến 100 triệu":
           priceRange = { [Op.between]: [50000000, 100000000] };
           break;
-        case "tren_100_trieu":
+        case "trên 100 triệu":
           priceRange = { [Op.gt]: 100000000 };
           break;
         default:
-          priceRange = null
+          priceRange = null;
           break;
       }
       if (priceRange) {
@@ -305,8 +305,7 @@ exports.getFeMale = async (req, res) => {
    }
    const offset = (page - 1) * limit;
 
-   const { rows: products, count: totalProducts } =
-     await Product.findAndCountAll({
+   const { rows: products, count: totalProducts } = await Product.findAndCountAll({
        where: {
          gioi_tinh: "Nữ",
          loai: {[Op.not]:"Vòng Tay"}
@@ -375,21 +374,27 @@ exports.getCouple10sp = async (req, res) => {
 // lấy sản phẩm dưới 2 c
 exports.getProductsUnderTwoMillion = async (req, res) => {
   try {
-    const products = await Product.findAll({
+    const allProducts = await Product.findAll({
       where: {
-        gia_san_pham: {
-          [Op.lt]: 2000000,
-        },
+        gioi_tinh: "Nam",
+        loai: {
+          [Op.notIn]:["Vòng tay","Trang sức"]
+        }
       },
     });
-
+    const products = allProducts.filter(product => {
+       if (product.gia_giam > 0) {
+         return product.gia_giam < 2000000;
+       } else {
+         return product.gia_san_pham < 2000000;
+       }
+    })
     if (products.length === 0) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm nào dưới 2 triệu" });
+      return res.status(404).json({message: "khong tìm thấy sản phẩm dưới 2 triệu"})
     }
-
     res.json({ products });
   } catch (error) {
-    console.error("sản phẩm dưới 2 triệu", error.message);
+    console.error("sản phẩm nam dưới 2 triệu", error.message);
     res.status(500).json({ error: error.message });
   }
 };
