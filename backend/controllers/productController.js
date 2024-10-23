@@ -70,28 +70,28 @@ exports.filtersanphamdongho = async (req, res) => {
     if (muc_gia) {
       let priceRange;
       switch (muc_gia) {
-        case "dưới 2 triệu":
+        case "Dưới 2 triệu":
           priceRange = { [Op.lt]: 2000000 };
           break;
-        case "từ 2 đến 5 triệu":
+        case "Từ 2 đến 5 triệu":
           priceRange = { [Op.between]: [2000000, 5000000] };
           break;
-        case "từ 5 đến 10 triệu":
+        case "Từ 5 đến 10 triệu":
           priceRange = { [Op.between]: [5000000, 10000000] };
           break;
-        case "từ 10 đến 20 triệu":
+        case "Từ 10 đến 20 triệu":
           priceRange = { [Op.between]: [10000000, 20000000] };
           break;
-        case "từ 20 đến 30 triệu":
+        case "Từ 20 đến 30 triệu":
           priceRange = { [Op.between]: [20000000, 30000000] };
           break;
-        case "từ 30 đến 50 triệu":
+        case "Từ 30 đến 50 triệu":
           priceRange = { [Op.between]: [30000000, 50000000] };
           break;
-        case "từ 50 đến 100 triệu":
+        case "Từ 50 đến 100 triệu":
           priceRange = { [Op.between]: [50000000, 100000000] };
           break;
-        case "trên 100 triệu":
+        case "Trên 100 triệu":
           priceRange = { [Op.gt]: 100000000 };
           break;
         default:
@@ -304,7 +304,6 @@ exports.getFeMale = async (req, res) => {
      return res.status(400).json({ message: "Itham số không hợp lệ" });
    }
    const offset = (page - 1) * limit;
-
    const { rows: products, count: totalProducts } = await Product.findAndCountAll({
        where: {
          gioi_tinh: "Nữ",
