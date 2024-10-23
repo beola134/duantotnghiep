@@ -70,28 +70,28 @@ exports.filtersanphamdongho = async (req, res) => {
     if (muc_gia) {
       let priceRange;
       switch (muc_gia) {
-        case "dưới 2 triệu":
+        case "Dưới 2 triệu":
           priceRange = { [Op.lt]: 2000000 };
           break;
-        case "từ 2 đến 5 triệu":
+        case "Từ 2 đến 5 triệu":
           priceRange = { [Op.between]: [2000000, 5000000] };
           break;
-        case "từ 5 đến 10 triệu":
+        case "Từ 5 đến 10 triệu":
           priceRange = { [Op.between]: [5000000, 10000000] };
           break;
-        case "từ 10 đến 20 triệu":
+        case "Từ 10 đến 20 triệu":
           priceRange = { [Op.between]: [10000000, 20000000] };
           break;
-        case "từ 20 đến 30 triệu":
+        case "Từ 20 đến 30 triệu":
           priceRange = { [Op.between]: [20000000, 30000000] };
           break;
-        case "từ 30 đến 50 triệu":
+        case "Từ 30 đến 50 triệu":
           priceRange = { [Op.between]: [30000000, 50000000] };
           break;
-        case "từ 50 đến 100 triệu":
+        case "Từ 50 đến 100 triệu":
           priceRange = { [Op.between]: [50000000, 100000000] };
           break;
-        case "trên 100 triệu":
+        case "Trên 100 triệu":
           priceRange = { [Op.gt]: 100000000 };
           break;
         default:
@@ -304,7 +304,6 @@ exports.getFeMale = async (req, res) => {
      return res.status(400).json({ message: "Itham số không hợp lệ" });
    }
    const offset = (page - 1) * limit;
-
    const { rows: products, count: totalProducts } = await Product.findAndCountAll({
        where: {
          gioi_tinh: "Nữ",
@@ -402,13 +401,23 @@ exports.getProductsUnderTwoMillion = async (req, res) => {
 //lấy sản phẩm từ 2 đến 5 triệu
 exports.getProductstu2den5trieu = async (req, res) => {
   try {
-    const products = await Product.findAll({
+    const allProducts = await Product.findAll({
       where: {
-        gia_san_pham: {
-          [Op.between]: [2000000, 5000000],
+        gioi_tinh: "Nam",
+        loai: {
+          [Op.notIn]: ["Vòng tay", "Trang sức"],
         },
       },
     });
+     const products = allProducts.filter((product) => {
+       if (product.gia_giam > 0) {
+         return product.gia_giam >= 2000000 && product.gia_giam <=5000000;
+       } else {
+         return (
+           product.gia_san_pham >= 2000000 && product.gia_san_pham <= 5000000
+         );
+       }
+     });
 
     if (products.length === 0) {
       return res.status(404).json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
@@ -424,17 +433,23 @@ exports.getProductstu2den5trieu = async (req, res) => {
 //lấy sản phẩm từ 5 đến 10 triệu
 exports.getProductstu5den10trieu = async (req, res) => {
   try {
-    const products = await Product.findAll({
-      where: {
-        gia_san_pham: {
-          [Op.between]: [5000000, 10000000],
-        },
-      },
-    });
-
-    if (products.length === 0) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
-    }
+   const allProducts = await Product.findAll({
+     where: {
+       gioi_tinh: "Nam",
+       loai: {
+         [Op.notIn]: ["Vòng tay", "Trang sức"],
+       },
+     },
+   });
+   const products = allProducts.filter((product) => {
+     if (product.gia_giam > 0) {
+       return product.gia_giam >= 5000000 && product.gia_giam <= 10000000;
+     } else {
+       return (
+         product.gia_san_pham >= 5000000 && product.gia_san_pham <= 10000000
+       );
+     }
+   });
 
     res.json({ products });
   } catch (error) {
@@ -446,17 +461,23 @@ exports.getProductstu5den10trieu = async (req, res) => {
 //lấy sản phẩm từ 10 đến 20 triệu
 exports.getProductstu10den20trieu = async (req, res) => {
   try {
-    const products = await Product.findAll({
-      where: {
-        gia_san_pham: {
-          [Op.between]: [10000000, 20000000],
-        },
-      },
-    });
-
-    if (products.length === 0) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
-    }
+     const allProducts = await Product.findAll({
+       where: {
+         gioi_tinh: "Nam",
+         loai: {
+           [Op.notIn]: ["Vòng tay", "Trang sức"],
+         },
+       },
+     });
+     const products = allProducts.filter((product) => {
+       if (product.gia_giam > 0) {
+         return product.gia_giam >= 10000000 && product.gia_giam <= 20000000;
+       } else {
+         return (
+           product.gia_san_pham >= 10000000 && product.gia_san_pham <= 20000000
+         );
+       }
+     });
 
     res.json({ products });
   } catch (error) {
@@ -468,17 +489,23 @@ exports.getProductstu10den20trieu = async (req, res) => {
 //lấy sản phẩm từ 20 đến 30 triệu
 exports.getProductstu20den30trieu = async (req, res) => {
   try {
-    const products = await Product.findAll({
-      where: {
-        gia_san_pham: {
-          [Op.between]: [20000000, 30000000],
-        },
-      },
-    });
-
-    if (products.length === 0) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
-    }
+    const allProducts = await Product.findAll({
+       where: {
+         gioi_tinh: "Nam",
+         loai: {
+           [Op.notIn]: ["Vòng tay", "Trang sức"],
+         },
+       },
+     });
+    const products = allProducts.filter((product) => {
+      if (product.gia_giam > 0) {
+         return product.gia_giam >= 20000000 && product.gia_giam <= 30000000;
+       } else {
+         return (
+           product.gia_san_pham >= 20000000 && product.gia_san_pham <= 30000000
+         );
+      }
+     });
 
     res.json({ products });
   } catch (error) {
@@ -489,17 +516,23 @@ exports.getProductstu20den30trieu = async (req, res) => {
 //lấy sản phẩm từ 30 đến 50 triệu
 exports.getProductstu30den50trieu = async (req, res) => {
   try {
-    const products = await Product.findAll({
-      where: {
-        gia_san_pham: {
-          [Op.between]: [30000000, 50000000],
-        },
-      },
-    });
-
-    if (products.length === 0) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
-    }
+     const allProducts = await Product.findAll({
+       where: {
+         gioi_tinh: "Nam",
+         loai: {
+           [Op.notIn]: ["Vòng tay", "Trang sức"],
+         },
+       },
+     });
+     const products = allProducts.filter((product) => {
+       if (product.gia_giam > 0) {
+         return product.gia_giam >= 30000000 && product.gia_giam <= 50000000;
+       } else {
+         return (
+           product.gia_san_pham >= 30000000 && product.gia_san_pham <= 50000000
+         );
+       }
+     });
 
     res.json({ products });
   } catch (error) {
@@ -510,17 +543,23 @@ exports.getProductstu30den50trieu = async (req, res) => {
 //lấy sản phẩm từ 50 đến 100 triệu
 exports.getProductstu50den100trieu = async (req, res) => {
   try {
-    const products = await Product.findAll({
-      where: {
-        gia_san_pham: {
-          [Op.between]: [50000000, 100000000],
-        },
-      },
-    });
-
-    if (products.length === 0) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
-    }
+     const allProducts = await Product.findAll({
+       where: {
+         gioi_tinh: "Nam",
+         loai: {
+           [Op.notIn]: ["Vòng tay", "Trang sức"],
+         },
+       },
+     });
+     const products = allProducts.filter((product) => {
+       if (product.gia_giam > 0) {
+         return product.gia_giam >= 50000000 && product.gia_giam <= 100000000;
+       } else {
+         return (
+           product.gia_san_pham >= 50000000 && product.gia_san_pham <= 100000000
+         );
+       }
+     });
 
     res.json({ products });
   } catch (error) {
@@ -531,18 +570,21 @@ exports.getProductstu50den100trieu = async (req, res) => {
 //lấy sản phẩm treen 100 triệu
 exports.getProductsOver100trieu = async (req, res) => {
   try {
-    const products = await Product.findAll({
+    const allProducts = await Product.findAll({
       where: {
-        gia_san_pham: {
-          [Op.gt]: [100000000],
+        gioi_tinh: "Nam",
+        loai: {
+          [Op.notIn]: ["Vòng tay", "Trang sức"],
         },
       },
     });
-
-    if (products.length === 0) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
-    }
-
+    const products = allProducts.filter((product) => {
+      if (product.gia_giam > 0) {
+        return product.gia_giam > 100000000;
+      } else {
+        return product.gia_san_pham > 100000000;
+      }
+    });
     res.json({ products });
   } catch (error) {
     console.error(error.message);
