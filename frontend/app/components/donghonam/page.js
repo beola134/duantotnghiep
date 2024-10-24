@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../donghonam/donghonam.module.css";
 
 export default function DonghoNam() {
@@ -29,6 +29,95 @@ export default function DonghoNam() {
     kieu_dang: "",
     xuat_xu: "",
   });
+
+  // Lọc sản phẩm dựa trên các bộ lọc đã chọn
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const queryParams = new URLSearchParams(filter);
+      const response = await fetch(`http://localhost:5000/product/filtersanphamdongho?${queryParams}`);
+      if (!response.ok) {
+        throw new Error("Lỗi không thể tải dữ liệu");
+      }
+      const data = await response.json();
+      setProducts(data.products);
+      const totalProducts = data.totalProducts;
+      const calculatedTotalPages = Math.ceil(totalProducts / limit);
+      setTotalPages(calculatedTotalPages);
+      if (totalProducts > 0) {
+        setCurrentPage(Math.min(currentPage, calculatedTotalPages));
+      } else {
+        setCurrentPage(1);
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, [filter]);
+
+  const handleFilterChange = (filterType, value) => {
+    // Tạo một bản sao của selectedFilter và filter
+    const newFilters = [...selectedFilter];
+    const newFilter = { ...filter, [filterType]: value }; // Cập nhật giá trị của filter
+
+    // Kiểm tra xem bộ lọc đã có trong danh sách hay chưa
+    const filterIndex = newFilters.findIndex((filter) => filter.startsWith(`${filterType}=`));
+
+    if (filterIndex !== -1) {
+      newFilters[filterIndex] = `${filterType}=${value}`; // Cập nhật bộ lọc
+    } else {
+      newFilters.push(`${filterType}=${value}`); // Thêm bộ lọc mới
+    }
+    setSelectedFilter(newFilters);
+    setFilter(newFilter);
+    // Reset lại danh mục khi người dùng chọn danh mục khác
+    if (filterType === "danh_muc") {
+      setCategoryName(value);
+    }
+  };
+
+  // button xoá hết bộ lọc
+  const handleClearFilters = () => {
+    setSelectedFilter([]); // Xóa tất cả các bộ lọc
+    setFilter({
+      gioi_tinh: "Nam", // Đặt lại mặc định đồng hồ nam
+      danh_muc: "",
+      muc_gia: "",
+      khuyen_mai: "",
+      loai_may: "",
+      chat_lieu_day: "",
+      chat_lieu_vo: "",
+      mat_kinh: "",
+      mau_mat: "",
+      phong_cach: "",
+      kieu_dang: "",
+      xuat_xu: "",
+    });
+    setCategoryName("Đồng hồ nam"); // Đặt lại tiêu đề về đồng hồ nam
+    fetchProducts();
+  };
+
+  // Xoá bộ lọc cụ thể
+  const handleRemoveFilter = (filterToRemove) => {
+    // Loại bỏ bộ lọc cụ thể khỏi selectedFilter
+    const newFilters = selectedFilter.filter((filter) => filter !== filterToRemove);
+
+    // Cập nhật filter dựa trên các bộ lọc còn lại
+    const [filterType] = filterToRemove.split("=");
+    const updatedFilter = { ...filter, [filterType]: "" }; // Xóa giá trị của bộ lọc bị xoá
+
+    // Nếu xoá danh mục (brand), đặt lại tiêu đề về đồng hồ nam
+    if (filterType === "danh_muc") {
+      setCategoryName("Đồng hồ nam");
+    }
+    setSelectedFilter(newFilters);
+    setFilter(updatedFilter);
+  };
 
   // Phân trang sản phẩm
   useEffect(() => {
@@ -70,84 +159,6 @@ export default function DonghoNam() {
     return pageNumbers;
   };
 
-  // Lọc sản phẩm dựa trên các bộ lọc đã chọn
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const queryParams = new URLSearchParams(filter);
-        const response = await fetch(`http://localhost:5000/product/filtersanphamdongho?${queryParams}`);
-        if (!response.ok) {
-          throw new Error("Lỗi không thể tải dữ liệu");
-        }
-        const data = await response.json();
-        setProducts(data.products);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, [filter]); // Chạy lại khi filter thay đổi
-
-  const handleFilterChange = (filterType, value) => {
-    // Tạo một bản sao của selectedFilter và filter
-    const newFilters = [...selectedFilter];
-    const newFilter = { ...filter, [filterType]: value }; // Cập nhật giá trị của filter
-
-    // Kiểm tra xem bộ lọc đã có trong danh sách hay chưa
-    const filterIndex = newFilters.findIndex((filter) => filter.startsWith(`${filterType}=`));
-
-    if (filterIndex !== -1) {
-      newFilters[filterIndex] = `${filterType}=${value}`; // Cập nhật bộ lọc
-    } else {
-      newFilters.push(`${filterType}=${value}`); // Thêm bộ lọc mới
-    }
-    setSelectedFilter(newFilters);
-    setFilter(newFilter);
-    // Reset lại danh mục khi người dùng chọn danh mục khác
-    if (filterType === "danh_muc") {
-      setCategoryName(value);
-    }
-  };
-
-  // button xoá hết bộ lọc
-  const handleClearFilters = () => {
-    setSelectedFilter([]); // Xóa tất cả các bộ lọc
-    setFilter({
-      gioi_tinh: "Nam", // Đặt lại mặc định đồng hồ nam
-      danh_muc: "",
-      muc_gia: "",
-      khuyen_mai: "",
-      loai_may: "",
-      chat_lieu_day: "",
-      chat_lieu_vo: "",
-      mat_kinh: "",
-      mau_mat: "",
-      phong_cach: "",
-      kieu_dang: "",
-      xuat_xu: "",
-    });
-  };
-
-  // Xoá bộ lọc cụ thể
-  const handleRemoveFilter = (filterToRemove) => {
-    // Loại bỏ bộ lọc cụ thể khỏi selectedFilter
-    const newFilters = selectedFilter.filter((filter) => filter !== filterToRemove);
-
-    // Cập nhật filter dựa trên các bộ lọc còn lại
-    const [filterType] = filterToRemove.split("=");
-    const updatedFilter = { ...filter, [filterType]: "" }; // Xóa giá trị của bộ lọc bị xoá
-
-    // Nếu xoá danh mục (brand), đặt lại tiêu đề về đồng hồ nam
-    if (filterType === "danh_muc") {
-      setCategoryName("Đồng hồ nam");
-    }
-    setSelectedFilter(newFilters);
-    setFilter(updatedFilter);
-  };
-
   // Gía từ thấp đến cao và ngược lại
   const sortProducts = (products) => {
     if (sortOption === "asc") {
@@ -183,7 +194,7 @@ export default function DonghoNam() {
                   <div className={styles["summary-content-filter"]} style={{ description: true }}>
                     <p>
                       Đến với thế giới <strong>đồng hồ nam</strong> của Wristly, bạn sẽ được sở hữu hàng nghìn sản phẩm
-                      chất lượng, thiết kế bắt mắt đến từ các thương hiệu
+                      chất lượng, thiết kế bắt mắt đến từ các thương hiệu&nbsp;
                       <em>
                         <strong>
                           <Link href="#" target="_blank">
@@ -192,9 +203,9 @@ export default function DonghoNam() {
                         </strong>
                       </em>
                       , Nhật Bản, Pháp, Mỹ…danh tiếng trên thế giới. Mọi sản phẩm đều đảm bảo
-                      <strong>100% hàng chính hãng</strong> kèm theo <strong>chế độ bảo hành chính hãng</strong> đặc
-                      biệt với mức giá hợp lý sẽ đem đến cho bạn phụ kiện hoàn hảo nhất; khẳng định đẳng cấp, phong cách
-                      riêng của bản thân
+                      <strong>&nbsp;100% hàng chính hãng</strong> kèm theo <strong>chế độ bảo hành chính hãng</strong>{" "}
+                      đặc biệt với mức giá hợp lý sẽ đem đến cho bạn phụ kiện hoàn hảo nhất; khẳng định đẳng cấp, phong
+                      cách riêng của bản thân
                     </p>
                   </div>
 
@@ -465,7 +476,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Dưới 2 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Dưới 2 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Dưới 2 triệu")}
                               >
                                 Dưới 2 triệu
                               </Link>
@@ -475,7 +486,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 2 triệu đến 5 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Từ 2 đến 5 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Từ 2 triệu đến 5 triệu")}
                               >
                                 Từ 2 triệu đến 5 triệu
                               </Link>
@@ -485,7 +496,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 5 triệu đến 10 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Từ 5 đến 10 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Từ 5 triệu đến 10 triệu")}
                               >
                                 Từ 5 triệu đến 10 triệu
                               </Link>
@@ -495,7 +506,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 10 triệu đến 20 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Từ 10 đến 20 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Từ 10 triệu đến 20 triệu")}
                               >
                                 Từ 10 triệu đến 20 triệu
                               </Link>
@@ -505,7 +516,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 20 triệu đến 30 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Từ 20 đến 30 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Từ 20 triệu đến 30 triệu")}
                               >
                                 Từ 20 triệu đến 30 triệu
                               </Link>
@@ -515,7 +526,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 30 triệu đến 50 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Từ 30 đến 50 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Từ 30 triệu đến 50 triệu")}
                               >
                                 Từ 30 triệu đến 50 triệu
                               </Link>
@@ -525,7 +536,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 50 triệu đến 100 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Từ 50 đến 100 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Từ 50 triệu đến 100 triệu")}
                               >
                                 Từ 50 triệu đến 100 triệu
                               </Link>
@@ -535,7 +546,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Trên 100 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Trên 100 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Trên 100 triệu")}
                               >
                                 Trên 100 triệu
                               </Link>
@@ -563,7 +574,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Giảm 10%"
-                                onClick={() => handleFilterChange("khuyenmai", "10")}
+                                onClick={() => handleFilterChange("khuyenmai", "Giảm 10%")}
                               >
                                 Giảm 10%
                               </Link>
@@ -573,7 +584,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Giảm 15%"
-                                onClick={() => handleFilterChange("khuyenmai", "15")}
+                                onClick={() => handleFilterChange("khuyenmai", "Giảm 15%")}
                               >
                                 Giảm 15%
                               </Link>
@@ -583,7 +594,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Giảm 20%"
-                                onClick={() => handleFilterChange("khuyenmai", "20")}
+                                onClick={() => handleFilterChange("khuyenmai", "Giảm 20%")}
                               >
                                 Giảm 20%
                               </Link>
@@ -593,7 +604,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Giảm 25%"
-                                onClick={() => handleFilterChange("khuyenmai", "25")}
+                                onClick={() => handleFilterChange("khuyenmai", "Giảm 25%")}
                               >
                                 Giảm 25%
                               </Link>
@@ -603,7 +614,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Giảm 30%"
-                                onClick={() => handleFilterChange("khuyenmai", "30")}
+                                onClick={() => handleFilterChange("khuyenmai", "Giảm 30%")}
                               >
                                 Giảm 30%
                               </Link>
@@ -613,7 +624,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Giảm 40%"
-                                onClick={() => handleFilterChange("khuyenmai", "40")}
+                                onClick={() => handleFilterChange("khuyenmai", "Giảm 40%")}
                               >
                                 Giảm 40%
                               </Link>
@@ -623,7 +634,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Giảm 50%"
-                                onClick={() => handleFilterChange("khuyenmai", "50")}
+                                onClick={() => handleFilterChange("khuyenmai", "Giảm 50%")}
                               >
                                 Giảm 50%
                               </Link>
@@ -1657,7 +1668,7 @@ export default function DonghoNam() {
                         <span
                           title="Next page"
                           className={styles["other-page"]}
-                          onClick={() => handlePageChange(currentPage + maxVisiblePages)}
+                          onClick={() => handlePageChange(currentPage + 1)}
                         >
                           ›
                         </span>
