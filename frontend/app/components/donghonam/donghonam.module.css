@@ -334,35 +334,60 @@
 }
 /* phân trang */
 .pagination {
-  text-align: center;
-  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 66px;
 }
-.pagination .current {
-  background: none repeat scroll 0 0 #303030;
-  color: #ffffff;
-  display: inline-block;
-  font-size: 14px;
-  margin-right: 8px;
-  padding: 7px 13px;
-  width: 34px;
-  height: 34px;
-  box-sizing: border-box;
-  border-radius: 50%;
-}
+
+.pagination span,
 .pagination a {
-  border: 1px solid #e7e7e7;
-  color: #4c4c4c;
   display: inline-block;
-  font-size: 14px;
-  margin-right: 8px;
-  padding: 6px 13px;
+  padding: 10px 15px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  border-radius: 50px;
   text-decoration: none;
-  width: 34px;
-  height: 34px;
-  box-sizing: border-box;
-  border-radius: 50%;
+  color: #333;
+  cursor: pointer;
 }
+
+.pagination span.disabled {
+  color: #999;
+  border-color: #eee;
+  cursor: not-allowed;
+}
+
+.pagination a:hover {
+  background: #333;
+  color: white;
+}
+
+.pagination .current {
+  background-color: #333;
+  color: white;
+}
+
+.pagination .other-page {
+  background-color: #fff;
+}
+
+.pagination .other-page:hover {
+  background: #333;
+}
+
+.pagination .next-page,
+.pagination .last-page,
+.pagination .prev-page,
+.pagination .first-page {
+  font-weight: bold;
+}
+
+.pagination b {
+  padding: 10px 5px;
+  font-size: 16px;
+}
+
 /* đánh giá */
 .ratingArea {
   margin-bottom: 14px;

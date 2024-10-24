@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import styles from "../donghonam/donghonam.module.css";
 
 export default function DonghoNam() {
@@ -8,14 +8,19 @@ export default function DonghoNam() {
   const [categoryName, setCategoryName] = useState("Đồng hồ nam");
   const [selectedFilter, setSelectedFilter] = useState([]); // Lưu trữ các filter đã chọn
   const [sortOption, setSortOption] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const limit = 20; // Số sản phẩm trên mỗi trang
+  const maxVisiblePages = 3; //Hiển thị phân trang tối đa 3 trang
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState({
     gioi_tinh: "Nam",
     danh_muc: "",
     muc_gia: "",
-    khuyen_mai: "",
+    khuyenmai: "",
     loai_may: "",
+    duong_kinh: "",
     chat_lieu_day: "",
     chat_lieu_vo: "",
     mat_kinh: "",
@@ -24,6 +29,48 @@ export default function DonghoNam() {
     kieu_dang: "",
     xuat_xu: "",
   });
+
+  // Phân trang sản phẩm
+  useEffect(() => {
+    const fetchProductsPages = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/product/allsp/gioitinh-nam?page=${currentPage}&limit=${limit}`);
+        const data = await res.json();
+        setProducts(data.products);
+        setTotalPages(data.totalPages);
+      } catch (error) {
+        console.error("Không thể tải dữ liệu sản phẩm", error);
+      }
+    };
+    fetchProductsPages();
+  }, [currentPage]);
+  // Hàm chuyển trang
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+  };
+  // Tính toán các trang sẽ hiển thị dựa trên trang hiện tại
+  const renderPageNumbers = () => {
+    const startPage = Math.floor((currentPage - 1) / maxVisiblePages) * maxVisiblePages + 1;
+    const endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
+
+    let pageNumbers = [];
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(
+        <Link
+          key={i}
+          href="#"
+          onClick={() => handlePageChange(i)}
+          className={i === currentPage ? styles.current : styles["other-page"]}
+        >
+          {i}
+        </Link>
+      );
+    }
+
+    return pageNumbers;
+  };
+
+  // Lọc sản phẩm dựa trên các bộ lọc đã chọn
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -59,7 +106,10 @@ export default function DonghoNam() {
     }
     setSelectedFilter(newFilters);
     setFilter(newFilter);
-    setCategoryName(value);
+    // Reset lại danh mục khi người dùng chọn danh mục khác
+    if (filterType === "danh_muc") {
+      setCategoryName(value);
+    }
   };
 
   // button xoá hết bộ lọc
@@ -85,7 +135,17 @@ export default function DonghoNam() {
   const handleRemoveFilter = (filterToRemove) => {
     // Loại bỏ bộ lọc cụ thể khỏi selectedFilter
     const newFilters = selectedFilter.filter((filter) => filter !== filterToRemove);
+
+    // Cập nhật filter dựa trên các bộ lọc còn lại
+    const [filterType] = filterToRemove.split("=");
+    const updatedFilter = { ...filter, [filterType]: "" }; // Xóa giá trị của bộ lọc bị xoá
+
+    // Nếu xoá danh mục (brand), đặt lại tiêu đề về đồng hồ nam
+    if (filterType === "danh_muc") {
+      setCategoryName("Đồng hồ nam");
+    }
     setSelectedFilter(newFilters);
+    setFilter(updatedFilter);
   };
 
   // Gía từ thấp đến cao và ngược lại
@@ -405,7 +465,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Dưới 2 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "dưới 2 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Dưới 2 triệu")}
                               >
                                 Dưới 2 triệu
                               </Link>
@@ -415,7 +475,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 2 triệu đến 5 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "từ 2 đến 5 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Từ 2 đến 5 triệu")}
                               >
                                 Từ 2 triệu đến 5 triệu
                               </Link>
@@ -425,7 +485,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 5 triệu đến 10 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "từ 5 đến 10 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Từ 5 đến 10 triệu")}
                               >
                                 Từ 5 triệu đến 10 triệu
                               </Link>
@@ -435,7 +495,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 10 triệu đến 20 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "từ 10 đến 20 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Từ 10 đến 20 triệu")}
                               >
                                 Từ 10 triệu đến 20 triệu
                               </Link>
@@ -445,7 +505,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 20 triệu đến 30 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "từ 20 đến 30 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Từ 20 đến 30 triệu")}
                               >
                                 Từ 20 triệu đến 30 triệu
                               </Link>
@@ -455,7 +515,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 30 triệu đến 50 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "từ 30 đến 50 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Từ 30 đến 50 triệu")}
                               >
                                 Từ 30 triệu đến 50 triệu
                               </Link>
@@ -465,7 +525,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 50 triệu đến 100 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "từ 50 đến 100 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Từ 50 đến 100 triệu")}
                               >
                                 Từ 50 triệu đến 100 triệu
                               </Link>
@@ -475,7 +535,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Trên 100 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "trên 100 triệu")}
+                                onClick={() => handleFilterChange("muc_gia", "Trên 100 triệu")}
                               >
                                 Trên 100 triệu
                               </Link>
@@ -499,37 +559,72 @@ export default function DonghoNam() {
                           <span className={styles.close}>x</span>
                           <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Giảm 10%">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Giảm 10%"
+                                onClick={() => handleFilterChange("khuyenmai", "10")}
+                              >
                                 Giảm 10%
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Giảm 15%">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Giảm 15%"
+                                onClick={() => handleFilterChange("khuyenmai", "15")}
+                              >
                                 Giảm 15%
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Giảm 20%">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Giảm 20%"
+                                onClick={() => handleFilterChange("khuyenmai", "20")}
+                              >
                                 Giảm 20%
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Giảm 25%">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Giảm 25%"
+                                onClick={() => handleFilterChange("khuyenmai", "25")}
+                              >
                                 Giảm 25%
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Giảm 30%">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Giảm 30%"
+                                onClick={() => handleFilterChange("khuyenmai", "30")}
+                              >
                                 Giảm 30%
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Giảm 40%">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Giảm 40%"
+                                onClick={() => handleFilterChange("khuyenmai", "40")}
+                              >
                                 Giảm 40%
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Giảm 50%">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Giảm 50%"
+                                onClick={() => handleFilterChange("khuyenmai", "50")}
+                              >
                                 Giảm 50%
                               </Link>
                             </div>
@@ -552,36 +647,80 @@ export default function DonghoNam() {
                           <span className={styles.close}>x</span>
                           <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Automatic (Máy cơ tự động)">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Automatic (Máy cơ tự động)"
+                                onClick={() => handleFilterChange("loai_may", "Automatic (Máy cơ tự động)")}
+                              >
                                 Automatic (Máy cơ tự động)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Quartz (Máy pin - điện tử)">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Quartz (Máy pin - điện tử)"
+                                onClick={() => handleFilterChange("loai_may", "Quartz (Máy pin - điện tử)")}
+                              >
                                 Quartz (Máy pin - điện tử)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Eco-Drive (Năng lượng ánh sáng)">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Eco-Drive (Năng lượng ánh sáng)"
+                                onClick={() => handleFilterChange("loai_may", "Eco-Drive (Năng lượng ánh sáng)")}
+                              >
                                 Eco-Drive (Năng lượng ánh sáng)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Quartz Chronograph (Máy pin bấm giờ thể thao)">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Quartz Chronograph (Máy pin bấm giờ thể thao)"
+                                onClick={() =>
+                                  handleFilterChange("loai_may", "Quartz Chronograph (Máy pin bấm giờ thể thao)")
+                                }
+                              >
                                 Quartz Chronograph (Máy pin bấm giờ thể thao)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)"
+                                onClick={() =>
+                                  handleFilterChange("loai_may", "Automatic Chronometer (Máy cơ tự động chuẩn COSC)")
+                                }
+                              >
                                 Automatic Chronometer (Máy cơ tự động chuẩn COSC)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Quartz Chronometer (Máy pin chuẩn COSC)">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Quartz Chronometer (Máy pin chuẩn COSC)"
+                                onClick={() =>
+                                  handleFilterChange("loai_may", "Quartz Chronometer (Máy pin chuẩn COSC)")
+                                }
+                              >
                                 Quartz Chronometer (Máy pin chuẩn COSC)
                               </Link>
                             </div>
-                            <div className={`${styles.cls} ${styles.item}`}>
+                            <div
+                              className={`${styles.cls} ${styles.item}`}
+                              onClick={() =>
+                                handleFilterChange(
+                                  "loai_may",
+                                  "Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)"
+                                )
+                              }
+                            >
                               <Link
                                 rel="nofollow"
                                 href="#"
@@ -591,12 +730,24 @@ export default function DonghoNam() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Quartz Solar (Năng lượng ánh sáng)">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Quartz Solar (Năng lượng ánh sáng)"
+                                onClick={() => handleFilterChange("loai_may", "Quartz Solar (Năng lượng ánh sáng)")}
+                              >
                                 Quartz Solar (Năng lượng ánh sáng)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )"
+                                onClick={() =>
+                                  handleFilterChange("loai_may", "Đồng hồ cơ lên giây cót bằng tay ( Manual winding )")
+                                }
+                              >
                                 Đồng hồ cơ lên giây cót bằng tay ( Manual winding )
                               </Link>
                             </div>
@@ -619,42 +770,82 @@ export default function DonghoNam() {
                           <span className={styles.close}>x</span>
                           <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Dưới 25mm">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Dưới 25mm"
+                                onClick={() => handleFilterChange("duong_kinh", "Dưới 25mm")}
+                              >
                                 Dưới 25mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="25mm đến 30mm">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="25mm đến 30mm"
+                                onClick={() => handleFilterChange("duong_kinh", "25mm đến 30mm")}
+                              >
                                 25mm đến 30mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="30mm đến 35mm">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="30mm đến 35mm"
+                                onClick={() => handleFilterChange("duong_kinh", "30mm đến 35mm")}
+                              >
                                 30mm đến 35mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="35mm đến 38mm">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="35mm đến 38mm"
+                                onClick={() => handleFilterChange("duong_kinh", "35mm đến 38mm")}
+                              >
                                 35mm đến 38mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="38mm đến 40mm">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="38mm đến 40mm"
+                                onClick={() => handleFilterChange("duong_kinh", "38mm đến 40mm")}
+                              >
                                 38mm đến 40mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="40mm đến 42mm">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="40mm đến 42mm"
+                                onClick={() => handleFilterChange("duong_kinh", "40mm đến 42mm")}
+                              >
                                 40mm đến 42mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="42mm đến 45mm">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="42mm đến 45mm"
+                                onClick={() => handleFilterChange("duong_kinh", "42mm đến 45mm")}
+                              >
                                 42mm đến 45mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Từ 45mm trở lên">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Từ 45mm trở lên"
+                                onClick={() => handleFilterChange("duong_kinh", "Từ 45mm trở lên")}
+                              >
                                 Từ 45mm trở lên
                               </Link>
                             </div>
@@ -677,72 +868,144 @@ export default function DonghoNam() {
                           <span className={styles.close}>x</span>
                           <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Dây da">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Dây da"
+                                onClick={() => handleFilterChange("chat_lieu_day", "  Dây da")}
+                              >
                                 Dây da
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L"
+                                onClick={() => handleFilterChange("chat_lieu_day", "Thép không gỉ 316L")}
+                              >
                                 Thép không gỉ 316L
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L mạ vàng công nghệ PVD">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L mạ vàng công nghệ PVD"
+                                onClick={() =>
+                                  handleFilterChange("chat_lieu_day", "Thép không gỉ 316L mạ vàng công nghệ PVD")
+                                }
+                              >
                                 Thép không gỉ 316L mạ vàng công nghệ PVD
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L dạng lưới">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L dạng lưới"
+                                onClick={() => handleFilterChange("chat_lieu_day", "Thép không gỉ 316L dạng lưới")}
+                              >
                                 Thép không gỉ 316L dạng lưới
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L dạng lắc">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L dạng lắc"
+                                onClick={() => handleFilterChange("chat_lieu_day", " Thép không gỉ 316L dạng lắc")}
+                              >
                                 Thép không gỉ 316L dạng lắc
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Dây vải">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Dây vải"
+                                onClick={() => handleFilterChange("chat_lieu_day", " Dây vải")}
+                              >
                                 Dây vải
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Vàng 18K">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L/ Vàng 18K"
+                                onClick={() => handleFilterChange("chat_lieu_day", " Thép không gỉ 316L/ Vàng 18K")}
+                              >
                                 Thép không gỉ 316L/ Vàng 18K
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Ceramic">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L/ Ceramic"
+                                onClick={() => handleFilterChange("chat_lieu_day", " Thép không gỉ 316L/ Ceramic")}
+                              >
                                 Thép không gỉ 316L/ Ceramic
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ mạ công nghệ PVD">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ mạ công nghệ PVD"
+                                onClick={() => handleFilterChange("chat_lieu_day", "Thép không gỉ mạ công nghệ PVD")}
+                              >
                                 Thép không gỉ mạ công nghệ PVD
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Dây cao su">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Dây cao su"
+                                onClick={() => handleFilterChange("chat_lieu_day", " Dây cao su")}
+                              >
                                 Dây cao su
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Dây dù">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Dây dù"
+                                onClick={() => handleFilterChange("chat_lieu_day", "  Dây dù")}
+                              >
                                 Dây dù
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Titanium">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Titanium"
+                                onClick={() => handleFilterChange("chat_lieu_day", " Titanium")}
+                              >
                                 Titanium
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Titanium mạ vàng công nghệ PVD">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Titanium mạ vàng công nghệ PVD"
+                                onClick={() => handleFilterChange("chat_lieu_day", "itanium mạ vàng công nghệ PVD")}
+                              >
                                 Titanium mạ vàng công nghệ PVD
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Nhựa">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Nhựa"
+                                onClick={() => handleFilterChange("chat_lieu_day", "  Nhựa")}
+                              >
                                 Nhựa
                               </Link>
                             </div>
@@ -765,57 +1028,114 @@ export default function DonghoNam() {
                           <span className={styles.close}>x</span>
                           <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L"
+                                onClick={() => handleFilterChange("chat_lieu_vo", "Thép không gỉ 316L")}
+                              >
                                 Thép không gỉ 316L
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ mạ vàng công nghệ PVD">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ mạ vàng công nghệ PVD"
+                                onClick={() =>
+                                  handleFilterChange("chat_lieu_vo", "Thép không gỉ mạ vàng công nghệ PVD")
+                                }
+                              >
                                 Thép không gỉ mạ vàng công nghệ PVD
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Vàng 18K">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Vàng 18K"
+                                onClick={() => handleFilterChange("chat_lieu_vo", "Vàng 18K")}
+                              >
                                 Vàng 18K
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Vàng 18K">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L/ Vàng 18K"
+                                onClick={() => handleFilterChange("chat_lieu_vo", "Thép không gỉ 316L/ Vàng 18K")}
+                              >
                                 Thép không gỉ 316L/ Vàng 18K
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Titanium">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Titanium"
+                                onClick={() => handleFilterChange("chat_lieu_vo", "Titanium")}
+                              >
                                 Titanium
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Titanium mạ công nghệ PVD">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Titanium mạ công nghệ PVD"
+                                onClick={() => handleFilterChange("chat_lieu_vo", "Titanium mạ công nghệ PVD")}
+                              >
                                 Titanium mạ công nghệ PVD
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Ceramic">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Ceramic"
+                                onClick={() => handleFilterChange("chat_lieu_vo", "Ceramic")}
+                              >
                                 Ceramic
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Ceramic">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ 316L/ Ceramic"
+                                onClick={() => handleFilterChange("chat_lieu_vo", "Thép không gỉ 316L/ Ceramic")}
+                              >
                                 Thép không gỉ 316L/ Ceramic
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thép không gỉ mạ công nghệ PVD">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thép không gỉ mạ công nghệ PVD"
+                                onClick={() => handleFilterChange("chat_lieu_vo", "Thép không gỉ mạ công nghệ PVD")}
+                              >
                                 Thép không gỉ mạ công nghệ PVD
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Nhựa">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Nhựa"
+                                onClick={() => handleFilterChange("chat_lieu_vo", "Nhựa")}
+                              >
                                 Nhựa
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Titanium/ Vàng 18K">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Titanium/ Vàng 18K"
+                                onClick={() => handleFilterChange("chat_lieu_vo", "Titanium/ Vàng 18K")}
+                              >
                                 Titanium/ Vàng 18K
                               </Link>
                             </div>
@@ -838,27 +1158,52 @@ export default function DonghoNam() {
                           <span className={styles.close}>x</span>
                           <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Sapphire">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Sapphire"
+                                onClick={() => handleFilterChange("mat_kinh", "Sapphire")}
+                              >
                                 Sapphire
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Mặt kính cứng">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Mặt kính cứng"
+                                onClick={() => handleFilterChange("mat_kinh", "Mặt kính cứng")}
+                              >
                                 Mặt kính cứng
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Hardlex Crystal">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Hardlex Crystal"
+                                onClick={() => handleFilterChange("mat_kinh", "Hardlex Crystal")}
+                              >
                                 Hardlex Crystal
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Mica">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Mica"
+                                onClick={() => handleFilterChange("mat_kinh", "Mica")}
+                              >
                                 Mica
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Kinh Nhựa">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Kinh Nhựa"
+                                onClick={() => handleFilterChange("mat_kinh", "Kinh Nhựa")}
+                              >
                                 Kinh Nhựa
                               </Link>
                             </div>
@@ -881,57 +1226,112 @@ export default function DonghoNam() {
                           <span className={styles.close}>x</span>
                           <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Trắng">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Trắng"
+                                onClick={() => handleFilterChange("mau_mat", "Trắng")}
+                              >
                                 Trắng
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Hồng">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Hồng"
+                                onClick={() => handleFilterChange("mau_mat", "Hồng")}
+                              >
                                 Hồng
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Xám">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Xám"
+                                onClick={() => handleFilterChange("mau_mat", "Xám")}
+                              >
                                 Xám
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Đen">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Đen"
+                                onClick={() => handleFilterChange("mau_mat", "Đen")}
+                              >
                                 Đen
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Xanh lam">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Xanh lam"
+                                onClick={() => handleFilterChange("mau_mat", "Xanh lam")}
+                              >
                                 Xanh lam
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Vàng">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Vàng"
+                                onClick={() => handleFilterChange("mau_mat", "Vàng")}
+                              >
                                 Vàng
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Khảm trai">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Khảm trai"
+                                onClick={() => handleFilterChange("mau_mat", "Khảm trai")}
+                              >
                                 Khảm trai
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Đỏ">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Đỏ"
+                                onClick={() => handleFilterChange("mau_mat", "Đỏ")}
+                              >
                                 Đỏ
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Da Cam">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Da Cam"
+                                onClick={() => handleFilterChange("mau_mat", "Da Cam")}
+                              >
                                 Da Cam
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Xanh Lá">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Xanh Lá"
+                                onClick={() => handleFilterChange("mau_mat", "Xanh Lá")}
+                              >
                                 Xanh Lá
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Nâu">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Nâu"
+                                onClick={() => handleFilterChange("mau_mat", "Nâu")}
+                              >
                                 Nâu
                               </Link>
                             </div>
@@ -954,32 +1354,62 @@ export default function DonghoNam() {
                           <span className={styles.close}>x</span>
                           <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Sang trọng">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Sang trọng"
+                                onClick={() => handleFilterChange("phong_cach", "Sang trọng")}
+                              >
                                 Sang trọng
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thể thao">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thể thao"
+                                onClick={() => handleFilterChange("phong_cach", "Thể thao")}
+                              >
                                 Thể thao
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thể thao sang trọng">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thể thao sang trọng"
+                                onClick={() => handleFilterChange("phong_cach", "Thể thao sang trọng")}
+                              >
                                 Thể thao sang trọng
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Quân đội">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Quân đội"
+                                onClick={() => handleFilterChange("phong_cach", "Quân đội")}
+                              >
                                 Quân đội
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thời trang">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thời trang"
+                                onClick={() => handleFilterChange("phong_cach", "Thời trang")}
+                              >
                                 Thời trang
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Hiện đại">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Hiện đại"
+                                onClick={() => handleFilterChange("phong_cach", "Hiện đại")}
+                              >
                                 Hiện đại
                               </Link>
                             </div>
@@ -1002,27 +1432,52 @@ export default function DonghoNam() {
                           <span className={styles.close}>x</span>
                           <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Mặt vuông">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Mặt vuông"
+                                onClick={() => handleFilterChange("kieu_dang", "Mặt vuông")}
+                              >
                                 Mặt vuông
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Mặt tròn">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Mặt tròn"
+                                onClick={() => handleFilterChange("kieu_dang", "Mặt tròn")}
+                              >
                                 Mặt tròn
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Mặt chữ nhật">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Mặt chữ nhật"
+                                onClick={() => handleFilterChange("kieu_dang", "Mặt chữ nhật")}
+                              >
                                 Mặt chữ nhật
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Mặt Oval">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Mặt Oval"
+                                onClick={() => handleFilterChange("kieu_dang", "Mặt Oval")}
+                              >
                                 Mặt Oval
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Khác">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Khác"
+                                onClick={() => handleFilterChange("kieu_dang", "Khác")}
+                              >
                                 Khác
                               </Link>
                             </div>
@@ -1045,12 +1500,22 @@ export default function DonghoNam() {
                           <span className={styles.close}>x</span>
                           <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Nhật Bản">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Nhật Bản"
+                                onClick={() => handleFilterChange("xuat_xu", "Nhật Bản")}
+                              >
                                 Nhật Bản
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link rel="nofollow" href="#" title="Thụy Sỹ">
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Thụy Sỹ"
+                                onClick={() => handleFilterChange("xuat_xu", "Thụy Sỹ")}
+                              >
                                 Thụy Sỹ
                               </Link>
                             </div>
@@ -1101,7 +1566,12 @@ export default function DonghoNam() {
                             loai,
                             duong_kinh,
                           } = product;
-
+                          const roundDiscount = (discountPercentage) => {
+                            const discountLevels = [10, 15, 20, 25, 30, 40, 50];
+                            return discountLevels.reduce((prev, curr) =>
+                              Math.abs(curr - discountPercentage) < Math.abs(prev - discountPercentage) ? curr : prev
+                            );
+                          };
                           return (
                             <div key={_id} className={styles.item}>
                               <div className={styles["frame-inner"]}>
@@ -1134,7 +1604,9 @@ export default function DonghoNam() {
                                   </div>
                                 </div>
                                 <div className={styles.discount}>
-                                  <span>-20%</span>
+                                  <span>
+                                    -{roundDiscount(Math.round(((gia_san_pham - gia_giam) / gia_san_pham) * 100))}%
+                                  </span>
                                 </div>
                                 <div className={styles.clear}></div>
                               </div>
@@ -1148,26 +1620,64 @@ export default function DonghoNam() {
                   </section>
 
                   {/* phân trang*/}
-                  <div className={styles.pagination}>
-                    <span title="Page 1" className={styles.current}>
-                      <span>1</span>
-                    </span>
-                    <Link className={styles["other-page"]} title="Page 2" href="#">
-                      <span>2</span>
-                    </Link>
-                    <Link className={styles["other-page"]} title="Page 3" href="#">
-                      <span>3</span>
-                    </Link>
-                    <Link className={styles["other-page"]} title="Page 4" href="#">
-                      <span>4</span>
-                    </Link>
-                    <b>...</b>
-                    <Link className={styles["next-page"]} title="Next page" href="#">
-                      ›
-                    </Link>
-                    <Link className={styles["last-page"]} title="Last page" href="#">
-                      ››
-                    </Link>
+                  <div>
+                    <div className={styles.pagination}>
+                      {/* quay lại trang đầu  */}
+                      {currentPage > 1 ? (
+                        <span
+                          title="Previous page"
+                          className={styles["other-page"]}
+                          onClick={() => handlePageChange(1)}
+                        >
+                          ‹‹
+                        </span>
+                      ) : (
+                        <span className={styles.disabled}> ‹‹</span> // Ẩn khi ở trang đầu
+                      )}
+                      {currentPage > 1 ? (
+                        <span
+                          title="Previous page"
+                          className={styles["other-page"]}
+                          onClick={() => handlePageChange(currentPage - 1)}
+                        >
+                          ‹
+                        </span>
+                      ) : (
+                        <span className={styles.disabled}>‹</span> // Ẩn khi ở trang đầu
+                      )}
+
+                      {/* Hiển thị các số trang */}
+                      {renderPageNumbers()}
+
+                      {/* Hiển thị dấu ... nếu không phải trang cuối */}
+                      {currentPage < totalPages - maxVisiblePages && <b>...</b>}
+
+                      {/* Nút tiến > */}
+                      {currentPage < totalPages ? (
+                        <span
+                          title="Next page"
+                          className={styles["other-page"]}
+                          onClick={() => handlePageChange(currentPage + maxVisiblePages)}
+                        >
+                          ›
+                        </span>
+                      ) : (
+                        <span className={styles.disabled}>›</span> // Ẩn khi ở trang cuối
+                      )}
+
+                      {/* Nút đến trang cuối cùng >> */}
+                      {currentPage < totalPages ? (
+                        <span
+                          title="Last page"
+                          className={styles["other-page"]}
+                          onClick={() => handlePageChange(totalPages)}
+                        >
+                          ››
+                        </span>
+                      ) : (
+                        <span className={styles.disabled}>››</span> // Ẩn khi đang ở trang cuối
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className={styles.clear}></div>
