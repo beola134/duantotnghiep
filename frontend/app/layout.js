@@ -4,6 +4,9 @@ import { useEffect } from "react";
 import Footer from "./components/layout/footer/page";
 import "./globals.css";
 import Script from "next/script";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Header from "./components/layout/header/page";
 
 
 export default function RootLayout({ children }) {
@@ -27,6 +30,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        <Header/>
         {children}
         <Footer />
       </body>

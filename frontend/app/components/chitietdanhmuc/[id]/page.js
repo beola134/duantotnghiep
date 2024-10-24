@@ -2108,7 +2108,7 @@ export default function DanhMuc({ params }) {
                             <div key={_id} className={styles.item}>
                               <div className={styles["frame-inner"]}>
                                 <figure className={styles["product-image"]}>
-                                  <Link href={`/san_pham/${_id}`}>
+                                  <Link href={`/components/product-detail/${_id}`}>
                                     <img
                                       src={`http://localhost:5000/images/${hinh_anh}`}
                                       alt={ten}

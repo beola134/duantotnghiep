@@ -122,7 +122,7 @@ export default function Login() {
         <div className={styles.signUpNow}>
           <span className={styles.dontHaveAnAccount}>
             Don't have an account?
-            <Link href="../components/register" id="gotoSignup">
+            <Link href="/components/register" id="gotoSignup">
               Sign up now
             </Link>
           </span>

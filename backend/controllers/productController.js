@@ -2,7 +2,7 @@ const Product = require("../models/product");
 const upload = require("../config/update");
 const Cate = require("../models/cate");
 const Category = require("../models/cate");
-const { Op } = require("sequelize");
+const { Sequelize,Op } = require("sequelize");
 
 // xử lí phần trăm giá giảm
   exports.filtersanphamdongho = async (req, res) => {
@@ -160,7 +160,7 @@ const { Op } = require("sequelize");
       console.log("Error: " ,error);
       res.status(500).json({ error: error.message });
     }
-  };
+
 
 
 // show sản phẩm mới nhất Nam
@@ -289,7 +289,7 @@ exports.getNewLimitCouple = async (req, res) => {
 // Lấy danh mục theo giới tính "Nam"
 exports.getMale = async (req, res) => {
   try {
-    let { limit = 10, page = 1 } = req.query
+    let { limit = 20, page = 1 } = req.query
     limit = parseInt(limit);
     page = parseInt(page);
     if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
@@ -337,7 +337,7 @@ exports.getMale10sp = async (req, res) => {
 // Lấy danh mục theo giới tính "Nữ"
 exports.getFeMale = async (req, res) => {
  try {
-   let { limit = 10, page = 1 } = req.query;
+   let { limit = 20, page = 1 } = req.query;
    limit = parseInt(limit);
    page = parseInt(page);
    if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
@@ -847,7 +847,6 @@ exports.addProduct = async (req, res) => {
         size_day,
         mau_day,
         do_dai_day,
-        createdAt,
         id_danh_muc: categoryId,
       } = req.body;
       const hinh_anh = req.file ? req.file.originalname : "";
@@ -881,7 +880,6 @@ exports.addProduct = async (req, res) => {
         size_day,
         mau_day,
         do_dai_day,
-        createdAt,
         id_danh_muc: categoryId,
       });
       res.json({ product });
@@ -920,11 +918,17 @@ exports.updateProduct = async (req, res) => {
       }
       const {
         ten_san_pham,
+        ten,
         gia_san_pham,
+        gia_giam,
         mo_ta,
+        ma_san_pham,
+        do_chiu_nuoc,
+        xuat_xu,
         gioi_tinh,
         so_luong,
         loai_may,
+        loai,
         duong_kinh,
         chat_lieu_day,
         chat_lieu_vo,
@@ -932,6 +936,10 @@ exports.updateProduct = async (req, res) => {
         mau_mat,
         phong_cach,
         kieu_dang,
+        thuong_hieu,
+        size_day,
+        mau_day,
+        do_dai_day,
         id_danh_muc: categoryId,
       } = req.body;
       const hinh_anh = req.file ? req.file.originalname : product.hinh_anh;
@@ -942,12 +950,18 @@ exports.updateProduct = async (req, res) => {
       // Cập nhật sản phẩm
       await product.update({
         ten_san_pham,
+        ten,
         gia_san_pham,
+        gia_giam,
         hinh_anh,
         mo_ta,
+        ma_san_pham,
+        do_chiu_nuoc,
+        xuat_xu,
         gioi_tinh,
         so_luong,
         loai_may,
+        loai,
         duong_kinh,
         chat_lieu_day,
         chat_lieu_vo,
@@ -955,6 +969,10 @@ exports.updateProduct = async (req, res) => {
         mau_mat,
         phong_cach,
         kieu_dang,
+        thuong_hieu,
+        size_day,
+        mau_day,
+        do_dai_day,
         id_danh_muc: categoryId,
       });
       res.json({ product });

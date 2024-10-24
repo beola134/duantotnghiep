@@ -162,7 +162,7 @@ export default function Register() {
         <div className={styles.signUpNow}>
           <span className={styles.dontHaveAnAccount}>
             Have an account?
-            <Link href="../components/login" id="gotoSignup">
+            <Link href="/components/login" id="gotoSignup">
               Sign up now
             </Link>
           </span>
