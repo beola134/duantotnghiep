@@ -149,22 +149,22 @@ exports.filtersanphamdongho = async (req, res) => {
         case "Dưới 2 triệu":
           priceRange = { [Op.lt]: 2000000 };
           break;
-        case "Từ 2 đến 5 triệu":
+        case "Từ 2 triệu đến 5 triệu":
           priceRange = { [Op.between]: [2000000, 5000000] };
           break;
-        case "Từ 5 đến 10 triệu":
+        case "Từ 5 triệu đến 10 triệu":
           priceRange = { [Op.between]: [5000000, 10000000] };
           break;
-        case "Từ 10 đến 20 triệu":
+        case "Từ 10 triệu đến 20 triệu":
           priceRange = { [Op.between]: [10000000, 20000000] };
           break;
-        case "Từ 20 đến 30 triệu":
+        case "Từ 20 triệu đến 30 triệu":
           priceRange = { [Op.between]: [20000000, 30000000] };
           break;
-        case "Từ 30 đến 50 triệu":
+        case "Từ 30 triệu đến 50 triệu":
           priceRange = { [Op.between]: [30000000, 50000000] };
           break;
-        case "Từ 50 đến 100 triệu":
+        case "Từ 50 triệu đến 100 triệu":
           priceRange = { [Op.between]: [50000000, 100000000] };
           break;
         case "Trên 100 triệu":
