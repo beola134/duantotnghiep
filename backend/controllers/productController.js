@@ -47,9 +47,36 @@ const { Op } = require("sequelize");
       if (loai_may) {
         filter.loai_may = loai_may;
       }
-      if (duong_kinh) {
-        filter.duong_kinh = duong_kinh;
-      }
+     if (duong_kinh) {
+       switch (duong_kinh) {
+         case "Dưới 25mm":
+           filter.duong_kinh = { [Op.lt]: 25 };
+           break;
+         case "25mm đến 30mm":
+           filter.duong_kinh = { [Op.between]: [25, 30] };
+           break;
+         case "30mm đến 35mm":
+           filter.duong_kinh = { [Op.between]: [30, 35] };
+           break;
+         case "35mm đến 38mm":
+           filter.duong_kinh = { [Op.between]: [35, 38] };
+           break;
+         case "38mm đến 40mm":
+           filter.duong_kinh = { [Op.between]: [38, 40] };
+           break;
+         case "40mm đến 42mm":
+           filter.duong_kinh = { [Op.between]: [40, 42] };
+           break;
+         case "42mm đến 45mm":
+           filter.duong_kinh = { [Op.between]: [42, 45] };
+           break;
+         case "Từ 45mm trở lên":
+           filter.duong_kinh = { [Op.gt]: 45 };
+           break;
+         default:
+           break;
+       }
+     }
       if (chat_lieu_day) {
         filter.chat_lieu_day = chat_lieu_day;
       }
@@ -361,10 +388,33 @@ exports.getFeMale10sp = async (req, res) => {
 // Lấy danh mục theo "Đôi"
 exports.getCouple = async (req, res) => {
   try {
-    const products = await Product.findAll({
-      where: { gioi_tinh: "Đồng Hồ Đôi" },
+    let { limit = 20, page = 1 } = req.query;
+    limit = parseInt(limit);
+    page = parseInt(page);
+    if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
+      return res.status(400).json({ message: "Itham số không hợp lệ" });
+    }
+    const offset = (page - 1) * limit;
+    const { rows: products, count: totalProducts } =
+      await Product.findAndCountAll({
+        where: { gioi_tinh: "Đồng Hồ Đôi" },
+        order: [["createdAt", "DESC"]],
+        limit,
+        offset,
+      });
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
+    }
+    const totalPages = Math.ceil(totalProducts / limit);
+    if (page > totalPages) {
+      return res.status(404).json({ message: "Trang không tồn tại" });
+    }
+    res.json({
+      products,
+      currentPage: page,
+      totalPages,
+      totalProducts,
     });
-    res.json({ products });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
