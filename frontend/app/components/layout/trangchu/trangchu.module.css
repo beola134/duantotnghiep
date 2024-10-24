@@ -1,0 +1,706 @@
+.container {
+  width: 1170px;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0px auto;
+}
+.productContainer {
+  width: 1170px;
+  max-width: 100%;
+
+  margin: 5px auto;
+  margin-top: 100px;
+}
+.featuredTitle {
+  text-align: center;
+  font-size: 30px;
+}
+.tab {
+  overflow: hidden;
+  margin-bottom: 20px;
+  margin-bottom: 60px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+.tab p {
+  position: relative;
+  border: none;
+  cursor: pointer;
+  padding-top: 30px;
+  padding-bottom: 10px;
+  font-size: 16px;
+  margin: 0 5px;
+  transition: color 0.3s ease; /* Hiệu ứng chuyển màu mượt mà */
+  color: #777777; /* Màu mặc định của tab */
+  border-bottom: none; /* Bỏ gạch chân mặc định */
+}
+
+.tabItem:hover {
+  color: #796752;
+}
+.tabItem:hover::after {
+  content: "";
+  position: absolute;
+  bottom: 0px; /* Căn chỉnh dòng gạch ngang dưới tiêu đề */
+  left: 0;
+  width: 115px;
+  height: 2px; /* Độ dày của dòng */
+  background-color: #796752; /* Màu sắc của dòng */
+}
+.active1 {
+  color: #796752;
+}
+.active1::after {
+  content: "";
+  position: absolute;
+  bottom: 0px; /* Căn chỉnh dòng gạch ngang dưới tiêu đề */
+  left: 0;
+  width: 115px;
+  height: 2px; /* Độ dày của dòng */
+  background-color: #796752; /* Màu sắc của dòng */
+}
+.active1::before {
+  content: "";
+  position: absolute;
+  bottom: 0px; /* Căn chỉnh dòng gạch ngang dưới tiêu đề */
+  width: 12170px;
+  height: 0.5px; /* Độ dày của dòng */
+  border-bottom: rgb(169, 98, 50, 0.2) 0.5px solid;
+  margin-left: -3333px;
+}
+
+.dongHoNam {
+  max-width: 1170px;
+  display: grid;
+  grid-template-columns: repeat(5, 20%);
+  gap: 8px;
+  margin: 0px auto;
+  row-gap: 30px;
+}
+.dongHoNu {
+  max-width: 1170px;
+  display: grid;
+  grid-template-columns: repeat(5, 20%);
+  gap: 8px;
+  margin: 0px auto;
+  row-gap: 30px;
+}
+.dongHoDoi {
+  max-width: 1170px;
+  display: grid;
+  grid-template-columns: repeat(5, 20%);
+  gap: 8px;
+  margin: 0px auto;
+  row-gap: 30px;
+}
+
+.watch {
+  text-align: center;
+  position: relative; /* Sử dụng relative để có thể đặt các thành phần con (badge) tuyệt đối bên trong */
+  width: 200px;
+}
+
+.watch img {
+  position: relative;
+  max-width: 200px; /* Đảm bảo ảnh không quá lớn */
+  transition: transform 0.5s ease-in-out; /* Thêm hiệu ứng chuyển đổi mượt mà */
+  z-index: 1;
+}
+.watch img:hover {
+  transform: scale(1.05); /* Phóng to hình ảnh nhẹ khi hover (tăng kích thước 5%) */
+}
+
+.watch p {
+  color: #000; /* Màu chữ mặc định */
+  text-decoration: none; /* Không có gạch chân mặc định */
+  transition: color 0.3s ease, text-decoration 0.3s ease; /* Hiệu ứng chuyển màu và gạch chân */
+  text-align: center; /* Căn giữa nội dung */
+  margin-top: 10px;
+}
+
+.priceKm {
+  font-weight: bold;
+  color: red;
+}
+/* Đặt bố cục cho watch */
+
+/* Định dạng badge giảm giá */
+.discountBadge {
+  position: absolute;
+  top: -15px; /* Đặt vị trí góc trên của badge */
+  left: 10px; /* Đặt vị trí góc trái của badge */
+  background-color: red; /* Màu nền đỏ */
+  color: white; /* Màu chữ trắng */
+  padding: 5px 5px; /* Căn chỉnh nội dung bên trong badge */
+  border-radius: 50%; /* Tạo hình tròn */
+  font-size: 10px; /* Cỡ chữ nhỏ */
+  font-weight: bold; /* Chữ đậm */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  z-index: 9;
+}
+.titleIndex {
+  text-align: center;
+  font-size: 30px;
+}
+
+.xemThem {
+  display: flex; /* Sử dụng flexbox để căn giữa */
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  align-items: center; /* Căn giữa theo chiều dọc nếu cần */
+  margin: 50px auto; /* Thêm khoảng cách ở trên và dưới */
+}
+
+.xemThem::after {
+  content: "";
+  position: relative; /* Đặt gạch ngang ở vị trí tuyệt đối */
+  left: 0;
+  right: 0;
+  border-top: 1px solid rgba(161, 147, 142, 0.881); /* Gạch ngang */
+  transform: translateY(-50%); /* Căn giữa gạch ngang */
+  width: 1170px;
+  margin: auto;
+}
+
+.xemThem p {
+  padding-top: 10px;
+  background-color: #796752; /* Nền màu để tách chữ ra khỏi gạch ngang */
+  width: 600px; /* Độ rộng của phần chữ */
+  height: 35px; /* Chiều cao của phần chữ */
+  border: 777777 solid 1px; /* Border xung quanh */
+  border-radius: 20px; /* Bo góc */
+  position: absolute; /* Để tạo gạch ngang */
+  text-align: center; /* Căn giữa chữ trong phần tử */
+  z-index: 999;
+  justify-content: center;
+}
+.xemThem p:hover {
+  background-color: #946d49;
+}
+
+.xemThem p b {
+  position: relative; /* Để chữ nằm trên gạch ngang */
+  z-index: 1; /* Đưa chữ lên trên gạch ngang */
+  color: #fff;
+}
+
+.overlay {
+  position: absolute; /* Để đặt vị trí tương đối so với div.watch */
+  bottom: 200px; /* Cách từ trên cùng 10px */
+  right: 0; /* Cách từ bên trái 10px */
+  background-color: red; /* Màu nền đỏ */
+  color: white; /* Màu chữ trắng */
+  padding: 2px;
+  border-radius: 2px; /* Bo góc */
+  z-index: 1; /* Đảm bảo ô chữ nằm trên cùng */
+  opacity: 0.9; /* Độ mờ của ô chữ */
+  width: 40px;
+  height: 22px;
+}
+
+.sale {
+  position: absolute; /* Để đặt vị trí tương đối so với div.watch */
+  bottom: 150px; /* Cách từ trên cùng 10px */
+  left: 10px; /* Cách từ bên trái 10px */
+  background-color: #e9a04d;
+  color: rgb(255, 255, 255); /* Màu chữ trắng */
+  border-radius: 2px; /* Bo góc */
+  z-index: 1; /* Đảm bảo ô chữ nằm trên cùng */
+  opacity: 0.9; /* Độ mờ của ô chữ */
+  width: 100px;
+  height: 22px;
+  padding: 2px;
+  margin-bottom: 10px;
+}
+/* Định dạng cho toàn bộ phần slideSection */
+.slideSection {
+  padding: 20px; /* Khoảng cách bên trong */
+
+  width: 1170px;
+  margin: auto;
+}
+
+/* Định dạng cho tiêu đề */
+.title {
+  display: flex; /* Sử dụng Flexbox */
+  justify-content: space-between; /* Khoảng cách giữa hai phần tử */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  margin-bottom: 20px; /* Khoảng cách dưới tiêu đề */
+}
+
+/* Định dạng cho h2 */
+.title .ss {
+  margin: 0; /* Bỏ khoảng cách mặc định */
+  font-size: 24px; /* Kích thước chữ */
+  font-weight: bold; /* Đậm */
+}
+
+/* Định dạng cho p */
+.title p {
+  margin: 0; /* Bỏ khoảng cách mặc định */
+  color: #000000; /* Màu chữ */
+  cursor: pointer; /* Đổi con trỏ khi di chuột */
+}
+/*thương hiệu nổi bật  */
+.owlItem {
+  position: relative;
+}
+.slick-prev,
+.slick-next {
+  display: none !important; /* Ẩn nút */
+}
+.prevButton,
+.nextButton {
+  width: 30px;
+  background-color: #fff; /* Màu nền */
+  color: white; /* Màu chữ */
+  border: none; /* Không viền */
+  padding-top: 10px; /* Khoảng cách */
+  margin: 10px; /* Khoảng cách giữa các nút */
+  cursor: pointer; /* Con trỏ chuột khi hover */
+  border-radius: 5px; /* Bo tròn góc */
+  transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+  position: absolute;
+  z-index: 9;
+  margin-top: -200px;
+}
+.prevButton {
+  left: -10px; /* Đặt nút Previous ở bên trái */
+}
+
+.nextButton {
+  right: -10px; /* Đặt nút Next ở bên phải */
+}
+.prevButton:hover,
+.nextButton:hover {
+  background-color: #777; /* Màu nền khi hover */
+}
+
+.container-news {
+  width: 1170px; /* Tổng chiều rộng là 1170px */
+  margin: 20px auto;
+  display: block;
+  justify-content: space-between;
+  max-height: 850px; /* Chiều cao tối đa */
+  /* Cuộn dọc nếu vượt quá chiều cao */
+}
+.section-news {
+  display: flex;
+  gap: 20px;
+}
+.news-section,
+.video-section {
+  background-color: white;
+}
+
+.news-section,
+.video-section {
+  width: 585px; /* Chia đều hai phần, mỗi phần có chiều rộng 622px */
+  padding: 10px;
+  height: auto;
+}
+
+.news-section {
+  width: 585px; /* Chiều rộng của phần news-section */
+  max-height: 850px; /* Chiều cao tối đa */
+  overflow-y: auto; /* Tạo thanh cuộn dọc khi nội dung vượt quá */
+  overflow-x: hidden; /* Ẩn thanh cuộn ngang nếu có nội dung thừa */
+
+  background-color: #fff; /* Màu nền cho phần tin tức */
+}
+/* Tiêu đề hình bình hành và đường gạch chân */
+.title-unline {
+  position: relative;
+  color: white;
+  padding: 10px 0 10px 30px;
+  font-size: 18px;
+  width: 210px;
+  margin-bottom: 20px;
+  background-color: #796752;
+  display: inline-block;
+  transform: skew(-30deg); /* Tạo hiệu ứng hình bình hành */
+  margin-left: 20px;
+}
+
+.text-none {
+  transform: skew(30deg);
+}
+.slick-arrow .slick-next {
+  display: none;
+}
+
+.title-unline::after {
+  content: "";
+  position: absolute;
+  bottom: 0px; 
+  margin-left: -20px;
+  width: 1010px;
+  height: 1px; 
+  background-color: #796752; 
+  transform: skew(20deg); 
+}
+
+.news-item {
+  display: block;
+  width: 322px;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 10px 0;
+  font-size: 10px;
+}
+.item-1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+}
+
+.item-1 img {
+  width: 250px; 
+  height: 150px;
+  object-fit: cover; 
+}
+
+.news-section::-webkit-scrollbar {
+  width: 12px; 
+}
+
+.news-section::-webkit-scrollbar-thumb {
+  background: #777777; 
+  border-radius: 10px; 
+  border: solid white 1px;
+}
+
+.news-section::-webkit-scrollbar-track {
+  background: #f0f0f0; 
+  border-radius: 10px; 
+}
+
+.news-item:last-child {
+  border-bottom: none; 
+}
+
+.news-item p {
+  margin: 0;
+  color: #555;
+  font-size: 14px; 
+}
+.new-item img {
+  margin-top: 10px;
+}
+.news-item small {
+  color: #777777;
+  font-size: 12px;
+}
+
+.news-content {
+  width: 65%;
+}
+
+.news-image {
+  width: 30%; 
+}
+
+.news-image img {
+  width: 100%; 
+  height: auto;
+  border-radius: 4px;
+}
+.item-left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+  margin-top: -20px;
+}
+.item-left p {
+  padding-bottom: 10px;
+}
+
+
+.video-wrapper {
+  position: relative;
+  padding-bottom: 65.5%; 
+  height: 0;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 585px;
+  height: 100%;
+  z-index: 1;
+}
+
+.related-videos {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.related-video {
+  text-align: center;
+}
+
+.related-video iframe {
+  width: 134px; 
+  height: 80px;
+  overflow: hidden;
+}
+
+.related-video p {
+  font-size: 12px; 
+  color: #ffffff;
+}
+.video-title {
+  display: flex;
+  max-height: 80px;
+  height: 55px;
+}
+.video-title img {
+  width: 160px;
+  padding: 5px 5px;
+  margin-top: -40px;
+}
+.video-title p {
+  border-left: #000 solid 1px;
+  padding-left: 5px;
+}
+.title-video {
+  position: absolute;
+  margin-top: -30px;
+  right: 320px; 
+  color: rgb(255, 255, 255); 
+  padding: 5px 5px; 
+  font-size: 10px; 
+  display: flex;
+
+  align-items: center;
+  z-index: 999;
+  background-color: #777777 0.5;
+  width: 575px;
+  margin-right: -160px;
+}
+.title-videos {
+  position: absolute;
+  margin-top: -30px;
+  color: rgb(255, 255, 255); 
+  padding: 5px 5px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  z-index: 999;
+  background-color: #777777 0.5;
+  width: 130px;
+}
+
+.ttContainer {
+  text-align: center;
+  margin: 150px auto;
+  max-width: 1170px;
+}
+.titleVs {
+  text-transform: uppercase;
+  font-size: 30px;
+  position: relative; 
+  margin: 20px 0; 
+  margin-top: -120px;
+}
+
+.titleVs::before,
+.titleVs::after {
+  content: ""; 
+  position: absolute; 
+  top: 50%; 
+  width: 200px; 
+  height: 2px; 
+  background: rgb(96, 96, 96); 
+}
+
+.titleVs::before {
+  margin-left: -220px;
+}
+
+.titleVs::after {
+  margin-left: 20px;
+}
+.iconList {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff 0.5;
+  max-width: 1170px;
+  margin-top: 90px;
+}
+.iconItem {
+  display: flex;
+}
+.iconItem p {
+  text-transform: uppercase;
+}
+.iconItem img {
+  width: 50px;
+  height: 40px;
+  margin-top: -15px;
+  margin-right: 5px;
+}
+.iconItem .ngay{
+  margin-top: -10px;
+}
+.iconItem .uytin{
+  margin-top: -5px;
+}
+
+.iconItem .uytin,
+.iconItem .ngay {
+  animation: move-up-down 2s ease-in-out infinite; 
+}
+
+@keyframes move-up-down {
+  0%,
+  100% {
+    transform: translateY(0); 
+  }
+  50% {
+    transform: translateY(-10px); 
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(0deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.shake {
+  animation: shake 0.5s ease infinite; 
+}
+.iconItem .vanchuyen,
+.baove {
+  transition: transform 0.5s ease; 
+  animation: shake 2s ease forwards infinite;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  80% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.certificateSection {
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  padding-top: 70px; 
+  width: 1170px;
+  position: relative;
+  height: 600px;
+}
+
+.text {
+  margin: 0px auto;
+  max-width: 50%;
+}
+.textTitle {
+  text-align: left;
+  width: 500px;
+  text-transform: uppercase; 
+  font-size: 24px; 
+  margin-bottom: 10px; 
+  line-height: 40px;
+}
+.text .xtc {
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-align: right;
+  margin-top: -30px;
+}
+.xtc::after {
+  content: ""; 
+  position: absolute; 
+  margin-top: 50px;
+  margin-left: -500px;
+  width: 500px;
+  height: 0.5px;
+  background: rgb(96, 96, 96); 
+}
+
+.certificateSection .imgChungnhan {
+  max-width: 50%; 
+  height: auto; 
+  border-radius: 5px; 
+  margin-right: 120px;
+  margin-top: 30px;
+}
+
+.textBrand {
+  width: 500px;
+  text-align: center;
+  padding-top: 120px;
+  font-weight: bold;
+  text-align: left;
+  font-size: 18px;
+  padding-bottom: 60px;
+}
+.textBrand a {
+  text-decoration: none;
+  color: red;
+}
+
+.sectionBrand {
+  width: 390px;
+  margin-left: 100px;
+  height: auto;
+}
+.itemSlide1 {
+  max-width: 150px;
+  width: 140px;
+  padding: 10px 7px;
+  display: flex;
+}
+.itemSlide1 img:hover {
+  border: #777777 0.5px solid;
+}
+.itemSlide1 img {
+  position: absolute; 
+  align-items: center;
+  justify-content: center;
+  width: 130px;
+  padding: 5px 10px;
+  height: 70px;
+}
