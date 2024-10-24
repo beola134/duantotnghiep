@@ -16,7 +16,7 @@ exports.filtersanphamdongho = async (req, res) => {
       chat_lieu_day,
       chat_lieu_vo,
       mat_kinh,
-      mau_ma,
+      mau_mat,
       phong_cach,
       kieu_dang,
       xuat_xu,
@@ -86,8 +86,8 @@ exports.filtersanphamdongho = async (req, res) => {
     if (mat_kinh) {
       filter.mat_kinh = mat_kinh;
     }
-    if (mau_ma) {
-      filter.mau_ma = mau_ma;
+    if (mau_mat) {
+      filter.mau_mat = mau_mat;
     }
     if (phong_cach) {
       filter.phong_cach = phong_cach;
@@ -132,7 +132,7 @@ exports.filtersanphamdongho = async (req, res) => {
           priceRange = { [Op.between]: [50000000, 100000000] };
           break;
         case "Trên 100 triệu":
-          priceRange = { [Op.gt]: 100000000 };
+          priceRange = { [Op.gte]: 100000000 };
           break;
         default:
           priceRange = null;
