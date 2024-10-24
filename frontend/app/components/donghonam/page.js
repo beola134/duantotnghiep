@@ -225,16 +225,16 @@ export default function DonghoNam() {
                         >
                           <span className={styles.close}>x</span>
                           <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
-                            <Link rel="nofollow" href="../components/donghonam" title="Đồng hồ nam">
+                            <Link rel="nofollow" href="/components/donghonam" title="Đồng hồ nam">
                               <span>Đồng hồ nam</span>
                             </Link>
-                            <Link rel="nofollow" href="../components/donghonu" title="Đồng hồ nữ">
+                            <Link rel="nofollow" href="/components/donghonu" title="Đồng hồ nữ">
                               <span>Đồng hồ nữ</span>
                             </Link>
-                            <Link rel="nofollow" href="../components/donghodoi" title="Đồng hồ đôi">
+                            <Link rel="nofollow" href="/components/donghodoi" title="Đồng hồ đôi">
                               <span>Đồng hồ đôi</span>
                             </Link>
-                            <Link rel="nofollow" href="../components/donghounisex" title="Đồng hồ unisex">
+                            <Link rel="nofollow" href="/components/donghounisex" title="Đồng hồ unisex">
                               <span>Đồng hồ unisex</span>
                             </Link>
                           </div>
