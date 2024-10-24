@@ -1,10 +1,11 @@
 "use client";
 import "bootstrap/dist/css/bootstrap.min.css";
-import styles from "./themsanpham.module.css";
-import Link from "next/link";
+import styles from "./suasanpham.module.css";
 import { useState, useEffect } from "react";
+import Link from "next/link";
+export default function SuaSanPham({ params }) {
+  const { id } = params; // Lấy id từ URL
 
-export default function ThemSanPham() {
   const [formData, setFormData] = useState({
     ten_san_pham: "",
     ten: "",
@@ -36,25 +37,27 @@ export default function ThemSanPham() {
   const [cates, setCategories] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Fetch danh mục từ API
+  // Lấy dữ liệu sản phẩm và danh mục khi component được tải
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchProductAndCategories = async () => {
       try {
-        const response = await fetch("http://localhost:5000/cate/allcatess");
-        const data = await response.json();
-        setCategories(data.cates);
-        if (data.cates.length === 0) {
-          setErrorMessage("Không tìm thấy danh mục nào.");
-        }
+        // Lấy danh mục
+        const cateResponse = await fetch("http://localhost:5000/cate/allcatess");
+        const cateData = await cateResponse.json();
+        setCategories(cateData.cates);
+
+        // Lấy sản phẩm theo ID
+        const productResponse = await fetch(`http://localhost:5000/product/chitietsp/${id}`);
+        const productData = await productResponse.json();
+        setFormData({ ...productData.product });
       } catch (error) {
-        console.error("Error fetching categories:", error);
-        setErrorMessage("Đã xảy ra lỗi khi lấy danh mục.");
+        setErrorMessage("Đã xảy ra lỗi khi tải dữ liệu.");
       }
     };
-    fetchCategories();
-  }, []);
+    fetchProductAndCategories();
+  }, [id]); // Thực thi khi id thay đổi
 
-  // Hàm xử lý thay đổi input
+  // Xử lý thay đổi trong form
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -63,7 +66,7 @@ export default function ThemSanPham() {
     }));
   };
 
-  // Hàm xử lý chọn file
+  // Xử lý thay đổi tệp hình ảnh
   const handleFileChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -71,43 +74,35 @@ export default function ThemSanPham() {
     }));
   };
 
-  // Hàm xử lý submit form
+  // Xử lý khi người dùng submit form để cập nhật sản phẩm
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage(""); // Reset lỗi trước khi gửi form
-
-    const { ten_san_pham, gia_san_pham, id_danh_muc } = formData;
+    setErrorMessage("");
 
     // Kiểm tra các trường bắt buộc
+    const { ten_san_pham, gia_san_pham, id_danh_muc } = formData;
     if (!ten_san_pham || !gia_san_pham || !id_danh_muc) {
       setErrorMessage("Vui lòng điền tất cả các trường bắt buộc.");
-      return; // Dừng lại nếu có lỗi
-    }
-
-    // Kiểm tra giá sản phẩm
-    if (isNaN(gia_san_pham) || gia_san_pham <= 0) {
-      setErrorMessage("Giá sản phẩm không hợp lệ.");
       return;
     }
 
-    // Sử dụng FormData để gửi file cùng với dữ liệu
     const data = new FormData();
 
-    // Thêm các field không phải file
+    // Thêm các trường vào form, trừ hình ảnh
     Object.keys(formData).forEach((key) => {
       if (key !== "hinh_anh") {
         data.append(key, formData[key]);
       }
     });
 
-    // Thêm file vào formData nếu có
+    // Thêm hình ảnh nếu có
     if (formData.hinh_anh) {
       data.append("hinh_anh", formData.hinh_anh);
     }
 
     try {
-      const response = await fetch("http://localhost:5000/product/themsp", {
-        method: "POST",
+      const response = await fetch(`http://localhost:5000/product/capnhatsp/${id}`, {
+        method: "PUT",
         body: data,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -117,15 +112,15 @@ export default function ThemSanPham() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to add product");
+        throw new Error(errorData.error || "Cập nhật sản phẩm không thành công");
       }
 
-      const result = await response.json();
-      console.log("Product added successfully:", result);
-      alert("Sản phẩm đã được thêm thành công");
+      alert("Sản phẩm đã được cập nhật thành công");
+      // Chuyển hướng sau khi cập nhật thành công
+      window.location.href = "/components/sanpham";
     } catch (error) {
-      console.error("Error adding product:", error.message);
-      setErrorMessage("Đã xảy ra lỗi khi thêm sản phẩm: " + error.message);
+      console.error("Lỗi khi cập nhật sản phẩm:", error.message);
+      setErrorMessage("Đã xảy ra lỗi khi cập nhật sản phẩm: " + error.message);
     }
   };
 
@@ -147,7 +142,7 @@ export default function ThemSanPham() {
           </li>
 
           <li>
-            <Link href="sanpham">
+            <Link href="/components/sanpham">
               <i className={`bx bxs-chart ${styles.icon}`}></i>
               Quản lý sản phẩm
             </Link>
@@ -504,8 +499,9 @@ export default function ThemSanPham() {
                 <div className="alert alert-danger">{errorMessage}</div>
               )}
               <button type="submit" className="btn btn-outline-primary">
-                Lưu lại
+               Cập nhật
               </button>
+              <button type="button" className="btn btn-outline-secondary">Hủy bỏ</button>
             </div>
           </form>
         </div>

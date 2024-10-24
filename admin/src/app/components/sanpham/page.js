@@ -67,6 +67,7 @@ export default function SanPham() {
       }
     }
   };
+  
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -246,14 +247,14 @@ export default function SanPham() {
         </nav>
         <div className={styles.header1}>
           <div className={styles.title} style={{ fontWeight: "bold" }}>
-            Danh Sách Nhân Viên
+            Danh Sách Sản Phẩm
           </div>
           <div className={styles.timestamp} id="timestamp"></div>
         </div>
         <div className={styles.bg}>
           <div className={styles.container}>
             <div className={styles.actions}>
-              <Link href="themsanpham" className={styles.sp}>
+              <Link href="/components/themsanpham" className={styles.sp}>
                 <i className="fas fa-plus"></i> Tạo mới sản phẩm
               </Link>
               <div className={styles.buttonGroup}>
@@ -347,7 +348,7 @@ export default function SanPham() {
                     } = product;
 
                     return (
-                      <tr>
+                      <tr key={_id}>
                         <td>
                           <input
                             type="checkbox"
@@ -381,12 +382,12 @@ export default function SanPham() {
                             🗑️
                           </button>
                           &nbsp;
-                          <a
-                            href="suasp.html"
+                          <Link
+                            href={`/components/suasanpham/${_id}`}
                             className={`${styles.btn} ${styles.edit}`}
                           >
                             ✏️
-                          </a>
+                          </Link>
                           &nbsp;
                         </td>
                       </tr>
