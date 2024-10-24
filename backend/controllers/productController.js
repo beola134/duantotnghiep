@@ -90,10 +90,46 @@ exports.filtersanphamdongho = async (req, res) => {
       filter.mau_ma = mau_ma;
     }
     if (phong_cach) {
-      filter.phong_cach = phong_cach;
+      switch (phong_cach) {
+        case "Sang trọng":
+          filter.phong_cach = "Sang trọng";
+          break;
+        case "Thể thao":
+          filter.phong_cach = "Thể thao";
+          break;
+        case "Thể thao sang trọng":
+          filter.phong_cach = "Thể thao sang trọng";
+          break;
+        case "Quân đội":
+          filter.phong_cach = "Quân đội";
+          break;
+        case "Thời trang":
+          filter.phong_cach = "Thời trang";
+          break;
+        case "Hiện đại":
+          filter.phong_cach = "Hiện đại";
+          break;
+        default:
+          break;
+      }
     }
     if (kieu_dang) {
-      filter.kieu_dang = kieu_dang;
+      switch (kieu_dang) {
+        case "Mặt vuông":
+          filter.kieu_dang = "Mặt vuông";
+          break;
+        case "Mặt tròn":
+          filter.kieu_dang = "Mặt tròn";
+          break;
+        case "Mặt chữ nhật":
+          filter.kieu_dang = "Mặt chữ nhật";
+          break;
+        case "Mặt Oval":
+          filter.kieu_dang = "Mặt Oval";
+          break;
+        default:
+          break;
+      }
     }
     if (xuat_xu) {
       filter.xuat_xu = xuat_xu;
