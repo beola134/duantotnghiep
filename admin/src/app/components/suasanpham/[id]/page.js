@@ -125,11 +125,25 @@ export default function SuaSanPham({ params }) {
         );
       }
 
-      alert("Sản phẩm đã được cập nhật thành công");
+      // Hiển thị thông báo thành công bằng SweetAlert2
+      await Swal.fire({
+        title: "Thành công!",
+        text: "Sản phẩm đã được cập nhật thành công",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+
       // Chuyển hướng sau khi cập nhật thành công
       window.location.href = "/components/sanpham";
     } catch (error) {
       console.error("Lỗi khi cập nhật sản phẩm:", error.message);
+      // Hiển thị thông báo lỗi bằng SweetAlert2
+      await Swal.fire({
+        title: "Lỗi!",
+        text: "Đã xảy ra lỗi khi cập nhật sản phẩm: " + error.message,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
       setErrorMessage("Đã xảy ra lỗi khi cập nhật sản phẩm: " + error.message);
     }
   };

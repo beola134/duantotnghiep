@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./themsanpham.module.css";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
 export default function ThemSanPham() {
   const [formData, setFormData] = useState({
@@ -80,13 +81,23 @@ export default function ThemSanPham() {
 
     // Kiểm tra các trường bắt buộc
     if (!ten_san_pham || !gia_san_pham || !id_danh_muc) {
-      setErrorMessage("Vui lòng điền tất cả các trường bắt buộc.");
+      Swal.fire({
+        title: "Lỗi",
+        text: "Vui lòng điền tất cả các trường bắt buộc.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
       return; // Dừng lại nếu có lỗi
     }
 
     // Kiểm tra giá sản phẩm
     if (isNaN(gia_san_pham) || gia_san_pham <= 0) {
-      setErrorMessage("Giá sản phẩm không hợp lệ.");
+      Swal.fire({
+        title: "Lỗi",
+        text: "Giá sản phẩm không hợp lệ.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
       return;
     }
 
@@ -122,13 +133,27 @@ export default function ThemSanPham() {
 
       const result = await response.json();
       console.log("Product added successfully:", result);
-      alert("Sản phẩm đã được thêm thành công");
+      
+      // Thông báo thành công
+      Swal.fire({
+        title: "Thành công",
+        text: "Sản phẩm đã được thêm thành công!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+      
     } catch (error) {
       console.error("Error adding product:", error.message);
-      setErrorMessage("Đã xảy ra lỗi khi thêm sản phẩm: " + error.message);
+      
+      // Thông báo lỗi
+      Swal.fire({
+        title: "Lỗi",
+        text: "Đã xảy ra lỗi khi thêm sản phẩm: " + error.message,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
-
   return (
     <div className={styles.SidebarContainer}>
       <section id={styles.sidebar}>

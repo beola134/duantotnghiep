@@ -3,9 +3,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./sanpham.module.css";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+
 export default function SanPham() {
   const uploadFile = () => {
-    alert("Tính năng tải file chưa được triển khai!");
+    Swal.fire({
+      title: "Chưa khả dụng",
+      text: "Tính năng tải file chưa được triển khai!",
+      icon: "info",
+      confirmButtonText: "OK",
+    });
   };
 
   // Hàm in dữ liệu
@@ -21,7 +28,13 @@ export default function SanPham() {
     window.getSelection().removeAllRanges();
     window.getSelection().addRange(range);
     document.execCommand("copy");
-    alert("Dữ liệu đã được sao chép");
+
+    Swal.fire({
+      title: "Thành công",
+      text: "Dữ liệu đã được sao chép!",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
   };
 
   // Hàm xuất dữ liệu ra Excel
@@ -29,6 +42,13 @@ export default function SanPham() {
     const table = document.getElementById("productTable");
     const workbook = XLSX.utils.table_to_book(table);
     XLSX.writeFile(workbook, "products.xlsx");
+
+    Swal.fire({
+      title: "Thành công",
+      text: "Dữ liệu đã được xuất ra Excel!",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
   };
 
   // Hàm xuất dữ liệu ra PDF
@@ -36,17 +56,54 @@ export default function SanPham() {
     const doc = new jsPDF();
     doc.autoTable({ html: "#productTable" });
     doc.save("products.pdf");
+
+    Swal.fire({
+      title: "Thành công",
+      text: "Dữ liệu đã được xuất ra PDF!",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
   };
 
   // Hàm xóa tất cả dữ liệu
-  const deleteAll = () => {
-    if (confirm("Bạn có chắc chắn muốn xóa tất cả không?")) {
+  const deleteAll = async () => {
+    const result = await Swal.fire({
+      title: "Xác nhận",
+      text: "Bạn có chắc chắn muốn xóa tất cả không?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
+    });
+
+    if (result.isConfirmed) {
       const tableBody = document.querySelector("#productTable tbody");
       tableBody.innerHTML = "";
+
+      Swal.fire({
+        title: "Đã xóa",
+        text: "Tất cả dữ liệu đã được xóa!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
     }
   };
+
   const deleteProduct = async (id) => {
-    if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) {
+    const result = await Swal.fire({
+      title: "Xác nhận",
+      text: "Bạn có chắc chắn muốn xóa sản phẩm này không?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
+    });
+
+    if (result.isConfirmed) {
       try {
         const response = await fetch(
           `http://localhost:5000/product/xoasp/${id}`,
@@ -61,16 +118,28 @@ export default function SanPham() {
         setProducts((prevProducts) =>
           prevProducts.filter((product) => product._id !== id)
         );
-        alert("Xóa sản phẩm thành công");
+
+        Swal.fire({
+          title: "Thành công",
+          text: "Sản phẩm đã được xóa thành công!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
       } catch (error) {
-        alert(error.message);
+        Swal.fire({
+          title: "Lỗi",
+          text: error.message,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       }
     }
   };
-  
+
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -88,11 +157,13 @@ export default function SanPham() {
     };
     fetchProducts();
   }, []);
+
   if (loading) {
     return <p>Loading...</p>;
   }
+
   if (error) {
-    return <p>Error:{error}</p>;
+    return <p>Error: {error}</p>;
   }
   return (
     <div className={styles.SidebarContainer}>
@@ -374,6 +445,12 @@ export default function SanPham() {
                         <td>{gia_giam.toLocaleString("vi-VN")}₫</td>
                         <td>{ma_san_pham}</td>
                         <td>
+                        <Link
+                            href={`/components/suasanpham/${_id}`}
+                            className={`${styles.btn} ${styles.edit}`}
+                          >
+                            ✏️
+                          </Link> &nbsp;
                           <button
                             className={`${styles.btn} ${styles.delete}`}
                             id="deleteButton"
@@ -381,13 +458,8 @@ export default function SanPham() {
                           >
                             🗑️
                           </button>
-                          &nbsp;
-                          <Link
-                            href={`/components/suasanpham/${_id}`}
-                            className={`${styles.btn} ${styles.edit}`}
-                          >
-                            ✏️
-                          </Link>
+                         
+                          
                           &nbsp;
                         </td>
                       </tr>
