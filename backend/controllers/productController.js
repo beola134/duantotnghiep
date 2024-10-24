@@ -114,7 +114,9 @@ exports.filtersanphamdongho = async (req, res) => {
           `ROUND(((gia_san_pham - gia_giam) / gia_san_pham ) * 100, 2 ) = ${khuyenmai}`)
       );
     }
-    const products = await Product.findAll({where: filter});
+    const products = await Product.findAll({where: filter,
+      limit: 20,
+    });
     res.json({ products });
   } catch (error) {
     console.log("Error: " ,error);
@@ -249,7 +251,7 @@ exports.getNewLimitCouple = async (req, res) => {
 // Lấy danh mục theo giới tính "Nam"
 exports.getMale = async (req, res) => {
   try {
-    let { limit = 10, page = 1 } = req.query
+    let { limit = 20, page = 1 } = req.query
     limit = parseInt(limit);
     page = parseInt(page);
     if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
@@ -297,7 +299,7 @@ exports.getMale10sp = async (req, res) => {
 // Lấy danh mục theo giới tính "Nữ"
 exports.getFeMale = async (req, res) => {
  try {
-   let { limit = 10, page = 1 } = req.query;
+   let { limit = 20, page = 1 } = req.query;
    limit = parseInt(limit);
    page = parseInt(page);
    if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
