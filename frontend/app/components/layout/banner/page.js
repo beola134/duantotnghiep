@@ -29,7 +29,7 @@ const cx = classNames.bind(styles);
 export default function Banner() {
   
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 6, 
