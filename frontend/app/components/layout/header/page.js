@@ -4,7 +4,8 @@ import styles from "./header.module.css";
 import classNames from "classnames/bind";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons"; 
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { useRouter } from "next/navigation";
 
 const locgia=[
   {id:"allsp/underTwomillion",
@@ -40,32 +41,20 @@ export default function Header() {
   const [category, setCategory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [inputData, setInputData] = useState(""); 
-  const [searchResults, setSearchResults] = useState([]);
+  const [inputData, setInputData] = useState('');
+   const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
+  useEffect(() => {
+      
+      setIsMounted(true);
+    }, []);
 
-  const handleSearch = async () => {
-    if (inputData.trim() === "") {
-      return; 
-    }
-
-    try {
-      const response = await fetch(`http://localhost:5000/product/timkiem?query=${inputData}`, {
-        method: "POST",
-      });
-
-      if (!response.ok) {
-        throw new Error("Lỗi tìm kiếm");
-      }
-
-      const data = await response.json();
-      setSearchResults(data); 
-    } catch (error) {
-      console.error("Lỗi khi tìm kiếm:", error);
+  const handleSearch = () => {
+   
+    if (inputData && isMounted) {
+      router.push(`/components/search?query=${inputData}`);
     }
   };
-
-
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -106,17 +95,22 @@ export default function Header() {
             </Link>
           </div>
           <div className={cx("search-bar")}>
-        <input
-          value={inputData}
-          onChange={(event) => setInputData(event.target.value)} 
-          type="text"
-          placeholder="Bạn muốn tìm ..."
-          className={cx("input")}
-        />
-       <button type="button" className={cx("button")} onClick={handleSearch}>
-           <Link href="/components/search"><i className="fas fa-search" style={{color: "white"}}></i></Link>
-        </button>
-      </div>
+            <input
+              value={inputData}
+              onChange={(event) => setInputData(event.target.value)}
+              type="text"
+              placeholder="Bạn muốn tìm ..."
+              className={cx("input")}
+            />
+            <button
+              type="button"
+              className={cx("button")}
+              onClick={handleSearch}
+              disabled={!inputData} 
+            >
+              <i className="fas fa-search" style={{ color: "white" }}></i>
+            </button>
+          </div>
           <div className={cx("contact-info")}>
             <div className={cx("phone")}>
               <img
@@ -133,7 +127,7 @@ export default function Header() {
 
             <div className={cx("user")}>
               <Link href="/components/login">
-                <FontAwesomeIcon icon={faUser} style={{color: "#ffffff",}} />
+                <FontAwesomeIcon icon={faUser} style={{ color: "#ffffff" }} />
               </Link>
             </div>
 
@@ -163,22 +157,22 @@ export default function Header() {
             <ul className={cx("dropdown-menu")}>
               {category.map((item) => (
                 <li className={cx("dropdown-menu-li")} key={item._id}>
-                  <Link href={`/components/chitietdanhmuc/${item._id}`} style={{color: "white"}}>
-                  <img
-                    className={cx("dropdown-menu-img")}
-                    src={`http://localhost:5000/images/${item.hinh_anh}`}
-                    alt=""
-                  />
-                  </Link> 
+                  <Link
+                    href={`/components/chitietdanhmuc/${item._id}`}
+                    style={{ color: "white" }}
+                  >
+                    <img
+                      className={cx("dropdown-menu-img")}
+                      src={`http://localhost:5000/images/${item.hinh_anh}`}
+                      alt=""
+                    />
+                  </Link>
                 </li>
               ))}
             </ul>
           </li>
           <li className={cx("nav-list-li")}>
-            <Link
-              href="/components/donghonam"
-              className={cx("nav-list-li-a")}
-            >
+            <Link href="/components/donghonam" className={cx("nav-list-li-a")}>
               ĐỒNG HỒ NAM
             </Link>
             <ul className={cx("dropdown-menu-dhn")}>
@@ -192,8 +186,12 @@ export default function Header() {
                       key={item._id}
                       style={{ fontSize: "10px" }}
                     >
-                      <Link href={`/components/chitietdanhmuc/${item._id}`}  className={cx("cxcx")}>{item.danh_muc}</Link>
-                      
+                      <Link
+                        href={`/components/chitietdanhmuc/${item._id}`}
+                        className={cx("cxcx")}
+                      >
+                        {item.danh_muc}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -203,15 +201,13 @@ export default function Header() {
               <li className={cx("dropdown-menu-dhn-li1")}>
                 <h3 className={cx("dropdown-menu-dhn-h3")}>MỨC GIÁ</h3>
                 <ul className={cx("dropdown-menu-dhn-ul")}>
-                  {locgia.map((item)=>(
-                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
-                      <Link href=""  className={cx("cxcx")}>
+                  {locgia.map((item) => (
+                    <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
+                      <Link href="" className={cx("cxcx")}>
                         {item.title}
                       </Link>
                     </li>
                   ))}
-                  
-                  
                 </ul>
               </li>
 
@@ -278,14 +274,18 @@ export default function Header() {
               <li className={cx("dropdown-menu-dhnu-li1")}>
                 <h3 className={cx("dropdown-menu-dhnu-h3")}>THƯƠNG HIỆU</h3>
                 <ul className={cx("dropdown-menu-dhnu-ul")}>
-                   {category.map((item) => (
+                  {category.map((item) => (
                     <li
                       className={cx("dropdown-menu-dhn-li2")}
                       key={item._id}
                       style={{ fontSize: "10px" }}
                     >
-                      <Link href={`/components/chitietdanhmuc/${item._id}`}  className={cx("cxcx")}>{item.danh_muc}</Link>
-                      
+                      <Link
+                        href={`/components/chitietdanhmuc/${item._id}`}
+                        className={cx("cxcx")}
+                      >
+                        {item.danh_muc}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -293,9 +293,12 @@ export default function Header() {
               <li className={cx("dropdown-menu-dhnu-li1")}>
                 <h3 className={cx("dropdown-menu-dhnu-h3")}>MỨC GIÁ</h3>
                 <ul className={cx("dropdown-menu-dhnu-ul")}>
-                  {locgia.map((item)=>(
-                     <li key={item.gia} className={cx("dropdown-menu-dhn-li2")}>
-                      <Link href={`/components/sanphamlocgia/${item.gia}` }  className={cx("cxcx")}>
+                  {locgia.map((item) => (
+                    <li key={item.gia} className={cx("dropdown-menu-dhn-li2")}>
+                      <Link
+                        href={`/components/sanphamlocgia/${item.gia}`}
+                        className={cx("cxcx")}
+                      >
                         {item.title}
                       </Link>
                     </li>
@@ -353,24 +356,25 @@ export default function Header() {
 
           {/*Đồng hồ đôi*/}
           <li className={cx("nav-list-li")}>
-            <Link
-              href="/components/donghodoi"
-              className={cx("nav-list-li-a")}
-            >
+            <Link href="/components/donghodoi" className={cx("nav-list-li-a")}>
               ĐỒNG HỒ ĐÔI
             </Link>
             <ul className={cx("dropdown-menu-dhd")}>
               <li className={cx("dropdown-menu-dhd-li1")}>
                 <h3 className={cx("dropdown-menu-dhd-h3")}>THƯƠNG HIỆU</h3>
                 <ul className={cx("dropdown-menu-dhd-ul")}>
-                   {category.map((item) => (
+                  {category.map((item) => (
                     <li
                       className={cx("dropdown-menu-dhn-li2")}
                       key={item._id}
                       style={{ fontSize: "10px" }}
                     >
-                      <Link href={`/components/chitietdanhmuc/${item._id}`}  className={cx("cxcx")}>{item.danh_muc}</Link>
-                      
+                      <Link
+                        href={`/components/chitietdanhmuc/${item._id}`}
+                        className={cx("cxcx")}
+                      >
+                        {item.danh_muc}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -378,9 +382,12 @@ export default function Header() {
               <li className={cx("dropdown-menu-dhd-li1")}>
                 <h3 className={cx("dropdown-menu-dhd-h3")}>MỨC GIÁ</h3>
                 <ul className={cx("dropdown-menu-dhd-ul")}>
-                  {locgia.map((item)=>(
-                     <li key={item.gia} className={cx("dropdown-menu-dhn-li2")}>
-                      <Link href={`/components/sanphamlocgia/${item.gia}` }  className={cx("cxcx")}>
+                  {locgia.map((item) => (
+                    <li key={item.gia} className={cx("dropdown-menu-dhn-li2")}>
+                      <Link
+                        href={`/components/sanphamlocgia/${item.gia}`}
+                        className={cx("cxcx")}
+                      >
                         {item.title}
                       </Link>
                     </li>
@@ -438,7 +445,10 @@ export default function Header() {
 
           {/*Đồng hồ treo tường*/}
           <li className={cx("nav-list-li")}>
-            <Link href="/components/donghotreotuong" className={cx("nav-list-li-a")}>
+            <Link
+              href="/components/donghotreotuong"
+              className={cx("nav-list-li-a")}
+            >
               ĐỒNG HỒ TREO TƯỜNG
             </Link>
             <ul className={cx("dropdown-menu-dhtt")}>
@@ -471,10 +481,7 @@ export default function Header() {
           </li>
 
           <li className={cx("nav-list-li")}>
-            <Link
-              href="/components/daydongho"
-              className={cx("nav-list-li-a")}
-            >
+            <Link href="/components/daydongho" className={cx("nav-list-li-a")}>
               DÂY ĐỒNG HỒ
             </Link>
           </li>
@@ -487,47 +494,65 @@ export default function Header() {
             </Link>
             <ul className={cx("dropdown-menu-doc")}>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/donghothuysi" className={cx("dropdown-menu-doc-a")}>
+                <Link
+                  href="/components/donghothuysi"
+                  className={cx("dropdown-menu-doc-a")}
+                >
                   ĐỒNG HỒ THỤY SĨ
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/donghonhatban" className={cx("dropdown-menu-doc-a")}>
+                <Link
+                  href="/components/donghonhatban"
+                  className={cx("dropdown-menu-doc-a")}
+                >
                   ĐỒNG HỒ NHẬT BẢN
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/daydongho" className={cx("dropdown-menu-doc-a")}>
+                <Link
+                  href="/components/daydongho"
+                  className={cx("dropdown-menu-doc-a")}
+                >
                   DÂY TREO ĐỒNG HỒ
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/trangsucCk" className={cx("dropdown-menu-doc-a")}>
+                <Link
+                  href="/components/trangsucCk"
+                  className={cx("dropdown-menu-doc-a")}
+                >
                   TRANG SỨC CALVIN KLEIN
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/trangsucDW" className={cx("dropdown-menu-doc-a")}>
+                <Link
+                  href="/components/trangsucDW"
+                  className={cx("dropdown-menu-doc-a")}
+                >
                   TRANG SỨC DW
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/donghobaothuc" className={cx("dropdown-menu-doc-a")}>
+                <Link
+                  href="/components/donghobaothuc"
+                  className={cx("dropdown-menu-doc-a")}
+                >
                   ĐỒNG HỒ BÁO THỨC
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/donghodeban" className={cx("dropdown-menu-doc-a")}>
+                <Link
+                  href="/components/donghodeban"
+                  className={cx("dropdown-menu-doc-a")}
+                >
                   ĐỒNG HỒ ĐỂ BÀN
                 </Link>
               </li>
             </ul>
           </li>
           <li className={cx("nav-list-li")}>
-            <Link
-              href="/components/suadongho"
-              className={cx("nav-list-li-a")}
-            >
+            <Link href="/components/suadongho" className={cx("nav-list-li-a")}>
               SỬA ĐỒNG HỒ
             </Link>
           </li>

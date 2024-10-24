@@ -38,19 +38,17 @@ export default function BannerSlide1() {
     }, [slider]); 
   return (
     <div className={cx("slider-collection")}>
-      <div className={cx("pav-slide-content")}>
-        <Slider {...settings}>
-          {cates.map((cate, index) => (
-            <div className={cx("item")} key={index}>
-              <img
-                src={cate.src}
-                alt={cate.alt}
-                style={{ objectFit: 'cover', width: '100%', height: 'auto' }}
-              />
-            </div>
-          ))}
-        </Slider>
-      </div>
+      <Slider {...settings}>
+        {cates.map((cate, index) => (
+          <div className={cx("item")} key={index}>
+            <img
+              src={cate.src}
+              alt={cate.alt}
+              style={{ objectFit: "cover", width: "100%", height: "auto" }}
+            />
+          </div>
+        ))}
+      </Slider>
     </div>
   );
 }

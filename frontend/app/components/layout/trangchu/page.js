@@ -219,11 +219,11 @@ export default function Main() {
                     <b>{item.ma_san_pham}</b>
                     <p>
                       <small>
-                        {item.loai_may} | {item.duong_kinh}
+                        {item.loai} | {item.duong_kinh}
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through" }}>
+                      <small style={{ textDecoration: "line-through",color: "#B1B1B1" }}>
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
@@ -266,11 +266,11 @@ export default function Main() {
                     <b>{item.ma_san_pham}</b>
                     <p>
                       <small>
-                        {item.loai_may} | {item.duong_kinh}
+                        {item.loai} | {item.duong_kinh}
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through" }}>
+                      <small style={{ textDecoration: "line-through", color: "#B1B1B1" }}>
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
@@ -312,11 +312,11 @@ export default function Main() {
                     <b>{item.ma_san_pham}</b>
                     <p>
                       <small>
-                        {item.loai_may} | {item.duong_kinh}
+                        {item.loai} | {item.duong_kinh}
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through" }}>
+                      <small style={{ textDecoration: "line-through", color: "#B1B1B1" }}>
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
@@ -385,11 +385,11 @@ export default function Main() {
                     <b>{item.ma_san_pham}</b>
                     <p>
                       <small>
-                        {item.loai_may} | {item.duong_kinh}
+                        {item.loai} | {item.duong_kinh}
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through" }}>
+                      <small style={{ textDecoration: "line-through",color: "#B1B1B1" }}>
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
@@ -432,11 +432,11 @@ export default function Main() {
                     <b>{item.ma_san_pham}</b>
                     <p>
                       <small>
-                        {item.loai_may} | {item.duong_kinh}
+                        {item.loai} | {item.duong_kinh}
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through" }}>
+                      <small style={{ textDecoration: "line-through" ,color: "#B1B1B1"}}>
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
@@ -479,11 +479,11 @@ export default function Main() {
                     <b>{item.ma_san_pham}</b>
                     <p>
                       <small>
-                        {item.loai_may} | {item.duong_kinh}
+                        {item.loai} | {item.duong_kinh}
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through" }}>
+                      <small style={{ textDecoration: "line-through",color: "#B1B1B1" }}>
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
