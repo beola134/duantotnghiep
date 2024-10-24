@@ -160,7 +160,7 @@ exports.filtersanphamdongho = async (req, res) => {
     console.log("Error: ", error);
     res.status(500).json({ error: error.message });
   }
-
+}
 
 
   // show sản phẩm mới nhất Nam
@@ -1029,4 +1029,4 @@ exports.filtersanphamdongho = async (req, res) => {
       return res.status(500).json({ message: "Lỗi khi tìm kiếm sản phẩm" });
     }
   }
-}
+
