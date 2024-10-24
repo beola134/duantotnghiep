@@ -84,6 +84,19 @@ router.get("/tu50den100", productController.getProductstu50den100trieu);
 //http://localhost:5000/product/over100
 router.get("/over100", productController.getProductsOver100trieu);
 
+// show sản phẩm theo đồng hồ báo thức
+//http://localhost:5000/product/getBaoThuc"
+router.get("/getBaoThuc", productController.getBaoThuc);
+
+// show sản phẩm theo đồng hồ để bàn
+//http://localhost:5000/product/getDeBan"
+router.get("/getDeBan", productController.getDeBan);
+
+// show sản phẩm theo đồng hồ treo tuong
+//http://localhost:5000/product/getTreoTuong"
+router.get("/getTreoTuong", productController.getTreoTuong);
+
+
 // show sản phẩm thêm chất liệu dây da
 //http://localhost:5000/product/allsp/getChatLieuDayDa"
 router.get("/allsp/getChatLieuDayDa", productController.getChatLieuDayDa);
