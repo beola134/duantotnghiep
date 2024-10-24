@@ -2,6 +2,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./suasanpham.module.css";
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import Link from "next/link";
 export default function SuaSanPham({ params }) {
   const { id } = params; // Lấy id từ URL
@@ -42,12 +43,16 @@ export default function SuaSanPham({ params }) {
     const fetchProductAndCategories = async () => {
       try {
         // Lấy danh mục
-        const cateResponse = await fetch("http://localhost:5000/cate/allcatess");
+        const cateResponse = await fetch(
+          "http://localhost:5000/cate/allcatess"
+        );
         const cateData = await cateResponse.json();
         setCategories(cateData.cates);
 
         // Lấy sản phẩm theo ID
-        const productResponse = await fetch(`http://localhost:5000/product/chitietsp/${id}`);
+        const productResponse = await fetch(
+          `http://localhost:5000/product/chitietsp/${id}`
+        );
         const productData = await productResponse.json();
         setFormData({ ...productData.product });
       } catch (error) {
@@ -101,18 +106,23 @@ export default function SuaSanPham({ params }) {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/product/capnhatsp/${id}`, {
-        method: "PUT",
-        body: data,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          Accept: "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://localhost:5000/product/capnhatsp/${id}`,
+        {
+          method: "PUT",
+          body: data,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Accept: "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Cập nhật sản phẩm không thành công");
+        throw new Error(
+          errorData.error || "Cập nhật sản phẩm không thành công"
+        );
       }
 
       alert("Sản phẩm đã được cập nhật thành công");
@@ -131,7 +141,9 @@ export default function SuaSanPham({ params }) {
           <i className={`bx bxs-smile ${styles.icon}`}></i>
           AdminSite
         </Link>
-        <ul className={styles.sideMenu}> <li>
+        <ul className={styles.sideMenu}>
+          {" "}
+          <li>
             <Link href="index.html" className={styles.active}>
               <i className={`bx bxs-dashboard ${styles.icon}`}></i>
               Thống Kê
@@ -140,7 +152,6 @@ export default function SuaSanPham({ params }) {
           <li className={styles.divider} data-text="Sản Phẩm">
             Sản Phẩm
           </li>
-
           <li>
             <Link href="/components/sanpham">
               <i className={`bx bxs-chart ${styles.icon}`}></i>
@@ -206,7 +217,8 @@ export default function SuaSanPham({ params }) {
                 <Link href="quanlygiohang.html">Quản lý giỏ hàng</Link>
               </li>
             </ul>
-          </li></ul>
+          </li>
+        </ul>
         <div className={styles.ads}>
           <div className={styles.wrapper}>
             <Link
@@ -297,7 +309,7 @@ export default function SuaSanPham({ params }) {
                   ))}
                 </select>
               </div>
-                   <div className={styles.formGroup}>
+              <div className={styles.formGroup}>
                 <label htmlFor="ma_san_pham">Mã sản phẩm</label>
                 <input
                   type="text"
@@ -499,9 +511,11 @@ export default function SuaSanPham({ params }) {
                 <div className="alert alert-danger">{errorMessage}</div>
               )}
               <button type="submit" className="btn btn-outline-primary">
-               Cập nhật
+                Cập nhật
               </button>
-              <button type="button" className="btn btn-outline-secondary">Hủy bỏ</button>
+              <button type="button" className="btn btn-outline-secondary">
+                Hủy bỏ
+              </button>
             </div>
           </form>
         </div>
