@@ -4,7 +4,17 @@
   box-sizing: border-box;
   margin: 0px auto;
 }
-
+.clear {
+  clear: both;
+}
+.cls::after,
+.cls::before,
+.clearfix::after,
+.clearfix::before {
+  content: "";
+  display: block;
+  clear: both;
+}
 /* ẩn */
 .hiden {
   display: none;
@@ -364,7 +374,6 @@
   position: absolute;
   top: 0;
   left: -12px;
-
 }
 .ratingNote {
   background: #796752;
