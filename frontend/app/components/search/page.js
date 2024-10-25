@@ -65,10 +65,7 @@ export default function Search() {
                   <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
                       -
-                      {((item.gia_san_pham - item.gia_giam) /
-                        item.gia_san_pham) *
-                        100}
-                      %
+                      {Math.floor(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100)}%
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img
