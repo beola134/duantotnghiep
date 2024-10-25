@@ -1,3 +1,4 @@
+import Menu from "./components/layout/header/header";
 import "./globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 export default function RootLayout({ children }) {
@@ -25,7 +26,10 @@ export default function RootLayout({ children }) {
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <title>Trang quản trị</title>
       </head>
-      <body>{children}</body>
+      
+      <body>
+      <Menu/>
+      {children}</body>
     </html>
   );
 }
