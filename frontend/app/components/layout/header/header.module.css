@@ -1,27 +1,22 @@
 .header {
-  max-width: 100%;
   background-color: #000;
   color: #fff;
   font-size: 14px;
   padding: 10px 0;
   max-height: 80px;
 }
-.container {
-  width: 1170px;
-  max-width: 100%;
-  box-sizing: border-box;
-  margin: 0px auto;
-}
+
 
 .top-bar {
+  max-width: 1170px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 4cm;
+  margin: 0 auto;
+  
 }
 
 .logo {
-  margin-left: -40px;
   height: 100px;
   display: flex;
   flex-direction: column;
@@ -31,8 +26,9 @@
 
 .logo .img {
   margin-top: -55px;
-  width: 200px;
+  width: 250px;
   height: 170px;
+  margin-left:-40px;
 }
 
 .search-bar {
@@ -69,7 +65,7 @@
   align-items: center;
   max-width: 40%;
   gap: 30px;
-  margin-right: -10px;
+  
 }
 
 .contact-info .phone {
@@ -131,9 +127,8 @@
 /* Menu điều hướng */
 .navbar {
   background-color: #796752;
-  display: flex;
-  justify-content: center;
   padding: 8px 0;
+  
 }
 
 .nav-list {
@@ -141,10 +136,14 @@
   display: flex;
   padding: 10px 0;
   position: relative;
+  justify-content: space-between;
+  max-width: 1170px;
+  align-items: center;
+  margin: 0 auto;
+  
 }
 
 .nav-list .nav-list-li {
-  margin: 0 10px;
   position: relative;
 }
 
@@ -210,9 +209,6 @@
   background-color: #fff;
 
   z-index: 9999; /* Đặt z-index cho pseudo-element để nó nằm trên phần tử khác */
-}
-.nav-list {
-  margin-right: 5px;
 }
 
 .dropdown-menu {

@@ -9,7 +9,7 @@
   max-width: 100%;
 
   margin: 5px auto;
-  margin-top: 100px;
+  margin-top: 90px;
 }
 .featuredTitle {
   text-align: center;
@@ -75,7 +75,7 @@
 .dongHoNam {
   max-width: 1170px;
   display: grid;
-  grid-template-columns: repeat(5, 20%);
+  grid-template-columns: repeat(5, 227px);
   gap: 8px;
   margin: 0px auto;
   row-gap: 30px;
@@ -83,7 +83,7 @@
 .dongHoNu {
   max-width: 1170px;
   display: grid;
-  grid-template-columns: repeat(5, 20%);
+  grid-template-columns: repeat(5, 227px);
   gap: 8px;
   margin: 0px auto;
   row-gap: 30px;
@@ -91,13 +91,14 @@
 .dongHoDoi {
   max-width: 1170px;
   display: grid;
-  grid-template-columns: repeat(5, 20%);
+  grid-template-columns: repeat(5, 227px);
   gap: 8px;
   margin: 0px auto;
   row-gap: 30px;
 }
 
 .watch {
+  padding-left:30px;
   text-align: center;
   position: relative; /* Sử dụng relative để có thể đặt các thành phần con (badge) tuyệt đối bên trong */
   width: 200px;
@@ -105,29 +106,34 @@
 
 .watch img {
   position: relative;
-  max-width: 200px; /* Đảm bảo ảnh không quá lớn */
+
   transition: transform 0.5s ease-in-out; /* Thêm hiệu ứng chuyển đổi mượt mà */
   z-index: 1;
+  margin: 0 auto;
 }
 .watch img:hover {
   transform: scale(1.05); /* Phóng to hình ảnh nhẹ khi hover (tăng kích thước 5%) */
 }
 
 .watch p {
-  color: #000; /* Màu chữ mặc định */
-  text-decoration: none; /* Không có gạch chân mặc định */
-  transition: color 0.3s ease, text-decoration 0.3s ease; /* Hiệu ứng chuyển màu và gạch chân */
-  text-align: center; /* Căn giữa nội dung */
-  margin-top: 10px;
+  color: #000;
+  text-decoration: none; 
+  transition: color 0.3s ease, text-decoration 0.3s ease; 
+  text-align: center; 
+   font-size: 10px;
+  line-height: 25px;
+}
+.watch p small{
+  color:#777777;
+ 
 }
 
 .priceKm {
   font-weight: bold;
   color: red;
 }
-/* Đặt bố cục cho watch */
 
-/* Định dạng badge giảm giá */
+
 .discountBadge {
   position: absolute;
   top: -15px; /* Đặt vị trí góc trên của badge */
@@ -191,47 +197,46 @@
 }
 
 .overlay {
-  position: absolute; /* Để đặt vị trí tương đối so với div.watch */
-  bottom: 200px; /* Cách từ trên cùng 10px */
-  right: 0; /* Cách từ bên trái 10px */
-  background-color: red; /* Màu nền đỏ */
-  color: white; /* Màu chữ trắng */
+  position: absolute; 
+ top: 180px;
+  right: 0;
+  background-color: red; 
+  color: white; 
   padding: 2px;
-  border-radius: 2px; /* Bo góc */
-  z-index: 1; /* Đảm bảo ô chữ nằm trên cùng */
-  opacity: 0.9; /* Độ mờ của ô chữ */
+  border-radius: 2px; 
+  z-index: 1; 
+  opacity: 0.9; 
   width: 40px;
   height: 22px;
 }
 
 .sale {
-  position: absolute; /* Để đặt vị trí tương đối so với div.watch */
-  bottom: 150px; /* Cách từ trên cùng 10px */
-  left: 10px; /* Cách từ bên trái 10px */
+  position: absolute; 
+  bottom: 150px; 
+  left: 10px; 
   background-color: #e9a04d;
-  color: rgb(255, 255, 255); /* Màu chữ trắng */
-  border-radius: 2px; /* Bo góc */
-  z-index: 1; /* Đảm bảo ô chữ nằm trên cùng */
-  opacity: 0.9; /* Độ mờ của ô chữ */
+  color: rgb(255, 255, 255); 
+  border-radius: 2px; 
+  z-index: 1; 
+  opacity: 0.9; 
   width: 100px;
   height: 22px;
   padding: 2px;
   margin-bottom: 10px;
 }
-/* Định dạng cho toàn bộ phần slideSection */
+
 .slideSection {
-  padding: 20px; /* Khoảng cách bên trong */
+  padding: 20px; 
 
   width: 1170px;
   margin: auto;
 }
 
-/* Định dạng cho tiêu đề */
 .title {
-  display: flex; /* Sử dụng Flexbox */
-  justify-content: space-between; /* Khoảng cách giữa hai phần tử */
-  align-items: center; /* Căn giữa theo chiều dọc */
-  margin-bottom: 20px; /* Khoảng cách dưới tiêu đề */
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 20px; 
 }
 
 /* Định dạng cho h2 */
@@ -301,13 +306,13 @@
 
 .news-section,
 .video-section {
-  width: 585px; /* Chia đều hai phần, mỗi phần có chiều rộng 622px */
+  width: 570px; /* Chia đều hai phần, mỗi phần có chiều rộng 622px */
   padding: 10px;
   height: auto;
 }
 
 .news-section {
-  width: 585px; /* Chiều rộng của phần news-section */
+  width: 570px; /* Chiều rộng của phần news-section */
   max-height: 850px; /* Chiều cao tối đa */
   overflow-y: auto; /* Tạo thanh cuộn dọc khi nội dung vượt quá */
   overflow-x: hidden; /* Ẩn thanh cuộn ngang nếu có nội dung thừa */
@@ -340,7 +345,7 @@
   position: absolute;
   bottom: 0px; 
   margin-left: -20px;
-  width: 1010px;
+  width: 980px;
   height: 1px; 
   background-color: #796752; 
   transform: skew(20deg); 

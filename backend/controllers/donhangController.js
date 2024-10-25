@@ -41,7 +41,7 @@ const addDonHang = async (req, res) => {
             }
         }
 
-        totalAmount += phi_ship || 0;
+        totalAmount += phi_ship || 0; 
 
         let voucher = null;
         if (ma_voucher) {
@@ -67,9 +67,9 @@ const addDonHang = async (req, res) => {
             _id: uuidv4(),
             dia_chi,
             tong_tien: totalAmount,
-            trang_thai,
+            trang_thai: 'Chờ xác nhận',
             da_thanh_toan: totalAmount,
-            phi_ship,
+            phi_ship: 30000,
             thoi_gian_tao,
             id_nguoi_dung,
             id_phuong_thuc_thanh_toan: id_phuong_thuc_thanh_toan || null,
@@ -82,8 +82,7 @@ const addDonHang = async (req, res) => {
                 const product = await Product.findByPk(ct.id_san_pham);
                 if (product) {
                     await ChiTietDonHang.create({
-                        gia_san_pham: product.gia_san_pham,
-                        ten_san_pham: product.ten_san_pham,
+                        gia_san_pham: product.gia_san_pham,ten_san_pham: product.ten_san_pham,
                         so_luong: ct.so_luong,
                         id_don_hang: donHang._id,
                         id_san_pham: ct.id_san_pham

@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import styles from "./register.module.css";
 import OTP from "../OTP/page";
 
@@ -72,8 +74,13 @@ export default function Register() {
             throw new Error(errorData.message || "Đăng ký thất bại");
           }
         } else {
-          alert("Đăng ký thành công");
-          setIsModalOpen(true); // mở modal xác thực OTP khi xác thực thành công
+          Swal.fire({
+            icon: "success",
+            title: "Đăng ký thành công",
+            text: "Vui lòng kiểm tra email để xác nhận mã OTP",
+          }).then(() => {
+            setIsModalOpen(true); // mở modal xác thực OTP khi xác thực thành công
+          });
         }
       } catch (error) {
         setFieldError("general", error.message);
@@ -82,6 +89,48 @@ export default function Register() {
       }
     },
   });
+  const handleLoginSuccess = async (credentialResponse) => {
+    const token = credentialResponse.credential;
+    try {
+      const response = await fetch("http://localhost:5000/users/auth/google", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      document.cookie = `token=${data.token}; path=/; max-age=${60 * 60}`;
+
+      Swal.fire({
+        title: "Đăng nhập thành công",
+        text: "Chào mừng bạn đến với Website!",
+        icon: "success",
+        showConfirmButton: true,
+      }).then(() => {
+        window.location.href = "http://localhost:3001";
+      });
+    } catch (error) {
+      Swal.fire({
+        title: "Đăng nhập thất bại",
+        text: error.message || "Vui lòng thử lại.",
+        icon: "error",
+        showConfirmButton: true,
+      });
+    }
+  };
+
+  const handleLoginFailure = () => {
+    Swal.fire({
+      title: "Đăng nhập thất bại",
+      text: "Có lỗi xảy ra vui lòng thử lại.",
+      icon: "error",
+      showConfirmButton: true,
+    });
+  };
 
   return (
     <div className={styles.mainContainer}>
@@ -150,14 +199,25 @@ export default function Register() {
           <OTP isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} />
         </form>
 
-        <div className={styles.socialAccountContainer}>
-          <span className={styles.title}>Or Sign in with</span>
-          <div className={styles.socialAccounts}>
-            <button className={styles.socialButton}>
-              <img src="/image/item/icon-gg-login.png" alt="" />
-            </button>
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+          <div className={styles.socialAccountContainer}>
+            <span className={styles.title}>Or Sign in with</span>
+
+            <GoogleLogin
+              onSuccess={handleLoginSuccess}
+              onFailure={handleLoginFailure}
+              render={(renderProps) => (
+                <div className={styles.socialAccounts}>
+                  <button
+                    className={styles.socialButton}
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                  ></button>
+                </div>
+              )}
+            />
           </div>
-        </div>
+        </GoogleOAuthProvider>
 
         <div className={styles.signUpNow}>
           <span className={styles.dontHaveAnAccount}>
