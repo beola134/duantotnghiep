@@ -98,6 +98,7 @@
 }
 
 .watch {
+  padding-left:30px;
   text-align: center;
   position: relative; /* Sử dụng relative để có thể đặt các thành phần con (badge) tuyệt đối bên trong */
   width: 200px;
@@ -105,7 +106,7 @@
 
 .watch img {
   position: relative;
- 
+
   transition: transform 0.5s ease-in-out; /* Thêm hiệu ứng chuyển đổi mượt mà */
   z-index: 1;
   margin: 0 auto;
@@ -119,6 +120,12 @@
   text-decoration: none; 
   transition: color 0.3s ease, text-decoration 0.3s ease; 
   text-align: center; 
+   font-size: 10px;
+  line-height: 25px;
+}
+.watch p small{
+  color:#777777;
+ 
 }
 
 .priceKm {
@@ -191,7 +198,7 @@
 
 .overlay {
   position: absolute; 
-  bottom: 200px; 
+ top: 180px;
   right: 0;
   background-color: red; 
   color: white; 

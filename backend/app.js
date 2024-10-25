@@ -13,6 +13,8 @@ var donhangRouter = require('./routes/donhangRouters');
 var ptttRouter = require('./routes/ptttRouters');
 var voucherRouter = require('./routes/voucherRouters');
 var saleRouter = require('./routes/saleRouters');
+var spRouter = require('./routes/spRouters');
+
 var app = express();
 app.use(cors());
 
@@ -34,6 +36,7 @@ app.use('/donhang', donhangRouter);
 app.use('/pttt', ptttRouter);
 app.use('/voucher', voucherRouter);
 app.use('/sale', saleRouter);
+app.use('/product', spRouter);
 
 
 sequelize.authenticate()

@@ -20,14 +20,24 @@ exports.filtersanphamdongho = async (req, res) => {
       phong_cach,
       kieu_dang,
       xuat_xu,
-      danh_muc
+      danh_muc,
+      limit = 20,
+      page = 1,
     } = req.query;
     console.log(req.query);
       
     let filter = {
       [Op.and]: [],
     };
-    filter.loai = { [Op.notIn]: ["Vòng tay", "Trang sức", "Đồng hồ để bàn", "Đồng hồ báo thức"] };
+    filter.loai = {
+      [Op.notIn]: [
+        "Dây đồng hồ",
+        "Vòng tay",
+        "Trang sức",
+        "Đồng hồ để bàn",
+        "Đồng hồ báo thức",
+      ],
+    };
     if (gioi_tinh) {
       switch (gioi_tinh) {
         case "Nam":
@@ -385,26 +395,56 @@ exports.filtersanphamdongho = async (req, res) => {
           break;
       }
       if (priceRange) {
-        if (khuyenmai === "true") {
-          filter.gia_giam = priceRange;
-        } else {
-          filter.gia_san_pham = priceRange;
-        }
+        filter[Op.or] = [
+          {
+            gia_giam: { ...priceRange, [Op.gt]: 0 },
+          },
+          {
+            [Op.and]: [
+              {
+                gia_giam: {
+                  [Op.or]: [0, null],
+                },
+              },
+              {
+                gia_san_pham: priceRange,
+              }
+            ],
+          },
+        ];
       }
     }
     if (khuyenmai) {
-      const khuyenmai = req.query.khuyenmai.replace('Giảm ', '').replace('%', '');
+      const discount = req.query.khuyenmai.replace('Giảm ', '').replace('%', '');
       filter[Op.and].push(
         { gia_giam: { [Op.ne]: null } },
         { gia_giam: { [Op.ne]: 0 } },
         Sequelize.literal(
-          `ROUND(((gia_san_pham - gia_giam) / gia_san_pham ) * 100, 0) = ${khuyenmai}`
+          `ROUND(((gia_san_pham - gia_giam) / gia_san_pham ) * 100, 0) = ${discount}`
         )
       );
     }
-    
-    const products = await Product.findAll({ where: filter, limit:20 });
-    res.json({ products });
+    const productsCount = await Product.count({ where: filter, });
+    //sp nhỏ hơn = 20nthif không phần trang
+    if (productsCount <= 20) {
+      const products = await Product.findAll({ where: filter });
+      return res.json({products, totalProducts: productsCount});
+    }
+    //nếu sp lớn 20 thì phân trang
+    const offset = (page - 1) * limit;
+    const { rows: products, count: totalProducts } = await Product.findAndCountAll({
+      where: filter,
+      limit,
+      offset,
+    })
+    // hàm nếu sp lớn hơn thì phân trang
+    const totalPages = Math.ceil(totalProducts / limit);
+      res.json({
+        products,
+        currentPage: page,
+        totalPages,
+        totalProducts,
+      });
   } catch (error) {
     console.log("Error: ", error);
     res.status(500).json({ error: error.message });
@@ -1059,260 +1099,4 @@ exports.filtersanphamdongho = async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   };
-
-  // Lấy tất cả sản phẩm
-  exports.getAllProducts = async (req, res) => {
-    try {
-      const products = await Product.findAll();
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-  //show sản phẩm theo danh mục show lun thông tin danh mục sản phẩm
-  exports.getProductsByCate = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: {
-          id_danh_muc: req.params.id,
-          loai: {
-            [Op.notIn]: ["Vòng Tay", "Trang Sức"],
-          },
-        },
-      });
-
-      const cate = await Category.findOne({ where: { _id: req.params.id } });
-
-      res.json({ products, cate });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-
-  //Chi tiết sản phẩm theo id
-  exports.getProductById = async (req, res) => {
-    try {
-      const product = await Product.findOne({ where: { _id: req.params.id } });
-      if (!product) {
-        return res.status(404).json({ error: "Không tìm thấy sản phẩm" });
-      }
-      //show lun danh mục sản phẩm
-      const cate = await Category.findOne({ where: { _id: product.id_danh_muc } });
-      res.json({ product, cate });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-
-  //Thêm sản phẩm
-  exports.addProduct = async (req, res) => {
-    try {
-      // Xử lý upload file
-      upload.single("hinh_anh")(req, res, async (err) => {
-        if (err) return res.status(400).json({ error: err.message });
-        const {
-          ten_san_pham,
-          ten,
-          gia_san_pham,
-          gia_giam,
-          mo_ta,
-          ma_san_pham,
-          do_chiu_nuoc,
-          xuat_xu,
-          gioi_tinh,
-          so_luong,
-          loai_may,
-          loai,
-          duong_kinh,
-          chat_lieu_day,
-          chat_lieu_vo,
-          mat_kinh,
-          mau_mat,
-          phong_cach,
-          kieu_dang,
-          thuong_hieu,
-          size_day,
-          mau_day,
-          do_dai_day,
-          id_danh_muc: categoryId,
-        } = req.body;
-        const hinh_anh = req.file ? req.file.originalname : "";
-        // Kiểm tra danh mục
-        if (!categoryId || !(await Cate.findOne({ where: { _id: categoryId } }))) {
-          return res.status(400).json({ error: "ID danh mục không hợp lệ" });
-        }
-        // Tạo và lưu sản phẩm
-        const product = await Product.create({
-          ten_san_pham,
-          ten,
-          gia_san_pham,
-          gia_giam,
-          hinh_anh,
-          mo_ta,
-          ma_san_pham,
-          do_chiu_nuoc,
-          xuat_xu,
-          gioi_tinh,
-          so_luong,
-          loai_may,
-          loai,
-          duong_kinh,
-          chat_lieu_day,
-          chat_lieu_vo,
-          mat_kinh,
-          mau_mat,
-          phong_cach,
-          kieu_dang,
-          thuong_hieu,
-          size_day,
-          mau_day,
-          do_dai_day,
-          id_danh_muc: categoryId,
-        });
-        res.json({ product });
-      });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-
-  // Xóa sản phẩm
-  exports.deleteProduct = async (req, res) => {
-    try {
-      const product = await Product.findOne({ where: { _id: req.params.id } });
-      if (!product) {
-        return res.status(404).json({ error: "Không tìm thấy sản phẩm" });
-      }
-      await product.destroy();
-      res.json({ message: "Xóa sản phẩm thành công" });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-
-  //cập nhật sản phẩm
-  exports.updateProduct = async (req, res) => {
-    try {
-      // Tìm sản phẩm theo ID
-      const product = await Product.findOne({ where: { _id: req.params.id } });
-      if (!product) {
-        return res.status(404).json({ error: "Không tìm thấy sản phẩm" });
-      }
-      // Xử lý upload ảnh
-      upload.single("hinh_anh")(req, res, async (err) => {
-        if (err) {
-          return res.status(400).json({ error: err.message });
-        }
-        const {
-          ten_san_pham,
-          ten,
-          gia_san_pham,
-          gia_giam,
-          mo_ta,
-          ma_san_pham,
-          do_chiu_nuoc,
-          xuat_xu,
-          gioi_tinh,
-          so_luong,
-          loai_may,
-          loai,
-          duong_kinh,
-          chat_lieu_day,
-          chat_lieu_vo,
-          mat_kinh,
-          mau_mat,
-          phong_cach,
-          kieu_dang,
-          thuong_hieu,
-          size_day,
-          mau_day,
-          do_dai_day,
-          id_danh_muc: categoryId,
-        } = req.body;
-        const hinh_anh = req.file ? req.file.originalname : product.hinh_anh;
-        // Kiểm tra danh mục
-        if (!categoryId || !(await Cate.findOne({ where: { _id: categoryId } }))) {
-          return res.status(400).json({ error: "ID danh mục không hợp lệ" });
-        }
-        // Cập nhật sản phẩm
-        await product.update({
-          ten_san_pham,
-          ten,
-          gia_san_pham,
-          gia_giam,
-          hinh_anh,
-          mo_ta,
-          ma_san_pham,
-          do_chiu_nuoc,
-          xuat_xu,
-          gioi_tinh,
-          so_luong,
-          loai_may,
-          loai,
-          duong_kinh,
-          chat_lieu_day,
-          chat_lieu_vo,
-          mat_kinh,
-          mau_mat,
-          phong_cach,
-          kieu_dang,
-          thuong_hieu,
-          size_day,
-          mau_day,
-          do_dai_day,
-          id_danh_muc: categoryId,
-        });
-        res.json({ product });
-      });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-
-  //phân trang sản phẩm
-  exports.getProductsByPage = async (req, res) => {
-    try {
-      const { page = 1, limit = 2 } = req.query;
-      const products = await Product.findAndCountAll({
-        limit: Number(limit),
-        offset: (page - 1) * limit,
-      });
-      if (products.count === 0) {
-        return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
-      }
-      res.json({ products });
-    } catch (error) {
-      console.error("Error fetching products:", error.message);
-      res.status(500).json({ error: error.message });
-    }
-  };
-
-  // Tìm kiếm sản phẩm
-  exports.searchProducts = async (req, res) => {
-    try {
-      const { query } = req.body;
-      // Tìm danh mục theo tên
-      const categories = await Category.findAll({
-        where: {
-          danh_muc: {
-            [Op.like]: `%${query}%`,
-          },
-        },
-      });
-      // Tìm sản phẩm theo tên hoặc theo danh mục
-      const products = await Product.findAll({
-        where: {
-          [Op.or]: [
-            { ten_san_pham: { [Op.like]: `%${query}%` } },
-            { id_danh_muc: categories.map((category) => category._id) }, // Tìm theo danh mục
-          ],
-        },
-      });
-
-      return res.json({ products });
-    } catch (error) {
-      console.error("Error searching products:", error);
-      return res.status(500).json({ message: "Lỗi khi tìm kiếm sản phẩm" });
-    }
-  }
-
+  

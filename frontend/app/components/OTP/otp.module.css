@@ -2,58 +2,52 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
 }
 
 .modal {
-  background: white;
-  border-radius: 10px;
+  background-color: white;
   padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+  text-align: center;
 }
 
-.XacnhanOTP {
-  text-align: center;
-  margin-bottom: 15px;
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
-.XacnhanGmail {
-  text-align: center;
+.description {
   margin-bottom: 20px;
 }
 
 .otpContainer {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   margin-bottom: 20px;
 }
+
 .otpInput {
   width: 40px;
   height: 40px;
   text-align: center;
   font-size: 24px;
-  margin: 0 5px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  outline: none;
-}
-
-.otpInput:focus {
-  border-color: #4caf50;
+  border-radius: 4px;
 }
 
 .timerContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 20px;
+  font-size: 16px;
 }
 
 .buttonContainer {
@@ -61,21 +55,29 @@
   justify-content: space-between;
 }
 
-.XacNhan {
+.cancelButton {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.confirmButton {
   background-color: #4caf50;
   color: white;
   border: none;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.XacNhan:hover {
-  background-color: #45a049;
-}
-
-.XacNhan:disabled {
+.confirmButton:disabled {
   background-color: #ccc;
-  cursor: not-allowed;
+}
+
+.errorMessage {
+  color: red;
+  margin-top: 20px;
 }

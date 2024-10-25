@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Header from "./components/layout/header/page";
 import Providers from "../redux/Provider";
 
+
 export default function RootLayout({ children }) {
   useEffect(() => {
     // Thêm FontAwesome script sau khi client render
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
           <Footer />
         </body>
       </Providers>
+
     </html>
   );
 }
