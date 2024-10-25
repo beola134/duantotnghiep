@@ -37,7 +37,7 @@ export default function ThemSanPham() {
   const [cates, setCategories] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Fetch danh mục từ API
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -55,7 +55,7 @@ export default function ThemSanPham() {
     fetchCategories();
   }, []);
 
-  // Hàm xử lý thay đổi input
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -64,7 +64,7 @@ export default function ThemSanPham() {
     }));
   };
 
-  // Hàm xử lý chọn file
+  
   const handleFileChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -72,14 +72,14 @@ export default function ThemSanPham() {
     }));
   };
 
-  // Hàm xử lý submit form
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage(""); // Reset lỗi trước khi gửi form
+    setErrorMessage(""); 
 
     const { ten_san_pham, gia_san_pham, id_danh_muc } = formData;
 
-    // Kiểm tra các trường bắt buộc
+    
     if (!ten_san_pham || !gia_san_pham || !id_danh_muc) {
       Swal.fire({
         title: "Lỗi",
@@ -87,10 +87,9 @@ export default function ThemSanPham() {
         icon: "error",
         confirmButtonText: "OK",
       });
-      return; // Dừng lại nếu có lỗi
+      return; 
     }
 
-    // Kiểm tra giá sản phẩm
     if (isNaN(gia_san_pham) || gia_san_pham <= 0) {
       Swal.fire({
         title: "Lỗi",
@@ -101,17 +100,16 @@ export default function ThemSanPham() {
       return;
     }
 
-    // Sử dụng FormData để gửi file cùng với dữ liệu
+   
     const data = new FormData();
 
-    // Thêm các field không phải file
     Object.keys(formData).forEach((key) => {
       if (key !== "hinh_anh") {
         data.append(key, formData[key]);
       }
     });
 
-    // Thêm file vào formData nếu có
+
     if (formData.hinh_anh) {
       data.append("hinh_anh", formData.hinh_anh);
     }
@@ -133,19 +131,17 @@ export default function ThemSanPham() {
 
       const result = await response.json();
       console.log("Product added successfully:", result);
-      
-      // Thông báo thành công
+
       Swal.fire({
         title: "Thành công",
         text: "Sản phẩm đã được thêm thành công!",
         icon: "success",
         confirmButtonText: "OK",
       });
-      
+      window.location.href = "/components/sanpham";
     } catch (error) {
       console.error("Error adding product:", error.message);
-      
-      // Thông báo lỗi
+  
       Swal.fire({
         title: "Lỗi",
         text: "Đã xảy ra lỗi khi thêm sản phẩm: " + error.message,
@@ -156,110 +152,7 @@ export default function ThemSanPham() {
   };
   return (
     <div className={styles.SidebarContainer}>
-      <section id={styles.sidebar}>
-        <Link href="index.html" className={styles.brand}>
-          <i className={`bx bxs-smile ${styles.icon}`}></i>
-          AdminSite
-        </Link>
-        <ul className={styles.sideMenu}> <li>
-            <Link href="index.html" className={styles.active}>
-              <i className={`bx bxs-dashboard ${styles.icon}`}></i>
-              Thống Kê
-            </Link>
-          </li>
-          <li className={styles.divider} data-text="Sản Phẩm">
-            Sản Phẩm
-          </li>
-
-          <li>
-            <Link href="sanpham">
-              <i className={`bx bxs-chart ${styles.icon}`}></i>
-              Quản lý sản phẩm
-            </Link>
-          </li>
-          <li>
-            <Link href="quanlydanhmuc.html">
-              <i className={`bx bxs-widget ${styles.icon}`}></i>
-              Quản lý danh mục
-            </Link>
-          </li>
-          <li>
-            <Link href="khosanpham.html">
-              <i className={`bx bxs-widget ${styles.icon}`}></i>
-              Quản lý kho
-            </Link>
-          </li>
-          <li className={styles.divider} data-text="Bình luận">
-            Bình luận
-          </li>
-          <li>
-            <Link href="quanlybinhluan.html">
-              <i className={`bx bxs-comment-detail ${styles.icon}`}></i>
-              Quản lý bình luận
-            </Link>
-          </li>
-          <li className={styles.divider} data-text="Tài khoản">
-            Tài khoản
-          </li>
-          <li>
-            <Link href="#">
-              <i className={`bx bxs-user-account ${styles.icon}`}></i>
-              Tài khoản
-              <i className={`bx bx-chevron-right ${styles.iconRight}`}></i>
-            </Link>
-            <ul className={styles.sideDropdown}>
-              <li>
-                <Link href="quanlytaikhoan.html">Quản lý tài khoản</Link>
-              </li>
-              <li>
-                <Link href="phanquyen.html">Phân Quyền</Link>
-              </li>
-              <li>
-                <Link href="themnhanvien.html">Tạo thành viên mới</Link>
-              </li>
-            </ul>
-          </li>
-          <li className={styles.divider} data-text="Đơn Hàng">
-            Đơn Hàng
-          </li>
-          <li>
-            <Link href="#">
-              <i className={`bx bxs-cart ${styles.icon}`}></i>
-              Đơn Hàng
-              <i className={`bx bx-chevron-right ${styles.iconRight}`}></i>
-            </Link>
-            <ul className={styles.sideDropdown}>
-              <li>
-                <Link href="quanlydonhang.html">Quản lý đơn hàng</Link>
-              </li>
-              <li>
-                <Link href="quanlygiohang.html">Quản lý giỏ hàng</Link>
-              </li>
-            </ul>
-          </li></ul>
-        <div className={styles.ads}>
-          <div className={styles.wrapper}>
-            <Link
-              style={{ textDecoration: "none" }}
-              href="#"
-              className={styles.btnUpgrade}
-            >
-              Logout
-            </Link>
-          </div>
-        </div>
-      </section>
       <section id={styles.content}>
-        <nav className={styles.nav}>
-          <i className={`bx bx-menu ${styles.toggleSidebar}`}></i>
-          <form action="#">
-            <div className={styles.formGroup}>
-              <input type="text" placeholder="Search..." />
-              <i className={`bx bx-search ${styles.icon}`}></i>
-            </div>
-          </form>
-          {/* Other nav elements */}
-        </nav>
         <div className={styles.header1}>
           <div className={styles.title} style={{ fontWeight: "bold" }}>
             Danh Sách Sản Phẩm
