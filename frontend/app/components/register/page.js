@@ -30,14 +30,14 @@ const schema = Yup.object().shape({
     .oneOf([Yup.ref("password"), null], "Mật khẩu không khớp")
     .required("Vui lòng xác nhận mật khẩu"),
 
-  image: Yup.mixed()
-    .required("Vui lòng chọn file hình ảnh")
-    .test("fileSize", "File quá lớn, vui lòng chọn file nhỏ hơn 2MB", (value) => {
-      return value && value.size <= 2000000; // 2MB
-    })
-    .test("fileType", "Định dạng file không hợp lệ", (value) => {
-      return value && ["image/jpg", "image/jpeg", "image/png", "image/webp", "image/gif"].includes(value.type);
-    }),
+  // image: Yup.mixed()
+  //   .required("Vui lòng chọn file hình ảnh")
+  //   .test("fileSize", "File quá lớn, vui lòng chọn file nhỏ hơn 2MB", (value) => {
+  //     return value && value.size <= 2000000; // 2MB
+  //   })
+  //   .test("fileType", "Định dạng file không hợp lệ", (value) => {
+  //     return value && ["image/jpg", "image/jpeg", "image/png", "image/webp", "image/gif"].includes(value.type);
+  //   }),
 });
 
 export default function Register() {
@@ -49,21 +49,22 @@ export default function Register() {
       email: "",
       password: "",
       confirmPassword: "",
-      image: null,
+      // image: null,
     },
     validationSchema: schema,
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       try {
-        const formData = new FormData();
-        formData.append("ten_dang_nhap", values.name);
-        formData.append("email", values.email);
-        formData.append("mat_khau", values.password);
-        formData.append("nhap_lai_mat_khau", values.confirmPassword);
-        formData.append("hinh_anh", values.image);
-
         const res = await fetch("http://localhost:5000/users/register", {
           method: "POST",
-          body: formData,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ten_dang_nhap: values.name,
+            email: values.email,
+            mat_khau: values.password,
+            nhap_lai_mat_khau: values.confirmPassword,
+          }),
         });
 
         if (!res.ok) {
@@ -181,7 +182,7 @@ export default function Register() {
           />
           {formik.errors.confirmPassword && <p className={styles.error}>{formik.errors.confirmPassword}</p>}
 
-          <input
+          {/* <input
             type="file"
             className={`${styles.input} ${formik.errors.image ? styles.inputError : ""}`}
             id="image"
@@ -190,7 +191,7 @@ export default function Register() {
               formik.setFieldValue("image", event.currentTarget.files[0]);
             }}
           />
-          {formik.errors.image && <p className={styles.error}>{formik.errors.image}</p>}
+          {formik.errors.image && <p className={styles.error}>{formik.errors.image}</p>} */}
 
           <span className={styles.forgotPassword}>
             <Link href="#">Forgot password</Link>
