@@ -99,22 +99,6 @@ i {
   font-size: 20px;
 }
 
-.loading {
-  border: 16px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 16px solid #3498db;
-  width: 60px;
-  height: 60px;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  z-index: 1111;
-  transform: translate(-50%, -50%);
-  display: none;
-}
-
 #boxContentLinfo {
   transition: height 75ms;
   overflow: hidden;
@@ -165,3 +149,4 @@ i {
   vertical-align: top;
   content: "";
 }
+
