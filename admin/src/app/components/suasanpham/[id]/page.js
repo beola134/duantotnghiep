@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import Link from "next/link";
 export default function SuaSanPham({ params }) {
-  const { id } = params; // Lấy id từ URL
+  const { id } = params;
 
   const [formData, setFormData] = useState({
     ten_san_pham: "",
@@ -38,18 +38,15 @@ export default function SuaSanPham({ params }) {
   const [cates, setCategories] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Lấy dữ liệu sản phẩm và danh mục khi component được tải
   useEffect(() => {
     const fetchProductAndCategories = async () => {
       try {
-        // Lấy danh mục
         const cateResponse = await fetch(
           "http://localhost:5000/cate/allcatess"
         );
         const cateData = await cateResponse.json();
         setCategories(cateData.cates);
 
-        // Lấy sản phẩm theo ID
         const productResponse = await fetch(
           `http://localhost:5000/product/chitietsp/${id}`
         );
@@ -60,9 +57,8 @@ export default function SuaSanPham({ params }) {
       }
     };
     fetchProductAndCategories();
-  }, [id]); // Thực thi khi id thay đổi
+  }, [id]);
 
-  // Xử lý thay đổi trong form
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -71,7 +67,6 @@ export default function SuaSanPham({ params }) {
     }));
   };
 
-  // Xử lý thay đổi tệp hình ảnh
   const handleFileChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -79,12 +74,10 @@ export default function SuaSanPham({ params }) {
     }));
   };
 
-  // Xử lý khi người dùng submit form để cập nhật sản phẩm
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
 
-    // Kiểm tra các trường bắt buộc
     const { ten_san_pham, gia_san_pham, id_danh_muc } = formData;
     if (!ten_san_pham || !gia_san_pham || !id_danh_muc) {
       setErrorMessage("Vui lòng điền tất cả các trường bắt buộc.");
@@ -93,14 +86,12 @@ export default function SuaSanPham({ params }) {
 
     const data = new FormData();
 
-    // Thêm các trường vào form, trừ hình ảnh
     Object.keys(formData).forEach((key) => {
       if (key !== "hinh_anh") {
         data.append(key, formData[key]);
       }
     });
 
-    // Thêm hình ảnh nếu có
     if (formData.hinh_anh) {
       data.append("hinh_anh", formData.hinh_anh);
     }
@@ -125,7 +116,6 @@ export default function SuaSanPham({ params }) {
         );
       }
 
-      // Hiển thị thông báo thành công bằng SweetAlert2
       await Swal.fire({
         title: "Thành công!",
         text: "Sản phẩm đã được cập nhật thành công",
@@ -133,11 +123,10 @@ export default function SuaSanPham({ params }) {
         confirmButtonText: "OK",
       });
 
-      // Chuyển hướng sau khi cập nhật thành công
       window.location.href = "/components/sanpham";
     } catch (error) {
       console.error("Lỗi khi cập nhật sản phẩm:", error.message);
-      // Hiển thị thông báo lỗi bằng SweetAlert2
+
       await Swal.fire({
         title: "Lỗi!",
         text: "Đã xảy ra lỗi khi cập nhật sản phẩm: " + error.message,
@@ -150,112 +139,7 @@ export default function SuaSanPham({ params }) {
 
   return (
     <div className={styles.SidebarContainer}>
-      <section id={styles.sidebar}>
-        <Link href="index.html" className={styles.brand}>
-          <i className={`bx bxs-smile ${styles.icon}`}></i>
-          AdminSite
-        </Link>
-        <ul className={styles.sideMenu}>
-          {" "}
-          <li>
-            <Link href="index.html" className={styles.active}>
-              <i className={`bx bxs-dashboard ${styles.icon}`}></i>
-              Thống Kê
-            </Link>
-          </li>
-          <li className={styles.divider} data-text="Sản Phẩm">
-            Sản Phẩm
-          </li>
-          <li>
-            <Link href="/components/sanpham">
-              <i className={`bx bxs-chart ${styles.icon}`}></i>
-              Quản lý sản phẩm
-            </Link>
-          </li>
-          <li>
-            <Link href="quanlydanhmuc.html">
-              <i className={`bx bxs-widget ${styles.icon}`}></i>
-              Quản lý danh mục
-            </Link>
-          </li>
-          <li>
-            <Link href="khosanpham.html">
-              <i className={`bx bxs-widget ${styles.icon}`}></i>
-              Quản lý kho
-            </Link>
-          </li>
-          <li className={styles.divider} data-text="Bình luận">
-            Bình luận
-          </li>
-          <li>
-            <Link href="quanlybinhluan.html">
-              <i className={`bx bxs-comment-detail ${styles.icon}`}></i>
-              Quản lý bình luận
-            </Link>
-          </li>
-          <li className={styles.divider} data-text="Tài khoản">
-            Tài khoản
-          </li>
-          <li>
-            <Link href="#">
-              <i className={`bx bxs-user-account ${styles.icon}`}></i>
-              Tài khoản
-              <i className={`bx bx-chevron-right ${styles.iconRight}`}></i>
-            </Link>
-            <ul className={styles.sideDropdown}>
-              <li>
-                <Link href="quanlytaikhoan.html">Quản lý tài khoản</Link>
-              </li>
-              <li>
-                <Link href="phanquyen.html">Phân Quyền</Link>
-              </li>
-              <li>
-                <Link href="themnhanvien.html">Tạo thành viên mới</Link>
-              </li>
-            </ul>
-          </li>
-          <li className={styles.divider} data-text="Đơn Hàng">
-            Đơn Hàng
-          </li>
-          <li>
-            <Link href="#">
-              <i className={`bx bxs-cart ${styles.icon}`}></i>
-              Đơn Hàng
-              <i className={`bx bx-chevron-right ${styles.iconRight}`}></i>
-            </Link>
-            <ul className={styles.sideDropdown}>
-              <li>
-                <Link href="quanlydonhang.html">Quản lý đơn hàng</Link>
-              </li>
-              <li>
-                <Link href="quanlygiohang.html">Quản lý giỏ hàng</Link>
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <div className={styles.ads}>
-          <div className={styles.wrapper}>
-            <Link
-              style={{ textDecoration: "none" }}
-              href="#"
-              className={styles.btnUpgrade}
-            >
-              Logout
-            </Link>
-          </div>
-        </div>
-      </section>
       <section id={styles.content}>
-        <nav className={styles.nav}>
-          <i className={`bx bx-menu ${styles.toggleSidebar}`}></i>
-          <form action="#">
-            <div className={styles.formGroup}>
-              <input type="text" placeholder="Search..." />
-              <i className={`bx bx-search ${styles.icon}`}></i>
-            </div>
-          </form>
-          {/* Other nav elements */}
-        </nav>
         <div className={styles.header1}>
           <div className={styles.title} style={{ fontWeight: "bold" }}>
             Danh Sách Sản Phẩm
