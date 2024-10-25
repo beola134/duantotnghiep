@@ -20,14 +20,24 @@ exports.filtersanphamdongho = async (req, res) => {
       phong_cach,
       kieu_dang,
       xuat_xu,
-      danh_muc
+      danh_muc,
+      limit = 20,
+      page = 1,
     } = req.query;
     console.log(req.query);
       
     let filter = {
       [Op.and]: [],
     };
-    filter.loai = { [Op.notIn]: ["Vòng tay", "Trang sức", "Đồng hồ để bàn", "Đồng hồ báo thức"] };
+    filter.loai = {
+      [Op.notIn]: [
+        "Dây đồng hồ",
+        "Vòng tay",
+        "Trang sức",
+        "Đồng hồ để bàn",
+        "Đồng hồ báo thức",
+      ],
+    };
     if (gioi_tinh) {
       switch (gioi_tinh) {
         case "Nam":
@@ -175,23 +185,58 @@ exports.filtersanphamdongho = async (req, res) => {
           break;
       }
       if (priceRange) {
-        if (khuyenmai === "true") {
-          filter.gia_giam = priceRange;
-        } else {
-          filter.gia_san_pham = priceRange;
-        }
+        filter[Op.or] = [
+          {
+            gia_giam: { ...priceRange, [Op.gt]: 0 },
+          },
+          {
+            [Op.and]: [
+              {
+                gia_giam: {
+                  [Op.or]: [0, null],
+                },
+              },
+              {
+                gia_san_pham: priceRange,
+              }
+            ],
+          },
+        ];
       }
     }
     if (khuyenmai) {
+      const discount = req.query.khuyenmai
+        .replace("Giảm", "")
+        .replace("%", "");
       filter[Op.and].push(
         { gia_giam: { [Op.ne]: null } },
         { gia_giam: { [Op.ne]: 0 } },
         Sequelize.literal(
-          `ROUND(((gia_san_pham - gia_giam) / gia_san_pham ) * 100, 2 ) = ${khuyenmai}`)
+          `ROUND(((gia_san_pham - gia_giam) / gia_san_pham ) * 100, 0 ) = ${discount}`
+        )
       );
     }
-    const products = await Product.findAll({ where: filter, limit:20 });
-    res.json({ products });
+    const productsCount = await Product.count({ where: filter, });
+    //sp nhỏ hơn = 20nthif không phần trang
+    if (productsCount <= 20) {
+      const products = await Product.findAll({ where: filter });
+      return res.json({products, totalProducts: productsCount});
+    }
+    //nếu sp lớn 20 thì phân trang
+    const offset = (page - 1) * limit;
+    const { rows: products, count: totalProducts } = await Product.findAndCountAll({
+      where: filter,
+      limit,
+      offset,
+    })
+    // hàm nếu sp lớn hơn thì phân trang
+    const totalPages = Math.ceil(totalProducts / limit);
+      res.json({
+        products,
+        currentPage: page,
+        totalPages,
+        totalProducts,
+      });
   } catch (error) {
     console.log("Error: ", error);
     res.status(500).json({ error: error.message });
