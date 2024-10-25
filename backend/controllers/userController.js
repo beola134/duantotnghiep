@@ -383,4 +383,24 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-// sửa lỗi pull về
+//xóa user
+exports.deleteUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await Users.findByPk(id);
+    if (!user) {
+      return res.status(404).json({
+        message: "Người dùng không tồn tại",
+      });
+    }
+    await user.destroy();
+    res.status(200).json({
+      message: "Xóa người dùng thành công",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Không thể xóa người dùng do có đơn hàng liên quan", 
+  });
+  
+  }
+};

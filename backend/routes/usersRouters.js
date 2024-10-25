@@ -51,4 +51,8 @@ router.put("/update/:id", upload.single("hinh_anh"), usersController.updateUser)
 //api đăng nhập bằng google
 //http://localhost:5000/users/auth/google
 router.post("/auth/google", googleLogin.googleLogin);
+
+//xóa người dùng
+//http://localhost:5000/users/delete/:id
+router.delete("/delete/:id", usersController.deleteUser);
 module.exports = router;
