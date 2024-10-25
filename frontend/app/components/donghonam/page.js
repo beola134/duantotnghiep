@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "../donghonam/donghonam.module.css";
+import Loading from "../loading/page";
 
 export default function DonghoNam() {
   const [products, setProducts] = useState([]);
@@ -9,9 +10,7 @@ export default function DonghoNam() {
   const [selectedFilter, setSelectedFilter] = useState([]); // Lưu trữ các filter đã chọn
   const [sortOption, setSortOption] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const limit = 20; // Số sản phẩm trên mỗi trang
-  const maxVisiblePages = 3; //Hiển thị phân trang tối đa 3 trang
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState({
@@ -34,21 +33,14 @@ export default function DonghoNam() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const queryParams = new URLSearchParams(filter);
+      const queryParams = new URLSearchParams({ ...filter, page: currentPage });
       const response = await fetch(`http://localhost:5000/product/filtersanphamdongho?${queryParams}`);
       if (!response.ok) {
         throw new Error("Lỗi không thể tải dữ liệu");
       }
       const data = await response.json();
       setProducts(data.products);
-      const totalProducts = data.totalProducts;
-      const calculatedTotalPages = Math.ceil(totalProducts / limit);
-      setTotalPages(calculatedTotalPages);
-      if (totalProducts > 0) {
-        setCurrentPage(Math.min(currentPage, calculatedTotalPages));
-      } else {
-        setCurrentPage(1);
-      }
+      setTotalPages(data.totalPages); // Cập nhật tổng số trang
     } catch (error) {
       setError(error.message);
     } finally {
@@ -56,9 +48,17 @@ export default function DonghoNam() {
     }
   };
 
+  // Mỗi khi filter hoặc trang thay đổi, gọi lại API để lấy dữ liệu
   useEffect(() => {
     fetchProducts();
-  }, [filter]);
+  }, [filter, currentPage]);
+
+  //Thay đổi trang
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchProducts();
+  };
 
   const handleFilterChange = (filterType, value) => {
     // Tạo một bản sao của selectedFilter và filter
@@ -75,6 +75,7 @@ export default function DonghoNam() {
     }
     setSelectedFilter(newFilters);
     setFilter(newFilter);
+
     // Reset lại danh mục khi người dùng chọn danh mục khác
     if (filterType === "danh_muc") {
       setCategoryName(value);
@@ -85,19 +86,9 @@ export default function DonghoNam() {
   const handleClearFilters = () => {
     setSelectedFilter([]); // Xóa tất cả các bộ lọc
     setFilter({
-      gioi_tinh: "Nam", // Đặt lại mặc định đồng hồ nam
-      danh_muc: "",
-      muc_gia: "",
-      khuyen_mai: "",
-      loai_may: "",
-      chat_lieu_day: "",
-      chat_lieu_vo: "",
-      mat_kinh: "",
-      mau_mat: "",
-      phong_cach: "",
-      kieu_dang: "",
-      xuat_xu: "",
+      gioi_tinh: "Nam",
     });
+    setCurrentPage(1); // Đặt lại trang về trang 1
     setCategoryName("Đồng hồ nam"); // Đặt lại tiêu đề về đồng hồ nam
     fetchProducts();
   };
@@ -117,46 +108,7 @@ export default function DonghoNam() {
     }
     setSelectedFilter(newFilters);
     setFilter(updatedFilter);
-  };
-
-  // Phân trang sản phẩm
-  useEffect(() => {
-    const fetchProductsPages = async () => {
-      try {
-        const res = await fetch(`http://localhost:5000/product/allsp/gioitinh-nam?page=${currentPage}&limit=${limit}`);
-        const data = await res.json();
-        setProducts(data.products);
-        setTotalPages(data.totalPages);
-      } catch (error) {
-        console.error("Không thể tải dữ liệu sản phẩm", error);
-      }
-    };
-    fetchProductsPages();
-  }, [currentPage]);
-  // Hàm chuyển trang
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) setCurrentPage(page);
-  };
-  // Tính toán các trang sẽ hiển thị dựa trên trang hiện tại
-  const renderPageNumbers = () => {
-    const startPage = Math.floor((currentPage - 1) / maxVisiblePages) * maxVisiblePages + 1;
-    const endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
-
-    let pageNumbers = [];
-    for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(
-        <Link
-          key={i}
-          href="#"
-          onClick={() => handlePageChange(i)}
-          className={i === currentPage ? styles.current : styles["other-page"]}
-        >
-          {i}
-        </Link>
-      );
-    }
-
-    return pageNumbers;
+    fetchProducts();
   };
 
   // Gía từ thấp đến cao và ngược lại
@@ -174,7 +126,7 @@ export default function DonghoNam() {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
   if (error) {
     return <p>Error:{error}</p>;
@@ -883,7 +835,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="Dây da"
-                                onClick={() => handleFilterChange("chat_lieu_day", "  Dây da")}
+                                onClick={() => handleFilterChange("chat_lieu_day", "Dây da")}
                               >
                                 Dây da
                               </Link>
@@ -1631,64 +1583,42 @@ export default function DonghoNam() {
                   </section>
 
                   {/* phân trang*/}
-                  <div>
-                    <div className={styles.pagination}>
-                      {/* quay lại trang đầu  */}
-                      {currentPage > 1 ? (
-                        <span
-                          title="Previous page"
-                          className={styles["other-page"]}
-                          onClick={() => handlePageChange(1)}
-                        >
-                          ‹‹
-                        </span>
-                      ) : (
-                        <span className={styles.disabled}> ‹‹</span> // Ẩn khi ở trang đầu
-                      )}
-                      {currentPage > 1 ? (
-                        <span
-                          title="Previous page"
-                          className={styles["other-page"]}
-                          onClick={() => handlePageChange(currentPage - 1)}
-                        >
-                          ‹
-                        </span>
-                      ) : (
-                        <span className={styles.disabled}>‹</span> // Ẩn khi ở trang đầu
-                      )}
+                  <div className={styles.pagination}>
+                    {/* First Page */}
+                    <span
+                      title="First page"
+                      className={currentPage === 1 ? styles.disabled : styles["other-page"]}
+                      onClick={() => currentPage > 1 && handlePageChange(1)}
+                    >
+                      ‹‹
+                    </span>
 
-                      {/* Hiển thị các số trang */}
-                      {renderPageNumbers()}
+                    {/* Previous Page */}
+                    <span
+                      className={currentPage === 1 ? styles.disabled : styles["other-page"]}
+                      onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                    >
+                      ‹
+                    </span>
 
-                      {/* Hiển thị dấu ... nếu không phải trang cuối */}
-                      {currentPage < totalPages - maxVisiblePages && <b>...</b>}
+                    {/* Current Page Display */}
+                    <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages}`}</span>
 
-                      {/* Nút tiến > */}
-                      {currentPage < totalPages ? (
-                        <span
-                          title="Next page"
-                          className={styles["other-page"]}
-                          onClick={() => handlePageChange(currentPage + 1)}
-                        >
-                          ›
-                        </span>
-                      ) : (
-                        <span className={styles.disabled}>›</span> // Ẩn khi ở trang cuối
-                      )}
+                    {/* Next Page */}
+                    <span
+                      className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
+                      onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                    >
+                      ›
+                    </span>
 
-                      {/* Nút đến trang cuối cùng >> */}
-                      {currentPage < totalPages ? (
-                        <span
-                          title="Last page"
-                          className={styles["other-page"]}
-                          onClick={() => handlePageChange(totalPages)}
-                        >
-                          ››
-                        </span>
-                      ) : (
-                        <span className={styles.disabled}>››</span> // Ẩn khi đang ở trang cuối
-                      )}
-                    </div>
+                    {/* Last Page */}
+                    <span
+                      className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
+                      onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
+                    >
+                      ››
+                    </span>
                   </div>
                 </div>
                 <div className={styles.clear}></div>
@@ -1718,17 +1648,17 @@ export default function DonghoNam() {
                     <em>
                       <strong>
                         <Link href="#">
-                          <span className={styles.highlightText}>đồng hồ đeo tay</span>
+                          <span className={styles.highlightText}>&nbsp;đồng hồ đeo tay</span>
                         </Link>
                       </strong>
                     </em>
-                    không chỉ để xem thời gian mà còn khẳng định phong cách và đẳng cấp của phái mạnh.
-                    <strong>Đồng hồ nam</strong> mang lại sự khác biệt nhất là khi đặt vào tổng thể trang phục, nhưng
-                    không phải ai cũng chọn được một chiếc đồng hồ phù hợp ở lần đầu tiên.
-                    <strong>Duy Anh Watch</strong> sẽ giúp bạn lựa chọn
+                    &nbsp;không chỉ để xem thời gian mà còn khẳng định phong cách và đẳng cấp của phái mạnh.
+                    <strong>&nbsp;Đồng hồ nam</strong> mang lại sự khác biệt nhất là khi đặt vào tổng thể trang phục,
+                    nhưng không phải ai cũng chọn được một chiếc đồng hồ phù hợp ở lần đầu tiên.
+                    <strong>&nbsp;Wristly</strong> sẽ giúp bạn lựa chọn
                     <Link href="#">
                       <em>
-                        <strong>đồng hồ nam đẹp</strong>
+                        <strong>&nbsp;đồng hồ nam đẹp&nbsp;</strong>
                       </em>
                     </Link>
                     và phù hợp với sở thích của từng người!

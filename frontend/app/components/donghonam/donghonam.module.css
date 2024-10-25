@@ -337,7 +337,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 66px;
+  margin: 20px 0;
 }
 
 .pagination span,
@@ -346,7 +346,7 @@
   padding: 10px 15px;
   margin: 0 5px;
   border: 1px solid #ccc;
-  border-radius: 50px;
+  border-radius: 5px;
   text-decoration: none;
   color: #333;
   cursor: pointer;
@@ -359,13 +359,14 @@
 }
 
 .pagination a:hover {
-  background: #333;
-  color: white;
+  background-color: #f0f0f0;
+  border-color: #bbb;
 }
 
 .pagination .current {
-  background-color: #333;
+  background-color: #007bff;
   color: white;
+  border-color: #007bff;
 }
 
 .pagination .other-page {
@@ -373,7 +374,7 @@
 }
 
 .pagination .other-page:hover {
-  background: #333;
+  background-color: #e6e6e6;
 }
 
 .pagination .next-page,
