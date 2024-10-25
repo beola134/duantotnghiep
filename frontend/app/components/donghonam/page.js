@@ -5,14 +5,17 @@ import styles from "../donghonam/donghonam.module.css";
 import Loading from "../loading/page";
 
 export default function DonghoNam() {
-  const [products, setProducts] = useState([]);
-  const [categoryName, setCategoryName] = useState("Đồng hồ nam");
-  const [selectedFilter, setSelectedFilter] = useState([]); // Lưu trữ các filter đã chọn
-  const [sortOption, setSortOption] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  // State quản lý dữ liệu và trạng thái chung
+  const [products, setProducts] = useState([]); // Danh sách sản phẩm hiện tại
+  const [categoryName, setCategoryName] = useState("Đồng hồ nam"); // Tiêu đề danh mục
+  const [selectedFilter, setSelectedFilter] = useState([]); // Lưu trữ các bộ lọc đã chọn
+  const [sortOption, setSortOption] = useState(""); // Tuỳ chọn sắp xếp (tăng/giảm dần)
+  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Bộ lọc mặc định cho đồng hồ nam
   const [filter, setFilter] = useState({
     gioi_tinh: "Nam",
     danh_muc: "",
@@ -29,7 +32,7 @@ export default function DonghoNam() {
     xuat_xu: "",
   });
 
-  // Lọc sản phẩm dựa trên các bộ lọc đã chọn
+  // 1. Hàm gọi API để lấy danh sách sản phẩm dựa vào bộ lọc và phân trang
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -39,7 +42,7 @@ export default function DonghoNam() {
         throw new Error("Lỗi không thể tải dữ liệu");
       }
       const data = await response.json();
-      setProducts(data.products);
+      setProducts(data.products); // Cập nhật danh sách sản phẩm
       setTotalPages(data.totalPages); // Cập nhật tổng số trang
     } catch (error) {
       setError(error.message);
@@ -48,52 +51,51 @@ export default function DonghoNam() {
     }
   };
 
-  // Mỗi khi filter hoặc trang thay đổi, gọi lại API để lấy dữ liệu
+  // 2. Gọi lại API khi bộ lọc hoặc trang hiện tại thay đổi
   useEffect(() => {
     fetchProducts();
   }, [filter, currentPage]);
 
-  //Thay đổi trang
-
+  // 3. Hàm chuyển trang
   const handlePageChange = (page) => {
     setCurrentPage(page);
     fetchProducts();
   };
 
+  // 4. Hàm cập nhật bộ lọc khi chọn mới
   const handleFilterChange = (filterType, value) => {
-    // Tạo một bản sao của selectedFilter và filter
     const newFilters = [...selectedFilter];
-    const newFilter = { ...filter, [filterType]: value }; // Cập nhật giá trị của filter
+    const newFilter = { ...filter, [filterType]: value };
 
-    // Kiểm tra xem bộ lọc đã có trong danh sách hay chưa
+    // Cập nhật hoặc thêm bộ lọc vào danh sách đã chọn
     const filterIndex = newFilters.findIndex((filter) => filter.startsWith(`${filterType}=`));
-
     if (filterIndex !== -1) {
-      newFilters[filterIndex] = `${filterType}=${value}`; // Cập nhật bộ lọc
+      newFilters[filterIndex] = `${filterType}=${value}`;
     } else {
-      newFilters.push(`${filterType}=${value}`); // Thêm bộ lọc mới
+      newFilters.push(`${filterType}=${value}`);
     }
+    // Cập nhật trạng thái bộ lọc
     setSelectedFilter(newFilters);
     setFilter(newFilter);
 
-    // Reset lại danh mục khi người dùng chọn danh mục khác
+    // Đặt lại danh mục khi chọn một danh mục khác
     if (filterType === "danh_muc") {
       setCategoryName(value);
     }
   };
 
-  // button xoá hết bộ lọc
+  // 5. Hàm xóa tất cả bộ lọc và đặt lại về trạng thái ban đầu
   const handleClearFilters = () => {
-    setSelectedFilter([]); // Xóa tất cả các bộ lọc
+    setSelectedFilter([]);
     setFilter({
       gioi_tinh: "Nam",
     });
-    setCurrentPage(1); // Đặt lại trang về trang 1
-    setCategoryName("Đồng hồ nam"); // Đặt lại tiêu đề về đồng hồ nam
+    setCurrentPage(1);
+    setCategoryName("Đồng hồ nam");
     fetchProducts();
   };
 
-  // Xoá bộ lọc cụ thể
+  // 6. Hàm xóa một bộ lọc cụ thể
   const handleRemoveFilter = (filterToRemove) => {
     // Loại bỏ bộ lọc cụ thể khỏi selectedFilter
     const newFilters = selectedFilter.filter((filter) => filter !== filterToRemove);
@@ -111,7 +113,7 @@ export default function DonghoNam() {
     fetchProducts();
   };
 
-  // Gía từ thấp đến cao và ngược lại
+  // 7. Hàm sắp xếp sản phẩm theo giá
   const sortProducts = (products) => {
     if (sortOption === "asc") {
       return [...products].sort((a, b) => a.gia_giam - b.gia_giam); // Giá từ thấp đến cao
@@ -120,9 +122,9 @@ export default function DonghoNam() {
     }
     return products; // Trả về danh sách gốc nếu không sắp xếp
   };
-
+  // 8. Cập nhật tuỳ chọn sắp xếp
   const handleSortChange = (e) => {
-    setSortOption(e.target.value); // cập nhật theo giá trị mình chọn
+    setSortOption(e.target.value);
   };
 
   if (loading) {
@@ -1584,7 +1586,7 @@ export default function DonghoNam() {
 
                   {/* phân trang*/}
                   <div className={styles.pagination}>
-                    {/* First Page */}
+                    {/* Prev trang đâù */}
                     <span
                       title="First page"
                       className={currentPage === 1 ? styles.disabled : styles["other-page"]}
@@ -1592,27 +1594,23 @@ export default function DonghoNam() {
                     >
                       ‹‹
                     </span>
-
-                    {/* Previous Page */}
+                    {/* Prev 1 trang */}
                     <span
                       className={currentPage === 1 ? styles.disabled : styles["other-page"]}
                       onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
                     >
                       ‹
                     </span>
-
-                    {/* Current Page Display */}
-                    <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages}`}</span>
-
-                    {/* Next Page */}
+                    {/* Trang hiện tại */}
+                    <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1}`}</span>
+                    {/* Next 1 trang*/}
                     <span
                       className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
                       onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
                     >
                       ›
                     </span>
-
-                    {/* Last Page */}
+                    {/* Next tới trang cuối */}
                     <span
                       className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
                       onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
