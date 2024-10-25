@@ -20,7 +20,7 @@ export default function Product({ data }) {
           <div key={product._id} className={styles.item}>
             <div className={styles["frame-inner"]}>
               <figure className={styles["product-image"]}>
-                <Link href="#">
+                <Link href={`/components/product-detail/${_id}`}>
                   <img
                     src={`http://localhost:5000/images/${hinh_anh}`}
                     alt={ten}

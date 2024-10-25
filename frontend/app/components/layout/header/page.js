@@ -5,6 +5,7 @@ import classNames from "classnames/bind";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+
 import { useRouter } from "next/navigation";
 
 const locgia=[
@@ -32,15 +33,37 @@ const locgia=[
   {id:"over100",
     title: "TRÊN 100 TRIỆU"
   },
-  
-
-];
+  ]
 
 export default function Header() {
   const cx = classNames.bind(styles);
   const [category, setCategory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [inputData, setInputData] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleSearch = async () => {
+    if (inputData.trim() === "") {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/product/timkiem?query=${inputData}`,
+        {
+          method: "POST",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Lỗi tìm kiếm");
+      }
+
+      const data = await response.json();
+      setSearchResults(data);
+    } catch (error) {
+      console.error("Lỗi khi tìm kiếm:", error);
   const [inputData, setInputData] = useState('');
    const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
@@ -80,7 +103,6 @@ export default function Header() {
     return <p>Error:{error}</p>;
   }
 
-
   return (
     <>
       <header className={cx("header")}>
@@ -105,6 +127,7 @@ export default function Header() {
             <button
               type="button"
               className={cx("button")}
+
               onClick={handleSearch}
               disabled={!inputData} 
             >
@@ -132,7 +155,9 @@ export default function Header() {
             </div>
 
             <div className={cx("cart")}>
-              <i className="fas fa-shopping-cart"></i>
+              <Link href="/components/giohang">
+                <i className="fas fa-shopping-cart"></i>
+              </Link>
               <span className={cx("cart-count")}>3</span>
             </div>
           </div>
@@ -150,8 +175,7 @@ export default function Header() {
           <li className={cx("nav-list-li")}>
             <Link
               href={"/components/thuonghieu"}
-              className={cx("nav-list-li-a")}
-            >
+              className={cx("nav-list-li-a")}>
               THƯƠNG HIỆU
             </Link>
             <ul className={cx("dropdown-menu")}>
@@ -159,6 +183,7 @@ export default function Header() {
                 <li className={cx("dropdown-menu-li")} key={item._id}>
                   <Link
                     href={`/components/chitietdanhmuc/${item._id}`}
+
                     style={{ color: "white" }}
                   >
                     <img
@@ -184,6 +209,7 @@ export default function Header() {
                     <li
                       className={cx("dropdown-menu-dhn-li2")}
                       key={item._id}
+
                       style={{ fontSize: "10px" }}
                     >
                       <Link
@@ -278,6 +304,7 @@ export default function Header() {
                     <li
                       className={cx("dropdown-menu-dhn-li2")}
                       key={item._id}
+
                       style={{ fontSize: "10px" }}
                     >
                       <Link
@@ -297,6 +324,7 @@ export default function Header() {
                     <li key={item.gia} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
                         href={`/components/sanphamlocgia/${item.gia}`}
+
                         className={cx("cxcx")}
                       >
                         {item.title}
@@ -367,6 +395,7 @@ export default function Header() {
                     <li
                       className={cx("dropdown-menu-dhn-li2")}
                       key={item._id}
+
                       style={{ fontSize: "10px" }}
                     >
                       <Link
@@ -386,6 +415,7 @@ export default function Header() {
                     <li key={item.gia} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
                         href={`/components/sanphamlocgia/${item.gia}`}
+
                         className={cx("cxcx")}
                       >
                         {item.title}
@@ -447,6 +477,7 @@ export default function Header() {
           <li className={cx("nav-list-li")}>
             <Link
               href="/components/donghotreotuong"
+
               className={cx("nav-list-li-a")}
             >
               ĐỒNG HỒ TREO TƯỜNG
@@ -488,14 +519,14 @@ export default function Header() {
           <li className={cx("nav-list-li")}>
             <Link
               href="/components/sanphamkhac"
-              className={cx("nav-list-li-a")}
-            >
+              className={cx("nav-list-li-a")}>
               SẢN PHẨM KHÁC
             </Link>
             <ul className={cx("dropdown-menu-doc")}>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghothuysi"
+
                   className={cx("dropdown-menu-doc-a")}
                 >
                   ĐỒNG HỒ THỤY SĨ
@@ -504,6 +535,7 @@ export default function Header() {
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghonhatban"
+
                   className={cx("dropdown-menu-doc-a")}
                 >
                   ĐỒNG HỒ NHẬT BẢN
@@ -512,6 +544,7 @@ export default function Header() {
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/daydongho"
+
                   className={cx("dropdown-menu-doc-a")}
                 >
                   DÂY TREO ĐỒNG HỒ
@@ -520,6 +553,7 @@ export default function Header() {
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/trangsucCk"
+
                   className={cx("dropdown-menu-doc-a")}
                 >
                   TRANG SỨC CALVIN KLEIN
@@ -528,6 +562,7 @@ export default function Header() {
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/trangsucDW"
+
                   className={cx("dropdown-menu-doc-a")}
                 >
                   TRANG SỨC DW
@@ -536,6 +571,7 @@ export default function Header() {
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghobaothuc"
+
                   className={cx("dropdown-menu-doc-a")}
                 >
                   ĐỒNG HỒ BÁO THỨC
@@ -544,6 +580,7 @@ export default function Header() {
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghodeban"
+
                   className={cx("dropdown-menu-doc-a")}
                 >
                   ĐỒNG HỒ ĐỂ BÀN
