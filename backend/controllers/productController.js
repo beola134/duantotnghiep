@@ -415,14 +415,12 @@ exports.filtersanphamdongho = async (req, res) => {
       }
     }
     if (khuyenmai) {
-      const discount = req.query.khuyenmai
-        .replace("Giảm", "")
-        .replace("%", "");
+      const discount = req.query.khuyenmai.replace('Giảm ', '').replace('%', '');
       filter[Op.and].push(
         { gia_giam: { [Op.ne]: null } },
         { gia_giam: { [Op.ne]: 0 } },
         Sequelize.literal(
-          `ROUND(((gia_san_pham - gia_giam) / gia_san_pham ) * 100, 0 ) = ${discount}`
+          `ROUND(((gia_san_pham - gia_giam) / gia_san_pham ) * 100, 0) = ${discount}`
         )
       );
     }
@@ -447,13 +445,6 @@ exports.filtersanphamdongho = async (req, res) => {
         totalPages,
         totalProducts,
       });
-          `ROUND(((gia_san_pham - gia_giam) / gia_san_pham ) * 100, 0) = ${khuyenmai}`
-        )
-      );
-    }
-    
-    const products = await Product.findAll({ where: filter, limit:20 });
-    res.json({ products });
   } catch (error) {
     console.log("Error: ", error);
     res.status(500).json({ error: error.message });
