@@ -1,4 +1,3 @@
-
 "use client";
 import { useEffect } from "react";
 import Footer from "./components/layout/footer/page";
@@ -7,8 +6,7 @@ import Script from "next/script";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from "./components/layout/header/page";
-import Providers from "@/redux/Provider";
-
+import Providers from "../redux/Provider";
 
 export default function RootLayout({ children }) {
   useEffect(() => {
@@ -40,5 +38,3 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
-
-

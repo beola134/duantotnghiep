@@ -13,7 +13,7 @@ const CartPage = () => {
   const total = useMemo(
     () =>
       cartItems.reduce(
-        (total, item) => total + item.gia_giam * item.so_luong,
+        (total, item1) => total + item1.gia_giam * item1.so_luong,
         0
       ),
     [cartItems]
@@ -31,6 +31,7 @@ const CartPage = () => {
                     <th colspan="2">Sản phẩm</th>
                     <th>Số lượng</th>
                     <th>Giá</th>
+                    <th>Thành tiền</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -38,7 +39,7 @@ const CartPage = () => {
                     <tr key={item._id}>
                       <td>
                         <img
-                          src={`http://localhost:3000/image/${item.hinh_anh}`}
+                          src={`http://localhost:5000/images/${item.hinh_anh}`}
                           alt=""
                           width="100px"
                         />
@@ -46,26 +47,47 @@ const CartPage = () => {
                       <td>{item.ten_san_pham}</td>
                       <td>
                         <div className={styles.quantitycontrol}>
-                          <button className={styles.decreasebtn}>-</button>
+                          <button
+                            className={styles.decreasebtn}
+                            onClick={() => {
+                              if (item.so_luong > 1) {
+                                dispatch(
+                                  updateCartItemQuantity({
+                                    _id: item._id,
+                                    so_luong: item.so_luong - 1,
+                                  })
+                                );
+                              }
+                            }}>
+                            -
+                          </button>
                           <input
                             min="1"
                             type="number"
                             value={item.so_luong}
-                            onChange={(e) =>
-                              dispatch(
-                                updateCartItemQuantity({
-                                  _id: item._id,
-                                  so_luong: parseInt(e.target.value),
-                                })
-                              )
-                            }
                             className={styles.quantity}
                             readonly
                           />
-                          <button className={styles.increasebtn}>+</button>
+                          <button
+                            className={styles.increasebtn}
+                            onClick={() =>
+                              dispatch(
+                                updateCartItemQuantity({
+                                  _id: item._id,
+                                  so_luong: item.so_luong + 1,
+                                })
+                              )
+                            }>
+                            +
+                          </button>
                         </div>
                       </td>
                       <td>{item.gia_giam.toLocaleString("vi-VN")}</td>
+                      <td>
+                        {(item.gia_giam * item.so_luong).toLocaleString(
+                          "vi-VN"
+                        )}
+                      </td>
                       <td name="delete">
                         <button
                           onClick={() => dispatch(removeFromCart(item._id))}>
@@ -89,14 +111,16 @@ const CartPage = () => {
             <br />
             <hr />
             <div className={styles.total}>
-              {cartItems.map((item) => (
-                <div className={styles.tt}>
-                  <p>Tổng tiền hàng:</p>
-                  <p>
-                    {(item.gia_giam * item.so_luong).toLocaleString("vi-VN")}
-                  </p>
-                </div>
-              ))}
+              <div className={styles.tt}>
+                <p>Tổng tiền hàng:</p>
+                <p>
+                  {total.toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  })}
+                </p>
+              </div>
+
               <div className={styles.uudai}>
                 <p>Ưu đãi:</p>
                 <p>0</p>

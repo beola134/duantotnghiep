@@ -493,9 +493,12 @@ export default function Detail({ params }) {
                       Mua ngay
                     </button>
                     <button
+                      type="button"
                       className={`${styles.btBuySp} ${styles.buySp} ${styles.submit}`}
-                      type="submit"
-                      onClick={() => dispatch(addToCart({ item: product }))}>
+                      onClick={(e) => {
+                        e.preventDefault();
+                        dispatch(addToCart({ item: product, so_luong: 1 }));
+                      }}>
                       Thêm vào giỏ hàng
                     </button>
 

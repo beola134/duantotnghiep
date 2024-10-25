@@ -2,13 +2,14 @@
   margin-bottom: 70px;
   min-height: 420px;
   overflow: hidden;
-  max-width: 1520px;
   height: 480px;
   margin: 0 auto;
   
 }
 .pav-slide-content{   
    position: relative;
+   max-width: 1170p;
+   
    
 }
 .owl-controls div {
