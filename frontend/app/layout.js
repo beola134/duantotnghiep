@@ -7,6 +7,7 @@ import Script from "next/script";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from "./components/layout/header/page";
+import Providers from "@/redux/Provider";
 
 
 export default function RootLayout({ children }) {
@@ -20,21 +21,22 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <head>
-        {/* Chỉ chạy trên client và sau khi hydrate */}
-        <Script
-          strategy="lazyOnload"
-          src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v20.0"
-          crossOrigin="anonymous"
-          nonce="uaRZ9ATs"
-        />
-      </head>
-      <body>
-        <Header/>
-        {children}
-        <Footer />
-      </body>
-
+      <Providers>
+        <head>
+          {/* Chỉ chạy trên client và sau khi hydrate */}
+          <Script
+            strategy="lazyOnload"
+            src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v20.0"
+            crossOrigin="anonymous"
+            nonce="uaRZ9ATs"
+          />
+        </head>
+        <body>
+          <Header />
+          {children}
+          <Footer />
+        </body>
+      </Providers>
     </html>
   );
 }
