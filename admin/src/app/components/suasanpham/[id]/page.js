@@ -411,9 +411,11 @@ export default function SuaSanPham({ params }) {
               <button type="submit" className="btn btn-outline-primary">
                 Cập nhật
               </button>
-              <button type="button" className="btn btn-outline-secondary">
+              <Link href="/components/sanpham">
+              <button href="/components/sanpham" type="button" className="btn btn-outline-secondary">
                 Hủy bỏ
               </button>
+              </Link>
             </div>
           </form>
         </div>

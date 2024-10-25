@@ -424,7 +424,9 @@ export default function ThemSanPham() {
               <button type="submit" className="btn btn-outline-primary">
                 Thêm
               </button>
+              <Link href="/components/sanpham">
               <button type="button" className="btn btn-outline-secondary">Hủy bỏ</button>
+              </Link>
             </div>
           </form>
         </div>
