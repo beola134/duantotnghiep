@@ -25,7 +25,7 @@ export default function ThanhToan() {
         throw new Error("Lỗi lấy thông tin người dùng");
       }
       const data = await response.json();
-      setUser(data);
+      setUser(data.user);
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -39,7 +39,7 @@ export default function ThanhToan() {
             <div className={`${styles.box} ${styles.customerInfo}`}>
               <p className={styles.productTitle}>Thông tin khách hàng</p>
               <div className={styles.inputGroup}>
-                <input type="email" placeholder="Email" />
+                <input type="email" placeholder="Email" value={user ? user.email : ""} readOnly />
                 <input type="text" placeholder="Điện thoại" />
               </div>
             </div>
