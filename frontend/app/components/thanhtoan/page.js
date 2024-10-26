@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import styles from "./thanhtoan.module.css";
 import { jwtDecode } from "jwt-decode";
+import Swal from "sweetalert2"; 
 
 export default function ThanhToan() {
   const [user, setUser] = useState(null);
@@ -40,7 +41,7 @@ export default function ThanhToan() {
       console.log(error);
     }
   };
-  // sử lí tăng giảm số lượng
+
   useEffect(() => {
     const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
     const updatedCartItems = cartItems.map((item) => ({ ...item, so_luong: item.so_luong ?? 1 }));
@@ -78,14 +79,18 @@ export default function ThanhToan() {
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
   };
 
-  // hàm xử lí khi chưa đăng nhập
-
   const userLogin = async () => {
     if (!user) {
-      alert("Vui lòng đăng nhập để tiếp tục thanh toán");
-      window.location.href = "/components/login";
+      Swal.fire({
+        icon: "warning",
+        title: "Cảnh báo",
+        text: "Vui lòng đăng nhập để tiếp tục thanh toán",
+      }).then(() => {
+        window.location.href = "/components/login";
+      });
       return;
     }
+
     const orderDetails = {
       dia_chi: user.dia_chi,
       id_nguoi_dung: user._id,
@@ -97,6 +102,7 @@ export default function ThanhToan() {
       })),
       ma_voucher: discountCode || null,
     };
+
     try {
       const response = await fetch("http://localhost:5000/donhang/donhang", {
         method: "POST",
@@ -110,15 +116,21 @@ export default function ThanhToan() {
       }
       const data = await response.json();
       console.log(data);
-      alert(data.message);
+      Swal.fire({
+        icon: "success",
+        title: "Thành công",
+        text: data.message,
+      });
       localStorage.setItem("cartItems", JSON.stringify([]));
       setCartItems([]);
     } catch (error) {
-      throw new Error("Lỗi tạo đơn hàng");
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: "Lỗi tạo đơn hàng",
+      });
     }
   };
-
-  // hàm xử lí voucher
 
   const applyDiscount = async () => {
     try {
@@ -136,7 +148,11 @@ export default function ThanhToan() {
       setDiscountValue(data.gia_tri);
       calculateTotal(cartItems);
     } catch (error) {
-      alert(error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: error.message,
+      });
       console.log(error);
     }
   };
@@ -149,15 +165,15 @@ export default function ThanhToan() {
             <div className={`${styles.box} ${styles.customerInfo}`}>
               <p className={styles.productTitle}>Thông tin khách hàng</p>
               <div className={styles.inputGroup}>
-                <input type="email" placeholder="Email" value={user ? user.email : ""} />
-                <input type="text" placeholder="Điện thoại" value={user ? user.dien_thoai : ""} />
+                <input type="email" placeholder="Email" value={user ? user.email : ""} readOnly />
+                <input type="text" placeholder="Điện thoại" value={user ? user.dien_thoai : ""} readOnly />
               </div>
             </div>
 
             <div className={`${styles.box} ${styles.shippingPaymentInfo}`}>
               <p className={styles.productTitle}>Địa chỉ giao hàng</p>
-              <input type="text" placeholder="Họ và tên" value={user ? user.ho_ten : ""} />
-              <input type="text" placeholder="Địa chỉ" value={user ? user.dia_chi : ""} />
+              <input type="text" placeholder="Họ và tên" value={user ? user.ho_ten : ""} readOnly />
+              <input type="text" placeholder="Địa chỉ" value={user ? user.dia_chi : ""} readOnly />
               <textarea
                 className={styles.textarea}
                 placeholder="Ghi chú"
@@ -211,7 +227,7 @@ export default function ThanhToan() {
               </div>
             </div>
             {cartItems.map((item, index) => (
-              <div className={`${styles.box} ${styles.productCard}`}>
+              <div className={`${styles.box} ${styles.productCard}`} key={item._id}>
                 <div className={styles.productInfo}>
                   <div className={styles.productLeft}>
                     <p className={styles.productTitle}>Sản phẩm mua</p>
@@ -268,7 +284,7 @@ export default function ThanhToan() {
               </p>
               <p className={styles.totalAmount}>
                 Tổng thanh toán:{" "}
-                <span className={styles.price}>{(totalAmount - discountValue).toLocaleString("vn-VN")}₫</span>
+                <span className={styles.price}>{(totalAmount - discountValue).toLocaleString("vi-VN")}₫</span>
               </p>
             </div>
             <button className={styles.checkoutButton} onClick={userLogin}>
