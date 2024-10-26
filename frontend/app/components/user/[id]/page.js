@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import styles from "./user.module.css";
+import styles from "../user.module.css";
 import Link from "next/link";
 
-const User = ({params}) => {
-   const { id } = params;
+const User = ({ params }) => {
+  const { id } = params;
   const [userData, setUserData] = useState({
     ten_dang_nhap: "",
     ho_ten: "",
@@ -13,7 +13,7 @@ const User = ({params}) => {
     dien_thoai: "",
     hinh_anh: "",
   });
- 
+
   const [isEditing, setIsEditing] = useState(false);
   const [avatarFile, setAvatarFile] = useState(null);
 
@@ -74,7 +74,7 @@ const User = ({params}) => {
       <div className={styles.sidebar}>
         <div className={styles.profilePicture}>
           <img
-            src={`/image/item/${userData.hinh_anh} `}
+            src={`http://localhost:5000/images/${userData.hinh_anh}`}
             alt="Avatar"
             className={styles.avatar}
           />
