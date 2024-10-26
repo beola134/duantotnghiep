@@ -5,11 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import styles from "./giohang.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import {
-  removeFromCart,
-  updateCartItemQuantity,
-  setCartItems,
-} from "../redux/slices/cartSilce";
+import { removeFromCart, updateCartItemQuantity, setCartItems } from "../redux/slices/cartSilce";
+import Link from 'next/link';
 
 const CartPage = () => {
   const cartItems = useSelector((state) => state.cart?.items) || [];
@@ -25,11 +22,7 @@ const CartPage = () => {
   }, [dispatch]);
 
   const total = useMemo(
-    () =>
-      cartItems.reduce(
-        (total, item1) => total + item1.gia_giam * item1.so_luong,
-        0
-      ),
+    () => cartItems.reduce((total, item1) => total + item1.gia_giam * item1.so_luong, 0),
     [cartItems]
   );
   return (
@@ -54,11 +47,7 @@ const CartPage = () => {
                   {cartItems.map((item) => (
                     <tr key={item._id}>
                       <td>
-                        <img
-                          src={`http://localhost:5000/images/${item.hinh_anh}`}
-                          alt=""
-                          width="100px"
-                        />
+                        <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt="" width="100px" />
                       </td>
                       <td>{item.ten_san_pham}</td>
                       <td>
@@ -74,15 +63,11 @@ const CartPage = () => {
                                   })
                                 );
                               }
-                            }}>
+                            }}
+                          >
                             -
                           </button>
-                          <input
-                            min="1"
-                            value={item.so_luong}
-                            className={styles.quantity}
-                            readonly
-                          />
+                          <input min="1" value={item.so_luong} className={styles.quantity} readonly />
                           <button
                             className={styles.increasebtn}
                             onClick={() =>
@@ -92,7 +77,8 @@ const CartPage = () => {
                                   so_luong: item.so_luong + 1,
                                 })
                               )
-                            }>
+                            }
+                          >
                             +
                           </button>
                         </div>
@@ -104,18 +90,16 @@ const CartPage = () => {
                         })}
                       </td>
                       <td>
-                        {(item.gia_giam * item.so_luong).toLocaleString(
-                          "vi-VN",
-                          {
-                            style: "currency",
-                            currency: "VND",
-                          }
-                        )}
+                        {(item.gia_giam * item.so_luong).toLocaleString("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
                       </td>
                       <td name="delete">
                         <button
                           style={{ border: "none", cursor: "pointer" }}
-                          onClick={() => dispatch(removeFromCart(item._id))}>
+                          onClick={() => dispatch(removeFromCart(item._id))}
+                        >
                           <FontAwesomeIcon
                             icon={faTrash}
                             style={{
@@ -167,9 +151,11 @@ const CartPage = () => {
                 </p>
               </div>
             </div>
-            <button type="button" id={styles.thtt}>
-              Tiến hành thanh toán
-            </button>
+            <Link href="/components/thanhtoan">
+              <button type="button" id={styles.thtt}>
+                Tiến hành thanh toán
+              </button>
+            </Link>
           </div>
         </div>
       </nav>
