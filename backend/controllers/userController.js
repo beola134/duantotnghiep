@@ -270,14 +270,6 @@ exports.register = async (req, res) => {
     };
 
     await transporter.sendMail(mailOptions);
-    // Thiết lập hẹn giờ xóa tài khoản sau 10phút nếu không được xác thực
-    setTimeout(async () => {
-      const user = await Users.findOne({ where: { email } });
-      if (user.otpExpires < Date.now()) {
-        await user.destroy();
-      }
-    }, 10 * 60 * 1000);
-
     res.status(200).json({
       message: "Đăng ký tài khoản thành công. Vui lòng kiểm tra email để nhận mã OTP.",
     });
