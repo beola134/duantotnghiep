@@ -26,16 +26,12 @@ export default function Thuonghieu() {
   }, []);
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex + itemsPerPage < cates.length ? prevIndex + itemsPerPage : 0
-    );
+    setCurrentIndex((prevIndex) => (prevIndex + itemsPerPage < cates.length ? prevIndex + itemsPerPage : 0));
   };
 
   const prevSlide = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex - itemsPerPage >= 0
-        ? prevIndex - itemsPerPage
-        : cates.length - itemsPerPage
+      prevIndex - itemsPerPage >= 0 ? prevIndex - itemsPerPage : cates.length - itemsPerPage
     );
   };
 
@@ -58,21 +54,16 @@ export default function Thuonghieu() {
             ‹
           </button>
           <div className={styles.thuonghieu}>
-            {cates
-              .slice(currentIndex, currentIndex + itemsPerPage)
-              .map((item) => {
-                const { _id, hinh_anh2 } = item;
-                return (
-                  <div className={styles.item} key={_id}>
-                    <Link href={`/components/chitietdanhmuc/${_id}`}>
-                      <img
-                        src={`http://localhost:5000/images/${hinh_anh2}`}
-                        alt={`Hình ảnh thương hiệu ${_id}`}
-                      />
-                    </Link>
-                  </div>
-                );
-              })}
+            {cates.slice(currentIndex, currentIndex + itemsPerPage).map((item) => {
+              const { _id, hinh_anh2 } = item;
+              return (
+                <div className={styles.item} key={_id}>
+                  <Link href={`/components/chitietdanhmuc/${_id}`}>
+                    <img src={`http://localhost:5000/images/${hinh_anh2}`} alt={`Hình ảnh thương hiệu ${_id}`} />
+                  </Link>
+                </div>
+              );
+            })}
           </div>
           <button onClick={nextSlide} className={styles.arrowRight}>
             ›
@@ -88,10 +79,7 @@ export default function Thuonghieu() {
             return (
               <div className={styles.item} key={_id}>
                 <Link href={`/components/chitietdanhmuc/${_id}`}>
-                  <img
-                    src={`http://localhost:5000/images/${hinh_anh2}`}
-                    alt={`Hình ảnh thương hiệu ${_id}`}
-                  />
+                  <img src={`http://localhost:5000/images/${hinh_anh2}`} alt={`Hình ảnh thương hiệu ${_id}`} />
                 </Link>
               </div>
             );

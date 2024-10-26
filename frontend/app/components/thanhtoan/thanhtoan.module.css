@@ -70,7 +70,7 @@
   height: 80px;
   resize: none;
 }
-
+/* phương thức thanh toán */
 .paymentMethods {
   margin: 20px 0;
 }
@@ -90,6 +90,12 @@
   width: 48%;
   box-sizing: border-box;
   margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.selected {
+  border: 2px solid black;
+  
 }
 
 .paymentOption img {
