@@ -6,6 +6,7 @@ import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 
 const locgia = [
   { id: "allsp/underTwomillion", title: "DƯỚI 2 TRIỆU" },
@@ -26,10 +27,31 @@ export default function Header() {
   const [inputData, setInputData] = useState("");
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
+  const [user, setUser] = useState(null);
   useEffect(() => {
     setIsMounted(true);
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+    if (token) {
+      const decoded = jwtDecode(token);
+      fetchUserDetails(decoded._id);
+    }
   }, []);
-
+  const fetchUserDetails = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:5000/users/${userId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch user details");
+      }
+      const userData = await response.json();
+      setUser(userData);
+      console.log(userData);
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  };
   const handleSearch = () => {
     if (inputData && isMounted) {
       router.push(`/components/search?query=${inputData}`);
@@ -103,11 +125,24 @@ export default function Header() {
               </span>
             </div>
 
-            <div className={cx("user")}>
-              <Link href="/components/login">
-                <FontAwesomeIcon icon={faUser} style={{ color: "#ffffff" }} />
-              </Link>
-            </div>
+            {user ? (
+              <div className={cx("user")}>
+                <Link href={`/components/user/${user.user._id}`}>
+                  <img
+                    src={`http://localhost:5000/images/${user.user.hinh_anh}`}
+                    width="300"
+                    height="363"
+                    style={{ display: "inline-block", opacity: "1" }}
+                  />
+                </Link>
+              </div>
+            ) : (
+              <div className={cx("user")}>
+                <Link href="/components/login">
+                  <FontAwesomeIcon icon={faUser} style={{ color: "#ffffff" }} />
+                </Link>
+              </div>
+            )}
 
             <div className={cx("cart")}>
               <Link href="/components/giohang">

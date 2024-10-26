@@ -35,14 +35,14 @@ const CartPage = () => {
   return (
     <>
       <nav className={styles.nav}>
-        <div class={styles.container}>
-          <div class={styles.content}>
-            <div class={styles.cartcontainer}>
+        <div className={styles.container}>
+          <div className={styles.content}>
+            <div className={styles.cartcontainer}>
               <h2>Giỏ hàng</h2>
               <table className={styles.carttable}>
                 <thead>
                   <tr>
-                    <th colspan="2" className={styles.sp}>
+                    <th colSpan="2" className={styles.sp}>
                       Sản phẩm
                     </th>
                     <th>Số lượng</th>
