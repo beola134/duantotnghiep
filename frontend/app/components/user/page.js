@@ -4,7 +4,7 @@ import styles from "./user.module.css";
 import Link from "next/link";
 
 const User = () => {
-  const userId = "7a315ae7-8030-4feb-bc17-2aa0bde8525c"; // ID người dùng hiện tại
+  const userId = params._id // ID người dùng hiện tại
   const [userData, setUserData] = useState({
     ten_dang_nhap: "",
     ho_ten: "",
