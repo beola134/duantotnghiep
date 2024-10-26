@@ -7,8 +7,8 @@ export default function ThanhToan() {
   const [user, setUser] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
-  const [voucher, setVoucher] = useState("");
-  const [discount, setDiscount] = useState(0);
+  const [discountCode, setDiscountCode] = useState("");
+  const [discountValue, setDiscountValue] = useState(0);
 
   useEffect(() => {
     const token = document.cookie
@@ -76,34 +76,68 @@ export default function ThanhToan() {
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
   };
 
-  // mã voucher
+  // hàm xử lí khi chưa đăng nhập
 
-  const fetchVoucher = async () => {
+  const userLogin = async () => {
+    if (!user) {
+      alert("Vui lòng đăng nhập để tiếp tục thanh toán");
+      window.location.href = "/components/login";
+      return;
+    }
+    const orderDetails = {
+      dia_chi: user.dia_chi,
+      id_nguoi_dung: user._id,
+      id_phuong_thuc_thanh_toan: null,
+      ghi_chu: "",
+      chi_tiet_don_hang: cartItems.map((item) => ({
+        id_san_pham: item._id,
+        so_luong: item.so_luong,
+      })),
+      ma_voucher: discount || null,
+    };
     try {
-      const response = await fetch("http://localhost:5000/voucher/ma_voucher", {
+      const response = await fetch("http://localhost:5000/donhang/donhang", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ma_voucher: voucher }),
+        body: JSON.stringify(orderDetails),
       });
       if (!response.ok) {
-        throw new Error("Lỗi lấy thông tin voucher");
+        throw new Error("Lỗi tạo đơn hàng");
       }
       const data = await response.json();
-      setDiscount(data.gia_tri);
+      console.log(data);
+      alert(data.message);
+      localStorage.removeItem("cartItems");
+      setCartItems([]);
     } catch (error) {
-      console.log(error);
+      throw new Error("Lỗi tạo đơn hàng");
     }
   };
 
-  useEffect(() => {
-    if (voucher) {
-      fetchVoucher();
-    }
-  }, [voucher]);
+  // hàm xử lí voucher
 
-  const totalWithDiscount = totalAmount - discount;
+  const applyDiscount = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/voucher/ma_voucher`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ma_voucher: discountCode }),
+      });
+      if (!response.ok) {
+        throw new Error("Mã giảm giá không hợp lệ");
+      }
+      const data = await response.json();
+      setDiscountValue(data.gia_tri);
+      setDiscountCode(discountCode);
+    } catch (error) {
+      alert(error.message);
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -197,8 +231,13 @@ export default function ThanhToan() {
 
           <aside className={styles.cartSummary}>
             <div className={styles.discountCode}>
-              <input type="text" placeholder="Nhập mã..." />
-              <button onClick={fetchVoucher}>Áp dụng</button>
+              <input
+                type="text"
+                placeholder="Nhập mã..."
+                value={discountCode}
+                onChange={(e) => setDiscountCode(e.target.value)}
+              />
+              <button onClick={applyDiscount}>Áp dụng</button>
               <hr />
             </div>
             <div className={styles.orderSummary}>
@@ -206,13 +245,15 @@ export default function ThanhToan() {
                 Tổng tiền hàng: <span className={styles.price}>{totalAmount.toLocaleString("vi-VN")}₫</span>
               </p>
               <p>
-                Ưu đãi: <span className={styles.price}>-{discount.toLocaleString("vi-VN")}₫</span>
+                Ưu đãi: <span className={styles.price}>-{(discountValue || 0).toLocaleString("vi-VN")}₫</span>
               </p>
               <p className={styles.totalAmount}>
-                Tổng thanh toán: <span className={styles.price}>{totalWithDiscount.toLocaleString("vi-VN")}₫</span>
+                Tổng thanh toán: <span className={styles.price}>0₫</span>
               </p>
             </div>
-            <button className={styles.checkoutButton}>Thanh toán</button>
+            <button className={styles.checkoutButton} onClick={userLogin}>
+              Thanh toán
+            </button>
           </aside>
         </div>
       </div>
