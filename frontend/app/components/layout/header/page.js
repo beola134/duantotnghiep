@@ -36,29 +36,29 @@ export default function Header() {
     }
   };
 
-      useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const response = await fetch("http://localhost:5000/cate/allcate");
-            if (!response.ok) {
-              throw new Error("Lỗi không thể tải dữ liệu");
-            }
-            const data = await response.json();
-            setCategory(data.cates);
-          } catch (error) {
-            setError(error.message);
-          } finally {
-            setLoading(false);
-          }
-        };
-        fetchData();
-      }, []);
-      if (loading) {
-        return <p>Loading...</p>;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/cate/allcate");
+        if (!response.ok) {
+          throw new Error("Lỗi không thể tải dữ liệu");
+        }
+        const data = await response.json();
+        setCategory(data.cates);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
-      if (error) {
-        return <p>Error:{error}</p>;
-      }
+    };
+    fetchData();
+  }, []);
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (error) {
+    return <p>Error:{error}</p>;
+  }
 
   return (
     <>
@@ -85,8 +85,7 @@ export default function Header() {
               type="button"
               className={cx("button")}
               onClick={handleSearch}
-              disabled={!inputData}
-            >
+              disabled={!inputData}>
               <i className="fas fa-search" style={{ color: "white" }}></i>
             </button>
           </div>
@@ -104,17 +103,16 @@ export default function Header() {
               </span>
             </div>
 
-                <div className={cx("user")}>
-                  <Link href="/components/login">
-                    <FontAwesomeIcon
-                      icon={faUser}
-                      style={{ color: "#ffffff" }}
-                    />
-                  </Link>
-                </div>
+            <div className={cx("user")}>
+              <Link href="/components/login">
+                <FontAwesomeIcon icon={faUser} style={{ color: "#ffffff" }} />
+              </Link>
+            </div>
 
             <div className={cx("cart")}>
-              <i className="fas fa-shopping-cart"></i>
+              <Link href="/components/giohang">
+                <i className="fas fa-shopping-cart"></i>
+              </Link>
               <span className={cx("cart-count")}>3</span>
             </div>
           </div>
@@ -132,8 +130,7 @@ export default function Header() {
           <li className={cx("nav-list-li")}>
             <Link
               href={"/components/thuonghieu"}
-              className={cx("nav-list-li-a")}
-            >
+              className={cx("nav-list-li-a")}>
               THƯƠNG HIỆU
             </Link>
             <ul className={cx("dropdown-menu")}>
@@ -141,8 +138,7 @@ export default function Header() {
                 <li className={cx("dropdown-menu-li")} key={item._id}>
                   <Link
                     href={`/components/chitietdanhmuc/${item._id}`}
-                    style={{ color: "white" }}
-                  >
+                    style={{ color: "white" }}>
                     <img
                       className={cx("dropdown-menu-img")}
                       src={`http://localhost:5000/images/${item.hinh_anh}`}
@@ -166,12 +162,10 @@ export default function Header() {
                     <li
                       className={cx("dropdown-menu-dhn-li2")}
                       key={item._id}
-                      style={{ fontSize: "10px" }}
-                    >
+                      style={{ fontSize: "10px" }}>
                       <Link
                         href={`/components/chitietdanhmuc/${item._id}`}
-                        className={cx("cxcx")}
-                      >
+                        className={cx("cxcx")}>
                         {item.danh_muc}
                       </Link>
                     </li>
@@ -179,81 +173,73 @@ export default function Header() {
                 </ul>
               </li>
 
-                  {/* Danh sách mức giá */}
-                  <li className={cx("dropdown-menu-dhn-li1")}>
-                    <h3 className={cx("dropdown-menu-dhn-h3")}>MỨC GIÁ</h3>
-                    <ul className={cx("dropdown-menu-dhn-ul")}>
-                      {locgia.map((item) => (
-                        <li
-                          key={item.id}
-                          className={cx("dropdown-menu-dhn-li2")}>
-                          <Link href="" className={cx("cxcx")}>
-                            {item.title}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
+              {/* Danh sách mức giá */}
+              <li className={cx("dropdown-menu-dhn-li1")}>
+                <h3 className={cx("dropdown-menu-dhn-h3")}>MỨC GIÁ</h3>
+                <ul className={cx("dropdown-menu-dhn-ul")}>
+                  {locgia.map((item) => (
+                    <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
+                      <Link href="" className={cx("cxcx")}>
+                        {item.title}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </li>
 
-                  {/* Danh sách loại máy */}
-                  <li className={cx("dropdown-menu-dhn-li1")}>
-                    <h3 className={cx("dropdown-menu-dhn-h3")}>LOẠI MÁY</h3>
-                    <ul className={cx("dropdown-menu-dhn-ul")}>
-                      <li className={cx("dropdown-menu-dhn-li2")}>
-                        AUTOMATIC (MÁY CƠ TỰ ĐỘNG)
-                      </li>
-                      <li className={cx("dropdown-menu-dhn-li2")}>
-                        QUARTZ (MÁY PIN - ĐIỆN TỬ)
-                      </li>
-                      <li className={cx("dropdown-menu-dhn-li2")}>
-                        ECO-DRIVE (NĂNG LƯỢNG ÁNH SÁNG)
-                      </li>
-                      <li className={cx("dropdown-menu-dhn-li2")}>
-                        QUARTZ CHRONOGRAPH (MÁY BẤM GIỜ THỂ THAO)
-                      </li>
-                    </ul>
+              {/* Danh sách loại máy */}
+              <li className={cx("dropdown-menu-dhn-li1")}>
+                <h3 className={cx("dropdown-menu-dhn-h3")}>LOẠI MÁY</h3>
+                <ul className={cx("dropdown-menu-dhn-ul")}>
+                  <li className={cx("dropdown-menu-dhn-li2")}>
+                    AUTOMATIC (MÁY CƠ TỰ ĐỘNG)
                   </li>
-
-                  {/* Danh sách chất liệu dây */}
-                  <li className={cx("dropdown-menu-dhnu-li1")}>
-                    <h3 className={cx("dropdown-menu-dhnu-h3")}>
-                      CHẤT LIỆU DÂY
-                    </h3>
-                    <ul className={cx("dropdown-menu-dhnu-ul")}>
-                      <li className={cx("dropdown-menu-dhnu-li2")}>DÂY DA</li>
-                      <li className={cx("dropdown-menu-dhnu-li2")}>
-                        THÉP KHÔNG GỈ 316L
-                      </li>
-                      <li className={cx("dropdown-menu-dhnu-li2")}>
-                        THÉP KHÔNG GỈ 316L MẠ VÀNG CÔNG NGHỆ PVD
-                      </li>
-                      <li className={cx("dropdown-menu-dhnu-li2")}>
-                        THÉP KHÔNG GỈ 316L DẠNG LƯỚI
-                      </li>
-                      <li className={cx("dropdown-menu-dhnu-li2")}>
-                        THÉP KHÔNG GỈ 316L DẠNG LẮC
-                      </li>
-                      <li className={cx("dropdown-menu-dhnu-li2")}>DÂY VẢI</li>
-                    </ul>
+                  <li className={cx("dropdown-menu-dhn-li2")}>
+                    QUARTZ (MÁY PIN - ĐIỆN TỬ)
                   </li>
-
-                  {/* Danh sách phong cách */}
-                  <li className={cx("dropdown-menu-dhn-li1")}>
-                    <h3 className={cx("dropdown-menu-dhn-h3")}>PHONG CÁCH</h3>
-                    <ul className={cx("dropdown-menu-dhn-ul")}>
-                      <li className={cx("dropdown-menu-dhn-li2")}>
-                        SANG TRỌNG
-                      </li>
-                      <li className={cx("dropdown-menu-dhn-li2")}>THỂ THAO</li>
-                      <li className={cx("dropdown-menu-dhn-li2")}>QUÂN ĐỘI</li>
-                      <li className={cx("dropdown-menu-dhn-li2")}>
-                        THỜI TRANG
-                      </li>
-                      <li className={cx("dropdown-menu-dhn-li2")}>HIỆN ĐẠI</li>
-                    </ul>
+                  <li className={cx("dropdown-menu-dhn-li2")}>
+                    ECO-DRIVE (NĂNG LƯỢNG ÁNH SÁNG)
+                  </li>
+                  <li className={cx("dropdown-menu-dhn-li2")}>
+                    QUARTZ CHRONOGRAPH (MÁY BẤM GIỜ THỂ THAO)
                   </li>
                 </ul>
               </li>
+
+              {/* Danh sách chất liệu dây */}
+              <li className={cx("dropdown-menu-dhnu-li1")}>
+                <h3 className={cx("dropdown-menu-dhnu-h3")}>CHẤT LIỆU DÂY</h3>
+                <ul className={cx("dropdown-menu-dhnu-ul")}>
+                  <li className={cx("dropdown-menu-dhnu-li2")}>DÂY DA</li>
+                  <li className={cx("dropdown-menu-dhnu-li2")}>
+                    THÉP KHÔNG GỈ 316L
+                  </li>
+                  <li className={cx("dropdown-menu-dhnu-li2")}>
+                    THÉP KHÔNG GỈ 316L MẠ VÀNG CÔNG NGHỆ PVD
+                  </li>
+                  <li className={cx("dropdown-menu-dhnu-li2")}>
+                    THÉP KHÔNG GỈ 316L DẠNG LƯỚI
+                  </li>
+                  <li className={cx("dropdown-menu-dhnu-li2")}>
+                    THÉP KHÔNG GỈ 316L DẠNG LẮC
+                  </li>
+                  <li className={cx("dropdown-menu-dhnu-li2")}>DÂY VẢI</li>
+                </ul>
+              </li>
+
+              {/* Danh sách phong cách */}
+              <li className={cx("dropdown-menu-dhn-li1")}>
+                <h3 className={cx("dropdown-menu-dhn-h3")}>PHONG CÁCH</h3>
+                <ul className={cx("dropdown-menu-dhn-ul")}>
+                  <li className={cx("dropdown-menu-dhn-li2")}>SANG TRỌNG</li>
+                  <li className={cx("dropdown-menu-dhn-li2")}>THỂ THAO</li>
+                  <li className={cx("dropdown-menu-dhn-li2")}>QUÂN ĐỘI</li>
+                  <li className={cx("dropdown-menu-dhn-li2")}>THỜI TRANG</li>
+                  <li className={cx("dropdown-menu-dhn-li2")}>HIỆN ĐẠI</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
 
           {/*Đồng hồ nữ */}
           <li className={cx("nav-list-li")}>
@@ -268,12 +254,10 @@ export default function Header() {
                     <li
                       className={cx("dropdown-menu-dhn-li2")}
                       key={item._id}
-                      style={{ fontSize: "10px" }}
-                    >
+                      style={{ fontSize: "10px" }}>
                       <Link
                         href={`/components/chitietdanhmuc/${item._id}`}
-                        className={cx("cxcx")}
-                      >
+                        className={cx("cxcx")}>
                         {item.danh_muc}
                       </Link>
                     </li>
@@ -287,8 +271,7 @@ export default function Header() {
                     <li key={item.gia} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
                         href={`/components/sanphamlocgia/${item.gia}`}
-                        className={cx("cxcx")}
-                      >
+                        className={cx("cxcx")}>
                         {item.title}
                       </Link>
                     </li>
@@ -357,12 +340,10 @@ export default function Header() {
                     <li
                       className={cx("dropdown-menu-dhn-li2")}
                       key={item._id}
-                      style={{ fontSize: "10px" }}
-                    >
+                      style={{ fontSize: "10px" }}>
                       <Link
                         href={`/components/chitietdanhmuc/${item._id}`}
-                        className={cx("cxcx")}
-                      >
+                        className={cx("cxcx")}>
                         {item.danh_muc}
                       </Link>
                     </li>
@@ -376,8 +357,7 @@ export default function Header() {
                     <li key={item.gia} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
                         href={`/components/sanphamlocgia/${item.gia}`}
-                        className={cx("cxcx")}
-                      >
+                        className={cx("cxcx")}>
                         {item.title}
                       </Link>
                     </li>
@@ -437,8 +417,7 @@ export default function Header() {
           <li className={cx("nav-list-li")}>
             <Link
               href="/components/donghotreotuong"
-              className={cx("nav-list-li-a")}
-            >
+              className={cx("nav-list-li-a")}>
               ĐỒNG HỒ TREO TƯỜNG
             </Link>
             <ul className={cx("dropdown-menu-dhtt")}>
@@ -478,64 +457,56 @@ export default function Header() {
           <li className={cx("nav-list-li")}>
             <Link
               href="/components/sanphamkhac"
-              className={cx("nav-list-li-a")}
-            >
+              className={cx("nav-list-li-a")}>
               SẢN PHẨM KHÁC
             </Link>
             <ul className={cx("dropdown-menu-doc")}>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghothuysi"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   ĐỒNG HỒ THỤY SĨ
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghonhatban"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   ĐỒNG HỒ NHẬT BẢN
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/daydongho"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   DÂY TREO ĐỒNG HỒ
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/trangsucCk"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   TRANG SỨC CALVIN KLEIN
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/trangsucDW"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   TRANG SỨC DW
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghobaothuc"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   ĐỒNG HỒ BÁO THỨC
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghodeban"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   ĐỒNG HỒ ĐỂ BÀN
                 </Link>
               </li>
