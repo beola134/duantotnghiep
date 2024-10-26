@@ -1,21 +1,22 @@
 "use client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./header.module.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Link from "next/link";
 import { useState } from "react";
 export default function Menu() {
-    const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
-    const [isOrderDropdownOpen, setOrderDropdownOpen] = useState(false);
-  
-    const toggleProductDropdown = () => {
-      setProductDropdownOpen(!isProductDropdownOpen);
-      setOrderDropdownOpen(false); // Đóng dropdown khác khi mở cái này
-    };
-  
-    const toggleOrderDropdown = () => {
-      setOrderDropdownOpen(!isOrderDropdownOpen);
-      setProductDropdownOpen(false); // Đóng dropdown khác khi mở cái này
-    };
+  const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
+  const [isOrderDropdownOpen, setOrderDropdownOpen] = useState(false);
+
+  const toggleProductDropdown = () => {
+    setProductDropdownOpen(!isProductDropdownOpen);
+    setOrderDropdownOpen(false); // Đóng dropdown khác khi mở cái này
+  };
+
+  const toggleOrderDropdown = () => {
+    setOrderDropdownOpen(!isOrderDropdownOpen);
+    setProductDropdownOpen(false); // Đóng dropdown khác khi mở cái này
+  };
   return (
     <div className={styles.SidebarContainer}>
       <section id={styles.sidebar}>
@@ -61,7 +62,7 @@ export default function Menu() {
               Quản lý bình luận
             </Link>
           </li>
-          <li className={styles.divider} data-text="Tài khoản" >
+          <li className={styles.divider} data-text="Tài khoản">
             Tài khoản
           </li>
           <li>
@@ -69,11 +70,12 @@ export default function Menu() {
               <i className={`bx bxs-user-account ${styles.icon}`}></i>
               Tài khoản
               <i className={`bx bx-chevron-right ${styles.iconRight}`}></i>
-              
             </Link>
-            <ul className={`${styles.sideDropdown} ${
+            <ul
+              className={`${styles.sideDropdown} ${
                 isProductDropdownOpen ? styles.show : ""
-              }`}>
+              }`}
+            >
               <li>
                 <Link href="/components/taikhoan">Quản lý tài khoản</Link>
               </li>
@@ -94,9 +96,11 @@ export default function Menu() {
               Đơn Hàng
               <i className={`bx bx-chevron-right ${styles.iconRight}`}></i>
             </Link>
-            <ul className={`${styles.sideDropdown} ${
+            <ul
+              className={`${styles.sideDropdown} ${
                 isOrderDropdownOpen ? styles.show : ""
-              }`}>
+              }`}
+            >
               <li>
                 <Link href="quanlydonhang.html">Quản lý đơn hàng</Link>
               </li>
@@ -136,43 +140,47 @@ export default function Menu() {
             <span className={styles.badge}>8</span>
           </a>
           <span className={styles.divider}></span>
-          <div className={`${styles.dropdown} ${styles.profile}`}>
-            <a
-              className={`${styles.dropdownToggle} d-flex align-items-center`}
-              href="#"
-              id="profileDropdown"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVvcGxlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-                alt=""
-                className={styles.roundedCircle}
-                width="40"
-                height="40"
-              />
-            </a>
-            <ul className={`${styles.dropdownMenu} dropdown-menu-end`} aria-labelledby="profileDropdown">
-              <li>
-                <a className={styles.dropdownItem} href="#">
-                  <i className={`bx bxs-user-circle ${styles.icon}`}></i>
-                  Profile
-                </a>
-              </li>
-              <li>
-                <a className={styles.dropdownItem} href="#">
-                  <i className={`bx bxs-cog`}></i> Settings
-                </a>
-              </li>
-              <li>
-                <a className={styles.dropdownItem} href="#">
-                  <i className={`bx bxs-log-out-circle`}></i>Đăng xuất
-                </a>
-              </li>
-            </ul>
-          </div>
+          <div className="dropdown profile">
+      <a
+        className="dropdown-toggle d-flex align-items-center"
+        href="#"
+        id="profileDropdown"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <img
+          src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVvcGxlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+          alt=""
+          className={`${styles.roundedCircle}`}
+          width="40"
+          height="40"
+        />
+      </a>
+      <ul
+        className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`}
+        aria-labelledby="profileDropdown"
+      >
+        <li>
+          <a className={`dropdown-item ${styles.dropdownItem}`} href="#">
+            <i className="bx bxs-user-circle icon"></i>
+            Profile
+          </a>
+        </li>
+        <li>
+          <a className={`dropdown-item ${styles.dropdownItem}`} href="#">
+            <i className="bx bxs-cog"></i> Settings
+          </a>
+        </li>
+        <li>
+          <a className={`dropdown-item ${styles.dropdownItem}`} href="#">
+            <i className="bx bxs-log-out-circle"></i>
+            Logout
+          </a>
+        </li>
+      </ul>
+    </div>
         </nav>
-        </section>
-   </div>
+      </section>
+    </div>
   );
 }

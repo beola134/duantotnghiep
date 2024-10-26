@@ -1,10 +1,12 @@
-import DonghoNam from "./components/donghonam/page";
+
 import Main from "./components/layout/trangchu/page";
+import ThanhToan from "./components/thanhtoan/page";
 
 export default function Home() {
   return (
     <>
-      <Main/>
+    <ThanhToan/>
+      {/* <Main/> */}
     </>
   );
 }
