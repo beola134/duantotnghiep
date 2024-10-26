@@ -79,7 +79,7 @@ i {
   right: 0;
   display: none;
 }
-#fixedBar #barInner a {
+#fixedBar #barInner button {
   background: #8d7a66bf;
   display: block;
   text-decoration: none;
@@ -93,6 +93,8 @@ i {
   border-radius: 50%;
   line-height: 42px;
   margin-right: 8px;
+  border: none;
+  cursor: pointer;
 }
 #fixedBar #barInner i {
   color: #fff;
@@ -149,4 +151,3 @@ i {
   vertical-align: top;
   content: "";
 }
-
