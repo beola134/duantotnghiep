@@ -5,7 +5,7 @@ const Category = require("../models/cate");
 const { Sequelize,Op } = require("sequelize");
 
 // xử lí phần trăm giá giảm
-exports.filtersanphamdongho = async (req, res) => {
+  exports.filtersanphamdongho = async (req, res) => {
   try {
     const {
       gioi_tinh,
@@ -449,9 +449,515 @@ exports.filtersanphamdongho = async (req, res) => {
     console.log("Error: ", error);
     res.status(500).json({ error: error.message });
   }
+  }
+
+// xử lí lọc them dây đồng hồ
+  exports.filterDayDongHo = async (req, res) => {
+  try {
+    const {
+      size_day,
+      mau_day,
+      thuong_hieu,
+      chat_lieu_day,
+      danh_muc,
+      limit = 20,
+      page = 1,
+    } = req.query;
+    console.log(req.query);
+      
+    let filter = {
+      [Op.and]: [],
+    };
+    filter.loai = {
+      [Op.notIn]: [
+        "Vòng tay",
+        "Trang sức",
+        "Đồng hồ để bàn",
+        "Đồng hồ báo thức",
+      ],
+    };
+    if (size_day) {
+      switch (size_day) {
+        case "26-24mm":
+          filter.size_day = "26-24mm";
+          break;
+        case "26-22mm":
+          filter.size_day = "26-22mm";
+          break;
+        case "24-22mm":
+          filter.size_day = "24-22mm";
+          break;
+        case "24-20mm":
+          filter.size_day = "24-20mm";
+          break;
+        case "22-20mm":
+          filter.size_day = "22-20mm";
+          break;
+        case "21-18mm":
+          filter.size_day = "21-18mm";
+          break;
+        case "20-18mm":
+          filter.size_day = "20-18mm";
+          break;
+        case "19-18mm":
+          filter.size_day = "19-18mm";
+          break;
+        case "18-16mm":
+          filter.size_day = "18-16mm";
+          break;
+        case "16-14mm":
+          filter.size_day = "16-14mm";
+          break;
+        case "14-12mm":
+          filter.size_day = "14-12mm";
+          break;
+        case "12-10mm":
+          filter.size_day = "12-10mm";
+          break;
+        default:
+          filter.size_day = size_day;
+          break;
+      }
+    }
+
+    if (mau_day) {
+      switch (mau_day) {
+        case "Nâu (Brown)":
+          filter.mau_day = "Nâu (Brown)";
+          break;
+        case "Nâu (Tan)":
+          filter.mau_day = "Nâu (Tan)";
+          break;
+        case "Xanh (Green)":
+          filter.mau_day = "Xanh (Green)";
+          break;
+        case "Xanh (Navy)":
+          filter.mau_day = "Xanh (Navy)";
+          break;
+        case "Đen":
+          filter.mau_day = "Đen";
+          break;
+        default:
+          filter.mau_day = mau_day; // fallback option
+          break;
+      }
+    }
+    if (thuong_hieu) {
+      switch (thuong_hieu) {
+        case "ZRC-Rochet":
+          filter.thuong_hieu = "ZRC-Rochet";
+          break;
+        case "Longines":
+          filter.thuong_hieu = "Longines";
+          break;
+        case "Seiko":
+          filter.thuong_hieu = "Seiko";
+          break;
+        case "Tissot":
+          filter.thuong_hieu = "Tissot";
+          break;
+        case "Daniel Wellington":
+          filter.thuong_hieu = "Daniel Wellington";
+          break;
+        default:
+          filter.thuong_hieu = thuong_hieu;
+          break;
+      }
+    }
+    if (chat_lieu_day) {
+      switch (chat_lieu_day) {
+        case "Dây cao su":
+          filter.chat_lieu_day = "Dây cao su";
+          break;
+        case "Dây da":
+          filter.chat_lieu_day = "Dây da";
+          break;
+        case "Dây Silicone":
+          filter.chat_lieu_day = "Dây Silicone";
+          break;
+        case "Dây dù":
+          filter.chat_lieu_day = "Dây dù";
+          break;
+
+          filter.chat_lieu_day = "Nhựa";
+          break;
+        default:
+          filter.chat_lieu_day = chat_lieu_day;
+          break;
+      }
+    }
+    if (danh_muc) {
+      const category = await Cate.findOne({ where: { danh_muc: danh_muc } });
+      console.log("category result", category);
+      if (category) {
+        filter.id_danh_muc = category._id;
+      } else {
+        return res.status(404).json({ message: "Danh mục không tồn tại" })
+      }
+    }
+    const productsCount = await Product.count({ where: filter, });
+    //sp nhỏ hơn = 20nthif không phần trang
+    if (productsCount <= 20) {
+      const products = await Product.findAll({ where: filter });
+      return res.json({products, totalProducts: productsCount});
+    }
+    //nếu sp lớn 20 thì phân trang
+    const offset = (page - 1) * limit;
+    const { rows: products, count: totalProducts } = await Product.findAndCountAll({
+      where: filter,
+      limit,
+      offset,
+    })
+    // hàm nếu sp lớn hơn thì phân trang
+    const totalPages = Math.ceil(totalProducts / limit);
+      res.json({
+        products,
+        currentPage: page,
+        totalPages,
+        totalProducts,
+      });
+  } catch (error) {
+    console.log("Error: ", error);
+    res.status(500).json({ error: error.message });
+  }
 }
+// xử lí lọc them đồng hồ để bàn
+  exports.filterDeBan = async (req, res) => {
+  try {
+    const {
+      thuong_hieu,
+      chat_lieu_vo,
+      danh_muc,
+      limit = 20,
+      page = 1,
+    } = req.query;
+    console.log(req.query);
 
+    let filter = {
+      [Op.and]: [],
+    };
+    filter.loai = {
+      [Op.notIn]: ["Vòng tay", "Trang sức", "Đồng hồ báo thức"],
+    };
 
+    if (thuong_hieu) {
+      switch (thuong_hieu) {
+        case "SEIKO":
+          filter.thuong_hieu = "SEIKO";
+          break;
+        case "RHYTHM":
+          filter.thuong_hieu = "RHYTHM";
+          break;
+        default:
+          filter.thuong_hieu = thuong_hieu;
+          break;
+      }
+    }
+    if (chat_lieu_vo) {
+      switch (chat_lieu_vo) {
+        case "Nhựa":
+          filter.chat_lieu_vo = "Nhựa";
+          break;
+        case "Gỗ tự nhiên":
+          filter.chat_lieu_vo = "Gỗ tự nhiên";
+          break;
+        case "Nhôm":
+          filter.chat_lieu_vo = "Nhôm";
+          break;
+        case "Gỗ":
+          filter.chat_lieu_vo = "Gỗ";
+          break;
+        default:
+          filter.chat_lieu_vo = chat_lieu_vo;
+          break;
+      }
+    }
+    if (danh_muc) {
+      const category = await Cate.findOne({ where: { danh_muc: danh_muc } });
+      console.log("category result", category);
+      if (category) {
+        filter.id_danh_muc = category._id;
+      } else {
+        return res.status(404).json({ message: "Danh mục không tồn tại" });
+      }
+    }
+    const productsCount = await Product.count({ where: filter });
+    //sp nhỏ hơn = 20nthif không phần trang
+    if (productsCount <= 20) {
+      const products = await Product.findAll({ where: filter });
+      return res.json({ products, totalProducts: productsCount });
+    }
+    //nếu sp lớn 20 thì phân trang
+    const offset = (page - 1) * limit;
+    const { rows: products, count: totalProducts } =
+      await Product.findAndCountAll({
+        where: filter,
+        limit,
+        offset,
+      });
+    // hàm nếu sp lớn hơn thì phân trang
+    const totalPages = Math.ceil(totalProducts / limit);
+    res.json({
+      products,
+      currentPage: page,
+      totalPages,
+      totalProducts,
+    });
+  } catch (error) {
+    console.log("Error: ", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// xử lí lọc them đồng hồ báo thức
+  exports.filterBaoThuc = async (req, res) => {
+  try {
+    const {
+      thuong_hieu,
+      chat_lieu_vo,
+      danh_muc,
+      limit = 20,
+      page = 1,
+    } = req.query;
+    console.log(req.query);
+
+    let filter = {
+      [Op.and]: [],
+    };
+    filter.loai = {
+      [Op.notIn]: ["Vòng tay", "Trang sức",],
+    };
+
+    if (thuong_hieu) {
+      switch (thuong_hieu) {
+        case "SEIKO":
+          filter.thuong_hieu = "SEIKO";
+          break;
+        case "RHYTHM":
+          filter.thuong_hieu = "RHYTHM";
+          break;
+        default:
+          filter.thuong_hieu = thuong_hieu;
+          break;
+      }
+    }
+    if (chat_lieu_vo) {
+      switch (chat_lieu_vo) {
+        case "Nhựa":
+          filter.chat_lieu_vo = "Nhựa";
+          break;
+        case "Nhôm":
+          filter.chat_lieu_vo = "Nhôm";
+          break;
+        default:
+          filter.chat_lieu_vo = chat_lieu_vo;
+          break;
+      }
+    }
+    if (danh_muc) {
+      const category = await Cate.findOne({ where: { danh_muc: danh_muc } });
+      console.log("category result", category);
+      if (category) {
+        filter.id_danh_muc = category._id;
+      } else {
+        return res.status(404).json({ message: "Danh mục không tồn tại" });
+      }
+    }
+    const productsCount = await Product.count({ where: filter });
+    //sp nhỏ hơn = 20nthif không phần trang
+    if (productsCount <= 20) {
+      const products = await Product.findAll({ where: filter });
+      return res.json({ products, totalProducts: productsCount });
+    }
+    //nếu sp lớn 20 thì phân trang
+    const offset = (page - 1) * limit;
+    const { rows: products, count: totalProducts } =
+      await Product.findAndCountAll({
+        where: filter,
+        limit,
+        offset,
+      });
+    // hàm nếu sp lớn hơn thì phân trang
+    const totalPages = Math.ceil(totalProducts / limit);
+    res.json({
+      products,
+      currentPage: page,
+      totalPages,
+      totalProducts,
+    });
+  } catch (error) {
+    console.log("Error: ", error);
+    res.status(500).json({ error: error.message });
+  }
+  };
+
+// xử lí lọc them đồng hồ TREO TƯỜNG
+  exports.filterTreoTuong = async (req, res) => {
+  try {
+    const {
+      thuong_hieu,
+      muc_gia,
+      chat_lieu_vo,
+      kieu_dang,
+      mau_mat,
+      danh_muc,
+      limit = 20,
+      page = 1,
+    } = req.query;
+    console.log(req.query);
+
+    let filter = {
+      [Op.and]: [],
+    };
+    filter.loai = {
+      [Op.notIn]: ["Vòng tay", "Trang sức",],
+    };
+
+    if (thuong_hieu) {
+      switch (thuong_hieu) {
+        case "SEIKO":
+          filter.thuong_hieu = "SEIKO";
+          break;
+        case "RHYTHM":
+          filter.thuong_hieu = "RHYTHM";
+          break;
+        default:
+          filter.thuong_hieu = thuong_hieu;
+          break;
+      }
+    }
+    if (muc_gia) {
+       let priceRange;
+       switch (muc_gia) {
+         case "Dưới 2 triệu":
+           priceRange = { [Op.lt]: 2000000 };
+           break;
+         case "Từ 2 triệu đến 5 triệu":
+           priceRange = { [Op.between]: [2000000, 5000000] };
+           break;
+         case "Trên 5 triệu":
+           priceRange = { [Op.gte]: 5000000 };
+           break;
+         default:
+           priceRange = null;
+           break;
+       }
+       if (priceRange) {
+         filter[Op.or] = [
+           {
+             gia_giam: { ...priceRange, [Op.gt]: 0 },
+           },
+           {
+             [Op.and]: [
+               {
+                 gia_giam: {
+                   [Op.or]: [0, null],
+                 },
+               },
+               {
+                 gia_san_pham: priceRange,
+               },
+             ],
+           },
+         ];
+       }
+    }
+    if (chat_lieu_vo) {
+      switch (chat_lieu_vo) {
+        case "Thủy Tinh":
+          filter.chat_lieu_vo = "Thủy Tinh";
+          break;
+        case "Nhựa":
+          filter.chat_lieu_vo = "Nhựa";
+          break;
+        case "Gỗ":
+          filter.chat_lieu_vo = "Gỗ";
+          break;
+        default:
+          filter.chat_lieu_vo = chat_lieu_vo;
+          break;
+      }
+    }
+    if (kieu_dang) {
+       switch (kieu_dang) {
+         case "Mặt vuông":
+           filter.kieu_dang = "Mặt vuông";
+           break;
+         case "Mặt tròn":
+           filter.kieu_dang = "Mặt tròn";
+           break;
+         case "Mặt chữ nhật":
+           filter.kieu_dang = "Mặt chữ nhật";
+           break;
+         case "Mặt Oval":
+           filter.kieu_dang = "Mặt Oval";
+           break;
+         default:
+           filter.kieu_dang = kieu_dang;
+           break;
+       }
+    }
+    if (mau_mat) {
+      switch (mau_mat) {
+        case "Trắng":
+          filter.mau_mat = "Trắng";
+          break;
+        case "Đen":
+          filter.mau_mat = "Đen";
+          break;
+        case "Xanh lam":
+          filter.mau_mat = "Xanh lam";
+          break;
+        case "Vàng":
+          filter.mau_mat = "Vàng";
+          break;
+        case "Đỏ":
+          filter.mau_mat = "Đỏ";
+          break;
+        case "Nâu":
+          filter.mau_mat = "Nâu";
+          break;
+        default:
+          filter.mau_mat = mau_mat;
+          break;
+      }
+    }
+    if (danh_muc) {
+      const category = await Cate.findOne({ where: { danh_muc: danh_muc } });
+      console.log("category result", category);
+      if (category) {
+        filter.id_danh_muc = category._id;
+      } else {
+        return res.status(404).json({ message: "Danh mục không tồn tại" });
+      }
+    }
+    const productsCount = await Product.count({ where: filter });
+    //sp nhỏ hơn = 20nthif không phần trang
+    if (productsCount <= 20) {
+      const products = await Product.findAll({ where: filter });
+      return res.json({ products, totalProducts: productsCount });
+    }
+    //nếu sp lớn 20 thì phân trang
+    const offset = (page - 1) * limit;
+    const { rows: products, count: totalProducts } =
+      await Product.findAndCountAll({
+        where: filter,
+        limit,
+        offset,
+      });
+    // hàm nếu sp lớn hơn thì phân trang
+    const totalPages = Math.ceil(totalProducts / limit);
+    res.json({
+      products,
+      currentPage: page,
+      totalPages,
+      totalProducts,
+    });
+  } catch (error) {
+    console.log("Error: ", error);
+    res.status(500).json({ error: error.message });
+  }
+  };
   // show sản phẩm mới nhất Nam
   exports.getNewProductsMale = async (req, res) => {
     try {
@@ -1098,5 +1604,7 @@ exports.filtersanphamdongho = async (req, res) => {
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  };
+};
+  
+
   

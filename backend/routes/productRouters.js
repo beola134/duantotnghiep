@@ -84,16 +84,20 @@ router.get("/tu50den100", productController.getProductstu50den100trieu);
 //http://localhost:5000/product/over100
 router.get("/over100", productController.getProductsOver100trieu);
 
-// show sản phẩm theo đồng hồ báo thức
-//http://localhost:5000/product/getBaoThuc"
-router.get("/getBaoThuc", productController.getBaoThuc);
+// show sản phẩm theo dây đồng hồ 
+//http://localhost:5000/product/filterDayDongHo"
+router.get("/filterDayDongHo", productController.filterDayDongHo);
 
 // show sản phẩm theo đồng hồ để bàn
-//http://localhost:5000/product/getDeBan"
-router.get("/getDeBan", productController.getDeBan);
+//http://localhost:5000/product/filterDeBan"
+router.get("/filterDeBan", productController.filterDeBan);
+
+// show sản phẩm theo đồng hồ báo thức
+//http://localhost:5000/product/filterBaoThuc"
+router.get("/filterBaoThuc", productController.filterBaoThuc);
 
 // show sản phẩm theo đồng hồ treo tuong
-//http://localhost:5000/product/getTreoTuong"
-router.get("/getTreoTuong", productController.getTreoTuong);
+//http://localhost:5000/product/filterTreoTuong"
+router.get("/filterTreoTuong", productController.filterTreoTuong);
 
 module.exports = router;
