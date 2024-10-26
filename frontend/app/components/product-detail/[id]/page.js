@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import styles from "./detail.module.css";
 
 import { useSelector, useDispatch } from "react-redux";
-import { addToCart } from "@/redux/slices/cartSilce";
+import { addToCart } from "../../redux/slices/cartSilce";
+
 export default function Detail({ params }) {
   const [product, setProducts] = useState(null);
   const [cate, setCate] = useState(null);

@@ -85,8 +85,7 @@ export default function Header() {
               type="button"
               className={cx("button")}
               onClick={handleSearch}
-              disabled={!inputData}
-            >
+              disabled={!inputData}>
               <i className="fas fa-search" style={{ color: "white" }}></i>
             </button>
           </div>
@@ -111,7 +110,9 @@ export default function Header() {
             </div>
 
             <div className={cx("cart")}>
-              <i className="fas fa-shopping-cart"></i>
+              <Link href="/components/giohang">
+                <i className="fas fa-shopping-cart"></i>
+              </Link>
               <span className={cx("cart-count")}>3</span>
             </div>
           </div>
@@ -129,8 +130,7 @@ export default function Header() {
           <li className={cx("nav-list-li")}>
             <Link
               href={"/components/thuonghieu"}
-              className={cx("nav-list-li-a")}
-            >
+              className={cx("nav-list-li-a")}>
               THƯƠNG HIỆU
             </Link>
             <ul className={cx("dropdown-menu")}>
@@ -138,8 +138,7 @@ export default function Header() {
                 <li className={cx("dropdown-menu-li")} key={item._id}>
                   <Link
                     href={`/components/chitietdanhmuc/${item._id}`}
-                    style={{ color: "white" }}
-                  >
+                    style={{ color: "white" }}>
                     <img
                       className={cx("dropdown-menu-img")}
                       src={`http://localhost:5000/images/${item.hinh_anh}`}
@@ -163,12 +162,10 @@ export default function Header() {
                     <li
                       className={cx("dropdown-menu-dhn-li2")}
                       key={item._id}
-                      style={{ fontSize: "10px" }}
-                    >
+                      style={{ fontSize: "10px" }}>
                       <Link
                         href={`/components/chitietdanhmuc/${item._id}`}
-                        className={cx("cxcx")}
-                      >
+                        className={cx("cxcx")}>
                         {item.danh_muc}
                       </Link>
                     </li>
@@ -257,12 +254,10 @@ export default function Header() {
                     <li
                       className={cx("dropdown-menu-dhn-li2")}
                       key={item._id}
-                      style={{ fontSize: "10px" }}
-                    >
+                      style={{ fontSize: "10px" }}>
                       <Link
                         href={`/components/chitietdanhmuc/${item._id}`}
-                        className={cx("cxcx")}
-                      >
+                        className={cx("cxcx")}>
                         {item.danh_muc}
                       </Link>
                     </li>
@@ -276,8 +271,7 @@ export default function Header() {
                     <li key={item.gia} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
                         href={`/components/sanphamlocgia/${item.gia}`}
-                        className={cx("cxcx")}
-                      >
+                        className={cx("cxcx")}>
                         {item.title}
                       </Link>
                     </li>
@@ -346,12 +340,10 @@ export default function Header() {
                     <li
                       className={cx("dropdown-menu-dhn-li2")}
                       key={item._id}
-                      style={{ fontSize: "10px" }}
-                    >
+                      style={{ fontSize: "10px" }}>
                       <Link
                         href={`/components/chitietdanhmuc/${item._id}`}
-                        className={cx("cxcx")}
-                      >
+                        className={cx("cxcx")}>
                         {item.danh_muc}
                       </Link>
                     </li>
@@ -365,8 +357,7 @@ export default function Header() {
                     <li key={item.gia} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
                         href={`/components/sanphamlocgia/${item.gia}`}
-                        className={cx("cxcx")}
-                      >
+                        className={cx("cxcx")}>
                         {item.title}
                       </Link>
                     </li>
@@ -426,8 +417,7 @@ export default function Header() {
           <li className={cx("nav-list-li")}>
             <Link
               href="/components/donghotreotuong"
-              className={cx("nav-list-li-a")}
-            >
+              className={cx("nav-list-li-a")}>
               ĐỒNG HỒ TREO TƯỜNG
             </Link>
             <ul className={cx("dropdown-menu-dhtt")}>
@@ -467,64 +457,56 @@ export default function Header() {
           <li className={cx("nav-list-li")}>
             <Link
               href="/components/sanphamkhac"
-              className={cx("nav-list-li-a")}
-            >
+              className={cx("nav-list-li-a")}>
               SẢN PHẨM KHÁC
             </Link>
             <ul className={cx("dropdown-menu-doc")}>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghothuysi"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   ĐỒNG HỒ THỤY SĨ
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghonhatban"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   ĐỒNG HỒ NHẬT BẢN
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/daydongho"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   DÂY TREO ĐỒNG HỒ
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/trangsucCk"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   TRANG SỨC CALVIN KLEIN
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/trangsucDW"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   TRANG SỨC DW
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghobaothuc"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   ĐỒNG HỒ BÁO THỨC
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghodeban"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   ĐỒNG HỒ ĐỂ BÀN
                 </Link>
               </li>
