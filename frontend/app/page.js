@@ -1,7 +1,10 @@
+import ThanhToan from "./components/thanhtoan/page";
+
 export default function Home() {
   return (
     <>
-      <Main/>
+    <ThanhToan/>
+      {/* <Main/> */}
     </>
   );
 }
