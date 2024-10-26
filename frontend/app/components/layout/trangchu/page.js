@@ -118,7 +118,7 @@ export default function Main() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:5000/product/new/gioitinh-nam");
+      const response = await fetch("http://localhost:5000/product/limit/gioitinh-nam");
       const data = await response.json();
       setProductsNewNam(data.products);
     };
@@ -130,7 +130,7 @@ export default function Main() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:5000/product/new/gioitinh-nu");
+      const response = await fetch("http://localhost:5000/product/limit/gioitinh-nu");
       const data = await response.json();
       setProductsNewNu(data.products);
     };
@@ -142,7 +142,7 @@ export default function Main() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:5000/product/new/doi");
+      const response = await fetch("http://localhost:5000/product/limit/doi");
       const data = await response.json();
       setProductsNewDoi(data.products);
     };
@@ -199,92 +199,9 @@ export default function Main() {
               <div className={styles.dongHoNam}>
                 {productsNam.map((item) => (
                   <div key={item._id} className={styles.watch}>
-                    <div className={styles.discountBadge}>-10%</div>
-                    <Link href={`/components/product-detail/${item._id}`}>
-                      <img
-                        src={`http://localhost:5000/images/${item.hinh_anh}`}
-                        alt={item.ten_san_pham}
-                      />
-                    </Link>
-                    <p>
-                      <small>{item.ten_san_pham}</small>
-                    </p>
-                    <br />
-                    <b>{item.ma_san_pham}</b>
-                    <p>
-                      <small>
-                        {item.loai_may} | {item.duong_kinh}
-                      </small>
-                    </p>
-                    <p>
-                      <small style={{ textDecoration: "line-through" }}>
-                        Giá: {formatCurrency(item.gia_san_pham)}
-                      </small>
-                    </p>
-                    <p>
-                      <span className={styles.priceKm}>
-                        Giá KM: {formatCurrency(item.gia_giam)}
-                      </span>
-                    </p>
-                  </div>
-                ))}
-                <div className={styles.xemThem}>
-                  <p>
-                    <b>XEM THÊM ĐỒNG HỒ NAM</b>
-                  </p>
-                </div>
-              </div>
-            )}
-            {activeTab === "tab2" && (
-              <div className={styles.dongHoNu}>
-                {productsNu.map((item) => (
-                  <div key={item._id} className={styles.watch}>
-                    <div className={styles.discountBadge}>-10%</div>
-                    <Link href={`/components/product-detail/${item._id}`}>
-                      <img
-                        src={`http://localhost:5000/images/${item.hinh_anh}`}
-                        alt={item.ten_san_pham}
-                      />
-                    </Link>
-                    <p>
-                      <small>{item.ten_san_pham}</small>
-                    </p>
-                    <br />
-                    <b>{item.ma_san_pham}</b>
-                    <p>
-                      <small>
-                        {item.loai_may} | {item.duong_kinh}
-                      </small>
-                    </p>
-                    <p>
-                      <small style={{ textDecoration: "line-through" }}>
-                        Giá: {formatCurrency(item.gia_san_pham)}
-                      </small>
-                    </p>
-                    <p>
-                      <span className={styles.priceKm}>
-                        Giá KM: {formatCurrency(item.gia_giam)}
-                      </span>
-                    </p>
-                  </div>
-                ))}
-                <div className={styles.xemThem}>
-                  <p>
-                    <b>XEM THÊM ĐỒNG HỒ NỮ</b>
-                  </p>
-                </div>
-              </div>
-            )}
-            {activeTab === "tab3" && (
-              <div className={styles.dongHoDoi}>
-                {productsDoi.map((item) => (
-                  <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
                       -
-                      {((item.gia_san_pham - item.gia_giam) /
-                        item.gia_san_pham) *
-                        100}
-                      %
+                     {Math.floor(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100)}%
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img
@@ -299,11 +216,11 @@ export default function Main() {
                     <b>{item.ma_san_pham}</b>
                     <p>
                       <small>
-                        {item.loai_may} | {item.duong_kinh}
+                        {item.loai} | {item.duong_kinh}
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through" }}>
+                      <small style={{ textDecoration: "line-through",color: "#B1B1B1" }}>
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
@@ -316,7 +233,94 @@ export default function Main() {
                 ))}
                 <div className={styles.xemThem}>
                   <p>
-                    <b>XEM THÊM ĐỒNG HỒ ĐÔi</b>
+                    
+                    <Link href="/components/donghonam"><b>XEM THÊM ĐỒNG HỒ NAM</b></Link>
+                  </p>
+                </div>
+              </div>
+            )}
+            {activeTab === "tab2" && (
+              <div className={styles.dongHoNu}>
+                {productsNu.map((item) => (
+                  <div key={item._id} className={styles.watch}>
+                    <div className={styles.discountBadge}>
+                      -
+                      {Math.floor(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100)}%
+                    </div>
+                    <Link href={`/components/product-detail/${item._id}`}>
+                      <img
+                        src={`http://localhost:5000/images/${item.hinh_anh}`}
+                        alt={item.ten_san_pham}
+                      />
+                    </Link>
+                    <p>
+                      <small>{item.ten_san_pham}</small>
+                    </p>
+                    <br />
+                    <b>{item.ma_san_pham}</b>
+                    <p>
+                      <small>
+                        {item.loai} | {item.duong_kinh}
+                      </small>
+                    </p>
+                    <p>
+                      <small style={{ textDecoration: "line-through", color: "#B1B1B1" }}>
+                        Giá: {formatCurrency(item.gia_san_pham)}
+                      </small>
+                    </p>
+                    <p>
+                      <span className={styles.priceKm}>
+                        Giá KM: {formatCurrency(item.gia_giam)}
+                      </span>
+                    </p>
+                  </div>
+                ))}
+                <div className={styles.xemThem}>
+                  <p>
+                    <Link href="/components/donghonu"><b>XEM THÊM ĐỒNG HỒ NỮ</b></Link>
+                  </p>
+                </div>
+              </div>
+            )}
+            {activeTab === "tab3" && (
+              <div className={styles.dongHoDoi}>
+                {productsDoi.map((item) => (
+                  <div key={item._id} className={styles.watch}>
+                    <div className={styles.discountBadge}>
+                      -
+                      {Math.floor(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100)}%
+                    </div>
+                    <Link href={`/components/product-detail/${item._id}`}>
+                      <img
+                        src={`http://localhost:5000/images/${item.hinh_anh}`}
+                        alt={item.ten_san_pham}
+                      />
+                    </Link>
+                    <p>
+                      <small>{item.ten_san_pham}</small>
+                    </p>
+                    <br />
+                    <b>{item.ma_san_pham}</b>
+                    <p>
+                      <small>
+                        {item.loai} | {item.duong_kinh}
+                      </small>
+                    </p>
+                    <p>
+                      <small style={{ textDecoration: "line-through", color: "#B1B1B1" }}>
+                        Giá: {formatCurrency(item.gia_san_pham)}
+                      </small>
+                    </p>
+                    <p>
+                      <span className={styles.priceKm}>
+                        Giá KM: {formatCurrency(item.gia_giam)}
+                      </span>
+                    </p>
+                  </div>
+                ))}
+                <div className={styles.xemThem}>
+                  <p>
+                    <Link href="/components/donghodoi"><b>XEM THÊM ĐỒNG HỒ ĐÔI</b></Link>
                   </p>
                 </div>
               </div>
@@ -350,14 +354,11 @@ export default function Main() {
           <div>
             {activeTab === "tab1" && (
               <div className={styles.dongHoNam}>
-                {productsNam.map((item) => (
+                {productsNewNam.map((item) => (
                   <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
                       -
-                      {((item.gia_san_pham - item.gia_giam) /
-                        item.gia_san_pham) *
-                        100}
-                      %
+                      {Math.floor(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100)}%
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img
@@ -372,11 +373,11 @@ export default function Main() {
                     <b>{item.ma_san_pham}</b>
                     <p>
                       <small>
-                        {item.loai_may} | {item.duong_kinh}
+                        {item.loai} | {item.duong_kinh}
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through" }}>
+                      <small style={{ textDecoration: "line-through",color: "#B1B1B1" }}>
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
@@ -390,16 +391,19 @@ export default function Main() {
                 ))}
                 <div className={styles.xemThem}>
                   <p>
-                    <b>XEM THÊM ĐỒNG HỒ NAM</b>
+                    <Link href="/components/donghonamnew"><b>XEM THÊM ĐỒNG HỒ NAM</b></Link>
                   </p>
                 </div>
               </div>
             )}
             {activeTab === "tab2" && (
               <div className={styles.dongHoNu}>
-                {productsNu.map((item) => (
+                {productsNewNu.map((item) => (
                   <div key={item._id} className={styles.watch}>
-                    <div className={styles.discountBadge}>-10%</div>
+                    <div className={styles.discountBadge}>
+                      -
+                      {Math.floor(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100)}%
+                    </div>
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img
                         src={`http://localhost:5000/images/${item.hinh_anh}`}
@@ -413,11 +417,11 @@ export default function Main() {
                     <b>{item.ma_san_pham}</b>
                     <p>
                       <small>
-                        {item.loai_may} | {item.duong_kinh}
+                        {item.loai} | {item.duong_kinh}
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through" }}>
+                      <small style={{ textDecoration: "line-through" ,color: "#B1B1B1"}}>
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
@@ -426,20 +430,24 @@ export default function Main() {
                         Giá KM: {formatCurrency(item.gia_giam)}
                       </span>
                     </p>
+                    <div className={styles.overlay}>New</div>
                   </div>
                 ))}
                 <div className={styles.xemThem}>
                   <p>
-                    <b>XEM THÊM ĐỒNG HỒ NỮ</b>
+                    <Link href="/components/donghonunew"><b>XEM THÊM ĐỒNG HỒ NỮ</b></Link>
                   </p>
                 </div>
               </div>
             )}
             {activeTab === "tab3" && (
               <div className={styles.dongHoDoi}>
-                {productsDoi.map((item) => (
+                {productsNewDoi.map((item) => (
                   <div key={item._id} className={styles.watch}>
-                    <div className={styles.discountBadge}>-10%</div>
+                    <div className={styles.discountBadge}>
+                      -
+                      {Math.floor(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100)}%
+                    </div>
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img
                         src={`http://localhost:5000/images/${item.hinh_anh}`}
@@ -453,11 +461,11 @@ export default function Main() {
                     <b>{item.ma_san_pham}</b>
                     <p>
                       <small>
-                        {item.loai_may} | {item.duong_kinh}
+                        {item.loai} | {item.duong_kinh}
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through" }}>
+                      <small style={{ textDecoration: "line-through",color: "#B1B1B1" }}>
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
@@ -466,11 +474,12 @@ export default function Main() {
                         Giá KM: {formatCurrency(item.gia_giam)}
                       </span>
                     </p>
+                    <div className={styles.overlay}>New</div>
                   </div>
                 ))}
                 <div className={styles.xemThem}>
                   <p>
-                    <b>XEM THÊM ĐỒNG HỒ ĐÔi</b>
+                    <Link href="/components/donghodoinew"><b>XEM THÊM ĐỒNG HỒ ĐÔI</b></Link>
                   </p>
                 </div>
               </div>
@@ -556,16 +565,14 @@ export default function Main() {
             <p>Bảo hành 5 năm</p>
           </div>
           <div className={styles.iconItem}>
-            
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width={50}
               height={40}
               viewBox="0 0 24 24"
               className={styles.ngay}
-              
             >
-              <g fill="none" stroke="black" strokeWidth={1} >
+              <g fill="none" stroke="black" strokeWidth={1}>
                 <path d="M3 20.4V3.6a.6.6 0 0 1 .6-.6h16.8a.6.6 0 0 1 .6.6v16.8a.6.6 0 0 1-.6.6H3.6a.6.6 0 0 1-.6-.6Z"></path>
                 <path
                   strokeLinecap="round"
@@ -597,16 +604,14 @@ export default function Main() {
                     className={`fs-slider-home fs-slider-home-content owl-carousel brand-index`}
                   >
                     <div className={styles.itemSlide1}>
-                      <Slider {...setting} >
+                      <Slider {...setting}>
                         {category.map((item) => (
                           <div key={item._id}>
                             <div className={styles.item}>
-                              <a  title={item.danh_muc}>
+                              <a title={item.danh_muc}>
                                 <img
                                   alt={item.danh_muc}
-                                 
                                   src={`http://localhost:5000/images/${item.hinh_anh}`}
-                                 
                                 />
                               </a>
                             </div>

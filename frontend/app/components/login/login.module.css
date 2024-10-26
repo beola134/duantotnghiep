@@ -163,14 +163,17 @@
   box-shadow: rgba(126, 126, 126, 0.878) 0px 12px 10px -8px;
   transition: all 0.2s ease-in-out;
 }
-
-.socialAccountContainer .socialAccounts .socialButton img {
-  margin: auto;
+.socialAccountContainer .title {
+  margin-bottom: 5px;
+}
+.socialAccountContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .socialAccountContainer .socialAccounts .socialButton:hover {
   transform: scale(1.2);
-  background: #333; /* Đổi màu khi hover */
 }
 
 .socialAccountContainer .socialAccounts .socialButton:active {

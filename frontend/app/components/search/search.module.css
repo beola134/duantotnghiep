@@ -1,11 +1,10 @@
 .search-results {
-  margin: 10px auto;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  background-color: #ffffff;
   border-radius: 4px;
-  max-height: 300px;
   overflow-y: auto;
   max-width: 1170px;
+  margin: 30px auto;
+ overflow: hidden; 
 }
 
 .search-results ul {
@@ -13,33 +12,74 @@
   padding: 0;
   margin: 0;
 }
-
-.product-item {
-  padding: 10px;
-  border-bottom: 1px solid #eaeaea;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.search-results h2{
+  text-align: center;
+  margin-bottom: 60px;
+  margin-top: 60px;
+  text-transform: uppercase;
+  font-size: 24px;
 }
 
-.product-item:last-child {
-  border-bottom: none;
-}
-
-.product-item:hover {
-  background-color: #f1f1f1;
-}
-
-.product-item:active {
-  background-color: #ddd;
-}
-
-.product-item span {
-  font-weight: bold;
-  color: #333;
-}
 
 .search-results p {
-  padding: 10px;
+  padding-bottom: 5px;
   text-align: center;
   color: #888;
+}
+.dongho-list {
+  max-width: 1170px;
+  display: grid;
+  grid-template-columns: repeat(5, 227px);
+  gap: 8px;
+  margin: 0px auto;
+  row-gap: 30px;
+ 
+}
+.watch {
+  padding-left: 30px;
+  text-align: center;
+  position: relative; 
+  width: 200px;
+}
+
+.watch img {
+  position: relative;
+
+  transition: transform 0.5s ease-in-out; 
+  z-index: 1;
+  margin: 0 auto;
+}
+.watch img:hover {
+  transform: scale(1.05); 
+}
+
+.watch p {
+  color: #000;
+  text-decoration: none; 
+  transition: color 0.3s ease, text-decoration 0.3s ease; 
+  text-align: center; 
+}
+.watch p small{
+  color:#777777;
+}
+.priceKm {
+  font-weight: bold;
+  color: red;
+}
+.discountBadge {
+  position: absolute;
+  top: -15px; 
+  left: 10px; 
+  background-color: red; 
+  color: white; 
+  padding: 5px 5px; 
+  border-radius: 50%; 
+  font-size: 10px; 
+  font-weight: bold; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  z-index: 9;
 }

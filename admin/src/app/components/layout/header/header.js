@@ -42,7 +42,7 @@ export default function Menu() {
             </Link>
           </li>
           <li>
-            <Link href="quanlydanhmuc.html">
+            <Link href="/components/danhmuc">
               <i className={`bx bxs-widget ${styles.icon}`}></i>
               Quản lý danh mục
             </Link>

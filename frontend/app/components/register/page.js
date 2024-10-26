@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Swal from "sweetalert2";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import styles from "./register.module.css";
 import OTP from "../OTP/page";
 
@@ -28,14 +30,14 @@ const schema = Yup.object().shape({
     .oneOf([Yup.ref("password"), null], "Mật khẩu không khớp")
     .required("Vui lòng xác nhận mật khẩu"),
 
-  image: Yup.mixed()
-    .required("Vui lòng chọn file hình ảnh")
-    .test("fileSize", "File quá lớn, vui lòng chọn file nhỏ hơn 2MB", (value) => {
-      return value && value.size <= 2000000; // 2MB
-    })
-    .test("fileType", "Định dạng file không hợp lệ", (value) => {
-      return value && ["image/jpg", "image/jpeg", "image/png", "image/webp", "image/gif"].includes(value.type);
-    }),
+  // image: Yup.mixed()
+  //   .required("Vui lòng chọn file hình ảnh")
+  //   .test("fileSize", "File quá lớn, vui lòng chọn file nhỏ hơn 2MB", (value) => {
+  //     return value && value.size <= 2000000; // 2MB
+  //   })
+  //   .test("fileType", "Định dạng file không hợp lệ", (value) => {
+  //     return value && ["image/jpg", "image/jpeg", "image/png", "image/webp", "image/gif"].includes(value.type);
+  //   }),
 });
 
 export default function Register() {
@@ -47,21 +49,22 @@ export default function Register() {
       email: "",
       password: "",
       confirmPassword: "",
-      image: null,
+      // image: null,
     },
     validationSchema: schema,
     onSubmit: async (values, { setSubmitting, setFieldError }) => {
       try {
-        const formData = new FormData();
-        formData.append("ten_dang_nhap", values.name);
-        formData.append("email", values.email);
-        formData.append("mat_khau", values.password);
-        formData.append("nhap_lai_mat_khau", values.confirmPassword);
-        formData.append("hinh_anh", values.image);
-
         const res = await fetch("http://localhost:5000/users/register", {
           method: "POST",
-          body: formData,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ten_dang_nhap: values.name,
+            email: values.email,
+            mat_khau: values.password,
+            nhap_lai_mat_khau: values.confirmPassword,
+          }),
         });
 
         if (!res.ok) {
@@ -72,8 +75,13 @@ export default function Register() {
             throw new Error(errorData.message || "Đăng ký thất bại");
           }
         } else {
-          alert("Đăng ký thành công");
-          setIsModalOpen(true); // mở modal xác thực OTP khi xác thực thành công
+          Swal.fire({
+            icon: "success",
+            title: "Đăng ký thành công",
+            text: "Vui lòng kiểm tra email để xác nhận mã OTP",
+          }).then(() => {
+            setIsModalOpen(true); // mở modal xác thực OTP khi xác thực thành công
+          });
         }
       } catch (error) {
         setFieldError("general", error.message);
@@ -82,6 +90,48 @@ export default function Register() {
       }
     },
   });
+  const handleLoginSuccess = async (credentialResponse) => {
+    const token = credentialResponse.credential;
+    try {
+      const response = await fetch("http://localhost:5000/users/auth/google", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      document.cookie = `token=${data.token}; path=/; max-age=${60 * 60}`;
+
+      Swal.fire({
+        title: "Đăng nhập thành công",
+        text: "Chào mừng bạn đến với Website!",
+        icon: "success",
+        showConfirmButton: true,
+      }).then(() => {
+        window.location.href = "http://localhost:3001";
+      });
+    } catch (error) {
+      Swal.fire({
+        title: "Đăng nhập thất bại",
+        text: error.message || "Vui lòng thử lại.",
+        icon: "error",
+        showConfirmButton: true,
+      });
+    }
+  };
+
+  const handleLoginFailure = () => {
+    Swal.fire({
+      title: "Đăng nhập thất bại",
+      text: "Có lỗi xảy ra vui lòng thử lại.",
+      icon: "error",
+      showConfirmButton: true,
+    });
+  };
 
   return (
     <div className={styles.mainContainer}>
@@ -132,7 +182,7 @@ export default function Register() {
           />
           {formik.errors.confirmPassword && <p className={styles.error}>{formik.errors.confirmPassword}</p>}
 
-          <input
+          {/* <input
             type="file"
             className={`${styles.input} ${formik.errors.image ? styles.inputError : ""}`}
             id="image"
@@ -141,7 +191,7 @@ export default function Register() {
               formik.setFieldValue("image", event.currentTarget.files[0]);
             }}
           />
-          {formik.errors.image && <p className={styles.error}>{formik.errors.image}</p>}
+          {formik.errors.image && <p className={styles.error}>{formik.errors.image}</p>} */}
 
           <span className={styles.forgotPassword}>
             <Link href="#">Forgot password</Link>
@@ -150,14 +200,25 @@ export default function Register() {
           <OTP isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} />
         </form>
 
-        <div className={styles.socialAccountContainer}>
-          <span className={styles.title}>Or Sign in with</span>
-          <div className={styles.socialAccounts}>
-            <button className={styles.socialButton}>
-              <img src="/image/item/icon-gg-login.png" alt="" />
-            </button>
+        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+          <div className={styles.socialAccountContainer}>
+            <span className={styles.title}>Or Sign in with</span>
+
+            <GoogleLogin
+              onSuccess={handleLoginSuccess}
+              onFailure={handleLoginFailure}
+              render={(renderProps) => (
+                <div className={styles.socialAccounts}>
+                  <button
+                    className={styles.socialButton}
+                    onClick={renderProps.onClick}
+                    disabled={renderProps.disabled}
+                  ></button>
+                </div>
+              )}
+            />
           </div>
-        </div>
+        </GoogleOAuthProvider>
 
         <div className={styles.signUpNow}>
           <span className={styles.dontHaveAnAccount}>

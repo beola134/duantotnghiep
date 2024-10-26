@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./otp.module.css";
+import Swal from "sweetalert2";
 
 function OtpModal({ isOpen, onRequestClose }) {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -8,10 +9,12 @@ function OtpModal({ isOpen, onRequestClose }) {
   const [error, setError] = useState("");
 
   const handleChangeOtp = (index, value) => {
+    if (!/^[0-9]*$/.test(value)) return; // chỉ nhận ký tự số
     const newOtp = [...otp];
-    newOtp[index] = value.slice(-1);
+    newOtp[index] = value.slice(-1); // chỉ cho phép nhập 1 ký tự
     setOtp(newOtp);
 
+    // Tự động chuyển sang ô tiếp theo hoặc quay lại ô trước đó
     if (index < otp.length - 1 && value) {
       document.getElementById(`otp-input-${index + 1}`).focus();
     }
@@ -19,6 +22,10 @@ function OtpModal({ isOpen, onRequestClose }) {
 
   const handleSubmit = async () => {
     const otpValue = otp.join("");
+    if (otpValue.length < 6) {
+      setError("Vui lòng nhập đủ 6 ký tự");
+      return;
+    }
     setIsLoading(true);
 
     try {
@@ -35,10 +42,16 @@ function OtpModal({ isOpen, onRequestClose }) {
         throw new Error(errorData.message || "Xác thực OTP thất bại");
       }
 
-      const data = await response.json();
-      alert(data.message);
-      onRequestClose();
-      window.location.href = "/components/login";
+      Swal.fire({
+        icon: "success",
+        title: "Xác thực thành công",
+        text: "Chuyển hướng đến trang đăng nhập",
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => {
+        onRequestClose();
+        window.location.href = "../components/login";
+      });
     } catch (error) {
       setError(error.message);
     } finally {
@@ -60,8 +73,8 @@ function OtpModal({ isOpen, onRequestClose }) {
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
-        <h3 className="XacnhanOTP">Xác thực OTP</h3>
-        <p className="XacnhanGmail">Vui lòng nhập mã OTP vừa gửi tới gmail</p>
+        <h3 className={styles.title}>Xác thực OTP</h3>
+        <p className={styles.description}>Vui lòng nhập mã OTP vừa gửi tới gmail</p>
         <div className={styles.otpContainer}>
           {otp.map((digit, index) => (
             <input
@@ -76,16 +89,16 @@ function OtpModal({ isOpen, onRequestClose }) {
           ))}
         </div>
         <div className={styles.timerContainer}>
-          <span style={{ marginLeft: "20px" }}>
+          <span>
             Mã sẽ hết hạn: {Math.floor(timeLeft / 60)}:{("0" + (timeLeft % 60)).slice(-2)}
           </span>
         </div>
         <div className={styles.buttonContainer}>
-          <button className="XacNhan" onClick={onRequestClose}>
+          <button className={styles.cancelButton} onClick={onRequestClose}>
             Hủy Bỏ
           </button>
-          <button className="XacNhan" onClick={handleSubmit} disabled={isLoading}>
-            Xác Nhận
+          <button className={styles.confirmButton} onClick={handleSubmit} disabled={isLoading}>
+            {isLoading ? "Đang xử lý..." : "Xác Nhận"}
           </button>
         </div>
         {error && <div className={styles.errorMessage}>{error}</div>}
