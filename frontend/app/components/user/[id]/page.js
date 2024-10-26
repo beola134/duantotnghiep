@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
-import styles from "./user.module.css";
+import styles from "../user.module.css";
 import Link from "next/link";
 
-const User = () => {
-  const userId = params._id // ID người dùng hiện tại
+const User = ({ params }) => {
+  const { id } = params;
   const [userData, setUserData] = useState({
     ten_dang_nhap: "",
     ho_ten: "",
@@ -13,13 +13,14 @@ const User = () => {
     dien_thoai: "",
     hinh_anh: "",
   });
+
   const [isEditing, setIsEditing] = useState(false);
   const [avatarFile, setAvatarFile] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/users/${userId}`);
+        const res = await fetch(`http://localhost:5000/users/${id}`);
         const data = await res.json();
         setUserData(data.user);
       } catch (error) {
@@ -28,7 +29,7 @@ const User = () => {
     };
 
     fetchUserData();
-  }, [userId]);
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,7 +51,7 @@ const User = () => {
       formData.append("hinh_anh", avatarFile);
     }
     try {
-      const res = await fetch(`http://localhost:5000/users/update/${userId}`, {
+      const res = await fetch(`http://localhost:5000/users/update/${id}`, {
         method: "PUT",
         body: formData,
       });
@@ -73,7 +74,7 @@ const User = () => {
       <div className={styles.sidebar}>
         <div className={styles.profilePicture}>
           <img
-            src={`/image/item/${userData.hinh_anh} `}
+            src={`http://localhost:5000/images/${userData.hinh_anh}`}
             alt="Avatar"
             className={styles.avatar}
           />
