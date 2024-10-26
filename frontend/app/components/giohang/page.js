@@ -1,14 +1,28 @@
 "use client";
 import { useMemo } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styles from "./giohang.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import {
   removeFromCart,
   updateCartItemQuantity,
-} from "@/redux/slices/cartSilce";
+  setCartItems,
+} from "../redux/slices/cartSilce";
+
 const CartPage = () => {
   const cartItems = useSelector((state) => state.cart?.items) || [];
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedItems = localStorage.getItem("cartItems");
+      if (savedItems) {
+        dispatch(setCartItems(JSON.parse(savedItems)));
+      }
+    }
+  }, [dispatch]);
 
   const total = useMemo(
     () =>
@@ -28,7 +42,9 @@ const CartPage = () => {
               <table className={styles.carttable}>
                 <thead>
                   <tr>
-                    <th colspan="2">Sản phẩm</th>
+                    <th colspan="2" className={styles.sp}>
+                      Sản phẩm
+                    </th>
                     <th>Số lượng</th>
                     <th>Giá</th>
                     <th>Thành tiền</th>
@@ -63,7 +79,6 @@ const CartPage = () => {
                           </button>
                           <input
                             min="1"
-                            type="number"
                             value={item.so_luong}
                             className={styles.quantity}
                             readonly
@@ -82,16 +97,33 @@ const CartPage = () => {
                           </button>
                         </div>
                       </td>
-                      <td>{item.gia_giam.toLocaleString("vi-VN")}</td>
+                      <td>
+                        {item.gia_giam.toLocaleString("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      </td>
                       <td>
                         {(item.gia_giam * item.so_luong).toLocaleString(
-                          "vi-VN"
+                          "vi-VN",
+                          {
+                            style: "currency",
+                            currency: "VND",
+                          }
                         )}
                       </td>
                       <td name="delete">
                         <button
+                          style={{ border: "none", cursor: "pointer" }}
                           onClick={() => dispatch(removeFromCart(item._id))}>
-                          X
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            style={{
+                              fontSize: "18px",
+                              border: "none",
+                              color: "red",
+                            }}
+                          />
                         </button>
                       </td>
                     </tr>
