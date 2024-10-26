@@ -32,7 +32,7 @@ const addDonHang = async (req, res) => {
                     if (product.so_luong < ct.so_luong) {
                         throw new Error(`Số lượng sản phẩm ${product.ten_san_pham} không đủ`);
                     }
-                    totalAmount += product.gia_san_pham * ct.so_luong;
+                    totalAmount += product.gia_giam * ct.so_luong;
                     product.so_luong -= ct.so_luong;
                     await product.save();
                 } else {
@@ -82,7 +82,7 @@ const addDonHang = async (req, res) => {
                 const product = await Product.findByPk(ct.id_san_pham);
                 if (product) {
                     await ChiTietDonHang.create({
-                        gia_san_pham: product.gia_san_pham,ten_san_pham: product.ten_san_pham,
+                        gia_san_pham: product.gia_giam,ten_san_pham: product.ten_san_pham,
                         so_luong: ct.so_luong,
                         id_don_hang: donHang._id,
                         id_san_pham: ct.id_san_pham
