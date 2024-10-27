@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import styles from "../user.module.css";
 import Link from "next/link";
 import Swal from "sweetalert2";
-
+import Cookies from "js-cookie";
 const User = ({ params }) => {
   const { id } = params;
   const [userData, setUserData] = useState({
@@ -85,11 +85,25 @@ const User = ({ params }) => {
     }
   };
 
+  const handleLayout = () => {
+    Cookies.remove("token");
+    Swal.fire({
+      title: "Đăng xuất thành công",
+      icon: "success",
+      confirmButtonText: "OK",
+    }).then(() => {
+      window.location.href = "/";
+    });
+  };
   return (
     <div className={styles.container}>
       <div className={styles.sidebar}>
         <div className={styles.profilePicture}>
-          <img src={`http://localhost:5000/images/${userData.hinh_anh}`} alt="Avatar" className={styles.avatar} />
+          <img
+            src={`http://localhost:5000/images/${userData.hinh_anh}`}
+            alt="Avatar"
+            className={styles.avatar}
+          />
         </div>
         <h3>
           <strong>Tài Khoản Của Tôi</strong>
@@ -107,8 +121,10 @@ const User = ({ params }) => {
             <Link href={""}>Trạng thái đơn hàng</Link>
           </p>
 
-          <p>
-            <Link href={""}>Đăng xuất</Link>
+          <p style={{ cursor: "pointer" }}>
+            <Link href={""} onClick={handleLayout}>
+              Đăng xuất
+            </Link>
           </p>
         </div>
       </div>
@@ -176,16 +192,27 @@ const User = ({ params }) => {
               <div className={styles.pro}>
                 <div className={styles.formGroup}>
                   <label htmlFor="avatar">Chọn ảnh đại diện:</label>
-                  <input type="file" id="avatar" accept="image/*" onChange={handleFileChange} />
+                  <input
+                    type="file"
+                    id="avatar"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
                 </div>
-                <button type="submit" onClick={handleSave} className="save-button">
+                <button
+                  type="submit"
+                  onClick={handleSave}
+                  className="save-button">
                   Cập nhật
                 </button>
               </div>
             </>
           ) : (
             <div className={styles.pro}>
-              <button type="button" onClick={() => setIsEditing(true)} className="edit-button">
+              <button
+                type="button"
+                onClick={() => setIsEditing(true)}
+                className="edit-button">
                 Chỉnh sửa
               </button>
             </div>
