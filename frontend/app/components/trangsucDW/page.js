@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "../donghonu/donghonu.module.css";
+import Loading from "../loading/page";
 export default function TrangsucDW() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +27,7 @@ export default function TrangsucDW() {
     fetchProducts();
   }, []);
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
   if (error) {
     return <p>Error:{error}</p>;
@@ -50,9 +51,7 @@ export default function TrangsucDW() {
                   <div className={styles["field-title"]}>
                     <div className={styles["title-name"]}>
                       <div className={styles["cat-title"]}>
-                        <div
-                          className={styles["cat-title-main"]}
-                          id="cat-dong-ho">
+                        <div className={styles["cat-title-main"]} id="cat-dong-ho">
                           <div className={styles["title-icon"]}>
                             <h1>Trang sức DW</h1>
                           </div>
@@ -61,9 +60,7 @@ export default function TrangsucDW() {
                       </div>
                     </div>
 
-                    <select
-                      className={styles["order-select"]}
-                      name="order-select">
+                    <select className={styles["order-select"]} name="order-select">
                       <option value="">Sắp xếp theo</option>
                       <option value="#">Bán chạy nhất</option>
                       <option value="#">Khuyến mãi</option>
@@ -113,29 +110,17 @@ export default function TrangsucDW() {
                                   </Link>
                                 </figure>
                                 <h3>
-                                  <Link
-                                    className={styles.name}
-                                    href="#"
-                                    title={ten}>
-                                    <span className={styles["cat-name"]}>
-                                      {ten_san_pham}
-                                    </span>
+                                  <Link className={styles.name} href="#" title={ten}>
+                                    <span className={styles["cat-name"]}>{ten_san_pham}</span>
                                     {ma_san_pham}
                                   </Link>
                                 </h3>
-                                <span className={styles["loai-may"]}>
-                                  {loai}
-                                </span>
+                                <span className={styles["loai-may"]}>{loai}</span>
                                 <span className={styles["row-lm"]}>|</span>
-                                <span className={styles["duong-kinh"]}>
-                                  {duong_kinh}
-                                </span>
+                                <span className={styles["duong-kinh"]}>{duong_kinh}</span>
                                 <div className={styles["price-area"]}>
                                   <div className={styles["price-current"]}>
-                                    Giá:{" "}
-                                    <span>
-                                      {gia_san_pham.toLocaleString("vi-VN")}₫
-                                    </span>
+                                    Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
                                   </div>
                                 </div>
                                 <div className={styles.clear}></div>
@@ -153,35 +138,20 @@ export default function TrangsucDW() {
                     <span title="Page 1" className={styles.current}>
                       <span>1</span>
                     </span>
-                    <Link
-                      className={styles["other-page"]}
-                      title="Page 2"
-                      href="#">
+                    <Link className={styles["other-page"]} title="Page 2" href="#">
                       <span>2</span>
                     </Link>
-                    <Link
-                      className={styles["other-page"]}
-                      title="Page 3"
-                      href="#">
+                    <Link className={styles["other-page"]} title="Page 3" href="#">
                       <span>3</span>
                     </Link>
-                    <Link
-                      className={styles["other-page"]}
-                      title="Page 4"
-                      href="#">
+                    <Link className={styles["other-page"]} title="Page 4" href="#">
                       <span>4</span>
                     </Link>
                     <b>...</b>
-                    <Link
-                      className={styles["next-page"]}
-                      title="Next page"
-                      href="#">
+                    <Link className={styles["next-page"]} title="Next page" href="#">
                       ›
                     </Link>
-                    <Link
-                      className={styles["last-page"]}
-                      title="Last page"
-                      href="#">
+                    <Link className={styles["last-page"]} title="Last page" href="#">
                       ››
                     </Link>
                   </div>
@@ -192,36 +162,18 @@ export default function TrangsucDW() {
                 <div className={styles.evaluateCat}>
                   <div className={`${styles.ratingArea} ${styles.cls}`}>
                     <span id="ratings">
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_1"
-                        value="1"></i>
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_2"
-                        value="2"></i>
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_3"
-                        value="3"></i>
-                      <i
-                        className={` ${styles.starOff}`}
-                        id="rate_4"
-                        value="4"></i>
-                      <i
-                        className={` ${styles.starOff}`}
-                        id="rate_5"
-                        value="5"></i>
+                      <i className={` ${styles.starOn}`} id="rate_1" value="1"></i>
+                      <i className={` ${styles.starOn}`} id="rate_2" value="2"></i>
+                      <i className={` ${styles.starOn}`} id="rate_3" value="3"></i>
+                      <i className={` ${styles.starOff}`} id="rate_4" value="4"></i>
+                      <i className={` ${styles.starOff}`} id="rate_5" value="5"></i>
                     </span>
-                    <span className={styles.ratingNote}>
-                      Nhấn vào đây để đánh giá
-                    </span>
+                    <span className={styles.ratingNote}>Nhấn vào đây để đánh giá</span>
                   </div>
                 </div>
 
                 <div className={styles.clear}></div>
-                <div
-                  className={`${styles.aq_relates} ${styles.content_li}`}></div>
+                <div className={`${styles.aq_relates} ${styles.content_li}`}></div>
               </div>
             </div>
             {/* end đồng hồ báo thức   */}

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import styles from "../user.module.css";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 const User = ({ params }) => {
   const { id } = params;
@@ -37,7 +38,7 @@ const User = ({ params }) => {
   };
 
   const handleFileChange = (e) => {
-    setAvatarFile(e.target.files[0]); // Lưu file ảnh
+    setAvatarFile(e.target.files[0]);
   };
 
   const handleSave = async () => {
@@ -57,15 +58,30 @@ const User = ({ params }) => {
       });
 
       if (res.ok) {
-        alert("Cập nhật thông tin thành công");
+        Swal.fire({
+          title: "Thành công",
+          text: "Cập nhật thông tin thành công",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
         setIsEditing(false);
         setAvatarFile(null);
       } else {
-        alert("Cập nhật thông tin thất bại");
+        Swal.fire({
+          title: "Thất bại",
+          text: "Cập nhật thông tin thất bại",
+          icon: "error",
+          confirmButtonText: "Thử lại",
+        });
       }
     } catch (error) {
       console.error("Error updating user data:", error);
-      alert("Cập nhật thông tin thất bại");
+      Swal.fire({
+        title: "Lỗi",
+        text: "Có lỗi xảy ra, vui lòng thử lại.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 
@@ -73,11 +89,7 @@ const User = ({ params }) => {
     <div className={styles.container}>
       <div className={styles.sidebar}>
         <div className={styles.profilePicture}>
-          <img
-            src={`http://localhost:5000/images/${userData.hinh_anh}`}
-            alt="Avatar"
-            className={styles.avatar}
-          />
+          <img src={`http://localhost:5000/images/${userData.hinh_anh}`} alt="Avatar" className={styles.avatar} />
         </div>
         <h3>
           <strong>Tài Khoản Của Tôi</strong>
@@ -164,27 +176,16 @@ const User = ({ params }) => {
               <div className={styles.pro}>
                 <div className={styles.formGroup}>
                   <label htmlFor="avatar">Chọn ảnh đại diện:</label>
-                  <input
-                    type="file"
-                    id="avatar"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
+                  <input type="file" id="avatar" accept="image/*" onChange={handleFileChange} />
                 </div>
-                <button
-                  type="submit"
-                  onClick={handleSave}
-                  className="save-button">
-                  Lưu
+                <button type="submit" onClick={handleSave} className="save-button">
+                  Cập nhật
                 </button>
               </div>
             </>
           ) : (
             <div className={styles.pro}>
-              <button
-                type="button"
-                onClick={() => setIsEditing(true)}
-                className="edit-button">
+              <button type="button" onClick={() => setIsEditing(true)} className="edit-button">
                 Chỉnh sửa
               </button>
             </div>
