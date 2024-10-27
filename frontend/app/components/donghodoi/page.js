@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./donghodoi.module.css";
+import Loading from "../loading/page";
 
 export default function DonghoDoi() {
   const [products, setProducts] = useState([]);
@@ -25,7 +26,7 @@ export default function DonghoDoi() {
     fetchProducts();
   }, []);
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
   if (error) {
     return <p>Error:{error}</p>;

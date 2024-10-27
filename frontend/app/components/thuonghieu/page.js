@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./thuonghieu.module.css";
+import Loading from "../loading/page";
 
 export default function Thuonghieu() {
   const [cates, setCates] = useState([]);
@@ -36,7 +37,7 @@ export default function Thuonghieu() {
   };
 
   if (loading) {
-    return <div>Đang tải...</div>;
+    return <Loading />;
   }
 
   if (error) {

@@ -484,11 +484,11 @@ export default function Main() {
             ))}
           </Slider>
           <button onClick={prev} className={`${styles.navButton} ${styles.prevButton}`}>
-            <img src="/image/item/icons/left.png" alt width="40px" height="30px" />
+            <img src="/image/item/icons/left.png"  width="40px" height="30px" />
           </button>
 
           <button onClick={next} className={`${styles.navButton} ${styles.nextButton}`}>
-            <img src="/image/item/icons/right.png" alt width="40px" height="30px" />
+            <img src="/image/item/icons/right.png"  width="40px" height="30px" />
           </button>
         </div>
       </section>
@@ -496,15 +496,15 @@ export default function Main() {
         <p className={styles.titleVs}>Vì sao nên chọn chúng tôi</p>
         <div className={styles.iconList}>
           <div className={styles.iconItem}>
-            <img src="/image/item/icons/huyhieu.png" alt="" className={styles.uytin} />
+            <img src="/image/item/icons/huyhieu.png"  className={styles.uytin} />
             <p>100% Hàng chính hãng</p>
           </div>
           <div className={styles.iconItem}>
-            <img src="/image/item/icons/vanchuyen.png" alt="" className={styles.vanchuyen} />
+            <img src="/image/item/icons/vanchuyen.png"  className={styles.vanchuyen} />
             <p>Miễn phí vận chuyển</p>
           </div>
           <div className={styles.iconItem}>
-            <img src="/image/item/picture4.jpg" alt="" className={styles.baove} />
+            <img src="/image/item/picture4.jpg"  className={styles.baove} />
             <p>Bảo hành 5 năm</p>
           </div>
           <div className={styles.iconItem}>

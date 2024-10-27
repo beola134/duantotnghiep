@@ -48,7 +48,6 @@ export default function Header() {
       }
       const userData = await response.json();
       setUser(userData);
-      console.log(userData);
     } catch (error) {
       console.error("Error fetching user details:", error);
     }
