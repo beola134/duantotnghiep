@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import styles from "./thanhtoan.module.css";
 import { jwtDecode } from "jwt-decode";
-import Swal from "sweetalert2"; 
+import Swal from "sweetalert2";
 
 export default function ThanhToan() {
   const [user, setUser] = useState(null);
@@ -13,6 +13,7 @@ export default function ThanhToan() {
   const [note, setNote] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
 
+  // Lấy thông tin người dùng từ token
   useEffect(() => {
     const token = document.cookie
       .split("; ")
@@ -28,6 +29,7 @@ export default function ThanhToan() {
     }
   }, []);
 
+  // Lấy thông tin người dùng từ server
   const fetchUserDetails = async (_id) => {
     try {
       const response = await fetch(`http://localhost:5000/users/${_id}`);
@@ -42,18 +44,19 @@ export default function ThanhToan() {
     }
   };
 
+  // Lấy thông tin giỏ hàng từ localStorage
   useEffect(() => {
     const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
     const updatedCartItems = cartItems.map((item) => ({ ...item, so_luong: item.so_luong ?? 1 }));
     setCartItems(cartItems);
     calculateTotal(updatedCartItems);
   }, []);
-
+  // Tính tổng tiền
   const calculateTotal = (items) => {
     const total = items.reduce((sum, item) => sum + item.so_luong * item.gia_giam, 0);
     setTotalAmount(total - discountValue);
   };
-
+  // Tăng giảm số lượng sản phẩm
   const handleIncrease = (index) => {
     const updatedCartItems = [...cartItems];
     updatedCartItems[index].so_luong += 1;
@@ -71,7 +74,7 @@ export default function ThanhToan() {
       localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
     }
   };
-
+  // Xóa sản phẩm khỏi giỏ hàng
   const handleDelete = (index) => {
     const updatedCartItems = cartItems.filter((_, i) => i !== index);
     setCartItems(updatedCartItems);
@@ -79,6 +82,7 @@ export default function ThanhToan() {
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
   };
 
+  // Tạo đơn hàng và kiểm tra xem có đăng nhập không
   const userLogin = async () => {
     if (!user) {
       Swal.fire({
@@ -86,11 +90,11 @@ export default function ThanhToan() {
         title: "Cảnh báo",
         text: "Vui lòng đăng nhập để tiếp tục thanh toán",
       }).then(() => {
-        window.location.href = "/components/login";
+        window.location.href = "/components/login?redirect=thanhtoan";
       });
       return;
     }
-
+    // kiểm tra
     const orderDetails = {
       dia_chi: user.dia_chi,
       id_nguoi_dung: user._id,
