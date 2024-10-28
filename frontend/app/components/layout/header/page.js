@@ -423,7 +423,7 @@ export default function Header() {
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/trangsucCk" className={cx("dropdown-menu-doc-a")}>
+                <Link href="/components/trangsucCK" className={cx("dropdown-menu-doc-a")}>
                   TRANG SỨC CALVIN KLEIN
                 </Link>
               </li>

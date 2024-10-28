@@ -260,3 +260,28 @@ exports.getAllProducts = async (req, res) => {
     }
   }
 
+//show sản phẩm liên quan theo danh mục ở trang chi tiết sản phẩm theo id show lun danh muc
+exports.getRelatedProducts = async (req, res) => {
+    try {
+      const product = await Product.findOne({ where: { _id: req.params.id } });
+      if (!product) {
+        return res.status(404).json({ error: "Không tìm thấy sản phẩm" });
+      }
+      const products = await Product.findAll({
+        where: {
+          id_danh_muc: product.id_danh_muc,
+          _id: {
+            [Op.not]: product._id, 
+          },
+          loai: {
+            [Op.notIn]: ["Vòng Tay", "Trang Sức"],
+          }
+        },
+      });
+      const cate = await Category.findOne({ where: { _id: product.id_danh_muc } });
+      res.json({ products, cate });
+    }
+    catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
