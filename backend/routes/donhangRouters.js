@@ -13,4 +13,8 @@ router.put('/update/:id',donhangController.updateDonHang);
 //http://localhost:5000/donhang/show/:id_nguoi_dung
 router.get('/show/:id_nguoi_dung',donhangController.getAllDonHangByUserId);
 
+//xem lịch sử đơn hàng
+//http://localhost:5000/donhang/history/:id_nguoi_dung
+router.get('/history/:id_nguoi_dung',donhangController.getDonHangByUserId );
+
 module.exports = router;

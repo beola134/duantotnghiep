@@ -33,16 +33,18 @@ const addDonHang = async (req, res) => {
               `Số lượng sản phẩm ${product.ten_san_pham} không đủ`
             );
           }
-          const productPrice = product.gia_giam >= 0 ? product.gia_giam : product.gia_san_pham;
-          totalAmount += productPrice * ct.so_luong;
-           product.so_luong -= ct.so_luong;
+          const price = product.gia_giam > 0 ? product.gia_giam : product.gia_san_pham;
+          totalAmount += price * ct.so_luong;
+          product.so_luong -= ct.so_luong;
           await product.save();
         } else {
           throw new Error(`Sản phẩm với ID ${ct.id_san_pham} không tồn tại`);
         }
       }
     }
-    totalAmount += 30000;
+
+    // totalAmount += 30000;
+
     let voucher = null;
     if (ma_voucher) {
       voucher = await Voucher.findOne({
@@ -82,7 +84,7 @@ const addDonHang = async (req, res) => {
         const product = await Product.findByPk(ct.id_san_pham);
         if (product) {
           await ChiTietDonHang.create({
-            gia_san_pham: product.gia_giam,
+            gia_san_pham: product.gia_giam > 0 ? product.gia_giam : product.gia_san_pham,
             ten_san_pham: product.ten_san_pham,
             so_luong: ct.so_luong,
             id_don_hang: donHang._id,
@@ -101,6 +103,7 @@ const addDonHang = async (req, res) => {
     res.status(500).json({ message: "Lỗi khi thêm đơn hàng", error });
   }
 };
+
 
 //cập nhật trạng thái đơn hàng
 const updateDonHang = async (req, res) => {
@@ -162,8 +165,49 @@ const getAllDonHangByUserId = async (req, res) => {
   }
 };
 
+//xem lịch sử mua hàng theo id_nguoi_dung khi login khi trang_thai là giao hàng thành công
+const getDonHangByUserId = async (req, res) => {
+  try {
+    const { id_nguoi_dung } = req.params;
+
+    // Lấy tất cả đơn hàng theo id_nguoi_dung
+    const donHangs = await DonHang.findAll({
+      where: { id_nguoi_dung, trang_thai: "Giao hàng thành công" },
+      include: [
+        {
+          model: ChiTietDonHang,
+          as: "chiTietDonHangs",
+          include: {
+            model: Product,
+            as: "product",
+          },
+        },
+        {
+          model: PhuongThucThanhToan,
+          as: "phuongThucThanhToan",
+          attributes: ["ten_phuong_thuc"],
+        },
+      ],
+    });
+
+    if (donHangs.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Không tìm thấy đơn hàng cho người dùng này." });
+    }
+
+    return res.status(200).json(donHangs);
+  } catch (error) {
+    console.error("Lỗi khi lấy đơn hàng:", error);
+    return res
+      .status(500)
+      .json({ message: "Đã xảy ra lỗi, vui lòng thử lại sau." });
+  }
+};
+
 module.exports = {
   addDonHang,
   updateDonHang,
   getAllDonHangByUserId,
+  getDonHangByUserId,
 };
