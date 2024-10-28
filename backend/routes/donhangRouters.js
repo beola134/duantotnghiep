@@ -5,4 +5,12 @@ const donhangController = require('../controllers/donhangController');
 //http://localhost:5000/donhang/donhang
 router.post('/donhang',donhangController.addDonHang);
 
+//cập nhật trạng thái đơn hàng
+//http://localhost:5000/donhang/update/:id
+router.put('/update/:id',donhangController.updateDonHang);
+
+//show all don hang theo id_nguoi_dung khi login
+//http://localhost:5000/donhang/show/:id_nguoi_dung
+router.get('/show/:id_nguoi_dung',donhangController.getAllDonHangByUserId);
+
 module.exports = router;
