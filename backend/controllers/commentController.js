@@ -39,7 +39,6 @@ exports.getAllComment = async (req, res) => {
         if (!product) {
             return res.status(400).json({ message: "Không tìm thấy sản phẩm" });
         }
-        //lấy tất cả bình luận theo _id sản phẩm
         const comments = await CMT.findAll({ where: { id_san_pham } });
         res.status(200).json({comments});
     } catch (error) {
