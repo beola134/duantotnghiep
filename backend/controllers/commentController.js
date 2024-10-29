@@ -33,35 +33,41 @@ exports.addComment = async (req, res) => {
 //lấy tất cả bình luận theo _id sản phẩm
 exports.getAllComment = async (req, res) => {
     try {
-        const { id_san_pham } = req.params;
-        //kiểm tra xem sản phẩm có tồn tại không
+        const { id_san_pham, limit = 3 , page = 1 } = req.params; 
+        const offset = (page - 1) * limit; 
+        // Kiểm tra xem sản phẩm có tồn tại không
         const product = await Product.findOne({ where: { _id: id_san_pham } });
         if (!product) {
-            return res.status(400).json({ message: "Không tìm thấy sản phẩm" });
+            return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
         }
-        //lấy tất cả bình luận theo _id sản phẩm
-        const comments = await CMT.findAll({ where: { id_san_pham } });
-        res.status(200).json({comments});
+        // Lấy tất cả bình luận theo _id sản phẩm với phân trang
+        const comments = await CMT.findAll({
+            where: { id_san_pham },
+            limit, 
+            offset,
+        });
+        // Lấy thông tin người dùng cho từng bình luận
+        const commentsWithUser = await Promise.all(comments.map(async (comment) => {
+            const user = await Users.findOne({ where: { _id: comment.id_nguoi_dung } });
+            return { 
+                ...comment.dataValues,
+                user: user ? {
+                    _id: user._id,
+                    ho_ten: user.ho_ten,
+                    hinh_anh: user.hinh_anh,
+                } : null 
+            };
+        }));
+        // Tính tổng số bình luận theo _id sản phẩm đó
+        const totalComments = await CMT.count({ where: { id_san_pham } });
+        const totalPages = Math.ceil(totalComments / limit); // Tổng số trang
+        res.status(200).json({
+            comments: commentsWithUser,
+            totalComments,
+            totalPages,
+            currentPage: page,
+        });
     } catch (error) {
-        console.error(error.message);
-        res.status(500).json({ message: "Lỗi server" });
-    }
-}
-
-//lấy tất cả bình luận theo _id người dùng
-exports.getAllCommentUser = async (req, res) => {
-    try {
-        const { id_nguoi_dung } = req.params;
-        //kiểm tra xem người dùng có tồn tại không
-        const user = await Users.findOne({ where: { _id: id_nguoi_dung } });
-        if (!user) {
-            return res.status(400).json({ message: "Không tìm thấy người dùng" });
-        }
-        //lấy tất cả bình luận theo _id người dùng
-        const comments = await CMT.findAll({ where: { id_nguoi_dung } });
-        res.status(200).json({comments});
-    }
-    catch (error) {
         console.error(error.message);
         res.status(500).json({ message: "Lỗi server" });
     }
