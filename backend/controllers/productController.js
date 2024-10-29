@@ -2,10 +2,10 @@ const Product = require("../models/product");
 const upload = require("../config/update");
 const Cate = require("../models/cate");
 const Category = require("../models/cate");
-const { Sequelize,Op } = require("sequelize");
+const { Sequelize, Op } = require("sequelize");
 
 // xử lí phần trăm giá giảm
-  exports.filtersanphamdongho = async (req, res) => {
+exports.filtersanphamdongho = async (req, res) => {
   try {
     const {
       gioi_tinh,
@@ -25,7 +25,7 @@ const { Sequelize,Op } = require("sequelize");
       page = 1,
     } = req.query;
     console.log(req.query);
-      
+
     let filter = {
       [Op.and]: [],
     };
@@ -54,103 +54,104 @@ const { Sequelize,Op } = require("sequelize");
           break;
       }
     }
-   if (mat_kinh) {
-     switch (mat_kinh) {
-       case "Sapphire":
-         filter.mat_kinh = "Sapphire";
-         break;
-       case "Mặt kính cứng":
-         filter.mat_kinh = "Mặt kính cứng";
-         break;
-       case "Hardlex Crystal":
-         filter.mat_kinh = "Hardlex Crystal";
-         break;
-       case "Mica":
-         filter.mat_kinh = "Mica";
-         break;
-       case "Kinh Nhựa":
-         filter.mat_kinh = "Kinh Nhựa";
-         break;
-       default:
-         filter.mat_kinh = mat_kinh;
-         break;
-     }
-   }
+    if (mat_kinh) {
+      switch (mat_kinh) {
+        case "Sapphire":
+          filter.mat_kinh = "Sapphire";
+          break;
+        case "Mặt kính cứng":
+          filter.mat_kinh = "Mặt kính cứng";
+          break;
+        case "Hardlex Crystal":
+          filter.mat_kinh = "Hardlex Crystal";
+          break;
+        case "Mica":
+          filter.mat_kinh = "Mica";
+          break;
+        case "Kinh Nhựa":
+          filter.mat_kinh = "Kinh Nhựa";
+          break;
+        default:
+          filter.mat_kinh = mat_kinh;
+          break;
+      }
+    }
 
-   if (mau_mat) {
-     switch (mau_mat) {
-       case "Trắng":
-         filter.mau_mat = "Trắng";
-         break;
-       case "Xám":
-         filter.mau_mat = "Xám";
-         break;
-       case "Xanh lam":
-         filter.mau_mat = "Xanh lam";
-         break;
-       case "Khảm trai":
-         filter.mau_mat = "Khảm trai";
-         break;
-       case "Da Cam":
-         filter.mau_mat = "Da Cam";
-         break;
-       case "Nâu":
-         filter.mau_mat = "Nâu";
-         break;
-       case "Hồng":
-         filter.mau_mat = "Hồng";
-         break;
-       case "Đen":
-         filter.mau_mat = "Đen";
-         break;
-       case "Vàng":
-         filter.mau_mat = "Vàng";
-         break;
-       case "Đỏ":
-         filter.mau_mat = "Đỏ";
-         break;
-       case "Xanh Lá":
-         filter.mau_mat = "Xanh Lá";
-         break;
-       default:
-         filter.mau_mat = mau_mat;
-         break;
-     }
-   }
-   if (loai_may) {
-     switch (loai_may) {
-       case "Automatic":
-         filter.loai_may = "Automatic (Máy cơ tự động)";
-         break;
-       case "Quartz":
-         filter.loai_may = "Quartz (Máy pin - điện tử)";
-         break;
-       case "Eco-Drive":
-         filter.loai_may = "Eco-Drive (Năng lượng ánh sáng)";
-         break;
-       case "Quartz Chronograph":
-         filter.loai_may = "Quartz Chronograph (Máy pin bấm giờ thể thao)";
-         break;
-       case "Automatic Chronometer":
-         filter.loai_may = "Automatic Chronometer (Máy cơ tự động chuẩn COSC)";
-         break;
-       case "Quartz Chronometer":
-         filter.loai_may = "Quartz Chronometer (Máy pin chuẩn COSC)";
-         break;
-       case "Automatic Chronograph":
-         filter.loai_may ="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)";
-         break;
-       case "Quartz Solar":
-         filter.loai_may = "Quartz Solar (Năng lượng ánh sáng)";
-         break;
-       case "Manual winding":
-         filter.loai_may = "Manual winding (Đồng hồ cơ lên dây cót bằng tay)";
-         break;
-       default:
-         filter.loai_may = loai_may;
-         break;
-     }
-   }
+    if (mau_mat) {
+      switch (mau_mat) {
+        case "Trắng":
+          filter.mau_mat = "Trắng";
+          break;
+        case "Xám":
+          filter.mau_mat = "Xám";
+          break;
+        case "Xanh lam":
+          filter.mau_mat = "Xanh lam";
+          break;
+        case "Khảm trai":
+          filter.mau_mat = "Khảm trai";
+          break;
+        case "Da Cam":
+          filter.mau_mat = "Da Cam";
+          break;
+        case "Nâu":
+          filter.mau_mat = "Nâu";
+          break;
+        case "Hồng":
+          filter.mau_mat = "Hồng";
+          break;
+        case "Đen":
+          filter.mau_mat = "Đen";
+          break;
+        case "Vàng":
+          filter.mau_mat = "Vàng";
+          break;
+        case "Đỏ":
+          filter.mau_mat = "Đỏ";
+          break;
+        case "Xanh Lá":
+          filter.mau_mat = "Xanh Lá";
+          break;
+        default:
+          filter.mau_mat = mau_mat;
+          break;
+      }
+    }
+    if (loai_may) {
+      switch (loai_may) {
+        case "Automatic":
+          filter.loai_may = "Automatic (Máy cơ tự động)";
+          break;
+        case "Quartz":
+          filter.loai_may = "Quartz (Máy pin - điện tử)";
+          break;
+        case "Eco-Drive":
+          filter.loai_may = "Eco-Drive (Năng lượng ánh sáng)";
+          break;
+        case "Quartz Chronograph":
+          filter.loai_may = "Quartz Chronograph (Máy pin bấm giờ thể thao)";
+          break;
+        case "Automatic Chronometer":
+          filter.loai_may = "Automatic Chronometer (Máy cơ tự động chuẩn COSC)";
+          break;
+        case "Quartz Chronometer":
+          filter.loai_may = "Quartz Chronometer (Máy pin chuẩn COSC)";
+          break;
+        case "Automatic Chronograph":
+          filter.loai_may =
+            "Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)";
+          break;
+        case "Quartz Solar":
+          filter.loai_may = "Quartz Solar (Năng lượng ánh sáng)";
+          break;
+        case "Manual winding":
+          filter.loai_may = "Manual winding (Đồng hồ cơ lên dây cót bằng tay)";
+          break;
+        default:
+          filter.loai_may = loai_may;
+          break;
+      }
+    }
 
     if (duong_kinh) {
       switch (duong_kinh) {
@@ -235,26 +236,26 @@ const { Sequelize,Op } = require("sequelize");
       filter.chat_lieu_vo = chat_lieu_vo;
     }
     if (mat_kinh) {
-       switch (mat_kinh) {
-         case "Sapphire":
-           filter.mat_kinh = "Sapphire";
-           break;
-         case "Mặt kính cứng":
-           filter.mat_kinh = "Mặt kính cứng";
-           break;
-         case "Hardlex Crystal":
-           filter.mat_kinh = "Hardlex Crystal";
-           break;
-         case "Mica":
-           filter.mat_kinh = "Mica";
-           break;
-         case "Kinh Nhựa":
-           filter.mat_kinh = "Kinh Nhựa";
-           break;
-         default:
-           filter.mat_kinh = mat_kinh;
-           break;
-       }
+      switch (mat_kinh) {
+        case "Sapphire":
+          filter.mat_kinh = "Sapphire";
+          break;
+        case "Mặt kính cứng":
+          filter.mat_kinh = "Mặt kính cứng";
+          break;
+        case "Hardlex Crystal":
+          filter.mat_kinh = "Hardlex Crystal";
+          break;
+        case "Mica":
+          filter.mat_kinh = "Mica";
+          break;
+        case "Kinh Nhựa":
+          filter.mat_kinh = "Kinh Nhựa";
+          break;
+        default:
+          filter.mat_kinh = mat_kinh;
+          break;
+      }
       filter.mat_kinh = mat_kinh;
     }
     if (mau_mat) {
@@ -337,7 +338,7 @@ const { Sequelize,Op } = require("sequelize");
           filter.kieu_dang = "Mặt Oval";
           break;
         default:
-           filter.kieu_dang = kieu_dang;
+          filter.kieu_dang = kieu_dang;
           break;
       }
     }
@@ -360,7 +361,7 @@ const { Sequelize,Op } = require("sequelize");
       if (category) {
         filter.id_danh_muc = category._id;
       } else {
-        return res.status(404).json({ message: "Danh mục không tồn tại" })
+        return res.status(404).json({ message: "Danh mục không tồn tại" });
       }
     }
     if (muc_gia) {
@@ -408,14 +409,16 @@ const { Sequelize,Op } = require("sequelize");
               },
               {
                 gia_san_pham: priceRange,
-              }
+              },
             ],
           },
         ];
       }
     }
     if (khuyenmai) {
-      const discount = req.query.khuyenmai.replace('Giảm ', '').replace('%', '');
+      const discount = req.query.khuyenmai
+        .replace("Giảm ", "")
+        .replace("%", "");
       filter[Op.and].push(
         { gia_giam: { [Op.ne]: null } },
         { gia_giam: { [Op.ne]: 0 } },
@@ -424,57 +427,55 @@ const { Sequelize,Op } = require("sequelize");
         )
       );
     }
-    const productsCount = await Product.count({ where: filter, });
+    const productsCount = await Product.count({ where: filter });
     //sp nhỏ hơn = 20nthif không phần trang
     if (productsCount <= 20) {
       const products = await Product.findAll({ where: filter });
-      return res.json({products, totalProducts: productsCount});
+      return res.json({ products, totalProducts: productsCount });
     }
     //nếu sp lớn 20 thì phân trang
     const offset = (page - 1) * limit;
-    const { rows: products, count: totalProducts } = await Product.findAndCountAll({
-      where: filter,
-      limit,
-      offset,
-    })
+    const { rows: products, count: totalProducts } =
+      await Product.findAndCountAll({
+        where: filter,
+        limit,
+        offset,
+      });
     // hàm nếu sp lớn hơn thì phân trang
     const totalPages = Math.ceil(totalProducts / limit);
-      res.json({
-        products,
-        currentPage: page,
-        totalPages,
-        totalProducts,
-      });
+    res.json({
+      products,
+      currentPage: page,
+      totalPages,
+      totalProducts,
+    });
   } catch (error) {
     console.log("Error: ", error);
     res.status(500).json({ error: error.message });
   }
-  }
+};
 
 // xử lí lọc them dây đồng hồ
-  exports.filterDayDongHo = async (req, res) => {
+exports.filterDayDongHo = async (req, res) => {
   try {
+    const category = await Cate.findOne({
+      where: { _id: "92ad8d9a-fba0-48db-a93d-6974bb5a9ed9" },
+    });
+    if (!category) {
+      return res.status(404).json({ message: "Danh mục không tồn tại" });
+    }
     const {
       size_day,
       mau_day,
       thuong_hieu,
       chat_lieu_day,
-      danh_muc,
       limit = 20,
       page = 1,
     } = req.query;
     console.log(req.query);
-      
+
     let filter = {
-      [Op.and]: [],
-    };
-    filter.loai = {
-      [Op.notIn]: [
-        "Vòng tay",
-        "Trang sức",
-        "Đồng hồ để bàn",
-        "Đồng hồ báo thức",
-      ],
+      [Op.and]: [{ id_danh_muc: category._id }],
     };
     if (size_day) {
       switch (size_day) {
@@ -512,7 +513,7 @@ const { Sequelize,Op } = require("sequelize");
           filter.size_day = "14-12mm";
           break;
         case "Size 12-10mm":
-          filter.size_day = "12-10mm";
+          filter.size_day = "";
           break;
         default:
           filter.size_day = size_day;
@@ -538,7 +539,7 @@ const { Sequelize,Op } = require("sequelize");
           filter.mau_day = "Đen";
           break;
         default:
-          filter.mau_day = mau_day; // fallback option
+          filter.mau_day = mau_day;
           break;
       }
     }
@@ -583,58 +584,47 @@ const { Sequelize,Op } = require("sequelize");
           break;
       }
     }
-    if (danh_muc) {
-      const category = await Cate.findOne({ where: { danh_muc: danh_muc } });
-      console.log("category result", category);
-      if (category) {
-        filter.id_danh_muc = category._id;
-      } else {
-        return res.status(404).json({ message: "Danh mục không tồn tại" })
-      }
-    }
-    const productsCount = await Product.count({ where: filter, });
+    const productsCount = await Product.count({ where: filter });
     //sp nhỏ hơn = 20nthif không phần trang
     if (productsCount <= 20) {
       const products = await Product.findAll({ where: filter });
-      return res.json({products, totalProducts: productsCount});
+      return res.json({ products, totalProducts: productsCount });
     }
     //nếu sp lớn 20 thì phân trang
     const offset = (page - 1) * limit;
-    const { rows: products, count: totalProducts } = await Product.findAndCountAll({
-      where: filter,
-      limit,
-      offset,
-    })
+    const { rows: products, count: totalProducts } =
+      await Product.findAndCountAll({
+        where: filter,
+        limit,
+        offset,
+      });
     // hàm nếu sp lớn hơn thì phân trang
     const totalPages = Math.ceil(totalProducts / limit);
-      res.json({
-        products,
-        currentPage: page,
-        totalPages,
-        totalProducts,
-      });
+    res.json({
+      products,
+      currentPage: page,
+      totalPages,
+      totalProducts,
+    });
   } catch (error) {
     console.log("Error: ", error);
     res.status(500).json({ error: error.message });
   }
-}
+};
 // xử lí lọc them đồng hồ để bàn
-  exports.filterDeBan = async (req, res) => {
+exports.filterDeBan = async (req, res) => {
   try {
-    const {
-      thuong_hieu,
-      chat_lieu_vo,
-      danh_muc,
-      limit = 20,
-      page = 1,
-    } = req.query;
+    const category = await Cate.findOne({
+      where: { _id: "09204055-d105-4c21-90e3-58ee82d2f65a" },
+    });
+    if (!category) {
+      return res.status(404).json({ message: "Danh mục không tồn tại" });
+    }
+    const { thuong_hieu, chat_lieu_vo, limit = 20, page = 1 } = req.query;
     console.log(req.query);
 
     let filter = {
-      [Op.and]: [],
-    };
-    filter.loai = {
-      [Op.notIn]: ["Vòng tay", "Trang sức", "Đồng hồ báo thức"],
+      [Op.and]: [{ id_danh_muc: category._id }],
     };
 
     if (thuong_hieu) {
@@ -669,15 +659,6 @@ const { Sequelize,Op } = require("sequelize");
           break;
       }
     }
-    if (danh_muc) {
-      const category = await Cate.findOne({ where: { danh_muc: danh_muc } });
-      console.log("category result", category);
-      if (category) {
-        filter.id_danh_muc = category._id;
-      } else {
-        return res.status(404).json({ message: "Danh mục không tồn tại" });
-      }
-    }
     const productsCount = await Product.count({ where: filter });
     //sp nhỏ hơn = 20nthif không phần trang
     if (productsCount <= 20) {
@@ -707,22 +688,18 @@ const { Sequelize,Op } = require("sequelize");
 };
 
 // xử lí lọc them đồng hồ báo thức
-  exports.filterBaoThuc = async (req, res) => {
+exports.filterBaoThuc = async (req, res) => {
   try {
-    const {
-      thuong_hieu,
-      chat_lieu_vo,
-      danh_muc,
-      limit = 20,
-      page = 1,
-    } = req.query;
+    const category = await Cate.findOne({
+      where: { _id: "ba2c7104-9bb0-448b-920a-3baffebbb7d6" },
+    });
+    if (!category) {
+      return res.status(404).json({ message: "Danh mục không tồn tại" });
+    }
+    const { thuong_hieu, chat_lieu_vo, limit = 20, page = 1 } = req.query;
     console.log(req.query);
-
     let filter = {
-      [Op.and]: [],
-    };
-    filter.loai = {
-      [Op.notIn]: ["Vòng tay", "Trang sức",],
+      [Op.and]: [{ id_danh_muc: category._id }],
     };
 
     if (thuong_hieu) {
@@ -751,15 +728,6 @@ const { Sequelize,Op } = require("sequelize");
           break;
       }
     }
-    if (danh_muc) {
-      const category = await Cate.findOne({ where: { danh_muc: danh_muc } });
-      console.log("category result", category);
-      if (category) {
-        filter.id_danh_muc = category._id;
-      } else {
-        return res.status(404).json({ message: "Danh mục không tồn tại" });
-      }
-    }
     const productsCount = await Product.count({ where: filter });
     //sp nhỏ hơn = 20nthif không phần trang
     if (productsCount <= 20) {
@@ -786,28 +754,31 @@ const { Sequelize,Op } = require("sequelize");
     console.log("Error: ", error);
     res.status(500).json({ error: error.message });
   }
-  };
+};
 
 // xử lí lọc them đồng hồ TREO TƯỜNG
-  exports.filterTreoTuong = async (req, res) => {
+exports.filterTreoTuong = async (req, res) => {
   try {
+    const category = await Cate.findOne({
+      where: { _id: "14257815-7fd6-41ac-9cd1-6a5d54f0eaa4" },
+    });
+    if (!category) {
+      return res.status(404).json({ message: "Danh mục không tồn tại" });
+    }
     const {
       thuong_hieu,
       muc_gia,
       chat_lieu_vo,
       kieu_dang,
       mau_mat,
-      danh_muc,
+      phong_cach,
       limit = 20,
       page = 1,
     } = req.query;
     console.log(req.query);
 
     let filter = {
-      [Op.and]: [],
-    };
-    filter.loai = {
-      [Op.notIn]: ["Vòng tay", "Trang sức",],
+      [Op.and]: [{ id_danh_muc: category._id }],
     };
 
     if (thuong_hieu) {
@@ -824,40 +795,40 @@ const { Sequelize,Op } = require("sequelize");
       }
     }
     if (muc_gia) {
-       let priceRange;
-       switch (muc_gia) {
-         case "Dưới 2 triệu":
-           priceRange = { [Op.lt]: 2000000 };
-           break;
-         case "Từ 2 triệu đến 5 triệu":
-           priceRange = { [Op.between]: [2000000, 5000000] };
-           break;
-         case "Trên 5 triệu":
-           priceRange = { [Op.gte]: 5000000 };
-           break;
-         default:
-           priceRange = null;
-           break;
-       }
-       if (priceRange) {
-         filter[Op.or] = [
-           {
-             gia_giam: { ...priceRange, [Op.gt]: 0 },
-           },
-           {
-             [Op.and]: [
-               {
-                 gia_giam: {
-                   [Op.or]: [0, null],
-                 },
-               },
-               {
-                 gia_san_pham: priceRange,
-               },
-             ],
-           },
-         ];
-       }
+      let priceRange;
+      switch (muc_gia) {
+        case "Dưới 2 triệu":
+          priceRange = { [Op.lt]: 2000000 };
+          break;
+        case "Từ 2 triệu đến 5 triệu":
+          priceRange = { [Op.between]: [2000000, 5000000] };
+          break;
+        case "Trên 5 triệu":
+          priceRange = { [Op.gte]: 5000000 };
+          break;
+        default:
+          priceRange = null;
+          break;
+      }
+      if (priceRange) {
+        filter[Op.or] = [
+          {
+            gia_giam: { ...priceRange, [Op.gt]: 0 },
+          },
+          {
+            [Op.and]: [
+              {
+                gia_giam: {
+                  [Op.or]: [0, null],
+                },
+              },
+              {
+                gia_san_pham: priceRange,
+              },
+            ],
+          },
+        ];
+      }
     }
     if (chat_lieu_vo) {
       switch (chat_lieu_vo) {
@@ -876,23 +847,23 @@ const { Sequelize,Op } = require("sequelize");
       }
     }
     if (kieu_dang) {
-       switch (kieu_dang) {
-         case "Mặt vuông":
-           filter.kieu_dang = "Mặt vuông";
-           break;
-         case "Mặt tròn":
-           filter.kieu_dang = "Mặt tròn";
-           break;
-         case "Mặt chữ nhật":
-           filter.kieu_dang = "Mặt chữ nhật";
-           break;
-         case "Mặt Oval":
-           filter.kieu_dang = "Mặt Oval";
-           break;
-         default:
-           filter.kieu_dang = kieu_dang;
-           break;
-       }
+      switch (kieu_dang) {
+        case "Mặt vuông":
+          filter.kieu_dang = "Mặt vuông";
+          break;
+        case "Mặt tròn":
+          filter.kieu_dang = "Mặt tròn";
+          break;
+        case "Mặt chữ nhật":
+          filter.kieu_dang = "Mặt chữ nhật";
+          break;
+        case "Mặt Oval":
+          filter.kieu_dang = "Mặt Oval";
+          break;
+        default:
+          filter.kieu_dang = kieu_dang;
+          break;
+      }
     }
     if (mau_mat) {
       switch (mau_mat) {
@@ -919,13 +890,14 @@ const { Sequelize,Op } = require("sequelize");
           break;
       }
     }
-    if (danh_muc) {
-      const category = await Cate.findOne({ where: { danh_muc: danh_muc } });
-      console.log("category result", category);
-      if (category) {
-        filter.id_danh_muc = category._id;
-      } else {
-        return res.status(404).json({ message: "Danh mục không tồn tại" });
+    if (phong_cach) {
+      switch (phong_cach) {
+        case "Quả Lắc":
+          filter.phong_cach = "Quả Lắc";
+          break;
+        default:
+          filter.phong_cach = phong_cach;
+          break;
       }
     }
     const productsCount = await Product.count({ where: filter });
@@ -954,654 +926,656 @@ const { Sequelize,Op } = require("sequelize");
     console.log("Error: ", error);
     res.status(500).json({ error: error.message });
   }
-  };
-  // show sản phẩm mới nhất Nam
-  exports.getNewProductsMale = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: {
-          gioi_tinh: "Nam",
-          loai: { [Op.not]: "Vòng Tay" },
-        },
-        order: [["createdAt", "DESC"]],
-      });
+};
+// show sản phẩm mới nhất Nam
+exports.getNewProductsMale = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        gioi_tinh: "Nam",
+        loai: { [Op.not]: "Vòng Tay" },
+      },
+      order: [["createdAt", "DESC"]],
+    });
 
-      if (products.length === 0) {
-        return res.status(404).json({ message: "Không có sản phẩm nào" });
-      }
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
     }
-  };
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-  // show sản phẩm mới nhất nu
-  exports.getNewProductsFeMale = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: {
-          gioi_tinh: "Nữ",
-          loai: { [Op.not]: "Vòng Tay" },
-        },
-        order: [["createdAt", "DESC"]],
-      });
+// show sản phẩm mới nhất nu
+exports.getNewProductsFeMale = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        gioi_tinh: "Nữ",
+        loai: { [Op.not]: "Vòng Tay" },
+      },
+      order: [["createdAt", "DESC"]],
+    });
 
-      if (products.length === 0) {
-        return res.status(404).json({ message: "Không có sản phẩm nào" });
-      }
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
     }
-  };
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-  // show sản phẩm mới nhất Đôi
-  exports.getNewProductsCouple = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: {
-          gioi_tinh: "Đồng Hồ Đôi",
-          loai: { [Op.not]: "Vòng Tay" },
-        },
-        order: [["createdAt", "DESC"]],
-      });
+// show sản phẩm mới nhất Đôi
+exports.getNewProductsCouple = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        gioi_tinh: "Đồng Hồ Đôi",
+        loai: { [Op.not]: "Vòng Tay" },
+      },
+      order: [["createdAt", "DESC"]],
+    });
 
-      if (products.length === 0) {
-        return res.status(404).json({ message: "Không có sản phẩm nào" });
-      }
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
     }
-  };
- 
-  // show sản phẩm mới nhất Nam giới hạn 10 sp
-  exports.getNewLimitMale = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: {
-          gioi_tinh: "Nam",
-          loai: { [Op.not]: "Vòng Tay" },
-        },
-        order: [["createdAt", "DESC"]],
-        limit: 10,
-      });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-      if (products.length === 0) {
-        return res.status(404).json({ message: "Không có sản phẩm nào" });
-      }
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+// show sản phẩm mới nhất Nam giới hạn 10 sp
+exports.getNewLimitMale = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        gioi_tinh: "Nam",
+        loai: { [Op.not]: "Vòng Tay" },
+      },
+      order: [["createdAt", "DESC"]],
+      limit: 10,
+    });
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
     }
-  };
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-  // show sản phẩm mới nhất nu giới hạn 10 sp
-  exports.getNewLimitFeMale = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: {
-          gioi_tinh: "Nữ",
-          loai: { [Op.not]: "Vòng Tay" },
-        },
-        order: [["createdAt", "DESC"]],
-        limit: 10,
-      });
+// show sản phẩm mới nhất nu giới hạn 10 sp
+exports.getNewLimitFeMale = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        gioi_tinh: "Nữ",
+        loai: { [Op.not]: "Vòng Tay" },
+      },
+      order: [["createdAt", "DESC"]],
+      limit: 10,
+    });
 
-      if (products.length === 0) {
-        return res.status(404).json({ message: "Không có sản phẩm nào" });
-      }
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
     }
-  };
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-  // show sản phẩm mới nhất Đôi giới hạn 10 sp
-  exports.getNewLimitCouple = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: {
-          gioi_tinh: "Đồng Hồ Đôi",
-          loai: { [Op.not]: "Vòng Tay" },
-        },
-        order: [["createdAt", "DESC"]],
-        limit: 10,
-      });
+// show sản phẩm mới nhất Đôi giới hạn 10 sp
+exports.getNewLimitCouple = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        gioi_tinh: "Đồng Hồ Đôi",
+        loai: { [Op.not]: "Vòng Tay" },
+      },
+      order: [["createdAt", "DESC"]],
+      limit: 10,
+    });
 
-      if (products.length === 0) {
-        return res.status(404).json({ message: "Không có sản phẩm nào" });
-      }
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
     }
-  };
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-  // Lấy danh mục theo giới tính "Nam"
-  exports.getMale = async (req, res) => {
-    try {
-      let { limit = 20, page = 1 } = req.query
-      limit = parseInt(limit);
-      page = parseInt(page);
-      if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
-        return res.status(400).json({ message: "Itham số không hợp lệ" });
-      }
-      const offset = (page - 1) * limit;
+// Lấy danh mục theo giới tính "Nam"
+exports.getMale = async (req, res) => {
+  try {
+    let { limit = 20, page = 1 } = req.query;
+    limit = parseInt(limit);
+    page = parseInt(page);
+    if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
+      return res.status(400).json({ message: "Itham số không hợp lệ" });
+    }
+    const offset = (page - 1) * limit;
 
-      const { rows: products, count: totalProducts } = await Product.findAndCountAll({
+    const { rows: products, count: totalProducts } =
+      await Product.findAndCountAll({
         where: { gioi_tinh: "Nam" },
         order: [["createdAt", "DESC"]],
         limit,
         offset,
       });
-      if (products.length === 0) {
-        return res.status(404).json({ message: "Không có sản phẩm nào" });
-      }
-      const totalPages = Math.ceil(totalProducts / limit);
-      if (page > totalPages) {
-        return res.status(404).json({ message: "Trang không tồn tại" });
-      }
-      res.json({
-        products,
-        currentPage: page,
-        totalPages,
-        totalProducts,
-      });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
     }
-  };
-
-  // Lấy danh mục theo giới tính "Nam" 10sp
-  exports.getMale10sp = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: { gioi_tinh: "Nam" },
-        limit: 10,
-      });
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    const totalPages = Math.ceil(totalProducts / limit);
+    if (page > totalPages) {
+      return res.status(404).json({ message: "Trang không tồn tại" });
     }
-  };
+    res.json({
+      products,
+      currentPage: page,
+      totalPages,
+      totalProducts,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-  // Lấy danh mục theo giới tính "Nữ"
-  exports.getFeMale = async (req, res) => {
-    try {
-      let { limit = 20, page = 1 } = req.query;
-      limit = parseInt(limit);
-      page = parseInt(page);
-      if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
-        return res.status(400).json({ message: "Itham số không hợp lệ" });
-      }
-      const offset = (page - 1) * limit;
-      const { rows: products, count: totalProducts } = await Product.findAndCountAll({
+// Lấy danh mục theo giới tính "Nam" 10sp
+exports.getMale10sp = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: { gioi_tinh: "Nam" },
+      limit: 10,
+    });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Lấy danh mục theo giới tính "Nữ"
+exports.getFeMale = async (req, res) => {
+  try {
+    let { limit = 20, page = 1 } = req.query;
+    limit = parseInt(limit);
+    page = parseInt(page);
+    if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
+      return res.status(400).json({ message: "Itham số không hợp lệ" });
+    }
+    const offset = (page - 1) * limit;
+    const { rows: products, count: totalProducts } =
+      await Product.findAndCountAll({
         where: {
           gioi_tinh: "Nữ",
-          loai: { [Op.not]: "Vòng Tay" }
+          loai: { [Op.not]: "Vòng Tay" },
         },
         order: [["createdAt", "DESC"]],
         limit,
         offset,
       });
-      if (products.length === 0) {
-        return res.status(404).json({ message: "Không có sản phẩm nào" });
-      }
-      const totalPages = Math.ceil(totalProducts / limit);
-      if (page > totalPages) {
-        return res.status(404).json({ message: "Trang không tồn tại" });
-      }
-      res.json({
-        products,
-        currentPage: page,
-        totalPages,
-        totalProducts,
-      });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
     }
-  };
-
-  // Lấy danh mục theo giới tính "Nữ"10sp
-  exports.getFeMale10sp = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: {
-          gioi_tinh: "Nữ",
-        },
-        limit: 10,
-      });
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    const totalPages = Math.ceil(totalProducts / limit);
+    if (page > totalPages) {
+      return res.status(404).json({ message: "Trang không tồn tại" });
     }
-  };
+    res.json({
+      products,
+      currentPage: page,
+      totalPages,
+      totalProducts,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-  // Lấy danh mục theo "Đôi"
-  exports.getCouple = async (req, res) => {
-    try {
-      let { limit = 20, page = 1 } = req.query;
-      limit = parseInt(limit);
-      page = parseInt(page);
-      if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
-        return res.status(400).json({ message: "Itham số không hợp lệ" });
-      }
-      const offset = (page - 1) * limit;
-      const { rows: products, count: totalProducts } =
-        await Product.findAndCountAll({
-          where: { gioi_tinh: "Đồng Hồ Đôi" },
-          order: [["createdAt", "DESC"]],
-          limit,
-          offset,
-        });
-      if (products.length === 0) {
-        return res.status(404).json({ message: "Không có sản phẩm nào" });
-      }
-      const totalPages = Math.ceil(totalProducts / limit);
-      if (page > totalPages) {
-        return res.status(404).json({ message: "Trang không tồn tại" });
-      }
-      res.json({
-        products,
-        currentPage: page,
-        totalPages,
-        totalProducts,
-      });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+// Lấy danh mục theo giới tính "Nữ"10sp
+exports.getFeMale10sp = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        gioi_tinh: "Nữ",
+      },
+      limit: 10,
+    });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Lấy danh mục theo "Đôi"
+exports.getCouple = async (req, res) => {
+  try {
+    let { limit = 20, page = 1 } = req.query;
+    limit = parseInt(limit);
+    page = parseInt(page);
+    if (isNaN(limit) || isNaN(page) || limit <= 0 || page <= 0) {
+      return res.status(400).json({ message: "Itham số không hợp lệ" });
     }
-  };
-
-  // Lấy danh mục theo giới tính "đồng hồ đôi"
-  exports.getCouple10sp = async (req, res) => {
-    try {
-      const products = await Product.findAll({
+    const offset = (page - 1) * limit;
+    const { rows: products, count: totalProducts } =
+      await Product.findAndCountAll({
         where: { gioi_tinh: "Đồng Hồ Đôi" },
-        limit: 10,
+        order: [["createdAt", "DESC"]],
+        limit,
+        offset,
       });
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không có sản phẩm nào" });
     }
-  };
+    const totalPages = Math.ceil(totalProducts / limit);
+    if (page > totalPages) {
+      return res.status(404).json({ message: "Trang không tồn tại" });
+    }
+    res.json({
+      products,
+      currentPage: page,
+      totalPages,
+      totalProducts,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-  // lấy sản phẩm dưới 2 c
-  exports.getProductsUnderTwoMillion = async (req, res) => {
-    try {
-      const allProducts = await Product.findAll({
-        where: {
-          gioi_tinh: "Nam",
-          loai: {
-            [Op.notIn]: ["Vòng tay", "Trang sức"]
-          }
+// Lấy danh mục theo giới tính "đồng hồ đôi"
+exports.getCouple10sp = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: { gioi_tinh: "Đồng Hồ Đôi" },
+      limit: 10,
+    });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// lấy sản phẩm dưới 2 c
+exports.getProductsUnderTwoMillion = async (req, res) => {
+  try {
+    const allProducts = await Product.findAll({
+      where: {
+        gioi_tinh: "Nam",
+        loai: {
+          [Op.notIn]: ["Vòng tay", "Trang sức"],
         },
-      });
-      const products = allProducts.filter(product => {
-        if (product.gia_giam > 0) {
-          return product.gia_giam < 2000000;
-        } else {
-          return product.gia_san_pham < 2000000;
-        }
-      })
-      if (products.length === 0) {
-        return res.status(404).json({ message: "khong tìm thấy sản phẩm dưới 2 triệu" })
+      },
+    });
+    const products = allProducts.filter((product) => {
+      if (product.gia_giam > 0) {
+        return product.gia_giam < 2000000;
+      } else {
+        return product.gia_san_pham < 2000000;
       }
-      res.json({ products });
-    } catch (error) {
-      console.error("sản phẩm nam dưới 2 triệu", error.message);
-      res.status(500).json({ error: error.message });
+    });
+    if (products.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "khong tìm thấy sản phẩm dưới 2 triệu" });
     }
-  };
+    res.json({ products });
+  } catch (error) {
+    console.error("sản phẩm nam dưới 2 triệu", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
 
-  //lấy sản phẩm từ 2 đến 5 triệu
-  exports.getProductstu2den5trieu = async (req, res) => {
-    try {
-      const allProducts = await Product.findAll({
-        where: {
-          gioi_tinh: "Nam",
-          loai: {
-            [Op.notIn]: ["Vòng tay", "Trang sức"],
-          },
+//lấy sản phẩm từ 2 đến 5 triệu
+exports.getProductstu2den5trieu = async (req, res) => {
+  try {
+    const allProducts = await Product.findAll({
+      where: {
+        gioi_tinh: "Nam",
+        loai: {
+          [Op.notIn]: ["Vòng tay", "Trang sức"],
         },
-      });
-      const products = allProducts.filter((product) => {
-        if (product.gia_giam > 0) {
-          return product.gia_giam >= 2000000 && product.gia_giam <= 5000000;
-        } else {
-          return (
-            product.gia_san_pham >= 2000000 && product.gia_san_pham <= 5000000
-          );
-        }
-      });
-
-      if (products.length === 0) {
-        return res.status(404).json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
+      },
+    });
+    const products = allProducts.filter((product) => {
+      if (product.gia_giam > 0) {
+        return product.gia_giam >= 2000000 && product.gia_giam <= 5000000;
+      } else {
+        return (
+          product.gia_san_pham >= 2000000 && product.gia_san_pham <= 5000000
+        );
       }
+    });
 
-      res.json({ products });
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ error: error.message });
+    if (products.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
     }
-  };
 
-  //lấy sản phẩm từ 5 đến 10 triệu
-  exports.getProductstu5den10trieu = async (req, res) => {
-    try {
-      const allProducts = await Product.findAll({
-        where: {
-          gioi_tinh: "Nam",
-          loai: {
-            [Op.notIn]: ["Vòng tay", "Trang sức"],
-          },
+    res.json({ products });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+//lấy sản phẩm từ 5 đến 10 triệu
+exports.getProductstu5den10trieu = async (req, res) => {
+  try {
+    const allProducts = await Product.findAll({
+      where: {
+        gioi_tinh: "Nam",
+        loai: {
+          [Op.notIn]: ["Vòng tay", "Trang sức"],
         },
-      });
-      const products = allProducts.filter((product) => {
-        if (product.gia_giam > 0) {
-          return product.gia_giam >= 5000000 && product.gia_giam <= 10000000;
-        } else {
-          return (
-            product.gia_san_pham >= 5000000 && product.gia_san_pham <= 10000000
-          );
-        }
-      });
+      },
+    });
+    const products = allProducts.filter((product) => {
+      if (product.gia_giam > 0) {
+        return product.gia_giam >= 5000000 && product.gia_giam <= 10000000;
+      } else {
+        return (
+          product.gia_san_pham >= 5000000 && product.gia_san_pham <= 10000000
+        );
+      }
+    });
 
-      res.json({ products });
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ error: error.message });
-    }
-  };
+    res.json({ products });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
 
-  //lấy sản phẩm từ 10 đến 20 triệu
-  exports.getProductstu10den20trieu = async (req, res) => {
-    try {
-      const allProducts = await Product.findAll({
-        where: {
-          gioi_tinh: "Nam",
-          loai: {
-            [Op.notIn]: ["Vòng tay", "Trang sức"],
-          },
+//lấy sản phẩm từ 10 đến 20 triệu
+exports.getProductstu10den20trieu = async (req, res) => {
+  try {
+    const allProducts = await Product.findAll({
+      where: {
+        gioi_tinh: "Nam",
+        loai: {
+          [Op.notIn]: ["Vòng tay", "Trang sức"],
         },
-      });
-      const products = allProducts.filter((product) => {
-        if (product.gia_giam > 0) {
-          return product.gia_giam >= 10000000 && product.gia_giam <= 20000000;
-        } else {
-          return (
-            product.gia_san_pham >= 10000000 && product.gia_san_pham <= 20000000
-          );
-        }
-      });
+      },
+    });
+    const products = allProducts.filter((product) => {
+      if (product.gia_giam > 0) {
+        return product.gia_giam >= 10000000 && product.gia_giam <= 20000000;
+      } else {
+        return (
+          product.gia_san_pham >= 10000000 && product.gia_san_pham <= 20000000
+        );
+      }
+    });
 
-      res.json({ products });
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ error: error.message });
-    }
-  };
+    res.json({ products });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
 
-  //lấy sản phẩm từ 20 đến 30 triệu
-  exports.getProductstu20den30trieu = async (req, res) => {
-    try {
-      const allProducts = await Product.findAll({
-        where: {
-          gioi_tinh: "Nam",
-          loai: {
-            [Op.notIn]: ["Vòng tay", "Trang sức"],
-          },
+//lấy sản phẩm từ 20 đến 30 triệu
+exports.getProductstu20den30trieu = async (req, res) => {
+  try {
+    const allProducts = await Product.findAll({
+      where: {
+        gioi_tinh: "Nam",
+        loai: {
+          [Op.notIn]: ["Vòng tay", "Trang sức"],
         },
-      });
-      const products = allProducts.filter((product) => {
-        if (product.gia_giam > 0) {
-          return product.gia_giam >= 20000000 && product.gia_giam <= 30000000;
-        } else {
-          return (
-            product.gia_san_pham >= 20000000 && product.gia_san_pham <= 30000000
-          );
-        }
-      });
+      },
+    });
+    const products = allProducts.filter((product) => {
+      if (product.gia_giam > 0) {
+        return product.gia_giam >= 20000000 && product.gia_giam <= 30000000;
+      } else {
+        return (
+          product.gia_san_pham >= 20000000 && product.gia_san_pham <= 30000000
+        );
+      }
+    });
 
-      res.json({ products });
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ error: error.message });
-    }
-  };
-  //lấy sản phẩm từ 30 đến 50 triệu
-  exports.getProductstu30den50trieu = async (req, res) => {
-    try {
-      const allProducts = await Product.findAll({
-        where: {
-          gioi_tinh: "Nam",
-          loai: {
-            [Op.notIn]: ["Vòng tay", "Trang sức"],
-          },
+    res.json({ products });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+//lấy sản phẩm từ 30 đến 50 triệu
+exports.getProductstu30den50trieu = async (req, res) => {
+  try {
+    const allProducts = await Product.findAll({
+      where: {
+        gioi_tinh: "Nam",
+        loai: {
+          [Op.notIn]: ["Vòng tay", "Trang sức"],
         },
-      });
-      const products = allProducts.filter((product) => {
-        if (product.gia_giam > 0) {
-          return product.gia_giam >= 30000000 && product.gia_giam <= 50000000;
-        } else {
-          return (
-            product.gia_san_pham >= 30000000 && product.gia_san_pham <= 50000000
-          );
-        }
-      });
+      },
+    });
+    const products = allProducts.filter((product) => {
+      if (product.gia_giam > 0) {
+        return product.gia_giam >= 30000000 && product.gia_giam <= 50000000;
+      } else {
+        return (
+          product.gia_san_pham >= 30000000 && product.gia_san_pham <= 50000000
+        );
+      }
+    });
 
-      res.json({ products });
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ error: error.message });
-    }
-  };
-  //lấy sản phẩm từ 50 đến 100 triệu
-  exports.getProductstu50den100trieu = async (req, res) => {
-    try {
-      const allProducts = await Product.findAll({
-        where: {
-          gioi_tinh: "Nam",
-          loai: {
-            [Op.notIn]: ["Vòng tay", "Trang sức"],
-          },
+    res.json({ products });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+//lấy sản phẩm từ 50 đến 100 triệu
+exports.getProductstu50den100trieu = async (req, res) => {
+  try {
+    const allProducts = await Product.findAll({
+      where: {
+        gioi_tinh: "Nam",
+        loai: {
+          [Op.notIn]: ["Vòng tay", "Trang sức"],
         },
-      });
-      const products = allProducts.filter((product) => {
-        if (product.gia_giam > 0) {
-          return product.gia_giam >= 50000000 && product.gia_giam <= 100000000;
-        } else {
-          return (
-            product.gia_san_pham >= 50000000 && product.gia_san_pham <= 100000000
-          );
-        }
-      });
+      },
+    });
+    const products = allProducts.filter((product) => {
+      if (product.gia_giam > 0) {
+        return product.gia_giam >= 50000000 && product.gia_giam <= 100000000;
+      } else {
+        return (
+          product.gia_san_pham >= 50000000 && product.gia_san_pham <= 100000000
+        );
+      }
+    });
 
-      res.json({ products });
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ error: error.message });
-    }
-  };
-  //lấy sản phẩm treen 100 triệu
-  exports.getProductsOver100trieu = async (req, res) => {
-    try {
-      const allProducts = await Product.findAll({
-        where: {
-          gioi_tinh: "Nam",
-          loai: {
-            [Op.notIn]: ["Vòng tay", "Trang sức"],
-          },
+    res.json({ products });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+//lấy sản phẩm treen 100 triệu
+exports.getProductsOver100trieu = async (req, res) => {
+  try {
+    const allProducts = await Product.findAll({
+      where: {
+        gioi_tinh: "Nam",
+        loai: {
+          [Op.notIn]: ["Vòng tay", "Trang sức"],
         },
-      });
-      const products = allProducts.filter((product) => {
-        if (product.gia_giam > 0) {
-          return product.gia_giam > 100000000;
-        } else {
-          return product.gia_san_pham > 100000000;
-        }
-      });
-      res.json({ products });
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).json({ error: error.message });
-    }
-  };
+      },
+    });
+    const products = allProducts.filter((product) => {
+      if (product.gia_giam > 0) {
+        return product.gia_giam > 100000000;
+      } else {
+        return product.gia_san_pham > 100000000;
+      }
+    });
+    res.json({ products });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
 
- // Lấy lọc theo Đồng hồ báo Thức
-  exports.getBaoThuc = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: { loai: "Đồng hồ báo thức" },
-      });
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
+// Lấy lọc theo Đồng hồ báo Thức
+exports.getBaoThuc = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: { loai: "Đồng hồ báo thức" },
+    });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 // Lấy lọc theo Đồng hồ để bàn
-  exports.getDeBan = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: { loai: "Đồng hồ để bàn" },
-      });
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
+exports.getDeBan = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: { loai: "Đồng hồ để bàn" },
+    });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
-  
+
 // Lấy lọc theo Đồng hồ treo tường
-  exports.getTreoTuong = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: { loai: "Đồng hồ treo tường" },
-      });
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
+exports.getTreoTuong = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: { loai: "Đồng hồ treo tường" },
+    });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
-
-  // Lấy danh mục theo chat liệu dây da
-  exports.getChatLieuDayDa = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: { chat_lieu_day: "Dây da" },
-      });
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-  // Lấy danh mục theo chat liệu dây dù
-  exports.getChatLieuDayDu = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: { chat_lieu_day: "Dây dù" },
-      });
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-
-  // Lấy danh mục theo chat liệu dây caosu
-  exports.getChatLieuDayCaoSu = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: { chat_lieu_day: "Dây cao su" },
-      });
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-
-  // Lấy danh mục theo xuatxuTS
-  exports.getXuatXuTS = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: {
-          xuat_xu: "Thụy Sỹ",
-          loai: { [Op.not]: "Trang sức" }
-        },
-      });
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-  // Lấy danh mục theo xuatxuTD
-  exports.getXuatXuTD = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: {
-          xuat_xu: "Thụy Điển",
-          loai: { [Op.not]: "Trang sức" }
-        },
-      });
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-  // Lấy danh mục theo xuatxuNB
-  exports.getXuatXuNB = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: {
-          xuat_xu: "Nhật Bản",
-          loai: {
-            [Op.notIn]: ["Đồng hồ để bàn", "Đồng hồ báo thức"]
-          },
-          thuong_hieu: {
-            [Op.notIn]: ["Đồng hồ treo tường RHYTHM", "Đồng hồ treo tường SEIKO"]
-          }
-        },
-      });
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-  // Lấy danh mục theo xuatxuMy
-  exports.getXuatXuMy = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: { xuat_xu: "Mỹ" },
-      });
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-
-  // Show sản phẩm theo id danh mục  vòng tay trang sức
-  exports.getProdctsCateLoai = async (req, res) => {
-    try {
-      const products = await Product.findAll({
-        where: {
-          id_danh_muc: req.params.id,
-          loai: {
-            [Op.in]: ["Vòng Tay", "Trang Sức"],
-          },
-        },
-      });
-
-      if (products.length === 0) {
-        return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
-      }
-
-      const cate = await Category.findOne({ where: { _id: req.params.id } });
-
-      res.json({ products, cate });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
+// Lấy danh mục theo chat liệu dây da
+exports.getChatLieuDayDa = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: { chat_lieu_day: "Dây da" },
+    });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
-  
+// Lấy danh mục theo chat liệu dây dù
+exports.getChatLieuDayDu = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: { chat_lieu_day: "Dây dù" },
+    });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-  
+// Lấy danh mục theo chat liệu dây caosu
+exports.getChatLieuDayCaoSu = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: { chat_lieu_day: "Dây cao su" },
+    });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Lấy danh mục theo xuatxuTS
+exports.getXuatXuTS = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        xuat_xu: "Thụy Sỹ",
+        loai: { [Op.not]: "Trang sức" },
+      },
+    });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+// Lấy danh mục theo xuatxuTD
+exports.getXuatXuTD = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        xuat_xu: "Thụy Điển",
+        loai: { [Op.not]: "Trang sức" },
+      },
+    });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+// Lấy danh mục theo xuatxuNB
+exports.getXuatXuNB = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        xuat_xu: "Nhật Bản",
+        loai: {
+          [Op.notIn]: ["Đồng hồ để bàn", "Đồng hồ báo thức"],
+        },
+        thuong_hieu: {
+          [Op.notIn]: ["Đồng hồ treo tường RHYTHM", "Đồng hồ treo tường SEIKO"],
+        },
+      },
+    });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+// Lấy danh mục theo xuatxuMy
+exports.getXuatXuMy = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: { xuat_xu: "Mỹ" },
+    });
+    res.json({ products });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Show sản phẩm theo id danh mục  vòng tay trang sức
+exports.getProdctsCateLoai = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        id_danh_muc: req.params.id,
+        loai: {
+          [Op.in]: ["Vòng Tay", "Trang Sức"],
+        },
+      },
+    });
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
+    }
+
+    const cate = await Category.findOne({ where: { _id: req.params.id } });
+
+    res.json({ products, cate });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
