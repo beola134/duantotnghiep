@@ -478,40 +478,40 @@ const { Sequelize,Op } = require("sequelize");
     };
     if (size_day) {
       switch (size_day) {
-        case "26-24mm":
+        case "Size 26-24mm":
           filter.size_day = "26-24mm";
           break;
-        case "26-22mm":
+        case "Size 26-22mm":
           filter.size_day = "26-22mm";
           break;
-        case "24-22mm":
+        case "Size 24-22mm":
           filter.size_day = "24-22mm";
           break;
-        case "24-20mm":
+        case "Size 24-20mm":
           filter.size_day = "24-20mm";
           break;
-        case "22-20mm":
+        case "Size 22-20mm":
           filter.size_day = "22-20mm";
           break;
-        case "21-18mm":
+        case "Size 21-18mm":
           filter.size_day = "21-18mm";
           break;
-        case "20-18mm":
+        case "Size 20-18mm":
           filter.size_day = "20-18mm";
           break;
-        case "19-18mm":
+        case "Size 19-18mm":
           filter.size_day = "19-18mm";
           break;
-        case "18-16mm":
+        case "Size 18-16mm":
           filter.size_day = "18-16mm";
           break;
-        case "16-14mm":
+        case "Size 16-14mm":
           filter.size_day = "16-14mm";
           break;
-        case "14-12mm":
+        case "Size 14-12mm":
           filter.size_day = "14-12mm";
           break;
-        case "12-10mm":
+        case "Size 12-10mm":
           filter.size_day = "12-10mm";
           break;
         default:
@@ -577,9 +577,6 @@ const { Sequelize,Op } = require("sequelize");
           break;
         case "Dây dù":
           filter.chat_lieu_day = "Dây dù";
-          break;
-
-          filter.chat_lieu_day = "Nhựa";
           break;
         default:
           filter.chat_lieu_day = chat_lieu_day;
@@ -1570,7 +1567,7 @@ const { Sequelize,Op } = require("sequelize");
       res.status(500).json({ error: error.message });
     }
   };
-  // Lấy danh mục theo xuatxuNB
+  // Lấy danh mục theo xuatxuMy
   exports.getXuatXuMy = async (req, res) => {
     try {
       const products = await Product.findAll({
