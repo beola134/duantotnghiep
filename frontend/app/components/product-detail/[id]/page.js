@@ -1972,18 +1972,7 @@ export default function Detail({ params }) {
                   <strong> về {product.ten}</strong>
                 </div>
                 {/* <!--  --> */}
-                <form className="formComment">
-                  <input
-                    type="text"
-                    className={styles.commentKeywordWrapper}
-                    id="comment-keyword"
-                    name="comment-keyword"
-                    placeholder="Tìm theo nội dung, người gửi..."
-                  />
-                  <button type="submit" className={styles.commentKeywordBtn}>
-                    <i className="fa fa-search"></i>
-                  </button>
-                </form>
+               
                 <div id="-info-comment" className={styles.cls}></div>
                 {/* <!--  --> */}
                 <form name="comment-add-form" id="comment-add-form" className={`${styles.formComment} ${styles.cls}`}>
@@ -2004,47 +1993,7 @@ export default function Detail({ params }) {
 
                   <input type="button" className={styles.btnCommentMb} value="Gửi bình luận" />
 
-                  {/* <!--  --> */}
-                  <div className={`${styles.wrapR} ${styles.cls}`} style={{ display: "none" }}>
-                    <div className={styles.titleMb}>
-                      Thông tin người gửi
-                      <span className={styles.closeMdComment}>
-                        <i className="fa-solid fa-xmark"></i>
-                      </span>
-                    </div>
-                    <div className={styles.wrapLoginpost}>
-                      <aside className={styles.right}>
-                        <div>
-                          <input
-                            className={styles.txtInput}
-                            required=""
-                            name="name"
-                            type="text"
-                            placeholder="Họ tên (bắt buộc)"
-                            id="cmt-name"
-                            autocomplete="off"
-                            value=""
-                          />
-                        </div>
-                        <div>
-                          <input
-                            className={styles.txtInput}
-                            required=""
-                            name="email"
-                            type="email"
-                            placeholder="Email (bắt buộc)"
-                            id="cmt-email"
-                            value=""
-                          />
-                        </div>
-                      </aside>
-                    </div>
-                    <div className={`${styles.wrapSubmit} ${styles.mbl}`}>
-                      <div className={styles.pullRight}>
-                        <input type="submit" className={styles.btnComment} value="Gửi bình luận" />
-                      </div>
-                    </div>
-                  </div>
+                
                 </form>
               </div>
             </div>
