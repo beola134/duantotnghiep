@@ -34,4 +34,8 @@ router.get("/phantrang", productController.getProductsByPage);
 //http://localhost:5000/product/timkiem
 router.post("/timkiem", productController.searchProducts);
 
+//show sản phẩm liên quan theo danh mục ở trang chi tiết sản phẩm theo id show lun danh muc
+//http://localhost:5000/product/related/:id
+router.get("/related/:id", productController.getRelatedProducts);
+
 module.exports = router;
