@@ -1,32 +1,55 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import styles from "./duoi2tr.module.css";
+import styles from "./donghotreotuong.module.css";
 import Loading from "../loading/page";
+import { useSearchParams } from "next/navigation";
 
-export default function DonghoNam() {
-  const [products, setProducts] = useState([]);
+export default function LocGia() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const searchParams = useSearchParams();
+  const [results, setResults] = useState([]);
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:5000/product/filtersanphamdongho?muc_gia=Dưới 2 triệu&gioi_tinh=Nam"
-        );
-        if (!response.ok) {
-          throw new Error("Lỗi không thể tải dữ liệu");
+    const query = searchParams.get("query");
+    if (query) {
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const response = await fetch(
+            `http://localhost:5000/product/filterTreoTuong?${query}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          setResults(data.products || []);
+          setError(null); // Xóa lỗi nếu thành công
+        } catch (error) {
+          console.error("Lỗi khi fetch dữ liệu:", error);
+          setError("Lỗi khi tải dữ liệu");
+          setResults([]);
+        } finally {
+          setLoading(false);
         }
-        const data = await response.json();
-        setProducts(data.products);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, []);
+      };
+
+      fetchData();
+    } else {
+      setResults([]);
+      setLoading(false); 
+    }
+  }, [searchParams]);
+
   if (loading) {
     return <Loading />;
   }
@@ -1607,7 +1630,7 @@ export default function DonghoNam() {
                       <div className={styles["cat-title"]}>
                         <div className={styles["cat-title-main"]} id="cat-dong-ho">
                           <div className={styles["title-icon"]}>
-                            <h1>Đồng hồ nam</h1>
+                            <h1>Đồng hồ treo tường</h1>
                           </div>
                         </div>
                         <div className={styles.clear}></div>
@@ -1634,7 +1657,7 @@ export default function DonghoNam() {
                     <div className={styles["products-cat-frame-inner"]}>
                       <div className={styles["product-grid"]}>
                         {/* item-1 */}
-                        {products.map((product) => {
+                        {results.map((product) => {
                           const {
                             _id,
                             ten,
@@ -1671,15 +1694,13 @@ export default function DonghoNam() {
                                 <span className={styles["row-lm"]}>|</span>
                                 <span className={styles["duong-kinh"]}>{duong_kinh}</span>
                                 <div className={styles["price-area"]}>
-                                  <div className={styles["price-old"]}>
-                                    Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
-                                  </div>
+                                  
                                   <div className={styles["price-current"]}>
-                                    Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
+                                    Giá: {gia_san_pham.toLocaleString("vi-VN")} ₫
                                   </div>
                                 </div>
                                 <div className={styles.discount}>
-                                  <span>-{Math.floor(((gia_san_pham - gia_giam) / gia_san_pham) * 100)}%</span>
+                                  <span>-0%</span>
                                 </div>
                                 <div className={styles.clear}></div>
                               </div>
