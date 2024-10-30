@@ -162,7 +162,7 @@ export default function Main() {
 
     fetchData();
   }, []);
-  console.log(category);
+
 
   return (
     <>

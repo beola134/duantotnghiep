@@ -1,17 +1,20 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "./detail.module.css";
-
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "../../redux/slices/cartSilce";
 import Loading from "../../loading/page";
 import Swal from "sweetalert2";
+import Slider from "react-slick";
+import Link from "next/link";
 
 export default function Detail({ params }) {
   const [product, setProducts] = useState(null);
   const [cate, setCate] = useState(null);
+  const [related, SetRelated] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const sliderRef = useRef(null);
 
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
@@ -34,7 +37,40 @@ export default function Detail({ params }) {
       }
     };
     fetchDetail();
-  }, [params]);
+  }, [params.id]);
+
+  // sản phẩm liên quan theo danh mục
+  useEffect(() => {
+    const fetchRelated = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/product/related/${params.id}`);
+        if (!response.ok) {
+          throw new Error("Lỗi không thể tải dữ liệu");
+        }
+        const data = await response.json();
+        SetRelated(data.products);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+    fetchRelated();
+  }, [params.id]);
+
+  // tính % sản phẩm
+  const roundDiscount = (discountPercentage) => {
+    const discountLevels = [10, 15, 20, 25, 30, 40, 50];
+    return discountLevels.reduce((prev, curr) =>
+      Math.abs(curr - discountPercentage) < Math.abs(prev - discountPercentage) ? curr : prev
+    );
+  };
+  // slidershow
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+  };
   if (loading) {
     return <Loading />;
   }
@@ -47,7 +83,10 @@ export default function Detail({ params }) {
       <div className={`${styles.topProductDetail} ${styles.container}  ${styles.cls}`}>
         <div className={styles.frameLeft}>
           <div className={styles.discountPro}>
-            -<span id="discount-pro">10</span>
+            -
+            <span id="discount-pro">
+              {roundDiscount(Math.round(((product.gia_san_pham - product.gia_giam) / product.gia_san_pham) * 100))}
+            </span>
             <span>%</span>
           </div>
           <div
@@ -136,9 +175,9 @@ export default function Detail({ params }) {
                   </span>
                 ))}
                 <span className={styles.hide}>5</span>
-                <a className={styles.rateCount} href="" title="Đánh giá sản phẩm này">
+                <Link className={styles.rateCount} href="" title="Đánh giá sản phẩm này">
                   (<span>1</span> đánh giá)
-                </a>
+                </Link>
               </span>
             </div>
             <span className={styles.codeProduct}>Mã sản phẩm: {product.ma_san_pham}</span>
@@ -178,13 +217,13 @@ export default function Detail({ params }) {
                   </span>
                   &nbsp;khi mua sản phẩm thứ 2 là đồng hồ&nbsp;
                   <strong>
-                    <a href="#" style={{ color: "#3498db" }}>
+                    <Link href="#" style={{ color: "#3498db" }}>
                       Casio
-                    </a>
+                    </Link>
                     , &nbsp;
-                    <a href="#" style={{ color: "#3498db" }}>
+                    <Link href="#" style={{ color: "#3498db" }}>
                       Calvin Klein
-                    </a>
+                    </Link>
                   </strong>
                 </p>
                 <p>
@@ -194,17 +233,17 @@ export default function Detail({ params }) {
                   </span>
                   &nbsp;khi mua sản phẩm thứ 2 là đồng hồ
                   <strong>
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>&nbsp;Claude Bernard</span>
-                    </a>
+                    </Link>
                     <span style={{ color: "#3498db" }}>, </span>
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>Edox</span>
-                    </a>
+                    </Link>
                     <span style={{ color: "#3498db" }}>,&nbsp;</span>
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>Titoni</span>
-                    </a>
+                    </Link>
                   </strong>
                 </p>
 
@@ -215,22 +254,22 @@ export default function Detail({ params }) {
                   </span>
                   &nbsp;khi mua sản phẩm thứ 2 là đồng hồ
                   <strong>
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>&nbsp;DW</span>
-                    </a>
+                    </Link>
                     &nbsp;
                     <span style={{ color: "#3498db" }}>, </span>
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>Olym Pianus</span>
-                    </a>
+                    </Link>
                     <span style={{ color: "#3498db" }}>,&nbsp;</span>
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>Fossil</span>
-                    </a>
+                    </Link>
                     <span style={{ color: "#3498db" }}>, </span>
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>Michael Kors</span>
-                    </a>
+                    </Link>
                   </strong>
                 </p>
 
@@ -241,27 +280,27 @@ export default function Detail({ params }) {
                   </span>
                   &nbsp;khi mua sản phẩm thứ 2 là đồng hồ
                   <strong>
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>&nbsp;Hamilton</span>
-                    </a>
+                    </Link>
                     <span style={{ color: "#3498db" }}>, </span>
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>Mido</span>
-                    </a>
+                    </Link>
                     <span style={{ color: "#3498db" }}>, </span>
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>Certina</span>
-                    </a>
+                    </Link>
                     <span style={{ color: "#3498db" }}>, </span>
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>Seiko, </span>
-                    </a>
-                    <a href="#">
+                    </Link>
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>&nbsp;Đồng hồ nữ Longines,&nbsp;</span>
-                    </a>
-                    <a href="#">
+                    </Link>
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>Đồng hồ nữ Tissot</span>
-                    </a>
+                    </Link>
                   </strong>
                 </p>
 
@@ -272,15 +311,15 @@ export default function Detail({ params }) {
                   </span>
                   &nbsp;khi mua sản phẩm thứ 2 là
                   <strong>
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>&nbsp;Đồng Hồ Treo Tường</span>
-                    </a>
+                    </Link>
                   </strong>
                   <span style={{ color: "#3498db" }}>, </span>
                   <strong>
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>Để Bàn</span>
-                    </a>
+                    </Link>
                   </strong>
                   &nbsp;có giá niêm yết từ
                   <span style={{ color: "#ff0000" }}>
@@ -296,35 +335,35 @@ export default function Detail({ params }) {
                 <ol>
                   <li>
                     1. Tặng 01 đồng hồ treo tường
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>
                         <strong>&nbsp;SEIKO</strong>
                       </span>
-                    </a>
+                    </Link>
                     &nbsp;hoặc
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>
                         <strong>&nbsp;RHYTHM&nbsp;</strong>
                       </span>
-                    </a>
+                    </Link>
                     trị giá lên đến <strong>1 triệu đồng.</strong>
                   </li>
                   <li>
                     2.&nbsp;Tặng 01 dây da
-                    <a href="#">
+                    <Link href="#">
                       <span style={{ color: "#3498db" }}>
                         <strong>ZRC</strong>
                       </span>
-                    </a>
+                    </Link>
                     thương hiệu Pháp trị giá lên đến <strong>700.000đ</strong>
                   </li>
                 </ol>
 
                 <p>
                   Ưu đãi <strong>MUA 1 TẶNG 1 </strong>tặng đồng hồ đến <strong>10 Triệu&nbsp;</strong>
-                  <a href="#">
+                  <Link href="#">
                     <span style={{ color: "#3498db" }}>(Xem chi tiết tại đây)</span>
-                  </a>
+                  </Link>
                   <span style={{ color: "#3498db" }}>&nbsp;</span>
                 </p>
               </div>
@@ -502,9 +541,9 @@ export default function Detail({ params }) {
                     </g>
                   </svg>
                   <div>Hoặc mua hàng qua điện thoại</div>
-                  <a title="hotline mua hàng" href="#" className={styles.phoneCall}>
+                  <Link title="hotline mua hàng" href="#" className={styles.phoneCall}>
                     024.3991.8668
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -522,7 +561,7 @@ export default function Detail({ params }) {
               <div className={styles.itemInner}>
                 <div className={styles.item1}>
                   <div className={styles.isvg}>
-                    <a href="#" title="100% hàng chính hãng">
+                    <Link href="#" title="100% hàng chính hãng">
                       <svg
                         x="0px"
                         y="0px"
@@ -538,13 +577,13 @@ export default function Detail({ params }) {
                           </g>
                         </g>
                       </svg>
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 <div className={styles.itemR}>
-                  <a href="#" title="100% hàng chính hãng">
+                  <Link href="#" title="100% hàng chính hãng">
                     100% hàng chính hãng
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -554,7 +593,7 @@ export default function Detail({ params }) {
               <div className={styles.itemInner}>
                 <div className={styles.item1}>
                   <div className={styles.isvg}>
-                    <a href="#" title="Miễn phí vận chuyển">
+                    <Link href="#" title="Miễn phí vận chuyển">
                       <svg x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: " new 0 0 512 512" }}>
                         <g>
                           <g>
@@ -587,13 +626,13 @@ export default function Detail({ params }) {
                           </g>
                         </g>
                       </svg>
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 <div className={styles.itemR}>
-                  <a href="#" title="Miễn phí vận chuyển">
+                  <Link href="#" title="Miễn phí vận chuyển">
                     Miễn phí vận chuyển
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -603,20 +642,20 @@ export default function Detail({ params }) {
               <div className={styles.itemInner}>
                 <div className={styles.item1}>
                   <div className={styles.isvg}>
-                    <a href="#" title="Bảo hành 5 năm">
+                    <Link href="#" title="Bảo hành 5 năm">
                       <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="-65 0 511 511.99875" width="40px">
                         <path d="m60.5 207c0 5.523438-4.476562 10-10 10s-10-4.476562-10-10 4.476562-10 10-10 10 4.476562 10 10zm0 0"></path>
                         <path d="m184.953125 510.320312c1.679687 1.117188 3.613281 1.679688 5.546875 1.679688s3.867188-.5625 5.546875-1.679688l90.941406-60.632812c58.554688-39.03125 93.511719-104.351562 93.511719-174.730469v-204.679687c0-4.296875-2.75-8.117188-6.824219-9.480469l-180-60.28125c-2.0625-.6875-4.292969-.6875-6.351562 0l-180 60.28125c-4.078125 1.363281-6.824219 5.183594-6.824219 9.480469v204.679687c0 70.378907 34.957031 135.699219 93.511719 174.730469zm-164.453125-235.363281v-197.480469l170-56.933593 170 56.933593v197.480469c0 63.675781-31.628906 122.773438-84.605469 158.089844l-85.394531 56.933594-85.394531-56.933594c-52.976563-35.3125-84.605469-94.414063-84.605469-158.089844zm0 0"></path>
                         <path d="m184.953125 462.25c1.679687 1.117188 3.613281 1.679688 5.546875 1.679688s3.867188-.5625 5.546875-1.679688l68.75-45.839844c47.402344-31.597656 75.703125-84.472656 75.703125-141.441406v-175.859375c0-4.296875-2.746094-8.117187-6.820312-9.480469l-140-46.941406c-2.0625-.691406-4.296876-.691406-6.359376 0l-140 46.941406c-4.074218 1.363282-6.820312 5.183594-6.820312 9.480469v67.890625c0 5.519531 4.476562 10 10 10 5.519531 0 10-4.480469 10-10v-60.695312l130-43.589844 130 43.589844v168.664062c0 50.269531-24.972656 96.921875-66.796875 124.800781l-63.203125 42.140625-63.203125-42.144531c-41.828125-27.875-66.796875-74.53125-66.796875-124.796875v-27.96875c0-5.523438-4.480469-10-10-10-5.523438 0-10 4.476562-10 10v27.96875c0 56.972656 28.300781 109.847656 75.703125 141.441406zm0 0"></path>
                         <path d="m149.289062 328.207031c5.664063 5.667969 13.199219 8.789063 21.210938 8.789063s15.542969-3.121094 21.210938-8.789063l80-80c11.722656-11.722656 11.726562-30.695312 0-42.417969-11.722657-11.722656-30.695313-11.726562-42.421876-.003906l-58.789062 58.792969-18.789062-18.789063c-11.71875-11.722656-30.695313-11.726562-42.421876 0-11.726562 11.722657-11.726562 30.695313 0 42.421876zm-25.859374-68.277343c3.910156-3.90625 10.230468-3.90625 14.136718 0l25.859375 25.859374c3.90625 3.902344 10.238281 3.902344 14.144531 0l65.859376-65.859374c3.910156-3.90625 10.226562-3.90625 14.140624 0 3.90625 3.90625 3.90625 10.226562-.003906 14.136718l-80 80c-1.890625 1.890625-4.398437 2.933594-7.066406 2.933594s-5.179688-1.042969-7.070312-2.933594l-40-40c-3.90625-3.90625-3.910157-10.226562 0-14.136718zm0 0"></path>
                       </svg>
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 <div className={styles.itemR}>
-                  <a href="#" title="Bảo hành 5 năm">
+                  <Link href="#" title="Bảo hành 5 năm">
                     Bảo hành 5 năm
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -626,7 +665,7 @@ export default function Detail({ params }) {
               <div className={styles.itemInner}>
                 <div className={styles.item1}>
                   <div className={styles.isvg}>
-                    <a href="#" title="Đổi hàng trong 7 ngày">
+                    <Link href="#" title="Đổi hàng trong 7 ngày">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         version="1.1"
@@ -666,13 +705,13 @@ export default function Detail({ params }) {
                         <g></g>
                         <g></g>
                       </svg>
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 <div className={styles.itemR}>
-                  <a href="#" title="Đổi hàng trong 7 ngày">
+                  <Link href="#" title="Đổi hàng trong 7 ngày">
                     Đổi hàng trong 7 ngày
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -688,19 +727,19 @@ export default function Detail({ params }) {
           <div className={styles.productTab}>
             <ul className={styles.productTabsUl}>
               <li className={`${styles.scrollNavItem} ${styles.fl} ${styles.active}`}>
-                <a className={styles.scrollNavLink} href="#">
+                <Link className={styles.scrollNavLink} href="#">
                   <span>Mô tả chi tiết</span>
-                </a>
+                </Link>
               </li>
               <li className={`${styles.scrollNavItem} ${styles.fl}`}>
-                <a className={styles.scrollNavLink} href="#">
+                <Link className={styles.scrollNavLink} href="#">
                   <span>Chế độ bảo hành</span>
-                </a>
+                </Link>
               </li>
               <li className={`${styles.scrollNavItem} ${styles.fl}`}>
-                <a className={styles.scrollNavLink} href="#">
+                <Link className={styles.scrollNavLink} href="#">
                   <span>Hướng dẫn sử dụng </span>
-                </a>
+                </Link>
               </li>
             </ul>
             <div className={styles.clearfix}></div>
@@ -1212,7 +1251,7 @@ export default function Detail({ params }) {
                     <p>&nbsp;</p>
 
                     <p>
-                      <a href="#">T139.807.22.038.00 </a>
+                      <Link href="#">T139.807.22.038.00</Link>
                       có đường kính&nbsp;39mm, vỏ bằng thép không gỉ 316L với mạ&nbsp;PVD bằng vàng hồng. Đồng hồ có mặt
                       số màu trắng&nbsp;với các kim và vạch chỉ giờ màu vàng. Đồng hồ cũng có lịch&nbsp;ngày ở vị trí 6
                       giờ.
@@ -1297,9 +1336,9 @@ export default function Detail({ params }) {
                       <li>
                         <p>
                           <strong>
-                            <a href="#" title="Top 10 mẫu đồng hồ Tissot mới nhất năm 2023">
+                            <Link href="#" title="Top 10 mẫu đồng hồ Tissot mới nhất năm 2023">
                               TOP 10 MẪU ĐỒNG HỒ TISSOT MỚI NHẤT NĂM 2023
-                            </a>
+                            </Link>
                           </strong>
                         </p>
                       </li>
@@ -1390,566 +1429,89 @@ export default function Detail({ params }) {
             id="products-blocks-slideshow-hot-1"
           >
             <div className={styles.owlStageOuter}>
-              <div
-                className={styles.owlStage}
-                style={{
-                  width: "4248px",
-                  transform: "translate3d(-1180px, 0px, 0px)",
-                  transition: "0.25s",
-                }}
-              >
+              <div className={styles.owlStage}>
                 {/* item1 */}
-                <div className={`${styles.owlItem} ${styles.active}`} style={{ width: "226px", marginRight: "10px" }}>
-                  <div className={styles.item}>
-                    <div className={styles.frameInner}>
-                      <figure className={styles.productImage}>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00">
-                          <img
-                            className={`${styles.owlLazy} ${styles.afterLazy}`}
-                            alt="Tissot Chemin Des Tourelles T099.407.36.038.00"
-                            width="300"
-                            height="363"
-                            data-src="/image/item/detail-hinh2.webp"
-                            srcset="/image/item/detail-hinh2.webp"
-                            style={{ display: "block", opacity: 1 }}
-                            src="/image/item/detail-hinh2.webp"
-                          />
-                        </a>
-                      </figure>
+                <Slider ref={sliderRef} {...settings}>
+                  {related.map((item) => {
+                    const { _id, ten, ten_san_pham, ma_san_pham, loai, duong_kinh, hinh_anh, gia_san_pham, gia_giam } =
+                      item;
 
-                      <h2>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00" className={styles.name}>
-                          <span className={styles.catName}>Đồng hồ nam Tissot Chemin Des Tourelles </span>
-                          T099.407.36.038.00
-                        </a>
-                      </h2>
+                    return (
+                      <div
+                        className={`${styles.owlItem} ${styles.active}`}
+                        style={{ width: "226px", marginRight: "10px" }}
+                        key={_id}
+                      >
+                        <div className={styles.item}>
+                          <div className={styles.frameInner}>
+                            <figure className={styles.productImage}>
+                              <Link href={`/components/product-detail/${_id}`} title={ten}>
+                                <img
+                                  className={`${styles.owlLazy} ${styles.afterLazy}`}
+                                  alt={ten}
+                                  width="300"
+                                  height="363"
+                                  style={{ display: "block", opacity: 1 }}
+                                  src={`http://localhost:5000/images/${hinh_anh}`}
+                                />
+                              </Link>
+                            </figure>
 
-                      <span className={styles.loaiMay}>Automatic</span>
-                      <span className={styles.rowLm}>|</span>
-                      <span className={styles.duongKinh}>42mm</span>
-                      <div className={styles.priceArae}>
-                        <div className={styles.priceOld}>
-                          Giá: <span>26.950.000₫</span>
+                            <h2>
+                              <Link href="#" title={ten} className={styles.name}>
+                                <span className={styles.catName}>{ten_san_pham}</span>
+                                {ma_san_pham}
+                              </Link>
+                            </h2>
+
+                            <span className={styles.loaiMay}>{loai}</span>
+                            <span className={styles.rowLm}> | </span>
+                            <span className={styles.duongKinh}>{duong_kinh}</span>
+
+                            <div className={styles.priceArae}>
+                              <div className={styles.priceOld}>
+                                Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                              </div>
+                              <div className={styles.priceCurrent}>Giá KM: {gia_giam.toLocaleString("vi-VN")}₫</div>
+                            </div>
+
+                            <div className={styles.discount}>
+                              <span>
+                                -{roundDiscount(Math.round(((gia_san_pham - gia_giam) / gia_san_pham) * 100))}%
+                              </span>
+                            </div>
+
+                            <div className={`${styles.itemSs} item-ss-20789`}>
+                              <span className={styles.iconSs}></span>
+                              <span className={styles.txtSs}>So sánh</span>
+                            </div>
+                            <br />
+                            <br />
+                            <div className={styles.clear}></div>
+                          </div>
                         </div>
-                        <div className={styles.priceCurrent}>Giá KM: 24.255.000₫</div>
                       </div>
-
-                      <div className={styles.discount}>
-                        <span>-10%</span>
-                      </div>
-
-                      <div className={`${styles.itemSs} item-ss-20789`}>
-                        <span className={styles.iconSs}></span>
-                        <span className={styles.txtSs}> So sánh </span>
-                      </div>
-
-                      <div className={styles.clear}></div>
-                    </div>
-                  </div>
-                </div>
-                {/* item1 */}
-                <div className={`${styles.owlItem} ${styles.active}`} style={{ width: "226px", marginRight: "10px" }}>
-                  <div className={styles.item}>
-                    <div className={styles.frameInner}>
-                      <figure className={styles.productImage}>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00">
-                          <img
-                            className={`${styles.owlLazy} ${styles.afterLazy}`}
-                            alt="Tissot Chemin Des Tourelles T099.407.36.038.00"
-                            width="300"
-                            height="363"
-                            data-src="/image/item/detail-hinh3.webp"
-                            srcset="/image/item/detail-hinh3.webp"
-                            style={{ display: "block", opacity: 1 }}
-                            src="/image/item/detail-hinh3.webp"
-                          />
-                        </a>
-                      </figure>
-
-                      <h2>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00" className={styles.name}>
-                          <span className={styles.catName}>Đồng hồ nam Tissot Chemin Des Tourelles </span>
-                          T099.407.36.038.00
-                        </a>
-                      </h2>
-
-                      <span className={styles.loaiMay}>Automatic</span>
-                      <span className={styles.rowLm}>|</span>
-                      <span className={styles.duongKinh}>42mm</span>
-                      <div className={styles.priceArae}>
-                        <div className={styles.priceOld}>
-                          Giá: <span>26.950.000₫</span>
-                        </div>
-                        <div className={styles.priceCurrent}>Giá KM: 24.255.000₫</div>
-                      </div>
-
-                      <div className={styles.discount}>
-                        <span>-10%</span>
-                      </div>
-
-                      <div className={`${styles.itemSs} item-ss-20789`}>
-                        <span className={styles.iconSs}></span>
-                        <span className={styles.txtSs}> So sánh </span>
-                      </div>
-
-                      <div className={styles.clear}></div>
-                    </div>
-                  </div>
-                </div>
-                {/* item1 */}
-                <div className={`${styles.owlItem} ${styles.active}`} style={{ width: "226px", marginRight: "10px" }}>
-                  <div className={styles.item}>
-                    <div className={styles.frameInner}>
-                      <figure className={styles.productImage}>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00">
-                          <img
-                            className={`${styles.owlLazy} ${styles.afterLazy}`}
-                            alt="Tissot Chemin Des Tourelles T099.407.36.038.00"
-                            width="300"
-                            height="363"
-                            data-src="/image/item/detail-hinh4.webp"
-                            srcset="/image/item/detail-hinh4.webp"
-                            style={{ display: "block", opacity: 1 }}
-                            src="/image/item/detail-hinh4.webp"
-                          />
-                        </a>
-                      </figure>
-
-                      <h2>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00" className={styles.name}>
-                          <span className={styles.catName}>Đồng hồ nam Tissot Chemin Des Tourelles </span>
-                          T099.407.36.038.00
-                        </a>
-                      </h2>
-
-                      <span className={styles.loaiMay}>Automatic</span>
-                      <span className={styles.rowLm}>|</span>
-                      <span className={styles.duongKinh}>42mm</span>
-                      <div className={styles.priceArae}>
-                        <div className={styles.priceOld}>
-                          Giá: <span>26.950.000₫</span>
-                        </div>
-                        <div className={styles.priceCurrent}>Giá KM: 24.255.000₫</div>
-                      </div>
-
-                      <div className={styles.discount}>
-                        <span>-10%</span>
-                      </div>
-
-                      <div className={`${styles.itemSs} item-ss-20789`}>
-                        <span className={styles.iconSs}></span>
-                        <span className={styles.txtSs}> So sánh </span>
-                      </div>
-
-                      <div className={styles.clear}></div>
-                    </div>
-                  </div>
-                </div>
-                {/* item1 */}
-                <div className={`${styles.owlItem} ${styles.active}`} style={{ width: "226px", marginRight: "10px" }}>
-                  <div className={styles.item}>
-                    <div className={styles.frameInner}>
-                      <figure className={styles.productImage}>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00">
-                          <img
-                            className={`${styles.owlLazy} ${styles.afterLazy}`}
-                            alt="Tissot Chemin Des Tourelles T099.407.36.038.00"
-                            width="300"
-                            height="363"
-                            data-src="/image/item/detail-hinh5.webp"
-                            srcset="/image/item/detail-hinh5.webp"
-                            style={{ display: "block", opacity: 1 }}
-                            src="/image/item/detail-hinh5.webp"
-                          />
-                        </a>
-                      </figure>
-
-                      <h2>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00" className={styles.name}>
-                          <span className={styles.catName}>Đồng hồ nam Tissot Chemin Des Tourelles </span>
-                          T099.407.36.038.00
-                        </a>
-                      </h2>
-
-                      <span className={styles.loaiMay}>Automatic</span>
-                      <span className={styles.rowLm}>|</span>
-                      <span className={styles.duongKinh}>42mm</span>
-                      <div className={styles.priceArae}>
-                        <div className={styles.priceOld}>
-                          Giá: <span>26.950.000₫</span>
-                        </div>
-                        <div className={styles.priceCurrent}>Giá KM: 24.255.000₫</div>
-                      </div>
-
-                      <div className={styles.discount}>
-                        <span>-10%</span>
-                      </div>
-
-                      <div className={`${styles.itemSs} item-ss-20789`}>
-                        <span className={styles.iconSs}></span>
-                        <span className={styles.txtSs}> So sánh </span>
-                      </div>
-
-                      <div className={styles.clear}></div>
-                    </div>
-                  </div>
-                </div>
-                {/* item1 */}
-                <div className={`${styles.owlItem} ${styles.active}`} style={{ width: "226px", marginRight: "10px" }}>
-                  <div className={styles.item}>
-                    <div className={styles.frameInner}>
-                      <figure className={styles.productImage}>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00">
-                          <img
-                            className={`${styles.owlLazy} ${styles.afterLazy}`}
-                            alt="Tissot Chemin Des Tourelles T099.407.36.038.00"
-                            width="300"
-                            height="363"
-                            data-src="/image/item/detail-hinh6.webp"
-                            srcset="/image/item/detail-hinh6.webp"
-                            style={{ display: "block", opacity: 1 }}
-                            src="/image/item/detail-hinh6.webp"
-                          />
-                        </a>
-                      </figure>
-
-                      <h2>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00" className={styles.name}>
-                          <span className={styles.catName}>Đồng hồ nam Tissot Chemin Des Tourelles </span>
-                          T099.407.36.038.00
-                        </a>
-                      </h2>
-
-                      <span className={styles.loaiMay}>Automatic</span>
-                      <span className={styles.rowLm}>|</span>
-                      <span className={styles.duongKinh}>42mm</span>
-                      <div className={styles.priceArae}>
-                        <div className={styles.priceOld}>
-                          Giá: <span>26.950.000₫</span>
-                        </div>
-                        <div className={styles.priceCurrent}>Giá KM: 24.255.000₫</div>
-                      </div>
-
-                      <div className={styles.discount}>
-                        <span>-10%</span>
-                      </div>
-
-                      <div className={`${styles.itemSs} item-ss-20789`}>
-                        <span className={styles.iconSs}></span>
-                        <span className={styles.txtSs}> So sánh </span>
-                      </div>
-
-                      <div className={styles.clear}></div>
-                    </div>
-                  </div>
-                </div>
-                {/* item1 */}
-                <div className={`${styles.owlItem} ${styles.active}`} style={{ width: "226px", marginRight: "10px" }}>
-                  <div className={styles.item}>
-                    <div className={styles.frameInner}>
-                      <figure className={styles.productImage}>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00">
-                          <img
-                            className={`${styles.owlLazy} ${styles.afterLazy}`}
-                            alt="Tissot Chemin Des Tourelles T099.407.36.038.00"
-                            width="300"
-                            height="363"
-                            data-src="/image/item/detail-hinh7.webp"
-                            srcset="/image/item/detail-hinh7.webp"
-                            style={{ display: "block", opacity: 1 }}
-                            src="/image/item/detail-hinh7.webp"
-                          />
-                        </a>
-                      </figure>
-
-                      <h2>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00" className={styles.name}>
-                          <span className={styles.catName}>Đồng hồ nam Tissot Chemin Des Tourelles </span>
-                          T099.407.36.038.00
-                        </a>
-                      </h2>
-
-                      <span className={styles.loaiMay}>Automatic</span>
-                      <span className={styles.rowLm}>|</span>
-                      <span className={styles.duongKinh}>42mm</span>
-                      <div className={styles.priceArae}>
-                        <div className={styles.priceOld}>
-                          Giá: <span>26.950.000₫</span>
-                        </div>
-                        <div className={styles.priceCurrent}>Giá KM: 24.255.000₫</div>
-                      </div>
-
-                      <div className={styles.discount}>
-                        <span>-10%</span>
-                      </div>
-
-                      <div className={`${styles.itemSs} item-ss-20789`}>
-                        <span className={styles.iconSs}></span>
-                        <span className={styles.txtSs}> So sánh </span>
-                      </div>
-
-                      <div className={styles.clear}></div>
-                    </div>
-                  </div>
-                </div>
-                {/* item1 */}
-                <div className={`${styles.owlItem} ${styles.active}`} style={{ width: "226px", marginRight: "10px" }}>
-                  <div className={styles.item}>
-                    <div className={styles.frameInner}>
-                      <figure className={styles.productImage}>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00">
-                          <img
-                            className={`${styles.owlLazy} ${styles.afterLazy}`}
-                            alt="Tissot Chemin Des Tourelles T099.407.36.038.00"
-                            width="300"
-                            height="363"
-                            data-src="/image/item/detail-hinh8.webp"
-                            srcset="/image/item/detail-hinh8.webp"
-                            style={{ display: "block", opacity: 1 }}
-                            src="/image/item/detail-hinh8.webp"
-                          />
-                        </a>
-                      </figure>
-
-                      <h2>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00" className={styles.name}>
-                          <span className={styles.catName}>Đồng hồ nam Tissot Chemin Des Tourelles </span>
-                          T099.407.36.038.00
-                        </a>
-                      </h2>
-
-                      <span className={styles.loaiMay}>Automatic</span>
-                      <span className={styles.rowLm}>|</span>
-                      <span className={styles.duongKinh}>42mm</span>
-                      <div className={styles.priceArae}>
-                        <div className={styles.priceOld}>
-                          Giá: <span>26.950.000₫</span>
-                        </div>
-                        <div className={styles.priceCurrent}>Giá KM: 24.255.000₫</div>
-                      </div>
-
-                      <div className={styles.discount}>
-                        <span>-10%</span>
-                      </div>
-
-                      <div className={`${styles.itemSs} item-ss-20789`}>
-                        <span className={styles.iconSs}></span>
-                        <span className={styles.txtSs}> So sánh </span>
-                      </div>
-
-                      <div className={styles.clear}></div>
-                    </div>
-                  </div>
-                </div>
-                {/* item1 */}
-                <div className={`${styles.owlItem} ${styles.active}`} style={{ width: "226px", marginRight: "10px" }}>
-                  <div className={styles.item}>
-                    <div className={styles.frameInner}>
-                      <figure className={styles.productImage}>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00">
-                          <img
-                            className={`${styles.owlLazy} ${styles.afterLazy}`}
-                            alt="Tissot Chemin Des Tourelles T099.407.36.038.00"
-                            width="300"
-                            height="363"
-                            data-src="/image/item/detail-hinh2.webp"
-                            srcset="/image/item/detail-hinh2.webp"
-                            style={{ display: "block", opacity: 1 }}
-                            src="/image/item/detail-hinh2.webp"
-                          />
-                        </a>
-                      </figure>
-
-                      <h2>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00" className={styles.name}>
-                          <span className={styles.catName}>Đồng hồ nam Tissot Chemin Des Tourelles </span>
-                          T099.407.36.038.00
-                        </a>
-                      </h2>
-
-                      <span className={styles.loaiMay}>Automatic</span>
-                      <span className={styles.rowLm}>|</span>
-                      <span className={styles.duongKinh}>42mm</span>
-                      <div className={styles.priceArae}>
-                        <div className={styles.priceOld}>
-                          Giá: <span>26.950.000₫</span>
-                        </div>
-                        <div className={styles.priceCurrent}>Giá KM: 24.255.000₫</div>
-                      </div>
-
-                      <div className={styles.discount}>
-                        <span>-10%</span>
-                      </div>
-
-                      <div className={`${styles.itemSs} item-ss-20789`}>
-                        <span className={styles.iconSs}></span>
-                        <span className={styles.txtSs}> So sánh </span>
-                      </div>
-
-                      <div className={styles.clear}></div>
-                    </div>
-                  </div>
-                </div>
-                {/* item1 */}
-                <div className={`${styles.owlItem} ${styles.active}`} style={{ width: "226px", marginRight: "10px" }}>
-                  <div className={styles.item}>
-                    <div className={styles.frameInner}>
-                      <figure className={styles.productImage}>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00">
-                          <img
-                            className={`${styles.owlLazy} ${styles.afterLazy}`}
-                            alt="Tissot Chemin Des Tourelles T099.407.36.038.00"
-                            width="300"
-                            height="363"
-                            data-src="/image/item/detail-hinh3.webp"
-                            srcset="/image/item/detail-hinh3.webp"
-                            style={{ display: "block", opacity: 1 }}
-                            src="/image/item/detail-hinh3.webp"
-                          />
-                        </a>
-                      </figure>
-
-                      <h2>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00" className={styles.name}>
-                          <span className={styles.catName}>Đồng hồ nam Tissot Chemin Des Tourelles </span>
-                          T099.407.36.038.00
-                        </a>
-                      </h2>
-
-                      <span className={styles.loaiMay}>Automatic</span>
-                      <span className={styles.rowLm}>|</span>
-                      <span className={styles.duongKinh}>42mm</span>
-                      <div className={styles.priceArae}>
-                        <div className={styles.priceOld}>
-                          Giá: <span>26.950.000₫</span>
-                        </div>
-                        <div className={styles.priceCurrent}>Giá KM: 24.255.000₫</div>
-                      </div>
-
-                      <div className={styles.discount}>
-                        <span>-10%</span>
-                      </div>
-
-                      <div className={`${styles.itemSs} item-ss-20789`}>
-                        <span className={styles.iconSs}></span>
-                        <span className={styles.txtSs}> So sánh </span>
-                      </div>
-
-                      <div className={styles.clear}></div>
-                    </div>
-                  </div>
-                </div>
-                {/* item1 */}
-                <div className={`${styles.owlItem} ${styles.active}`} style={{ width: "226px", marginRight: "10px" }}>
-                  <div className={styles.item}>
-                    <div className={styles.frameInner}>
-                      <figure className={styles.productImage}>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00">
-                          <img
-                            className={`${styles.owlLazy} ${styles.afterLazy}`}
-                            alt="Tissot Chemin Des Tourelles T099.407.36.038.00"
-                            width="300"
-                            height="363"
-                            data-src="/image/item/detail-hinh4.webp"
-                            srcset="/image/item/detail-hinh4.webp"
-                            style={{ display: "block", opacity: 1 }}
-                            src="/image/item/detail-hinh4.webp"
-                          />
-                        </a>
-                      </figure>
-
-                      <h2>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00" className={styles.name}>
-                          <span className={styles.catName}>Đồng hồ nam Tissot Chemin Des Tourelles </span>
-                          T099.407.36.038.00
-                        </a>
-                      </h2>
-
-                      <span className={styles.loaiMay}>Automatic</span>
-                      <span className={styles.rowLm}>|</span>
-                      <span className={styles.duongKinh}>42mm</span>
-                      <div className={styles.priceArae}>
-                        <div className={styles.priceOld}>
-                          Giá: <span>26.950.000₫</span>
-                        </div>
-                        <div className={styles.priceCurrent}>Giá KM: 24.255.000₫</div>
-                      </div>
-
-                      <div className={styles.discount}>
-                        <span>-10%</span>
-                      </div>
-
-                      <div className={`${styles.itemSs} item-ss-20789`}>
-                        <span className={styles.iconSs}></span>
-                        <span className={styles.txtSs}> So sánh </span>
-                      </div>
-
-                      <div className={styles.clear}></div>
-                    </div>
-                  </div>
-                </div>
-                {/* item1 */}
-                <div className={`${styles.owlItem} ${styles.active}`} style={{ width: "226px", marginRight: "10px" }}>
-                  <div className={styles.item}>
-                    <div className={styles.frameInner}>
-                      <figure className={styles.productImage}>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00">
-                          <img
-                            className={`${styles.owlLazy} ${styles.afterLazy}`}
-                            alt="Tissot Chemin Des Tourelles T099.407.36.038.00"
-                            width="300"
-                            height="363"
-                            data-src="/image/item/detail-hinh5.webp"
-                            srcset="/image/item/detail-hinh5.webp"
-                            style={{ display: "block", opacity: 1 }}
-                            src="/image/item/detail-hinh5.webp"
-                          />
-                        </a>
-                      </figure>
-
-                      <h2>
-                        <a href="#" title="Tissot Chemin Des Tourelles T099.407.36.038.00" className={styles.name}>
-                          <span className={styles.catName}>Đồng hồ nam Tissot Chemin Des Tourelles </span>
-                          T099.407.36.038.00
-                        </a>
-                      </h2>
-
-                      <span className={styles.loaiMay}>Automatic</span>
-                      <span className={styles.rowLm}>|</span>
-                      <span className={styles.duongKinh}>42mm</span>
-                      <div className={styles.priceArae}>
-                        <div className={styles.priceOld}>
-                          Giá: <span>26.950.000₫</span>
-                        </div>
-                        <div className={styles.priceCurrent}>Giá KM: 24.255.000₫</div>
-                      </div>
-
-                      <div className={styles.discount}>
-                        <span>-10%</span>
-                      </div>
-
-                      <div className={`${styles.itemSs} item-ss-20789`}>
-                        <span className={styles.iconSs}></span>
-                        <span className={styles.txtSs}> So sánh </span>
-                      </div>
-
-                      <div className={styles.clear}></div>
-                    </div>
-                  </div>
-                </div>
+                    );
+                  })}
+                </Slider>
               </div>
             </div>
             <div className={styles.owlControls}>
               <div className={styles.owlNav}>
-                <div className={styles.owlPrev}>‹</div>
+                <div className={styles.owlPrev} onClick={() => sliderRef.current.slickPrev()}>
+                  ‹
+                </div>
 
-                <div className={styles.owlNext}>›</div>
+                <div className={styles.owlNext} onClick={() => sliderRef.current.slickNext()}>
+                  ›
+                </div>
               </div>
               <div className={styles.owlDots} style={{ display: "none" }}></div>
             </div>
           </div>
         </div>
       </div>
+
       {/* Đánh giá bình luận */}
       <div className={`${styles.bottomDetail} ${styles.container}`}>
         <div id="prodetail-tab30" className={styles.prodetailsTabCm}>
@@ -1972,7 +1534,7 @@ export default function Detail({ params }) {
                   <strong> về {product.ten}</strong>
                 </div>
                 {/* <!--  --> */}
-               
+
                 <div id="-info-comment" className={styles.cls}></div>
                 {/* <!--  --> */}
                 <form name="comment-add-form" id="comment-add-form" className={`${styles.formComment} ${styles.cls}`}>
@@ -1992,8 +1554,6 @@ export default function Detail({ params }) {
                   </div>
 
                   <input type="button" className={styles.btnCommentMb} value="Gửi bình luận" />
-
-                
                 </form>
               </div>
             </div>
