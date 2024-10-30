@@ -8,20 +8,50 @@ export default function Daydongho() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/product/category/92ad8d9a-fba0-48db-a93d-6974bb5a9ed9");
-        const data = await res.json();
-        setProducts(data.products);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
+  const [categoryName, setCategoryName] = useState("Dây đồng hồ"); // Tiêu đề danh mục
+  const [selectedFilter, setSelectedFilter] = useState([]); // Lưu trữ các bộ lọc đã chọn
+  const [sortOption, setSortOption] = useState(""); // Tuỳ chọn sắp xếp (tăng/giảm dần)
+  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+  const [totalPages, setTotalPages] = useState(1);
+
+  const [filter, setFilter] = useState({
+    size_day: "",
+    mau_day: "",
+    thuong_hieu: "",
+    chat_lieu_day: "",
+    danh_muc: "",
+  });
+
+  // 1. Hàm gọi API để lấy danh sách sản phẩm dựa vào bộ lọc và phân trang
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const queryParams = new URLSearchParams({ ...filter, page: currentPage });
+      const response = await fetch(
+        `http://localhost:5000/product/filterDayDongHo?${queryParams}`
+      );
+      if (!response.ok) {
+        throw new Error("Lỗi không thể tải dữ liệu");
       }
-    };
+      const data = await response.json();
+      setProducts(data.products); // Cập nhật danh sách sản phẩm
+      setTotalPages(data.totalPages); // Cập nhật tổng số trang
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 2. Gọi lại API khi bộ lọc hoặc trang hiện tại thay đổi
+  useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [filter, currentPage]);
+  // 3. Hàm chuyển trang
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchProducts();
+  };
   if (loading) {
     return <Loading />;
   }
@@ -39,9 +69,13 @@ export default function Daydongho() {
               <div className={styles.hiden}>
                 <div className={styles.clear}></div>
                 {/* none-menu-ngang */}
-                <div className={`${styles["block-product-filter"]} ${styles.cls}`}>
+                <div
+                  className={`${styles["block-product-filter"]} ${styles.cls}`}
+                >
                   {/* item1 */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                       data-id="id-field-size-day"
@@ -53,7 +87,9 @@ export default function Daydongho() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-size-day"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
                           <a rel="nofollow" href="#" title="Size 26-24mm">
                             Size 26-24mm
@@ -118,7 +154,9 @@ export default function Daydongho() {
                     </div>
                   </div>
                   {/* item2 */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                       data-id="id-field-mau-day"
@@ -130,7 +168,9 @@ export default function Daydongho() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-mau-day"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
                           <a rel="nofollow" href="#" title="Nâu (Brown)">
                             Nâu (Brown)
@@ -160,7 +200,9 @@ export default function Daydongho() {
                     </div>
                   </div>
                   {/* item3 */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                       data-id="id-field-thuong-hieu"
@@ -172,7 +214,9 @@ export default function Daydongho() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-thuong-hieu"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
                           <a rel="nofollow" href="#" title="ZRC-Rochet">
                             ZRC-Rochet
@@ -202,7 +246,9 @@ export default function Daydongho() {
                     </div>
                   </div>
                   {/* item4 */}
-                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div
+                    className={`${styles["field-area"]} ${styles["field-item"]}`}
+                  >
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                       data-id="id-field-chat-lieu"
@@ -214,7 +260,9 @@ export default function Daydongho() {
                       className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]} ${styles["filter-4-chat-lieu"]}`}
                     >
                       <span className={styles.close}>x</span>
-                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div
+                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                      >
                         <div className={`${styles.cls} ${styles.item}`}>
                           <a rel="nofollow" href="#" title="Dây cao su">
                             Dây cao su
@@ -245,7 +293,9 @@ export default function Daydongho() {
               <div className={styles.container}>
                 <div className={styles.clear}></div>
                 <div className={styles["all-summary"]}>
-                  <div className={`${styles["summary-content-filter"]} ${styles.description}`}>
+                  <div
+                    className={`${styles["summary-content-filter"]} ${styles.description}`}
+                  >
                     <div className={styles["banner-cat-manuf"]}>
                       <img src="/image/item/banner-daydongho.jpg" alt="" />
                     </div>
@@ -254,10 +304,17 @@ export default function Daydongho() {
                 <div className={styles.clear}></div>
                 <div className={styles["products-cat"]}>
                   <div className={styles["block-products-filter"]}>
-                    <div className={`${styles["block-product-filter"]} ${styles.cls}`}>
+                    <div
+                      className={`${styles["block-product-filter"]} ${styles.cls}`}
+                    >
                       {/* item1 */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
-                        <div className={`${styles["field-name"]} ${styles.normal}`} data-id="id-field-size-day">
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
+                        <div
+                          className={`${styles["field-name"]} ${styles.normal}`}
+                          data-id="id-field-size-day"
+                        >
                           Kích thước dây
                         </div>
                         <div
@@ -265,7 +322,9 @@ export default function Daydongho() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-size-day"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <a rel="nofollow" href="#" title="Size 26-24mm">
                                 Kích thước 26-24mm
@@ -330,8 +389,13 @@ export default function Daydongho() {
                         </div>
                       </div>
                       {/* item2 */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
-                        <div className={`${styles["field-name"]} ${styles.normal}`} data-id="id-field-mau-day">
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
+                        <div
+                          className={`${styles["field-name"]} ${styles.normal}`}
+                          data-id="id-field-mau-day"
+                        >
                           Màu Dây
                         </div>
                         <div
@@ -339,7 +403,9 @@ export default function Daydongho() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-mau-day"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <a rel="nofollow" href="#" title="Nâu (Brown)">
                                 Nâu (Brown)
@@ -369,8 +435,13 @@ export default function Daydongho() {
                         </div>
                       </div>
                       {/* item3 */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
-                        <div className={`${styles["field-name"]} ${styles.normal}`} data-id="id-field-thuong-hieu">
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
+                        <div
+                          className={`${styles["field-name"]} ${styles.normal}`}
+                          data-id="id-field-thuong-hieu"
+                        >
                           Thương hiệu
                         </div>
                         <div
@@ -378,7 +449,9 @@ export default function Daydongho() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-thuong-hieu"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <a rel="nofollow" href="#" title="ZRC-Rochet">
                                 ZRC-Rochet
@@ -400,7 +473,11 @@ export default function Daydongho() {
                               </a>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Daniel Wellington">
+                              <a
+                                rel="nofollow"
+                                href="#"
+                                title="Daniel Wellington"
+                              >
                                 Daniel Wellington
                               </a>
                             </div>
@@ -408,8 +485,13 @@ export default function Daydongho() {
                         </div>
                       </div>
                       {/* item4 */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
-                        <div className={`${styles["field-name"]} ${styles.normal}`} data-id="id-field-chat-lieu">
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
+                        <div
+                          className={`${styles["field-name"]} ${styles.normal}`}
+                          data-id="id-field-chat-lieu"
+                        >
                           Chất Liệu
                         </div>
                         <div
@@ -417,7 +499,9 @@ export default function Daydongho() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]} ${styles["filter-4-chat-lieu"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <a rel="nofollow" href="#" title="Dây cao su">
                                 Dây cao su
@@ -448,7 +532,10 @@ export default function Daydongho() {
                   <div className={styles["field-title"]}>
                     <div className={styles["title-name"]}>
                       <div className={styles["cat-title"]}>
-                        <div className={styles["cat-title-main"]} id="cat-dong-ho">
+                        <div
+                          className={styles["cat-title-main"]}
+                          id="cat-dong-ho"
+                        >
                           <div className={styles["title-icon"]}>
                             <h1>Dây đồng hồ</h1>
                           </div>
@@ -457,7 +544,10 @@ export default function Daydongho() {
                       </div>
                     </div>
 
-                    <select className={styles["order-select"]} name="order-select">
+                    <select
+                      className={styles["order-select"]}
+                      name="order-select"
+                    >
                       <option value="">Sắp xếp theo</option>
                       <option value="#">Bán chạy nhất</option>
                       <option value="#">Khuyễn mãi</option>
@@ -477,7 +567,14 @@ export default function Daydongho() {
                       <div className={styles["products-cat-frame-inner"]}>
                         <div className={styles["product-grid"]}>
                           {products.map((product) => {
-                            const { _id, ten, ten_san_pham, ma_san_pham, gia_san_pham, hinh_anh } = product;
+                            const {
+                              _id,
+                              ten,
+                              ten_san_pham,
+                              ma_san_pham,
+                              gia_san_pham,
+                              hinh_anh,
+                            } = product;
 
                             return (
                               <div key={_id} className={styles.item}>
@@ -493,14 +590,22 @@ export default function Daydongho() {
                                     </Link>
                                   </figure>
                                   <h3>
-                                    <Link href="#" className={styles.name} title={ten}>
-                                      <span className={styles["cat-name"]}>{ten_san_pham}</span>
+                                    <Link
+                                      href="#"
+                                      className={styles.name}
+                                      title={ten}
+                                    >
+                                      <span className={styles["cat-name"]}>
+                                        {ten_san_pham}
+                                      </span>
                                       {ma_san_pham}
                                     </Link>
                                   </h3>
                                   <div className={styles["price-area"]}>
                                     <div className={styles["price-current"]}>
-                                      <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                                      <span>
+                                        {gia_san_pham.toLocaleString("vi-VN")}₫
+                                      </span>
                                     </div>
                                   </div>
                                 </div>
@@ -513,25 +618,62 @@ export default function Daydongho() {
                   </div>
                   {/* phân trang */}
                   <div className={styles.pagination}>
-                    <span title="Page 1" className={styles.current}>
-                      <span>1</span>
+                    {/* Prev trang đâù */}
+                    <span
+                      title="First page"
+                      className={
+                        currentPage === 1
+                          ? styles.disabled
+                          : styles["other-page"]
+                      }
+                      onClick={() => currentPage > 1 && handlePageChange(1)}
+                    >
+                      ‹‹
                     </span>
-                    <a className={styles["other-page"]} title="Page 2" href="#">
-                      <span>2</span>
-                    </a>
-                    <a className={styles["other-page"]} title="Page 3" href="#">
-                      <span>3</span>
-                    </a>
-                    <a className={styles["other-page"]} title="Page 4" href="#">
-                      <span>4</span>
-                    </a>
-                    <b>...</b>
-                    <a className={styles["next-page"]} title="Next page" href="#">
+                    {/* Prev 1 trang */}
+                    <span
+                      className={
+                        currentPage === 1
+                          ? styles.disabled
+                          : styles["other-page"]
+                      }
+                      onClick={() =>
+                        currentPage > 1 && handlePageChange(currentPage - 1)
+                      }
+                    >
+                      ‹
+                    </span>
+                    {/* Trang hiện tại */}
+                    <span
+                      className={styles.currentPage}
+                    >{`Trang ${currentPage} / ${totalPages || 1}`}</span>
+                    {/* Next 1 trang*/}
+                    <span
+                      className={
+                        currentPage === totalPages
+                          ? styles.disabled
+                          : styles["other-page"]
+                      }
+                      onClick={() =>
+                        currentPage < totalPages &&
+                        handlePageChange(currentPage + 1)
+                      }
+                    >
                       ›
-                    </a>
-                    <a className={styles["last-page"]} title="Last page" href="#">
+                    </span>
+                    {/* Next tới trang cuối */}
+                    <span
+                      className={
+                        currentPage === totalPages
+                          ? styles.disabled
+                          : styles["other-page"]
+                      }
+                      onClick={() =>
+                        currentPage < totalPages && handlePageChange(totalPages)
+                      }
+                    >
                       ››
-                    </a>
+                    </span>
                   </div>
                 </div>
                 <div className={styles.clear}></div>
@@ -539,18 +681,42 @@ export default function Daydongho() {
                 <div className={styles.evaluateCat}>
                   <div className={`${styles.ratingArea} ${styles.cls}`}>
                     <span id="ratings">
-                      <i className={` ${styles.starOn}`} id="rate_1" value="1"></i>
-                      <i className={` ${styles.starOn}`} id="rate_2" value="2"></i>
-                      <i className={` ${styles.starOn}`} id="rate_3" value="3"></i>
-                      <i className={` ${styles.starOff}`} id="rate_4" value="4"></i>
-                      <i className={` ${styles.starOff}`} id="rate_5" value="5"></i>
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_1"
+                        value="1"
+                      ></i>
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_2"
+                        value="2"
+                      ></i>
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_3"
+                        value="3"
+                      ></i>
+                      <i
+                        className={` ${styles.starOff}`}
+                        id="rate_4"
+                        value="4"
+                      ></i>
+                      <i
+                        className={` ${styles.starOff}`}
+                        id="rate_5"
+                        value="5"
+                      ></i>
                     </span>
-                    <span className={styles.ratingNote}>Nhấn vào đây để đánh giá</span>
+                    <span className={styles.ratingNote}>
+                      Nhấn vào đây để đánh giá
+                    </span>
                   </div>
                 </div>
 
                 <div className={styles.clear}></div>
-                <div className={`${styles.aq_relates} ${styles.content_li}`}></div>
+                <div
+                  className={`${styles.aq_relates} ${styles.content_li}`}
+                ></div>
               </div>
             </div>
             {/* end - đồng hồ nam */}
