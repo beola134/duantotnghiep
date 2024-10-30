@@ -5,6 +5,10 @@ const donhangController = require('../controllers/donhangController');
 //http://localhost:5000/donhang/donhang
 router.post('/donhang',donhangController.addDonHang);
 
+//show tất cả đơn hàng
+//http://localhost:5000/donhang/showAll
+router.get('/showAll',donhangController.getAllDonHang);
+
 //cập nhật trạng thái đơn hàng
 //http://localhost:5000/donhang/update/:id
 router.put('/update/:id',donhangController.updateDonHang);
