@@ -104,6 +104,21 @@ const addDonHang = async (req, res) => {
   }
 };
 
+//show tất cả đơn hàng
+const getAllDonHang = async (req, res) => {
+  try {
+    const donHangs = await DonHang.findAll();
+    if (donHangs.length === 0) {
+      return res.status(404).json({ message: "Không tìm thấy đơn hàng." });
+    } 
+    return res.status(200).json({donHangs});
+  } catch (error) {
+    console.error("Lỗi khi lấy đơn hàng:", error);
+    return res
+      .status(500)
+      .json({ message: "Đã xảy ra lỗi, vui lòng thử lại sau." });
+  }
+}
 
 //cập nhật trạng thái đơn hàng
 const updateDonHang = async (req, res) => {
@@ -210,4 +225,5 @@ module.exports = {
   updateDonHang,
   getAllDonHangByUserId,
   getDonHangByUserId,
+  getAllDonHang,
 };
