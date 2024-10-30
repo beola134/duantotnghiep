@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, use } from "react";
 import styles from "./detail.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "../../redux/slices/cartSilce";
@@ -7,15 +7,18 @@ import Loading from "../../loading/page";
 import Swal from "sweetalert2";
 import Slider from "react-slick";
 import Link from "next/link";
+import { jwtDecode } from "jwt-decode";
 
 export default function Detail({ params }) {
+  const [user, setUser] = useState(null);
   const [product, setProducts] = useState(null);
   const [cate, setCate] = useState(null);
   const [related, SetRelated] = useState([]);
+  const [comment, setComment] = useState("");
+  const [star, setStar] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const sliderRef = useRef(null);
-
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   console.log(cart);
@@ -70,6 +73,70 @@ export default function Detail({ params }) {
     speed: 500,
     slidesToShow: 5,
     slidesToScroll: 1,
+  };
+
+  // lấy thông tin người dùng
+  useEffect(() => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+    if (token) {
+      try {
+        const { _id } = jwtDecode(token);
+        setUser({ _id });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, []);
+
+  // thêm bình luận sản phẩm theo id người dùng và id sản phẩm
+  const addComment = async () => {
+    if (user) {
+      if (comment && star) {
+        try {
+          const response = await fetch(`http://localhost:5000/comment/add`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              noi_dung: comment,
+              sao: star,
+              id_nguoi_dung: user._id,
+              id_san_pham: params.id,
+            }),
+          });
+          if (!response.ok) {
+            throw new Error("Lỗi không thể thêm bình luận");
+          }
+          const data = await response.json();
+          console.log(data);
+
+          setComment("");
+          setStar(0);
+          Swal.fire({
+            icon: "success",
+            title: "Bình luận thành công!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        } catch (error) {
+          setError(error.message);
+        }
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: "Vui lòng nhập bình luận và chọn sao",
+        });
+      }
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "Vui lòng đăng nhập để bình luận",
+      });
+    }
   };
   if (loading) {
     return <Loading />;
@@ -1537,23 +1604,40 @@ export default function Detail({ params }) {
 
                 <div id="-info-comment" className={styles.cls}></div>
                 {/* <!--  --> */}
-                <form name="comment-add-form" id="comment-add-form" className={`${styles.formComment} ${styles.cls}`}>
+                <form
+                  name="comment-add-form"
+                  id="comment-add-form"
+                  className={`${styles.formComment} ${styles.cls}`}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    addComment();
+                  }}
+                >
                   <label className={styles.labelForm}>Nhận xét và đánh giá</label>
                   <div className={styles.ratingArea}>
                     <span id="ratings" className={styles.cls}>
-                      <i className={`${styles.iconV1} ${styles.starOn}`} id="rate_1" value="1"></i>
-                      <i className={`${styles.iconV1} ${styles.starOn}`} id="rate_2" value="2"></i>
-                      <i className={`${styles.iconV1} ${styles.starOn}`} id="rate_3" value="3"></i>
-                      <i className={`${styles.iconV1} ${styles.starOff}`} id="rate_4" value="4"></i>
-                      <i className={`${styles.iconV1} ${styles.starOff}`} id="rate_5" value="5"></i>
+                      {[1, 2, 3, 4, 5].map((value) => (
+                        <i
+                          key={value}
+                          className={`${styles.iconV1} ${value <= star ? styles.starOn : styles.starOff}`}
+                          onClick={() => setStar(value)}
+                          value={value}
+                        ></i>
+                      ))}
                     </span>
                     <span className={styles.ratingNote}>Nhấn vào đây để đánh giá</span>
                   </div>
                   <div className={styles.textarea}>
-                    <textarea name="content" id="cmt-content" placeholder="Viết bình luận của bạn..."></textarea>
+                    <textarea
+                      name="content"
+                      id="cmt-content"
+                      placeholder="Viết bình luận của bạn..."
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                    ></textarea>
                   </div>
 
-                  <input type="button" className={styles.btnCommentMb} value="Gửi bình luận" />
+                  <input type="submit" className={styles.btnCommentMb} value="Gửi bình luận" />
                 </form>
               </div>
             </div>
