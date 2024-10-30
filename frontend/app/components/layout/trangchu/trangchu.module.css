@@ -98,7 +98,7 @@
 }
 
 .watch {
-  padding-left:30px;
+  padding-left: 30px;
   text-align: center;
   position: relative; /* Sử dụng relative để có thể đặt các thành phần con (badge) tuyệt đối bên trong */
   width: 200px;
@@ -117,22 +117,22 @@
 
 .watch p {
   color: #000;
-  text-decoration: none; 
-  transition: color 0.3s ease, text-decoration 0.3s ease; 
-  text-align: center; 
-   font-size: 10px;
+  text-decoration: none;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+  text-align: center;
+  font-size: 10px;
   line-height: 25px;
 }
-.watch p small{
-  color:#777777;
- 
+.watch p small {
+  color: #777777;
+  font-size: 14px;
 }
 
 .priceKm {
   font-weight: bold;
   color: red;
+  font-size: 16px;
 }
-
 
 .discountBadge {
   position: absolute;
@@ -197,28 +197,28 @@
 }
 
 .overlay {
-  position: absolute; 
- top: 180px;
+  position: absolute;
+  top: 180px;
   right: 0;
-  background-color: red; 
-  color: white; 
+  background-color: red;
+  color: white;
   padding: 2px;
-  border-radius: 2px; 
-  z-index: 1; 
-  opacity: 0.9; 
+  border-radius: 2px;
+  z-index: 1;
+  opacity: 0.9;
   width: 40px;
   height: 22px;
 }
 
 .sale {
-  position: absolute; 
-  bottom: 150px; 
-  left: 10px; 
+  position: absolute;
+  bottom: 150px;
+  left: 10px;
   background-color: #e9a04d;
-  color: rgb(255, 255, 255); 
-  border-radius: 2px; 
-  z-index: 1; 
-  opacity: 0.9; 
+  color: rgb(255, 255, 255);
+  border-radius: 2px;
+  z-index: 1;
+  opacity: 0.9;
   width: 100px;
   height: 22px;
   padding: 2px;
@@ -226,17 +226,17 @@
 }
 
 .slideSection {
-  padding: 20px; 
+  padding: 20px;
 
   width: 1170px;
   margin: auto;
 }
 
 .title {
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  margin-bottom: 20px; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 /* Định dạng cho h2 */
@@ -343,12 +343,12 @@
 .title-unline::after {
   content: "";
   position: absolute;
-  bottom: 0px; 
+  bottom: 0px;
   margin-left: -20px;
   width: 980px;
-  height: 1px; 
-  background-color: #796752; 
-  transform: skew(20deg); 
+  height: 1px;
+  background-color: #796752;
+  transform: skew(20deg);
 }
 
 .news-item {
@@ -368,34 +368,34 @@
 }
 
 .item-1 img {
-  width: 250px; 
+  width: 250px;
   height: 150px;
-  object-fit: cover; 
+  object-fit: cover;
 }
 
 .news-section::-webkit-scrollbar {
-  width: 12px; 
+  width: 12px;
 }
 
 .news-section::-webkit-scrollbar-thumb {
-  background: #777777; 
-  border-radius: 10px; 
+  background: #777777;
+  border-radius: 10px;
   border: solid white 1px;
 }
 
 .news-section::-webkit-scrollbar-track {
-  background: #f0f0f0; 
-  border-radius: 10px; 
+  background: #f0f0f0;
+  border-radius: 10px;
 }
 
 .news-item:last-child {
-  border-bottom: none; 
+  border-bottom: none;
 }
 
 .news-item p {
   margin: 0;
   color: #555;
-  font-size: 14px; 
+  font-size: 14px;
 }
 .new-item img {
   margin-top: 10px;
@@ -410,28 +410,27 @@
 }
 
 .news-image {
-  width: 30%; 
+  width: 30%;
 }
 
 .news-image img {
-  width: 100%; 
+  width: 100%;
   height: auto;
   border-radius: 4px;
 }
 .item-left {
   display: flex;
   flex-direction: column;
-  gap: 20px; 
+  gap: 20px;
   margin-top: -20px;
 }
 .item-left p {
   padding-bottom: 10px;
 }
 
-
 .video-wrapper {
   position: relative;
-  padding-bottom: 65.5%; 
+  padding-bottom: 65.5%;
   height: 0;
   overflow: hidden;
   margin-top: 10px;
@@ -457,13 +456,13 @@
 }
 
 .related-video iframe {
-  width: 134px; 
+  width: 134px;
   height: 80px;
   overflow: hidden;
 }
 
 .related-video p {
-  font-size: 12px; 
+  font-size: 12px;
   color: #ffffff;
 }
 .video-title {
@@ -483,10 +482,10 @@
 .title-video {
   position: absolute;
   margin-top: -30px;
-  right: 320px; 
-  color: rgb(255, 255, 255); 
-  padding: 5px 5px; 
-  font-size: 10px; 
+  right: 320px;
+  color: rgb(255, 255, 255);
+  padding: 5px 5px;
+  font-size: 10px;
   display: flex;
 
   align-items: center;
@@ -498,7 +497,7 @@
 .title-videos {
   position: absolute;
   margin-top: -30px;
-  color: rgb(255, 255, 255); 
+  color: rgb(255, 255, 255);
   padding: 5px 5px;
   font-size: 10px;
   display: flex;
@@ -516,19 +515,19 @@
 .titleVs {
   text-transform: uppercase;
   font-size: 30px;
-  position: relative; 
-  margin: 20px 0; 
+  position: relative;
+  margin: 20px 0;
   margin-top: -120px;
 }
 
 .titleVs::before,
 .titleVs::after {
-  content: ""; 
-  position: absolute; 
-  top: 50%; 
-  width: 200px; 
-  height: 2px; 
-  background: rgb(96, 96, 96); 
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 200px;
+  height: 2px;
+  background: rgb(96, 96, 96);
 }
 
 .titleVs::before {
@@ -557,25 +556,25 @@
   margin-top: -15px;
   margin-right: 5px;
 }
-.iconItem .ngay{
+.iconItem .ngay {
   margin-top: -10px;
 }
-.iconItem .uytin{
+.iconItem .uytin {
   margin-top: -5px;
 }
 
 .iconItem .uytin,
 .iconItem .ngay {
-  animation: move-up-down 2s ease-in-out infinite; 
+  animation: move-up-down 2s ease-in-out infinite;
 }
 
 @keyframes move-up-down {
   0%,
   100% {
-    transform: translateY(0); 
+    transform: translateY(0);
   }
   50% {
-    transform: translateY(-10px); 
+    transform: translateY(-10px);
   }
 }
 
@@ -598,11 +597,11 @@
 }
 
 .shake {
-  animation: shake 0.5s ease infinite; 
+  animation: shake 0.5s ease infinite;
 }
 .iconItem .vanchuyen,
 .baove {
-  transition: transform 0.5s ease; 
+  transition: transform 0.5s ease;
   animation: shake 2s ease forwards infinite;
 }
 
@@ -628,10 +627,10 @@
 }
 
 .certificateSection {
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between; 
-  padding-top: 70px; 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 70px;
   width: 1170px;
   position: relative;
   height: 600px;
@@ -644,9 +643,9 @@
 .textTitle {
   text-align: left;
   width: 500px;
-  text-transform: uppercase; 
-  font-size: 24px; 
-  margin-bottom: 10px; 
+  text-transform: uppercase;
+  font-size: 24px;
+  margin-bottom: 10px;
   line-height: 40px;
 }
 .text .xtc {
@@ -656,19 +655,19 @@
   margin-top: -30px;
 }
 .xtc::after {
-  content: ""; 
-  position: absolute; 
+  content: "";
+  position: absolute;
   margin-top: 50px;
   margin-left: -500px;
   width: 500px;
   height: 0.5px;
-  background: rgb(96, 96, 96); 
+  background: rgb(96, 96, 96);
 }
 
 .certificateSection .imgChungnhan {
-  max-width: 50%; 
-  height: auto; 
-  border-radius: 5px; 
+  max-width: 50%;
+  height: auto;
+  border-radius: 5px;
   margin-right: 120px;
   margin-top: 30px;
 }
@@ -702,7 +701,7 @@
   border: #777777 0.5px solid;
 }
 .itemSlide1 img {
-  position: absolute; 
+  position: absolute;
   align-items: center;
   justify-content: center;
   width: 130px;

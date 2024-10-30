@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "../donghonam/donghonam.module.css";
+import Loading from "../loading/page";
 
 export default function DonghoNam() {
   const [products, setProducts] = useState([]);
@@ -10,9 +11,7 @@ export default function DonghoNam() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/product/new/gioitinh-nam"
-        );
+        const response = await fetch("http://localhost:5000/product/new/gioitinh-nam");
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -27,7 +26,7 @@ export default function DonghoNam() {
     fetchProducts();
   }, []);
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
   if (error) {
     return <p>Error:{error}</p>;
@@ -1678,7 +1677,7 @@ export default function DonghoNam() {
                                   </div>
                                 </div>
                                 <div className={styles.discount}>
-                                  <span>-{(gia_san_pham - gia_giam)/gia_san_pham * 100}%</span>
+                                  <span>-{((gia_san_pham - gia_giam) / gia_san_pham) * 100}%</span>
                                 </div>
                                 {/* <div className={styles.overlay}>New</div> */}
                                 <div className={styles.clear}></div>

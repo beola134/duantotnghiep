@@ -1,10 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import styles from "./user.module.css";
+import styles from "../user.module.css";
 import Link from "next/link";
-
-const User = () => {
-  const userId = "7a315ae7-8030-4feb-bc17-2aa0bde8525c"; // ID người dùng hiện tại
+import Swal from "sweetalert2";
+import Cookies from "js-cookie";
+const User = ({ params }) => {
+  const { id } = params;
   const [userData, setUserData] = useState({
     ten_dang_nhap: "",
     ho_ten: "",
@@ -13,13 +14,14 @@ const User = () => {
     dien_thoai: "",
     hinh_anh: "",
   });
+
   const [isEditing, setIsEditing] = useState(false);
   const [avatarFile, setAvatarFile] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/users/${userId}`);
+        const res = await fetch(`http://localhost:5000/users/${id}`);
         const data = await res.json();
         setUserData(data.user);
       } catch (error) {
@@ -28,7 +30,7 @@ const User = () => {
     };
 
     fetchUserData();
-  }, [userId]);
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,7 +38,7 @@ const User = () => {
   };
 
   const handleFileChange = (e) => {
-    setAvatarFile(e.target.files[0]); // Lưu file ảnh
+    setAvatarFile(e.target.files[0]);
   };
 
   const handleSave = async () => {
@@ -50,30 +52,55 @@ const User = () => {
       formData.append("hinh_anh", avatarFile);
     }
     try {
-      const res = await fetch(`http://localhost:5000/users/update/${userId}`, {
+      const res = await fetch(`http://localhost:5000/users/update/${id}`, {
         method: "PUT",
         body: formData,
       });
 
       if (res.ok) {
-        alert("Cập nhật thông tin thành công");
+        Swal.fire({
+          title: "Thành công",
+          text: "Cập nhật thông tin thành công",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
         setIsEditing(false);
         setAvatarFile(null);
       } else {
-        alert("Cập nhật thông tin thất bại");
+        Swal.fire({
+          title: "Thất bại",
+          text: "Cập nhật thông tin thất bại",
+          icon: "error",
+          confirmButtonText: "Thử lại",
+        });
       }
     } catch (error) {
       console.error("Error updating user data:", error);
-      alert("Cập nhật thông tin thất bại");
+      Swal.fire({
+        title: "Lỗi",
+        text: "Có lỗi xảy ra, vui lòng thử lại.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 
+  const handleLayout = () => {
+    Cookies.remove("token");
+    Swal.fire({
+      title: "Đăng xuất thành công",
+      icon: "success",
+      confirmButtonText: "OK",
+    }).then(() => {
+      window.location.href = "/";
+    });
+  };
   return (
     <div className={styles.container}>
       <div className={styles.sidebar}>
         <div className={styles.profilePicture}>
           <img
-            src={`/image/item/${userData.hinh_anh} `}
+            src={`http://localhost:5000/images/${userData.hinh_anh}`}
             alt="Avatar"
             className={styles.avatar}
           />
@@ -94,8 +121,10 @@ const User = () => {
             <Link href={""}>Trạng thái đơn hàng</Link>
           </p>
 
-          <p>
-            <Link href={""}>Đăng xuất</Link>
+          <p style={{ cursor: "pointer" }}>
+            <Link href={""} onClick={handleLayout}>
+              Đăng xuất
+            </Link>
           </p>
         </div>
       </div>
@@ -174,7 +203,7 @@ const User = () => {
                   type="submit"
                   onClick={handleSave}
                   className="save-button">
-                  Lưu
+                  Cập nhật
                 </button>
               </div>
             </>

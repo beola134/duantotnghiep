@@ -3,6 +3,7 @@ import Product from "../product/page";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "../donghonu/donghonu.module.css";
+import Loading from "../loading/page";
 
 export default function Donghonu() {
   const [products, setProducts] = useState([]);
@@ -11,9 +12,7 @@ export default function Donghonu() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/product/allsp/gioitinh-nu"
-        );
+        const response = await fetch("http://localhost:5000/product/allsp/gioitinh-nu");
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -28,7 +27,7 @@ export default function Donghonu() {
     fetchProducts();
   }, []);
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
   if (error) {
     return <p>Error:{error}</p>;
@@ -45,17 +44,13 @@ export default function Donghonu() {
                 <div className={styles.clear}></div>
                 <div className={styles["block-product-filter"]}>
                   {/* Giới tính */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                    <div className={`${styles["field-name"]} ${styles.normal} ${styles.field}`}>Giới tính</div>
                     <div
-                      className={`${styles["field-name"]} ${styles.normal} ${styles.field}`}>
-                      Giới tính
-                    </div>
-                    <div
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]}`}>
+                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]}`}
+                    >
                       <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                         <Link rel="nofollow" href="#" title="Đồng hồ nam">
                           <span>Đồng hồ nam</span>
                         </Link>
@@ -72,18 +67,18 @@ export default function Donghonu() {
                     </div>
                   </div>
                   {/* Thương hiệu  */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                     <div
-                      className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}>
+                      className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
+                    >
                       Thương hiệu
                     </div>
                     <div
                       id="brand"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-3-column"]} ${styles["filter-brand"]}`}>
+                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-3-column"]} ${styles["filter-brand"]}`}
+                    >
                       <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="LONGINES">
                             LONGINES
@@ -115,10 +110,7 @@ export default function Donghonu() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="FREDERIQUE CONSTANT">
+                          <Link rel="nofollow" href="#" title="FREDERIQUE CONSTANT">
                             FREDERIQUE CONSTANT
                           </Link>
                         </div>
@@ -163,10 +155,7 @@ export default function Donghonu() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="DANIEL WELLINGTON">
+                          <Link rel="nofollow" href="#" title="DANIEL WELLINGTON">
                             DANIEL WELLINGTON
                           </Link>
                         </div>
@@ -190,68 +179,50 @@ export default function Donghonu() {
                   </div>
 
                   {/* Mức giá */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                     <div
-                      className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}>
+                      className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
+                    >
                       Mức giá
                     </div>
                     <div
                       id="price"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-price"]}`}>
+                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-price"]}`}
+                    >
                       <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Dưới 2 triệu">
                             Dưới 2 triệu
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Từ 2 triệu đến 5 triệu">
+                          <Link rel="nofollow" href="#" title="Từ 2 triệu đến 5 triệu">
                             Từ 2 triệu đến 5 triệu
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Từ 5 triệu đến 10 triệu">
+                          <Link rel="nofollow" href="#" title="Từ 5 triệu đến 10 triệu">
                             Từ 5 triệu đến 10 triệu
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Từ 10 triệu đến 20 triệu">
+                          <Link rel="nofollow" href="#" title="Từ 10 triệu đến 20 triệu">
                             Từ 10 triệu đến 20 triệu
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Từ 20 triệu đến 30 triệu">
+                          <Link rel="nofollow" href="#" title="Từ 20 triệu đến 30 triệu">
                             Từ 20 triệu đến 30 triệu
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Từ 30 triệu đến 50 triệu">
+                          <Link rel="nofollow" href="#" title="Từ 30 triệu đến 50 triệu">
                             Từ 30 triệu đến 50 triệu
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Từ 50 triệu đến 100 triệu">
+                          <Link rel="nofollow" href="#" title="Từ 50 triệu đến 100 triệu">
                             Từ 50 triệu đến 100 triệu
                           </Link>
                         </div>
@@ -265,19 +236,19 @@ export default function Donghonu() {
                   </div>
 
                   {/* Khuyến mãi */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                      data-id="id-field-discount">
+                      data-id="id-field-discount"
+                    >
                       Khuyến mại
                     </div>
                     <div
                       id="discount"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-discount"]}`}>
+                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-discount"]}`}
+                    >
                       <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Giảm 10%">
                             Giảm 10%
@@ -318,89 +289,61 @@ export default function Donghonu() {
                   </div>
 
                   {/* Loại máy */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                      data-id="id-field-loai-may">
+                      data-id="id-field-loai-may"
+                    >
                       Loại máy
                     </div>
                     <div
                       id="loai-may"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-loai-may"]}`}>
+                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-loai-may"]}`}
+                    >
                       <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Automatic (Máy cơ tự động)">
+                          <Link rel="nofollow" href="#" title="Automatic (Máy cơ tự động)">
                             Automatic (Máy cơ tự động)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Quartz (Máy pin - điện tử)">
+                          <Link rel="nofollow" href="#" title="Quartz (Máy pin - điện tử)">
                             Quartz (Máy pin - điện tử)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Eco-Drive (Năng lượng ánh sáng)">
+                          <Link rel="nofollow" href="#" title="Eco-Drive (Năng lượng ánh sáng)">
                             Eco-Drive (Năng lượng ánh sáng)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Quartz Chronograph (Máy pin bấm giờ thể thao)">
+                          <Link rel="nofollow" href="#" title="Quartz Chronograph (Máy pin bấm giờ thể thao)">
                             Quartz Chronograph (Máy pin bấm giờ thể thao)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)">
+                          <Link rel="nofollow" href="#" title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)">
                             Automatic Chronometer (Máy cơ tự động chuẩn COSC)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Quartz Chronometer (Máy pin chuẩn COSC)">
+                          <Link rel="nofollow" href="#" title="Quartz Chronometer (Máy pin chuẩn COSC)">
                             Quartz Chronometer (Máy pin chuẩn COSC)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)">
-                            Automatic Chronograph (Máy cơ tự động bấm giờ thể
-                            thao)
+                          <Link rel="nofollow" href="#" title="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)">
+                            Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Quartz Solar (Năng lượng ánh sáng)">
+                          <Link rel="nofollow" href="#" title="Quartz Solar (Năng lượng ánh sáng)">
                             Quartz Solar (Năng lượng ánh sáng)
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )">
+                          <Link rel="nofollow" href="#" title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )">
                             Đồng hồ cơ lên giây cót bằng tay ( Manual winding )
                           </Link>
                         </div>
@@ -409,19 +352,19 @@ export default function Donghonu() {
                   </div>
 
                   {/*Đường kính */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                      data-id="id-field-duong-kinh">
+                      data-id="id-field-duong-kinh"
+                    >
                       Đường kính
                     </div>
                     <div
                       id="duong-kinh"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-duong-kinh"]}`}>
+                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-duong-kinh"]}`}
+                    >
                       <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Dưới 25mm">
                             Dưới 25mm
@@ -467,53 +410,41 @@ export default function Donghonu() {
                   </div>
 
                   {/*Chất liệu dây  */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                      data-id="id-field-chat-lieu-day">
+                      data-id="id-field-chat-lieu-day"
+                    >
                       Chất liệu dây
                     </div>
                     <div
                       id="chat-lieu-day"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-chat-lieu-day"]}`}>
+                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-chat-lieu-day"]}`}
+                    >
                       <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Dây da">
                             Dây da
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Thép không gỉ 316L">
+                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L">
                             Thép không gỉ 316L
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Thép không gỉ 316L mạ vàng công nghệ PVD">
+                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L mạ vàng công nghệ PVD">
                             Thép không gỉ 316L mạ vàng công nghệ PVD
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Thép không gỉ 316L dạng lưới">
+                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L dạng lưới">
                             Thép không gỉ 316L dạng lưới
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Thép không gỉ 316L dạng lắc">
+                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L dạng lắc">
                             Thép không gỉ 316L dạng lắc
                           </Link>
                         </div>
@@ -523,26 +454,17 @@ export default function Donghonu() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Thép không gỉ 316L/ Vàng 18K">
+                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Vàng 18K">
                             Thép không gỉ 316L/ Vàng 18K
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Thép không gỉ 316L/ Ceramic">
+                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Ceramic">
                             Thép không gỉ 316L/ Ceramic
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Thép không gỉ mạ công nghệ PVD">
+                          <Link rel="nofollow" href="#" title="Thép không gỉ mạ công nghệ PVD">
                             Thép không gỉ mạ công nghệ PVD
                           </Link>
                         </div>
@@ -562,10 +484,7 @@ export default function Donghonu() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Titanium mạ vàng công nghệ PVD">
+                          <Link rel="nofollow" href="#" title="Titanium mạ vàng công nghệ PVD">
                             Titanium mạ vàng công nghệ PVD
                           </Link>
                         </div>
@@ -579,32 +498,26 @@ export default function Donghonu() {
                   </div>
 
                   {/*Chất liệu vỏ */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                      data-id="id-field-chat-lieu-vo">
+                      data-id="id-field-chat-lieu-vo"
+                    >
                       Chất liệu vỏ
                     </div>
                     <div
                       id="chat-lieu-vo"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-chat-lieu-vo"]}`}>
+                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-chat-lieu-vo"]}`}
+                    >
                       <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Thép không gỉ 316L">
+                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L">
                             Thép không gỉ 316L
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Thép không gỉ mạ vàng công nghệ PVD">
+                          <Link rel="nofollow" href="#" title="Thép không gỉ mạ vàng công nghệ PVD">
                             Thép không gỉ mạ vàng công nghệ PVD
                           </Link>
                         </div>
@@ -614,10 +527,7 @@ export default function Donghonu() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Thép không gỉ 316L/ Vàng 18K">
+                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Vàng 18K">
                             Thép không gỉ 316L/ Vàng 18K
                           </Link>
                         </div>
@@ -627,10 +537,7 @@ export default function Donghonu() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Titanium mạ công nghệ PVD">
+                          <Link rel="nofollow" href="#" title="Titanium mạ công nghệ PVD">
                             Titanium mạ công nghệ PVD
                           </Link>
                         </div>
@@ -640,18 +547,12 @@ export default function Donghonu() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Thép không gỉ 316L/ Ceramic">
+                          <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Ceramic">
                             Thép không gỉ 316L/ Ceramic
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Thép không gỉ mạ công nghệ PVD">
+                          <Link rel="nofollow" href="#" title="Thép không gỉ mạ công nghệ PVD">
                             Thép không gỉ mạ công nghệ PVD
                           </Link>
                         </div>
@@ -661,10 +562,7 @@ export default function Donghonu() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Titanium/ Vàng 18K">
+                          <Link rel="nofollow" href="#" title="Titanium/ Vàng 18K">
                             Titanium/ Vàng 18K
                           </Link>
                         </div>
@@ -673,19 +571,19 @@ export default function Donghonu() {
                   </div>
 
                   {/* Mặt kính */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                      data-id="id-field-mat-kinh">
+                      data-id="id-field-mat-kinh"
+                    >
                       Mặt kính
                     </div>
                     <div
                       id="mat-kinh"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-mat-kinh"]}`}>
+                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-mat-kinh"]}`}
+                    >
                       <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Sapphire">
                             Sapphire
@@ -716,19 +614,19 @@ export default function Donghonu() {
                   </div>
 
                   {/*Màu mặt */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                      data-id="id-field-mau-mat">
+                      data-id="id-field-mau-mat"
+                    >
                       Màu mặt
                     </div>
                     <div
                       id="mau-mat"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-mau-mat"]}`}>
+                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-mau-mat"]}`}
+                    >
                       <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Trắng">
                             Trắng
@@ -789,19 +687,19 @@ export default function Donghonu() {
                   </div>
 
                   {/*Phong cách */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                      data-id="id-field-phong-cach">
+                      data-id="id-field-phong-cach"
+                    >
                       Phong cách
                     </div>
                     <div
                       id="phong-cach"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-phong-cach"]}`}>
+                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-phong-cach"]}`}
+                    >
                       <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Sang trọng">
                             Sang trọng
@@ -813,10 +711,7 @@ export default function Donghonu() {
                           </Link>
                         </div>
                         <div className={`${styles.cls} ${styles.item}`}>
-                          <Link
-                            rel="nofollow"
-                            href="#"
-                            title="Thể thao sang trọng">
+                          <Link rel="nofollow" href="#" title="Thể thao sang trọng">
                             Thể thao sang trọng
                           </Link>
                         </div>
@@ -840,19 +735,19 @@ export default function Donghonu() {
                   </div>
 
                   {/*Kiểu dáng */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                      data-id="id-field-kieu-dang">
+                      data-id="id-field-kieu-dang"
+                    >
                       Kiểu dáng
                     </div>
                     <div
                       id="kieu-dang"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-kieu-dang"]}`}>
+                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-kieu-dang"]}`}
+                    >
                       <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Mặt vuông">
                             Mặt vuông
@@ -883,19 +778,19 @@ export default function Donghonu() {
                   </div>
 
                   {/*Xuất xứ thương hiệu */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                  <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                     <div
                       className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                      data-id="id-field-xuat-xu-thuong-hieu">
+                      data-id="id-field-xuat-xu-thuong-hieu"
+                    >
                       Xuất xứ thương hiệu
                     </div>
                     <div
                       id="xuat-xu-thuong-hieu"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]} ${styles["filter-4-xuat-xu-thuong-hieu"]}`}>
+                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]} ${styles["filter-4-xuat-xu-thuong-hieu"]}`}
+                    >
                       <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                      <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                         <div className={`${styles.cls} ${styles.item}`}>
                           <Link rel="nofollow" href="#" title="Nhật Bản">
                             Nhật Bản
@@ -915,13 +810,10 @@ export default function Donghonu() {
               <div className={styles.container}>
                 <div className={styles.clear}></div>
                 <div className={styles["all-summary"]}>
-                  <div
-                    className={styles["summary-content-filter"]}
-                    style={{ description: true }}>
+                  <div className={styles["summary-content-filter"]} style={{ description: true }}>
                     <p>
-                      Đến với thế giới <strong>đồng hồ nữ</strong> của Duy Anh
-                      Watch, bạn sẽ được sở hữu hàng nghìn sản phẩm chất lượng,
-                      thiết kế bắt mắt đến từ các thương hiệu
+                      Đến với thế giới <strong>đồng hồ nữ</strong> của Duy Anh Watch, bạn sẽ được sở hữu hàng nghìn sản
+                      phẩm chất lượng, thiết kế bắt mắt đến từ các thương hiệu
                       <em>
                         <strong>
                           <Link href="#" target="_blank">
@@ -929,12 +821,10 @@ export default function Donghonu() {
                           </Link>
                         </strong>
                       </em>
-                      , Nhật Bản, Pháp, Mỹ…danh tiếng trên thế giới. Mọi sản
-                      phẩm đều đảm bảo
-                      <strong>100% hàng chính hãng</strong> kèm theo{" "}
-                      <strong>chế độ bảo hành chính hãng</strong> đặc biệt với
-                      mức giá hợp lý sẽ đem đến cho bạn phụ kiện hoàn hảo nhất;
-                      khẳng định đẳng cấp, phong cách riêng của bản thân
+                      , Nhật Bản, Pháp, Mỹ…danh tiếng trên thế giới. Mọi sản phẩm đều đảm bảo
+                      <strong>100% hàng chính hãng</strong> kèm theo <strong>chế độ bảo hành chính hãng</strong> đặc
+                      biệt với mức giá hợp lý sẽ đem đến cho bạn phụ kiện hoàn hảo nhất; khẳng định đẳng cấp, phong cách
+                      riêng của bản thân
                     </p>
                   </div>
 
@@ -945,17 +835,13 @@ export default function Donghonu() {
                   <div className={styles["block-products-filter"]}>
                     <div className={styles["block-product-filter"]}>
                       {/* Giới tính */}
-                      <div
-                        className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                        <div className={`${styles["field-name"]} ${styles.normal} ${styles.field}`}>Giới tính</div>
                         <div
-                          className={`${styles["field-name"]} ${styles.normal} ${styles.field}`}>
-                          Giới tính
-                        </div>
-                        <div
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]}`}
+                        >
                           <span className={styles.close}>x</span>
-                          <div
-                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <Link rel="nofollow" href="#" title="Đồng hồ nam">
                               <span>Đồng hồ nam</span>
                             </Link>
@@ -965,28 +851,25 @@ export default function Donghonu() {
                             <Link rel="nofollow" href="#" title="Đồng hồ đôi">
                               <span>Đồng hồ đôi</span>
                             </Link>
-                            <Link
-                              rel="nofollow"
-                              href="#"
-                              title="Đồng hồ unisex">
+                            <Link rel="nofollow" href="#" title="Đồng hồ unisex">
                               <span>Đồng hồ unisex</span>
                             </Link>
                           </div>
                         </div>
                       </div>
                       {/* Thương hiệu  */}
-                      <div
-                        className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                         <div
-                          className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}>
+                          className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
+                        >
                           Thương hiệu
                         </div>
                         <div
                           id="brand"
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-3-column"]} ${styles["filter-brand"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-3-column"]} ${styles["filter-brand"]}`}
+                        >
                           <span className={styles.close}>x</span>
-                          <div
-                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="LONGINES">
                                 LONGINES
@@ -1018,18 +901,12 @@ export default function Donghonu() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="FREDERIQUE CONSTANT">
+                              <Link rel="nofollow" href="#" title="FREDERIQUE CONSTANT">
                                 FREDERIQUE CONSTANT
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="CALVIN KLEIN">
+                              <Link rel="nofollow" href="#" title="CALVIN KLEIN">
                                 CALVIN KLEIN
                               </Link>
                             </div>
@@ -1039,10 +916,7 @@ export default function Donghonu() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="CLAUDE BERNARD">
+                              <Link rel="nofollow" href="#" title="CLAUDE BERNARD">
                                 CLAUDE BERNARD
                               </Link>
                             </div>
@@ -1072,10 +946,7 @@ export default function Donghonu() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="DANIEL WELLINGTON">
+                              <Link rel="nofollow" href="#" title="DANIEL WELLINGTON">
                                 DANIEL WELLINGTON
                               </Link>
                             </div>
@@ -1090,10 +961,7 @@ export default function Donghonu() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="MICHAEL KORS">
+                              <Link rel="nofollow" href="#" title="MICHAEL KORS">
                                 MICHAEL KORS
                               </Link>
                             </div>
@@ -1102,79 +970,55 @@ export default function Donghonu() {
                       </div>
 
                       {/* Mức giá */}
-                      <div
-                        className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                         <div
-                          className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}>
+                          className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
+                        >
                           Mức giá
                         </div>
                         <div
                           id="price"
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-price"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-price"]}`}
+                        >
                           <span className={styles.close}>x</span>
-                          <div
-                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Dưới 2 triệu">
+                              <Link rel="nofollow" href="#" title="Dưới 2 triệu">
                                 Dưới 2 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Từ 2 triệu đến 5 triệu">
+                              <Link rel="nofollow" href="#" title="Từ 2 triệu đến 5 triệu">
                                 Từ 2 triệu đến 5 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Từ 5 triệu đến 10 triệu">
+                              <Link rel="nofollow" href="#" title="Từ 5 triệu đến 10 triệu">
                                 Từ 5 triệu đến 10 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Từ 10 triệu đến 20 triệu">
+                              <Link rel="nofollow" href="#" title="Từ 10 triệu đến 20 triệu">
                                 Từ 10 triệu đến 20 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Từ 20 triệu đến 30 triệu">
+                              <Link rel="nofollow" href="#" title="Từ 20 triệu đến 30 triệu">
                                 Từ 20 triệu đến 30 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Từ 30 triệu đến 50 triệu">
+                              <Link rel="nofollow" href="#" title="Từ 30 triệu đến 50 triệu">
                                 Từ 30 triệu đến 50 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Từ 50 triệu đến 100 triệu">
+                              <Link rel="nofollow" href="#" title="Từ 50 triệu đến 100 triệu">
                                 Từ 50 triệu đến 100 triệu
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Trên 100 triệu">
+                              <Link rel="nofollow" href="#" title="Trên 100 triệu">
                                 Trên 100 triệu
                               </Link>
                             </div>
@@ -1183,19 +1027,19 @@ export default function Donghonu() {
                       </div>
 
                       {/* Khuyến mãi */}
-                      <div
-                        className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                          data-id="id-field-discount">
+                          data-id="id-field-discount"
+                        >
                           Khuyến mại
                         </div>
                         <div
                           id="discount"
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-discount"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-discount"]}`}
+                        >
                           <span className={styles.close}>x</span>
-                          <div
-                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Giảm 10%">
                                 Giảm 10%
@@ -1236,65 +1080,46 @@ export default function Donghonu() {
                       </div>
 
                       {/* Loại máy */}
-                      <div
-                        className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                          data-id="id-field-loai-may">
+                          data-id="id-field-loai-may"
+                        >
                           Loại máy
                         </div>
                         <div
                           id="loai-may"
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-loai-may"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-loai-may"]}`}
+                        >
                           <span className={styles.close}>x</span>
-                          <div
-                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Automatic (Máy cơ tự động)">
+                              <Link rel="nofollow" href="#" title="Automatic (Máy cơ tự động)">
                                 Automatic (Máy cơ tự động)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Quartz (Máy pin - điện tử)">
+                              <Link rel="nofollow" href="#" title="Quartz (Máy pin - điện tử)">
                                 Quartz (Máy pin - điện tử)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Eco-Drive (Năng lượng ánh sáng)">
+                              <Link rel="nofollow" href="#" title="Eco-Drive (Năng lượng ánh sáng)">
                                 Eco-Drive (Năng lượng ánh sáng)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Quartz Chronograph (Máy pin bấm giờ thể thao)">
+                              <Link rel="nofollow" href="#" title="Quartz Chronograph (Máy pin bấm giờ thể thao)">
                                 Quartz Chronograph (Máy pin bấm giờ thể thao)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)">
-                                Automatic Chronometer (Máy cơ tự động chuẩn
-                                COSC)
+                              <Link rel="nofollow" href="#" title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)">
+                                Automatic Chronometer (Máy cơ tự động chuẩn COSC)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Quartz Chronometer (Máy pin chuẩn COSC)">
+                              <Link rel="nofollow" href="#" title="Quartz Chronometer (Máy pin chuẩn COSC)">
                                 Quartz Chronometer (Máy pin chuẩn COSC)
                               </Link>
                             </div>
@@ -1302,26 +1127,19 @@ export default function Donghonu() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)">
-                                Automatic Chronograph (Máy cơ tự động bấm giờ
-                                thể thao)
+                                title="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)"
+                              >
+                                Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Quartz Solar (Năng lượng ánh sáng)">
+                              <Link rel="nofollow" href="#" title="Quartz Solar (Năng lượng ánh sáng)">
                                 Quartz Solar (Năng lượng ánh sáng)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )">
-                                Đồng hồ cơ lên giây cót bằng tay ( Manual
-                                winding )
+                              <Link rel="nofollow" href="#" title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )">
+                                Đồng hồ cơ lên giây cót bằng tay ( Manual winding )
                               </Link>
                             </div>
                           </div>
@@ -1329,77 +1147,56 @@ export default function Donghonu() {
                       </div>
 
                       {/*Đường kính */}
-                      <div
-                        className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                          data-id="id-field-duong-kinh">
+                          data-id="id-field-duong-kinh"
+                        >
                           Đường kính
                         </div>
                         <div
                           id="duong-kinh"
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-duong-kinh"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-duong-kinh"]}`}
+                        >
                           <span className={styles.close}>x</span>
-                          <div
-                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Dưới 25mm">
                                 Dưới 25mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="25mm đến 30mm">
+                              <Link rel="nofollow" href="#" title="25mm đến 30mm">
                                 25mm đến 30mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="30mm đến 35mm">
+                              <Link rel="nofollow" href="#" title="30mm đến 35mm">
                                 30mm đến 35mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="35mm đến 38mm">
+                              <Link rel="nofollow" href="#" title="35mm đến 38mm">
                                 35mm đến 38mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="38mm đến 40mm">
+                              <Link rel="nofollow" href="#" title="38mm đến 40mm">
                                 38mm đến 40mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="40mm đến 42mm">
+                              <Link rel="nofollow" href="#" title="40mm đến 42mm">
                                 40mm đến 42mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="42mm đến 45mm">
+                              <Link rel="nofollow" href="#" title="42mm đến 45mm">
                                 42mm đến 45mm
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Từ 45mm trở lên">
+                              <Link rel="nofollow" href="#" title="Từ 45mm trở lên">
                                 Từ 45mm trở lên
                               </Link>
                             </div>
@@ -1408,53 +1205,41 @@ export default function Donghonu() {
                       </div>
 
                       {/*Chất liệu dây  */}
-                      <div
-                        className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                          data-id="id-field-chat-lieu-day">
+                          data-id="id-field-chat-lieu-day"
+                        >
                           Chất liệu dây
                         </div>
                         <div
                           id="chat-lieu-day"
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-chat-lieu-day"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-chat-lieu-day"]}`}
+                        >
                           <span className={styles.close}>x</span>
-                          <div
-                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Dây da">
                                 Dây da
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Thép không gỉ 316L">
+                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L">
                                 Thép không gỉ 316L
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Thép không gỉ 316L mạ vàng công nghệ PVD">
+                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L mạ vàng công nghệ PVD">
                                 Thép không gỉ 316L mạ vàng công nghệ PVD
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Thép không gỉ 316L dạng lưới">
+                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L dạng lưới">
                                 Thép không gỉ 316L dạng lưới
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Thép không gỉ 316L dạng lắc">
+                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L dạng lắc">
                                 Thép không gỉ 316L dạng lắc
                               </Link>
                             </div>
@@ -1464,26 +1249,17 @@ export default function Donghonu() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Thép không gỉ 316L/ Vàng 18K">
+                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Vàng 18K">
                                 Thép không gỉ 316L/ Vàng 18K
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Thép không gỉ 316L/ Ceramic">
+                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Ceramic">
                                 Thép không gỉ 316L/ Ceramic
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Thép không gỉ mạ công nghệ PVD">
+                              <Link rel="nofollow" href="#" title="Thép không gỉ mạ công nghệ PVD">
                                 Thép không gỉ mạ công nghệ PVD
                               </Link>
                             </div>
@@ -1503,10 +1279,7 @@ export default function Donghonu() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Titanium mạ vàng công nghệ PVD">
+                              <Link rel="nofollow" href="#" title="Titanium mạ vàng công nghệ PVD">
                                 Titanium mạ vàng công nghệ PVD
                               </Link>
                             </div>
@@ -1520,32 +1293,26 @@ export default function Donghonu() {
                       </div>
 
                       {/*Chất liệu vỏ */}
-                      <div
-                        className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                          data-id="id-field-chat-lieu-vo">
+                          data-id="id-field-chat-lieu-vo"
+                        >
                           Chất liệu vỏ
                         </div>
                         <div
                           id="chat-lieu-vo"
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-chat-lieu-vo"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-chat-lieu-vo"]}`}
+                        >
                           <span className={styles.close}>x</span>
-                          <div
-                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Thép không gỉ 316L">
+                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L">
                                 Thép không gỉ 316L
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Thép không gỉ mạ vàng công nghệ PVD">
+                              <Link rel="nofollow" href="#" title="Thép không gỉ mạ vàng công nghệ PVD">
                                 Thép không gỉ mạ vàng công nghệ PVD
                               </Link>
                             </div>
@@ -1555,10 +1322,7 @@ export default function Donghonu() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Thép không gỉ 316L/ Vàng 18K">
+                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Vàng 18K">
                                 Thép không gỉ 316L/ Vàng 18K
                               </Link>
                             </div>
@@ -1568,10 +1332,7 @@ export default function Donghonu() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Titanium mạ công nghệ PVD">
+                              <Link rel="nofollow" href="#" title="Titanium mạ công nghệ PVD">
                                 Titanium mạ công nghệ PVD
                               </Link>
                             </div>
@@ -1581,18 +1342,12 @@ export default function Donghonu() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Thép không gỉ 316L/ Ceramic">
+                              <Link rel="nofollow" href="#" title="Thép không gỉ 316L/ Ceramic">
                                 Thép không gỉ 316L/ Ceramic
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Thép không gỉ mạ công nghệ PVD">
+                              <Link rel="nofollow" href="#" title="Thép không gỉ mạ công nghệ PVD">
                                 Thép không gỉ mạ công nghệ PVD
                               </Link>
                             </div>
@@ -1602,10 +1357,7 @@ export default function Donghonu() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Titanium/ Vàng 18K">
+                              <Link rel="nofollow" href="#" title="Titanium/ Vàng 18K">
                                 Titanium/ Vàng 18K
                               </Link>
                             </div>
@@ -1614,37 +1366,31 @@ export default function Donghonu() {
                       </div>
 
                       {/* Mặt kính */}
-                      <div
-                        className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                          data-id="id-field-mat-kinh">
+                          data-id="id-field-mat-kinh"
+                        >
                           Mặt kính
                         </div>
                         <div
                           id="mat-kinh"
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-mat-kinh"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-mat-kinh"]}`}
+                        >
                           <span className={styles.close}>x</span>
-                          <div
-                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Sapphire">
                                 Sapphire
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Mặt kính cứng">
+                              <Link rel="nofollow" href="#" title="Mặt kính cứng">
                                 Mặt kính cứng
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Hardlex Crystal">
+                              <Link rel="nofollow" href="#" title="Hardlex Crystal">
                                 Hardlex Crystal
                               </Link>
                             </div>
@@ -1663,19 +1409,19 @@ export default function Donghonu() {
                       </div>
 
                       {/*Màu mặt */}
-                      <div
-                        className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                          data-id="id-field-mau-mat">
+                          data-id="id-field-mau-mat"
+                        >
                           Màu mặt
                         </div>
                         <div
                           id="mau-mat"
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-mau-mat"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-mau-mat"]}`}
+                        >
                           <span className={styles.close}>x</span>
-                          <div
-                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Trắng">
                                 Trắng
@@ -1736,19 +1482,19 @@ export default function Donghonu() {
                       </div>
 
                       {/*Phong cách */}
-                      <div
-                        className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                          data-id="id-field-phong-cach">
+                          data-id="id-field-phong-cach"
+                        >
                           Phong cách
                         </div>
                         <div
                           id="phong-cach"
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-phong-cach"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-phong-cach"]}`}
+                        >
                           <span className={styles.close}>x</span>
-                          <div
-                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Sang trọng">
                                 Sang trọng
@@ -1760,10 +1506,7 @@ export default function Donghonu() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Thể thao sang trọng">
+                              <Link rel="nofollow" href="#" title="Thể thao sang trọng">
                                 Thể thao sang trọng
                               </Link>
                             </div>
@@ -1787,19 +1530,19 @@ export default function Donghonu() {
                       </div>
 
                       {/*Kiểu dáng */}
-                      <div
-                        className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                          data-id="id-field-kieu-dang">
+                          data-id="id-field-kieu-dang"
+                        >
                           Kiểu dáng
                         </div>
                         <div
                           id="kieu-dang"
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-kieu-dang"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-kieu-dang"]}`}
+                        >
                           <span className={styles.close}>x</span>
-                          <div
-                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Mặt vuông">
                                 Mặt vuông
@@ -1811,10 +1554,7 @@ export default function Donghonu() {
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Mặt chữ nhật">
+                              <Link rel="nofollow" href="#" title="Mặt chữ nhật">
                                 Mặt chữ nhật
                               </Link>
                             </div>
@@ -1833,19 +1573,19 @@ export default function Donghonu() {
                       </div>
 
                       {/*Xuất xứ thương hiệu */}
-                      <div
-                        className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                          data-id="id-field-xuat-xu-thuong-hieu">
+                          data-id="id-field-xuat-xu-thuong-hieu"
+                        >
                           Xuất xứ thương hiệu
                         </div>
                         <div
                           id="xuat-xu-thuong-hieu"
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]} ${styles["filter-4-xuat-xu-thuong-hieu"]}`}>
+                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]} ${styles["filter-4-xuat-xu-thuong-hieu"]}`}
+                        >
                           <span className={styles.close}>x</span>
-                          <div
-                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link rel="nofollow" href="#" title="Nhật Bản">
                                 Nhật Bản
@@ -1865,9 +1605,7 @@ export default function Donghonu() {
                   <div className={styles["field-title"]}>
                     <div className={styles["title-name"]}>
                       <div className={styles["cat-title"]}>
-                        <div
-                          className={styles["cat-title-main"]}
-                          id="cat-dong-ho">
+                        <div className={styles["cat-title-main"]} id="cat-dong-ho">
                           <div className={styles["title-icon"]}>
                             <h1>Đồng hồ nữ</h1>
                           </div>
@@ -1876,9 +1614,7 @@ export default function Donghonu() {
                       </div>
                     </div>
 
-                    <select
-                      className={styles["order-select"]}
-                      name="order-select">
+                    <select className={styles["order-select"]} name="order-select">
                       <option value="">Sắp xếp theo</option>
                       <option value="#">Bán chạy nhất</option>
                       <option value="#">Khuyến mãi</option>
@@ -1908,35 +1644,20 @@ export default function Donghonu() {
                     <span title="Page 1" className={styles.current}>
                       <span>1</span>
                     </span>
-                    <Link
-                      className={styles["other-page"]}
-                      title="Page 2"
-                      href="#">
+                    <Link className={styles["other-page"]} title="Page 2" href="#">
                       <span>2</span>
                     </Link>
-                    <Link
-                      className={styles["other-page"]}
-                      title="Page 3"
-                      href="#">
+                    <Link className={styles["other-page"]} title="Page 3" href="#">
                       <span>3</span>
                     </Link>
-                    <Link
-                      className={styles["other-page"]}
-                      title="Page 4"
-                      href="#">
+                    <Link className={styles["other-page"]} title="Page 4" href="#">
                       <span>4</span>
                     </Link>
                     <b>...</b>
-                    <Link
-                      className={styles["next-page"]}
-                      title="Next page"
-                      href="#">
+                    <Link className={styles["next-page"]} title="Next page" href="#">
                       ›
                     </Link>
-                    <Link
-                      className={styles["last-page"]}
-                      title="Last page"
-                      href="#">
+                    <Link className={styles["last-page"]} title="Last page" href="#">
                       ››
                     </Link>
                   </div>
@@ -1947,40 +1668,20 @@ export default function Donghonu() {
                 <div className={styles.evaluateCat}>
                   <div className={`${styles.ratingArea} ${styles.cls}`}>
                     <span id="ratings">
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_1"
-                        value="1"></i>
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_2"
-                        value="2"></i>
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_3"
-                        value="3"></i>
-                      <i
-                        className={` ${styles.starOff}`}
-                        id="rate_4"
-                        value="4"></i>
-                      <i
-                        className={` ${styles.starOff}`}
-                        id="rate_5"
-                        value="5"></i>
+                      <i className={` ${styles.starOn}`} id="rate_1" value="1"></i>
+                      <i className={` ${styles.starOn}`} id="rate_2" value="2"></i>
+                      <i className={` ${styles.starOn}`} id="rate_3" value="3"></i>
+                      <i className={` ${styles.starOff}`} id="rate_4" value="4"></i>
+                      <i className={` ${styles.starOff}`} id="rate_5" value="5"></i>
                     </span>
-                    <span className={styles.ratingNote}>
-                      Nhấn vào đây để đánh giá
-                    </span>
+                    <span className={styles.ratingNote}>Nhấn vào đây để đánh giá</span>
                   </div>
                 </div>
 
                 {/* mô tả*/}
-                <div
-                  className={`${styles.summaryContentCat} ${styles.description} ${styles.heightAuto}`}>
+                <div className={`${styles.summaryContentCat} ${styles.description} ${styles.heightAuto}`}>
                   <h2 dir="ltr" style={{ textAlign: "justify" }}>
-                    <strong>
-                      TẤT CẢ NHỮNG ĐIỀU BẠN CẦN BIẾT VỀ CÁCH CHỌN ĐỒNG HỒ NAM
-                    </strong>
+                    <strong>TẤT CẢ NHỮNG ĐIỀU BẠN CẦN BIẾT VỀ CÁCH CHỌN ĐỒNG HỒ NAM</strong>
                   </h2>
 
                   <p dir="ltr" style={{ textAlign: "justify" }}>
@@ -1988,17 +1689,13 @@ export default function Donghonu() {
                     <em>
                       <strong>
                         <Link href="#">
-                          <span className={styles.highlightText}>
-                            đồng hồ đeo tay
-                          </span>
+                          <span className={styles.highlightText}>đồng hồ đeo tay</span>
                         </Link>
                       </strong>
                     </em>
-                    không chỉ để xem thời gian mà còn khẳng định phong cách và
-                    đẳng cấp của phái mạnh.
-                    <strong>Đồng hồ nam</strong> mang lại sự khác biệt nhất là
-                    khi đặt vào tổng thể trang phục, nhưng không phải ai cũng
-                    chọn được một chiếc đồng hồ phù hợp ở lần đầu tiên.
+                    không chỉ để xem thời gian mà còn khẳng định phong cách và đẳng cấp của phái mạnh.
+                    <strong>Đồng hồ nam</strong> mang lại sự khác biệt nhất là khi đặt vào tổng thể trang phục, nhưng
+                    không phải ai cũng chọn được một chiếc đồng hồ phù hợp ở lần đầu tiên.
                     <strong>Duy Anh Watch</strong> sẽ giúp bạn lựa chọn
                     <Link href="#">
                       <em>
@@ -2022,9 +1719,7 @@ export default function Donghonu() {
                   </p>
 
                   <h2 dir="ltr" className={styles.justifyText}>
-                    <strong>
-                      1. CÁC THƯƠNG HIỆU ĐỒNG HỒ NAM NỔI TIẾNG TẠI VIỆT NAM
-                    </strong>
+                    <strong>1. CÁC THƯƠNG HIỆU ĐỒNG HỒ NAM NỔI TIẾNG TẠI VIỆT NAM</strong>
                   </h2>
 
                   <h3 dir="ltr" className={styles.justifyText}>
@@ -2038,21 +1733,18 @@ export default function Donghonu() {
                         <Link href="#">Longines</Link>
                       </strong>
                     </em>
-                    là một trong những thương hiệu đồng hồ lâu đời nhất thế
-                    giới. Với gần hai thế kỷ ra đời và phát triển, cái tên
-                    Longines có thể được xem như “lão làng” trong giới chơi đồng
-                    hồ. Quy tụ tinh hoa hàng trăm năm chế tác cùng tinh thần
-                    thanh lịch bất biến với thời gian, những chiếc đồng hồ
-                    Longines chính là vật sở hữu đáng giá nhờ độ tin cậy cao, đa
-                    dạng về kiểu dáng và mẫu mã với thiết kế cổ điển, nhiều
-                    phiên bản dress watch lý tưởng. Các mẫu
+                    là một trong những thương hiệu đồng hồ lâu đời nhất thế giới. Với gần hai thế kỷ ra đời và phát
+                    triển, cái tên Longines có thể được xem như “lão làng” trong giới chơi đồng hồ. Quy tụ tinh hoa hàng
+                    trăm năm chế tác cùng tinh thần thanh lịch bất biến với thời gian, những chiếc đồng hồ Longines
+                    chính là vật sở hữu đáng giá nhờ độ tin cậy cao, đa dạng về kiểu dáng và mẫu mã với thiết kế cổ
+                    điển, nhiều phiên bản dress watch lý tưởng. Các mẫu
                     <strong>
                       <em>
                         <Link href="#">đồng hồ nữ Longines</Link>
                       </em>
                     </strong>
-                    đã làm mê hoặc&nbsp;rất nhiều&nbsp;tín đồ yêu đồng
-                    hồ&nbsp;trên khắp thế giới hàng trăm&nbsp;năm nay.
+                    đã làm mê hoặc&nbsp;rất nhiều&nbsp;tín đồ yêu đồng hồ&nbsp;trên khắp thế giới hàng trăm&nbsp;năm
+                    nay.
                   </p>
 
                   <p className={styles.imageContainer}>
@@ -2070,14 +1762,12 @@ export default function Donghonu() {
                     <em>
                       <strong>
                         <Link href="#">
-                          <span className={styles.highlightText}>
-                            đồng hồ unisex
-                          </span>
+                          <span className={styles.highlightText}>đồng hồ unisex</span>
                         </Link>
                       </strong>
                     </em>
-                    , đồng hồ nữ hay nữ, Longines vẫn mang đến hàng loạt phiên
-                    bản nổi tiếng đáp ứng nhiều thị hiếu khác nhau.
+                    , đồng hồ nữ hay nữ, Longines vẫn mang đến hàng loạt phiên bản nổi tiếng đáp ứng nhiều thị hiếu khác
+                    nhau.
                   </p>
 
                   <p dir="ltr" className={styles.justifyText}>
@@ -2089,13 +1779,11 @@ export default function Donghonu() {
                   </h3>
 
                   <p dir="ltr" className={styles.justifyText}>
-                    Dù là người đam mê đồng hồ hay không, bạn sẽ khó có thể tìm
-                    thấy một người nào chưa từng nghe qua cái tên Rolex trong
-                    đời. Vương miện <strong>Rolex </strong>là một trong những
-                    biểu tượng dễ nhận diện nhất trên thế giới. Đeo đồng hồ
-                    Rolex không chỉ thể hiện địa vị mà còn cho phép bạn bước vào
-                    thế giới của những khả năng không giới hạn. Đó là lý do tại
-                    sao Rolex sản xuất và bán khoảng một triệu chiếc
+                    Dù là người đam mê đồng hồ hay không, bạn sẽ khó có thể tìm thấy một người nào chưa từng nghe qua
+                    cái tên Rolex trong đời. Vương miện <strong>Rolex </strong>là một trong những biểu tượng dễ nhận
+                    diện nhất trên thế giới. Đeo đồng hồ Rolex không chỉ thể hiện địa vị mà còn cho phép bạn bước vào
+                    thế giới của những khả năng không giới hạn. Đó là lý do tại sao Rolex sản xuất và bán khoảng một
+                    triệu chiếc
                     <Link href="#">
                       <em>
                         <strong>đồng hồ nữ cao cấp</strong>
@@ -2131,18 +1819,15 @@ export default function Donghonu() {
                         </Link>
                       </strong>
                     </em>
-                    tự hào có truyền thống chế tác đồng hồ rất lâu đời. Ngày nay
-                    thuộc sở hữu của Tập đoàn Swatch của Thụy Sỹ, đồng hồ Tissot
-                    liên tục đưa ra những mẫu đồng hồ chất lượng cao với mức giá
-                    tương đối phải chăng. Họ cũng là một trong những thương hiệu
-                    thành công nhất của Thụy Sĩ cung cấp những chiếc
+                    tự hào có truyền thống chế tác đồng hồ rất lâu đời. Ngày nay thuộc sở hữu của Tập đoàn Swatch của
+                    Thụy Sỹ, đồng hồ Tissot liên tục đưa ra những mẫu đồng hồ chất lượng cao với mức giá tương đối phải
+                    chăng. Họ cũng là một trong những thương hiệu thành công nhất của Thụy Sĩ cung cấp những chiếc
                     <Link href="#">
                       <em>
                         <strong>đồng hồ nữ thời trang</strong>
                       </em>
                     </Link>
-                    , đa dạng&nbsp;phong cách và phù hợp với số đông người tiêu
-                    dùng từ giá thành đến kiểu dáng.
+                    , đa dạng&nbsp;phong cách và phù hợp với số đông người tiêu dùng từ giá thành đến kiểu dáng.
                   </p>
 
                   <p className={styles.imageContainer}>
@@ -2164,16 +1849,12 @@ export default function Donghonu() {
                   </h3>
 
                   <p dir="ltr" className={styles.justifyText}>
-                    Là người khổng lồ khác trong toàn ngành công nghiệp đồng hồ,{" "}
-                    <strong>Omega</strong> chính là thương hiệu hùng mạnh nhất
-                    thuộc tập đoàn Swatch. Nguồn gốc của thương hiệu bắt đầu từ
-                    năm 1848. Omega được biết đến với nhiều thành tựu nổi bật và
-                    đã tham gia vào các sự kiện đáng chú ý, như là cỗ máy đo
-                    thời gian chính thức của Thế vận hội Olympic kể từ năm 1932
-                    và là chiếc đồng hồ đầu tiên được đeo trên mặt trăng. Với
-                    chứng nhận Master Chronometer, <strong>Omega</strong> đã
-                    thiết lập một chuẩn mực công nghiệp mới về độ chính xác,
-                    hiệu suất và khả năng chống từ.
+                    Là người khổng lồ khác trong toàn ngành công nghiệp đồng hồ, <strong>Omega</strong> chính là thương
+                    hiệu hùng mạnh nhất thuộc tập đoàn Swatch. Nguồn gốc của thương hiệu bắt đầu từ năm 1848. Omega được
+                    biết đến với nhiều thành tựu nổi bật và đã tham gia vào các sự kiện đáng chú ý, như là cỗ máy đo
+                    thời gian chính thức của Thế vận hội Olympic kể từ năm 1932 và là chiếc đồng hồ đầu tiên được đeo
+                    trên mặt trăng. Với chứng nhận Master Chronometer, <strong>Omega</strong> đã thiết lập một chuẩn mực
+                    công nghiệp mới về độ chính xác, hiệu suất và khả năng chống từ.
                   </p>
 
                   <p className={styles.imageContainer}>
@@ -2195,9 +1876,8 @@ export default function Donghonu() {
                   </h3>
 
                   <p dir="ltr" className={styles.justifyText}>
-                    Thương hiệu thuộc về tập đoàn Swatch Thụy Sĩ và do đó được
-                    hưởng lợi từ tất cả sự hợp lực của một tập đoàn công nghiệp
-                    như vậy. Những năm gần đây
+                    Thương hiệu thuộc về tập đoàn Swatch Thụy Sĩ và do đó được hưởng lợi từ tất cả sự hợp lực của một
+                    tập đoàn công nghiệp như vậy. Những năm gần đây
                     <em>
                       <strong>
                         <Link href="#">
@@ -2211,19 +1891,14 @@ export default function Donghonu() {
                         <strong>đồng hồ đeo tay nam</strong>
                       </em>
                     </Link>
-                    đáng ngưỡng mộ, kết hợp giữa thể thao và thanh lịch được
-                    thực hiện một cách hoàn hảo, một số trong số chúng có công
-                    nghệ tuyệt vời mà hầu như không quá đắt đỏ. So sánh trong
-                    phân khúc tầm trung thì những gì Hamilton cung cấp là điều
-                    mà một người yêu đồng hồ Thụy Sĩ nên quan tâm. Ngoài ra hãng
-                    còn kết hợp với các nhà làm phim Hollywood để cho ra các
-                    siêu phẩm phim hành động, phim khoa học viễn tưởng ăn khách
-                    trên toàn thế giới, gần đây nhất là bộ&nbsp;phim Hành tinh
-                    cát (Dune II) sản xuất năm 2024, với chiếc&nbsp;
+                    đáng ngưỡng mộ, kết hợp giữa thể thao và thanh lịch được thực hiện một cách hoàn hảo, một số trong
+                    số chúng có công nghệ tuyệt vời mà hầu như không quá đắt đỏ. So sánh trong phân khúc tầm trung thì
+                    những gì Hamilton cung cấp là điều mà một người yêu đồng hồ Thụy Sĩ nên quan tâm. Ngoài ra hãng còn
+                    kết hợp với các nhà làm phim Hollywood để cho ra các siêu phẩm phim hành động, phim khoa học viễn
+                    tưởng ăn khách trên toàn thế giới, gần đây nhất là bộ&nbsp;phim Hành tinh cát (Dune II) sản xuất năm
+                    2024, với chiếc&nbsp;
                     <strong>
-                      <em>
-                        Hamilton Ventura Edge Dune Limited Edition H24624330
-                      </em>
+                      <em>Hamilton Ventura Edge Dune Limited Edition H24624330</em>
                     </strong>
                     được xuất hiện trên tay nhân vật chính trong phim.
                   </p>
@@ -2252,12 +1927,9 @@ export default function Donghonu() {
                         <Link href="#">Mido</Link>
                       </em>
                     </strong>
-                    là một nhà sản xuất đồng hồ Thụy Sĩ đã tạo dựng được danh
-                    tiếng khi kết hợp công nghệ tiên tiến với thiết kế thời
-                    trang, lấy cảm hứng từ kiến ​​trúc. Đồng hồ của hãng tự hào
-                    với độ chính xác và chất lượng cao nhờ kỹ thuật và vật liệu
-                    cao cấp, đủ khả năng đứng vững trước thử thách của thời
-                    gian.
+                    là một nhà sản xuất đồng hồ Thụy Sĩ đã tạo dựng được danh tiếng khi kết hợp công nghệ tiên tiến với
+                    thiết kế thời trang, lấy cảm hứng từ kiến ​​trúc. Đồng hồ của hãng tự hào với độ chính xác và chất
+                    lượng cao nhờ kỹ thuật và vật liệu cao cấp, đủ khả năng đứng vững trước thử thách của thời gian.
                   </p>
 
                   <p className={styles.imageContainer}>
@@ -2287,21 +1959,18 @@ export default function Donghonu() {
                     <strong>
                       <Link href="#">Seiko</Link>
                     </strong>
-                    đã khởi động cuộc cách mạng lớn nhất của kỷ nguyên đồng hồ
-                    hiện đại. Cho đến ngày nay, thương hiệu này vẫn tiếp tục
-                    cung cấp những chiếc đồng hồ tuyệt vời từ cơ khí, tự động và
-                    chạy bằng pin. Ngày nay, Seiko không chỉ là một nhà tiên
-                    phong về đồng hồ khi những chiếc đồng hồ hàng đầu của thương
+                    đã khởi động cuộc cách mạng lớn nhất của kỷ nguyên đồng hồ hiện đại. Cho đến ngày nay, thương hiệu
+                    này vẫn tiếp tục cung cấp những chiếc đồng hồ tuyệt vời từ cơ khí, tự động và chạy bằng pin. Ngày
+                    nay, Seiko không chỉ là một nhà tiên phong về đồng hồ khi những chiếc đồng hồ hàng đầu của thương
                     hiệu này tiếp tục sánh ngang với
                     <em>
                       <strong>
                         <Link href="#">đồng hồ Thụy Sỹ</Link>
                       </strong>
                     </em>
-                    . Các quy trình sản xuất đồng hồ nội bộ của hãng, bao gồm cả
-                    kỹ thuật đánh bóng truyền thống, zaratsu, vẫn là một trong
-                    những quy trình tốt nhất thế giới, giúp cho những chiếc đồng
-                    hồ của hãng trở nên chính xác và thẩm mỹ nhất trên thế giới.
+                    . Các quy trình sản xuất đồng hồ nội bộ của hãng, bao gồm cả kỹ thuật đánh bóng truyền thống,
+                    zaratsu, vẫn là một trong những quy trình tốt nhất thế giới, giúp cho những chiếc đồng hồ của hãng
+                    trở nên chính xác và thẩm mỹ nhất trên thế giới.
                   </p>
 
                   <p className={styles.imageContainer}>
@@ -2339,9 +2008,8 @@ export default function Donghonu() {
                         <Link href="#">đồng hồ Nhật Bản</Link>
                       </strong>
                     </em>
-                    này nên là chiếc đồng hồ đầu tiên trong danh sách của bạn,
-                    đặc biệt là vì nhiều bộ sưu tập của chúng có phong cách hoàn
-                    hảo và hiệu suất phi thường.
+                    này nên là chiếc đồng hồ đầu tiên trong danh sách của bạn, đặc biệt là vì nhiều bộ sưu tập của chúng
+                    có phong cách hoàn hảo và hiệu suất phi thường.
                   </p>
 
                   <p className={styles.imageCenter}>
@@ -2386,11 +2054,9 @@ export default function Donghonu() {
                         <Link href="#">Orient</Link>
                       </strong>
                     </em>
-                    là một trong những nhà sản xuất đồng hồ tốt nhất và được
-                    công nhận rộng rãi nhất tại Nhật Bản. Giờ đây, thương hiệu
-                    này là một công ty con của Seiko, nhưng họ vẫn tiếp tục xây
-                    dựng các bộ máy của riêng mình, đó là lý do tại sao những
-                    chiếc
+                    là một trong những nhà sản xuất đồng hồ tốt nhất và được công nhận rộng rãi nhất tại Nhật Bản. Giờ
+                    đây, thương hiệu này là một công ty con của Seiko, nhưng họ vẫn tiếp tục xây dựng các bộ máy của
+                    riêng mình, đó là lý do tại sao những chiếc
                     <Link href="#">
                       <strong>
                         <em>đồng hồ cơ Orient</em>
@@ -2418,19 +2084,15 @@ export default function Donghonu() {
                   </h2>
 
                   <p dir="ltr" className={styles.justifyText}>
-                    Nếu bạn đang muốn mua một chiếc đồng hồ để đeo nhưng chưa
-                    biết nên lựa chọn như thế nào, từ việc cân nhắc những ưu và
-                    nhược điểm của các loại đồng hồ khác nhau, đến các kiểu
-                    <strong>đồng hồ nữ</strong> khác nhau… thì bài viết này là
-                    dành cho bạn!
+                    Nếu bạn đang muốn mua một chiếc đồng hồ để đeo nhưng chưa biết nên lựa chọn như thế nào, từ việc cân
+                    nhắc những ưu và nhược điểm của các loại đồng hồ khác nhau, đến các kiểu
+                    <strong>đồng hồ nữ</strong> khác nhau… thì bài viết này là dành cho bạn!
                   </p>
 
                   <p dir="ltr" className={styles.justifyText}>
-                    Hơn thế nữa việc trang bị cho mình những thông tin liên quan
-                    có thể đơn giản hóa quá trình mua hàng và không bị lạc giữa
-                    hàng trăm loại đồng hồ khác nhau và để chắc chắn rằng bạn
-                    không mua một chiếc đồng hồ yêu thích hôm nay để rồi chán nó
-                    vào ngày mai!
+                    Hơn thế nữa việc trang bị cho mình những thông tin liên quan có thể đơn giản hóa quá trình mua hàng
+                    và không bị lạc giữa hàng trăm loại đồng hồ khác nhau và để chắc chắn rằng bạn không mua một chiếc
+                    đồng hồ yêu thích hôm nay để rồi chán nó vào ngày mai!
                   </p>
 
                   <p className={styles.justifyText}>
@@ -2458,17 +2120,15 @@ export default function Donghonu() {
                         <em>đồng hồ</em>
                       </strong>
                     </Link>
-                    của mình chủ yếu vào khi nào? Ở đâu? Hãy đặt ra câu hỏi và
-                    trả lời chúng. Chiếc đồng hồ được chọn cũng cần phải phù hợp
-                    với công việc, hoàn cảnh sử dụng.
+                    của mình chủ yếu vào khi nào? Ở đâu? Hãy đặt ra câu hỏi và trả lời chúng. Chiếc đồng hồ được chọn
+                    cũng cần phải phù hợp với công việc, hoàn cảnh sử dụng.
                   </p>
 
                   <ul>
                     <li>
                       <p className={styles.justifyText}>
-                        Nếu bạn là người kinh doanh, hay gặp gỡ mọi người và mặc
-                        những bộ trang phục lịch sự thì bạn có thể lựa chọn
-                        những mẫu
+                        Nếu bạn là người kinh doanh, hay gặp gỡ mọi người và mặc những bộ trang phục lịch sự thì bạn có
+                        thể lựa chọn những mẫu
                         <em>
                           <strong>đồng hồ nữ cổ điển</strong>
                         </em>
@@ -2477,22 +2137,19 @@ export default function Donghonu() {
                     </li>
                     <li>
                       <p className={styles.justifyText}>
-                        Nếu bạn yêu thích phong cách thể thao, mạnh mẽ thì những
-                        chiếc
+                        Nếu bạn yêu thích phong cách thể thao, mạnh mẽ thì những chiếc
                         <em>
                           <strong>đồng hồ nữ thể thao</strong>
                         </em>
-                        có kích thước lớn sẽ là lựa chọn giúp bạn trở nên năng
-                        động hơn. Những chiếc đồng hồ này không chỉ có khả năng
-                        chịu va đập và chống nước tốt mà nó còn hữu dụng với
-                        nhiều tính năng hỗ trợ khác.
+                        có kích thước lớn sẽ là lựa chọn giúp bạn trở nên năng động hơn. Những chiếc đồng hồ này không
+                        chỉ có khả năng chịu va đập và chống nước tốt mà nó còn hữu dụng với nhiều tính năng hỗ trợ
+                        khác.
                       </p>
                     </li>
                     <li>
                       <p className={styles.justifyText}>
-                        Nếu bạn là mẫu người chỉ muốn lựa chọn những chiếc{" "}
-                        <strong>đồng hồ nữ đơn giản</strong> là để xem giờ, hỗ
-                        trợ cho cuộc sống hàng ngày thì các mẫu
+                        Nếu bạn là mẫu người chỉ muốn lựa chọn những chiếc <strong>đồng hồ nữ đơn giản</strong> là để
+                        xem giờ, hỗ trợ cho cuộc sống hàng ngày thì các mẫu
                         <em>
                           <strong>đồng hồ nữ dây da</strong>
                         </em>
@@ -2500,8 +2157,7 @@ export default function Donghonu() {
                         <em>
                           <strong>đồng hồ nữ dây kim loại</strong>
                         </em>
-                        đơn giản của Tissot hoặc Longines với mức giá cũng khá
-                        hợp lý.
+                        đơn giản của Tissot hoặc Longines với mức giá cũng khá hợp lý.
                       </p>
                     </li>
                   </ul>
@@ -2514,14 +2170,10 @@ export default function Donghonu() {
 
                   <ul>
                     <li className={styles.justifyText}>
-                      <Link href="#">
-                        Shop đồng hồ nữ chính hãng uy tín tại HCM
-                      </Link>
+                      <Link href="#">Shop đồng hồ nữ chính hãng uy tín tại HCM</Link>
                     </li>
                     <li className={styles.justifyText}>
-                      <Link href="">
-                        Top 20 mẫu đồng hồ nữ bán chạy nhất tháng 4 2023
-                      </Link>
+                      <Link href="">Top 20 mẫu đồng hồ nữ bán chạy nhất tháng 4 2023</Link>
                     </li>
                   </ul>
 
@@ -2537,31 +2189,26 @@ export default function Donghonu() {
                         <strong>Thế giới đồng hồ nữ</strong>
                       </em>
                     </Link>
-                    rất đa dạng và phong phú với sự góp mặt của các thương hiệu
-                    đồng hồ Thụy Sĩ và Nhật Bản – 2 cường quốc về sản xuất đồng
-                    hồ hàng đầu thế giới. Ở các
+                    rất đa dạng và phong phú với sự góp mặt của các thương hiệu đồng hồ Thụy Sĩ và Nhật Bản – 2 cường
+                    quốc về sản xuất đồng hồ hàng đầu thế giới. Ở các
                     <Link href="#">
                       <em>
                         <strong>shop đồng hồ nữ</strong>
                       </em>
                     </Link>
-                    , họ thường chia các mẫu đồng hồ theo thương hiệu. Thông
-                    thường những thương hiệu phân khúc cao cấp nhất như Rolex,
-                    Omega, Patek Philippe, Grand Seiko… sẽ có giá đến hàng trăm
-                    triệu. Các mẫu đồng hồ thuộc thương hiệu Longines – thương
-                    hiệu cao cấp của tập đoàn đồng hồ lớn nhất Thụy Sĩ Swatch có
-                    giá từ vài chục đến vài trăm triệu tùy theo mẫu đồng hồ bạn
-                    chọn. Trong khi đó các thương hiệu tầm trung như Tissot,
-                    Mido, Certina, Hamilton, Seiko… có mức giá từ vài triệu đến
-                    vài chục triệu. Ngoài ra nếu bạn muốn một chiếc
+                    , họ thường chia các mẫu đồng hồ theo thương hiệu. Thông thường những thương hiệu phân khúc cao cấp
+                    nhất như Rolex, Omega, Patek Philippe, Grand Seiko… sẽ có giá đến hàng trăm triệu. Các mẫu đồng hồ
+                    thuộc thương hiệu Longines – thương hiệu cao cấp của tập đoàn đồng hồ lớn nhất Thụy Sĩ Swatch có giá
+                    từ vài chục đến vài trăm triệu tùy theo mẫu đồng hồ bạn chọn. Trong khi đó các thương hiệu tầm trung
+                    như Tissot, Mido, Certina, Hamilton, Seiko… có mức giá từ vài triệu đến vài chục triệu. Ngoài ra nếu
+                    bạn muốn một chiếc
                     <Link href="#">
                       <em>
                         <strong>đồng hồ nữ hàng hiệu</strong>
                       </em>
                     </Link>
-                    với mức giá mềm thì có thể kể đến thương hiệu Seiko,
-                    Citizen, Orient, Casio, Daniel Wellington… chỉ từ 3 triệu
-                    trở lên.
+                    với mức giá mềm thì có thể kể đến thương hiệu Seiko, Citizen, Orient, Casio, Daniel Wellington… chỉ
+                    từ 3 triệu trở lên.
                   </p>
 
                   <p className={styles.justifyText}>&nbsp;</p>
@@ -2571,11 +2218,9 @@ export default function Donghonu() {
                   </h3>
 
                   <p className={styles.justifyText}>
-                    Phạm vi giá cũng là một yếu tố quan trọng để bạn quyết định
-                    mua đồng hồ. Ngân sách sẽ quyết định bạn có thể mua được
-                    đồng hồ nữ ở mức giá nào! Ngoại trừ những chiếc đồng hồ có
-                    giá cao thuộc phân khúc cao cấp thì bạn có thể ước lượng số
-                    tiền mình có thể mua theo các mức giá sau:
+                    Phạm vi giá cũng là một yếu tố quan trọng để bạn quyết định mua đồng hồ. Ngân sách sẽ quyết định bạn
+                    có thể mua được đồng hồ nữ ở mức giá nào! Ngoại trừ những chiếc đồng hồ có giá cao thuộc phân khúc
+                    cao cấp thì bạn có thể ước lượng số tiền mình có thể mua theo các mức giá sau:
                   </p>
 
                   <ul>
@@ -2584,11 +2229,9 @@ export default function Donghonu() {
                         <em>
                           <strong>Đồng hồ nam dưới 3 triệu</strong>
                         </em>
-                        : với mức giá này thì điều người mua quan tâm là đồng hồ
-                        nam giá rẻ nhưng phải có chất lượng tốt và chỉ đơn giản
-                        là để xem giờ như một món phụ kiện trên cổ tay. Bạn có
-                        thể tìm đến đồng hồ pin thạch anh thuộc các thương hiệu
-                        như Casio, Orient, Citizen, Olym Pianus.
+                        : với mức giá này thì điều người mua quan tâm là đồng hồ nam giá rẻ nhưng phải có chất lượng tốt
+                        và chỉ đơn giản là để xem giờ như một món phụ kiện trên cổ tay. Bạn có thể tìm đến đồng hồ pin
+                        thạch anh thuộc các thương hiệu như Casio, Orient, Citizen, Olym Pianus.
                       </p>
                     </li>
                     <li>
@@ -2596,9 +2239,8 @@ export default function Donghonu() {
                         <strong>
                           <em>Đồng hồ nam từ 3 – 6 triệu</em>
                         </strong>
-                        : Với số tiền này bạn có thể lựa chọn nhiều mẫu đồng hồ
-                        nam đẹp hơn, có thể kể đến Seiko, Orient, Citizen, Casio
-                        Edifice, Casio G-Shock, Cadino, Olym Pianus…
+                        : Với số tiền này bạn có thể lựa chọn nhiều mẫu đồng hồ nam đẹp hơn, có thể kể đến Seiko,
+                        Orient, Citizen, Casio Edifice, Casio G-Shock, Cadino, Olym Pianus…
                       </p>
                     </li>
                     <li>
@@ -2606,11 +2248,9 @@ export default function Donghonu() {
                         <strong>
                           <em>Từ 6 đến 10 triệu</em>
                         </strong>
-                        : Đây là phân khúc mà người dùng bắt đầu có sự hứng thú
-                        với đồng hồ, bạn sẽ có vô vàn sự lựa chọn khác nhau từ
-                        đồng hồ Nhật Bản cho đến đồng hồ Thụy Sỹ. Với đồng hồ
-                        Nhật thì phân khúc này bạn có thể tìm kiếm một số mẫu
-                        đồng hồ cơ của các thương hiệu như Citizen, Orient.
+                        : Đây là phân khúc mà người dùng bắt đầu có sự hứng thú với đồng hồ, bạn sẽ có vô vàn sự lựa
+                        chọn khác nhau từ đồng hồ Nhật Bản cho đến đồng hồ Thụy Sỹ. Với đồng hồ Nhật thì phân khúc này
+                        bạn có thể tìm kiếm một số mẫu đồng hồ cơ của các thương hiệu như Citizen, Orient.
                       </p>
                     </li>
                     <li>
@@ -2618,9 +2258,8 @@ export default function Donghonu() {
                         <strong>
                           <em>Từ 10 – 40 triệu trở lên</em>
                         </strong>
-                        : Bạn có thể mua được đồng hồ cơ Thụy Sỹ với nhiều lựa
-                        chọn phong phú từ Seiko, Orient Star, Tissot, Mido,
-                        Hamilton, Certina…
+                        : Bạn có thể mua được đồng hồ cơ Thụy Sỹ với nhiều lựa chọn phong phú từ Seiko, Orient Star,
+                        Tissot, Mido, Hamilton, Certina…
                       </p>
                     </li>
                     <li>
@@ -2628,9 +2267,8 @@ export default function Donghonu() {
                         <strong>
                           <em>Từ 40 triệu trở lên</em>
                         </strong>
-                        : đây là mức giá để có thể sở hữu những chiếc đồng hồ cơ
-                        Thụy Sỹ cao cấp, có thể kể đến thương hiệu Longines với
-                        nhiều BST của họ có mức giá từ 40 triệu trở lên.
+                        : đây là mức giá để có thể sở hữu những chiếc đồng hồ cơ Thụy Sỹ cao cấp, có thể kể đến thương
+                        hiệu Longines với nhiều BST của họ có mức giá từ 40 triệu trở lên.
                       </p>
                     </li>
                   </ul>
@@ -2649,24 +2287,17 @@ export default function Donghonu() {
 
                   <ul className={styles.justifyText}>
                     <li>
-                      <Link href="#">
-                        Cách lựa chọn đồng hồ phù hợp với kích thước cổ tay
-                      </Link>
+                      <Link href="#">Cách lựa chọn đồng hồ phù hợp với kích thước cổ tay</Link>
                     </li>
                     <li>
-                      <Link href="">
-                        Toplist 15 mẫu đồng hồ nữ theo hot trend và đẹp nhất
-                        năm 2023
-                      </Link>
+                      <Link href="">Toplist 15 mẫu đồng hồ nữ theo hot trend và đẹp nhất năm 2023</Link>
                     </li>
                   </ul>
 
                   <p className={styles.justifyText}>&nbsp;</p>
 
                   <h3 className={styles.justifyText}>
-                    <strong>
-                      2.6 Chọn đồng hồ nữ dây da hay dây kim loại
-                    </strong>
+                    <strong>2.6 Chọn đồng hồ nữ dây da hay dây kim loại</strong>
                   </h3>
 
                   <p className={styles.justifyText}>
@@ -2676,21 +2307,17 @@ export default function Donghonu() {
                         &nbsp;<Link href="#">Đồng hồ nam dây da</Link>
                       </strong>
                     </em>
-                    là món đồ cổ điển quen thuộc được nhiều người yêu thích. Vì
-                    cảm giác mềm mại, nhẹ nhàng tự nhiên, nó là một chất liệu
-                    thoải mái vừa linh hoạt vừa bền lâu. Có nhiều màu sắc và
-                    kiểu dáng, loại dây đồng hồ này có khả năng điều chỉnh &
-                    giãn rộng theo thời gian. Dây da có thể phù hợp một cách gọn
-                    gàng trên cổ tay của bạn.
+                    là món đồ cổ điển quen thuộc được nhiều người yêu thích. Vì cảm giác mềm mại, nhẹ nhàng tự nhiên, nó
+                    là một chất liệu thoải mái vừa linh hoạt vừa bền lâu. Có nhiều màu sắc và kiểu dáng, loại dây đồng
+                    hồ này có khả năng điều chỉnh & giãn rộng theo thời gian. Dây da có thể phù hợp một cách gọn gàng
+                    trên cổ tay của bạn.
                   </p>
 
                   <p className={styles.justifyText}>
-                    Dây da là một lựa chọn tuyệt vời cho các sự kiện trang
-                    trọng, dây da rất tinh xảo và thanh lịch. Điểm cộng của nó
-                    là bạn có thể thử đi giày hoặc thắt lưng cùng màu sao cho
-                    hợp thời trang. Dây da đồng hồ nói chung được làm với hệ
-                    thống khóa chắc chắn, điều này ngăn không cho chốt đồng hồ
-                    bị bung ra bất ngờ.
+                    Dây da là một lựa chọn tuyệt vời cho các sự kiện trang trọng, dây da rất tinh xảo và thanh lịch.
+                    Điểm cộng của nó là bạn có thể thử đi giày hoặc thắt lưng cùng màu sao cho hợp thời trang. Dây da
+                    đồng hồ nói chung được làm với hệ thống khóa chắc chắn, điều này ngăn không cho chốt đồng hồ bị bung
+                    ra bất ngờ.
                   </p>
 
                   <p className={styles.justifyText}>
@@ -2700,45 +2327,35 @@ export default function Donghonu() {
                         <em>đồng hồ nữ dây kim loại)</em>
                       </strong>
                     </Link>
-                    &nbsp;là một lựa chọn phổ biến cho đồng hồ thể thao, phù hợp
-                    cho nhiều hoạt động thể thao. Đồng hồ dây kim loại như đồng
-                    hồ nam chính hãng
+                    &nbsp;là một lựa chọn phổ biến cho đồng hồ thể thao, phù hợp cho nhiều hoạt động thể thao. Đồng hồ
+                    dây kim loại như đồng hồ nam chính hãng
                     <strong>
                       <em>
                         <Link href="#">Longines</Link>
                       </em>
                     </strong>
-                    thường đắt hơn dây da và cũng có thể sử dụng như một chiếc
-                    đồng hồ đeo tay cho những dịp sang trọng.
+                    thường đắt hơn dây da và cũng có thể sử dụng như một chiếc đồng hồ đeo tay cho những dịp sang trọng.
                   </p>
 
                   <p className={styles.justifyText}>
-                    Mạnh mẽ và không dễ bị đứt, dây đồng hồ kim loại có thể bị
-                    ướt, chúng không dễ bị hỏng như da khi tiếp xúc với mồ hôi
-                    và nước. Vật liệu kim loại cũng không bị đàn hồi hay giãn
-                    như dây da. Sở hữu độ bền cao và dây kim loại sẽ gắn bó với
-                    đồng hồ đến hết vòng đời nên không tốn thêm chi phí!
+                    Mạnh mẽ và không dễ bị đứt, dây đồng hồ kim loại có thể bị ướt, chúng không dễ bị hỏng như da khi
+                    tiếp xúc với mồ hôi và nước. Vật liệu kim loại cũng không bị đàn hồi hay giãn như dây da. Sở hữu độ
+                    bền cao và dây kim loại sẽ gắn bó với đồng hồ đến hết vòng đời nên không tốn thêm chi phí!
                   </p>
 
                   <p className={styles.justifyText}>
-                    - Ngoài dây da và dây kim loại, đồng hồ nữ còn có các phiên
-                    bản dây cao su, dây vải dù dành cho các tín đồ có&nbsp;phong
-                    cách, có&nbsp;cá tính ưa chuộng những hoạt động bên
-                    ngoài&nbsp;
+                    - Ngoài dây da và dây kim loại, đồng hồ nữ còn có các phiên bản dây cao su, dây vải dù dành cho các
+                    tín đồ có&nbsp;phong cách, có&nbsp;cá tính ưa chuộng những hoạt động bên ngoài&nbsp;
                   </p>
 
                   <p className={styles.justifyText}>&nbsp;</p>
 
                   <ul className={styles.justifyText}>
                     <li>
-                      <Link href="#">
-                        Top 9 mẫu đồng hồ nữ dây cao su nên mua trong năm 2024
-                      </Link>
+                      <Link href="#">Top 9 mẫu đồng hồ nữ dây cao su nên mua trong năm 2024</Link>
                     </li>
                     <li>
-                      <Link href="#">
-                        DÂY ĐEO ĐỒNG HỒ: NÊN CHỌN DÂY DA HAY DÂY KIM LOẠI?
-                      </Link>
+                      <Link href="#">DÂY ĐEO ĐỒNG HỒ: NÊN CHỌN DÂY DA HAY DÂY KIM LOẠI?</Link>
                     </li>
                   </ul>
 
@@ -2749,9 +2366,8 @@ export default function Donghonu() {
                   </h3>
 
                   <p className={styles.justifyText}>
-                    Mặt số của đồng hồ là mặt phía trên, chứa các dấu hiệu hiển
-                    thị thời gian như kim và cọc số, kèm theo một số biến thể
-                    khác nhau tùy vào loại đồng hồ.&nbsp;
+                    Mặt số của đồng hồ là mặt phía trên, chứa các dấu hiệu hiển thị thời gian như kim và cọc số, kèm
+                    theo một số biến thể khác nhau tùy vào loại đồng hồ.&nbsp;
                   </p>
 
                   <p className={styles.justifyText}>
@@ -2759,21 +2375,17 @@ export default function Donghonu() {
                     <em>
                       <strong>đồng hồ nữ đẹp nhất</strong>
                     </em>
-                    phải có màu sắc, kiểu dáng nào! Mặt số có vô vàn hình dáng,
-                    màu sắc, chất liệu khác nhau. Mặt đồng hồ đen hoặc trắng là
-                    lựa chọn phổ biến nhất dành cho nam giới, trong khi các màu
-                    khác cũng được ưa chuộng không kém đó là xanh lục, nâu,
-                    vàng, xám… Trong khi đó, những mặt số có màu sắc đặc biệt,
-                    có vân họa tiết hoặc khảm xà cừ thường sẽ đắt tiền hơn. Các
-                    dấu chỉ giờ như con số, vạch chỉ giờ, bộ kim… thường có màu
-                    tương phản với mặt đồng hồ, một số chi tiết còn được tráng
-                    lớp dạ quang để có thể nhìn trong đêm.
+                    phải có màu sắc, kiểu dáng nào! Mặt số có vô vàn hình dáng, màu sắc, chất liệu khác nhau. Mặt đồng
+                    hồ đen hoặc trắng là lựa chọn phổ biến nhất dành cho nam giới, trong khi các màu khác cũng được ưa
+                    chuộng không kém đó là xanh lục, nâu, vàng, xám… Trong khi đó, những mặt số có màu sắc đặc biệt, có
+                    vân họa tiết hoặc khảm xà cừ thường sẽ đắt tiền hơn. Các dấu chỉ giờ như con số, vạch chỉ giờ, bộ
+                    kim… thường có màu tương phản với mặt đồng hồ, một số chi tiết còn được tráng lớp dạ quang để có thể
+                    nhìn trong đêm.
                   </p>
 
                   <p className={styles.justifyText}>
-                    Hình dạng mặt đồng hồ và màu sắc mặt là sự lựa chọn liên
-                    quan đến tính thẩm mỹ. Vì thế bạn có thể lựa chọn tùy theo
-                    gu thẩm mỹ của bản thân.
+                    Hình dạng mặt đồng hồ và màu sắc mặt là sự lựa chọn liên quan đến tính thẩm mỹ. Vì thế bạn có thể
+                    lựa chọn tùy theo gu thẩm mỹ của bản thân.
                   </p>
 
                   <p className={styles.centerText}>
@@ -2787,10 +2399,7 @@ export default function Donghonu() {
                   </p>
 
                   <p className={styles.centerText}>
-                    <Link href="#">
-                      NHỮNG PHIÊN BẢN ĐỒNG HỒ NAM DÂY DA MẶT XANH THỂ HIỆN NÉT
-                      CÁ TÍNH CỦA NAM GIỚI
-                    </Link>
+                    <Link href="#">NHỮNG PHIÊN BẢN ĐỒNG HỒ NAM DÂY DA MẶT XANH THỂ HIỆN NÉT CÁ TÍNH CỦA NAM GIỚI</Link>
                   </p>
 
                   <p className={styles.justifyText}>&nbsp;</p>
@@ -2800,10 +2409,9 @@ export default function Donghonu() {
                   </h3>
 
                   <p className={styles.justifyText}>
-                    Khi nói về đồng hồ, bộ máy có lẽ là phần quan trọng nhất.
-                    Nhưng sau đó là gì? Vỏ và mặt kính đồng hồ cũng quan trọng
-                    không kém vì nó bảo vệ mặt số và bộ chuyển động đồng thời
-                    tăng thêm vẻ đẹp tinh tế cho thiết kế.
+                    Khi nói về đồng hồ, bộ máy có lẽ là phần quan trọng nhất. Nhưng sau đó là gì? Vỏ và mặt kính đồng hồ
+                    cũng quan trọng không kém vì nó bảo vệ mặt số và bộ chuyển động đồng thời tăng thêm vẻ đẹp tinh tế
+                    cho thiết kế.
                   </p>
 
                   <p className={styles.justifyText}>
@@ -2818,29 +2426,23 @@ export default function Donghonu() {
                   </p>
 
                   <p className={styles.justifyText}>
-                    - Trong tất cả các loại kính đồng hồ,{" "}
-                    <em>kính đồng hồ acrylic</em> là yếu nhất, điều này là do nó
-                    được làm từ nhựa không phải từ thủy tinh. Acrylic là một
-                    loại nhựa chuyên dụng có giá thành rẻ thường được tìm thấy
-                    trên các thương hiệu đồng hồ giá thấp.
+                    - Trong tất cả các loại kính đồng hồ, <em>kính đồng hồ acrylic</em> là yếu nhất, điều này là do nó
+                    được làm từ nhựa không phải từ thủy tinh. Acrylic là một loại nhựa chuyên dụng có giá thành rẻ
+                    thường được tìm thấy trên các thương hiệu đồng hồ giá thấp.
                   </p>
 
                   <p className={styles.justifyText}>
-                    - Đây có lẽ là loại kính đồng hồ phổ biến nhất được sử dụng
-                    trên đồng hồ. Nếu bạn có một chiếc đồng hồ tầm giá trung
-                    bình thì nó thường có mặt <em>kính khoáng</em>. Nó được sản
-                    xuất bằng kính cường lực tiêu chuẩn làm từ silica. Kính
-                    khoáng có khả năng chống xước và sản xuất khá rẻ. Tuy nhiên,
-                    nó có thể bị xước khi va chạm với vật liệu cứng.
+                    - Đây có lẽ là loại kính đồng hồ phổ biến nhất được sử dụng trên đồng hồ. Nếu bạn có một chiếc đồng
+                    hồ tầm giá trung bình thì nó thường có mặt <em>kính khoáng</em>. Nó được sản xuất bằng kính cường
+                    lực tiêu chuẩn làm từ silica. Kính khoáng có khả năng chống xước và sản xuất khá rẻ. Tuy nhiên, nó
+                    có thể bị xước khi va chạm với vật liệu cứng.
                   </p>
 
                   <p className={styles.justifyText}>
-                    - <em>Kính sapphire</em> có chất lượng hàng đầu thường có ở
-                    những mẫu đồng hồ nữ hàng hiệu. Nếu một chiếc đồng hồ có
-                    kính sapphire crystal, thì nó là loại kính chất lượng cao
-                    nhất hiện có. Đúng như tên gọi, loại kính đồng hồ này được
-                    làm từ sapphire nhưng nó thường được làm từ sapphire tổng
-                    hợp, không phải sapphire tự nhiên.
+                    - <em>Kính sapphire</em> có chất lượng hàng đầu thường có ở những mẫu đồng hồ nữ hàng hiệu. Nếu một
+                    chiếc đồng hồ có kính sapphire crystal, thì nó là loại kính chất lượng cao nhất hiện có. Đúng như
+                    tên gọi, loại kính đồng hồ này được làm từ sapphire nhưng nó thường được làm từ sapphire tổng hợp,
+                    không phải sapphire tự nhiên.
                   </p>
 
                   <p className={styles.justifyText}>
@@ -2850,23 +2452,19 @@ export default function Donghonu() {
                         <strong>đồng hồ nữ chính hãng</strong>
                       </em>
                     </Link>
-                    từ những cửa hàng chính hãng và thương hiệu đáng tin cậy,
-                    bạn sẽ luôn được cung cấp thông tin rõ ràng về loại mặt kính
-                    của đồng hồ.
+                    từ những cửa hàng chính hãng và thương hiệu đáng tin cậy, bạn sẽ luôn được cung cấp thông tin rõ
+                    ràng về loại mặt kính của đồng hồ.
                   </p>
 
                   <p className={styles.justifyText}>&nbsp;</p>
 
                   <ul className={styles.listStyle}>
                     <li className={styles.justifyText}>
-                      <Link href="#">
-                        Top đồng hồ nữ mặt chữ nhật có kiểu dáng đẹp nhất
-                      </Link>
+                      <Link href="#">Top đồng hồ nữ mặt chữ nhật có kiểu dáng đẹp nhất</Link>
                     </li>
                     <li className={styles.justifyText}>
                       <Link href="#">
-                        CÓ BAO NHIÊU LOẠI MẶT KÍNH ĐỒNG HỒ, LOẠI MẶT KÍNH ĐỒNG
-                        HỒ NÀO TỐT NHẤT?&nbsp;
+                        CÓ BAO NHIÊU LOẠI MẶT KÍNH ĐỒNG HỒ, LOẠI MẶT KÍNH ĐỒNG HỒ NÀO TỐT NHẤT?&nbsp;
                       </Link>
                     </li>
                   </ul>
@@ -2874,9 +2472,7 @@ export default function Donghonu() {
                   <p className={styles.justifyText}>&nbsp;</p>
 
                   <h2 className={styles.heading}>
-                    <strong>
-                      3. ĐỊA CHỈ MUA ĐỒNG HỒ NAM CHÍNH HÃNG UY TÍN
-                    </strong>
+                    <strong>3. ĐỊA CHỈ MUA ĐỒNG HỒ NAM CHÍNH HÃNG UY TÍN</strong>
                   </h2>
 
                   <p className={styles.justifyText}>
@@ -2884,21 +2480,16 @@ export default function Donghonu() {
                     <strong>
                       <em>cửa hàng đồng hồ nữ uy tín</em>
                     </strong>
-                    &nbsp;để mua chiếc đồng hồ ưng ý nhất cũng là vấn đề quan
-                    trọng.
+                    &nbsp;để mua chiếc đồng hồ ưng ý nhất cũng là vấn đề quan trọng.
                   </p>
 
                   <p dir="ltr" className={styles.justifyText}>
-                    <strong className={styles.strongText}>Duy Anh Watch</strong>{" "}
-                    là nhà phân phối được ủy quyền chính thức của các thương
-                    hiệu đồng hồ hàng đầu thế giới của Thụy Sĩ:
+                    <strong className={styles.strongText}>Duy Anh Watch</strong> là nhà phân phối được ủy quyền chính
+                    thức của các thương hiệu đồng hồ hàng đầu thế giới của Thụy Sĩ:
                     <em>
                       <strong>
-                        <Link href="#">Longines</Link>,{" "}
-                        <Link href="#">Tissot</Link>, <Link href="#">Mido</Link>
-                        , <Link href="#">Hamilton</Link>,
-                        <Link href="#">Certina</Link>,{" "}
-                        <Link href="#">Titoni</Link>,{" "}
+                        <Link href="#">Longines</Link>, <Link href="#">Tissot</Link>, <Link href="#">Mido</Link>,{" "}
+                        <Link href="#">Hamilton</Link>,<Link href="#">Certina</Link>, <Link href="#">Titoni</Link>,{" "}
                         <Link href="#">Frederique Constant</Link>
                       </strong>
                     </em>
@@ -2908,33 +2499,25 @@ export default function Donghonu() {
                         <Link href="#">Daniel Wellington (DW)</Link>
                       </strong>
                     </em>
-                    &nbsp;của Thụy Điển do Filip Tysander thành lập năm 2011
-                    nhưng đã có bước tăng trưởng thần kỳ vào năm 2015 (với hơn
-                    4700% doanh thu)&nbsp;và các thương hiệu đồng hồ Nhật Bản
-                    nổi tiếng về chất lượng và độ bền&nbsp;như
+                    &nbsp;của Thụy Điển do Filip Tysander thành lập năm 2011 nhưng đã có bước tăng trưởng thần kỳ vào
+                    năm 2015 (với hơn 4700% doanh thu)&nbsp;và các thương hiệu đồng hồ Nhật Bản nổi tiếng về chất lượng
+                    và độ bền&nbsp;như
                     <em>
                       <strong>
-                        <Link href="#">Seiko</Link>,{" "}
-                        <Link href="#">Citizen</Link>,{" "}
-                        <Link href="#">Orient</Link>,<Link href="#">Casio</Link>
+                        <Link href="#">Seiko</Link>, <Link href="#">Citizen</Link>, <Link href="#">Orient</Link>,
+                        <Link href="#">Casio</Link>
                       </strong>
                     </em>
-                    … Với hệ thống cửa hàng nằm ở những vị trí đắc địa, cơ sở
-                    vật chất đẳng cấp cho phép khách hàng đánh giá cao trải
-                    nghiệm mua sắm đồng hồ, đồng thời được hưởng lợi từ dịch vụ
-                    chuyên nghiệp và xuất sắc.
+                    … Với hệ thống cửa hàng nằm ở những vị trí đắc địa, cơ sở vật chất đẳng cấp cho phép khách hàng đánh
+                    giá cao trải nghiệm mua sắm đồng hồ, đồng thời được hưởng lợi từ dịch vụ chuyên nghiệp và xuất sắc.
                   </p>
 
                   <p dir="ltr" className={styles.justifyText}>
-                    Tất cả các sản phẩm hiện có trong hệ thống cửa hàng của
-                    chúng tôi đều được bảo hành chính hãng từ 1 đến 3 năm tùy
-                    theo mặt hàng và điều kiện riêng của thương hiệu. Bên cạnh
-                    đó bạn còn nhận được gói bảo hành 5 năm cùng nhiều quyền lợi
-                    hấp dẫn tại
+                    Tất cả các sản phẩm hiện có trong hệ thống cửa hàng của chúng tôi đều được bảo hành chính hãng từ 1
+                    đến 3 năm tùy theo mặt hàng và điều kiện riêng của thương hiệu. Bên cạnh đó bạn còn nhận được gói
+                    bảo hành 5 năm cùng nhiều quyền lợi hấp dẫn tại
                     <Link href="#">
-                      <strong className={styles.strongText}>
-                        Đồng hồ Duy Anh
-                      </strong>
+                      <strong className={styles.strongText}>Đồng hồ Duy Anh</strong>
                     </Link>
                     .
                   </p>
@@ -2946,9 +2529,7 @@ export default function Donghonu() {
                   <hr />
 
                   <p dir="ltr" className={styles.justifyText}>
-                    <strong className={styles.strongText}>
-                      Hệ thống&nbsp;mạng xã hội của Đồng hồ Duy Anh
-                    </strong>
+                    <strong className={styles.strongText}>Hệ thống&nbsp;mạng xã hội của Đồng hồ Duy Anh</strong>
                   </p>
 
                   <ul>
@@ -2964,7 +2545,8 @@ export default function Donghonu() {
                       <Link
                         href="https://www.instagram.com/donghoduyanh_official/"
                         target="_blank"
-                        className={styles.socialLink}>
+                        className={styles.socialLink}
+                      >
                         https://www.instagram.com/donghoduyanh_official/
                       </Link>
                     </li>
@@ -2982,8 +2564,7 @@ export default function Donghonu() {
                   <span>Xem thêm</span>
                 </div>
                 <div className={styles.clear}></div>
-                <div
-                  className={`${styles.aq_relates} ${styles.content_li}`}></div>
+                <div className={`${styles.aq_relates} ${styles.content_li}`}></div>
               </div>
             </div>
             {/* end đồng hồ nữ   */}

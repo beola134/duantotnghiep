@@ -77,7 +77,7 @@ export default function Menu() {
               }`}
             >
               <li>
-                <Link href="quanlytaikhoan.html">Quản lý tài khoản</Link>
+                <Link href="/components/taikhoan">Quản lý tài khoản</Link>
               </li>
               <li>
                 <Link href="phanquyen.html">Phân Quyền</Link>

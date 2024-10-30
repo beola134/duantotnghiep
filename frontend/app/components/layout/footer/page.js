@@ -1,6 +1,28 @@
 import Link from "next/link";
+import React, { useEffect, useState } from "react";
 import styles from "./footer.module.css";
+
 export default function Footer() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  // Hàm xử lý sự kiện cuộn
+  const toggleVisibility = () => {
+    if (window.scrollY > 100) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  };
+
+  // Hàm cuộn lên đầu trang
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", toggleVisibility);
+    return () => window.removeEventListener("scroll", toggleVisibility);
+  }, []);
   return (
     <footer>
       {/* Footer Top */}
@@ -195,11 +217,11 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div id="fixedBar" style={{ position: "fixed", bottom: "168px", display: "block" }}>
+      <div id="fixedBar" style={{ position: "fixed", bottom: "168px", display: isVisible ? "block" : "none" }}>
         <div id="barInner">
-          <Link className={styles.goTop} href="">
+          <button className={styles.goTop} href="" onClick={scrollToTop}>
             <i className="fa-solid fa-angles-up"></i>
-          </Link>
+          </button>
         </div>
       </div>
       <div className={styles.loading}></div>

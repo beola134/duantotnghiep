@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./duoi2tr.module.css";
+import Loading from "../loading/page";
 
 export default function DonghoNam() {
   const [products, setProducts] = useState([]);
@@ -27,7 +28,7 @@ export default function DonghoNam() {
     fetchProducts();
   }, []);
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
   if (error) {
     return <p>Error:{error}</p>;
@@ -1678,9 +1679,7 @@ export default function DonghoNam() {
                                   </div>
                                 </div>
                                 <div className={styles.discount}>
-                                  <span>-
-                      {Math.floor(((gia_san_pham - gia_giam) / gia_san_pham) * 100)}
-                      %</span>
+                                  <span>-{Math.floor(((gia_san_pham - gia_giam) / gia_san_pham) * 100)}%</span>
                                 </div>
                                 <div className={styles.clear}></div>
                               </div>
