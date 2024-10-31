@@ -100,4 +100,36 @@ router.get("/filterBaoThuc", productController.filterBaoThuc);
 //http://localhost:5000/product/filterTreoTuong"
 router.get("/filterTreoTuong", productController.filterTreoTuong);
 
+// show sản phẩm thêm chất liệu dây da
+//http://localhost:5000/product/allsp/getChatLieuDayDa"
+router.get("/allsp/getChatLieuDayDa", productController.getChatLieuDayDa);
+
+// show sản phẩm thêm chất liệu dây dù
+//http://localhost:5000/product/allsp/getChatLieuDayDu"
+router.get("/allsp/getChatLieuDayDu", productController.getChatLieuDayDu);
+
+// show sản phẩm thêm chất liệu dây caosu
+//http://localhost:5000/product/allsp/getChatLieuDayCaoSu"
+router.get("/allsp/getChatLieuDayCaoSu", productController.getChatLieuDayCaoSu);
+
+// show sản phẩm thêm Xuất xứ TS
+//http://localhost:5000/product/allsp/getXuatXuTS"
+router.get("/allsp/getXuatXuTS", productController.getXuatXuTS);
+
+// show sản phẩm thêm Xuất xứ TD
+//http://localhost:5000/product/allsp/getXuatXuTD"
+router.get("/allsp/getXuatXuTD", productController.getXuatXuTD);
+
+// show sản phẩm thêm Xuất xứ NB
+//http://localhost:5000/product/allsp/getXuatXuNB"
+router.get("/allsp/getXuatXuNB", productController.getXuatXuNB);
+
+// show sản phẩm thêm Xuất xứ Mỹ
+//http://localhost:5000/product/allsp/getXuatXuMy"
+router.get("/allsp/getXuatXuMy", productController.getXuatXuMy);
+
+// Show sản phẩm theo id danh mục  vòng tay trang sức
+//http://localhost:5000/product/category/loai/:id/"
+router.get("/category/loai/:id/", productController.getProdctsCateLoai);
+
 module.exports = router;

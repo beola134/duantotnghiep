@@ -139,21 +139,18 @@ exports.resetPassword = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, mat_khau } = req.body;
-
     // Kiểm tra xem email có tồn tại hay không
     const user = await Users.findOne({ where: { email } });
     if (!user) {
       return res.status(400).json({ message: "Email không tồn tại" });
     }
-
     // Kiểm tra xem tài khoản có bị khóa không
     if (user.lock_until && user.lock_until > new Date()) {
-      const remainingTime = Math.ceil((user.lock_until - new Date()) / 1000 / 60); // Thời gian còn lại tính bằng phút
+      const remainingTime = Math.ceil((user.lock_until - new Date()) / 1000 / 60); 
       return res.status(400).json({
         message: `Tài khoản của bạn đã bị khóa. Vui lòng thử lại sau ${remainingTime} phút.`,
       });
     }
-
     // Kiểm tra mật khẩu
     const validPass = await bcrypt.compare(mat_khau, user.mat_khau);
     if (!validPass) {
@@ -171,28 +168,23 @@ exports.login = async (req, res) => {
           message: `Bạn đã nhập sai quá nhiều lần. Tài khoản bị khóa trong 15 phút.`,
         });
       }
-
       await user.save();
       return res.status(400).json({ message: "Mật khẩu không hợp lệ" });
     }
-
     // Đặt lại số lần thử đăng nhập khi đăng nhập thành công
     user.login_attempts = 0;
     user.lock_until = null;
     await user.save();
-
     // Tạo token
     const token = jwt.sign({ _id: user._id, quyen: user.quyen }, process.env.TOKEN_SECRET, {
       expiresIn: "1h",
     });
-
     // Cài đặt cookie chứa token
     res.cookie("token", token, {
       httpOnly: true,
       maxAge: 60 * 60 * 1000,
       sameSite: "strict",
     });
-
     // Thông tin người dùng trả về
     const userInfo = {
       _id: user._id,
@@ -204,7 +196,6 @@ exports.login = async (req, res) => {
       hinh_anh: user.hinh_anh,
       quyen: user.quyen,
     };
-
     res.status(200).json({
       message: "Đăng nhập thành công",
       token,
@@ -345,7 +336,6 @@ exports.changePassword = async (req, res) => {
 };
 
 //cập nhật user hinh_anh dùng thư viện multer
-
 exports.updateUser = async (req, res) => {
   try {
     const id = req.params.id;
