@@ -8,13 +8,17 @@ import Swal from "sweetalert2";
 import Slider from "react-slick";
 import Link from "next/link";
 import { jwtDecode } from "jwt-decode";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 
 export default function Detail({ params }) {
   const [user, setUser] = useState(null);
   const [product, setProducts] = useState(null);
   const [cate, setCate] = useState(null);
   const [related, SetRelated] = useState([]);
-  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState([]);
+  const [commentText, setCommentText] = useState("");
   const [star, setStar] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -94,7 +98,7 @@ export default function Detail({ params }) {
   // thêm bình luận sản phẩm theo id người dùng và id sản phẩm
   const addComment = async () => {
     if (user) {
-      if (comment && star) {
+      if (commentText && star) {
         try {
           const response = await fetch(`http://localhost:5000/comment/add`, {
             method: "POST",
@@ -102,7 +106,7 @@ export default function Detail({ params }) {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              noi_dung: comment,
+              noi_dung: commentText,
               sao: star,
               id_nguoi_dung: user._id,
               id_san_pham: params.id,
@@ -114,7 +118,7 @@ export default function Detail({ params }) {
           const data = await response.json();
           console.log(data);
 
-          setComment("");
+          setCommentText("");
           setStar(0);
           Swal.fire({
             icon: "success",
@@ -138,6 +142,24 @@ export default function Detail({ params }) {
       });
     }
   };
+  // lấy tất cả bình luận theo id sản phẩm
+  useEffect(() => {
+    const getAllComment = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/comment/getAll/${params.id}`);
+        if (!response.ok) {
+          throw new Error("Lỗi không thể tải dữ liệu");
+        }
+        const data = await response.json();
+
+        setComments(data.comments);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+    getAllComment();
+  }, [params.id]);
+
   if (loading) {
     return <Loading />;
   }
@@ -1632,12 +1654,52 @@ export default function Detail({ params }) {
                       name="content"
                       id="cmt-content"
                       placeholder="Viết bình luận của bạn..."
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
                     ></textarea>
                   </div>
 
                   <input type="submit" className={styles.btnCommentMb} value="Gửi bình luận" />
+
+                  {/* show bình luận  */}
+                  <div className={`${styles.commentSection} ${styles.container}`}>
+                    {Array.isArray(comments) && comments.length > 0 ? (
+                      comments.map((comment, index) => (
+                        <div key={index} className={styles.comment}>
+                          <div className={styles.profile}>
+                            <img src={`http://localhost:5000/images/${comment.user?.hinh_anh}`} alt="Profile Picture" />
+                          </div>
+                          <div className={styles.content}>
+                            <div className={styles.header}>
+                              <span className={styles.name}>{comment.user?.ten_dang_nhap || "Ẩn danh"}</span>
+                              <span className={styles.date}>
+                                {new Intl.DateTimeFormat("vi-VN", {
+                                  year: "numeric",
+                                  month: "2-digit",
+                                  day: "2-digit",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  second: "2-digit",
+                                }).format(new Date(comment.ngay_binh_luan))}
+                              </span>
+                              <div className={styles.rating}>
+                                {Array.from({ length: 5 }, (_, i) => (
+                                  <FontAwesomeIcon
+                                    key={i}
+                                    icon={i < comment.sao ? solidStar : regularStar}
+                                    className={styles.star}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                            <p className={styles.text}>{comment.noi_dung}</p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p>Không có bình luận nào</p>
+                    )}
+                  </div>
                 </form>
               </div>
             </div>
