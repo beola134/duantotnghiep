@@ -388,6 +388,65 @@ exports.deleteUser = async (req, res) => {
 };
 
 
-
 /////////////////////////////////////////////////////////////////////////////////
-//thêm người dùng bên phía admin 
+//thêm người dùng bên phía admin
+
+// API thêm người dùng bên phía admin
+exports.addUser= async (req, res) => {
+  try {
+    const {
+      ten_dang_nhap,
+      mat_khau,
+      email,
+      ho_ten,
+      dia_chi,
+      dien_thoai,
+      quyen,
+    } = req.body;
+
+    if (!ten_dang_nhap || !mat_khau || !email) {
+      return res.status(400).json({
+        message: "Tên đăng nhập, mật khẩu và email là bắt buộc.",
+      });
+    }
+
+    const emailExist = await Users.findOne({ where: { email } });
+    if (emailExist) {
+      return res.status(400).json({
+        message: "Email đã tồn tại.",
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(mat_khau, salt);
+
+    const newUser = await Users.create({
+      ten_dang_nhap,
+      mat_khau: hashPassword,
+      email,
+      ho_ten,
+      dia_chi,
+      dien_thoai,
+      quyen: quyen || "2",
+      hinh_anh: "default.png",
+    });
+
+    res.status(201).json({
+      message: "Thêm người dùng thành công.",
+      user: {
+        id: newUser.id,
+        ten_dang_nhap: newUser.ten_dang_nhap,
+        ho_ten: newUser.ho_ten,
+        email: newUser.email,
+        dia_chi: newUser.dia_chi,
+        dien_thoai: newUser.dien_thoai,
+        quyen: newUser.quyen,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Lỗi máy chủ.",
+      error: error.message,
+    });
+  }
+};

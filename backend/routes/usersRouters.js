@@ -5,6 +5,10 @@ const upload = require("../config/update");
 const crypto = require("crypto");
 const googleLogin = require("../controllers/logingoogleController");
 
+// thêm người dùng
+//http://localhost:5000/users/addUser
+router.post("/addUser", usersController.addUser);
+
 // Lấy thông tin người dùng theo id
 //http://localhost:5000/users/:id
 router.get("/:id", usersController.getUserById);
@@ -16,6 +20,7 @@ router.get("/", usersController.getAllUsers);
 // Đăng ký tài khoản
 //http://localhost:5000/users/register
 router.post("/register", usersController.register);
+
 //kiểm tra mã otp có đúng không
 //http://localhost:5000/users/verifyotp
 router.post("/verifyotp", usersController.verifyOtp);
