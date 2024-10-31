@@ -171,7 +171,7 @@ const getAllDonHangByUserId = async (req, res) => {
         .json({ message: "Không tìm thấy đơn hàng cho người dùng này." });
     }
 
-    return res.status(200).json(donHangs);
+    return res.status(200).json({donHangs});
   } catch (error) {
     console.error("Lỗi khi lấy đơn hàng:", error);
     return res
@@ -211,7 +211,7 @@ const getDonHangByUserId = async (req, res) => {
         .json({ message: "Không tìm thấy đơn hàng cho người dùng này." });
     }
 
-    return res.status(200).json(donHangs);
+    return res.status(200).json({donHangs});
   } catch (error) {
     console.error("Lỗi khi lấy đơn hàng:", error);
     return res
