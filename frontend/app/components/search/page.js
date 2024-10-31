@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 
 export default function Search() {
   const router = useRouter();
-  const searchParams = useSearchParams(); // Lấy search params từ URL
+  const searchParams = useSearchParams(); 
   const [results, setResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -21,9 +21,9 @@ export default function Search() {
   };
 
   useEffect(() => {
-    const query = searchParams.get("query"); // Lấy giá trị của "query" từ URL
+    const query = searchParams.get("query"); 
     if (query) {
-      setSearchQuery(query); // Cập nhật searchQuery để hiển thị
+      setSearchQuery(query); 
 
       const fetchData = async () => {
         try {
@@ -34,13 +34,13 @@ export default function Search() {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ query }), // Gửi query đến API
+              body: JSON.stringify({ query }), 
             }
           );
 
           const data = await response.json();
           console.log("Dữ liệu trả về từ API:", data);
-          setResults(data.products); // Cập nhật kết quả tìm kiếm
+          setResults(data.products); 
         } catch (error) {
           console.error("Lỗi khi fetch dữ liệu:", error);
         }

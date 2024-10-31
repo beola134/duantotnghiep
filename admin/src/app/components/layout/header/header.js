@@ -102,7 +102,7 @@ export default function Menu() {
               }`}
             >
               <li>
-                <Link href="quanlydonhang.html">Quản lý đơn hàng</Link>
+                <Link href="/components/quanlydonhang">Quản lý đơn hàng</Link>
               </li>
               <li>
                 <Link href="quanlygiohang.html">Quản lý giỏ hàng</Link>
