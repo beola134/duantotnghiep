@@ -39,9 +39,7 @@ export default function TrangsucDW() {
           <div className={styles["main-column"]}>
             <div className={styles["center-1col"]}>
               <div className={styles.clear}></div>
-              <div className={styles.hiden}>
-                <div className={styles.clear}></div>
-              </div>
+
               <div className={styles.clear}></div>
               <div className={styles.container}>
                 <div className={styles.clear}></div>
@@ -86,7 +84,6 @@ export default function TrangsucDW() {
                             ten_san_pham,
                             ma_san_pham,
                             gia_san_pham,
-                            gia_giam,
                             hinh_anh,
                             loai,
                             duong_kinh,
@@ -96,7 +93,7 @@ export default function TrangsucDW() {
                             <div key={_id} className={styles.item}>
                               <div className={styles["frame-inner"]}>
                                 <figure className={styles["product-image"]}>
-                                  <Link href={`/components/product-detail/${item._id}`}>
+                                  <Link href={`/components/product-detail/${_id}`}>
                                     <img
                                       src={`http://localhost:5000/images/${hinh_anh}`}
                                       alt={ten}

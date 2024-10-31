@@ -37,9 +37,7 @@ export default function Donghobaothuc() {
           <div className={styles["main-column"]}>
             <div className={styles["center-1col"]}>
               <div className={styles.clear}></div>
-              <div className={styles.hiden}>
-                <div className={styles.clear}></div>
-              </div>
+
               <div className={styles.clear}></div>
               <div className={styles.container}>
                 <div className={styles.clear}></div>
@@ -146,7 +144,6 @@ export default function Donghobaothuc() {
                             ten_san_pham,
                             ma_san_pham,
                             gia_san_pham,
-
                             hinh_anh,
                           } = product;
 

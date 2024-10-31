@@ -1,4 +1,3 @@
-import Product from "../product/page";
 import Link from "next/link";
 import styles from "../donghonu/donghonu.module.css";
 export default async function TrangsucCK() {
@@ -58,7 +57,6 @@ export default async function TrangsucCK() {
                     <div className={styles["products-cat-frame-inner"]}>
                       <div className={styles["product-grid"]}>
                         {/* item-1 */}
-                        <Product data={data2.products}></Product>
                       </div>
                     </div>
                   </section>
