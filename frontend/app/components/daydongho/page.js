@@ -52,12 +52,75 @@ export default function Daydongho() {
     setCurrentPage(page);
     fetchProducts();
   };
+   // 4. Hàm cập nhật bộ lọc khi chọn mới
+  const handleFilterChange = (filterType, value) => {
+    const newFilters = [...selectedFilter];
+    const newFilter = { ...filter, [filterType]: value };
+
+    // Cập nhật hoặc thêm bộ lọc vào danh sách đã chọn
+    const filterIndex = newFilters.findIndex((filter) => filter.startsWith(`${filterType}=`));
+    if (filterIndex !== -1) {
+      newFilters[filterIndex] = `${filterType}=${value}`;
+    } else {
+      newFilters.push(`${filterType}=${value}`);
+    }
+    // Cập nhật trạng thái bộ lọc
+    setSelectedFilter(newFilters);
+    setFilter(newFilter);
+
+    // Đặt lại danh mục khi chọn một danh mục khác
+    if (filterType === "danh_muc") {
+      setCategoryName(value);
+    }
+  };
+// 5. Hàm xóa tất cả bộ lọc và đặt lại về trạng thái ban đầu
+const handleClearFilters = () => {
+  setSelectedFilter([]);
+  setFilter({
+    danh_muc: "Dây đồng hồ",
+  });
+  setCurrentPage(1);
+  setCategoryName("Dây đồng hồ");
+  fetchProducts();
+};
+// 6. Hàm xóa một bộ lọc cụ thể
+const handleRemoveFilter = (filterToRemove) => {
+  // Loại bỏ bộ lọc cụ thể khỏi selectedFilter
+  const newFilters = selectedFilter.filter((filter) => filter !== filterToRemove);
+
+  // Cập nhật filter dựa trên các bộ lọc còn lại
+  const [filterType] = filterToRemove.split("=");
+  const updatedFilter = { ...filter, [filterType]: "" }; // Xóa giá trị của bộ lọc bị xoá
+
+  // Nếu xoá danh mục (brand), đặt lại tiêu đề về đồng hồ nam
+  if (filterType === "danh_muc") {
+    setCategoryName("Dây đồng hồ");
+  }
+  setSelectedFilter(newFilters);
+  setFilter(updatedFilter);
+  fetchProducts();
+};
+// 7. Hàm sắp xếp sản phẩm theo giá
+const sortProducts = (products) => {
+  if (sortOption === "asc") {
+    return [...products].sort((a, b) => a.gia_san_pham - b.gia_san_pham); // Giá từ thấp đến cao
+  } else if (sortOption === "desc") {
+    return [...products].sort((a, b) => b.gia_san_pham - a.gia_san_pham); // Giá từ cao đến thấp
+  }
+  return products; // Trả về danh sách gốc nếu không sắp xếp
+};
+// 8. Cập nhật tuỳ chọn sắp xếp
+const handleSortChange = (e) => {
+  setSortOption(e.target.value);
+};
+
   if (loading) {
     return <Loading />;
   }
   if (error) {
     return <p>Error:{error}</p>;
   }
+  const displayedProducts = sortProducts(products); // sắp xếp sản phẩm trước khi hiển thị
   return (
     <>
       <div className={styles["container-header"]}>
@@ -65,229 +128,6 @@ export default function Daydongho() {
           <div className={styles["main-column"]}>
             <div className={styles["center-1col"]}>
               <div className={styles.clear}></div>
-
-              <div className={styles.hiden}>
-                <div className={styles.clear}></div>
-                {/* none-menu-ngang */}
-                <div
-                  className={`${styles["block-product-filter"]} ${styles.cls}`}
-                >
-                  {/* item1 */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}
-                  >
-                    <div
-                      className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                      data-id="id-field-size-day"
-                    >
-                      Size dây
-                    </div>
-                    <div
-                      id="size-day"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-size-day"]}`}
-                    >
-                      <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
-                      >
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Size 26-24mm">
-                            Size 26-24mm
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Size 26-22mm">
-                            Size 26-22mm
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Size 24-22mm">
-                            Size 24-22mm
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Size 24-20mm">
-                            Size 24-20mm
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Size 22-20mm">
-                            Size 22-20mm
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Size 21-18mm">
-                            Size 21-18mm
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Size 20-18mm">
-                            Size 20-18mm
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Size 19-18mm">
-                            Size 19-18mm
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Size 18-16mm">
-                            Size 18-16mm
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Size 16-14mm">
-                            Size 16-14mm
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Size 14-12mm">
-                            Size 14-12mm
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Size 12-10mm">
-                            Size 12-10mm
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* item2 */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}
-                  >
-                    <div
-                      className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                      data-id="id-field-mau-day"
-                    >
-                      Màu Dây
-                    </div>
-                    <div
-                      id="mau-day"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-mau-day"]}`}
-                    >
-                      <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
-                      >
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Nâu (Brown)">
-                            Nâu (Brown)
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Nâu (Tan)">
-                            Nâu (Tan)
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Xanh (Green)">
-                            Xanh (Green)
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Xanh (Navy)">
-                            Xanh (Navy)
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Đen">
-                            Đen
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* item3 */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}
-                  >
-                    <div
-                      className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                      data-id="id-field-thuong-hieu"
-                    >
-                      Thương hiệu
-                    </div>
-                    <div
-                      id="thuong-hieu"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-thuong-hieu"]}`}
-                    >
-                      <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
-                      >
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="ZRC-Rochet">
-                            ZRC-Rochet
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Longines">
-                            Longines
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Seiko">
-                            Seiko
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Tissot">
-                            Tissot
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Daniel Wellington">
-                            Daniel Wellington
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* item4 */}
-                  <div
-                    className={`${styles["field-area"]} ${styles["field-item"]}`}
-                  >
-                    <div
-                      className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
-                      data-id="id-field-chat-lieu"
-                    >
-                      Chất Liệu
-                    </div>
-                    <div
-                      id="chat-lieu"
-                      className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]} ${styles["filter-4-chat-lieu"]}`}
-                    >
-                      <span className={styles.close}>x</span>
-                      <div
-                        className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
-                      >
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Dây cao su">
-                            Dây cao su
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Dây da">
-                            Dây da
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Dây Silicone">
-                            Dây Silicone
-                          </a>
-                        </div>
-                        <div className={`${styles.cls} ${styles.item}`}>
-                          <a rel="nofollow" href="#" title="Dây dù">
-                            Dây dù
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
               {/* container */}
               <div className={styles.container}>
@@ -301,6 +141,19 @@ export default function Daydongho() {
                     </div>
                   </div>
                 </div>
+                <div className={styles.clear}></div>
+                {selectedFilter.length > 0 && (
+                  <div className={styles.choosedfilter}>
+                    {selectedFilter.map((filter, index) => (
+                      <Link key={index} rel="nofollow" href="#" onClick={() => handleRemoveFilter(filter)}>
+                        {filter.split("=")[1]} {/*Hiển thị các bộ lọc đã chọn*/}
+                      </Link>
+                    ))}
+                    <Link rel="nofollow" className={styles.reset} href="#" onClick={handleClearFilters}>
+                      Xoá hết
+                    </Link>
+                  </div>
+                )}
                 <div className={styles.clear}></div>
                 <div className={styles["products-cat"]}>
                   <div className={styles["block-products-filter"]}>
@@ -326,64 +179,64 @@ export default function Daydongho() {
                             className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
                           >
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Size 26-24mm">
-                                Kích thước 26-24mm
-                              </a>
+                              <Link rel="nofollow" href="#" title="Size 26-24mm" onClick={() => handleFilterChange("size_day", "Size 26-24mm")}>
+                              Kích thước 26-24mm
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Size 26-22mm">
+                              <Link rel="nofollow" href="#" title="Size 26-22mm" onClick={() => handleFilterChange("size_day", "Size 26-22mm")}>
                                 Kích thước 26-22mm
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Size 24-22mm">
+                              <Link rel="nofollow" href="#" title="Size 24-22mm" onClick={() => handleFilterChange("size_day", "Size 24-22mm")}>
                                 Kích thước 24-22mm
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Size 24-20mm">
+                              <Link rel="nofollow" href="#" title="Size 24-20mm" onClick={() => handleFilterChange("size_day", "Size 24-20mm")}>
                                 Kích thước 24-20mm
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Size 22-20mm">
+                              <Link rel="nofollow" href="#" title="Size 22-20mm" onClick={() => handleFilterChange("size_day", "Size 22-20mm")}>
                                 Kích thước 22-20mm
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Size 21-18mm">
+                              <Link rel="nofollow" href="#" title="Size 21-18mm" onClick={() => handleFilterChange("size_day", "Size 21-18mm")}>
                                 Kích thước 21-18mm
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Size 20-18mm">
+                              <Link rel="nofollow" href="#" title="Size 20-18mm" onClick={() => handleFilterChange("size_day", "Size 20-18mm")}>
                                 Kích thước 20-18mm
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Size 19-18mm">
+                              <Link rel="nofollow" href="#" title="Size 19-18mm" onClick={() => handleFilterChange("size_day", "Size 19-18mm")}>
                                 Kích thước 19-18mm
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Size 18-16mm">
+                              <Link rel="nofollow" href="#" title="Size 18-16mm" onClick={() => handleFilterChange("size_day", "Size 18-16mm")}>
                                 Kích thước 18-16mm
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Size 16-14mm">
+                              <Link rel="nofollow" href="#" title="Size 16-14mm" onClick={() => handleFilterChange("size_day", "Size 16-14mm")}>
                                 Kích thước 16-14mm
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Size 14-12mm">
+                              <Link rel="nofollow" href="#" title="Size 14-12mm" onClick={() => handleFilterChange("size_day", "Size 14-12mm")}>
                                 Kích thước 14-12mm
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Size 12-10mm">
+                              <Link rel="nofollow" href="#" title="Size 12-10mm" onClick={() => handleFilterChange("size_day", "Size 12-10mm")}>
                                 Kích thước 12-10mm
-                              </a>
+                              </Link>
                             </div>
                           </div>
                         </div>
@@ -407,29 +260,29 @@ export default function Daydongho() {
                             className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
                           >
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Nâu (Brown)">
+                              <Link rel="nofollow" href="#" title="Nâu (Brown)" onClick={() => handleFilterChange("mau_day", "Nâu (Brown)")}>
                                 Nâu (Brown)
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Nâu (Tan)">
+                              <Link rel="nofollow" href="#" title="Nâu (Tan)" onClick={() => handleFilterChange("mau_day", "Nâu (Tan)")}>
                                 Nâu (Tan)
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Xanh (Green)">
+                              <Link rel="nofollow" href="#" title="Xanh (Green)" onClick={() => handleFilterChange("mau_day", "Xanh (Green)")}>
                                 Xanh (Green)
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Xanh (Navy)">
+                              <Link rel="nofollow" href="#" title="Xanh (Navy)" onClick={() => handleFilterChange("mau_day", "Xanh (Navy)")}>
                                 Xanh (Navy)
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Đen">
+                              <Link rel="nofollow" href="#" title="Đen" onClick={() => handleFilterChange("mau_day", "Đen")}>
                                 Đen
-                              </a>
+                              </Link>
                             </div>
                           </div>
                         </div>
@@ -453,33 +306,33 @@ export default function Daydongho() {
                             className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
                           >
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="ZRC-Rochet">
+                              <Link rel="nofollow" href="#" title="ZRC-Rochet" onClick={() => handleFilterChange("thuong_hieu", "ZRC-Rochet")}>
                                 ZRC-Rochet
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Longines">
+                              <Link rel="nofollow" href="#" title="Longines" onClick={() => handleFilterChange("thuong_hieu", "Longines")}>
                                 Longines
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Seiko">
+                              <Link rel="nofollow" href="#" title="Seiko" onClick={() => handleFilterChange("thuong_hieu", "Seiko")}>
                                 Seiko
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Tissot">
+                              <Link rel="nofollow" href="#" title="Tissot" onClick={() => handleFilterChange("thuong_hieu", "Tissot")}>
                                 Tissot
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a
+                              <Link
                                 rel="nofollow"
                                 href="#"
                                 title="Daniel Wellington"
-                              >
+                              onClick={() => handleFilterChange("thuong_hieu", "Daniel Wellington")}>
                                 Daniel Wellington
-                              </a>
+                              </Link>
                             </div>
                           </div>
                         </div>
@@ -503,24 +356,24 @@ export default function Daydongho() {
                             className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
                           >
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Dây cao su">
+                              <Link rel="nofollow" href="#" title="Dây cao su" onClick={() => handleFilterChange("chat_lieu_day", "Dây cao su")}>
                                 Dây cao su
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Dây da">
+                              <Link rel="nofollow" href="#" title="Dây da" onClick={() => handleFilterChange("chat_lieu_day", "Dây da")}>
                                 Dây da
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Dây Silicone">
+                              <Link rel="nofollow" href="#" title="Dây Silicone" onClick={() => handleFilterChange("chat_lieu_day", "Dây Silicone")}>
                                 Dây Silicone
-                              </a>
+                              </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
-                              <a rel="nofollow" href="#" title="Dây dù">
+                              <Link rel="nofollow" href="#" title="Dây dù" onClick={() => handleFilterChange("chat_lieu_day", "Dây dù")}>
                                 Dây dù
-                              </a>
+                              </Link>
                             </div>
                           </div>
                         </div>
@@ -544,18 +397,12 @@ export default function Daydongho() {
                       </div>
                     </div>
 
-                    <select
-                      className={styles["order-select"]}
-                      name="order-select"
-                    >
+                    <select className={styles["order-select"]} name="order-select" onChange={handleSortChange}>
                       <option value="">Sắp xếp theo</option>
-                      <option value="#">Bán chạy nhất</option>
-                      <option value="#">Khuyễn mãi</option>
-                      <option value="#">Giá từ thấp tới cao</option>
-                      <option value="#">Giá từ cao tới thấp</option>
-                      <option value="#">Mới nhất</option>
-                      <option value="#">Xem nhiều</option>
-                      <option value="#">Sản phẩm hot</option>
+                      <option value="asc">Giá từ thấp tới cao</option>
+                      <option value="desc">Giá từ cao tới thấp</option>
+                      <option value="newest">Mới nhất</option>
+                      <option value="hot">Sản phẩm hot</option>
                     </select>
                     <div className={styles.clear}></div>
                   </div>
@@ -566,7 +413,7 @@ export default function Daydongho() {
                     <section className={styles["products-cat-frame"]}>
                       <div className={styles["products-cat-frame-inner"]}>
                         <div className={styles["product-grid"]}>
-                          {products.map((product) => {
+                          {displayedProducts.map((product) => {
                             const {
                               _id,
                               ten,
@@ -575,7 +422,6 @@ export default function Daydongho() {
                               gia_san_pham,
                               hinh_anh,
                             } = product;
-
                             return (
                               <div key={_id} className={styles.item}>
                                 <div className={styles["frame-inner"]}>
@@ -607,7 +453,9 @@ export default function Daydongho() {
                                         {gia_san_pham.toLocaleString("vi-VN")}₫
                                       </span>
                                     </div>
+                              
                                   </div>
+                                  
                                 </div>
                               </div>
                             );

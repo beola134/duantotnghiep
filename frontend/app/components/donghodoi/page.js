@@ -86,10 +86,10 @@ export default function DonghoDoi() {
   const handleClearFilters = () => {
     setSelectedFilter([]);
     setFilter({
-      gioi_tinh: "Nam",
+      gioi_tinh: "Đồng Hồ Đôi",
     });
     setCurrentPage(1);
-    setCategoryName("Đồng hồ nam");
+    setCategoryName("Đồng hồ đôi");
     fetchProducts();
   };
   // 6. Hàm xóa một bộ lọc cụ thể

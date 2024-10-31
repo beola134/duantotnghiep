@@ -3,16 +3,17 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./chitietdanhmuc.module.css";
 import Loading from "../../loading/page";
-export default function DanhMuc() {
 
+export default function DanhMuc({ params }) {
+  const { id: danh_muc } = params;
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [categoryName, setCategoryName] = useState(""); // Tiêu đề danh mục
-  const [selectedFilter, setSelectedFilter] = useState([]); // Lưu trữ các bộ lọc đã chọn
-  const [sortOption, setSortOption] = useState(""); // Tuỳ chọn sắp xếp (tăng/giảm dần)
-  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
+  const [categoryName, setCategoryName] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState([]);
+  const [sortOption, setSortOption] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [filter, setFilter] = useState({
     gioi_tinh: "",
     danh_muc: "",
@@ -28,19 +29,25 @@ export default function DanhMuc() {
     kieu_dang: "",
     xuat_xu: "",
   });
-  
-  // 1. Hàm gọi API để lấy danh sách sản phẩm dựa vào bộ lọc và phân trang
+
+  // Hàm gọi API lấy sản phẩm dựa trên bộ lọc
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const queryParams = new URLSearchParams({ ...filter, page: currentPage });
-      const response = await fetch(`http://localhost:5000/product/filtersanphamdongho?${queryParams}`);
+      const queryParams = new URLSearchParams({
+        ...filter, 
+        danh_muc: danh_muc,
+        page: currentPage,
+      });
+
+      const response = await fetch(
+        `http://localhost:5000/product/filtersanphamdongho?${queryParams}`
+      );
       if (!response.ok) {
         throw new Error("Lỗi không thể tải dữ liệu");
       }
       const data = await response.json();
-      setProducts(data.products); // Cập nhật danh sách sản phẩm
-      setTotalPages(data.totalPages); // Cập nhật tổng số trang
+      setProducts(data.products);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -48,40 +55,43 @@ export default function DanhMuc() {
     }
   };
 
-  // 2. Gọi lại API khi bộ lọc hoặc trang hiện tại thay đổi
+  useEffect(() => {
+    if (params.id) {
+      setFilter((prevFilter) => ({
+        ...prevFilter,
+        danh_muc: params.id,
+      }));
+      setCategoryName(params.id);
+      setCurrentPage(1);
+      fetchProducts();
+    }
+  }, [params.id]);
+
+  // Theo dõi filter và gọi fetchProducts khi filter thay đổi
   useEffect(() => {
     fetchProducts();
   }, [filter, currentPage]);
 
-  // 3. Hàm chuyển trang
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    fetchProducts();
-  };
-
-  // 4. Hàm cập nhật bộ lọc khi chọn mới
+  // Cập nhật filter khi thay đổi từ dropdown
   const handleFilterChange = (filterType, value) => {
-    const newFilters = [...selectedFilter];
     const newFilter = { ...filter, [filterType]: value };
-
-    // Cập nhật hoặc thêm bộ lọc vào danh sách đã chọn
-    const filterIndex = newFilters.findIndex((filter) => filter.startsWith(`${filterType}=`));
-    if (filterIndex !== -1) {
-      newFilters[filterIndex] = `${filterType}=${value}`;
-    } else {
-      newFilters.push(`${filterType}=${value}`);
-    }
-    // Cập nhật trạng thái bộ lọc
-    setSelectedFilter(newFilters);
     setFilter(newFilter);
 
-    // Đặt lại danh mục khi chọn một danh mục khác
+    setSelectedFilter((prevFilters) => {
+      const updatedFilters = prevFilters.filter(
+        (f) => !f.startsWith(`${filterType}=`)
+      );
+      return value
+        ? [...updatedFilters, `${filterType}=${value}`]
+        : updatedFilters;
+    });
+
     if (filterType === "danh_muc") {
       setCategoryName(value);
     }
   };
 
-  // 5. Hàm xóa tất cả bộ lọc và đặt lại về trạng thái ban đầu
+  // Xoá tất cả bộ lọc
   const handleClearFilters = () => {
     setSelectedFilter([]);
     setFilter({
@@ -92,38 +102,34 @@ export default function DanhMuc() {
     fetchProducts();
   };
 
-  // 6. Hàm xóa một bộ lọc cụ thể
+  // Xoá một bộ lọc cụ thể
   const handleRemoveFilter = (filterToRemove) => {
-    // Loại bỏ bộ lọc cụ thể khỏi selectedFilter
-    const newFilters = selectedFilter.filter((filter) => filter !== filterToRemove);
-
-    // Cập nhật filter dựa trên các bộ lọc còn lại
+    const newFilters = selectedFilter.filter(
+      (filter) => filter !== filterToRemove
+    );
     const [filterType] = filterToRemove.split("=");
-    const updatedFilter = { ...filter, [filterType]: "" }; // Xóa giá trị của bộ lọc bị xoá
+    const updatedFilter = { ...filter, [filterType]: "" };
 
-    // Nếu xoá danh mục (brand), đặt lại tiêu đề về đồng hồ nam
     if (filterType === "danh_muc") {
       setCategoryName("Đồng hồ nam");
     }
     setSelectedFilter(newFilters);
     setFilter(updatedFilter);
-    fetchProducts();
   };
 
-  // 7. Hàm sắp xếp sản phẩm theo giá
   const sortProducts = (products) => {
     if (sortOption === "asc") {
-      return [...products].sort((a, b) => a.gia_giam - b.gia_giam); // Giá từ thấp đến cao
+      return [...products].sort((a, b) => a.gia_giam - b.gia_giam);
     } else if (sortOption === "desc") {
-      return [...products].sort((a, b) => b.gia_giam - a.gia_giam); // Giá từ cao đến thấp
+      return [...products].sort((a, b) => b.gia_giam - a.gia_giam);
     }
-    return products; // Trả về danh sách gốc nếu không sắp xếp
+    return products;
   };
-  // 8. Cập nhật tuỳ chọn sắp xếp
+
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
   };
-  
+
   if (loading) {
     return <Loading />;
   }
@@ -131,6 +137,7 @@ export default function DanhMuc() {
   if (error) {
     return <p>Lỗi: {error}</p>;
   }
+
   const displayedProducts = sortProducts(products);
   return (
     <>
@@ -194,32 +201,58 @@ export default function DanhMuc() {
                 <div className={styles.clear}></div>
                 <div className={styles["products-cat"]}>
                   <div className={styles["block-products-filter"]}>
-                  <div className={styles["block-product-filter"]}>
+                    <div className={styles["block-product-filter"]}>
                       {/* Giới tính */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
-                        <div className={`${styles["field-name"]} ${styles.normal} ${styles.field}`}>Giới tính</div>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
+                        <div
+                          className={`${styles["field-name"]} ${styles.normal} ${styles.field}`}
+                        >
+                          Giới tính
+                        </div>
                         <div
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
-                            <Link rel="nofollow" href="/components/donghonam" title="Đồng hồ nam">
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
+                            <Link
+                              rel="nofollow"
+                              href="/components/donghonam"
+                              title="Đồng hồ nam"
+                            >
                               <span>Đồng hồ nam</span>
                             </Link>
-                            <Link rel="nofollow" href="/components/donghonu" title="Đồng hồ nữ">
+                            <Link
+                              rel="nofollow"
+                              href="/components/donghonu"
+                              title="Đồng hồ nữ"
+                            >
                               <span>Đồng hồ nữ</span>
                             </Link>
-                            <Link rel="nofollow" href="/components/donghodoi" title="Đồng hồ đôi">
+                            <Link
+                              rel="nofollow"
+                              href="/components/donghodoi"
+                              title="Đồng hồ đôi"
+                            >
                               <span>Đồng hồ đôi</span>
                             </Link>
-                            <Link rel="nofollow" href="/components/donghounisex" title="Đồng hồ unisex">
+                            <Link
+                              rel="nofollow"
+                              href="/components/donghounisex"
+                              title="Đồng hồ unisex"
+                            >
                               <span>Đồng hồ unisex</span>
                             </Link>
                           </div>
                         </div>
                       </div>
                       {/* Thương hiệu  */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                         >
@@ -230,13 +263,17 @@ export default function DanhMuc() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-3-column"]} ${styles["filter-brand"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link
                                 rel="nofollow"
                                 href="#"
                                 title="LONGINES"
-                                onClick={() => handleFilterChange("danh_muc", "LONGINES")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "LONGINES")
+                                }
                               >
                                 LONGINES
                               </Link>
@@ -246,7 +283,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="TISSOT"
-                                onClick={() => handleFilterChange("danh_muc", "TISSOT")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "TISSOT")
+                                }
                               >
                                 TISSOT
                               </Link>
@@ -256,7 +295,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="MIDO"
-                                onClick={() => handleFilterChange("danh_muc", "MIDO")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "MIDO")
+                                }
                               >
                                 MIDO
                               </Link>
@@ -266,7 +307,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="CERTINA"
-                                onClick={() => handleFilterChange("danh_muc", "CERTINA")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "CERTINA")
+                                }
                               >
                                 CERTINA
                               </Link>
@@ -276,7 +319,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="HAMILTON"
-                                onClick={() => handleFilterChange("danh_muc", "HAMILTON")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "HAMILTON")
+                                }
                               >
                                 HAMILTON
                               </Link>
@@ -286,7 +331,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="TITONI"
-                                onClick={() => handleFilterChange("danh_muc", "TITONI")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "TITONI")
+                                }
                               >
                                 TITONI
                               </Link>
@@ -296,7 +343,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="FREDERIQUE CONSTANT"
-                                onClick={() => handleFilterChange("danh_muc", "FREDERIQUE CONSTANT")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "danh_muc",
+                                    "FREDERIQUE CONSTANT"
+                                  )
+                                }
                               >
                                 FREDERIQUE CONSTANT
                               </Link>
@@ -306,7 +358,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="CALVIN KLEIN"
-                                onClick={() => handleFilterChange("danh_muc", "CALVIN KLEIN")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "CALVIN KLEIN")
+                                }
                               >
                                 CALVIN KLEIN
                               </Link>
@@ -316,7 +370,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="EDOX"
-                                onClick={() => handleFilterChange("danh_muc", "EDOX")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "EDOX")
+                                }
                               >
                                 EDOX
                               </Link>
@@ -326,7 +382,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="CLAUDE BERNARD"
-                                onClick={() => handleFilterChange("danh_muc", "CLAUDE BERNARD")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "danh_muc",
+                                    "CLAUDE BERNARD"
+                                  )
+                                }
                               >
                                 CLAUDE BERNARD
                               </Link>
@@ -336,7 +397,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="SEIKO"
-                                onClick={() => handleFilterChange("danh_muc", "SEIKO")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "SEIKO")
+                                }
                               >
                                 SEIKO
                               </Link>
@@ -346,7 +409,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="CITIZEN"
-                                onClick={() => handleFilterChange("danh_muc", "CITIZEN")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "CITIZEN")
+                                }
                               >
                                 CITIZEN
                               </Link>
@@ -356,7 +421,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="ORIENT"
-                                onClick={() => handleFilterChange("danh_muc", "ORIENT")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "ORIENT")
+                                }
                               >
                                 ORIENT
                               </Link>
@@ -366,7 +433,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="CASIO"
-                                onClick={() => handleFilterChange("danh_muc", "CASIO")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "CASIO")
+                                }
                               >
                                 CASIO
                               </Link>
@@ -376,7 +445,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="OLYM PIANUS"
-                                onClick={() => handleFilterChange("danh_muc", "OLYM PIANUS")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "OLYM PIANUS")
+                                }
                               >
                                 OLYM PIANUS
                               </Link>
@@ -386,7 +457,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="DANIEL WELLINGTON"
-                                onClick={() => handleFilterChange("danh_muc", "DANIEL WELLINGTON")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "danh_muc",
+                                    "DANIEL WELLINGTON"
+                                  )
+                                }
                               >
                                 DANIEL WELLINGTON
                               </Link>
@@ -396,7 +472,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="FOSSIL"
-                                onClick={() => handleFilterChange("danh_muc", "FOSSIL")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "FOSSIL")
+                                }
                               >
                                 FOSSIL
                               </Link>
@@ -406,7 +484,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="SKAGEN"
-                                onClick={() => handleFilterChange("danh_muc", "SKAGEN")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "SKAGEN")
+                                }
                               >
                                 SKAGEN
                               </Link>
@@ -416,7 +496,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="MICHAEL KORS"
-                                onClick={() => handleFilterChange("danh_muc", "MICHAEL KORS")}
+                                onClick={() =>
+                                  handleFilterChange("danh_muc", "MICHAEL KORS")
+                                }
                               >
                                 MICHAEL KORS
                               </Link>
@@ -426,7 +508,9 @@ export default function DanhMuc() {
                       </div>
 
                       {/* Mức giá */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                         >
@@ -437,13 +521,17 @@ export default function DanhMuc() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-price"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link
                                 rel="nofollow"
                                 href="#"
                                 title="Dưới 2 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Dưới 2 triệu")}
+                                onClick={() =>
+                                  handleFilterChange("muc_gia", "Dưới 2 triệu")
+                                }
                               >
                                 Dưới 2 triệu
                               </Link>
@@ -453,7 +541,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 2 triệu đến 5 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Từ 2 triệu đến 5 triệu")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "muc_gia",
+                                    "Từ 2 triệu đến 5 triệu"
+                                  )
+                                }
                               >
                                 Từ 2 triệu đến 5 triệu
                               </Link>
@@ -463,7 +556,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 5 triệu đến 10 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Từ 5 triệu đến 10 triệu")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "muc_gia",
+                                    "Từ 5 triệu đến 10 triệu"
+                                  )
+                                }
                               >
                                 Từ 5 triệu đến 10 triệu
                               </Link>
@@ -473,7 +571,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 10 triệu đến 20 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Từ 10 triệu đến 20 triệu")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "muc_gia",
+                                    "Từ 10 triệu đến 20 triệu"
+                                  )
+                                }
                               >
                                 Từ 10 triệu đến 20 triệu
                               </Link>
@@ -483,7 +586,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 20 triệu đến 30 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Từ 20 triệu đến 30 triệu")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "muc_gia",
+                                    "Từ 20 triệu đến 30 triệu"
+                                  )
+                                }
                               >
                                 Từ 20 triệu đến 30 triệu
                               </Link>
@@ -493,7 +601,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 30 triệu đến 50 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Từ 30 triệu đến 50 triệu")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "muc_gia",
+                                    "Từ 30 triệu đến 50 triệu"
+                                  )
+                                }
                               >
                                 Từ 30 triệu đến 50 triệu
                               </Link>
@@ -503,7 +616,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 50 triệu đến 100 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Từ 50 triệu đến 100 triệu")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "muc_gia",
+                                    "Từ 50 triệu đến 100 triệu"
+                                  )
+                                }
                               >
                                 Từ 50 triệu đến 100 triệu
                               </Link>
@@ -513,7 +631,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Trên 100 triệu"
-                                onClick={() => handleFilterChange("muc_gia", "Trên 100 triệu")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "muc_gia",
+                                    "Trên 100 triệu"
+                                  )
+                                }
                               >
                                 Trên 100 triệu
                               </Link>
@@ -523,7 +646,9 @@ export default function DanhMuc() {
                       </div>
 
                       {/* Khuyến mãi */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-discount"
@@ -535,13 +660,17 @@ export default function DanhMuc() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-discount"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link
                                 rel="nofollow"
                                 href="#"
                                 title="Giảm 10%"
-                                onClick={() => handleFilterChange("khuyenmai", "Giảm 10%")}
+                                onClick={() =>
+                                  handleFilterChange("khuyenmai", "Giảm 10%")
+                                }
                               >
                                 Giảm 10%
                               </Link>
@@ -551,7 +680,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Giảm 15%"
-                                onClick={() => handleFilterChange("khuyenmai", "Giảm 15%")}
+                                onClick={() =>
+                                  handleFilterChange("khuyenmai", "Giảm 15%")
+                                }
                               >
                                 Giảm 15%
                               </Link>
@@ -561,7 +692,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Giảm 20%"
-                                onClick={() => handleFilterChange("khuyenmai", "Giảm 20%")}
+                                onClick={() =>
+                                  handleFilterChange("khuyenmai", "Giảm 20%")
+                                }
                               >
                                 Giảm 20%
                               </Link>
@@ -571,7 +704,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Giảm 25%"
-                                onClick={() => handleFilterChange("khuyenmai", "Giảm 25%")}
+                                onClick={() =>
+                                  handleFilterChange("khuyenmai", "Giảm 25%")
+                                }
                               >
                                 Giảm 25%
                               </Link>
@@ -581,7 +716,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Giảm 30%"
-                                onClick={() => handleFilterChange("khuyenmai", "Giảm 30%")}
+                                onClick={() =>
+                                  handleFilterChange("khuyenmai", "Giảm 30%")
+                                }
                               >
                                 Giảm 30%
                               </Link>
@@ -591,7 +728,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Giảm 40%"
-                                onClick={() => handleFilterChange("khuyenmai", "Giảm 40%")}
+                                onClick={() =>
+                                  handleFilterChange("khuyenmai", "Giảm 40%")
+                                }
                               >
                                 Giảm 40%
                               </Link>
@@ -601,7 +740,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Giảm 50%"
-                                onClick={() => handleFilterChange("khuyenmai", "Giảm 50%")}
+                                onClick={() =>
+                                  handleFilterChange("khuyenmai", "Giảm 50%")
+                                }
                               >
                                 Giảm 50%
                               </Link>
@@ -611,7 +752,9 @@ export default function DanhMuc() {
                       </div>
 
                       {/* Loại máy */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-loai-may"
@@ -623,13 +766,20 @@ export default function DanhMuc() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-loai-may"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link
                                 rel="nofollow"
                                 href="#"
                                 title="Automatic (Máy cơ tự động)"
-                                onClick={() => handleFilterChange("loai_may", "Automatic (Máy cơ tự động)")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "loai_may",
+                                    "Automatic (Máy cơ tự động)"
+                                  )
+                                }
                               >
                                 Automatic (Máy cơ tự động)
                               </Link>
@@ -639,7 +789,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Quartz (Máy pin - điện tử)"
-                                onClick={() => handleFilterChange("loai_may", "Quartz (Máy pin - điện tử)")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "loai_may",
+                                    "Quartz (Máy pin - điện tử)"
+                                  )
+                                }
                               >
                                 Quartz (Máy pin - điện tử)
                               </Link>
@@ -649,7 +804,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Eco-Drive (Năng lượng ánh sáng)"
-                                onClick={() => handleFilterChange("loai_may", "Eco-Drive (Năng lượng ánh sáng)")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "loai_may",
+                                    "Eco-Drive (Năng lượng ánh sáng)"
+                                  )
+                                }
                               >
                                 Eco-Drive (Năng lượng ánh sáng)
                               </Link>
@@ -660,7 +820,10 @@ export default function DanhMuc() {
                                 href="#"
                                 title="Quartz Chronograph (Máy pin bấm giờ thể thao)"
                                 onClick={() =>
-                                  handleFilterChange("loai_may", "Quartz Chronograph (Máy pin bấm giờ thể thao)")
+                                  handleFilterChange(
+                                    "loai_may",
+                                    "Quartz Chronograph (Máy pin bấm giờ thể thao)"
+                                  )
                                 }
                               >
                                 Quartz Chronograph (Máy pin bấm giờ thể thao)
@@ -672,10 +835,14 @@ export default function DanhMuc() {
                                 href="#"
                                 title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)"
                                 onClick={() =>
-                                  handleFilterChange("loai_may", "Automatic Chronometer (Máy cơ tự động chuẩn COSC)")
+                                  handleFilterChange(
+                                    "loai_may",
+                                    "Automatic Chronometer (Máy cơ tự động chuẩn COSC)"
+                                  )
                                 }
                               >
-                                Automatic Chronometer (Máy cơ tự động chuẩn COSC)
+                                Automatic Chronometer (Máy cơ tự động chuẩn
+                                COSC)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
@@ -684,7 +851,10 @@ export default function DanhMuc() {
                                 href="#"
                                 title="Quartz Chronometer (Máy pin chuẩn COSC)"
                                 onClick={() =>
-                                  handleFilterChange("loai_may", "Quartz Chronometer (Máy pin chuẩn COSC)")
+                                  handleFilterChange(
+                                    "loai_may",
+                                    "Quartz Chronometer (Máy pin chuẩn COSC)"
+                                  )
                                 }
                               >
                                 Quartz Chronometer (Máy pin chuẩn COSC)
@@ -704,7 +874,8 @@ export default function DanhMuc() {
                                 href="#"
                                 title="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)"
                               >
-                                Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)
+                                Automatic Chronograph (Máy cơ tự động bấm giờ
+                                thể thao)
                               </Link>
                             </div>
                             <div className={`${styles.cls} ${styles.item}`}>
@@ -712,7 +883,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Quartz Solar (Năng lượng ánh sáng)"
-                                onClick={() => handleFilterChange("loai_may", "Quartz Solar (Năng lượng ánh sáng)")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "loai_may",
+                                    "Quartz Solar (Năng lượng ánh sáng)"
+                                  )
+                                }
                               >
                                 Quartz Solar (Năng lượng ánh sáng)
                               </Link>
@@ -723,10 +899,14 @@ export default function DanhMuc() {
                                 href="#"
                                 title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )"
                                 onClick={() =>
-                                  handleFilterChange("loai_may", "Đồng hồ cơ lên giây cót bằng tay ( Manual winding )")
+                                  handleFilterChange(
+                                    "loai_may",
+                                    "Đồng hồ cơ lên giây cót bằng tay ( Manual winding )"
+                                  )
                                 }
                               >
-                                Đồng hồ cơ lên giây cót bằng tay ( Manual winding )
+                                Đồng hồ cơ lên giây cót bằng tay ( Manual
+                                winding )
                               </Link>
                             </div>
                           </div>
@@ -734,7 +914,9 @@ export default function DanhMuc() {
                       </div>
 
                       {/*Đường kính */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-duong-kinh"
@@ -746,13 +928,17 @@ export default function DanhMuc() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-duong-kinh"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link
                                 rel="nofollow"
                                 href="#"
                                 title="Dưới 25mm"
-                                onClick={() => handleFilterChange("duong_kinh", "Dưới 25mm")}
+                                onClick={() =>
+                                  handleFilterChange("duong_kinh", "Dưới 25mm")
+                                }
                               >
                                 Dưới 25mm
                               </Link>
@@ -762,7 +948,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="25mm đến 30mm"
-                                onClick={() => handleFilterChange("duong_kinh", "25mm đến 30mm")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "duong_kinh",
+                                    "25mm đến 30mm"
+                                  )
+                                }
                               >
                                 25mm đến 30mm
                               </Link>
@@ -772,7 +963,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="30mm đến 35mm"
-                                onClick={() => handleFilterChange("duong_kinh", "30mm đến 35mm")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "duong_kinh",
+                                    "30mm đến 35mm"
+                                  )
+                                }
                               >
                                 30mm đến 35mm
                               </Link>
@@ -782,7 +978,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="35mm đến 38mm"
-                                onClick={() => handleFilterChange("duong_kinh", "35mm đến 38mm")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "duong_kinh",
+                                    "35mm đến 38mm"
+                                  )
+                                }
                               >
                                 35mm đến 38mm
                               </Link>
@@ -792,7 +993,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="38mm đến 40mm"
-                                onClick={() => handleFilterChange("duong_kinh", "38mm đến 40mm")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "duong_kinh",
+                                    "38mm đến 40mm"
+                                  )
+                                }
                               >
                                 38mm đến 40mm
                               </Link>
@@ -802,7 +1008,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="40mm đến 42mm"
-                                onClick={() => handleFilterChange("duong_kinh", "40mm đến 42mm")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "duong_kinh",
+                                    "40mm đến 42mm"
+                                  )
+                                }
                               >
                                 40mm đến 42mm
                               </Link>
@@ -812,7 +1023,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="42mm đến 45mm"
-                                onClick={() => handleFilterChange("duong_kinh", "42mm đến 45mm")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "duong_kinh",
+                                    "42mm đến 45mm"
+                                  )
+                                }
                               >
                                 42mm đến 45mm
                               </Link>
@@ -822,7 +1038,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Từ 45mm trở lên"
-                                onClick={() => handleFilterChange("duong_kinh", "Từ 45mm trở lên")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "duong_kinh",
+                                    "Từ 45mm trở lên"
+                                  )
+                                }
                               >
                                 Từ 45mm trở lên
                               </Link>
@@ -832,7 +1053,9 @@ export default function DanhMuc() {
                       </div>
 
                       {/*Chất liệu dây  */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-chat-lieu-day"
@@ -844,13 +1067,17 @@ export default function DanhMuc() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-chat-lieu-day"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link
                                 rel="nofollow"
                                 href="#"
                                 title="Dây da"
-                                onClick={() => handleFilterChange("chat_lieu_day", "Dây da")}
+                                onClick={() =>
+                                  handleFilterChange("chat_lieu_day", "Dây da")
+                                }
                               >
                                 Dây da
                               </Link>
@@ -860,7 +1087,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Thép không gỉ 316L"
-                                onClick={() => handleFilterChange("chat_lieu_day", "Thép không gỉ 316L")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_day",
+                                    "Thép không gỉ 316L"
+                                  )
+                                }
                               >
                                 Thép không gỉ 316L
                               </Link>
@@ -871,7 +1103,10 @@ export default function DanhMuc() {
                                 href="#"
                                 title="Thép không gỉ 316L mạ vàng công nghệ PVD"
                                 onClick={() =>
-                                  handleFilterChange("chat_lieu_day", "Thép không gỉ 316L mạ vàng công nghệ PVD")
+                                  handleFilterChange(
+                                    "chat_lieu_day",
+                                    "Thép không gỉ 316L mạ vàng công nghệ PVD"
+                                  )
                                 }
                               >
                                 Thép không gỉ 316L mạ vàng công nghệ PVD
@@ -882,7 +1117,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Thép không gỉ 316L dạng lưới"
-                                onClick={() => handleFilterChange("chat_lieu_day", "Thép không gỉ 316L dạng lưới")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_day",
+                                    "Thép không gỉ 316L dạng lưới"
+                                  )
+                                }
                               >
                                 Thép không gỉ 316L dạng lưới
                               </Link>
@@ -892,7 +1132,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Thép không gỉ 316L dạng lắc"
-                                onClick={() => handleFilterChange("chat_lieu_day", " Thép không gỉ 316L dạng lắc")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_day",
+                                    " Thép không gỉ 316L dạng lắc"
+                                  )
+                                }
                               >
                                 Thép không gỉ 316L dạng lắc
                               </Link>
@@ -902,7 +1147,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Dây vải"
-                                onClick={() => handleFilterChange("chat_lieu_day", " Dây vải")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_day",
+                                    " Dây vải"
+                                  )
+                                }
                               >
                                 Dây vải
                               </Link>
@@ -912,7 +1162,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Thép không gỉ 316L/ Vàng 18K"
-                                onClick={() => handleFilterChange("chat_lieu_day", " Thép không gỉ 316L/ Vàng 18K")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_day",
+                                    " Thép không gỉ 316L/ Vàng 18K"
+                                  )
+                                }
                               >
                                 Thép không gỉ 316L/ Vàng 18K
                               </Link>
@@ -922,7 +1177,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Thép không gỉ 316L/ Ceramic"
-                                onClick={() => handleFilterChange("chat_lieu_day", " Thép không gỉ 316L/ Ceramic")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_day",
+                                    " Thép không gỉ 316L/ Ceramic"
+                                  )
+                                }
                               >
                                 Thép không gỉ 316L/ Ceramic
                               </Link>
@@ -932,7 +1192,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Thép không gỉ mạ công nghệ PVD"
-                                onClick={() => handleFilterChange("chat_lieu_day", "Thép không gỉ mạ công nghệ PVD")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_day",
+                                    "Thép không gỉ mạ công nghệ PVD"
+                                  )
+                                }
                               >
                                 Thép không gỉ mạ công nghệ PVD
                               </Link>
@@ -942,7 +1207,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Dây cao su"
-                                onClick={() => handleFilterChange("chat_lieu_day", " Dây cao su")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_day",
+                                    " Dây cao su"
+                                  )
+                                }
                               >
                                 Dây cao su
                               </Link>
@@ -952,7 +1222,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Dây dù"
-                                onClick={() => handleFilterChange("chat_lieu_day", "  Dây dù")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_day",
+                                    "  Dây dù"
+                                  )
+                                }
                               >
                                 Dây dù
                               </Link>
@@ -962,7 +1237,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Titanium"
-                                onClick={() => handleFilterChange("chat_lieu_day", " Titanium")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_day",
+                                    " Titanium"
+                                  )
+                                }
                               >
                                 Titanium
                               </Link>
@@ -972,7 +1252,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Titanium mạ vàng công nghệ PVD"
-                                onClick={() => handleFilterChange("chat_lieu_day", "itanium mạ vàng công nghệ PVD")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_day",
+                                    "itanium mạ vàng công nghệ PVD"
+                                  )
+                                }
                               >
                                 Titanium mạ vàng công nghệ PVD
                               </Link>
@@ -982,7 +1267,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Nhựa"
-                                onClick={() => handleFilterChange("chat_lieu_day", "  Nhựa")}
+                                onClick={() =>
+                                  handleFilterChange("chat_lieu_day", "  Nhựa")
+                                }
                               >
                                 Nhựa
                               </Link>
@@ -992,7 +1279,9 @@ export default function DanhMuc() {
                       </div>
 
                       {/*Chất liệu vỏ */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-chat-lieu-vo"
@@ -1004,13 +1293,20 @@ export default function DanhMuc() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-chat-lieu-vo"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link
                                 rel="nofollow"
                                 href="#"
                                 title="Thép không gỉ 316L"
-                                onClick={() => handleFilterChange("chat_lieu_vo", "Thép không gỉ 316L")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_vo",
+                                    "Thép không gỉ 316L"
+                                  )
+                                }
                               >
                                 Thép không gỉ 316L
                               </Link>
@@ -1021,7 +1317,10 @@ export default function DanhMuc() {
                                 href="#"
                                 title="Thép không gỉ mạ vàng công nghệ PVD"
                                 onClick={() =>
-                                  handleFilterChange("chat_lieu_vo", "Thép không gỉ mạ vàng công nghệ PVD")
+                                  handleFilterChange(
+                                    "chat_lieu_vo",
+                                    "Thép không gỉ mạ vàng công nghệ PVD"
+                                  )
                                 }
                               >
                                 Thép không gỉ mạ vàng công nghệ PVD
@@ -1032,7 +1331,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Vàng 18K"
-                                onClick={() => handleFilterChange("chat_lieu_vo", "Vàng 18K")}
+                                onClick={() =>
+                                  handleFilterChange("chat_lieu_vo", "Vàng 18K")
+                                }
                               >
                                 Vàng 18K
                               </Link>
@@ -1042,7 +1343,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Thép không gỉ 316L/ Vàng 18K"
-                                onClick={() => handleFilterChange("chat_lieu_vo", "Thép không gỉ 316L/ Vàng 18K")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_vo",
+                                    "Thép không gỉ 316L/ Vàng 18K"
+                                  )
+                                }
                               >
                                 Thép không gỉ 316L/ Vàng 18K
                               </Link>
@@ -1052,7 +1358,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Titanium"
-                                onClick={() => handleFilterChange("chat_lieu_vo", "Titanium")}
+                                onClick={() =>
+                                  handleFilterChange("chat_lieu_vo", "Titanium")
+                                }
                               >
                                 Titanium
                               </Link>
@@ -1062,7 +1370,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Titanium mạ công nghệ PVD"
-                                onClick={() => handleFilterChange("chat_lieu_vo", "Titanium mạ công nghệ PVD")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_vo",
+                                    "Titanium mạ công nghệ PVD"
+                                  )
+                                }
                               >
                                 Titanium mạ công nghệ PVD
                               </Link>
@@ -1072,7 +1385,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Ceramic"
-                                onClick={() => handleFilterChange("chat_lieu_vo", "Ceramic")}
+                                onClick={() =>
+                                  handleFilterChange("chat_lieu_vo", "Ceramic")
+                                }
                               >
                                 Ceramic
                               </Link>
@@ -1082,7 +1397,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Thép không gỉ 316L/ Ceramic"
-                                onClick={() => handleFilterChange("chat_lieu_vo", "Thép không gỉ 316L/ Ceramic")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_vo",
+                                    "Thép không gỉ 316L/ Ceramic"
+                                  )
+                                }
                               >
                                 Thép không gỉ 316L/ Ceramic
                               </Link>
@@ -1092,7 +1412,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Thép không gỉ mạ công nghệ PVD"
-                                onClick={() => handleFilterChange("chat_lieu_vo", "Thép không gỉ mạ công nghệ PVD")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_vo",
+                                    "Thép không gỉ mạ công nghệ PVD"
+                                  )
+                                }
                               >
                                 Thép không gỉ mạ công nghệ PVD
                               </Link>
@@ -1102,7 +1427,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Nhựa"
-                                onClick={() => handleFilterChange("chat_lieu_vo", "Nhựa")}
+                                onClick={() =>
+                                  handleFilterChange("chat_lieu_vo", "Nhựa")
+                                }
                               >
                                 Nhựa
                               </Link>
@@ -1112,7 +1439,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Titanium/ Vàng 18K"
-                                onClick={() => handleFilterChange("chat_lieu_vo", "Titanium/ Vàng 18K")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "chat_lieu_vo",
+                                    "Titanium/ Vàng 18K"
+                                  )
+                                }
                               >
                                 Titanium/ Vàng 18K
                               </Link>
@@ -1122,7 +1454,9 @@ export default function DanhMuc() {
                       </div>
 
                       {/* Mặt kính */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-mat-kinh"
@@ -1134,13 +1468,17 @@ export default function DanhMuc() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-mat-kinh"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link
                                 rel="nofollow"
                                 href="#"
                                 title="Sapphire"
-                                onClick={() => handleFilterChange("mat_kinh", "Sapphire")}
+                                onClick={() =>
+                                  handleFilterChange("mat_kinh", "Sapphire")
+                                }
                               >
                                 Sapphire
                               </Link>
@@ -1150,7 +1488,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Mặt kính cứng"
-                                onClick={() => handleFilterChange("mat_kinh", "Mặt kính cứng")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "mat_kinh",
+                                    "Mặt kính cứng"
+                                  )
+                                }
                               >
                                 Mặt kính cứng
                               </Link>
@@ -1160,7 +1503,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Hardlex Crystal"
-                                onClick={() => handleFilterChange("mat_kinh", "Hardlex Crystal")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "mat_kinh",
+                                    "Hardlex Crystal"
+                                  )
+                                }
                               >
                                 Hardlex Crystal
                               </Link>
@@ -1170,7 +1518,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Mica"
-                                onClick={() => handleFilterChange("mat_kinh", "Mica")}
+                                onClick={() =>
+                                  handleFilterChange("mat_kinh", "Mica")
+                                }
                               >
                                 Mica
                               </Link>
@@ -1180,7 +1530,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Kinh Nhựa"
-                                onClick={() => handleFilterChange("mat_kinh", "Kinh Nhựa")}
+                                onClick={() =>
+                                  handleFilterChange("mat_kinh", "Kinh Nhựa")
+                                }
                               >
                                 Kinh Nhựa
                               </Link>
@@ -1190,7 +1542,9 @@ export default function DanhMuc() {
                       </div>
 
                       {/*Màu mặt */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-mau-mat"
@@ -1202,13 +1556,17 @@ export default function DanhMuc() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-2-column"]} ${styles["filter-4-mau-mat"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link
                                 rel="nofollow"
                                 href="#"
                                 title="Trắng"
-                                onClick={() => handleFilterChange("mau_mat", "Trắng")}
+                                onClick={() =>
+                                  handleFilterChange("mau_mat", "Trắng")
+                                }
                               >
                                 Trắng
                               </Link>
@@ -1218,7 +1576,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Hồng"
-                                onClick={() => handleFilterChange("mau_mat", "Hồng")}
+                                onClick={() =>
+                                  handleFilterChange("mau_mat", "Hồng")
+                                }
                               >
                                 Hồng
                               </Link>
@@ -1228,7 +1588,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Xám"
-                                onClick={() => handleFilterChange("mau_mat", "Xám")}
+                                onClick={() =>
+                                  handleFilterChange("mau_mat", "Xám")
+                                }
                               >
                                 Xám
                               </Link>
@@ -1238,7 +1600,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Đen"
-                                onClick={() => handleFilterChange("mau_mat", "Đen")}
+                                onClick={() =>
+                                  handleFilterChange("mau_mat", "Đen")
+                                }
                               >
                                 Đen
                               </Link>
@@ -1248,7 +1612,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Xanh lam"
-                                onClick={() => handleFilterChange("mau_mat", "Xanh lam")}
+                                onClick={() =>
+                                  handleFilterChange("mau_mat", "Xanh lam")
+                                }
                               >
                                 Xanh lam
                               </Link>
@@ -1258,7 +1624,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Vàng"
-                                onClick={() => handleFilterChange("mau_mat", "Vàng")}
+                                onClick={() =>
+                                  handleFilterChange("mau_mat", "Vàng")
+                                }
                               >
                                 Vàng
                               </Link>
@@ -1268,7 +1636,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Khảm trai"
-                                onClick={() => handleFilterChange("mau_mat", "Khảm trai")}
+                                onClick={() =>
+                                  handleFilterChange("mau_mat", "Khảm trai")
+                                }
                               >
                                 Khảm trai
                               </Link>
@@ -1278,7 +1648,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Đỏ"
-                                onClick={() => handleFilterChange("mau_mat", "Đỏ")}
+                                onClick={() =>
+                                  handleFilterChange("mau_mat", "Đỏ")
+                                }
                               >
                                 Đỏ
                               </Link>
@@ -1288,7 +1660,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Da Cam"
-                                onClick={() => handleFilterChange("mau_mat", "Da Cam")}
+                                onClick={() =>
+                                  handleFilterChange("mau_mat", "Da Cam")
+                                }
                               >
                                 Da Cam
                               </Link>
@@ -1298,7 +1672,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Xanh Lá"
-                                onClick={() => handleFilterChange("mau_mat", "Xanh Lá")}
+                                onClick={() =>
+                                  handleFilterChange("mau_mat", "Xanh Lá")
+                                }
                               >
                                 Xanh Lá
                               </Link>
@@ -1308,7 +1684,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Nâu"
-                                onClick={() => handleFilterChange("mau_mat", "Nâu")}
+                                onClick={() =>
+                                  handleFilterChange("mau_mat", "Nâu")
+                                }
                               >
                                 Nâu
                               </Link>
@@ -1318,7 +1696,9 @@ export default function DanhMuc() {
                       </div>
 
                       {/*Phong cách */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-phong-cach"
@@ -1330,13 +1710,17 @@ export default function DanhMuc() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-phong-cach"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link
                                 rel="nofollow"
                                 href="#"
                                 title="Sang trọng"
-                                onClick={() => handleFilterChange("phong_cach", "Sang trọng")}
+                                onClick={() =>
+                                  handleFilterChange("phong_cach", "Sang trọng")
+                                }
                               >
                                 Sang trọng
                               </Link>
@@ -1346,7 +1730,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Thể thao"
-                                onClick={() => handleFilterChange("phong_cach", "Thể thao")}
+                                onClick={() =>
+                                  handleFilterChange("phong_cach", "Thể thao")
+                                }
                               >
                                 Thể thao
                               </Link>
@@ -1356,7 +1742,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Thể thao sang trọng"
-                                onClick={() => handleFilterChange("phong_cach", "Thể thao sang trọng")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "phong_cach",
+                                    "Thể thao sang trọng"
+                                  )
+                                }
                               >
                                 Thể thao sang trọng
                               </Link>
@@ -1366,7 +1757,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Quân đội"
-                                onClick={() => handleFilterChange("phong_cach", "Quân đội")}
+                                onClick={() =>
+                                  handleFilterChange("phong_cach", "Quân đội")
+                                }
                               >
                                 Quân đội
                               </Link>
@@ -1376,7 +1769,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Thời trang"
-                                onClick={() => handleFilterChange("phong_cach", "Thời trang")}
+                                onClick={() =>
+                                  handleFilterChange("phong_cach", "Thời trang")
+                                }
                               >
                                 Thời trang
                               </Link>
@@ -1386,7 +1781,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Hiện đại"
-                                onClick={() => handleFilterChange("phong_cach", "Hiện đại")}
+                                onClick={() =>
+                                  handleFilterChange("phong_cach", "Hiện đại")
+                                }
                               >
                                 Hiện đại
                               </Link>
@@ -1396,7 +1793,9 @@ export default function DanhMuc() {
                       </div>
 
                       {/*Kiểu dáng */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-kieu-dang"
@@ -1408,13 +1807,17 @@ export default function DanhMuc() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-1-column"]} ${styles["filter-4-kieu-dang"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link
                                 rel="nofollow"
                                 href="#"
                                 title="Mặt vuông"
-                                onClick={() => handleFilterChange("kieu_dang", "Mặt vuông")}
+                                onClick={() =>
+                                  handleFilterChange("kieu_dang", "Mặt vuông")
+                                }
                               >
                                 Mặt vuông
                               </Link>
@@ -1424,7 +1827,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Mặt tròn"
-                                onClick={() => handleFilterChange("kieu_dang", "Mặt tròn")}
+                                onClick={() =>
+                                  handleFilterChange("kieu_dang", "Mặt tròn")
+                                }
                               >
                                 Mặt tròn
                               </Link>
@@ -1434,7 +1839,12 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Mặt chữ nhật"
-                                onClick={() => handleFilterChange("kieu_dang", "Mặt chữ nhật")}
+                                onClick={() =>
+                                  handleFilterChange(
+                                    "kieu_dang",
+                                    "Mặt chữ nhật"
+                                  )
+                                }
                               >
                                 Mặt chữ nhật
                               </Link>
@@ -1444,7 +1854,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Mặt Oval"
-                                onClick={() => handleFilterChange("kieu_dang", "Mặt Oval")}
+                                onClick={() =>
+                                  handleFilterChange("kieu_dang", "Mặt Oval")
+                                }
                               >
                                 Mặt Oval
                               </Link>
@@ -1454,7 +1866,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Khác"
-                                onClick={() => handleFilterChange("kieu_dang", "Khác")}
+                                onClick={() =>
+                                  handleFilterChange("kieu_dang", "Khác")
+                                }
                               >
                                 Khác
                               </Link>
@@ -1464,7 +1878,9 @@ export default function DanhMuc() {
                       </div>
 
                       {/*Xuất xứ thương hiệu */}
-                      <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                      <div
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                      >
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                           data-id="id-field-xuat-xu-thuong-hieu"
@@ -1476,13 +1892,17 @@ export default function DanhMuc() {
                           className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]} ${styles["filter-4-xuat-xu-thuong-hieu"]}`}
                         >
                           <span className={styles.close}>x</span>
-                          <div className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
+                          <div
+                            className={`${styles["filters-in-field-inner"]} ${styles.cls}`}
+                          >
                             <div className={`${styles.cls} ${styles.item}`}>
                               <Link
                                 rel="nofollow"
                                 href="#"
                                 title="Nhật Bản"
-                                onClick={() => handleFilterChange("xuat_xu", "Nhật Bản")}
+                                onClick={() =>
+                                  handleFilterChange("xuat_xu", "Nhật Bản")
+                                }
                               >
                                 Nhật Bản
                               </Link>
@@ -1492,7 +1912,9 @@ export default function DanhMuc() {
                                 rel="nofollow"
                                 href="#"
                                 title="Thụy Sỹ"
-                                onClick={() => handleFilterChange("xuat_xu", "Thụy Sỹ")}
+                                onClick={() =>
+                                  handleFilterChange("xuat_xu", "Thụy Sỹ")
+                                }
                               >
                                 Thụy Sỹ
                               </Link>
@@ -1515,7 +1937,7 @@ export default function DanhMuc() {
                               {" "}
                               {categoryName === "Đồng hồ"
                                 ? categoryName
-                                : `Đồng hồ ${categoryName}`}
+                                : `Đồng hồ ${categoryName} ${danh_muc}`}
                             </h1>
                           </div>
                         </div>
@@ -1523,7 +1945,11 @@ export default function DanhMuc() {
                       </div>
                     </div>
 
-                    <select className={styles["order-select"]} name="order-select" onChange={handleSortChange}>
+                    <select
+                      className={styles["order-select"]}
+                      name="order-select"
+                      onChange={handleSortChange}
+                    >
                       <option value="">Sắp xếp theo</option>
                       <option value="asc">Giá từ thấp tới cao</option>
                       <option value="desc">Giá từ cao tới thấp</option>
@@ -1555,7 +1981,10 @@ export default function DanhMuc() {
                           const roundDiscount = (discountPercentage) => {
                             const discountLevels = [10, 15, 20, 25, 30, 40, 50];
                             return discountLevels.reduce((prev, curr) =>
-                              Math.abs(curr - discountPercentage) < Math.abs(prev - discountPercentage) ? curr : prev
+                              Math.abs(curr - discountPercentage) <
+                              Math.abs(prev - discountPercentage)
+                                ? curr
+                                : prev
                             );
                           };
                           return (
@@ -1704,13 +2133,35 @@ export default function DanhMuc() {
                 <div className={styles.evaluateCat}>
                   <div className={`${styles.ratingArea} ${styles.cls}`}>
                     <span id="ratings">
-                      <i className={` ${styles.starOn}`} id="rate_1" value="1"></i>
-                      <i className={` ${styles.starOn}`} id="rate_2" value="2"></i>
-                      <i className={` ${styles.starOn}`} id="rate_3" value="3"></i>
-                      <i className={` ${styles.starOff}`} id="rate_4" value="4"></i>
-                      <i className={` ${styles.starOff}`} id="rate_5" value="5"></i>
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_1"
+                        value="1"
+                      ></i>
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_2"
+                        value="2"
+                      ></i>
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_3"
+                        value="3"
+                      ></i>
+                      <i
+                        className={` ${styles.starOff}`}
+                        id="rate_4"
+                        value="4"
+                      ></i>
+                      <i
+                        className={` ${styles.starOff}`}
+                        id="rate_5"
+                        value="5"
+                      ></i>
                     </span>
-                    <span className={styles.ratingNote}>Nhấn vào đây để đánh giá</span>
+                    <span className={styles.ratingNote}>
+                      Nhấn vào đây để đánh giá
+                    </span>
                   </div>
                 </div>
                 <div className={styles.clear}></div>

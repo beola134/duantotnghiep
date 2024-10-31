@@ -499,3 +499,100 @@
   padding: 10px 5px;
   font-size: 16px;
 }
+/* bộ lọc sản phẩm */
+
+.choosedfilter {
+  margin-bottom: 20px;
+}
+.choosedfilter a {
+  background: #e88f38;
+  color: #fff !important;
+  margin-right: 2px;
+  padding: 3px 24px 3px 9px;
+  display: inline-block;
+  position: relative;
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+.choosedfilter .reset {
+  background: #ec0202;
+}
+.choosedfilter a::after {
+  content: "X";
+  position: absolute;
+  top: 3px;
+  right: 2px;
+  width: 15px;
+  height: 13px;
+  color: #fff;
+  z-index: 1;
+  font-size: 12px;
+}
+/* ần thông tin khi hover */
+.block-products-filter .field-item .filters-in-field {
+  display: none;
+}
+.block-products-filter {
+  border-top: 1px solid #e5e5e5;
+  margin-top: 15px;
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 15px;
+}
+
+.block-products-filter .block-product-filter {
+  display: flex;
+}
+
+.block-products-filter .field-item {
+  float: left;
+  margin-right: 9px;
+  position: relative;
+  padding-right: 9px;
+  padding-top: 13px;
+  padding-bottom: 10px;
+}
+.block-products-filter .field-item {
+  flex: 1;
+}
+
+.block-products-filter .field-item .field-name {
+  cursor: pointer;
+  font-weight: normal;
+  text-transform: uppercase;
+  font-size: 12px;
+  transition: 0.3s;
+}
+.block-products-filter .field-label a {
+  margin: 6px 0;
+  line-height: 24px;
+  display: block;
+}
+.block-products-filter .field-item:after {
+  border-left: 2px solid transparent;
+  border-right: 2px solid transparent;
+  border-top: 5px solid #a0a0a0;
+  display: inline-block;
+  width: 0;
+  height: 0;
+  position: absolute;
+  right: 4px;
+  top: 18px;
+  vertical-align: top;
+  content: "";
+}
+.block-products-filter .field-item:nth-child(7),
+.block-products-filter .field-item:nth-child(8),
+.block-products-filter .field-item:nth-child(9),
+.block-products-filter .field-item:last-child {
+  margin-right: 0px;
+}
+.block-products-filter .field-item:nth-child(7) .filters-in-field,
+.block-products-filter .field-item:nth-child(8) .filters-in-field,
+.block-products-filter .field-item:nth-child(9) .filters-in-field,
+.block-products-filter .field-item:last-child .filters-in-field {
+  left: inherit;
+  right: 0px;
+}
+.block-products-filter .field-item:hover .filters-in-field {
+  display: block;
+}
