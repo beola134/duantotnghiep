@@ -8,11 +8,11 @@ export default function DonghoDoi() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [categoryName, setCategoryName] = useState("Đồng hồ đôi"); // Tiêu đề danh mục
-  const [selectedFilter, setSelectedFilter] = useState([]); // Lưu trữ các bộ lọc đã chọn
-  const [sortOption, setSortOption] = useState(""); // Tuỳ chọn sắp xếp (tăng/giảm dần)
-  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
+  const [categoryName, setCategoryName] = useState("Đồng hồ đôi");
+  const [selectedFilter, setSelectedFilter] = useState([]);
+  const [sortOption, setSortOption] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const [filter, setFilter] = useState({
     gioi_tinh: "Đồng Hồ Đôi",
@@ -29,7 +29,7 @@ export default function DonghoDoi() {
     kieu_dang: "",
     xuat_xu: "",
   });
-  const fetchProducts = async () => {
+  const laySanPham = async () => {
     setLoading(true);
     try {
       const queryParams = new URLSearchParams({ ...filter, page: currentPage });
@@ -40,8 +40,8 @@ export default function DonghoDoi() {
         throw new Error("Lỗi không thể tải dữ liệu");
       }
       const data = await response.json();
-      setProducts(data.products); // Cập nhật danh sách sản phẩm
-      setTotalPages(data.totalPages); // Cập nhật tổng số trang
+      setProducts(data.products);
+      setTotalPages(data.totalPages);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -49,22 +49,18 @@ export default function DonghoDoi() {
     }
   };
 
-  // 2. Gọi lại API khi bộ lọc hoặc trang hiện tại thay đổi
   useEffect(() => {
-    fetchProducts();
+    laySanPham();
   }, [filter, currentPage]);
 
-  // 3. Hàm chuyển trang
-  const handlePageChange = (page) => {
+  const thayDoiTrang = (page) => {
     setCurrentPage(page);
-    fetchProducts();
+    laySanPham();
   };
-  // 4. Hàm cập nhật bộ lọc khi chọn mới
-  const handleFilterChange = (filterType, value) => {
+  const capNhatBoLoc = (filterType, value) => {
     const newFilters = [...selectedFilter];
     const newFilter = { ...filter, [filterType]: value };
 
-    // Cập nhật hoặc thêm bộ lọc vào danh sách đã chọn
     const filterIndex = newFilters.findIndex((filter) =>
       filter.startsWith(`${filterType}=`)
     );
@@ -73,56 +69,52 @@ export default function DonghoDoi() {
     } else {
       newFilters.push(`${filterType}=${value}`);
     }
-    // Cập nhật trạng thái bộ lọc
+
     setSelectedFilter(newFilters);
     setFilter(newFilter);
 
-    // Đặt lại danh mục khi chọn một danh mục khác
     if (filterType === "danh_muc") {
       setCategoryName(value);
     }
   };
-  // 5. Hàm xóa tất cả bộ lọc và đặt lại về trạng thái ban đầu
-  const handleClearFilters = () => {
+
+  const xoaTatCaBoLoc = () => {
     setSelectedFilter([]);
     setFilter({
       gioi_tinh: "Đồng Hồ Đôi",
     });
     setCurrentPage(1);
     setCategoryName("Đồng hồ đôi");
-    fetchProducts();
+    laySanPham();
   };
-  // 6. Hàm xóa một bộ lọc cụ thể
-  const handleRemoveFilter = (filterToRemove) => {
+
+  const xoaBoLoc = (filterToRemove) => {
     // Loại bỏ bộ lọc cụ thể khỏi selectedFilter
     const newFilters = selectedFilter.filter(
       (filter) => filter !== filterToRemove
     );
 
-    // Cập nhật filter dựa trên các bộ lọc còn lại
     const [filterType] = filterToRemove.split("=");
-    const updatedFilter = { ...filter, [filterType]: "" }; // Xóa giá trị của bộ lọc bị xoá
+    const updatedFilter = { ...filter, [filterType]: "" };
 
-    // Nếu xoá danh mục (brand), đặt lại tiêu đề về đồng hồ nam
     if (filterType === "danh_muc") {
       setCategoryName("Đồng hồ đôi");
     }
     setSelectedFilter(newFilters);
     setFilter(updatedFilter);
-    fetchProducts();
+    laySanPham();
   };
 
-  // 7. Hàm sắp xếp sản phẩm theo giá
-  const sortProducts = (products) => {
+  const sapXepSanPham = (products) => {
     if (sortOption === "asc") {
-      return [...products].sort((a, b) => a.gia_giam - b.gia_giam); // Giá từ thấp đến cao
+      return [...products].sort((a, b) => a.gia_giam - b.gia_giam);
     } else if (sortOption === "desc") {
-      return [...products].sort((a, b) => b.gia_giam - a.gia_giam); // Giá từ cao đến thấp
+      return [...products].sort((a, b) => b.gia_giam - a.gia_giam);
     }
-    return products; // Trả về danh sách gốc nếu không sắp xếp
+    return products;
   };
-  // 8. Cập nhật tuỳ chọn sắp xếp
-  const handleSortChange = (e) => {
+
+  const capNhatSapXep = (e) => {
     setSortOption(e.target.value);
   };
   if (loading) {
@@ -131,7 +123,7 @@ export default function DonghoDoi() {
   if (error) {
     return <p>Error:{error}</p>;
   }
-  const displayedProducts = sortProducts(products);
+  const sanPhamHienThi = sapXepSanPham(products);
   return (
     <>
       <div className={styles["container-header"]}>
@@ -176,16 +168,16 @@ export default function DonghoDoi() {
                         key={index}
                         rel="nofollow"
                         href="#"
-                        onClick={() => handleRemoveFilter(filter)}
+                        onClick={() => xoaBoLoc(filter)}
                       >
-                        {filter.split("=")[1]} {/*Hiển thị các bộ lọc đã chọn*/}
+                        {filter.split("=")[1]}
                       </Link>
                     ))}
                     <Link
                       rel="nofollow"
                       className={styles.reset}
                       href="#"
-                      onClick={handleClearFilters}
+                      onClick={xoaTatCaBoLoc}
                     >
                       Xoá hết
                     </Link>
@@ -195,7 +187,6 @@ export default function DonghoDoi() {
                 <div className={styles["products-cat"]}>
                   <div className={styles["block-products-filter"]}>
                     <div className={styles["block-product-filter"]}>
-                      {/* Giới tính */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -242,7 +233,7 @@ export default function DonghoDoi() {
                           </div>
                         </div>
                       </div>
-                      {/* Thương hiệu  */}
+
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -265,7 +256,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="LONGINES"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "LONGINES")
+                                  capNhatBoLoc("danh_muc", "LONGINES")
                                 }
                               >
                                 LONGINES
@@ -277,7 +268,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="TISSOT"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "TISSOT")
+                                  capNhatBoLoc("danh_muc", "TISSOT")
                                 }
                               >
                                 TISSOT
@@ -288,9 +279,7 @@ export default function DonghoDoi() {
                                 rel="nofollow"
                                 href="#"
                                 title="MIDO"
-                                onClick={() =>
-                                  handleFilterChange("danh_muc", "MIDO")
-                                }
+                                onClick={() => capNhatBoLoc("danh_muc", "MIDO")}
                               >
                                 MIDO
                               </Link>
@@ -301,7 +290,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="CERTINA"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "CERTINA")
+                                  capNhatBoLoc("danh_muc", "CERTINA")
                                 }
                               >
                                 CERTINA
@@ -313,7 +302,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="HAMILTON"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "HAMILTON")
+                                  capNhatBoLoc("danh_muc", "HAMILTON")
                                 }
                               >
                                 HAMILTON
@@ -325,7 +314,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="TITONI"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "TITONI")
+                                  capNhatBoLoc("danh_muc", "TITONI")
                                 }
                               >
                                 TITONI
@@ -337,10 +326,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="FREDERIQUE CONSTANT"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "danh_muc",
-                                    "FREDERIQUE CONSTANT"
-                                  )
+                                  capNhatBoLoc("danh_muc", "FREDERIQUECONSTANT")
                                 }
                               >
                                 FREDERIQUE CONSTANT
@@ -352,7 +338,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="CALVIN KLEIN"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "CALVIN KLEIN")
+                                  capNhatBoLoc("danh_muc", "CALVINKLEIN")
                                 }
                               >
                                 CALVIN KLEIN
@@ -363,9 +349,7 @@ export default function DonghoDoi() {
                                 rel="nofollow"
                                 href="#"
                                 title="EDOX"
-                                onClick={() =>
-                                  handleFilterChange("danh_muc", "EDOX")
-                                }
+                                onClick={() => capNhatBoLoc("danh_muc", "EDOX")}
                               >
                                 EDOX
                               </Link>
@@ -376,10 +360,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="CLAUDE BERNARD"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "danh_muc",
-                                    "CLAUDE BERNARD"
-                                  )
+                                  capNhatBoLoc("danh_muc", "CLAUDEBERNARD")
                                 }
                               >
                                 CLAUDE BERNARD
@@ -391,7 +372,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="SEIKO"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "SEIKO")
+                                  capNhatBoLoc("danh_muc", "SEIKO")
                                 }
                               >
                                 SEIKO
@@ -403,7 +384,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="CITIZEN"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "CITIZEN")
+                                  capNhatBoLoc("danh_muc", "CITIZEN")
                                 }
                               >
                                 CITIZEN
@@ -415,7 +396,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="ORIENT"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "ORIENT")
+                                  capNhatBoLoc("danh_muc", "ORIENT")
                                 }
                               >
                                 ORIENT
@@ -427,7 +408,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="CASIO"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "CASIO")
+                                  capNhatBoLoc("danh_muc", "CASIO")
                                 }
                               >
                                 CASIO
@@ -439,7 +420,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="OLYM PIANUS"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "OLYM PIANUS")
+                                  capNhatBoLoc("danh_muc", "OLYMPIANUS")
                                 }
                               >
                                 OLYM PIANUS
@@ -451,10 +432,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="DANIEL WELLINGTON"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "danh_muc",
-                                    "DANIEL WELLINGTON"
-                                  )
+                                  capNhatBoLoc("danh_muc", "DANIELWELLINGTON")
                                 }
                               >
                                 DANIEL WELLINGTON
@@ -466,7 +444,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="FOSSIL"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "FOSSIL")
+                                  capNhatBoLoc("danh_muc", "FOSSIL")
                                 }
                               >
                                 FOSSIL
@@ -478,7 +456,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="SKAGEN"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "SKAGEN")
+                                  capNhatBoLoc("danh_muc", "SKAGEN")
                                 }
                               >
                                 SKAGEN
@@ -490,7 +468,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="MICHAEL KORS"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "MICHAEL KORS")
+                                  capNhatBoLoc("danh_muc", "MICHAELKORS")
                                 }
                               >
                                 MICHAEL KORS
@@ -500,7 +478,6 @@ export default function DonghoDoi() {
                         </div>
                       </div>
 
-                      {/* Mức giá */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -523,7 +500,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Dưới 2 triệu"
                                 onClick={() =>
-                                  handleFilterChange("muc_gia", "Dưới 2 triệu")
+                                  capNhatBoLoc("muc_gia", "Dưới 2 triệu")
                                 }
                               >
                                 Dưới 2 triệu
@@ -535,7 +512,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Từ 2 triệu đến 5 triệu"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "muc_gia",
                                     "Từ 2 triệu đến 5 triệu"
                                   )
@@ -550,7 +527,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Từ 5 triệu đến 10 triệu"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "muc_gia",
                                     "Từ 5 triệu đến 10 triệu"
                                   )
@@ -565,7 +542,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Từ 10 triệu đến 20 triệu"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "muc_gia",
                                     "Từ 10 triệu đến 20 triệu"
                                   )
@@ -580,7 +557,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Từ 20 triệu đến 30 triệu"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "muc_gia",
                                     "Từ 20 triệu đến 30 triệu"
                                   )
@@ -595,7 +572,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Từ 30 triệu đến 50 triệu"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "muc_gia",
                                     "Từ 30 triệu đến 50 triệu"
                                   )
@@ -610,7 +587,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Từ 50 triệu đến 100 triệu"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "muc_gia",
                                     "Từ 50 triệu đến 100 triệu"
                                   )
@@ -625,10 +602,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Trên 100 triệu"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "muc_gia",
-                                    "Trên 100 triệu"
-                                  )
+                                  capNhatBoLoc("muc_gia", "Trên 100 triệu")
                                 }
                               >
                                 Trên 100 triệu
@@ -638,7 +612,6 @@ export default function DonghoDoi() {
                         </div>
                       </div>
 
-                      {/* Khuyến mãi */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -662,7 +635,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Giảm 10%"
                                 onClick={() =>
-                                  handleFilterChange("khuyenmai", "Giảm 10%")
+                                  capNhatBoLoc("khuyenmai", "Giảm 10%")
                                 }
                               >
                                 Giảm 10%
@@ -674,7 +647,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Giảm 15%"
                                 onClick={() =>
-                                  handleFilterChange("khuyenmai", "Giảm 15%")
+                                  capNhatBoLoc("khuyenmai", "Giảm 15%")
                                 }
                               >
                                 Giảm 15%
@@ -686,7 +659,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Giảm 20%"
                                 onClick={() =>
-                                  handleFilterChange("khuyenmai", "Giảm 20%")
+                                  capNhatBoLoc("khuyenmai", "Giảm 20%")
                                 }
                               >
                                 Giảm 20%
@@ -698,7 +671,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Giảm 25%"
                                 onClick={() =>
-                                  handleFilterChange("khuyenmai", "Giảm 25%")
+                                  capNhatBoLoc("khuyenmai", "Giảm 25%")
                                 }
                               >
                                 Giảm 25%
@@ -710,7 +683,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Giảm 30%"
                                 onClick={() =>
-                                  handleFilterChange("khuyenmai", "Giảm 30%")
+                                  capNhatBoLoc("khuyenmai", "Giảm 30%")
                                 }
                               >
                                 Giảm 30%
@@ -722,7 +695,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Giảm 40%"
                                 onClick={() =>
-                                  handleFilterChange("khuyenmai", "Giảm 40%")
+                                  capNhatBoLoc("khuyenmai", "Giảm 40%")
                                 }
                               >
                                 Giảm 40%
@@ -734,7 +707,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Giảm 50%"
                                 onClick={() =>
-                                  handleFilterChange("khuyenmai", "Giảm 50%")
+                                  capNhatBoLoc("khuyenmai", "Giảm 50%")
                                 }
                               >
                                 Giảm 50%
@@ -744,7 +717,6 @@ export default function DonghoDoi() {
                         </div>
                       </div>
 
-                      {/* Loại máy */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -768,7 +740,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Automatic (Máy cơ tự động)"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Automatic (Máy cơ tự động)"
                                   )
@@ -783,7 +755,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Quartz (Máy pin - điện tử)"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Quartz (Máy pin - điện tử)"
                                   )
@@ -798,7 +770,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Eco-Drive (Năng lượng ánh sáng)"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Eco-Drive (Năng lượng ánh sáng)"
                                   )
@@ -813,7 +785,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Quartz Chronograph (Máy pin bấm giờ thể thao)"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Quartz Chronograph (Máy pin bấm giờ thể thao)"
                                   )
@@ -828,7 +800,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Automatic Chronometer (Máy cơ tự động chuẩn COSC)"
                                   )
@@ -844,7 +816,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Quartz Chronometer (Máy pin chuẩn COSC)"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Quartz Chronometer (Máy pin chuẩn COSC)"
                                   )
@@ -856,7 +828,7 @@ export default function DonghoDoi() {
                             <div
                               className={`${styles.cls} ${styles.item}`}
                               onClick={() =>
-                                handleFilterChange(
+                                capNhatBoLoc(
                                   "loai_may",
                                   "Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)"
                                 )
@@ -877,7 +849,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Quartz Solar (Năng lượng ánh sáng)"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Quartz Solar (Năng lượng ánh sáng)"
                                   )
@@ -892,7 +864,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Đồng hồ cơ lên giây cót bằng tay ( Manual winding )"
                                   )
@@ -906,7 +878,6 @@ export default function DonghoDoi() {
                         </div>
                       </div>
 
-                      {/*Đường kính */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -930,7 +901,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Dưới 25mm"
                                 onClick={() =>
-                                  handleFilterChange("duong_kinh", "Dưới 25mm")
+                                  capNhatBoLoc("duong_kinh", "Dưới 25mm")
                                 }
                               >
                                 Dưới 25mm
@@ -942,10 +913,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="25mm đến 30mm"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "duong_kinh",
-                                    "25mm đến 30mm"
-                                  )
+                                  capNhatBoLoc("duong_kinh", "25mm đến 30mm")
                                 }
                               >
                                 25mm đến 30mm
@@ -957,10 +925,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="30mm đến 35mm"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "duong_kinh",
-                                    "30mm đến 35mm"
-                                  )
+                                  capNhatBoLoc("duong_kinh", "30mm đến 35mm")
                                 }
                               >
                                 30mm đến 35mm
@@ -972,10 +937,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="35mm đến 38mm"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "duong_kinh",
-                                    "35mm đến 38mm"
-                                  )
+                                  capNhatBoLoc("duong_kinh", "35mm đến 38mm")
                                 }
                               >
                                 35mm đến 38mm
@@ -987,10 +949,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="38mm đến 40mm"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "duong_kinh",
-                                    "38mm đến 40mm"
-                                  )
+                                  capNhatBoLoc("duong_kinh", "38mm đến 40mm")
                                 }
                               >
                                 38mm đến 40mm
@@ -1002,10 +961,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="40mm đến 42mm"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "duong_kinh",
-                                    "40mm đến 42mm"
-                                  )
+                                  capNhatBoLoc("duong_kinh", "40mm đến 42mm")
                                 }
                               >
                                 40mm đến 42mm
@@ -1017,10 +973,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="42mm đến 45mm"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "duong_kinh",
-                                    "42mm đến 45mm"
-                                  )
+                                  capNhatBoLoc("duong_kinh", "42mm đến 45mm")
                                 }
                               >
                                 42mm đến 45mm
@@ -1032,10 +985,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Từ 45mm trở lên"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "duong_kinh",
-                                    "Từ 45mm trở lên"
-                                  )
+                                  capNhatBoLoc("duong_kinh", "Từ 45mm trở lên")
                                 }
                               >
                                 Từ 45mm trở lên
@@ -1045,7 +995,6 @@ export default function DonghoDoi() {
                         </div>
                       </div>
 
-                      {/*Chất liệu dây  */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -1069,7 +1018,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Dây da"
                                 onClick={() =>
-                                  handleFilterChange("chat_lieu_day", "Dây da")
+                                  capNhatBoLoc("chat_lieu_day", "Dây da")
                                 }
                               >
                                 Dây da
@@ -1081,7 +1030,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thép không gỉ 316L"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     "Thép không gỉ 316L"
                                   )
@@ -1096,7 +1045,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thép không gỉ 316L mạ vàng công nghệ PVD"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     "Thép không gỉ 316L mạ vàng công nghệ PVD"
                                   )
@@ -1111,7 +1060,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thép không gỉ 316L dạng lưới"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     "Thép không gỉ 316L dạng lưới"
                                   )
@@ -1126,7 +1075,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thép không gỉ 316L dạng lắc"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     " Thép không gỉ 316L dạng lắc"
                                   )
@@ -1141,10 +1090,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Dây vải"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "chat_lieu_day",
-                                    " Dây vải"
-                                  )
+                                  capNhatBoLoc("chat_lieu_day", " Dây vải")
                                 }
                               >
                                 Dây vải
@@ -1156,7 +1102,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thép không gỉ 316L/ Vàng 18K"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     " Thép không gỉ 316L/ Vàng 18K"
                                   )
@@ -1171,7 +1117,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thép không gỉ 316L/ Ceramic"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     " Thép không gỉ 316L/ Ceramic"
                                   )
@@ -1186,7 +1132,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thép không gỉ mạ công nghệ PVD"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     "Thép không gỉ mạ công nghệ PVD"
                                   )
@@ -1201,10 +1147,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Dây cao su"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "chat_lieu_day",
-                                    " Dây cao su"
-                                  )
+                                  capNhatBoLoc("chat_lieu_day", " Dây cao su")
                                 }
                               >
                                 Dây cao su
@@ -1216,10 +1159,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Dây dù"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "chat_lieu_day",
-                                    "  Dây dù"
-                                  )
+                                  capNhatBoLoc("chat_lieu_day", "  Dây dù")
                                 }
                               >
                                 Dây dù
@@ -1231,10 +1171,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Titanium"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "chat_lieu_day",
-                                    " Titanium"
-                                  )
+                                  capNhatBoLoc("chat_lieu_day", " Titanium")
                                 }
                               >
                                 Titanium
@@ -1246,7 +1183,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Titanium mạ vàng công nghệ PVD"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     "itanium mạ vàng công nghệ PVD"
                                   )
@@ -1261,7 +1198,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Nhựa"
                                 onClick={() =>
-                                  handleFilterChange("chat_lieu_day", "  Nhựa")
+                                  capNhatBoLoc("chat_lieu_day", "  Nhựa")
                                 }
                               >
                                 Nhựa
@@ -1295,7 +1232,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thép không gỉ 316L"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_vo",
                                     "Thép không gỉ 316L"
                                   )
@@ -1310,7 +1247,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thép không gỉ mạ vàng công nghệ PVD"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_vo",
                                     "Thép không gỉ mạ vàng công nghệ PVD"
                                   )
@@ -1325,7 +1262,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Vàng 18K"
                                 onClick={() =>
-                                  handleFilterChange("chat_lieu_vo", "Vàng 18K")
+                                  capNhatBoLoc("chat_lieu_vo", "Vàng 18K")
                                 }
                               >
                                 Vàng 18K
@@ -1337,7 +1274,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thép không gỉ 316L/ Vàng 18K"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_vo",
                                     "Thép không gỉ 316L/ Vàng 18K"
                                   )
@@ -1352,7 +1289,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Titanium"
                                 onClick={() =>
-                                  handleFilterChange("chat_lieu_vo", "Titanium")
+                                  capNhatBoLoc("chat_lieu_vo", "Titanium")
                                 }
                               >
                                 Titanium
@@ -1364,7 +1301,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Titanium mạ công nghệ PVD"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_vo",
                                     "Titanium mạ công nghệ PVD"
                                   )
@@ -1379,7 +1316,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Ceramic"
                                 onClick={() =>
-                                  handleFilterChange("chat_lieu_vo", "Ceramic")
+                                  capNhatBoLoc("chat_lieu_vo", "Ceramic")
                                 }
                               >
                                 Ceramic
@@ -1391,7 +1328,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thép không gỉ 316L/ Ceramic"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_vo",
                                     "Thép không gỉ 316L/ Ceramic"
                                   )
@@ -1406,7 +1343,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thép không gỉ mạ công nghệ PVD"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_vo",
                                     "Thép không gỉ mạ công nghệ PVD"
                                   )
@@ -1421,7 +1358,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Nhựa"
                                 onClick={() =>
-                                  handleFilterChange("chat_lieu_vo", "Nhựa")
+                                  capNhatBoLoc("chat_lieu_vo", "Nhựa")
                                 }
                               >
                                 Nhựa
@@ -1433,7 +1370,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Titanium/ Vàng 18K"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_vo",
                                     "Titanium/ Vàng 18K"
                                   )
@@ -1446,7 +1383,6 @@ export default function DonghoDoi() {
                         </div>
                       </div>
 
-                      {/* Mặt kính */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -1470,7 +1406,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Sapphire"
                                 onClick={() =>
-                                  handleFilterChange("mat_kinh", "Sapphire")
+                                  capNhatBoLoc("mat_kinh", "Sapphire")
                                 }
                               >
                                 Sapphire
@@ -1482,10 +1418,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Mặt kính cứng"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "mat_kinh",
-                                    "Mặt kính cứng"
-                                  )
+                                  capNhatBoLoc("mat_kinh", "Mặt kính cứng")
                                 }
                               >
                                 Mặt kính cứng
@@ -1497,10 +1430,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Hardlex Crystal"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "mat_kinh",
-                                    "Hardlex Crystal"
-                                  )
+                                  capNhatBoLoc("mat_kinh", "Hardlex Crystal")
                                 }
                               >
                                 Hardlex Crystal
@@ -1511,9 +1441,7 @@ export default function DonghoDoi() {
                                 rel="nofollow"
                                 href="#"
                                 title="Mica"
-                                onClick={() =>
-                                  handleFilterChange("mat_kinh", "Mica")
-                                }
+                                onClick={() => capNhatBoLoc("mat_kinh", "Mica")}
                               >
                                 Mica
                               </Link>
@@ -1524,7 +1452,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Kinh Nhựa"
                                 onClick={() =>
-                                  handleFilterChange("mat_kinh", "Kinh Nhựa")
+                                  capNhatBoLoc("mat_kinh", "Kinh Nhựa")
                                 }
                               >
                                 Kinh Nhựa
@@ -1534,7 +1462,6 @@ export default function DonghoDoi() {
                         </div>
                       </div>
 
-                      {/*Màu mặt */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -1557,9 +1484,7 @@ export default function DonghoDoi() {
                                 rel="nofollow"
                                 href="#"
                                 title="Trắng"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Trắng")
-                                }
+                                onClick={() => capNhatBoLoc("mau_mat", "Trắng")}
                               >
                                 Trắng
                               </Link>
@@ -1569,9 +1494,7 @@ export default function DonghoDoi() {
                                 rel="nofollow"
                                 href="#"
                                 title="Hồng"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Hồng")
-                                }
+                                onClick={() => capNhatBoLoc("mau_mat", "Hồng")}
                               >
                                 Hồng
                               </Link>
@@ -1581,9 +1504,7 @@ export default function DonghoDoi() {
                                 rel="nofollow"
                                 href="#"
                                 title="Xám"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Xám")
-                                }
+                                onClick={() => capNhatBoLoc("mau_mat", "Xám")}
                               >
                                 Xám
                               </Link>
@@ -1593,9 +1514,7 @@ export default function DonghoDoi() {
                                 rel="nofollow"
                                 href="#"
                                 title="Đen"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Đen")
-                                }
+                                onClick={() => capNhatBoLoc("mau_mat", "Đen")}
                               >
                                 Đen
                               </Link>
@@ -1606,7 +1525,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Xanh lam"
                                 onClick={() =>
-                                  handleFilterChange("mau_mat", "Xanh lam")
+                                  capNhatBoLoc("mau_mat", "Xanh lam")
                                 }
                               >
                                 Xanh lam
@@ -1617,9 +1536,7 @@ export default function DonghoDoi() {
                                 rel="nofollow"
                                 href="#"
                                 title="Vàng"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Vàng")
-                                }
+                                onClick={() => capNhatBoLoc("mau_mat", "Vàng")}
                               >
                                 Vàng
                               </Link>
@@ -1630,7 +1547,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Khảm trai"
                                 onClick={() =>
-                                  handleFilterChange("mau_mat", "Khảm trai")
+                                  capNhatBoLoc("mau_mat", "Khảm trai")
                                 }
                               >
                                 Khảm trai
@@ -1641,9 +1558,7 @@ export default function DonghoDoi() {
                                 rel="nofollow"
                                 href="#"
                                 title="Đỏ"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Đỏ")
-                                }
+                                onClick={() => capNhatBoLoc("mau_mat", "Đỏ")}
                               >
                                 Đỏ
                               </Link>
@@ -1654,7 +1569,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Da Cam"
                                 onClick={() =>
-                                  handleFilterChange("mau_mat", "Da Cam")
+                                  capNhatBoLoc("mau_mat", "Da Cam")
                                 }
                               >
                                 Da Cam
@@ -1666,7 +1581,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Xanh Lá"
                                 onClick={() =>
-                                  handleFilterChange("mau_mat", "Xanh Lá")
+                                  capNhatBoLoc("mau_mat", "Xanh Lá")
                                 }
                               >
                                 Xanh Lá
@@ -1677,9 +1592,7 @@ export default function DonghoDoi() {
                                 rel="nofollow"
                                 href="#"
                                 title="Nâu"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Nâu")
-                                }
+                                onClick={() => capNhatBoLoc("mau_mat", "Nâu")}
                               >
                                 Nâu
                               </Link>
@@ -1688,7 +1601,6 @@ export default function DonghoDoi() {
                         </div>
                       </div>
 
-                      {/*Phong cách */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -1712,7 +1624,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Sang trọng"
                                 onClick={() =>
-                                  handleFilterChange("phong_cach", "Sang trọng")
+                                  capNhatBoLoc("phong_cach", "Sang trọng")
                                 }
                               >
                                 Sang trọng
@@ -1724,7 +1636,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thể thao"
                                 onClick={() =>
-                                  handleFilterChange("phong_cach", "Thể thao")
+                                  capNhatBoLoc("phong_cach", "Thể thao")
                                 }
                               >
                                 Thể thao
@@ -1736,7 +1648,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thể thao sang trọng"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "phong_cach",
                                     "Thể thao sang trọng"
                                   )
@@ -1751,7 +1663,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Quân đội"
                                 onClick={() =>
-                                  handleFilterChange("phong_cach", "Quân đội")
+                                  capNhatBoLoc("phong_cach", "Quân đội")
                                 }
                               >
                                 Quân đội
@@ -1763,7 +1675,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thời trang"
                                 onClick={() =>
-                                  handleFilterChange("phong_cach", "Thời trang")
+                                  capNhatBoLoc("phong_cach", "Thời trang")
                                 }
                               >
                                 Thời trang
@@ -1775,7 +1687,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Hiện đại"
                                 onClick={() =>
-                                  handleFilterChange("phong_cach", "Hiện đại")
+                                  capNhatBoLoc("phong_cach", "Hiện đại")
                                 }
                               >
                                 Hiện đại
@@ -1785,7 +1697,6 @@ export default function DonghoDoi() {
                         </div>
                       </div>
 
-                      {/*Kiểu dáng */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -1809,7 +1720,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Mặt vuông"
                                 onClick={() =>
-                                  handleFilterChange("kieu_dang", "Mặt vuông")
+                                  capNhatBoLoc("kieu_dang", "Mặt vuông")
                                 }
                               >
                                 Mặt vuông
@@ -1821,7 +1732,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Mặt tròn"
                                 onClick={() =>
-                                  handleFilterChange("kieu_dang", "Mặt tròn")
+                                  capNhatBoLoc("kieu_dang", "Mặt tròn")
                                 }
                               >
                                 Mặt tròn
@@ -1833,10 +1744,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Mặt chữ nhật"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "kieu_dang",
-                                    "Mặt chữ nhật"
-                                  )
+                                  capNhatBoLoc("kieu_dang", "Mặt chữ nhật")
                                 }
                               >
                                 Mặt chữ nhật
@@ -1848,7 +1756,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Mặt Oval"
                                 onClick={() =>
-                                  handleFilterChange("kieu_dang", "Mặt Oval")
+                                  capNhatBoLoc("kieu_dang", "Mặt Oval")
                                 }
                               >
                                 Mặt Oval
@@ -1860,7 +1768,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Khác"
                                 onClick={() =>
-                                  handleFilterChange("kieu_dang", "Khác")
+                                  capNhatBoLoc("kieu_dang", "Khác")
                                 }
                               >
                                 Khác
@@ -1870,7 +1778,6 @@ export default function DonghoDoi() {
                         </div>
                       </div>
 
-                      {/*Xuất xứ thương hiệu */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -1894,7 +1801,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Nhật Bản"
                                 onClick={() =>
-                                  handleFilterChange("xuat_xu", "Nhật Bản")
+                                  capNhatBoLoc("xuat_xu", "Nhật Bản")
                                 }
                               >
                                 Nhật Bản
@@ -1906,7 +1813,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="Thụy Sỹ"
                                 onClick={() =>
-                                  handleFilterChange("xuat_xu", "Thụy Sỹ")
+                                  capNhatBoLoc("xuat_xu", "Thụy Sỹ")
                                 }
                               >
                                 Thụy Sỹ
@@ -1917,7 +1824,7 @@ export default function DonghoDoi() {
                       </div>
                     </div>
                   </div>
-                  {/*Menu-Đồng hồ nam */}
+
                   <div className={styles["field-title"]}>
                     <div className={styles["title-name"]}>
                       <div className={styles["cat-title"]}>
@@ -1938,7 +1845,11 @@ export default function DonghoDoi() {
                       </div>
                     </div>
 
-                    <select className={styles["order-select"]} name="order-select" onChange={handleSortChange}>
+                    <select
+                      className={styles["order-select"]}
+                      name="order-select"
+                      onChange={capNhatSapXep}
+                    >
                       <option value="">Sắp xếp theo</option>
                       <option value="asc">Giá từ thấp tới cao</option>
                       <option value="desc">Giá từ cao tới thấp</option>
@@ -1949,13 +1860,12 @@ export default function DonghoDoi() {
                   </div>
 
                   <div className={styles.clear}></div>
-                  {/*Danh sách sản phẩm */}
 
                   <section className={styles["products-cat-frame"]}>
                     <div className={styles["products-cat-frame-inner"]}>
                       <div className={styles["product-grid"]}>
                         {/* item-1 */}
-                        {displayedProducts.map((product) => {
+                        {sanPhamHienThi.map((product) => {
                           const {
                             _id,
                             ten,
@@ -2040,7 +1950,7 @@ export default function DonghoDoi() {
                                 </div>
                                 <div className={styles.clear}></div>
                               </div>
-                              {/* end .frame-inner */}
+
                               <div className={styles.clear}></div>
                             </div>
                           );
@@ -2049,9 +1959,7 @@ export default function DonghoDoi() {
                     </div>
                   </section>
 
-                  {/* phân trang*/}
                   <div className={styles.pagination}>
-                    {/* Prev trang đâù */}
                     <span
                       title="First page"
                       className={
@@ -2059,11 +1967,11 @@ export default function DonghoDoi() {
                           ? styles.disabled
                           : styles["other-page"]
                       }
-                      onClick={() => currentPage > 1 && handlePageChange(1)}
+                      onClick={() => currentPage > 1 && thayDoiTrang(1)}
                     >
                       ‹‹
                     </span>
-                    {/* Prev 1 trang */}
+
                     <span
                       className={
                         currentPage === 1
@@ -2071,16 +1979,16 @@ export default function DonghoDoi() {
                           : styles["other-page"]
                       }
                       onClick={() =>
-                        currentPage > 1 && handlePageChange(currentPage - 1)
+                        currentPage > 1 && thayDoiTrang(currentPage - 1)
                       }
                     >
                       ‹
                     </span>
-                    {/* Trang hiện tại */}
+
                     <span
                       className={styles.currentPage}
                     >{`Trang ${currentPage} / ${totalPages || 1}`}</span>
-                    {/* Next 1 trang*/}
+
                     <span
                       className={
                         currentPage === totalPages
@@ -2089,12 +1997,12 @@ export default function DonghoDoi() {
                       }
                       onClick={() =>
                         currentPage < totalPages &&
-                        handlePageChange(currentPage + 1)
+                        thayDoiTrang(currentPage + 1)
                       }
                     >
                       ›
                     </span>
-                    {/* Next tới trang cuối */}
+
                     <span
                       className={
                         currentPage === totalPages
@@ -2102,7 +2010,7 @@ export default function DonghoDoi() {
                           : styles["other-page"]
                       }
                       onClick={() =>
-                        currentPage < totalPages && handlePageChange(totalPages)
+                        currentPage < totalPages && thayDoiTrang(totalPages)
                       }
                     >
                       ››
@@ -2111,18 +2019,38 @@ export default function DonghoDoi() {
                 </div>
                 <div className={styles.clear}></div>
 
-                
-               {/* đánh giá start */}
-               <div className={styles.evaluateCat}>
+                <div className={styles.evaluateCat}>
                   <div className={`${styles.ratingArea} ${styles.cls}`}>
                     <span id="ratings">
-                      <i className={` ${styles.starOn}`} id="rate_1" value="1"></i>
-                      <i className={` ${styles.starOn}`} id="rate_2" value="2"></i>
-                      <i className={` ${styles.starOn}`} id="rate_3" value="3"></i>
-                      <i className={` ${styles.starOff}`} id="rate_4" value="4"></i>
-                      <i className={` ${styles.starOff}`} id="rate_5" value="5"></i>
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_1"
+                        value="1"
+                      ></i>
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_2"
+                        value="2"
+                      ></i>
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_3"
+                        value="3"
+                      ></i>
+                      <i
+                        className={` ${styles.starOff}`}
+                        id="rate_4"
+                        value="4"
+                      ></i>
+                      <i
+                        className={` ${styles.starOff}`}
+                        id="rate_5"
+                        value="5"
+                      ></i>
                     </span>
-                    <span className={styles.ratingNote}>Nhấn vào đây để đánh giá</span>
+                    <span className={styles.ratingNote}>
+                      Nhấn vào đây để đánh giá
+                    </span>
                   </div>
                 </div>
 
@@ -2132,7 +2060,7 @@ export default function DonghoDoi() {
                 ></div>
               </div>
             </div>
-            {/* end đồng hồ nam   */}
+
             <div className={styles.clear}></div>
           </div>
         </div>

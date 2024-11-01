@@ -16,7 +16,7 @@ export default function DanhMuc({ params }) {
   const [totalPages, setTotalPages] = useState(1);
   const [filter, setFilter] = useState({
     gioi_tinh: "",
-    danh_muc: "",
+    danh_muc: danh_muc,
     muc_gia: "",
     khuyenmai: "",
     loai_may: "",
@@ -30,13 +30,11 @@ export default function DanhMuc({ params }) {
     xuat_xu: "",
   });
 
-  // Hàm gọi API lấy sản phẩm dựa trên bộ lọc
-  const fetchProducts = async () => {
+  const laySanPham = async () => {
     setLoading(true);
     try {
       const queryParams = new URLSearchParams({
-        ...filter, 
-        danh_muc: danh_muc,
+        ...filter,
         page: currentPage,
       });
 
@@ -48,6 +46,7 @@ export default function DanhMuc({ params }) {
       }
       const data = await response.json();
       setProducts(data.products);
+      setTotalPages(data.totalPages); // Giả sử API trả về totalPages
     } catch (error) {
       setError(error.message);
     } finally {
@@ -56,24 +55,25 @@ export default function DanhMuc({ params }) {
   };
 
   useEffect(() => {
-    if (params.id) {
-      setFilter((prevFilter) => ({
-        ...prevFilter,
-        danh_muc: params.id,
-      }));
-      setCategoryName(params.id);
+    if (danh_muc) {
+      setFilter((prevFilter) => ({ ...prevFilter, danh_muc }));
+      setCategoryName(danh_muc);
       setCurrentPage(1);
-      fetchProducts();
+      laySanPham();
     }
-  }, [params.id]);
+  }, [danh_muc]);
 
-  // Theo dõi filter và gọi fetchProducts khi filter thay đổi
   useEffect(() => {
-    fetchProducts();
+    laySanPham();
   }, [filter, currentPage]);
-
-  // Cập nhật filter khi thay đổi từ dropdown
-  const handleFilterChange = (filterType, value) => {
+  useEffect(() => {
+    if (filter.danh_muc) {
+      setCategoryName(filter.danh_muc);
+      setCurrentPage(1);
+      laySanPham();
+    }
+  }, [filter.danh_muc]);
+  const capNhatBoLoc = (filterType, value) => {
     const newFilter = { ...filter, [filterType]: value };
     setFilter(newFilter);
 
@@ -85,39 +85,43 @@ export default function DanhMuc({ params }) {
         ? [...updatedFilters, `${filterType}=${value}`]
         : updatedFilters;
     });
-
-    if (filterType === "danh_muc") {
-      setCategoryName(value);
-    }
   };
 
-  // Xoá tất cả bộ lọc
-  const handleClearFilters = () => {
+  const xoaTatCaBoLoc = () => {
     setSelectedFilter([]);
     setFilter({
-      gioi_tinh: "Nam",
+      gioi_tinh: "",
+      danh_muc: danh_muc,
+      muc_gia: "",
+      khuyenmai: "",
+      loai_may: "",
+      duong_kinh: "",
+      chat_lieu_day: "",
+      chat_lieu_vo: "",
+      mat_kinh: "",
+      mau_mat: "",
+      phong_cach: "",
+      kieu_dang: "",
+      xuat_xu: "",
     });
     setCurrentPage(1);
-    setCategoryName("Đồng hồ nam");
-    fetchProducts();
+    laySanPham();
   };
 
-  // Xoá một bộ lọc cụ thể
-  const handleRemoveFilter = (filterToRemove) => {
+  const xoaBoLoc = (filterToRemove) => {
     const newFilters = selectedFilter.filter(
       (filter) => filter !== filterToRemove
     );
     const [filterType] = filterToRemove.split("=");
     const updatedFilter = { ...filter, [filterType]: "" };
-
-    if (filterType === "danh_muc") {
-      setCategoryName("Đồng hồ nam");
-    }
     setSelectedFilter(newFilters);
     setFilter(updatedFilter);
   };
-
-  const sortProducts = (products) => {
+  const thayDoiTrang = (page) => {
+    setCurrentPage(page);
+    laySanPham();
+  };
+  const sapXepSanPham = (products) => {
     if (sortOption === "asc") {
       return [...products].sort((a, b) => a.gia_giam - b.gia_giam);
     } else if (sortOption === "desc") {
@@ -126,7 +130,7 @@ export default function DanhMuc({ params }) {
     return products;
   };
 
-  const handleSortChange = (e) => {
+  const capNhatSapXep = (e) => {
     setSortOption(e.target.value);
   };
 
@@ -138,7 +142,8 @@ export default function DanhMuc({ params }) {
     return <p>Lỗi: {error}</p>;
   }
 
-  const displayedProducts = sortProducts(products);
+  const sanPhamHienThi = sapXepSanPham(products);
+
   return (
     <>
       <div className={styles["container-header"]}>
@@ -183,16 +188,16 @@ export default function DanhMuc({ params }) {
                         key={index}
                         rel="nofollow"
                         href="#"
-                        onClick={() => handleRemoveFilter(filter)}
+                        onClick={() => xoaBoLoc(filter)}
                       >
-                        {filter.split("=")[1]} {/*Hiển thị các bộ lọc đã chọn*/}
+                        {filter.split("=")[1]}
                       </Link>
                     ))}
                     <Link
                       rel="nofollow"
                       className={styles.reset}
                       href="#"
-                      onClick={handleClearFilters}
+                      onClick={xoaTatCaBoLoc}
                     >
                       Xoá hết
                     </Link>
@@ -202,7 +207,6 @@ export default function DanhMuc({ params }) {
                 <div className={styles["products-cat"]}>
                   <div className={styles["block-products-filter"]}>
                     <div className={styles["block-product-filter"]}>
-                      {/* Giới tính */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -249,7 +253,7 @@ export default function DanhMuc({ params }) {
                           </div>
                         </div>
                       </div>
-                      {/* Thương hiệu  */}
+
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -272,7 +276,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="LONGINES"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "LONGINES")
+                                  capNhatBoLoc("danh_muc", "LONGINES")
                                 }
                               >
                                 LONGINES
@@ -284,7 +288,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="TISSOT"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "TISSOT")
+                                  capNhatBoLoc("danh_muc", "TISSOT")
                                 }
                               >
                                 TISSOT
@@ -295,9 +299,7 @@ export default function DanhMuc({ params }) {
                                 rel="nofollow"
                                 href="#"
                                 title="MIDO"
-                                onClick={() =>
-                                  handleFilterChange("danh_muc", "MIDO")
-                                }
+                                onClick={() => capNhatBoLoc("danh_muc", "MIDO")}
                               >
                                 MIDO
                               </Link>
@@ -308,7 +310,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="CERTINA"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "CERTINA")
+                                  capNhatBoLoc("danh_muc", "CERTINA")
                                 }
                               >
                                 CERTINA
@@ -320,7 +322,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="HAMILTON"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "HAMILTON")
+                                  capNhatBoLoc("danh_muc", "HAMILTON")
                                 }
                               >
                                 HAMILTON
@@ -332,7 +334,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="TITONI"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "TITONI")
+                                  capNhatBoLoc("danh_muc", "TITONI")
                                 }
                               >
                                 TITONI
@@ -342,9 +344,9 @@ export default function DanhMuc({ params }) {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="FREDERIQUE CONSTANT"
+                                title="FREDERIQUECONSTANT"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "danh_muc",
                                     "FREDERIQUE CONSTANT"
                                   )
@@ -359,7 +361,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="CALVIN KLEIN"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "CALVIN KLEIN")
+                                  capNhatBoLoc("danh_muc", "CALVINKLEIN")
                                 }
                               >
                                 CALVIN KLEIN
@@ -370,9 +372,7 @@ export default function DanhMuc({ params }) {
                                 rel="nofollow"
                                 href="#"
                                 title="EDOX"
-                                onClick={() =>
-                                  handleFilterChange("danh_muc", "EDOX")
-                                }
+                                onClick={() => capNhatBoLoc("danh_muc", "EDOX")}
                               >
                                 EDOX
                               </Link>
@@ -383,10 +383,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="CLAUDE BERNARD"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "danh_muc",
-                                    "CLAUDE BERNARD"
-                                  )
+                                  capNhatBoLoc("danh_muc", "CLAUDEBERNARD")
                                 }
                               >
                                 CLAUDE BERNARD
@@ -398,7 +395,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="SEIKO"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "SEIKO")
+                                  capNhatBoLoc("danh_muc", "SEIKO")
                                 }
                               >
                                 SEIKO
@@ -410,7 +407,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="CITIZEN"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "CITIZEN")
+                                  capNhatBoLoc("danh_muc", "CITIZEN")
                                 }
                               >
                                 CITIZEN
@@ -422,7 +419,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="ORIENT"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "ORIENT")
+                                  capNhatBoLoc("danh_muc", "ORIENT")
                                 }
                               >
                                 ORIENT
@@ -434,7 +431,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="CASIO"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "CASIO")
+                                  capNhatBoLoc("danh_muc", "CASIO")
                                 }
                               >
                                 CASIO
@@ -446,7 +443,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="OLYM PIANUS"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "OLYM PIANUS")
+                                  capNhatBoLoc("danh_muc", "OLYMPIANUS")
                                 }
                               >
                                 OLYM PIANUS
@@ -458,10 +455,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="DANIEL WELLINGTON"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "danh_muc",
-                                    "DANIEL WELLINGTON"
-                                  )
+                                  capNhatBoLoc("danh_muc", "DANIELWELLINGTON")
                                 }
                               >
                                 DANIEL WELLINGTON
@@ -473,7 +467,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="FOSSIL"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "FOSSIL")
+                                  capNhatBoLoc("danh_muc", "FOSSIL")
                                 }
                               >
                                 FOSSIL
@@ -485,7 +479,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="SKAGEN"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "SKAGEN")
+                                  capNhatBoLoc("danh_muc", "SKAGEN")
                                 }
                               >
                                 SKAGEN
@@ -497,7 +491,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="MICHAEL KORS"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "MICHAEL KORS")
+                                  capNhatBoLoc("danh_muc", "MICHAELKORS")
                                 }
                               >
                                 MICHAEL KORS
@@ -507,7 +501,6 @@ export default function DanhMuc({ params }) {
                         </div>
                       </div>
 
-                      {/* Mức giá */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -530,7 +523,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Dưới 2 triệu"
                                 onClick={() =>
-                                  handleFilterChange("muc_gia", "Dưới 2 triệu")
+                                  capNhatBoLoc("muc_gia", "Dưới 2 triệu")
                                 }
                               >
                                 Dưới 2 triệu
@@ -542,7 +535,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Từ 2 triệu đến 5 triệu"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "muc_gia",
                                     "Từ 2 triệu đến 5 triệu"
                                   )
@@ -557,7 +550,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Từ 5 triệu đến 10 triệu"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "muc_gia",
                                     "Từ 5 triệu đến 10 triệu"
                                   )
@@ -572,7 +565,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Từ 10 triệu đến 20 triệu"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "muc_gia",
                                     "Từ 10 triệu đến 20 triệu"
                                   )
@@ -587,7 +580,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Từ 20 triệu đến 30 triệu"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "muc_gia",
                                     "Từ 20 triệu đến 30 triệu"
                                   )
@@ -602,7 +595,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Từ 30 triệu đến 50 triệu"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "muc_gia",
                                     "Từ 30 triệu đến 50 triệu"
                                   )
@@ -617,7 +610,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Từ 50 triệu đến 100 triệu"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "muc_gia",
                                     "Từ 50 triệu đến 100 triệu"
                                   )
@@ -632,10 +625,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Trên 100 triệu"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "muc_gia",
-                                    "Trên 100 triệu"
-                                  )
+                                  capNhatBoLoc("muc_gia", "Trên 100 triệu")
                                 }
                               >
                                 Trên 100 triệu
@@ -645,7 +635,6 @@ export default function DanhMuc({ params }) {
                         </div>
                       </div>
 
-                      {/* Khuyến mãi */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -669,7 +658,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Giảm 10%"
                                 onClick={() =>
-                                  handleFilterChange("khuyenmai", "Giảm 10%")
+                                  capNhatBoLoc("khuyenmai", "Giảm 10%")
                                 }
                               >
                                 Giảm 10%
@@ -681,7 +670,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Giảm 15%"
                                 onClick={() =>
-                                  handleFilterChange("khuyenmai", "Giảm 15%")
+                                  capNhatBoLoc("khuyenmai", "Giảm 15%")
                                 }
                               >
                                 Giảm 15%
@@ -693,7 +682,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Giảm 20%"
                                 onClick={() =>
-                                  handleFilterChange("khuyenmai", "Giảm 20%")
+                                  capNhatBoLoc("khuyenmai", "Giảm 20%")
                                 }
                               >
                                 Giảm 20%
@@ -705,7 +694,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Giảm 25%"
                                 onClick={() =>
-                                  handleFilterChange("khuyenmai", "Giảm 25%")
+                                  capNhatBoLoc("khuyenmai", "Giảm 25%")
                                 }
                               >
                                 Giảm 25%
@@ -717,7 +706,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Giảm 30%"
                                 onClick={() =>
-                                  handleFilterChange("khuyenmai", "Giảm 30%")
+                                  capNhatBoLoc("khuyenmai", "Giảm 30%")
                                 }
                               >
                                 Giảm 30%
@@ -729,7 +718,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Giảm 40%"
                                 onClick={() =>
-                                  handleFilterChange("khuyenmai", "Giảm 40%")
+                                  capNhatBoLoc("khuyenmai", "Giảm 40%")
                                 }
                               >
                                 Giảm 40%
@@ -741,7 +730,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Giảm 50%"
                                 onClick={() =>
-                                  handleFilterChange("khuyenmai", "Giảm 50%")
+                                  capNhatBoLoc("khuyenmai", "Giảm 50%")
                                 }
                               >
                                 Giảm 50%
@@ -751,7 +740,6 @@ export default function DanhMuc({ params }) {
                         </div>
                       </div>
 
-                      {/* Loại máy */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -775,7 +763,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Automatic (Máy cơ tự động)"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Automatic (Máy cơ tự động)"
                                   )
@@ -790,7 +778,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Quartz (Máy pin - điện tử)"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Quartz (Máy pin - điện tử)"
                                   )
@@ -805,7 +793,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Eco-Drive (Năng lượng ánh sáng)"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Eco-Drive (Năng lượng ánh sáng)"
                                   )
@@ -820,7 +808,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Quartz Chronograph (Máy pin bấm giờ thể thao)"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Quartz Chronograph (Máy pin bấm giờ thể thao)"
                                   )
@@ -835,7 +823,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Automatic Chronometer (Máy cơ tự động chuẩn COSC)"
                                   )
@@ -851,7 +839,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Quartz Chronometer (Máy pin chuẩn COSC)"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Quartz Chronometer (Máy pin chuẩn COSC)"
                                   )
@@ -863,7 +851,7 @@ export default function DanhMuc({ params }) {
                             <div
                               className={`${styles.cls} ${styles.item}`}
                               onClick={() =>
-                                handleFilterChange(
+                                capNhatBoLoc(
                                   "loai_may",
                                   "Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)"
                                 )
@@ -884,7 +872,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Quartz Solar (Năng lượng ánh sáng)"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Quartz Solar (Năng lượng ánh sáng)"
                                   )
@@ -899,7 +887,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "loai_may",
                                     "Đồng hồ cơ lên giây cót bằng tay ( Manual winding )"
                                   )
@@ -913,7 +901,6 @@ export default function DanhMuc({ params }) {
                         </div>
                       </div>
 
-                      {/*Đường kính */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -937,7 +924,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Dưới 25mm"
                                 onClick={() =>
-                                  handleFilterChange("duong_kinh", "Dưới 25mm")
+                                  capNhatBoLoc("duong_kinh", "Dưới 25mm")
                                 }
                               >
                                 Dưới 25mm
@@ -949,10 +936,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="25mm đến 30mm"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "duong_kinh",
-                                    "25mm đến 30mm"
-                                  )
+                                  capNhatBoLoc("duong_kinh", "25mm đến 30mm")
                                 }
                               >
                                 25mm đến 30mm
@@ -964,10 +948,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="30mm đến 35mm"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "duong_kinh",
-                                    "30mm đến 35mm"
-                                  )
+                                  capNhatBoLoc("duong_kinh", "30mm đến 35mm")
                                 }
                               >
                                 30mm đến 35mm
@@ -979,10 +960,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="35mm đến 38mm"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "duong_kinh",
-                                    "35mm đến 38mm"
-                                  )
+                                  capNhatBoLoc("duong_kinh", "35mm đến 38mm")
                                 }
                               >
                                 35mm đến 38mm
@@ -994,10 +972,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="38mm đến 40mm"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "duong_kinh",
-                                    "38mm đến 40mm"
-                                  )
+                                  capNhatBoLoc("duong_kinh", "38mm đến 40mm")
                                 }
                               >
                                 38mm đến 40mm
@@ -1009,10 +984,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="40mm đến 42mm"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "duong_kinh",
-                                    "40mm đến 42mm"
-                                  )
+                                  capNhatBoLoc("duong_kinh", "40mm đến 42mm")
                                 }
                               >
                                 40mm đến 42mm
@@ -1024,10 +996,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="42mm đến 45mm"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "duong_kinh",
-                                    "42mm đến 45mm"
-                                  )
+                                  capNhatBoLoc("duong_kinh", "42mm đến 45mm")
                                 }
                               >
                                 42mm đến 45mm
@@ -1039,10 +1008,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Từ 45mm trở lên"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "duong_kinh",
-                                    "Từ 45mm trở lên"
-                                  )
+                                  capNhatBoLoc("duong_kinh", "Từ 45mm trở lên")
                                 }
                               >
                                 Từ 45mm trở lên
@@ -1052,7 +1018,6 @@ export default function DanhMuc({ params }) {
                         </div>
                       </div>
 
-                      {/*Chất liệu dây  */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -1076,7 +1041,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Dây da"
                                 onClick={() =>
-                                  handleFilterChange("chat_lieu_day", "Dây da")
+                                  capNhatBoLoc("chat_lieu_day", "Dây da")
                                 }
                               >
                                 Dây da
@@ -1088,7 +1053,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thép không gỉ 316L"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     "Thép không gỉ 316L"
                                   )
@@ -1103,7 +1068,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thép không gỉ 316L mạ vàng công nghệ PVD"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     "Thép không gỉ 316L mạ vàng công nghệ PVD"
                                   )
@@ -1118,7 +1083,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thép không gỉ 316L dạng lưới"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     "Thép không gỉ 316L dạng lưới"
                                   )
@@ -1133,7 +1098,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thép không gỉ 316L dạng lắc"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     " Thép không gỉ 316L dạng lắc"
                                   )
@@ -1148,10 +1113,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Dây vải"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "chat_lieu_day",
-                                    " Dây vải"
-                                  )
+                                  capNhatBoLoc("chat_lieu_day", " Dây vải")
                                 }
                               >
                                 Dây vải
@@ -1163,7 +1125,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thép không gỉ 316L/ Vàng 18K"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     " Thép không gỉ 316L/ Vàng 18K"
                                   )
@@ -1178,7 +1140,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thép không gỉ 316L/ Ceramic"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     " Thép không gỉ 316L/ Ceramic"
                                   )
@@ -1193,7 +1155,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thép không gỉ mạ công nghệ PVD"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     "Thép không gỉ mạ công nghệ PVD"
                                   )
@@ -1208,10 +1170,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Dây cao su"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "chat_lieu_day",
-                                    " Dây cao su"
-                                  )
+                                  capNhatBoLoc("chat_lieu_day", " Dây cao su")
                                 }
                               >
                                 Dây cao su
@@ -1223,10 +1182,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Dây dù"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "chat_lieu_day",
-                                    "  Dây dù"
-                                  )
+                                  capNhatBoLoc("chat_lieu_day", "  Dây dù")
                                 }
                               >
                                 Dây dù
@@ -1238,10 +1194,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Titanium"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "chat_lieu_day",
-                                    " Titanium"
-                                  )
+                                  capNhatBoLoc("chat_lieu_day", " Titanium")
                                 }
                               >
                                 Titanium
@@ -1253,7 +1206,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Titanium mạ vàng công nghệ PVD"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_day",
                                     "itanium mạ vàng công nghệ PVD"
                                   )
@@ -1268,7 +1221,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Nhựa"
                                 onClick={() =>
-                                  handleFilterChange("chat_lieu_day", "  Nhựa")
+                                  capNhatBoLoc("chat_lieu_day", "  Nhựa")
                                 }
                               >
                                 Nhựa
@@ -1278,7 +1231,6 @@ export default function DanhMuc({ params }) {
                         </div>
                       </div>
 
-                      {/*Chất liệu vỏ */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -1302,7 +1254,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thép không gỉ 316L"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_vo",
                                     "Thép không gỉ 316L"
                                   )
@@ -1317,7 +1269,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thép không gỉ mạ vàng công nghệ PVD"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_vo",
                                     "Thép không gỉ mạ vàng công nghệ PVD"
                                   )
@@ -1332,7 +1284,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Vàng 18K"
                                 onClick={() =>
-                                  handleFilterChange("chat_lieu_vo", "Vàng 18K")
+                                  capNhatBoLoc("chat_lieu_vo", "Vàng 18K")
                                 }
                               >
                                 Vàng 18K
@@ -1344,7 +1296,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thép không gỉ 316L/ Vàng 18K"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_vo",
                                     "Thép không gỉ 316L/ Vàng 18K"
                                   )
@@ -1359,7 +1311,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Titanium"
                                 onClick={() =>
-                                  handleFilterChange("chat_lieu_vo", "Titanium")
+                                  capNhatBoLoc("chat_lieu_vo", "Titanium")
                                 }
                               >
                                 Titanium
@@ -1371,7 +1323,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Titanium mạ công nghệ PVD"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_vo",
                                     "Titanium mạ công nghệ PVD"
                                   )
@@ -1386,7 +1338,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Ceramic"
                                 onClick={() =>
-                                  handleFilterChange("chat_lieu_vo", "Ceramic")
+                                  capNhatBoLoc("chat_lieu_vo", "Ceramic")
                                 }
                               >
                                 Ceramic
@@ -1398,7 +1350,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thép không gỉ 316L/ Ceramic"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_vo",
                                     "Thép không gỉ 316L/ Ceramic"
                                   )
@@ -1413,7 +1365,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thép không gỉ mạ công nghệ PVD"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_vo",
                                     "Thép không gỉ mạ công nghệ PVD"
                                   )
@@ -1428,7 +1380,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Nhựa"
                                 onClick={() =>
-                                  handleFilterChange("chat_lieu_vo", "Nhựa")
+                                  capNhatBoLoc("chat_lieu_vo", "Nhựa")
                                 }
                               >
                                 Nhựa
@@ -1440,7 +1392,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Titanium/ Vàng 18K"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "chat_lieu_vo",
                                     "Titanium/ Vàng 18K"
                                   )
@@ -1453,7 +1405,6 @@ export default function DanhMuc({ params }) {
                         </div>
                       </div>
 
-                      {/* Mặt kính */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -1477,7 +1428,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Sapphire"
                                 onClick={() =>
-                                  handleFilterChange("mat_kinh", "Sapphire")
+                                  capNhatBoLoc("mat_kinh", "Sapphire")
                                 }
                               >
                                 Sapphire
@@ -1489,10 +1440,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Mặt kính cứng"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "mat_kinh",
-                                    "Mặt kính cứng"
-                                  )
+                                  capNhatBoLoc("mat_kinh", "Mặt kính cứng")
                                 }
                               >
                                 Mặt kính cứng
@@ -1504,10 +1452,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Hardlex Crystal"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "mat_kinh",
-                                    "Hardlex Crystal"
-                                  )
+                                  capNhatBoLoc("mat_kinh", "Hardlex Crystal")
                                 }
                               >
                                 Hardlex Crystal
@@ -1518,9 +1463,7 @@ export default function DanhMuc({ params }) {
                                 rel="nofollow"
                                 href="#"
                                 title="Mica"
-                                onClick={() =>
-                                  handleFilterChange("mat_kinh", "Mica")
-                                }
+                                onClick={() => capNhatBoLoc("mat_kinh", "Mica")}
                               >
                                 Mica
                               </Link>
@@ -1531,7 +1474,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Kinh Nhựa"
                                 onClick={() =>
-                                  handleFilterChange("mat_kinh", "Kinh Nhựa")
+                                  capNhatBoLoc("mat_kinh", "Kinh Nhựa")
                                 }
                               >
                                 Kinh Nhựa
@@ -1541,7 +1484,6 @@ export default function DanhMuc({ params }) {
                         </div>
                       </div>
 
-                      {/*Màu mặt */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -1564,9 +1506,7 @@ export default function DanhMuc({ params }) {
                                 rel="nofollow"
                                 href="#"
                                 title="Trắng"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Trắng")
-                                }
+                                onClick={() => capNhatBoLoc("mau_mat", "Trắng")}
                               >
                                 Trắng
                               </Link>
@@ -1576,9 +1516,7 @@ export default function DanhMuc({ params }) {
                                 rel="nofollow"
                                 href="#"
                                 title="Hồng"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Hồng")
-                                }
+                                onClick={() => capNhatBoLoc("mau_mat", "Hồng")}
                               >
                                 Hồng
                               </Link>
@@ -1588,9 +1526,7 @@ export default function DanhMuc({ params }) {
                                 rel="nofollow"
                                 href="#"
                                 title="Xám"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Xám")
-                                }
+                                onClick={() => capNhatBoLoc("mau_mat", "Xám")}
                               >
                                 Xám
                               </Link>
@@ -1600,9 +1536,7 @@ export default function DanhMuc({ params }) {
                                 rel="nofollow"
                                 href="#"
                                 title="Đen"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Đen")
-                                }
+                                onClick={() => capNhatBoLoc("mau_mat", "Đen")}
                               >
                                 Đen
                               </Link>
@@ -1613,7 +1547,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Xanh lam"
                                 onClick={() =>
-                                  handleFilterChange("mau_mat", "Xanh lam")
+                                  capNhatBoLoc("mau_mat", "Xanh lam")
                                 }
                               >
                                 Xanh lam
@@ -1624,9 +1558,7 @@ export default function DanhMuc({ params }) {
                                 rel="nofollow"
                                 href="#"
                                 title="Vàng"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Vàng")
-                                }
+                                onClick={() => capNhatBoLoc("mau_mat", "Vàng")}
                               >
                                 Vàng
                               </Link>
@@ -1637,7 +1569,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Khảm trai"
                                 onClick={() =>
-                                  handleFilterChange("mau_mat", "Khảm trai")
+                                  capNhatBoLoc("mau_mat", "Khảm trai")
                                 }
                               >
                                 Khảm trai
@@ -1648,9 +1580,7 @@ export default function DanhMuc({ params }) {
                                 rel="nofollow"
                                 href="#"
                                 title="Đỏ"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Đỏ")
-                                }
+                                onClick={() => capNhatBoLoc("mau_mat", "Đỏ")}
                               >
                                 Đỏ
                               </Link>
@@ -1661,7 +1591,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Da Cam"
                                 onClick={() =>
-                                  handleFilterChange("mau_mat", "Da Cam")
+                                  capNhatBoLoc("mau_mat", "Da Cam")
                                 }
                               >
                                 Da Cam
@@ -1673,7 +1603,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Xanh Lá"
                                 onClick={() =>
-                                  handleFilterChange("mau_mat", "Xanh Lá")
+                                  capNhatBoLoc("mau_mat", "Xanh Lá")
                                 }
                               >
                                 Xanh Lá
@@ -1684,9 +1614,7 @@ export default function DanhMuc({ params }) {
                                 rel="nofollow"
                                 href="#"
                                 title="Nâu"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Nâu")
-                                }
+                                onClick={() => capNhatBoLoc("mau_mat", "Nâu")}
                               >
                                 Nâu
                               </Link>
@@ -1695,7 +1623,6 @@ export default function DanhMuc({ params }) {
                         </div>
                       </div>
 
-                      {/*Phong cách */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -1719,7 +1646,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Sang trọng"
                                 onClick={() =>
-                                  handleFilterChange("phong_cach", "Sang trọng")
+                                  capNhatBoLoc("phong_cach", "Sang trọng")
                                 }
                               >
                                 Sang trọng
@@ -1731,7 +1658,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thể thao"
                                 onClick={() =>
-                                  handleFilterChange("phong_cach", "Thể thao")
+                                  capNhatBoLoc("phong_cach", "Thể thao")
                                 }
                               >
                                 Thể thao
@@ -1743,7 +1670,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thể thao sang trọng"
                                 onClick={() =>
-                                  handleFilterChange(
+                                  capNhatBoLoc(
                                     "phong_cach",
                                     "Thể thao sang trọng"
                                   )
@@ -1758,7 +1685,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Quân đội"
                                 onClick={() =>
-                                  handleFilterChange("phong_cach", "Quân đội")
+                                  capNhatBoLoc("phong_cach", "Quân đội")
                                 }
                               >
                                 Quân đội
@@ -1770,7 +1697,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thời trang"
                                 onClick={() =>
-                                  handleFilterChange("phong_cach", "Thời trang")
+                                  capNhatBoLoc("phong_cach", "Thời trang")
                                 }
                               >
                                 Thời trang
@@ -1782,7 +1709,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Hiện đại"
                                 onClick={() =>
-                                  handleFilterChange("phong_cach", "Hiện đại")
+                                  capNhatBoLoc("phong_cach", "Hiện đại")
                                 }
                               >
                                 Hiện đại
@@ -1792,7 +1719,6 @@ export default function DanhMuc({ params }) {
                         </div>
                       </div>
 
-                      {/*Kiểu dáng */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -1816,7 +1742,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Mặt vuông"
                                 onClick={() =>
-                                  handleFilterChange("kieu_dang", "Mặt vuông")
+                                  capNhatBoLoc("kieu_dang", "Mặt vuông")
                                 }
                               >
                                 Mặt vuông
@@ -1828,7 +1754,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Mặt tròn"
                                 onClick={() =>
-                                  handleFilterChange("kieu_dang", "Mặt tròn")
+                                  capNhatBoLoc("kieu_dang", "Mặt tròn")
                                 }
                               >
                                 Mặt tròn
@@ -1840,10 +1766,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Mặt chữ nhật"
                                 onClick={() =>
-                                  handleFilterChange(
-                                    "kieu_dang",
-                                    "Mặt chữ nhật"
-                                  )
+                                  capNhatBoLoc("kieu_dang", "Mặt chữ nhật")
                                 }
                               >
                                 Mặt chữ nhật
@@ -1855,7 +1778,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Mặt Oval"
                                 onClick={() =>
-                                  handleFilterChange("kieu_dang", "Mặt Oval")
+                                  capNhatBoLoc("kieu_dang", "Mặt Oval")
                                 }
                               >
                                 Mặt Oval
@@ -1867,7 +1790,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Khác"
                                 onClick={() =>
-                                  handleFilterChange("kieu_dang", "Khác")
+                                  capNhatBoLoc("kieu_dang", "Khác")
                                 }
                               >
                                 Khác
@@ -1877,7 +1800,6 @@ export default function DanhMuc({ params }) {
                         </div>
                       </div>
 
-                      {/*Xuất xứ thương hiệu */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -1901,7 +1823,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Nhật Bản"
                                 onClick={() =>
-                                  handleFilterChange("xuat_xu", "Nhật Bản")
+                                  capNhatBoLoc("xuat_xu", "Nhật Bản")
                                 }
                               >
                                 Nhật Bản
@@ -1913,7 +1835,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="Thụy Sỹ"
                                 onClick={() =>
-                                  handleFilterChange("xuat_xu", "Thụy Sỹ")
+                                  capNhatBoLoc("xuat_xu", "Thụy Sỹ")
                                 }
                               >
                                 Thụy Sỹ
@@ -1924,7 +1846,7 @@ export default function DanhMuc({ params }) {
                       </div>
                     </div>
                   </div>
-                  {/*Menu-Đồng hồ nam */}
+
                   <div className={styles["field-title"]}>
                     <div className={styles["title-name"]}>
                       <div className={styles["cat-title"]}>
@@ -1937,7 +1859,7 @@ export default function DanhMuc({ params }) {
                               {" "}
                               {categoryName === "Đồng hồ"
                                 ? categoryName
-                                : `Đồng hồ ${categoryName} ${danh_muc}`}
+                                : `Đồng hồ ${categoryName}`}
                             </h1>
                           </div>
                         </div>
@@ -1948,7 +1870,7 @@ export default function DanhMuc({ params }) {
                     <select
                       className={styles["order-select"]}
                       name="order-select"
-                      onChange={handleSortChange}
+                      onChange={capNhatSapXep}
                     >
                       <option value="">Sắp xếp theo</option>
                       <option value="asc">Giá từ thấp tới cao</option>
@@ -1960,13 +1882,12 @@ export default function DanhMuc({ params }) {
                   </div>
 
                   <div className={styles.clear}></div>
-                  {/*Danh sách sản phẩm */}
 
                   <section className={styles["products-cat-frame"]}>
                     <div className={styles["products-cat-frame-inner"]}>
                       <div className={styles["product-grid"]}>
                         {/* item-1 */}
-                        {displayedProducts.map((product) => {
+                        {sanPhamHienThi.map((product) => {
                           const {
                             _id,
                             ten,
@@ -2058,7 +1979,7 @@ export default function DanhMuc({ params }) {
                                 </div>
                                 <div className={styles.clear}></div>
                               </div>
-                              {/* end .frame-inner */}
+
                               <div className={styles.clear}></div>
                             </div>
                           );
@@ -2067,9 +1988,7 @@ export default function DanhMuc({ params }) {
                     </div>
                   </section>
 
-                  {/* phân trang*/}
                   <div className={styles.pagination}>
-                    {/* Prev trang đâù */}
                     <span
                       title="First page"
                       className={
@@ -2077,11 +1996,11 @@ export default function DanhMuc({ params }) {
                           ? styles.disabled
                           : styles["other-page"]
                       }
-                      onClick={() => currentPage > 1 && handlePageChange(1)}
+                      onClick={() => currentPage > 1 && thayDoiTrang(1)}
                     >
                       ‹‹
                     </span>
-                    {/* Prev 1 trang */}
+
                     <span
                       className={
                         currentPage === 1
@@ -2089,16 +2008,16 @@ export default function DanhMuc({ params }) {
                           : styles["other-page"]
                       }
                       onClick={() =>
-                        currentPage > 1 && handlePageChange(currentPage - 1)
+                        currentPage > 1 && thayDoiTrang(currentPage - 1)
                       }
                     >
                       ‹
                     </span>
-                    {/* Trang hiện tại */}
+
                     <span
                       className={styles.currentPage}
                     >{`Trang ${currentPage} / ${totalPages || 1}`}</span>
-                    {/* Next 1 trang*/}
+
                     <span
                       className={
                         currentPage === totalPages
@@ -2107,12 +2026,12 @@ export default function DanhMuc({ params }) {
                       }
                       onClick={() =>
                         currentPage < totalPages &&
-                        handlePageChange(currentPage + 1)
+                        thayDoiTrang(currentPage + 1)
                       }
                     >
                       ›
                     </span>
-                    {/* Next tới trang cuối */}
+
                     <span
                       className={
                         currentPage === totalPages
@@ -2120,7 +2039,7 @@ export default function DanhMuc({ params }) {
                           : styles["other-page"]
                       }
                       onClick={() =>
-                        currentPage < totalPages && handlePageChange(totalPages)
+                        currentPage < totalPages && thayDoiTrang(totalPages)
                       }
                     >
                       ››
@@ -2129,7 +2048,6 @@ export default function DanhMuc({ params }) {
                 </div>
                 <div className={styles.clear}></div>
 
-                {/* đánh giá start */}
                 <div className={styles.evaluateCat}>
                   <div className={`${styles.ratingArea} ${styles.cls}`}>
                     <span id="ratings">
@@ -2170,7 +2088,7 @@ export default function DanhMuc({ params }) {
                 ></div>
               </div>
             </div>
-            {/* end đồng hồ nam   */}
+
             <div className={styles.clear}></div>
           </div>
         </div>
