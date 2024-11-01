@@ -146,7 +146,7 @@ const getAllDonHangByUserId = async (req, res) => {
     const { id_nguoi_dung } = req.params;
 
     // Lấy tất cả đơn hàng theo id_nguoi_dung
-    const donHangs = await DonHang.findAll({
+    const orders = await DonHang.findAll({
       where: { id_nguoi_dung },
       include: [
         {
@@ -165,13 +165,13 @@ const getAllDonHangByUserId = async (req, res) => {
       ],
     });
 
-    if (donHangs.length === 0) {
+    if (orders.length === 0) {
       return res
         .status(404)
         .json({ message: "Không tìm thấy đơn hàng cho người dùng này." });
     }
 
-    return res.status(200).json(donHangs);
+    return res.status(200).json({orders});
   } catch (error) {
     console.error("Lỗi khi lấy đơn hàng:", error);
     return res
@@ -211,7 +211,7 @@ const getDonHangByUserId = async (req, res) => {
         .json({ message: "Không tìm thấy đơn hàng cho người dùng này." });
     }
 
-    return res.status(200).json(donHangs);
+    return res.status(200).json({donHangs});
   } catch (error) {
     console.error("Lỗi khi lấy đơn hàng:", error);
     return res
