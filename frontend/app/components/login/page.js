@@ -56,7 +56,15 @@ export default function Login() {
           icon: "success",
           showConfirmButton: true,
         }).then(() => {
-          window.location.href = "http://localhost:3001";
+          if (typeof window !== "undefined") {
+            const queryParam = new URLSearchParams(window.location.search);
+            const redirect = queryParam.get("redirect");
+            if (redirect === "thanhtoan") {
+              window.location.href = "/components/thanhtoan";
+            } else {
+              window.location.href = "/";
+            }
+          }
         });
       } catch (error) {
         setSubmitting(false);
