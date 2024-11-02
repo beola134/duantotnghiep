@@ -4,10 +4,9 @@ import classNames from "classnames/bind";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Loading from "../loading/page";
- const cx = classNames.bind(styles);
+const cx = classNames.bind(styles);
 
 export default function DongHoTreoTuong() {
- 
   const [products, setProduct] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState([]);
   const [sortOption, setSortOption] = useState("");
@@ -25,7 +24,6 @@ export default function DongHoTreoTuong() {
     kieu_dang: "",
   });
 
- 
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -46,23 +44,19 @@ export default function DongHoTreoTuong() {
     }
   };
 
-  
   useEffect(() => {
     fetchProducts();
   }, [filter, currentPage]);
-
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
     fetchProducts();
   };
 
-  
   const handleFilterChange = (filterType, value) => {
     const newFilters = [...selectedFilter];
     const newFilter = { ...(filter || {}), [filterType]: value };
 
-    
     const filterIndex = newFilters.findIndex((filter) =>
       filter.startsWith(`${filterType}=`)
     );
@@ -79,40 +73,38 @@ export default function DongHoTreoTuong() {
       setCategoryName(value);
     }
   };
-   const handleClearFilters = () => {
-     setSelectedFilter([]);
-     setFilter({
-       gioi_tinh: "",
-     });
-     setCurrentPage(1);
-     
-     fetchProducts();
-   };
-  
+  const handleClearFilters = () => {
+    setSelectedFilter([]);
+    setFilter({
+      gioi_tinh: "",
+    });
+    setCurrentPage(1);
+
+    fetchProducts();
+  };
+
   const handleRemoveFilter = (filterToRemove) => {
-    if (!filterToRemove.includes("=")) return; 
+    if (!filterToRemove.includes("=")) return;
     const newFilters = selectedFilter.filter(
       (filter) => filter !== filterToRemove
     );
     const [filterType] = filterToRemove.split("=");
     const updatedFilter = { ...(filter || {}), [filterType]: "" };
 
-  
     setSelectedFilter(newFilters);
     setFilter(updatedFilter);
     fetchProducts();
   };
 
-  
   const sortProducts = (products) => {
     if (sortOption === "asc") {
-      return [...products].sort((a, b) => a.gia_san_pham - b.gia_san_pham); 
+      return [...products].sort((a, b) => a.gia_san_pham - b.gia_san_pham);
     } else if (sortOption === "desc") {
-      return [...products].sort((a, b) => b.gia_san_pham - a.gia_san_pham); 
+      return [...products].sort((a, b) => b.gia_san_pham - a.gia_san_pham);
     }
-    return products; 
+    return products;
   };
-  
+
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
   };
@@ -122,8 +114,7 @@ export default function DongHoTreoTuong() {
   }
   if (error) {
     return <p>Error:{error}</p>;
-    
-  } 
+  }
 
   const displayedProducts = sortProducts(products);
 
@@ -204,7 +195,6 @@ export default function DongHoTreoTuong() {
                 <div className={cx("products-cat")}>
                   <div className={cx("block-products-filter")}>
                     <div className={cx("block-product-filter", "cls")}>
-                      
                       <div className={cx("field-area", "field-item")}>
                         <div
                           className={cx(
@@ -686,8 +676,6 @@ export default function DongHoTreoTuong() {
                             </Link>
                           </div>
                         ))}
-
-                        
                       </div>
                     </div>
                   </section>
