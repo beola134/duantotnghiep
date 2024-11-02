@@ -120,7 +120,7 @@
   text-decoration: none;
   transition: color 0.3s ease, text-decoration 0.3s ease;
   text-align: center;
-  font-size: 10px;
+  font-size: 14px;
   line-height: 25px;
 }
 .watch p small {
@@ -456,7 +456,7 @@
 }
 
 .related-video iframe {
-  width: 134px;
+  width: 130px;
   height: 80px;
   overflow: hidden;
 }

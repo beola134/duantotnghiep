@@ -10,7 +10,7 @@ const Product = sequelize.define('Product', {
     },
     ten_san_pham: {
         type: DataTypes.STRING(255),
-        allowNull: true
+        allowNull: false
     },
     ten: {
         type: DataTypes.STRING(255),
@@ -26,7 +26,7 @@ const Product = sequelize.define('Product', {
     },
     hinh_anh: {
         type: DataTypes.STRING(255),
-        allowNull: true
+        allowNull: false
     },
     mo_ta: {
         type: DataTypes.TEXT,

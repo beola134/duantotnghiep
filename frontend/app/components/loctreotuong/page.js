@@ -1,28 +1,81 @@
 "use client";
-import styles from "./donghotreotuong.module.css";
-import classNames from "classnames/bind";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import styles from "./donghotreotuong.module.css";
 import Loading from "../loading/page";
+import { useSearchParams } from "next/navigation";
+import classNames from "classnames/bind";
 const cx = classNames.bind(styles);
 
-export default function DongHoTreoTuong() {
-  const [products, setProduct] = useState([]);
+export default function DonghoNam() {
+  const [products, setProducts] = useState([]);
+  const [categoryName, setCategoryName] = useState("Đồng hồ treo tường");
   const [selectedFilter, setSelectedFilter] = useState([]);
   const [sortOption, setSortOption] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const searchParams = useSearchParams();
 
+  // Bộ lọc mặc định cho đồng hồ nam
   const [filter, setFilter] = useState({
     muc_gia: "",
-    phong_cach: "",
     chat_lieu_vo: "",
-    danh_muc: "",
     mau_mat: "",
+    phong_cach: "",
     kieu_dang: "",
+    thuong_hieu: "",
   });
+
+  useEffect(() => {
+    const query = searchParams.get("query");
+    if (query) {
+      const parsedFilters = Object.fromEntries(
+        new URLSearchParams(query).entries()
+      );
+      
+      
+      setFilter((prevFilter) => ({
+        ...prevFilter,
+        ...parsedFilters,
+      }));
+
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const response = await fetch(
+            `http://localhost:5000/product/filterTreoTuong?${query}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          setProducts(data.products || []);
+          setError(null);
+        } catch (error) {
+          console.error("Lỗi khi fetch dữ liệu:", error);
+          setError("Lỗi khi tải dữ liệu");
+          setProducts([]);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchData();
+    } else {
+      setProducts([]);
+      setLoading(false);
+    }
+  }, [searchParams]);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -35,7 +88,7 @@ export default function DongHoTreoTuong() {
         throw new Error("Lỗi không thể tải dữ liệu");
       }
       const data = await response.json();
-      setProduct(data.products);
+      setProducts(data.products);
       setTotalPages(data.totalPages);
     } catch (error) {
       setError(error.message);
@@ -55,7 +108,7 @@ export default function DongHoTreoTuong() {
 
   const handleFilterChange = (filterType, value) => {
     const newFilters = [...selectedFilter];
-    const newFilter = { ...(filter || {}), [filterType]: value };
+    const newFilter = { ...filter, [filterType]: value };
 
     const filterIndex = newFilters.findIndex((filter) =>
       filter.startsWith(`${filterType}=`)
@@ -65,7 +118,7 @@ export default function DongHoTreoTuong() {
     } else {
       newFilters.push(`${filterType}=${value}`);
     }
-    // Cập nhật trạng thái bộ lọc
+
     setSelectedFilter(newFilters);
     setFilter(newFilter);
 
@@ -73,6 +126,7 @@ export default function DongHoTreoTuong() {
       setCategoryName(value);
     }
   };
+
   const handleClearFilters = () => {
     setSelectedFilter([]);
     setFilter({
@@ -84,13 +138,16 @@ export default function DongHoTreoTuong() {
   };
 
   const handleRemoveFilter = (filterToRemove) => {
-    if (!filterToRemove.includes("=")) return;
     const newFilters = selectedFilter.filter(
       (filter) => filter !== filterToRemove
     );
-    const [filterType] = filterToRemove.split("=");
-    const updatedFilter = { ...(filter || {}), [filterType]: "" };
 
+    const [filterType] = filterToRemove.split("=");
+    const updatedFilter = { ...filter, [filterType]: "" };
+
+    if (filterType === "danh_muc") {
+      setCategoryName("Đồng hồ nam");
+    }
     setSelectedFilter(newFilters);
     setFilter(updatedFilter);
     fetchProducts();
@@ -108,22 +165,21 @@ export default function DongHoTreoTuong() {
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
   };
-
-  if (loading) {
-    return <Loading />;
-  }
-  if (error) {
-    return <p>Error:{error}</p>;
-  }
-
-  const displayedProducts = sortProducts(products);
-
-  const formatCurrency = (amount) => {
+    const formatCurrency = (amount) => {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
     }).format(amount);
   };
+
+  if (loading) {
+    return <Loading />;
+  }
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
+  const displayedProducts = sortProducts(products); 
   return (
     <>
       <div className={cx("container-header")}>
@@ -195,6 +251,8 @@ export default function DongHoTreoTuong() {
                 <div className={cx("products-cat")}>
                   <div className={cx("block-products-filter")}>
                     <div className={cx("block-product-filter", "cls")}>
+                      {/* block - menu-ngang */}
+                      {/* item1 */}
                       <div className={cx("field-area", "field-item")}>
                         <div
                           className={cx(
@@ -676,6 +734,8 @@ export default function DongHoTreoTuong() {
                             </Link>
                           </div>
                         ))}
+
+                        
                       </div>
                     </div>
                   </section>

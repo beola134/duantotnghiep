@@ -39,7 +39,7 @@
   border-radius: 25px;
   padding: 5px 20px;
   max-height: 30px;
-  margin-right: -120px;
+  margin-right: -70px;
 }
 
 .search-bar .input {
@@ -106,7 +106,7 @@
 }
 
 .contact-info .cart .user-i {
-  font-size: 10px;
+  font-size: 15px;
   color: #fff;
 }
 
@@ -115,16 +115,18 @@
   color: #ffffff;
   border-radius: 50%;
   text-align: center;
-  font-size: 12px;
+  font-size: 8px;
   width: 20px;
   height: 20px;
-  top: -8px;
-  right: -10px;
+  top:-5px;
+  right:-7px;
   border: solid 1px #fff;
   border-radius: 50%;
+  padding-top:1px;
 }
 
-/* Menu điều hướng */
+
+
 .navbar {
   background-color: #796752;
   padding: 8px 0;
@@ -163,53 +165,18 @@
 .nav-list > .nav-list-li > .nav-list-li-i {
   color: #ffffff;
 }
-.nav-list > .nav-list-li > .nav-list-li-i::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  margin-left: -1px;
-  bottom: -17px;
-  width: 90%;
-  height: 3px;
-  background-color: #fff;
-  transform: scaleX(1);
-}
+
 
 .nav-list > .nav-list-li > .nav-list-li-a {
-  position: relative; /* Đặt position cho liên kết để có thể quản lý z-index */
-}
-.nav-list > .nav-list-li > .nav-list-li-a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -17px;
-  width: 100%;
-  height: 3px;
-  background-color: #fff;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.3s ease;
-  z-index: 9999; /* Đặt z-index cho pseudo-element để nó nằm trên phần tử khác */
+  position: relative; 
 }
 
-.nav-list > .nav-list-li > .nav-list-li-a:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
+
+
 .nav-list-home {
   color: white;
 }
-.nav-list-home::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -17px;
-  width: 100%;
-  height: 3px;
-  background-color: #fff;
 
-  z-index: 9999; /* Đặt z-index cho pseudo-element để nó nằm trên phần tử khác */
-}
 
 .dropdown-menu {
   list-style: none;
@@ -217,8 +184,8 @@
   padding-top: 20px;
   margin: 0;
   top: 100%;
-  left: 50%; /* Căn giữa theo chiều ngang */
-  transform: translateX(1%); /* Dịch chuyển sang trái một nửa chiều rộng của menu */
+  left: 50%; 
+  transform: translateX(1%); 
   display: none;
   width: 1000px;
   flex-wrap: wrap;
@@ -247,7 +214,7 @@
   transition: transform 0.3s ease;
 }
 .dropdown-menu .dropdown-menu-li .dropdown-menu-img:hover {
-  transform: scale(1.2); /* Phóng to hình ảnh lên 1.2 lần khi di chuột */
+  transform: scale(1.2); 
 }
 
 .nav-list .nav-list-li:hover .dropdown-menu,
@@ -302,209 +269,209 @@
 .nav-list .nav-list-li:hover .dropdown-menu-doc {
   pointer-events: auto;
 }
-/* đồng hồ nữ*/
+
 .dropdown-menu-dhnu {
   list-style: none;
   background-color: #796752db;
   padding: 20px;
   margin: 0;
   position: absolute;
-  top: 100%; /* Để hiển thị dưới menu chính */
-  left: 50%; /* Căn giữa theo chiều ngang */
-  transform: translateX(-27%); /* Dịch chuyển sang trái một nửa chiều rộng của menu */
-  display: none; /* Ẩn menu cho đến khi hover */
+  top: 100%; 
+  left: 50%; 
+  transform: translateX(-27%); 
+  display: none; 
   width: 1000px;
   z-index: 999;
 }
-/*Đồng hồ đôi*/
+
 .dropdown-menu-dhd {
   list-style: none;
   background-color: #796752db;
   padding: 20px;
   margin: 0;
   position: absolute;
-  top: 100%; /* Để hiển thị dưới menu chính */
-  left: 50%; /* Căn giữa theo chiều ngang */
-  transform: translateX(-40%); /* Dịch chuyển sang trái một nửa chiều rộng của menu */
-  display: none; /* Ẩn menu cho đến khi hover */
+  top: 100%; 
+  left: 50%; 
+  transform: translateX(-40%); 
+  display: none; 
   width: 1000px;
   z-index: 999;
 }
 
 .nav-list li:hover .dropdown-menu-dhd {
   display: flex;
-  flex-direction: row; /* Để sắp xếp các cột ngang */
-  justify-content: space-between; /* Căn chỉnh các cột */
+  flex-direction: row; 
+  justify-content: space-between; 
 }
 
 .dropdown-menu-dhd li {
   padding-bottom: 5px;
-  margin: 0; /* Để không có khoảng cách giữa các phần tử */
-  flex: 1; /* Để các phần tử có cùng chiều rộng */
+  margin: 0; 
+  flex: 1; 
   padding-right: 10px;
 }
 
 .dropdown-menu-dhd li h3 {
-  margin-bottom: 10px; /* Khoảng cách giữa tiêu đề và danh sách */
+  margin-bottom: 10px; 
 }
 .dropdown-menu-dhd li h3::after {
   content: "";
-  display: block; /* Đảm bảo nó là một khối */
-  width: 80%; /* Chiều rộng đầy đủ */
-  height: 2px; /* Độ dày của đường gạch */
-  background-color: #ccc; /* Màu sắc của đường gạch */
-  margin: 5px 0; /* Khoảng cách trên và dưới đường gạch */
+  display: block;
+  width: 80%; 
+  height: 2px; 
+  background-color: #ccc; 
+  margin: 5px 0; 
 }
 .dropdown-menu-dhd li ul {
-  list-style: none; /* Bỏ dấu chấm của danh sách */
-  padding: 0; /* Bỏ khoảng cách mặc định */
-  max-height: 200px; /* Chiều cao tối đa */
-  overflow-y: auto; /* Thêm thanh cuộn dọc */
+  list-style: none; 
+  padding: 0; 
+  max-height: 200px; 
+  overflow-y: auto; 
 }
 
 .dropdown-menu-dhd li ul li {
-  margin-bottom: 5px; /* Khoảng cách giữa các mục trong danh sách */
-  font-size: 12px; /* Kích thước font có thể điều chỉnh */
+  margin-bottom: 5px; 
+  font-size: 12px; 
   color: white;
 }
 
-/* Hiệu ứng hover cho dropdown menu */
+
 .dropdown-menu-dhd li ul li:hover {
   color: red;
 }
-/* Tùy chỉnh thanh cuộn */
+
 .dropdown-menu-dhd li ul::-webkit-scrollbar {
-  width: 8px; /* Chiều rộng của thanh cuộn */
+  width: 8px; 
 }
 
 .dropdown-menu-dhd li ul::-webkit-scrollbar-thumb {
-  background: #796752; /* Màu sắc của thanh cuộn */
-  border-radius: 10px; /* Làm tròn góc của thanh cuộn */
+  background: #796752;
+  border-radius: 10px; 
   border: solid white 1px;
 }
 
 .dropdown-menu-dhd li ul::-webkit-scrollbar-track {
-  background: #f0f0f0; /* Màu sắc của đường ray thanh cuộn */
-  border-radius: 10px; /* Làm tròn góc của đường ray */
+  background: #f0f0f0; 
+  border-radius: 10px; 
 }
 
-/* Thay đổi màu sắc khi hover */
+
 .dropdown-menu-dhd li ul::-webkit-scrollbar-thumb:hover {
-  background: #4b4b4b; /* Màu sắc của thanh cuộn khi hover */
+  background: #4b4b4b; 
 }
 
 .nav-list .nav-list-li:hover .dropdown-menu-dhnu {
   display: flex;
-  flex-direction: row; /* Để sắp xếp các cột ngang */
-  justify-content: space-between; /* Căn chỉnh các cột */
+  flex-direction: row;
+  justify-content: space-between; 
 }
 
 .dropdown-menu-dhnu li {
   padding-bottom: 5px;
-  margin: 0; /* Để không có khoảng cách giữa các phần tử */
-  flex: 1; /* Để các phần tử có cùng chiều rộng */
+  margin: 0; 
+  flex: 1; 
   padding-right: 10px;
 }
 
 .dropdown-menu-dhnu li h3 {
-  margin-bottom: 10px; /* Khoảng cách giữa tiêu đề và danh sách */
+  margin-bottom: 10px; 
   color: #000000;
 }
 .dropdown-menu-dhnu li h3::after {
   content: "";
-  display: block; /* Đảm bảo nó là một khối */
-  width: 80%; /* Chiều rộng đầy đủ */
-  height: 2px; /* Độ dày của đường gạch */
-  background-color: #ccc; /* Màu sắc của đường gạch */
-  margin: 5px 0; /* Khoảng cách trên và dưới đường gạch */
+  display: block; 
+  width: 80%; 
+  height: 2px; 
+  background-color: #ccc; 
+  margin: 5px 0; 
 }
 .dropdown-menu-dhnu li ul {
-  list-style: none; /* Bỏ dấu chấm của danh sách */
-  padding: 0; /* Bỏ khoảng cách mặc định */
-  max-height: 200px; /* Chiều cao tối đa */
-  overflow-y: auto; /* Thêm thanh cuộn dọc */
+  list-style: none; 
+  padding: 0; 
+  max-height: 200px;
+  overflow-y: auto; 
 }
 
 .dropdown-menu-dhnu li ul li {
-  margin-bottom: 5px; /* Khoảng cách giữa các mục trong danh sách */
-  font-size: 12px; /* Kích thước font có thể điều chỉnh */
+  margin-bottom: 5px; 
+  font-size: 12px; 
   color: white;
 }
 
-/* Hiệu ứng hover cho dropdown menu */
+
 .dropdown-menu-dhnu li ul li:hover {
   color: red;
 }
-/* Tùy chỉnh thanh cuộn */
+
 .dropdown-menu-dhnu li ul::-webkit-scrollbar {
-  width: 8px; /* Chiều rộng của thanh cuộn */
+  width: 8px; 
 }
 
 .dropdown-menu-dhnu li ul::-webkit-scrollbar-thumb {
-  background: #796752; /* Màu sắc của thanh cuộn */
-  border-radius: 10px; /* Làm tròn góc của thanh cuộn */
+  background: #796752; 
+  border-radius: 10px; 
   border: solid white 1px;
 }
 
 .dropdown-menu-dhnu li ul::-webkit-scrollbar-track {
-  background: #f0f0f0; /* Màu sắc của đường ray thanh cuộn */
-  border-radius: 10px; /* Làm tròn góc của đường ray */
+  background: #f0f0f0; 
+  border-radius: 10px; 
 }
 
-/* Thay đổi màu sắc khi hover */
+
 .dropdown-menu-dhnu li ul::-webkit-scrollbar-thumb:hover {
-  background: #4b4b4b; /* Màu sắc của thanh cuộn khi hover */
+  background: #4b4b4b; 
 }
 
-/*đồng hồ nam*/
+
 .dropdown-menu-dhn {
   list-style: none;
   background-color: #796752db;
   padding: 20px;
   margin: 0;
   position: absolute;
-  top: 100%; /* Để hiển thị dưới menu chính */
-  left: 50%; /* Căn giữa theo chiều ngang */
-  transform: translateX(-13%); /* Dịch chuyển sang trái một nửa chiều rộng của menu */
-  display: none; /* Ẩn menu cho đến khi hover */
+  top: 100%; 
+  left: 50%; 
+  transform: translateX(-13%); 
+  display: none; 
   width: 1000px;
   z-index: 999;
 }
 
 .nav-list .nav-list-li:hover .dropdown-menu-dhn {
   display: flex;
-  flex-direction: row; /* Để sắp xếp các cột ngang */
-  justify-content: space-between; /* Căn chỉnh các cột */
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .dropdown-menu-dhn li {
   padding-bottom: 5px;
-  margin: 0; /* Để không có khoảng cách giữa các phần tử */
-  flex: 1; /* Để các phần tử có cùng chiều rộng */
+  margin: 0;
+  flex: 1;
   padding-right: 10px;
 }
 
 .dropdown-menu-dhn li h3 {
-  margin-bottom: 10px; /* Khoảng cách giữa tiêu đề và danh sách */
+  margin-bottom: 10px;
 }
 .dropdown-menu-dhn li h3::after {
   content: "";
-  display: block; /* Đảm bảo nó là một khối */
-  width: 80%; /* Chiều rộng đầy đủ */
-  height: 2px; /* Độ dày của đường gạch */
-  background-color: #ccc; /* Màu sắc của đường gạch */
-  margin: 5px 0; /* Khoảng cách trên và dưới đường gạch */
+  display: block; 
+  width: 80%; 
+  height: 2px; 
+  background-color: #ccc; 
+  margin: 5px 0;
 }
 .dropdown-menu-dhn li ul {
-  list-style: none; /* Bỏ dấu chấm của danh sách */
-  padding: 0; /* Bỏ khoảng cách mặc định */
-  max-height: 200px; /* Chiều cao tối đa */
-  overflow-y: auto; /* Thêm thanh cuộn dọc */
+  list-style: none; 
+  padding: 0; 
+  max-height: 200px; 
+  overflow-y: auto; 
 }
 
 .dropdown-menu-dhn li ul li {
-  margin-bottom: 5px; /* Khoảng cách giữa các mục trong danh sách */
-  font-size: 12px; /* Kích thước font có thể điều chỉnh */
+  margin-bottom: 5px; 
+  font-size: 12px;
   color: white;
 }
 .dropdown-menu-dhtt {
@@ -513,10 +480,10 @@
   padding: 20px;
   margin: 0;
   position: absolute;
-  top: 100%; /* Để hiển thị dưới menu chính */
-  left: 50%; /* Căn giữa theo chiều ngang */
-  transform: translateX(-58%); /* Dịch chuyển sang trái một nửa chiều rộng của menu */
-  display: none; /* Ẩn menu cho đến khi hover */
+  top: 100%; 
+  left: 50%; 
+  transform: translateX(-58%); 
+  display: none; 
   width: 1000px;
   z-index: 999;
 }
@@ -528,66 +495,66 @@
 }
 .nav-list .nav-list-li:hover .dropdown-menu-dhtt {
   display: flex;
-  flex-direction: row; /* Để sắp xếp các cột ngang */
-  justify-content: space-between; /* Căn chỉnh các cột */
+  flex-direction: row; 
+  justify-content: space-between; 
 }
 
 .dropdown-menu-dhtt li {
   padding-bottom: 5px;
-  margin: 0; /* Để không có khoảng cách giữa các phần tử */
-  flex: 1; /* Để các phần tử có cùng chiều rộng */
+  margin: 0;
+  flex: 1; 
 }
 
 .dropdown-menu-dhtt li h3 {
-  margin-bottom: 10px; /* Khoảng cách giữa tiêu đề và danh sách */
+  margin-bottom: 10px;
 }
 .dropdown-menu-dhtt li h3::after {
   content: "";
-  display: block; /* Đảm bảo nó là một khối */
-  width: 80%; /* Chiều rộng đầy đủ */
-  height: 2px; /* Độ dày của đường gạch */
-  background-color: #ccc; /* Màu sắc của đường gạch */
-  margin: 5px 0; /* Khoảng cách trên và dưới đường gạch */
+  display: block; 
+  width: 80%; 
+  height: 2px; 
+  background-color: #ccc; 
+  margin: 5px 0; 
 }
 .dropdown-menu-dhtt li ul {
-  list-style: none; /* Bỏ dấu chấm của danh sách */
-  padding: 0; /* Bỏ khoảng cách mặc định */
-  max-height: 200px; /* Chiều cao tối đa */
-  overflow-y: auto; /* Thêm thanh cuộn dọc */
+  list-style: none;
+  padding: 0;
+  max-height: 200px; 
+  overflow-y: auto; 
 }
 
 .dropdown-menu-dhtt li ul li {
-  margin-bottom: 5px; /* Khoảng cách giữa các mục trong danh sách */
-  font-size: 12px; /* Kích thước font có thể điều chỉnh */
+  margin-bottom: 5px; 
+  font-size: 12px; 
   color: white;
 }
 .dropdown-menu-dhtt li ul li:hover {
   color: red;
 }
 
-/* Hiệu ứng hover cho dropdown menu */
+
 .dropdown-menu-dhn li ul li:hover {
   color: red;
 }
-/* Tùy chỉnh thanh cuộn */
+
 .dropdown-menu-dhn li ul::-webkit-scrollbar {
-  width: 8px; /* Chiều rộng của thanh cuộn */
+  width: 8px;
 }
 
 .dropdown-menu-dhn li ul::-webkit-scrollbar-thumb {
-  background: #796752; /* Màu sắc của thanh cuộn */
-  border-radius: 10px; /* Làm tròn góc của thanh cuộn */
+  background: #796752; 
+  border-radius: 10px; 
   border: solid white 1px;
 }
 
 .dropdown-menu-dhn li ul::-webkit-scrollbar-track {
-  background: #f0f0f0; /* Màu sắc của đường ray thanh cuộn */
-  border-radius: 10px; /* Làm tròn góc của đường ray */
+  background: #f0f0f0; 
+  border-radius: 10px; 
 }
 
-/* Thay đổi màu sắc khi hover */
+
 .dropdown-menu-dhn li ul::-webkit-scrollbar-thumb:hover {
-  background: #4b4b4b; /* Màu sắc của thanh cuộn khi hover */
+  background: #4b4b4b; 
 }
 
 .dropdown-menu-dhn-li2,

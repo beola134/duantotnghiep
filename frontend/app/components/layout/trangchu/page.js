@@ -9,19 +9,16 @@ import Link from "next/link";
 const cx = classNames.bind(styles);
 
 export default function Main() {
+   
   const [activeTab, setActiveTab] = useState("tab1");
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
-  const setting = {
-    arrows: false,
-    dots: false,
-    infinite: true,
-    speed: 300,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-  };
-  const settings = {
+  const [firstSlider, setFirstSlider] = useState(null);
+  const [secondSlider, setSecondSlider] = useState(null);
+
+  
+  const firstSettings = {
     arrows: false,
     dots: false,
     infinite: true,
@@ -52,27 +49,71 @@ export default function Main() {
       },
     ],
   };
-  const [slider, setSlider] = useState(null);
-  const next = () => {
-    if (slider) {
-      slider.slickNext();
+
+ 
+  const secondSettings = {
+    arrows: true,
+    dots: false,
+    infinite: true,
+    speed: 400,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+ 
+  const nextFirst = () => {
+    if (firstSlider) {
+      firstSlider.slickNext();
     }
   };
 
-  const prev = () => {
-    if (slider) {
-      slider.slickPrev();
+  const prevFirst = () => {
+    if (firstSlider) {
+      firstSlider.slickPrev();
+    }
+  };
+
+  const nextSecond = () => {
+    if (secondSlider) {
+      secondSlider.slickNext();
+    }
+  };
+
+  const prevSecond = () => {
+    if (secondSlider) {
+      secondSlider.slickPrev();
     }
   };
   useEffect(() => {
     const interval = setInterval(() => {
-      if (slider) {
-        next();
+      if (firstSlider) {
+        nextFirst();
+      }
+      if (secondSlider) {
+        nextSecond();
       }
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [slider]);
+  }, [firstSlider, secondSlider]);
+
+
   const [productsNam, setProductsNam] = useState([]);
 
   useEffect(() => {
@@ -109,7 +150,7 @@ export default function Main() {
     fetchData();
   }, []);
 
-  //sản phẩm mới
+  
   const [productsNewNam, setProductsNewNam] = useState([]);
 
   useEffect(() => {
@@ -473,7 +514,7 @@ export default function Main() {
           </p>
         </div>
         <div className={styles.owlItem}>
-          <Slider {...settings} ref={(sliderRef) => setSlider(sliderRef)}>
+          <Slider ref={setFirstSlider} {...firstSettings}>
             {category.map((item) => (
               <div key={item._id}>
                 <div className={styles.item}>
@@ -490,12 +531,13 @@ export default function Main() {
               </div>
             ))}
           </Slider>
-          <button onClick={prev} className={`${styles.navButton} ${styles.prevButton}`}>
-            <img src="/image/item/icons/left.png" width="40px" height="30px" />
+
+          <button onClick={prevFirst} className={`${styles.navButton} ${styles.prevButton}`}>
+            <img src="/image/item/icons/left.png"  width="40px" height="30px" />
           </button>
 
-          <button onClick={next} className={`${styles.navButton} ${styles.nextButton}`}>
-            <img src="/image/item/icons/right.png" width="40px" height="30px" />
+          <button onClick={nextFirst} className={`${styles.navButton} ${styles.nextButton}`}>
+            <img src="/image/item/icons/right.png"  width="40px" height="30px" />
           </button>
         </div>
       </section>
@@ -538,17 +580,18 @@ export default function Main() {
             <div className={styles.sectionBrand}>
               <div className={styles.sliderCll}>
                 <div id="pav-slide-content">
-                  <div className={`fs-slider-home fs-slider-home-content owl-carousel brand-index`}>
+                  <div className={styles.brandIndex}>
                     <div className={styles.itemSlide1}>
-                      <Slider {...setting}>
+                      <Slider ref={setSecondSlider} {...secondSettings}>
                         {category.map((item) => (
-                          <div key={item._id}>
-                            <div className={styles.item}>
-                              <a title={item.danh_muc}>
-                                <img alt={item.danh_muc} src={`http://localhost:5000/images/${item.hinh_anh}`} />
-                              </a>
+                            <div className={styles.item} key={item._id}>
+                                <img
+                                  alt={item.danh_muc}
+                                  width="390"
+                                  height="50"
+                                  src={`http://localhost:5000/images/${item.hinh_anh}`}   
+                                />
                             </div>
-                          </div>
                         ))}
                       </Slider>
                     </div>
