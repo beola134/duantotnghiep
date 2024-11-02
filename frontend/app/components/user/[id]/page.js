@@ -143,10 +143,20 @@ const User = ({ params }) => {
     <div className={styles.container}>
       <div className={styles.sidebar}>
         <div className={styles.profilePicture}>
-          <img
+          {/*<img
             src={`http://localhost:5000/images/${userData.hinh_anh}`}
             alt="Avatar"
             className={styles.avatar}
+          />*/}
+          <img
+            src={
+              userData.hinh_anh.startsWith("http")
+                ? userData.hinh_anh
+                : `http://localhost:5000/images/${userData.hinh_anh}`
+            }
+            width="300"
+            height="363"
+            style={{ display: "inline-block", opacity: "1" }}
           />
         </div>
         <h3>
@@ -281,10 +291,21 @@ const User = ({ params }) => {
               <ul>
                 {orderShow.map((order) => (
                   <li key={order.id}>
-                    <p>Mã Đơn Hàng: {order.id}</p>
-                    <p>Ngày Đặt: {order.thoi_gian_tao}</p>
-                    <p>Tổng Giá Trị: {order.tong_tien} VND</p>
-                    <p>Trạng thái đơn hàng: {order.trang_thai}</p>
+                    <p>Mã Đơn Hàng: {order._id}</p>
+                    <p>
+                      Ngày Đặt:{" "}
+                      {new Date(order.thoi_gian_tao).toLocaleString("vi-VN", {
+                        timeZone: "Asia/Ho_Chi_Minh",
+                      })}
+                    </p>
+
+                    <p>
+                      Tổng Giá Trị: {order.tong_tien.toLocaleString("vi-VN")}₫
+                    </p>
+                    <p>
+                      Trạng thái đơn hàng:
+                      <span className={styles.trh}>{order.trang_thai}</span>
+                    </p>
                   </li>
                 ))}
               </ul>
