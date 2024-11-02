@@ -310,8 +310,7 @@ export default function Header() {
               type="button"
               className={cx("button")}
               onClick={handleSearch}
-              disabled={!inputData}
-            >
+              disabled={!inputData}>
               <i className="fas fa-search" style={{ color: "white" }}></i>
             </button>
           </div>
@@ -333,10 +332,18 @@ export default function Header() {
               <div className={cx("user")}>
                 <Link href={`/components/user/${user.user._id}`}>
                   <img
-                    src={`http://localhost:5000/images/${user.user.hinh_anh}`}
+                    src={
+                      user.user.hinh_anh.startsWith("http")
+                        ? user.user.hinh_anh
+                        : `http://localhost:5000/images/${user.user.hinh_anh}`
+                    }
                     width="300"
                     height="363"
-                    style={{ display: "inline-block", opacity: "1" }}
+                    style={{
+                      display: "inline-block",
+                      opacity: "1",
+                      borderRadius: "50%",
+                    }}
                   />
                 </Link>
               </div>
@@ -348,15 +355,15 @@ export default function Header() {
               </div>
             )}
             <Link href="/components/giohang">
-            <div className={cx("cart")}>
-              
+              <div className={cx("cart")}>
                 <FontAwesomeIcon
                   icon={faShoppingCart}
                   style={{ color: "#ffffff" }}
                 />
-              
-              <span className={cx("cart-count")}>3</span>
-            </div></Link>
+
+                <span className={cx("cart-count")}>3</span>
+              </div>
+            </Link>
           </div>
         </div>
       </header>
@@ -372,8 +379,7 @@ export default function Header() {
           <li className={cx("nav-list-li")}>
             <Link
               href={"/components/thuonghieu"}
-              className={cx("nav-list-li-a")}
-            >
+              className={cx("nav-list-li-a")}>
               THƯƠNG HIỆU
             </Link>
             <ul className={cx("dropdown-menu")}>
@@ -381,8 +387,7 @@ export default function Header() {
                 <li className={cx("dropdown-menu-li")} key={item._id}>
                   <Link
                     href={`/components/chitietdanhmuc/${item._id}`}
-                    style={{ color: "white" }}
-                  >
+                    style={{ color: "white" }}>
                     <img
                       className={cx("dropdown-menu-img")}
                       src={`http://localhost:5000/images/${item.hinh_anh}`}
@@ -409,8 +414,7 @@ export default function Header() {
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -428,8 +432,7 @@ export default function Header() {
                         href={`/components/locgia?query=${encodeURIComponent(
                           item.id
                         )}`}
-                        className={cx("cxcx")}
-                      >
+                        className={cx("cxcx")}>
                         {item.title}
                       </Link>
                     </li>
@@ -448,8 +451,7 @@ export default function Header() {
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -461,15 +463,14 @@ export default function Header() {
               <li className={cx("dropdown-menu-dhnu-li1")}>
                 <h3 className={cx("dropdown-menu-dhnu-h3")}>CHẤT LIỆU DÂY</h3>
                 <ul className={cx("dropdown-menu-dhnu-ul")}>
-                   {locDayNam.map((item) => (
+                  {locDayNam.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
                         href={`/components/locgia?query=${encodeURIComponent(
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -488,8 +489,7 @@ export default function Header() {
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -515,8 +515,7 @@ export default function Header() {
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -532,8 +531,7 @@ export default function Header() {
                         href={`/components/locgia?query=${encodeURIComponent(
                           item.id
                         )}`}
-                        className={cx("cxcx")}
-                      >
+                        className={cx("cxcx")}>
                         {item.title}
                       </Link>
                     </li>
@@ -550,8 +548,7 @@ export default function Header() {
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -561,15 +558,14 @@ export default function Header() {
               <li className={cx("dropdown-menu-dhnu-li1")}>
                 <h3 className={cx("dropdown-menu-dhnu-h3")}>CHẤT LIỆU DÂY</h3>
                 <ul className={cx("dropdown-menu-dhnu-ul")}>
-                   {locDayNu.map((item) => (
+                  {locDayNu.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
                         href={`/components/locgia?query=${encodeURIComponent(
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -586,8 +582,7 @@ export default function Header() {
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -613,8 +608,7 @@ export default function Header() {
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -630,8 +624,7 @@ export default function Header() {
                         href={`/components/locgia?query=${encodeURIComponent(
                           item.id
                         )}`}
-                        className={cx("cxcx")}
-                      >
+                        className={cx("cxcx")}>
                         {item.title}
                       </Link>
                     </li>
@@ -648,8 +641,7 @@ export default function Header() {
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -659,15 +651,14 @@ export default function Header() {
               <li className={cx("dropdown-menu-dhd-li1")}>
                 <h3 className={cx("dropdown-menu-dhd-h3")}>CHẤT LIỆU DÂY</h3>
                 <ul className={cx("dropdown-menu-dhd-ul")}>
-                   {locDayDoi.map((item) => (
+                  {locDayDoi.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
                         href={`/components/locgia?query=${encodeURIComponent(
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -677,15 +668,14 @@ export default function Header() {
               <li className={cx("dropdown-menu-dhd-li1")}>
                 <h3 className={cx("dropdown-menu-dhd-h3")}>PHONG CÁCH</h3>
                 <ul className={cx("dropdown-menu-dhd-ul")}>
-                 {locPhongCachDoi.map((item) => (
+                  {locPhongCachDoi.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
                         href={`/components/locgia?query=${encodeURIComponent(
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -699,8 +689,7 @@ export default function Header() {
           <li className={cx("nav-list-li")}>
             <Link
               href="/components/donghotreotuong"
-              className={cx("nav-list-li-a")}
-            >
+              className={cx("nav-list-li-a")}>
               ĐỒNG HỒ TREO TƯỜNG
             </Link>
             <ul className={cx("dropdown-menu-dhtt")}>
@@ -714,8 +703,7 @@ export default function Header() {
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -725,15 +713,14 @@ export default function Header() {
               <li className={cx("dropdown-menu-dhtt-li1")}>
                 <h3 className={cx("dropdown-menu-dhtt-h3")}>MỨC GIÁ</h3>
                 <ul className={cx("dropdown-menu-dhtt-ul")}>
-                 {locttGia.map((item) => (
+                  {locttGia.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
                         href={`/components/loctreotuong?query=${encodeURIComponent(
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -750,8 +737,7 @@ export default function Header() {
                           item.id
                         )}`}
                         className={cx("cxcx")}
-                        style={{ textTransform: "uppercase" }}
-                      >
+                        style={{ textTransform: "uppercase" }}>
                         {item.title}
                       </Link>
                     </li>
@@ -769,64 +755,56 @@ export default function Header() {
           <li className={cx("nav-list-li")}>
             <Link
               href="/components/sanphamkhac"
-              className={cx("nav-list-li-a")}
-            >
+              className={cx("nav-list-li-a")}>
               SẢN PHẨM KHÁC
             </Link>
             <ul className={cx("dropdown-menu-doc")}>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghothuysi"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   ĐỒNG HỒ THỤY SĨ
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghonhatban"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   ĐỒNG HỒ NHẬT BẢN
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/daydongho"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   DÂY TREO ĐỒNG HỒ
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/trangsucCK"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   TRANG SỨC CALVIN KLEIN
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/trangsucDW"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   TRANG SỨC DW
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghobaothuc"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   ĐỒNG HỒ BÁO THỨC
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
                 <Link
                   href="/components/donghodeban"
-                  className={cx("dropdown-menu-doc-a")}
-                >
+                  className={cx("dropdown-menu-doc-a")}>
                   ĐỒNG HỒ ĐỂ BÀN
                 </Link>
               </li>

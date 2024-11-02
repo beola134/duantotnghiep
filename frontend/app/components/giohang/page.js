@@ -41,10 +41,26 @@ const CartPage = () => {
             {cartItems.length === 0 ? (
               <div>
                 <img
-                  src="/image/item/empty-cart.webp"
+                  src="/image/item/cart-empty(1)"
                   alt="Giỏ hàng trống"
-                  style={{ marginLeft: "100px" }}
+                  style={{
+                    width: "350px",
+                    marginLeft: "220px",
+                  }}
                 />
+                <div className={styles.mh}>
+                  <p style={{ fontSize: "22px", marginBottom: "5px" }}>
+                    Giỏ hàng đang trống
+                  </p>
+
+                  <p style={{ fontSize: "14px", marginBottom: "5px" }}>
+                    Về cửa hàng để lấp đầu giỏ
+                  </p>
+                  <Link href={"/"}>
+                    {" "}
+                    <button className={styles.Btn}></button>
+                  </Link>
+                </div>
               </div>
             ) : (
               <div>
