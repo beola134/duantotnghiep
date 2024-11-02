@@ -2,52 +2,54 @@
 import Link from "next/link";
 import styles from "../donghonu/donghonu.module.css";
 import { useEffect, useState } from "react";
+import Loading from "../loading/page";
 
 export default function TrangsucCK() {
   const [products, setProducts] = useState([]);
-  const [selectedFilter, setSelectedFilter] = useState([]);
-  const [categoryName, setCategoryName] = useState("Đồng hồ nữ");
-  const [error, setError] = useState(null);
+  const [categoryName, setCategoryName] = useState(""); // Tiêu đề danh mục
+  const [selectedFilter, setSelectedFilter] = useState([]); // Lưu trữ các bộ lọc đã chọn
+  const [sortOption, setSortOption] = useState(""); // Tuỳ chọn sắp xếp (tăng/giảm dần)
+  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+  const [totalPages, setTotalPages] = useState(1); // Tổng số trang
   const [loading, setLoading] = useState(true);
-  const [sortOption, setSortOption] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-    useEffect(() => {
-      const fetchProducts = async () => {
-        try {
-          const response = await fetch(
-            "http://localhost:5000/product/category/ba2c7104-9bb0-448b-920a-3baffebbb7d6"
-          );
-          if (!response.ok) {
-            throw new Error("Lỗi không thể tải dữ liệu");
-          }
-          const data = await response.json();
-          setProducts(data.products);
-          setTotalPages(Math.ceil(data.products.length / 10)); // Giả sử mỗi trang hiển thị 10 sản phẩm
-        } catch (error) {
-          setError(error.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchProducts();
-    }, []);
+  const [error, setError] = useState(null);
 
   // Bộ lọc mặc định cho đồng hồ nữ
   const [filter, setFilter] = useState({
     chat_lieu_vo: "",
   });
+  // 1. Hàm gọi API để lấy danh sách sản phẩm dựa vào bộ lọc và phân trang
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const queryParams = new URLSearchParams({ ...filter, page: currentPage });
+      const response = await fetch(
+        `http://localhost:5000/product/filterBaoThuc?${queryParams}`
+      );
+      if (!response.ok) {
+        throw new Error("Lỗi không thể tải dữ liệu");
+      }
+      const data = await response.json();
+      setProducts(data.products); // Cập nhật danh sách sản phẩm
+      setTotalPages(data.totalPages); // Cập nhật tổng số trang
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  // 5. Hàm xóa tất cả bộ lọc và đặt lại về trạng thái ban đầu
-  const handleClearFilters = () => {
-    setSelectedFilter([]);
-    setFilter({
-      gioi_tinh: "Nu",
-    });
-    setCurrentPage(1);
-    setCategoryName("Đồng hồ nữ");
+  // 2. Gọi lại API khi bộ lọc hoặc trang hiện tại thay đổi
+  useEffect(() => {
+    fetchProducts();
+  }, [filter, currentPage]);
+
+  // 3. Hàm chuyển trang
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
     fetchProducts();
   };
+
   // 4. Hàm cập nhật bộ lọc khi chọn mới
   const handleFilterChange = (filterType, value) => {
     const newFilters = [...selectedFilter];
@@ -71,6 +73,18 @@ export default function TrangsucCK() {
       setCategoryName(value);
     }
   };
+
+  // 5. Hàm xóa tất cả bộ lọc và đặt lại về trạng thái ban đầu
+  const handleClearFilters = () => {
+    setSelectedFilter([]);
+    setFilter({
+      gioi_tinh: "Nu",
+    });
+    setCurrentPage(1);
+    setCategoryName("Đồng hồ nữ");
+    fetchProducts();
+  };
+
   // 6. Hàm xóa một bộ lọc cụ thể
   const handleRemoveFilter = (filterToRemove) => {
     // Loại bỏ bộ lọc cụ thể khỏi selectedFilter
@@ -84,12 +98,13 @@ export default function TrangsucCK() {
 
     // Nếu xoá danh mục (brand), đặt lại tiêu đề về đồng hồ nam
     if (filterType === "danh_muc") {
-      setCategoryName("Đồng hồ báo thức");
+      setCategoryName("Đồng hồ nữ");
     }
     setSelectedFilter(newFilters);
     setFilter(updatedFilter);
     fetchProducts();
   };
+
   // 7. Hàm sắp xếp sản phẩm theo giá
   const sortProducts = (products) => {
     if (sortOption === "asc") {
@@ -104,11 +119,12 @@ export default function TrangsucCK() {
     setSortOption(e.target.value);
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-
+  if (loading) {
+    return <Loading />;
+  }
+  if (error) {
+    return <p>Error:{error}</p>;
+  }
   const displayedProducts = sortProducts(products);
   return (
     <>
@@ -141,7 +157,7 @@ export default function TrangsucCK() {
                                 href="#"
                                 title="SEIKO"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "SEIKO")
+                                  handleFilterChange("thuong_hieu", "SEIKO")
                                 }>
                                 SEIKO
                               </Link>
@@ -153,7 +169,7 @@ export default function TrangsucCK() {
                                 href="#"
                                 title="RHYTHM"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "RHYTHM")
+                                  handleFilterChange("thuong_hieu", "RHYTHM")
                                 }>
                                 RHYTHM
                               </Link>
@@ -185,6 +201,17 @@ export default function TrangsucCK() {
                                   handleFilterChange("chat_lieu_vo", "Nhựa")
                                 }>
                                 Nhựa
+                              </Link>
+                            </div>
+                            <div className={`${styles.cls} ${styles.item}`}>
+                              <Link
+                                rel="nofollow"
+                                href="#"
+                                title="Nhôm"
+                                onClick={() =>
+                                  handleFilterChange("chat_lieu_vo", "Nhôm")
+                                }>
+                                Nhôm
                               </Link>
                             </div>
                           </div>
