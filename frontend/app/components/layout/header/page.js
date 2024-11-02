@@ -8,14 +8,89 @@ import { faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import Loading from "../../loading/page";
+const locTHNam = [
+  {id: "danh_muc=CASIO&gioi_tinh=Nam", title: "CASIO"},
+  {id: "danh_muc=MICHAEL KORS&gioi_tinh=Nam", title: "MICHAEL KORS"},
+  {id: "danh_muc=HAMILTON&gioi_tinh=Nam", title: "HAMILTON"},
+  {id: "danh_muc=TITONI&gioi_tinh=Nam", title: "TITONI"},
+  {id: "danh_muc=CLAUDE BERNARD&gioi_tinh=Nam", title: "CLAUDE BERNARD"},
+  {id: "danh_muc=OLYM PIANUS&gioi_tinh=Nam", title: "OLYM PIANUS"},
+  {id: "danh_muc=FREDERIQUE CONSTANT&gioi_tinh=Nam", title: "FREDERIQUE CONSTANT"},
+  {id: "danh_muc=EDOX&gioi_tinh=Nam", title: "EDOX"},
+  {id: "danh_muc=CERTINA&gioi_tinh=Nam", title: "CERTINA"},
+  {id: "danh_muc=CALVIN KLEIN&gioi_tinh=Nam", title: "CALVIN KLEIN"},
+  {id: "danh_muc=DANIEL WELLINGTON&gioi_tinh=Nam", title: "DANIEL WELLINGTON"},
+  {id: "danh_muc=MIDO&gioi_tinh=Nam", title: "MIDO"},
+  {id: "danh_muc=CITIZEN&gioi_tinh=Nam", title: "CITIZEN"},
+  {id: "danh_muc=SEIKO&gioi_tinh=Nam", title: "SEIKO"},
+  {id: "danh_muc=ORIENT&gioi_tinh=Nam", title: "ORIENT"},
+  {id: "danh_muc=FOSSIL&gioi_tinh=Nam", title: "FOSSIL"},
+  {id: "danh_muc=SKAGEN&gioi_tinh=Nam", title: "SKAGEN"},
+  {id: "danh_muc=LONGINES&gioi_tinh=Nam", title: "LONGINES"},
+  {id: "danh_muc=TISSOT&gioi_tinh=Nam", title: "TISSOT"}
 
+];
+const locTHNu = [
+  { id: "danh_muc=CASIO&gioi_tinh=Nữ", title: "CASIO" },
+  { id: "danh_muc=MICHAEL KORS&gioi_tinh=Nữ", title: "MICHAEL KORS" },
+  { id: "danh_muc=HAMILTON&gioi_tinh=Nữ", title: "HAMILTON" },
+  { id: "danh_muc=TITONI&gioi_tinh=Nữ", title: "TITONI" },
+  { id: "danh_muc=CLAUDE BERNARD&gioi_tinh=Nữ", title: "CLAUDE BERNARD" },
+  { id: "danh_muc=OLYM PIANUS&gioi_tinh=Nữ", title: "OLYM PIANUS" },
+  {
+    id: "danh_muc=FREDERIQUE CONSTANT&gioi_tinh=Nữ",
+    title: "FREDERIQUE CONSTANT",
+  },
+  { id: "danh_muc=EDOX&gioi_tinh=Nữ", title: "EDOX" },
+  { id: "danh_muc=CERTINA&gioi_tinh=Nữ", title: "CERTINA" },
+  { id: "danh_muc=CALVIN KLEIN&gioi_tinh=Nữ", title: "CALVIN KLEIN" },
+  {
+    id: "danh_muc=DANIEL WELLINGTON&gioi_tinh=Nữ",
+    title: "DANIEL WELLINGTON",
+  },
+  { id: "danh_muc=MIDO&gioi_tinh=Nữ", title: "MIDO" },
+  { id: "danh_muc=CITIZEN&gioi_tinh=Nữ", title: "CITIZEN" },
+  { id: "danh_muc=SEIKO&gioi_tinh=Nữ", title: "SEIKO" },
+  { id: "danh_muc=ORIENT&gioi_tinh=Nữ", title: "ORIENT" },
+  { id: "danh_muc=FOSSIL&gioi_tinh=Nữ", title: "FOSSIL" },
+  { id: "danh_muc=SKAGEN&gioi_tinh=Nữ", title: "SKAGEN" },
+  { id: "danh_muc=LONGINES&gioi_tinh=Nữ", title: "LONGINES" },
+  { id: "danh_muc=TISSOT&gioi_tinh=Nữ", title: "TISSOT" },
+];
+const locTHDoi = [
+  { id: "danh_muc=CASIO&gioi_tinh=Đồng Hồ Đôi", title: "CASIO" },
+  { id: "danh_muc=MICHAEL KORS&gioi_tinh=Đồng Hồ Đôi", title: "MICHAEL KORS" },
+  { id: "danh_muc=HAMILTON&gioi_tinh=Đồng Hồ Đôi", title: "HAMILTON" },
+  { id: "danh_muc=TITONI&gioi_tinh=Đồng Hồ Đôi", title: "TITONI" },
+  { id: "danh_muc=CLAUDE BERNARD&gioi_tinh=Đồng Hồ Đôi", title: "CLAUDE BERNARD" },
+  { id: "danh_muc=OLYM PIANUS&gioi_tinh=Đồng Hồ Đôi", title: "OLYM PIANUS" },
+  {
+    id: "danh_muc=FREDERIQUE CONSTANT&gioi_tinh=Đồng Hồ Đôi",
+    title: "FREDERIQUE CONSTANT",
+  },
+  { id: "danh_muc=EDOX&gioi_tinh=Đồng Hồ Đôi", title: "EDOX" },
+  { id: "danh_muc=CERTINA&gioi_tinh=Đồng Hồ Đôi", title: "CERTINA" },
+  { id: "danh_muc=CALVIN KLEIN&gioi_tinh=Đồng Hồ Đôi", title: "CALVIN KLEIN" },
+  {
+    id: "danh_muc=DANIEL WELLINGTON&gioi_tinh=Đồng Hồ Đôi",
+    title: "DANIEL WELLINGTON",
+  },
+  { id: "danh_muc=MIDO&gioi_tinh=Đồng Hồ Đôi", title: "MIDO" },
+  { id: "danh_muc=CITIZEN&gioi_tinh=Đồng Hồ Đôi", title: "CITIZEN" },
+  { id: "danh_muc=SEIKO&gioi_tinh=Đồng Hồ Đôi", title: "SEIKO" },
+  { id: "danh_muc=ORIENT&gioi_tinh=Đồng Hồ Đôi", title: "ORIENT" },
+  { id: "danh_muc=FOSSIL&gioi_tinh=Đồng Hồ Đôi", title: "FOSSIL" },
+  { id: "danh_muc=SKAGEN&gioi_tinh=Đồng Hồ Đôi", title: "SKAGEN" },
+  { id: "danh_muc=LONGINES&gioi_tinh=Đồng Hồ Đôi", title: "LONGINES" },
+  { id: "danh_muc=TISSOT&gioi_tinh=Đồng Hồ Đôi", title: "TISSOT" },
+];
 
 const locgiaNam = [
   { id: "muc_gia=Dưới 2 triệu&gioi_tinh=Nam", title: "DƯỚI 2 TRIỆU" },
   { id: "muc_gia=Từ 2 triệu đến 5 triệu&gioi_tinh=Nam", title: "TỪ 2 TRIỆU ĐẾN 5 TRIỆU" },
   { id: "muc_gia=Từ 5 triệu đến 10 triệu&gioi_tinh=Nam", title: "TỪ 5 TRIỆU ĐẾN 10 TRIỆU" },
   { id: "muc_gia=Từ 10 triệu đến 20 triệu&gioi_tinh=Nam", title: "TỪ 10 TRIỆU ĐẾN 20 TRIỆU" },
-  { id: "muc_gia=Từ 20 triệu đến 30 triệu&gioi_tinh=Nam", title: "TỪ 20 TRIỆU ĐẾN 30 TRITRIỆU" },
+  { id: "muc_gia=Từ 20 triệu đến 30 triệu&gioi_tinh=Nam", title: "TỪ 20 TRIỆU ĐẾN 30 TRIỆU" },
   { id: "muc_gia=Từ 30 triệu đến 50 triệu&gioi_tinh=Nam", title: "TỪ 30 TRIỆU ĐẾN 50 TRIỆU" },
   { id: "muc_gia=Từ 50 triệu đến 100 triệu&gioi_tinh=Nam", title: "TỪ 50 TRIỆU ĐẾN 100 TRIỆU " },
   { id: "muc_gia=Trên 100 triệu&gioi_tinh=Nam", title: "TRÊN 100 TRIỆU" },
@@ -61,7 +136,7 @@ const locgiaNu = [
   { id: "muc_gia=Từ 2 triệu đến 5 triệu&gioi_tinh=Nữ", title: "TỪ 2 TRIỆU ĐẾN 5 TRIỆU" },
   { id: "muc_gia=Từ 5 triệu đến 10 triệu&gioi_tinh=Nữ", title: "TỪ 5 TRIỆU ĐẾN 10 TRIỆU" },
   { id: "muc_gia=Từ 10 triệu đến 20 triệu&gioi_tinh=Nữ", title: "TỪ 10 TRIỆU ĐẾN 20 TRIỆU" },
-  { id: "muc_gia=Từ 20 triệu đến 30 triệu&gioi_tinh=Nữ", title: "TỪ 20 TRIỆU ĐẾN 30 TRITRIỆU" },
+  { id: "muc_gia=Từ 20 triệu đến 30 triệu&gioi_tinh=Nữ", title: "TỪ 20 TRIỆU ĐẾN 30 TRIỆU" },
   { id: "muc_gia=Từ 30 triệu đến 50 triệu&gioi_tinh=Nữ", title: "TỪ 30 TRIỆU ĐẾN 50 TRIỆU" },
   { id: "muc_gia=Từ 50 triệu đến 100 triệu&gioi_tinh=Nữ", title: "TỪ 50 TRIỆU ĐẾN 100 TRIỆU " },
   { id: "muc_gia=Trên 100 triệu&gioi_tinh=Nữ", title: "TRÊN 100 TRIỆU" },
@@ -71,7 +146,7 @@ const locgiaDoi = [
   { id: "muc_gia=Từ 2 triệu đến 5 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TỪ 2 TRIỆU ĐẾN 5 TRIỆU" },
   { id: "muc_gia=Từ 5 triệu đến 10 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TỪ 5 TRIỆU ĐẾN 10 TRIỆU" },
   { id: "muc_gia=Từ 10 triệu đến 20 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TỪ 10 TRIỆU ĐẾN 20 TRIỆU" },
-  { id: "muc_gia=Từ 20 triệu đến 30 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TỪ 20 TRIỆU ĐẾN 30 TRITRIỆU" },
+  { id: "muc_gia=Từ 20 triệu đến 30 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TỪ 20 TRIỆU ĐẾN 30 TRIỆU" },
   { id: "muc_gia=Từ 30 triệu đến 50 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TỪ 30 TRIỆU ĐẾN 50 TRIỆU" },
   { id: "muc_gia=Từ 50 triệu đến 100 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TỪ 50 TRIỆU ĐẾN 100 TRIỆU " },
   { id: "muc_gia=Trên 100 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TRÊN 100 TRIỆU" },
@@ -272,17 +347,16 @@ export default function Header() {
                 </Link>
               </div>
             )}
+            <Link href="/components/giohang">
             <div className={cx("cart")}>
-              <span className={cx("cart-count")}>3</span>
-            </div>
-            <div className={cx("cart")}>
-              <Link href="/components/giohang">
+              
                 <FontAwesomeIcon
                   icon={faShoppingCart}
                   style={{ color: "#ffffff" }}
                 />
-              </Link>
-            </div>
+              
+              <span className={cx("cart-count")}>3</span>
+            </div></Link>
           </div>
         </div>
       </header>
@@ -306,7 +380,7 @@ export default function Header() {
               {category.map((item) => (
                 <li className={cx("dropdown-menu-li")} key={item._id}>
                   <Link
-                    href={`/components/chitietdanhmuc${item._id}`}
+                    href={`/components/chitietdanhmuc/${item._id}`}
                     style={{ color: "white" }}
                   >
                     <img
@@ -328,17 +402,16 @@ export default function Header() {
               <li className={cx("dropdown-menu-dhn-li1")}>
                 <h3 className={cx("dropdown-menu-dhn-h3")}>THƯƠNG HIỆU</h3>
                 <ul className={cx("dropdown-menu-dhn-ul")}>
-                  {category.map((item) => (
-                    <li
-                      className={cx("dropdown-menu-dhn-li2")}
-                      key={item._id}
-                      style={{ fontSize: "10px" }}
-                    >
+                  {locTHNam.map((item) => (
+                    <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/chitietdanhmuc/${item._id}`}
+                        href={`/components/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
+                        style={{ textTransform: "uppercase" }}
                       >
-                        {item.danh_muc}
+                        {item.title}
                       </Link>
                     </li>
                   ))}
@@ -435,17 +508,16 @@ export default function Header() {
               <li className={cx("dropdown-menu-dhnu-li1")}>
                 <h3 className={cx("dropdown-menu-dhnu-h3")}>THƯƠNG HIỆU</h3>
                 <ul className={cx("dropdown-menu-dhnu-ul")}>
-                  {category.map((item) => (
-                    <li
-                      className={cx("dropdown-menu-dhn-li2")}
-                      key={item._id}
-                      style={{ fontSize: "10px" }}
-                    >
+                  {locTHNu.map((item) => (
+                    <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/chitietdanhmuc/${item._id}`}
+                        href={`/components/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
+                        style={{ textTransform: "uppercase" }}
                       >
-                        {item.danh_muc}
+                        {item.title}
                       </Link>
                     </li>
                   ))}
@@ -534,17 +606,16 @@ export default function Header() {
               <li className={cx("dropdown-menu-dhd-li1")}>
                 <h3 className={cx("dropdown-menu-dhd-h3")}>THƯƠNG HIỆU</h3>
                 <ul className={cx("dropdown-menu-dhd-ul")}>
-                  {category.map((item) => (
-                    <li
-                      className={cx("dropdown-menu-dhn-li2")}
-                      key={item._id}
-                      style={{ fontSize: "10px" }}
-                    >
+                  {locTHDoi.map((item) => (
+                    <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/chitietdanhmuc/${item._id}`}
+                        href={`/components/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
+                        style={{ textTransform: "uppercase" }}
                       >
-                        {item.danh_muc}
+                        {item.title}
                       </Link>
                     </li>
                   ))}
