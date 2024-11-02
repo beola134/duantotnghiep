@@ -5,7 +5,8 @@
 }
 
 body {
-  font: 14px / 18px Helvetica, Arial, "DejaVu Sans", "Liberation Sans", Freesans, sans-serif;
+  font: 14px / 18px Helvetica, Arial, "DejaVu Sans", "Liberation Sans", Freesans,
+    sans-serif;
 }
 
 .container {
@@ -47,6 +48,7 @@ img {
   height: auto;
   transition: all 5s ease;
   display: inline-block;
+
   
 }
 figure {
