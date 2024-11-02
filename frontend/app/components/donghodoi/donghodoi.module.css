@@ -448,6 +448,143 @@ width: 1170px;
   .highlightText {
     color: #3498db;
   }
-  
+  /* phân trang */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.pagination span,
+.pagination a {
+  display: inline-block;
+  padding: 10px 15px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #333;
+  cursor: pointer;
+}
+
+.pagination span.disabled {
+  color: #999;
+  border-color: #eee;
+  cursor: not-allowed;
+}
+
+.pagination a:hover {
+  background-color: #f0f0f0;
+  border-color: #bbb;
+}
+
+.pagination .current {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.pagination .other-page {
+  background-color: #fff;
+}
+
+.pagination .other-page:hover {
+  background-color: #e6e6e6;
+}
+
+.pagination .next-page,
+.pagination .last-page,
+.pagination .prev-page,
+.pagination .first-page {
+  font-weight: bold;
+}
+
+.pagination b {
+  padding: 10px 5px;
+  font-size: 16px;
+}
+/* bộ lọc sản phẩm */
+
+.choosedfilter {
+  margin-bottom: 20px;
+}
+.choosedfilter a {
+  background: #e88f38;
+  color: #fff !important;
+  margin-right: 2px;
+  padding: 3px 24px 3px 9px;
+  display: inline-block;
+  position: relative;
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+.choosedfilter .reset {
+  background: #ec0202;
+}
+.choosedfilter a::after {
+  content: "X";
+  position: absolute;
+  top: 3px;
+  right: 2px;
+  width: 15px;
+  height: 13px;
+  color: #fff;
+  z-index: 1;
+  font-size: 12px;
+}
+/* đánh giá */
+.ratingArea {
+  margin-bottom: 14px;
+}
+#ratings {
+  display: block;
+  float: left;
+  margin-top: 6px;
+}
+#ratings i {
+  cursor: pointer;
+}
+#ratings i,
+.starOn {
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" aria-hidden="true" role="img"><path fill="orange" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>')
+    no-repeat;
+  width: 17px;
+  height: 17px;
+  display: inline-block;
+}
+
+#ratings i,
+.starOff {
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" aria-hidden="true" role="img"><path fill="lightgray" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"/></svg>')
+    no-repeat;
+  width: 17px;
+  height: 17px;
+  display: inline-block;
+}
+.ratingNote::after {
+  content: "";
+  display: block;
+  clear: both;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 13px 12px 12px 0;
+  border-color: transparent #796752 transparent transparent;
+  position: absolute;
+  top: 0;
+  left: -12px;
+}
+.ratingNote {
+  background: #796752;
+  color: #fff;
+  padding: 4px 10px;
+  position: relative;
+  font-size: 13px;
+  border-radius: 0 4px 4px 0;
+  display: inline-block;
+  margin-left: 28px;
+  bottom: 5px;
+}
 
 

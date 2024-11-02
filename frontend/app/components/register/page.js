@@ -21,7 +21,7 @@ const schema = Yup.object().shape({
 
   password: Yup.string()
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*!])[A-Za-z\d@#$%^&*!]{8,}$/,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*!?])[A-Za-z\d@#$%^&*!?]{8,}$/,
       "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt."
     )
     .required("Vui lòng nhập mật khẩu"),
@@ -178,7 +178,7 @@ export default function Register() {
             name="confirmPassword"
             onChange={formik.handleChange}
             value={formik.values.confirmPassword}
-            placeholder="Xác nhận Mật khẩu"
+            placeholder="Confirm Password"
           />
           {formik.errors.confirmPassword && <p className={styles.error}>{formik.errors.confirmPassword}</p>}
 
@@ -199,27 +199,27 @@ export default function Register() {
           <input type="submit" className={styles.loginButton} value="Sign Up" />
           <OTP isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} />
         </form>
+        {!isModalOpen && (
+          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+            <div className={styles.socialAccountContainer}>
+              <span className={styles.title}>Or Sign in with</span>
 
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
-          <div className={styles.socialAccountContainer}>
-            <span className={styles.title}>Or Sign in with</span>
-
-            <GoogleLogin
-              onSuccess={handleLoginSuccess}
-              onFailure={handleLoginFailure}
-              render={(renderProps) => (
-                <div className={styles.socialAccounts}>
-                  <button
-                    className={styles.socialButton}
-                    onClick={renderProps.onClick}
-                    disabled={renderProps.disabled}
-                  ></button>
-                </div>
-              )}
-            />
-          </div>
-        </GoogleOAuthProvider>
-
+              <GoogleLogin
+                onSuccess={handleLoginSuccess}
+                onFailure={handleLoginFailure}
+                render={(renderProps) => (
+                  <div className={styles.socialAccounts}>
+                    <button
+                      className={styles.socialButton}
+                      onClick={renderProps.onClick}
+                      disabled={renderProps.disabled}
+                    ></button>
+                  </div>
+                )}
+              />
+            </div>
+          </GoogleOAuthProvider>
+        )}
         <div className={styles.signUpNow}>
           <span className={styles.dontHaveAnAccount}>
             Have an account?

@@ -200,17 +200,17 @@ export default function Footer() {
             <div className={styles.blockTagsFt}>
               <div className={styles.blockTagsDefault}>
                 <Link href="">Longines</Link>
-                <span className={styles.sepa}>|</span>
+                <span className={styles.sepa}> | </span>
                 <Link href="">Tissot</Link>
-                <span className={styles.sepa}>|</span>
+                <span className={styles.sepa}> | </span>
                 <Link href="">MIDO</Link>
-                <span className={styles.sepa}>|</span>
+                <span className={styles.sepa}> | </span>
                 <Link href="">Frederique Constant</Link>
-                <span className={styles.sepa}>|</span>
+                <span className={styles.sepa}> | </span>
                 <Link href="">Seiko</Link>
-                <span className={styles.sepa}>|</span>
+                <span className={styles.sepa}> | </span>
                 <Link href="">Citizen</Link>
-                <span className={styles.sepa}>|</span>
+                <span className={styles.sepa}> | </span>
                 <Link href="">Orient</Link>
               </div>
             </div>

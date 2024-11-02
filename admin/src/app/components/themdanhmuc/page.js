@@ -1,8 +1,6 @@
 'use client';
 import "bootstrap/dist/css/bootstrap.min.css";
-import Script from "next/script";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./themdanhmuc.module.css";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
