@@ -6,7 +6,7 @@ import Loading from "../loading/page";
 
 export default function Donghonu() {
   const [products, setProducts] = useState([]);
-  const [categoryName, setCategoryName] = useState("Đồng hồ nữ"); // Tiêu đề danh mục
+  const [categoryName, setCategoryName] = useState(""); // Tiêu đề danh mục
   const [selectedFilter, setSelectedFilter] = useState([]); // Lưu trữ các bộ lọc đã chọn
   const [sortOption, setSortOption] = useState(""); // Tuỳ chọn sắp xếp (tăng/giảm dần)
   const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
@@ -324,7 +324,7 @@ export default function Donghonu() {
                                 onClick={() =>
                                   handleFilterChange(
                                     "danh_muc",
-                                    "FREDERIQUE CONSTANT"
+                                    "FREDERIQUECONSTANT"
                                   )
                                 }>
                                 FREDERIQUE CONSTANT
@@ -336,7 +336,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="CALVIN KLEIN"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "CALVIN KLEIN")
+                                  handleFilterChange("danh_muc", "CALVINKLEIN")
                                 }>
                                 CALVIN KLEIN
                               </Link>
@@ -360,7 +360,7 @@ export default function Donghonu() {
                                 onClick={() =>
                                   handleFilterChange(
                                     "danh_muc",
-                                    "CLAUDE BERNARD"
+                                    "CLAUDEBERNARD"
                                   )
                                 }>
                                 CLAUDE BERNARD
@@ -416,7 +416,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="OLYM PIANUS"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "OLYM PIANUS")
+                                  handleFilterChange("danh_muc", "OLYMPIANUS")
                                 }>
                                 OLYM PIANUS
                               </Link>
@@ -425,11 +425,11 @@ export default function Donghonu() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="DANIEL WELLINGTON"
+                                title="DANIELWELLINGTON"
                                 onClick={() =>
                                   handleFilterChange(
                                     "danh_muc",
-                                    "DANIEL WELLINGTON"
+                                    "DANIELWELLINGTON"
                                   )
                                 }>
                                 DANIEL WELLINGTON
@@ -463,7 +463,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="MICHAEL KORS"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "MICHAEL KORS")
+                                  handleFilterChange("danh_muc", "MICHAELKORS")
                                 }>
                                 MICHAEL KORS
                               </Link>
@@ -1779,7 +1779,8 @@ export default function Donghonu() {
 
                     <select
                       className={styles["order-select"]}
-                      name="order-select">
+                      name="order-select"
+                      onChange={handleSortChange}>
                       <option value="">Sắp xếp theo</option>
                       <option value="asc">Giá từ thấp tới cao</option>
                       <option value="desc">Giá từ cao tới thấp</option>

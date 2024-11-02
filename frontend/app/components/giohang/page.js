@@ -38,17 +38,17 @@ const CartPage = () => {
       <nav className={styles.nav}>
         <div className={styles.container}>
           <div className={styles.content}>
-            <div className={styles.cartcontainer}>
-              <h2>Giỏ hàng</h2>
-              {cartItems.length === 0 ? (
-                <div>
-                  <img
-                    src="/image/item/empty-cart.webp"
-                    alt="Giỏ hàng trống"
-                    style={{ marginLeft: "100px" }}
-                  />
-                </div>
-              ) : (
+            {cartItems.length === 0 ? (
+              <div>
+                <img
+                  src="/image/item/empty-cart.webp"
+                  alt="Giỏ hàng trống"
+                  style={{ marginLeft: "100px" }}
+                />
+              </div>
+            ) : (
+              <div>
+                <h2>Giỏ hàng</h2>
                 <table className={styles.carttable}>
                   <thead>
                     <tr>
@@ -140,52 +140,32 @@ const CartPage = () => {
                     ))}
                   </tbody>
                 </table>
-              )}
-            </div>
-          </div>
-          {cartItems.length > 0 && (
-            <div className={styles.sidebar}>
-              <h2>ƯU ĐÃI</h2>
-              <div className={styles.voucherinput}>
-                <input type="text" id="voucher-code" placeholder="Nhập mã..." />
-                <button type="button" id="apply-voucher">
-                  Áp dụng
-                </button>
               </div>
-              <br />
-              <hr />
-              <div className={styles.total}>
-                <div className={styles.tt}>
-                  <p>Tổng tiền hàng:</p>
-                  <p>
-                    {total.toLocaleString("vi-VN", {
-                      style: "currency",
-                      currency: "VND",
-                    })}
-                  </p>
-                </div>
+            )}
 
-                <div className={styles.uudai}>
-                  <p>Ưu đãi:</p>
-                  <p>0</p>
+            {cartItems.length > 0 && (
+              <div>
+                <br />
+                <hr />
+                <div className={styles.total}>
+                  <div className={styles.tt}>
+                    <p>Tổng tiền hàng:</p>
+                    <p>
+                      {total.toLocaleString("vi-VN", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
+                    </p>
+                  </div>
                 </div>
-                <div className={styles.ttt}>
-                  <p>Tổng thanh toán:</p>
-                  <p>
-                    {total.toLocaleString("vi-VN", {
-                      style: "currency",
-                      currency: "VND",
-                    })}
-                  </p>
-                </div>
+                <Link href="/components/thanhtoan">
+                  <button type="button" id={styles.thtt}>
+                    Tiến hành thanh toán
+                  </button>
+                </Link>
               </div>
-              <Link href="/components/thanhtoan">
-                <button type="button" id={styles.thtt}>
-                  Tiến hành thanh toán
-                </button>
-              </Link>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </nav>
     </>
