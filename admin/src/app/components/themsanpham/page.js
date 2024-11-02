@@ -34,9 +34,9 @@ export default function ThemSanPham() {
     hinh_anh: null,
   });
 
+  const [errors, setErrors] = useState({});
   const [cates, setCategories] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -55,16 +55,19 @@ export default function ThemSanPham() {
     fetchCategories();
   }, []);
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+    // Xóa lỗi khi người dùng bắt đầu nhập lại
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+    }));
   };
 
-  
   const handleFileChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -72,43 +75,52 @@ export default function ThemSanPham() {
     }));
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    const {
+      ten_san_pham,
+      ten,
+      gia_san_pham,
+      ma_san_pham,
+      so_luong,
+      id_danh_muc,
+      hinh_anh,
+    } = formData;
+
+    if (!ten_san_pham) newErrors.ten_san_pham = "Vui lòng nhập tên sản phẩm.";
+    if (!ten) newErrors.ten = "Vui lòng nhập tên chi tiết.";
+    if (!gia_san_pham || isNaN(gia_san_pham) || gia_san_pham <= 0) {
+      newErrors.gia_san_pham = "Vui lòng nhập giá sản phẩm hợp lệ.";
+    }
+    if (!ma_san_pham) newErrors.ma_san_pham = "Vui lòng nhập mã sản phẩm.";
+    if (!so_luong) newErrors.so_luong = "Vui lòng nhập số lượng.";
+    if (!id_danh_muc) newErrors.id_danh_muc = "Vui lòng chọn danh mục.";
+    if (!hinh_anh) newErrors.hinh_anh = "Vui lòng chọn hình ảnh sản phẩm.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage(""); 
+    setErrorMessage("");
 
-    const { ten_san_pham, gia_san_pham, id_danh_muc } = formData;
-
-    
-    if (!ten_san_pham || !gia_san_pham || !id_danh_muc) {
+    if (!validateForm()) {
       Swal.fire({
         title: "Lỗi",
         text: "Vui lòng điền tất cả các trường bắt buộc.",
         icon: "error",
         confirmButtonText: "OK",
       });
-      return; 
-    }
-
-    if (isNaN(gia_san_pham) || gia_san_pham <= 0) {
-      Swal.fire({
-        title: "Lỗi",
-        text: "Giá sản phẩm không hợp lệ.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
       return;
     }
 
-   
     const data = new FormData();
-
     Object.keys(formData).forEach((key) => {
       if (key !== "hinh_anh") {
         data.append(key, formData[key]);
       }
     });
-
 
     if (formData.hinh_anh) {
       data.append("hinh_anh", formData.hinh_anh);
@@ -129,9 +141,6 @@ export default function ThemSanPham() {
         throw new Error(errorData.error || "Failed to add product");
       }
 
-      const result = await response.json();
-      console.log("Product added successfully:", result);
-
       Swal.fire({
         title: "Thành công",
         text: "Sản phẩm đã được thêm thành công!",
@@ -141,7 +150,6 @@ export default function ThemSanPham() {
       window.location.href = "/components/sanpham";
     } catch (error) {
       console.error("Error adding product:", error.message);
-  
       Swal.fire({
         title: "Lỗi",
         text: "Đã xảy ra lỗi khi thêm sản phẩm: " + error.message,
@@ -150,6 +158,7 @@ export default function ThemSanPham() {
       });
     }
   };
+
   return (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>
@@ -171,6 +180,9 @@ export default function ThemSanPham() {
                   value={formData.ten_san_pham}
                   onChange={handleChange}
                 />
+                {errors.ten_san_pham && (
+                  <span className="text-danger">{errors.ten_san_pham}</span>
+                )}
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="ten">Tên chi tiết</label>
@@ -181,6 +193,9 @@ export default function ThemSanPham() {
                   value={formData.ten}
                   onChange={handleChange}
                 />
+                {errors.ten && (
+                  <span className="text-danger">{errors.ten}</span>
+                )}
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="gia_san_pham">Giá sản phẩm</label>
@@ -191,6 +206,9 @@ export default function ThemSanPham() {
                   value={formData.gia_san_pham}
                   onChange={handleChange}
                 />
+                {errors.gia_san_pham && (
+                  <span className="text-danger">{errors.gia_san_pham}</span>
+                )}
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="gia_giam">Giá giảm</label>
@@ -219,8 +237,11 @@ export default function ThemSanPham() {
                     </option>
                   ))}
                 </select>
+                {errors.id_danh_muc && (
+                  <span className="text-danger">{errors.id_danh_muc}</span>
+                )}
               </div>
-                   <div className={styles.formGroup}>
+              <div className={styles.formGroup}>
                 <label htmlFor="ma_san_pham">Mã sản phẩm</label>
                 <input
                   type="text"
@@ -229,6 +250,9 @@ export default function ThemSanPham() {
                   value={formData.ma_san_pham}
                   onChange={handleChange}
                 />
+                {errors.ma_san_pham && (
+                  <span className="text-danger">{errors.ma_san_pham}</span>
+                )}
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="do_chiu_nuoc">Độ chịu nước</label>
@@ -269,6 +293,9 @@ export default function ThemSanPham() {
                   value={formData.so_luong}
                   onChange={handleChange}
                 />
+                {errors.so_luong && (
+                  <span className="text-danger">{errors.so_luong}</span>
+                )}
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="loai">Loại</label>
@@ -408,6 +435,9 @@ export default function ThemSanPham() {
                   name="hinh_anh"
                   onChange={handleFileChange}
                 />
+                {errors.hinh_anh && (
+                  <span className="text-danger">{errors.hinh_anh}</span>
+                )}
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="mo_ta">Mô tả sản phẩm</label>
@@ -425,7 +455,9 @@ export default function ThemSanPham() {
                 Thêm
               </button>
               <Link href="/components/sanpham">
-              <button type="button" className="btn btn-outline-secondary">Hủy bỏ</button>
+                <button type="button" className="btn btn-outline-secondary">
+                  Hủy bỏ
+                </button>
               </Link>
             </div>
           </form>

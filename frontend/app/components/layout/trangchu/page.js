@@ -203,7 +203,14 @@ export default function Main() {
 
     fetchData();
   }, []);
-  console.log(category);
+
+  // tính % sản phẩm
+  const roundDiscount = (discountPercentage) => {
+    const discountLevels = [10, 15, 20, 25, 30, 40, 50];
+    return discountLevels.reduce((prev, curr) =>
+      Math.abs(curr - discountPercentage) < Math.abs(prev - discountPercentage) ? curr : prev
+    );
+  };
 
   return (
     <>
@@ -237,7 +244,7 @@ export default function Main() {
                 {productsNam.map((item) => (
                   <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
-                      -{Math.floor(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100)}%
+                      - {roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
@@ -276,7 +283,7 @@ export default function Main() {
                 {productsNu.map((item) => (
                   <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
-                      -{Math.floor(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100)}%
+                      - {roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
@@ -315,7 +322,7 @@ export default function Main() {
                 {productsDoi.map((item) => (
                   <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
-                      -{Math.floor(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100)}%
+                      - {roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
@@ -381,7 +388,7 @@ export default function Main() {
                 {productsNewNam.map((item) => (
                   <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
-                      -{Math.floor(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100)}%
+                      - {roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
@@ -421,7 +428,7 @@ export default function Main() {
                 {productsNewNu.map((item) => (
                   <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
-                      -{Math.floor(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100)}%
+                      - {roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
@@ -461,7 +468,7 @@ export default function Main() {
                 {productsNewDoi.map((item) => (
                   <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
-                      -{Math.floor(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100)}%
+                      - {roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
@@ -524,6 +531,7 @@ export default function Main() {
               </div>
             ))}
           </Slider>
+
           <button onClick={prevFirst} className={`${styles.navButton} ${styles.prevButton}`}>
             <img src="/image/item/icons/left.png"  width="40px" height="30px" />
           </button>
@@ -537,15 +545,15 @@ export default function Main() {
         <p className={styles.titleVs}>Vì sao nên chọn chúng tôi</p>
         <div className={styles.iconList}>
           <div className={styles.iconItem}>
-            <img src="/image/item/icons/huyhieu.png"  className={styles.uytin} />
+            <img src="/image/item/icons/huyhieu.png" className={styles.uytin} />
             <p>100% Hàng chính hãng</p>
           </div>
           <div className={styles.iconItem}>
-            <img src="/image/item/icons/vanchuyen.png"  className={styles.vanchuyen} />
+            <img src="/image/item/icons/vanchuyen.png" className={styles.vanchuyen} />
             <p>Miễn phí vận chuyển</p>
           </div>
           <div className={styles.iconItem}>
-            <img src="/image/item/picture4.jpg"  className={styles.baove} />
+            <img src="/image/item/picture4.jpg" className={styles.baove} />
             <p>Bảo hành 5 năm</p>
           </div>
           <div className={styles.iconItem}>
