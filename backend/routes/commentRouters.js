@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const commentController = require("../controllers/commentController");
+//show tất cả bình luận
+//http://localhost:5000/comment/showAll
+router.get("/showAll", commentController.showAllComment);
 //thêm bình luận
 //http://localhost:5000/comment/add
 router.post("/add", commentController.addComment);
