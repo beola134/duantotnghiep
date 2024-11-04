@@ -1,7 +1,16 @@
 const CMT = require("../models/comment");
 const Product = require("../models/product");
 const Users = require("../models/users");
-
+//show tất cả bình luận
+exports.showAllComment = async (req, res) => {
+  try {
+    const comments = await CMT.findAll();
+    res.status(200).json({ comments });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Lỗi server" });
+  }
+}
 //Bình luận sản phẩm theo _id sản phẩm và _id người dùng
 exports.addComment = async (req, res) => {
   try {
@@ -96,4 +105,4 @@ exports.editComment = async (req, res) => {
     res.status(500).json({ message: "Lỗi server" });
   }
 };
-//fix lỗi
+
