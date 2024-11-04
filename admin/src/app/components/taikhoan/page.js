@@ -275,7 +275,7 @@ export default function TaiKhoan() {
                       <td>{item.dia_chi}</td>
                       <td>{item.email}</td>
                       <td>{item.dien_thoai}</td>
-                      <td>{item.quyen === 1 ? 'Khách hàng' : item.quyen === 2 ? 'Quản trị viên' : ''}</td>
+                      <td>{item.quyen === 1 ? 'Quản trị viên' : item.quyen === 2 ? 'Khách hàng' : ''}</td>
 
                       <td>
                         <Link

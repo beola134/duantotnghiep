@@ -304,7 +304,7 @@ exports.verifyOtp = async (req, res) => {
 // API đổi mật khẩu theo email và mat_khau
 exports.changePassword = async (req, res) => {
   try {
-    const { email, mat_khau, mat_khau_moi } = req.body;
+    const { email, mat_khau, mat_khau_moi,xac_nhan_mat_khau } = req.body;
     // Kiểm tra xem email đã được sử dụng chưa
     const user = await Users.findOne({ where: { email } });
     if (!user) {
@@ -317,6 +317,12 @@ exports.changePassword = async (req, res) => {
     if (!validPass) {
       return res.status(400).json({
         message: "Mật khẩu không hợp lệ",
+      });
+    }
+    // Kiểm tra mật khẩu mới và xác nhận mật khẩu mới
+    if (mat_khau_moi !== xac_nhan_mat_khau) {
+      return res.status(400).json({
+        message: "Mật khẩu mới và xác nhận mật khẩu mới không khớp",
       });
     }
     // Tạo mật khẩu mới
