@@ -2,17 +2,38 @@
 const Product = require("../models/product");
 const upload = require("../config/update");
 const Cate = require("../models/cate");
+const Users = require("../models/users");
 const Category = require("../models/cate");
 const { Sequelize,Op } = require("sequelize");
 
 exports.getAllProducts = async (req, res) => {
-    try {
-      const products = await Product.findAll();
-      res.json({ products });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+  try {
+    const { limit = 5, page = 1 } = req.query;
+    const offset = (page - 1) * limit;
+    const products = await Product.findAndCountAll({
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+    });
+
+    if (products.count === 0) {
+      return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
     }
-  };
+
+    const totalPage = Math.ceil(products.count / limit);
+    const totalProducts = products.count;
+
+    res.json({
+      products: products.rows, // Use `products.rows` to return the array of products
+      currentPage: parseInt(page),
+      totalPage,
+      totalProducts,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
   //show sản phẩm theo danh mục show lun thông tin danh mục sản phẩm
   exports.getProductsByCate = async (req, res) => {
     try {
