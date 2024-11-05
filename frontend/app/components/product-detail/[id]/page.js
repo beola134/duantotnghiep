@@ -20,12 +20,13 @@ export default function Detail({ params }) {
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
   const [star, setStar] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const sliderRef = useRef(null);
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
-  console.log(cart);
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -142,23 +143,31 @@ export default function Detail({ params }) {
       });
     }
   };
-  // lấy tất cả bình luận theo id sản phẩm
+  // lấy tất cả bình luận theo id sản phẩm với phân trang
   useEffect(() => {
     const getAllComment = async () => {
+      setLoading(true);
       try {
-        const response = await fetch(`http://localhost:5000/comment/getAll/${params.id}`);
+        const response = await fetch(`http://localhost:5000/comment/getAll/${params.id}?page=${currentPage}`);
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
         const data = await response.json();
 
         setComments(data.comments);
+        setTotalPages(data.totalPages);
       } catch (error) {
         setError(error.message);
+      } finally {
+        setLoading(false);
       }
     };
     getAllComment();
-  }, [params.id]);
+  }, [params.id, currentPage]);
+  // hàm chuyển trang
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   if (loading) {
     return <Loading />;
@@ -1699,6 +1708,39 @@ export default function Detail({ params }) {
                     ) : (
                       <p>Không có bình luận nào</p>
                     )}
+                    <div className={styles.pagination}>
+                      {/* Prev trang đâù */}
+                      <span
+                        title="First page"
+                        className={currentPage === 1 ? styles.disabled : styles["other-page"]}
+                        onClick={() => currentPage > 1 && handlePageChange(1)}
+                      >
+                        ‹‹
+                      </span>
+                      {/* Prev 1 trang */}
+                      <span
+                        className={currentPage === 1 ? styles.disabled : styles["other-page"]}
+                        onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                      >
+                        ‹
+                      </span>
+                      {/* Trang hiện tại */}
+                      <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1}`}</span>
+                      {/* Next 1 trang*/}
+                      <span
+                        className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
+                        onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                      >
+                        ›
+                      </span>
+                      {/* Next tới trang cuối */}
+                      <span
+                        className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
+                        onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
+                      >
+                        ››
+                      </span>
+                    </div>
                   </div>
                 </form>
               </div>
