@@ -23,7 +23,7 @@ exports.getAllProducts = async (req, res) => {
     const totalProducts = products.count;
 
     res.json({
-      products: products.rows, // Use `products.rows` to return the array of products
+      products: products.rows,
       currentPage: parseInt(page),
       totalPage,
       totalProducts,
