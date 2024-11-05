@@ -384,9 +384,9 @@ export default function Header() {
             </Link>
             <ul className={cx("dropdown-menu")}>
               {category.map((item) => (
-                <li className={cx("dropdown-menu-li")} key={item._id}>
+                <li className={cx("dropdown-menu-li")} key={item.danh_muc}>
                   <Link
-                    href={`/components/chitietdanhmuc/${item._id}`}
+                    href={`/components/chitietdanhmuc/${item.danh_muc}`}
                     style={{ color: "white" }}>
                     <img
                       className={cx("dropdown-menu-img")}

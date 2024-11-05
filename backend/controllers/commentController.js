@@ -41,7 +41,8 @@ exports.addComment = async (req, res) => {
 //lấy tất cả bình luận theo _id sản phẩm
 exports.getAllComment = async (req, res) => {
   try {
-    const { id_san_pham, limit = 3, page = 1 } = req.params;
+    const { id_san_pham } = req.params;
+    const { page = 1, limit = 3 } = req.query;
     const offset = (page - 1) * limit;
     // Kiểm tra xem sản phẩm có tồn tại không
     const product = await Product.findOne({ where: { _id: id_san_pham } });

@@ -6,7 +6,7 @@ const Voucher = require("../models/voucher");
 const { v4: uuidv4 } = require("uuid"); // Import UUID v4
 const { Op } = require("sequelize"); // Import Sequelize operators
 const { DonHang, ChiTietDonHang } = require("../models");
-
+const nodemailer = require("nodemailer");
 const addDonHang = async (req, res) => {
   let {
     dia_chi,
@@ -37,6 +37,8 @@ const addDonHang = async (req, res) => {
           totalAmount += price * ct.so_luong;
           product.so_luong -= ct.so_luong;
           await product.save();
+          ct.ten_san_pham = product.ten_san_pham;
+          ct.gia_san_pham = price; 
         } else {
           throw new Error(`Sản phẩm với ID ${ct.id_san_pham} không tồn tại`);
         }
@@ -94,7 +96,43 @@ const addDonHang = async (req, res) => {
       });
       await Promise.all(chiTietPromises);
     }
+    const user = await Users.findByPk(id_nguoi_dung);
+    if (!user) throw new Error("Người dùng không tồn tại");
 
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "nguyentantai612004@gmail.com",
+        pass: "dmez voqj ozar xfzw",
+      },
+    });
+    const mailOptions = {
+      from: "nguyentantai612004@gmail.com",
+      to: user.email,
+      subject: "Đặt hàng thành công",
+      html: `
+        <h2>Đơn hàng của bạn đã được đặt thành công!</h2>
+        <p><strong>Thông tin đơn hàng:</strong></p>
+        <ul>
+          <li><strong>Địa chỉ:</strong> ${dia_chi}</li>
+          <li><strong>Tổng tiền:</strong> ${totalAmount} VND</li>
+          <li><strong>Phí ship:</strong> 30,000 VND</li>
+          <li><strong>Trạng thái:</strong> Chờ xác nhận</li>
+          <li><strong>Ghi chú:</strong> ${ghi_chu || "Không có"}</li>
+        </ul>
+        <p><strong>Chi tiết sản phẩm:</strong></p>
+        <ul>
+          ${chi_tiet_don_hang.map(ct => `
+            <li>
+              Sản phẩm: ${ct.ten_san_pham}, 
+              Số lượng: ${ct.so_luong}, 
+              Giá: ${ct.gia_san_pham} VND
+            </li>`).join('')}
+        </ul>
+        <p>Cảm ơn bạn đã mua hàng!</p>
+      `,
+    };
+    await transporter.sendMail(mailOptions);
     res
       .status(201)
       .json({ message: "Đơn hàng đã được thêm thành công", donHang });
