@@ -220,6 +220,8 @@ const getDonHangByUserId = async (req, res) => {
   }
 };
 
+///show chi tiết đơn hàng
+
 module.exports = {
   addDonHang,
   updateDonHang,
