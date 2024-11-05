@@ -451,4 +451,86 @@
     border: 1px solid #796752;
     color: #796752;
   }
-  
+  .choosedfilter {
+  margin-bottom: 20px;
+}
+.choosedfilter a {
+  background: #e88f38;
+  color: #fff !important;
+  margin-right: 2px;
+  padding: 3px 24px 3px 9px;
+  display: inline-block;
+  position: relative;
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+.choosedfilter .reset {
+  background: #ec0202;
+}
+.choosedfilter a::after {
+  content: "X";
+  position: absolute;
+  top: 3px;
+  right: 2px;
+  width: 15px;
+  height: 13px;
+  color: #fff;
+  z-index: 1;
+  font-size: 12px;
+}
+/* phân trang */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.pagination span,
+.pagination a {
+  display: inline-block;
+  padding: 10px 15px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #333;
+  cursor: pointer;
+}
+
+.pagination span.disabled {
+  color: #999;
+  border-color: #eee;
+  cursor: not-allowed;
+}
+
+.pagination a:hover {
+  background-color: #f0f0f0;
+  border-color: #bbb;
+}
+
+.pagination .current {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.pagination .other-page {
+  background-color: #fff;
+}
+
+.pagination .other-page:hover {
+  background-color: #e6e6e6;
+}
+
+.pagination .next-page,
+.pagination .last-page,
+.pagination .prev-page,
+.pagination .first-page {
+  font-weight: bold;
+}
+
+.pagination b {
+  padding: 10px 5px;
+  font-size: 16px;
+}

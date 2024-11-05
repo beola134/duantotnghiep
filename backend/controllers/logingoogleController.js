@@ -35,18 +35,25 @@ const googleLogin = async (req, res) => {
         }
 
         const { email, name, given_name, sub, picture } = payload;
-        let account = await Users.findOne({ where: { email, googleId: sub } });
+        let account = await Users.findOne({ where: { email } });
 
-        if (account) {
+        if (account && !account.googleId) {
+            // Nếu tài khoản tồn tại nhưng chưa liên kết với Google, ngăn tạo tài khoản mới
+            throw new Error('Tài khoản đã tồn tại');
+        }
+
+        if (account && account.googleId === sub) {
+            // Nếu tài khoản đã liên kết với Google, thực hiện đăng nhập
             const tokenJwt = jwt.sign(
-                { _id: account._id, email: account.email, quyen: account.quyen }, 
-                process.env.ACCESS_TOKEN_SECRET, 
+                { _id: account._id, email: account.email, quyen: account.quyen },
+                process.env.ACCESS_TOKEN_SECRET,
                 { expiresIn: '1h' }
             );
             res.cookie('token', tokenJwt, { httpOnly: true, maxAge: 60 * 60 * 1000 });
             return res.status(200).json({ message: 'Login success', token: tokenJwt });
         }
 
+        // Nếu chưa có tài khoản với Google ID này, tạo tài khoản mới
         account = await Users.create({
             ho_ten: name,
             ten_dang_nhap: given_name,
@@ -57,14 +64,14 @@ const googleLogin = async (req, res) => {
         });
 
         const tokenJwt = jwt.sign(
-            { _id: account._id, email: account.email, quyen: account.quyen }, 
-            process.env.ACCESS_TOKEN_SECRET, 
+            { _id: account._id, email: account.email, quyen: account.quyen },
+            process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: '1h' }
         );
         res.cookie('token', tokenJwt, { httpOnly: true, maxAge: 60 * 60 * 1000 });
         res.status(200).json({ message: 'Login success', token: tokenJwt });
         console.log('Created new account:', account.toJSON());
-        
+
     } catch (error) {
         console.error('Login failed:', error.message);
         res.status(400).json({ message: 'Login failed', error: error.message });

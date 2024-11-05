@@ -283,7 +283,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="FREDERIQUE CONSTANT"
-                                onClick={() => handleFilterChange("danh_muc", "FREDERIQUE CONSTANT")}
+                                onClick={() => handleFilterChange("danh_muc", "FREDERIQUECONSTANT")}
                               >
                                 FREDERIQUE CONSTANT
                               </Link>
@@ -293,7 +293,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="CALVIN KLEIN"
-                                onClick={() => handleFilterChange("danh_muc", "CALVIN KLEIN")}
+                                onClick={() => handleFilterChange("danh_muc", "CALVINKLEIN")}
                               >
                                 CALVIN KLEIN
                               </Link>
@@ -313,7 +313,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="CLAUDE BERNARD"
-                                onClick={() => handleFilterChange("danh_muc", "CLAUDE BERNARD")}
+                                onClick={() => handleFilterChange("danh_muc", "CLAUDEBERNARD")}
                               >
                                 CLAUDE BERNARD
                               </Link>
@@ -363,7 +363,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="OLYM PIANUS"
-                                onClick={() => handleFilterChange("danh_muc", "OLYM PIANUS")}
+                                onClick={() => handleFilterChange("danh_muc", "OLYMPIANUS")}
                               >
                                 OLYM PIANUS
                               </Link>
@@ -373,7 +373,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="DANIEL WELLINGTON"
-                                onClick={() => handleFilterChange("danh_muc", "DANIEL WELLINGTON")}
+                                onClick={() => handleFilterChange("danh_muc", "DANIELWELLINGTON")}
                               >
                                 DANIEL WELLINGTON
                               </Link>
@@ -403,7 +403,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="MICHAEL KORS"
-                                onClick={() => handleFilterChange("danh_muc", "MICHAEL KORS")}
+                                onClick={() => handleFilterChange("danh_muc", "MICHAELKORS")}
                               >
                                 MICHAEL KORS
                               </Link>

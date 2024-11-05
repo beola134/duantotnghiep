@@ -18,6 +18,10 @@ function OtpModal({ isOpen, onRequestClose }) {
     if (index < otp.length - 1 && value) {
       document.getElementById(`otp-input-${index + 1}`).focus();
     }
+    // xoá ô nếu nhấn backspace
+    if (index > 0 && !value) {
+      document.getElementById(`otp-input-${index - 1}`).focus();
+    }
   };
 
   const handleSubmit = async () => {
@@ -84,6 +88,11 @@ function OtpModal({ isOpen, onRequestClose }) {
               maxLength="1"
               value={digit}
               onChange={(e) => handleChangeOtp(index, e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Backspace" && !otp[index]) {
+                  document.getElementById(`otp-input-${index - 1}`).focus();
+                }
+              }}
               className={styles.otpInput}
             />
           ))}
