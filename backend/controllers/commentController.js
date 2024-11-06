@@ -4,7 +4,15 @@ const Users = require("../models/users");
 //show tất cả bình luận
 exports.showAllComment = async (req, res) => {
   try {
-    const comments = await CMT.findAll();
+    const { page = 1, limit = 5 } = req.query;
+    const offset = (page - 1) * limit;
+    const comments = await CMT.findAll({
+      limit,
+      offset,
+    });
+    const totalComments = await CMT.count();
+    const totalPages = Math.ceil(totalComments / limit);
+    res.status(200).json({ comments, totalComments, totalPages, currentPage: page });
     res.status(200).json({ comments });
   } catch (error) {
     console.error(error.message);

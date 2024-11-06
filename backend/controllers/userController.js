@@ -28,8 +28,15 @@ exports.getUserById = async (req, res) => {
 // API lấy thông tin tất cả người dùng
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await Users.findAll();
-    res.json({ users });
+    const { page = 1, limit = 5 } = req.query;
+    const offset = (page - 1) * limit;
+    const users = await Users.findAll ({
+      limit,
+      offset,
+    });
+    const totalUsers = await Users.count();
+    const totalPages = Math.ceil(totalUsers / limit);
+    res.json({ users,totalUsers, totalPages, currentPage: page });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
