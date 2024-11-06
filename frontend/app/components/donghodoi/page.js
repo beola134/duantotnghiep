@@ -89,7 +89,7 @@ export default function DonghoDoi() {
   };
 
   const xoaBoLoc = (filterToRemove) => {
-    // Loại bỏ bộ lọc cụ thể khỏi selectedFilter
+  
     const newFilters = selectedFilter.filter(
       (filter) => filter !== filterToRemove
     );
