@@ -10,4 +10,21 @@ router.post('/', voucher.addVoucher);
 //http://localhost:5000/voucher/ma_voucher
 router.post('/ma_voucher', voucher.getVoucherByCode);
 
+//Show all cac vouchers
+//http://localhost:5000/voucher/getAllVouchers
+router.get("/getAllVouchers", voucher.getAllVouchers);
+
+//Show voucher theo id
+//http://localhost:5000/voucher/getVoucherById/:id
+router.get("/getVoucherById/:id", voucher.getVoucherById);
+
+//cập nhật voucher
+//http://localhost:5000/voucher/updateVoucher/:id
+router.put("/updateVoucher/:id", voucher.updateVoucher);
+
+
+//Xóa voucher
+//http://localhost:5000/voucher/deleteVouCher/:id
+router.delete("/deleteVouCher/:id", voucher.deleteVouCher);
+
 module.exports = router;

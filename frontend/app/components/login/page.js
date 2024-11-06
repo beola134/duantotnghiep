@@ -17,7 +17,7 @@ const schema = yup.object().shape({
   password: yup
     .string()
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*!])[A-Za-z\d@#$%^&*!]{8,}$/,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*!?])[A-Za-z\d@#$%^&*!?]{8,}$/,
       "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt."
     )
     .required("Vui lòng nhập mật khẩu"),
@@ -56,7 +56,15 @@ export default function Login() {
           icon: "success",
           showConfirmButton: true,
         }).then(() => {
-          window.location.href = "http://localhost:3001";
+          if (typeof window !== "undefined") {
+            const queryParam = new URLSearchParams(window.location.search);
+            const redirect = queryParam.get("redirect");
+            if (redirect === "thanhtoan") {
+              window.location.href = "/components/thanhtoan";
+            } else {
+              window.location.href = "/";
+            }
+          }
         });
       } catch (error) {
         setSubmitting(false);

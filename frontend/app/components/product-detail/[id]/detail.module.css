@@ -923,3 +923,128 @@
   margin-top: 10px;
   display: block;
 }
+/* comment-show */
+
+.commentSection {
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 15px 0;
+  background-color: #f9f9f9;
+}
+
+.comment {
+  display: flex;
+  align-items: flex-start;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.comment:last-child {
+  border-bottom: none;
+}
+
+.profile {
+  position: relative;
+  margin-right: 10px;
+}
+
+.profile img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.content {
+  max-width: 80%;
+}
+
+.header {
+  display: flex;
+  font-size: 14px;
+}
+
+.name {
+  font-weight: bold;
+  color: #333;
+  margin-right: 15px;
+}
+
+.date {
+  color: #999;
+  margin-right: 10px;
+}
+
+.rating {
+  display: flex;
+  margin-left: 5px;
+}
+
+.star {
+  color: #ffd700;
+  font-size: 14px;
+  margin-left: 2px;
+}
+
+.text {
+  color: #666;
+  font-size: 14px;
+  margin-top: 10px;
+}
+/* phân trang */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.pagination span,
+.pagination a {
+  display: inline-block;
+  padding: 10px 15px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #333;
+  cursor: pointer;
+}
+
+.pagination span.disabled {
+  color: #999;
+  border-color: #eee;
+  cursor: not-allowed;
+}
+
+.pagination a:hover {
+  background-color: #f0f0f0;
+  border-color: #bbb;
+}
+
+.pagination .current {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.pagination .other-page {
+  background-color: #fff;
+}
+
+.pagination .other-page:hover {
+  background-color: #e6e6e6;
+}
+
+.pagination .next-page,
+.pagination .last-page,
+.pagination .prev-page,
+.pagination .first-page {
+  font-weight: bold;
+}
+
+.pagination b {
+  padding: 10px 5px;
+  font-size: 16px;
+}

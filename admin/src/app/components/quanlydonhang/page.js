@@ -1,11 +1,11 @@
 "use client";
 import "bootstrap/dist/css/bootstrap.min.css";
-import styles from "./taikhoan.module.css";
+import styles from "./donhang.module.css";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-    
-export default function TaiKhoan() {
+
+export default function DonHang() {
   const uploadFile = () => {
     Swal.fire({
       title: "Chưa khả dụng",
@@ -63,7 +63,7 @@ export default function TaiKhoan() {
     });
   };
 
-  // Hàm xóa tất cả dữ liệu
+
   const deleteAll = async () => {
     const result = await Swal.fire({
       title: "Xác nhận",
@@ -89,72 +89,89 @@ export default function TaiKhoan() {
     }
   };
 
-  const deleteUser = async (id) => {
-    const result = await Swal.fire({
-      title: "Xác nhận",
-      text: "Bạn có chắc chắn muốn xóa tài khoản này không?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
-    });
-
-    if (result.isConfirmed) {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/users/delete/${id}`,
-          {
-            method: "DELETE",
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Lỗi khi xóa tài khoản");
-        }
-
-        setUser((prevUsers) =>
-          prevUsers.filter((nguoi_dung) => nguoi_dung._id !== id)
-        );
-
-        Swal.fire({
-          title: "Thành công",
-          text: "Tài khoản đã được xóa thành công!",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-      } catch (error) {
-        Swal.fire({
-          title: "Lỗi",
-          text: error.message,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-      }
-    }
-  };
-
-  const [users, setUser] = useState([]);
+  
+    const [donHangs, setDonhang] = useState([]);
+    const [nguoiDungMap, setNguoiDungMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchDonhang = async () => {
       try {
-        const response = await fetch("http://localhost:5000/users");
+        const response = await fetch("http://localhost:5000/donhang/showAll");
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
         const data = await response.json();
-        setUser(data.users);
+        setDonhang(data.donHangs);
+
+        
+        const idNguoiDungList = [
+          ...new Set(data.donHangs.map((dh) => dh.id_nguoi_dung)),
+        ];
+
+       
+        const nguoiDungData = await Promise.all(
+          idNguoiDungList.map(async (id) => {
+            const res = await fetch(`http://localhost:5000/users/${id}`);
+            const userData = await res.json();
+            return { id, ...userData.user };
+          })
+        );
+
+        const nguoiDungObj = nguoiDungData.reduce((acc, user) => {
+          acc[user.id] = user;
+          return acc;
+        }, {});
+        setNguoiDungMap(nguoiDungObj);
       } catch (error) {
         setError(error.message);
       } finally {
         setLoading(false);
       }
     };
-    fetchCategories();
+
+    fetchDonhang();
   }, []);
+    const handleStatusChange = async (id, newStatus) => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/donhang/update/${id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ trang_thai: newStatus }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Lỗi cập nhật trạng thái");
+        }
+
+        
+        setDonhang((prevDonHangs) =>
+          prevDonHangs.map((donHang) =>
+            donHang._id === id ? { ...donHang, trang_thai: newStatus } : donHang
+          )
+        );
+
+        Swal.fire({
+          title: "Thành công",
+          text: "Trạng thái đơn hàng đã được cập nhật!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      } catch (error) {
+        Swal.fire({
+          title: "Lỗi",
+          text: "Không thể cập nhật trạng thái",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
+    };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -168,16 +185,13 @@ export default function TaiKhoan() {
       <section id={styles.content}>
         <div className={styles.header1}>
           <div className={styles.title} style={{ fontWeight: "bold" }}>
-            Danh Sách Tài Khoản
+            Danh Sách đơn hàng
           </div>
           <div className={styles.timestamp} id="timestamp"></div>
         </div>
         <div className={styles.bg}>
           <div className={styles.container}>
             <div className={styles.actions}>
-              <Link href="/components/themdanhmuc" className={styles.sp}>
-                <i className="fas fa-plus"></i> Tạo mới tài khoản
-              </Link>
               <div className={styles.buttonGroup}>
                 <button className={styles.sp2} onClick={uploadFile}>
                   &nbsp;
@@ -233,66 +247,65 @@ export default function TaiKhoan() {
                       <input type="checkbox" id="selectAll" />
                     </th>
                     <th style={{ width: "15%", textAlign: "center" }}>
-                      ID tài khoản
+                      ID đơn hàng
                     </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      Họ và tên
-                    </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>Ảnh</th>
                     <th style={{ width: "15%", textAlign: "center" }}>
                       Địa chỉ
                     </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Email
+                    <th style={{ width: "12%", textAlign: "center" }}>
+                      Tên khách hàng
                     </th>
                     <th style={{ width: "10%", textAlign: "center" }}>
                       Số điện thoại
                     </th>
                     <th style={{ width: "10%", textAlign: "center" }}>
-                      Chức vụ
+                      Ghi chú
                     </th>
                     <th style={{ width: "10%", textAlign: "center" }}>
-                      Chức năng
+                      Ngày mua
+                    </th>
+                    <th style={{ width: "11%", textAlign: "center" }}>
+                      Tổng tiền
+                    </th>
+                    <th style={{ width: "14%", textAlign: "center" }}>
+                      Tình trạng
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((item) => (
+                  {donHangs.map((item) => (
                     <tr key={item._id}>
                       <td>
                         <input type="checkbox" className={styles.rowCheckbox} />
                       </td>
                       <td>{item._id}</td>
                       <td>
-                        <p className={styles.mota}>{item.ho_ten}</p>
+                        <p className={styles.mota}>{item.dia_chi}</p>
                       </td>
                       <td>
-                        <img
-                          src={`http://localhost:5000/images/${item.hinh_anh}`}
-                          alt={item.danh_muc}
-                        />
+                        {nguoiDungMap[item.id_nguoi_dung]?.ho_ten ||
+                          "Đang tải..."}
                       </td>
-                      <td>{item.dia_chi}</td>
-                      <td>{item.email}</td>
-                      <td>{item.dien_thoai}</td>
-                      <td>{item.quyen === 1 ? 'Quản trị viên' : item.quyen === 2 ? 'Khách hàng' : ''}</td>
+                      <td>{nguoiDungMap[item.id_nguoi_dung]?.dien_thoai ||
+                          "Đang tải..."}</td>
+                      <td>{item.ghi_chu}</td>
+                      <td>{item.thoi_gian_tao}</td>
+                      <td>{item.tong_tien.toLocaleString("vi-VN")}₫</td>
 
                       <td>
-                        <Link
-                          href={`/components/suataikhoan/${item._id}`}
-                          className={`${styles.btn} ${styles.edit}`}
-                        >
-                          ✏️
-                        </Link>{" "}
-                        &nbsp;
-                        <button
-                          className={`${styles.btn} ${styles.delete}`}
-                          id="deleteButton"
-                          onClick={() => deleteUser(item._id)}
-                        >
-                          🗑️
-                        </button>
-                        &nbsp;
+                        <p className={styles.trangthai}><select
+                          value={item.trang_thai}
+                          onChange={(e) =>
+                            handleStatusChange(item._id, e.target.value)
+                           
+                          }
+                        >   
+                            <option value="Chờ xác nhận">Chờ xác nhận</option>
+                            <option value="Đã xác nhận và đóng gói">Đã xác nhận và đóng gói</option>
+                            <option value="Đã xác nhận và đóng gói">Đang giao</option>
+                          <option value="Đã giao hàng">Đã giao hàng</option>
+                          <option value="Đã hủy">Đã hủy</option>
+                        </select></p>
                       </td>
                     </tr>
                   ))}

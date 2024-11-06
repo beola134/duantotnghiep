@@ -102,7 +102,7 @@ export default function Menu() {
               }`}
             >
               <li>
-                <Link href="quanlydonhang.html">Quản lý đơn hàng</Link>
+                <Link href="/components/quanlydonhang">Quản lý đơn hàng</Link>
               </li>
               <li>
                 <Link href="quanlygiohang.html">Quản lý giỏ hàng</Link>
@@ -126,10 +126,6 @@ export default function Menu() {
         <nav className={styles.nav}>
           <i className={`bx bx-menu ${styles.toggleSidebar}`}></i>
           <form action="#">
-            <div className={styles.formGroup}>
-              <input type="text" placeholder="Search..." />
-              <i className={`bx bx-search ${styles.icon}`}></i>
-            </div>
           </form>
           <a href="#" className={styles.navLink}>
             <i className={`bx bxs-bell ${styles.icon}`}></i>
