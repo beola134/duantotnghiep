@@ -19,6 +19,10 @@ router.get('/show/:id_nguoi_dung',donhangController.getAllDonHangByUserId);
 
 //xem lịch sử đơn hàng
 //http://localhost:5000/donhang/history/:id_nguoi_dung
-router.get('/history/:id_nguoi_dung',donhangController.getDonHangByUserId );
+router.get('/history/:id_nguoi_dung', donhangController.getDonHangByUserId);
+
+//xem chi tiết đơn hàng
+//http://localhost:5000/donhang/getAllOrderDetails
+router.get("/getAllOrderDetails", donhangController.getAllOrderDetails);
 
 module.exports = router;

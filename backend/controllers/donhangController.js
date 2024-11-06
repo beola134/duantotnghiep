@@ -260,10 +260,39 @@ const getDonHangByUserId = async (req, res) => {
 
 ///show chi tiết đơn hàng
 
+ const getAllOrderDetails = async (req, res) => {
+   try {
+     const { limit = 5, page = 1 } = req.query;
+
+     const offset = (page - 1) * limit;
+     const { rows: ordersDetail, count: totalOrders } =
+       await ChiTietDonHang.findAndCountAll({
+         limit: parseInt(limit),
+         offset: parseInt(offset),
+       });
+
+     const totalPages = Math.ceil(totalOrders / limit);
+
+     if (!ordersDetail || ordersDetail.length === 0) {
+       return res.status(404).json({ message: "No products found" });
+     }
+
+     res.status(200).json({
+       ordersDetail,
+       currentPage: parseInt(page),
+       totalPages,
+       totalOrders,
+     });
+   } catch (error) {
+     res.status(500).json({ error: error.message });
+   }
+ };
+
 module.exports = {
   addDonHang,
   updateDonHang,
   getAllDonHangByUserId,
   getDonHangByUserId,
   getAllDonHang,
+  getAllOrderDetails,
 };
