@@ -23,16 +23,18 @@ export default function DonHang() {
     const filteredDonhangs = donHangs.filter((donHang) => {
       const userName = nguoiDungMap[donHang.id_nguoi_dung]?.ho_ten || "";
       const phoneNumber = nguoiDungMap[donHang.id_nguoi_dung]?.dien_thoai || "";
+      const trangThai = donHang.trang_thai || "";
       return (
         removeAccents(userName.toLowerCase()).includes(query) ||
-        phoneNumber.includes(query)
+        phoneNumber.includes(query) ||
+        removeAccents(trangThai.toLowerCase()).includes(query)
+
       );
     });
     setDisplayDonhang(filteredDonhangs.slice(0, itemsPerPage));
     setCurrentPage(1);
   }
 };
-
   useEffect(() => {
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;

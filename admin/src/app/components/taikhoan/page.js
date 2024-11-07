@@ -251,7 +251,7 @@ export default function TaiKhoan() {
         <div className={styles.bg}>
           <div className={styles.container}>
             <div className={styles.actions}>
-              <Link href="/components/themdanhmuc" className={styles.sp}>
+              <Link href="/components/themtaikhoan" className={styles.sp}>
                 <i className="fas fa-plus"></i> Tạo mới tài khoản
               </Link>
               <div className={styles.buttonGroup}>
@@ -380,6 +380,7 @@ export default function TaiKhoan() {
                         &nbsp;
                         <button
                           className={`${styles.btn} ${styles.delete}`}
+                          style={{margin: "auto"}}
                           id="deleteButton"
                           onClick={() => deleteUser(item._id)}
                         >
