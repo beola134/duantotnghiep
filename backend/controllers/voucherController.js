@@ -51,16 +51,32 @@ const getVoucherById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
- 
+                              
 // show all vouchers
 const getAllVouchers = async (req, res) => {
   try {
-    const vouchers = await voucher.findAll();
-    res.status(200).json(vouchers);
+    const { limit = 5, page = 1 } = req.query;
+
+    const offset = (page - 1) * limit;
+    const { rows: vouchers, count: totalVouchers } =
+      await voucher.findAndCountAll({
+        limit: parseInt(limit),
+        offset: parseInt(offset),
+      });
+
+    const totalPages = Math.ceil(totalVouchers / limit);
+
+    res.status(200).json({
+      vouchers,
+      currentPage: parseInt(page),
+      totalPages,
+      totalVouchers,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 // cập nhật voucher
 const updateVoucher = async (req, res) => {

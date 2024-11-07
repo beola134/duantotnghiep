@@ -28,8 +28,15 @@ exports.getUserById = async (req, res) => {
 // API lấy thông tin tất cả người dùng
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await Users.findAll();
-    res.json({ users });
+    const { page = 1, limit = 5 } = req.query;
+    const offset = (page - 1) * limit;
+    const users = await Users.findAll ({
+      limit,
+      offset,
+    });
+    const totalUsers = await Users.count();
+    const totalPages = Math.ceil(totalUsers / limit);
+    res.json({ users,totalUsers, totalPages, currentPage: page });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -352,12 +359,13 @@ exports.updateUser = async (req, res) => {
       });
     }
     const hinh_anh = req.file ? req.file.filename : user.hinh_anh;
-    const { ten_dang_nhap, ho_ten, email, dia_chi, dien_thoai } = req.body;
+    const { ten_dang_nhap, ho_ten, email, dia_chi, dien_thoai,quyen } = req.body;
     user.ten_dang_nhap = ten_dang_nhap || user.ten_dang_nhap;
     user.ho_ten = ho_ten || user.ho_ten;
     user.email = email || user.email;
     user.dia_chi = dia_chi || user.dia_chi;
     user.dien_thoai = dien_thoai || user.dien_thoai;
+    user.quyen = quyen || user.quyen;
     user.hinh_anh = hinh_anh;
     await user.save();
     res.status(200).json({
