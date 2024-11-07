@@ -8,7 +8,7 @@ import DonHang from "./components/quanlydonhang/page";
 export default function Home() {
   return (
   
-   <DonHang/>
+   <SanPham/>
    
   );
 }

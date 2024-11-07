@@ -6,6 +6,89 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
     
 export default function TaiKhoan() {
+  const [users, setUser] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [displayUsers, setDisplayUsers] = useState([]);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const removeAccents = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
+  const handleSearch = (e) => {
+  if (e.key === "Enter") {
+    const query = removeAccents(searchQuery.toLowerCase());
+
+    const filteredTaiKhoan = users.filter((user) => {
+      const userName = user.ho_ten || "";
+      const phone = user.dien_thoai || "";
+      const email = user.email || "";
+      const role = user.quyen === 1 ? "quản trị viên" : user.quyen === 2 ? "khách hàng" : "";
+      return (
+        removeAccents(userName.toLowerCase()).includes(query) ||
+        removeAccents(phone.toLowerCase()).includes(query) ||
+        removeAccents(email.toLowerCase()).includes(query) ||
+        removeAccents(role.toLowerCase()).includes(query)
+      );
+    });
+
+    setDisplayUsers(filteredTaiKhoan.slice(0, itemsPerPage));
+    setCurrentPage(1);
+  }
+  };
+  const handleRoleChange = async (id, newRole) => {
+    try {
+      const response = await fetch(`http://localhost:5000/users/update/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quyen: newRole }),
+      });
+      if (!response.ok) throw new Error("Lỗi khi cập nhật chức vụ");
+
+      setUser((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === id ? { ...user, quyen: newRole } : user
+        )
+      );
+
+      Swal.fire({
+        title: "Thành công",
+        text: "Chức vụ đã được cập nhật!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    } catch (error) {
+      Swal.fire({
+        title: "Lỗi",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  };
+  
+
+  useEffect(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    setDisplayUsers(users.slice(start, end));
+  }, [users, itemsPerPage, currentPage]);
+
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1);
+    Swal.fire({
+      title: "Đã cập nhật",
+      text: `Giới hạn hiển thị đã được thay đổi thành ${e.target.value} mục.`,
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+  };
+
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+
   const uploadFile = () => {
     Swal.fire({
       title: "Chưa khả dụng",
@@ -16,54 +99,59 @@ export default function TaiKhoan() {
   };
 
   const printData = () => {
-    window.print();
+    if (typeof window !== "undefined") {
+      window.print();
+    }
   };
 
   const copyData = () => {
-    const table = document.getElementById("productTable");
-    const range = document.createRange();
-    range.selectNode(table);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-    document.execCommand("copy");
+    if (typeof document !== "undefined") {
+      const table = document.getElementById("productTable");
+      const range = document.createRange();
+      range.selectNode(table);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      document.execCommand("copy");
 
-    Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu đã được sao chép!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
+      Swal.fire({
+        title: "Thành công",
+        text: "Dữ liệu đã được sao chép!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    }
   };
 
-  // Hàm xuất dữ liệu ra Excel
   const exportToExcel = () => {
-    const table = document.getElementById("productTable");
-    const workbook = XLSX.utils.table_to_book(table);
-    XLSX.writeFile(workbook, "products.xlsx");
+    if (typeof document !== "undefined" && typeof XLSX !== "undefined") {
+      const table = document.getElementById("productTable");
+      const workbook = XLSX.utils.table_to_book(table);
+      XLSX.writeFile(workbook, "products.xlsx");
 
-    Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu đã được xuất ra Excel!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
+      Swal.fire({
+        title: "Thành công",
+        text: "Dữ liệu đã được xuất ra Excel!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    }
   };
 
-  // Hàm xuất dữ liệu ra PDF
   const exportToPDF = () => {
-    const doc = new jsPDF();
-    doc.autoTable({ html: "#productTable" });
-    doc.save("products.pdf");
+    if (typeof document !== "undefined" && typeof jsPDF !== "undefined") {
+      const doc = new jsPDF();
+      doc.autoTable({ html: "#productTable" });
+      doc.save("products.pdf");
 
-    Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu đã được xuất ra PDF!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
+      Swal.fire({
+        title: "Thành công",
+        text: "Dữ liệu đã được xuất ra PDF!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    }
   };
 
-  // Hàm xóa tất cả dữ liệu
   const deleteAll = async () => {
     const result = await Swal.fire({
       title: "Xác nhận",
@@ -77,8 +165,10 @@ export default function TaiKhoan() {
     });
 
     if (result.isConfirmed) {
-      const tableBody = document.querySelector("#productTable tbody");
-      tableBody.innerHTML = "";
+      if (typeof document !== "undefined") {
+        const tableBody = document.querySelector("#productTable tbody");
+        tableBody.innerHTML = "";
+      }
 
       Swal.fire({
         title: "Đã xóa",
@@ -103,19 +193,14 @@ export default function TaiKhoan() {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(
-          `http://localhost:5000/users/delete/${id}`,
-          {
-            method: "DELETE",
-          }
-        );
+        const response = await fetch(`http://localhost:5000/users/delete/${id}`, {
+          method: "DELETE",
+        });
         if (!response.ok) {
           throw new Error("Lỗi khi xóa tài khoản");
         }
 
-        setUser((prevUsers) =>
-          prevUsers.filter((nguoi_dung) => nguoi_dung._id !== id)
-        );
+        setUser((prevUsers) => prevUsers.filter((nguoi_dung) => nguoi_dung._id !== id));
 
         Swal.fire({
           title: "Thành công",
@@ -134,12 +219,8 @@ export default function TaiKhoan() {
     }
   };
 
-  const [users, setUser] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchUsers = async () => {
       try {
         const response = await fetch("http://localhost:5000/users");
         if (!response.ok) {
@@ -153,16 +234,11 @@ export default function TaiKhoan() {
         setLoading(false);
       }
     };
-    fetchCategories();
+    fetchUsers();
   }, []);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
   return (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>
@@ -175,7 +251,7 @@ export default function TaiKhoan() {
         <div className={styles.bg}>
           <div className={styles.container}>
             <div className={styles.actions}>
-              <Link href="/components/themdanhmuc" className={styles.sp}>
+              <Link href="/components/themtaikhoan" className={styles.sp}>
                 <i className="fas fa-plus"></i> Tạo mới tài khoản
               </Link>
               <div className={styles.buttonGroup}>
@@ -212,18 +288,26 @@ export default function TaiKhoan() {
               <div className={styles.tableControls}>
                 <label htmlFor="entries" style={{ fontWeight: "bold" }}>
                   Hiện&nbsp;
-                  <select id="entries">
+                  <select
+                    id="entries"
+                    value={itemsPerPage}
+                    onChange={handleItemsPerPageChange}
+                  >
+                    <option value="5">5</option>
                     <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
+                    <option value="15">15</option>
                   </select>
-                  <span>&nbsp; danh mục</span>
+                  <span>&nbsp; người dùng</span>
                 </label>
                 <div className={styles.search}>
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
                     Tìm kiếm:
                   </label>
-                  <input type="text" id="search" />
+                  <input type="text"
+                  id="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearch} />
                 </div>
               </div>
               <table id="productTable" className={styles.productTable}>
@@ -235,20 +319,18 @@ export default function TaiKhoan() {
                     <th style={{ width: "15%", textAlign: "center" }}>
                       ID tài khoản
                     </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
+                    <th style={{ width: "12%", textAlign: "center" }}>
                       Họ và tên
                     </th>
                     <th style={{ width: "12%", textAlign: "center" }}>Ảnh</th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
+                    <th style={{ width: "10%", textAlign: "center" }}>
                       Địa chỉ
                     </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Email
-                    </th>
+                    <th style={{ width: "13%", textAlign: "center" }}>Email</th>
                     <th style={{ width: "10%", textAlign: "center" }}>
                       Số điện thoại
                     </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
+                    <th style={{ width: "15%", textAlign: "center" }}>
                       Chức vụ
                     </th>
                     <th style={{ width: "10%", textAlign: "center" }}>
@@ -257,7 +339,7 @@ export default function TaiKhoan() {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((item) => (
+                  {displayUsers.map((item) => (
                     <tr key={item._id}>
                       <td>
                         <input type="checkbox" className={styles.rowCheckbox} />
@@ -275,7 +357,18 @@ export default function TaiKhoan() {
                       <td>{item.dia_chi}</td>
                       <td>{item.email}</td>
                       <td>{item.dien_thoai}</td>
-                      <td>{item.quyen === 1 ? 'Quản trị viên' : item.quyen === 2 ? 'Khách hàng' : ''}</td>
+                      <td>
+                        <p className={styles.chucvu}>
+                         <select
+                          value={item.quyen}
+                          onChange={(e) => handleRoleChange(item._id, Number(e.target.value))}
+                          className={styles.roleSelect}
+                        >
+                          <option value="1">Quản trị viên</option>
+                          <option value="2">Khách hàng</option>
+                        </select>
+                        </p>
+                      </td>
 
                       <td>
                         <Link
@@ -287,6 +380,7 @@ export default function TaiKhoan() {
                         &nbsp;
                         <button
                           className={`${styles.btn} ${styles.delete}`}
+                          style={{margin: "auto"}}
                           id="deleteButton"
                           onClick={() => deleteUser(item._id)}
                         >
@@ -300,16 +394,23 @@ export default function TaiKhoan() {
               </table>
 
               <div className={styles.pagination}>
-                <span>Hiện 1 đến 10 của 16 danh mục</span>
+                <span>Hiện 1 đến {displayUsers.length} của {users.length} người dùng</span>
                 <div className={styles.paginationControls}>
-                  <button className={styles.paginationButton}>Lùi</button>
+                  <button className={styles.paginationButton}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    disabled={currentPage === 1}>Lùi</button>
                   <button
-                    className={`${styles.paginationButton} ${styles.active}`}
+                    className={`${styles.paginationButton}  ${styles.active}`}
                   >
-                    1
+                    {currentPage} / {totalPages}
                   </button>
-                  <button className={styles.paginationButton}>2</button>
-                  <button className={styles.paginationButton}>Tiếp</button>
+          
+                  <button className={styles.paginationButton} onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    disabled={currentPage === totalPages}>Tiếp</button>
                 </div>
               </div>
             </div>
