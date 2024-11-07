@@ -7,6 +7,50 @@ import Swal from "sweetalert2";
 
 
 export default function DanhMuc() {
+  const [categories, setCategories] = useState([]);
+  const [displayCategories, setDisplayCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [itemsPerPage, setItemsPerPage] = useState(5); 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const removeAccents = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      const query = removeAccents(searchQuery.toLowerCase());
+      const filteredCategories = categories.filter((category) =>
+        removeAccents(category.danh_muc.toLowerCase()).includes(query)
+      );
+      setDisplayCategories(filteredCategories.slice(0, itemsPerPage));
+      setCurrentPage(1);
+    }
+  };
+
+  useEffect(() => {
+ 
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    setDisplayCategories(categories.slice(start, end));
+  }, [categories, itemsPerPage, currentPage]);
+
+
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1); // Reset về trang đầu tiên
+    Swal.fire({
+      title: "Đã cập nhật",
+      text: `Giới hạn hiển thị đã được thay đổi thành ${e.target.value} mục.`,
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+  };
+
+  const totalPages = Math.ceil(categories.length / itemsPerPage);
+
+
   const uploadFile = () => {
     Swal.fire({
       title: "Chưa khả dụng",
@@ -137,9 +181,6 @@ export default function DanhMuc() {
     }
   };
 
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -215,10 +256,14 @@ export default function DanhMuc() {
               <div className={styles.tableControls}>
                 <label htmlFor="entries" style={{ fontWeight: "bold" }}>
                   Hiện&nbsp;
-                  <select id="entries">
+                  <select
+                    id="entries"
+                    value={itemsPerPage}
+                    onChange={handleItemsPerPageChange}
+                  >
+                    <option value="5">5</option>
                     <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
+                    <option value="15">15</option>
                   </select>
                   <span>&nbsp; danh mục</span>
                 </label>
@@ -226,7 +271,11 @@ export default function DanhMuc() {
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
                     Tìm kiếm:
                   </label>
-                  <input type="text" id="search" />
+                  <input type="text"
+                    id="search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleSearch}/>
                 </div>
               </div>
               <table id="productTable" className={styles.productTable}>
@@ -253,13 +302,16 @@ export default function DanhMuc() {
                   </tr>
                 </thead>
                 <tbody>
-                  {categories.map((item) => (
+                  {displayCategories.map((item) => (
                     <tr key={item._id}>
                       <td>
                         <input type="checkbox" className={styles.rowCheckbox} />
                       </td>
                       <td>{item._id}</td>
-                      <td > <p className={styles.mota}>{item.mo_ta}</p></td>
+                      <td>
+                        {" "}
+                        <p className={styles.mota}>{item.mo_ta}</p>
+                      </td>
                       <td>{item.danh_muc}</td>
                       <td>
                         <img
@@ -267,7 +319,7 @@ export default function DanhMuc() {
                           alt={item.danh_muc}
                         />
                       </td>
-                      
+
                       <td>
                         <Link
                           href={`/components/suadanhmuc/${item._id}`}
@@ -291,16 +343,32 @@ export default function DanhMuc() {
               </table>
 
               <div className={styles.pagination}>
-                <span>Hiện 1 đến 10 của 16 danh mục</span>
+                <span>Hiện 1 đến {displayCategories.length} của {categories.length} danh mục</span>
                 <div className={styles.paginationControls}>
-                  <button className={styles.paginationButton}>Lùi</button>
+                  <button
+                    className={styles.paginationButton}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    disabled={currentPage === 1}
+                  >
+                    Lùi
+                  </button>
                   <button
                     className={`${styles.paginationButton} ${styles.active}`}
                   >
-                    1
+                    {currentPage} / {totalPages}
                   </button>
-                  <button className={styles.paginationButton}>2</button>
-                  <button className={styles.paginationButton}>Tiếp</button>
+                  
+                  <button
+                    className={styles.paginationButton}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    disabled={currentPage === totalPages}
+                  >
+                    Tiếp
+                  </button>
                 </div>
               </div>
             </div>

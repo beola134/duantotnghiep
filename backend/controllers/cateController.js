@@ -27,8 +27,22 @@ exports.getAllCates = async (req, res) => {
 // Lấy tất cả danh mục
 exports.getAllCatess = async (req, res) => {
   try {
-    const cates = await Cate.findAll();
-    res.json({ cates });
+    const { limit = 5, page = 1 } = req.query;
+
+    const offset = (page - 1) * limit;
+    const { rows: cates, count: Totalcates } = await Cate.findAndCountAll({
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+    });
+
+    const totalPages = Math.ceil(Totalcates / limit);
+
+    res.status(200).json({
+      cates,
+      currentPage: parseInt(page),
+      totalPages,
+      Totalcates,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
