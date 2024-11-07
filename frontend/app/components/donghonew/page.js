@@ -18,7 +18,7 @@ export default function DonghoNam() {
 
   // Bộ lọc mặc định cho đồng hồ nam
   const [filter, setFilter] = useState({
-    gioi_tinh: "Nam",
+    gioi_tinh: "",
     danh_muc: "",
     muc_gia: "",
     khuyenmai: "",
@@ -267,21 +267,30 @@ export default function DonghoNam() {
                           >
                             <Link
                               rel="nofollow"
-                              href="/components/donghonam"
+                              href="/components/donghonew?query=gioi_tinh=Nam"
+                                onClick={() =>
+                                  handleFilterChange("gioi_tinh", "Nam")
+                                }
                               title="Đồng hồ nam"
                             >
                               <span>Đồng hồ nam</span>
                             </Link>
                             <Link
                               rel="nofollow"
-                              href="/components/donghonu"
+                                href="/components/donghonew?query=gioi_tinh=Nữ"
                               title="Đồng hồ nữ"
+                              onClick={() =>
+                                  handleFilterChange("gioi_tinh", "Nữ")
+                                }
                             >
                               <span>Đồng hồ nữ</span>
                             </Link>
                             <Link
                               rel="nofollow"
-                              href="/components/donghodoi"
+                              href="/components/donghonew?query=gioi_tinh=Đồng Hồ Đôi"
+                              onClick={() =>
+                                  handleFilterChange("gioi_tinh", "Đồng Hồ Đôi")
+                                }
                               title="Đồng hồ đôi"
                             >
                               <span>Đồng hồ đôi</span>

@@ -241,16 +241,13 @@
 .paginationButton:hover {
   background-color: #f0f0f0;
 }
-
 .trangthai select{
-    background-color: #32CD32;
-    border-radius: 6px;
-    border: 1px solid #32CD32;
-    padding: 5px;  
-    text-align: center;
-    color: white;
-    max-width: 150px;
-    direction: rtl;
+  direction: rtl;
+  max-width: 180px; 
+  padding: 5px;   
+  text-align: center;
+  border-radius: 6px;
+  
 }
 
 

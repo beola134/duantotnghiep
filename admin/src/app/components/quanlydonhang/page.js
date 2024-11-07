@@ -303,7 +303,7 @@ export default function DonHang() {
                     <th style={{ width: "15%", textAlign: "center" }}>
                       ID đơn hàng
                     </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
+                    <th style={{ width: "12%", textAlign: "center" }}>
                       Địa chỉ
                     </th>
                     <th style={{ width: "12%", textAlign: "center" }}>
@@ -321,7 +321,7 @@ export default function DonHang() {
                     <th style={{ width: "11%", textAlign: "center" }}>
                       Tổng tiền
                     </th>
-                    <th style={{ width: "14%", textAlign: "center" }}>
+                    <th style={{ width: "17%", textAlign: "center" }}>
                       Tình trạng
                     </th>
                   </tr>
@@ -352,21 +352,55 @@ export default function DonHang() {
                         <p className={styles.trangthai}>
                           <select
                             value={item.trang_thai}
-                            onChange={(e) =>
-                              handleStatusChange(item._id, e.target.value)
-                            }
+                            onChange={(e) => handleStatusChange(item._id, e.target.value)}
+                            style={{
+                              backgroundColor: item.trang_thai === "Đơn hàng đã hủy" ? "white" : "black",
+                              color: item.trang_thai === "Đơn hàng đã hủy" ? "black" : "white",
+                              border: "1px solid black",
+                            }}
                           >
-                            <option value="Chờ xác nhận">Chờ xác nhận</option>
-                            <option value="Đã xác nhận">Đã xác nhận</option>
-                            <option value="Đóng gói">Đóng gói</option>
-                            <option value="Đang giao hàng">
+                            <option
+                              value="Chờ xác nhận"
+                              style={{ backgroundColor: "black", color: "white" }}
+                            >
+                              Chờ xác nhận
+                            </option>
+                            <option
+                              value="Đã xác nhận"
+                              style={{ backgroundColor: "black", color: "white" }}
+                            >
+                              Đã xác nhận
+                            </option>
+                            <option
+                              value="Đóng gói"
+                              style={{ backgroundColor: "black", color: "white" }}
+                            >
+                              Đóng gói
+                            </option>
+                            <option
+                              value="Đang giao hàng"
+                              style={{ backgroundColor: "black", color: "white" }}
+                            >
                               Đang giao hàng
                             </option>
-
-                            <option value="Giao hàng thành công">
+                            <option
+                              value="Giao hàng thành công"
+                              style={{ backgroundColor: "black", color: "white" }}
+                            >
                               Giao hàng thành công
                             </option>
+                            <option
+                              value="Đơn hàng đã hủy"
+                              style={{
+                                backgroundColor: "white",
+                                color: "black",
+                                border: "1px solid black",
+                              }}
+                            >
+                              Đơn hàng đã hủy
+                            </option>
                           </select>
+
                         </p>
                       </td>
                     </tr>
