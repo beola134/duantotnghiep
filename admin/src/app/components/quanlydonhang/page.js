@@ -6,6 +6,54 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 export default function DonHang() {
+  const [displayDonhang, setDisplayDonhang] = useState([]);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [donHangs, setDonhang] = useState([]);
+  const [nguoiDungMap, setNguoiDungMap] = useState({});
+   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const removeAccents = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
+  const handleSearch = (e) => {
+  if (e.key === "Enter") {
+    const query = removeAccents(searchQuery.toLowerCase());
+    const filteredDonhangs = donHangs.filter((donHang) => {
+      const userName = nguoiDungMap[donHang.id_nguoi_dung]?.ho_ten || "";
+      const phoneNumber = nguoiDungMap[donHang.id_nguoi_dung]?.dien_thoai || "";
+      return (
+        removeAccents(userName.toLowerCase()).includes(query) ||
+        phoneNumber.includes(query)
+      );
+    });
+    setDisplayDonhang(filteredDonhangs.slice(0, itemsPerPage));
+    setCurrentPage(1);
+  }
+};
+
+  useEffect(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    setDisplayDonhang(donHangs.slice(start, end));  
+  }, [donHangs, itemsPerPage, currentPage]);
+
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1);
+    Swal.fire({
+      title: "Đã cập nhật",
+      text: `Giới hạn hiển thị đã được thay đổi thành ${e.target.value} mục.`,
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+  };
+
+  const totalPages = Math.ceil(donHangs.length / itemsPerPage);
+
+
+
   const uploadFile = () => {
     Swal.fire({
       title: "Chưa khả dụng",
@@ -90,10 +138,6 @@ export default function DonHang() {
   };
 
   
-    const [donHangs, setDonhang] = useState([]);
-    const [nguoiDungMap, setNguoiDungMap] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchDonhang = async () => {
@@ -226,10 +270,14 @@ export default function DonHang() {
               <div className={styles.tableControls}>
                 <label htmlFor="entries" style={{ fontWeight: "bold" }}>
                   Hiện&nbsp;
-                  <select id="entries">
+                  <select
+                    id="entries"
+                    value={itemsPerPage}
+                    onChange={handleItemsPerPageChange}
+                  >
+                    <option value="5">5</option>
                     <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
+                    <option value="15">15</option>
                   </select>
                   <span>&nbsp; danh mục</span>
                 </label>
@@ -237,7 +285,11 @@ export default function DonHang() {
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
                     Tìm kiếm:
                   </label>
-                  <input type="text" id="search" />
+                  <input type="text"
+                  id="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearch} />
                 </div>
               </div>
               <table id="productTable" className={styles.productTable}>
@@ -273,7 +325,7 @@ export default function DonHang() {
                   </tr>
                 </thead>
                 <tbody>
-                  {donHangs.map((item) => (
+                  {displayDonhang.map((item) => (
                     <tr key={item._id}>
                       <td>
                         <input type="checkbox" className={styles.rowCheckbox} />
@@ -286,26 +338,34 @@ export default function DonHang() {
                         {nguoiDungMap[item.id_nguoi_dung]?.ho_ten ||
                           "Đang tải..."}
                       </td>
-                      <td>{nguoiDungMap[item.id_nguoi_dung]?.dien_thoai ||
-                          "Đang tải..."}</td>
+                      <td>
+                        {nguoiDungMap[item.id_nguoi_dung]?.dien_thoai ||
+                          "Đang tải..."}
+                      </td>
                       <td>{item.ghi_chu}</td>
                       <td>{item.thoi_gian_tao}</td>
                       <td>{item.tong_tien.toLocaleString("vi-VN")}₫</td>
 
                       <td>
-                        <p className={styles.trangthai}><select
-                          value={item.trang_thai}
-                          onChange={(e) =>
-                            handleStatusChange(item._id, e.target.value)
-                           
-                          }
-                        >   
+                        <p className={styles.trangthai}>
+                          <select
+                            value={item.trang_thai}
+                            onChange={(e) =>
+                              handleStatusChange(item._id, e.target.value)
+                            }
+                          >
                             <option value="Chờ xác nhận">Chờ xác nhận</option>
-                            <option value="Đã xác nhận và đóng gói">Đã xác nhận và đóng gói</option>
-                            <option value="Đã xác nhận và đóng gói">Đang giao</option>
-                          <option value="Đã giao hàng">Đã giao hàng</option>
-                          <option value="Đã hủy">Đã hủy</option>
-                        </select></p>
+                            <option value="Đã xác nhận">Đã xác nhận</option>
+                            <option value="Đóng gói">Đóng gói</option>
+                            <option value="Đang giao hàng">
+                              Đang giao hàng
+                            </option>
+
+                            <option value="Giao hàng thành công">
+                              Giao hàng thành công
+                            </option>
+                          </select>
+                        </p>
                       </td>
                     </tr>
                   ))}
@@ -313,16 +373,23 @@ export default function DonHang() {
               </table>
 
               <div className={styles.pagination}>
-                <span>Hiện 1 đến 10 của 16 danh mục</span>
+                <span>Hiện 1 đến {displayDonhang.length} của {donHangs.length} đơn hàng</span>
                 <div className={styles.paginationControls}>
-                  <button className={styles.paginationButton}>Lùi</button>
+                  <button className={styles.paginationButton}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    disabled={currentPage === 1}>Lùi</button>
                   <button
-                    className={`${styles.paginationButton} ${styles.active}`}
+                    className={`${styles.paginationButton}  ${styles.active}`}
                   >
-                    1
+                    {currentPage} / {totalPages}
                   </button>
-                  <button className={styles.paginationButton}>2</button>
-                  <button className={styles.paginationButton}>Tiếp</button>
+          
+                  <button className={styles.paginationButton} onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    disabled={currentPage === totalPages}>Tiếp</button>
                 </div>
               </div>
             </div>

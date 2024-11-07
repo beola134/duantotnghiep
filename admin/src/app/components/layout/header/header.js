@@ -66,7 +66,7 @@ export default function Menu() {
             Tài khoản
           </li>
           <li>
-            <Link href="#" onClick={toggleProductDropdown}>
+            <Link href="" onClick={toggleProductDropdown}>
               <i className={`bx bxs-user-account ${styles.icon}`}></i>
               Tài khoản
               <i className={`bx bx-chevron-right ${styles.iconRight}`}></i>
@@ -79,12 +79,7 @@ export default function Menu() {
               <li>
                 <Link href="/components/taikhoan">Quản lý tài khoản</Link>
               </li>
-              <li>
-                <Link href="phanquyen.html">Phân Quyền</Link>
-              </li>
-              <li>
-                <Link href="themnhanvien.html">Tạo thành viên mới</Link>
-              </li>
+              
             </ul>
           </li>
           <li className={styles.divider} data-text="Đơn Hàng">
