@@ -12,8 +12,5 @@ router.post("/add", commentController.addComment);
 //http://localhost:5000/comment/getAll/:id_san_pham
 router.get("/getAll/:id_san_pham", commentController.getAllComment);
 
-//sửa bình luận theo _id nguoi_dung và _id sản phẩm
-//http://localhost:5000/comment/edit/:id_nguoi_dung/:id_san_pham
-router.put("/edit/:id_nguoi_dung/:id_san_pham", commentController.editComment);
 
 module.exports = router;
