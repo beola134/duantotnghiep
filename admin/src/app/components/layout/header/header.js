@@ -71,7 +71,10 @@ export default function Menu() {
               Tài khoản
               <i className={`bx bx-chevron-right ${styles.iconRight}`}></i>
             </Link>
-            <ul className={`${styles.sideDropdown} ${isProductDropdownOpen ? styles.show : ""}`}>
+            <ul
+              className={`${styles.sideDropdown} ${
+                isProductDropdownOpen ? styles.show : ""
+              }`}>
               <li>
                 <Link href="/components/taikhoan">Quản lý tài khoản</Link>
               </li>
@@ -92,7 +95,10 @@ export default function Menu() {
               Đơn Hàng
               <i className={`bx bx-chevron-right ${styles.iconRight}`}></i>
             </Link>
-            <ul className={`${styles.sideDropdown} ${isOrderDropdownOpen ? styles.show : ""}`}>
+            <ul
+              className={`${styles.sideDropdown} ${
+                isOrderDropdownOpen ? styles.show : ""
+              }`}>
               <li>
                 <Link href="/components/quanlydonhang">Quản lý đơn hàng</Link>
               </li>
@@ -101,10 +107,22 @@ export default function Menu() {
               </li>
             </ul>
           </li>
+          <li className={styles.divider} data-text="Voucher">
+            Voucher
+          </li>
+          <li>
+            <Link href="/components/voucher">
+              <i className={`bx bx-qr ${styles.icon}`}></i>
+              Quản lý Voucher
+            </Link>
+          </li>
         </ul>
         <div className={styles.ads}>
           <div className={styles.wrapper}>
-            <Link style={{ textDecoration: "none" }} href="#" className={styles.btnUpgrade}>
+            <Link
+              style={{ textDecoration: "none" }}
+              href="#"
+              className={styles.btnUpgrade}>
               Đăng xuất
             </Link>
           </div>
@@ -129,8 +147,7 @@ export default function Menu() {
               href="#"
               id="profileDropdown"
               data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+              aria-expanded="false">
               <img
                 src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVvcGxlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
                 alt=""
@@ -139,7 +156,9 @@ export default function Menu() {
                 height="40"
               />
             </a>
-            <ul className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`} aria-labelledby="profileDropdown">
+            <ul
+              className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`}
+              aria-labelledby="profileDropdown">
               <li>
                 <a className={`dropdown-item ${styles.dropdownItem}`} href="#">
                   <i className="bx bxs-user-circle icon"></i>

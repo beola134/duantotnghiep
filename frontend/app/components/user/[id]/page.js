@@ -20,6 +20,13 @@ const User = ({ params }) => {
   const [avatarFile, setAvatarFile] = useState(null);
   const [activeTab, setActiveTab] = useState("profile");
 
+  const [passwordData, setPasswordData] = useState({
+    mat_khau: "",
+    mat_khau_moi: "",
+    xac_nhan_mat_khau: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -129,6 +136,72 @@ const User = ({ params }) => {
     }
   };
 
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordData({ ...passwordData, [name]: value });
+  };
+
+  const handleSubmitPasswordChange = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const { mat_khau, mat_khau_moi, xac_nhan_mat_khau } = passwordData;
+
+    if (mat_khau_moi !== xac_nhan_mat_khau) {
+      Swal.fire({
+        title: "Lỗi",
+        text: "Mật khẩu mới và xác nhận mật khẩu không khớp",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+    try {
+      const res = await fetch(`http://localhost:5000/users/changepassword`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: userData.email,
+          mat_khau,
+          mat_khau_moi,
+          xac_nhan_mat_khau,
+        }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        Swal.fire({
+          title: "Thành công",
+          text: data.message,
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(() => {
+          window.location.href = `/components/user/${id}`;
+        });
+      } else {
+        Swal.fire({
+          title: "Thất bại",
+          text: data.message,
+          icon: "error",
+          confirmButtonText: "Thử lại",
+        });
+      }
+    } catch (error) {
+      console.error("Error changing password:", error);
+      Swal.fire({
+        title: "Lỗi",
+        text: "Có lỗi xảy ra, vui lòng thử lại.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+
+    setIsSubmitting(false);
+  };
+
   const handleLayout = () => {
     Cookies.remove("token");
     Swal.fire({
@@ -139,6 +212,7 @@ const User = ({ params }) => {
       window.location.href = "/";
     });
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.sidebar}>
@@ -180,6 +254,13 @@ const User = ({ params }) => {
               style={{ cursor: "pointer" }}
               onClick={() => handleTabClick("orderShow")}>
               Trạng thái đơn hàng
+            </span>
+          </p>
+          <p>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleTabClick("changePassword")}>
+              Đổi mật khẩu
             </span>
           </p>
 
@@ -312,6 +393,54 @@ const User = ({ params }) => {
             ) : (
               <p>Bạn chưa có đơn hàng.</p>
             )}
+          </div>
+        )}
+        {activeTab === "changePassword" && (
+          <div>
+            <h2>Đổi Mật Khẩu</h2>
+            <form onSubmit={handleSubmitPasswordChange}>
+              <div className={styles.formGroup}>
+                <label htmlFor="mat_khau">Mật khẩu cũ:</label>
+                <input
+                  type="password"
+                  id="mat_khau"
+                  name="mat_khau"
+                  value={passwordData.mat_khau}
+                  onChange={handlePasswordChange}
+                  required
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="mat_khau_moi">Mật khẩu mới:</label>
+                <input
+                  type="password"
+                  id="mat_khau_moi"
+                  name="mat_khau_moi"
+                  value={passwordData.mat_khau_moi}
+                  onChange={handlePasswordChange}
+                  required
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="xac_nhan_mat_khau">
+                  Xác nhận mật khẩu mới:
+                </label>
+                <input
+                  type="password"
+                  id="xac_nhan_mat_khau"
+                  name="xac_nhan_mat_khau"
+                  value={passwordData.xac_nhan_mat_khau}
+                  onChange={handlePasswordChange}
+                  required
+                />
+              </div>
+
+              <div className={styles.pro}>
+                <button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Đang xử lý..." : "Đổi Mật Khẩu"}
+                </button>
+              </div>
+            </form>
           </div>
         )}
       </div>
