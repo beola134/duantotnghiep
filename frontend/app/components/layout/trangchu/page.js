@@ -416,8 +416,8 @@ export default function Main() {
                 ))}
                 <div className={styles.xemThem}>
                   <p>
-                    <Link href="/components/donghonamnew">
-                      <b>XEM THÊM ĐỒNG HỒ NAM</b>
+                    <Link href="/components/donghonew?query=gioi_tinh=Nam">
+                      <b>XEM THÊM ĐỒNG HỒ NAM MỚI</b>
                     </Link>
                   </p>
                 </div>
@@ -456,8 +456,8 @@ export default function Main() {
                 ))}
                 <div className={styles.xemThem}>
                   <p>
-                    <Link href="/components/donghonunew">
-                      <b>XEM THÊM ĐỒNG HỒ NỮ</b>
+                    <Link href="/components/donghonew?query=gioi_tinh=Nữ">
+                      <b>XEM THÊM ĐỒNG HỒ NỮ MỚi</b>
                     </Link>
                   </p>
                 </div>
@@ -496,8 +496,8 @@ export default function Main() {
                 ))}
                 <div className={styles.xemThem}>
                   <p>
-                    <Link href="/components/donghodoinew">
-                      <b>XEM THÊM ĐỒNG HỒ ĐÔI</b>
+                    <Link href="/components/donghonew?query=gioi_tinh=Đồng Hồ Đôi">
+                      <b>XEM THÊM ĐỒNG HỒ ĐÔI MỚI </b>
                     </Link>
                   </p>
                 </div>
