@@ -13,14 +13,12 @@ export default function TaiKhoan() {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-
+//tìm kiếm
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
   const handleSearch = (e) => {
-  if (e.key === "Enter") {
     const query = removeAccents(searchQuery.toLowerCase());
-
     const filteredTaiKhoan = users.filter((user) => {
       const userName = user.ho_ten || "";
       const phone = user.dien_thoai || "";
@@ -36,8 +34,17 @@ export default function TaiKhoan() {
 
     setDisplayUsers(filteredTaiKhoan.slice(0, itemsPerPage));
     setCurrentPage(1);
-  }
   };
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      handleSearch(removeAccents(searchQuery.toLowerCase()));
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery, users, itemsPerPage]);
+
+
+  //cập nhật quyền người dùng
   const handleRoleChange = async (id, newRole) => {
     try {
       const response = await fetch(`http://localhost:5000/users/update/${id}`, {
@@ -218,7 +225,7 @@ export default function TaiKhoan() {
       }
     }
   };
-
+//lấy dữ liệu danh sách tài khoản
   useEffect(() => {
     const fetchUsers = async () => {
       try {
