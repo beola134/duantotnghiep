@@ -186,7 +186,7 @@ export default function DanhMuc() {
     }
   };
 
-
+// lấy dữ liệu danh sách danh mục
   useEffect(() => {
     const fetchCategories = async () => {
       try {
