@@ -4,24 +4,33 @@ import styles from "./comments.module.css";
 import { useState, useEffect } from "react";
 export default function CommentsPage() {
   const [comments, setComments] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   // gọi tất cả các bình luận từ API
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/comment/showAll");
-        const data = await response.json();
-        setComments(data.comments);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchComments();
-  }, []);
 
+  const fetchComments = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/comment/showAll?page=${currentPage}`);
+      const data = await response.json();
+      setComments(data.comments);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchComments();
+  }, [currentPage]);
+
+  // chức năng chuyển trang
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchComments();
+  };
   return (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>
@@ -139,12 +148,27 @@ export default function CommentsPage() {
               </table>
 
               <div className={styles.pagination}>
-                <span>Hiện 1 đến 10 của 16 danh mục</span>
                 <div className={styles.paginationControls}>
-                  <button className={styles.paginationButton}>Lùi</button>
-                  <button className={`${styles.paginationButton} ${styles.active}`}>1</button>
-                  <button className={styles.paginationButton}>2</button>
-                  <button className={styles.paginationButton}>Tiếp</button>
+                  <button
+                    className={`${styles.paginationButton} ${
+                      currentPage === 1 ? styles.disabled : styles["other-page"]
+                    }`}
+                    onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    Lùi
+                  </button>
+
+                  <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPages || 1}`}</button>
+                  <button
+                    className={`${styles.paginationButton} ${
+                      currentPage === totalPages ? styles.disabled : styles["other-page"]
+                    }`}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    Tiếp
+                  </button>
                 </div>
               </div>
             </div>
