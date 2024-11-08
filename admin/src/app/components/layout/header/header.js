@@ -1,32 +1,40 @@
 "use client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./header.module.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 export default function Menu() {
   const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
   const [isOrderDropdownOpen, setOrderDropdownOpen] = useState(false);
 
+  // Conditionally load Bootstrap JS in the client
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      import("bootstrap/dist/js/bootstrap.bundle.min.js");
+    }
+  }, []);
+
   const toggleProductDropdown = () => {
     setProductDropdownOpen(!isProductDropdownOpen);
-    setOrderDropdownOpen(false); // Đóng dropdown khác khi mở cái này
+    setOrderDropdownOpen(false); // Close other dropdown when opening this one
   };
 
   const toggleOrderDropdown = () => {
     setOrderDropdownOpen(!isOrderDropdownOpen);
-    setProductDropdownOpen(false); // Đóng dropdown khác khi mở cái này
+    setProductDropdownOpen(false); // Close other dropdown when opening this one
   };
+
   return (
     <div className={styles.SidebarContainer}>
       <section id={styles.sidebar}>
-        <Link href="index.html" className={styles.brand}>
+        <Link href="/" className={styles.brand}>
           <i className={`bx bxs-smile ${styles.icon}`}></i>
           AdminSite
         </Link>
         <ul className={styles.sideMenu}>
           <li>
-            <Link href="index.html" className={styles.active}>
+            <Link href="/" className={styles.active}>
               <i className={`bx bxs-dashboard ${styles.icon}`}></i>
               Thống Kê
             </Link>
@@ -34,7 +42,6 @@ export default function Menu() {
           <li className={styles.divider} data-text="Sản Phẩm">
             Sản Phẩm
           </li>
-
           <li>
             <Link href="/components/sanpham">
               <i className={`bx bxs-chart ${styles.icon}`}></i>
@@ -48,7 +55,7 @@ export default function Menu() {
             </Link>
           </li>
           <li>
-            <Link href="khosanpham.html">
+            <Link href="/khosanpham">
               <i className={`bx bxs-widget ${styles.icon}`}></i>
               Quản lý kho
             </Link>
@@ -57,6 +64,7 @@ export default function Menu() {
             Bình luận
           </li>
           <li>
+
             <Link href="/components/comments">
               <i className={`bx bxs-comment-detail ${styles.icon}`}></i>
               Quản lý bình luận
@@ -71,9 +79,13 @@ export default function Menu() {
               Tài khoản
               <i className={`bx bx-chevron-right ${styles.iconRight}`}></i>
             </Link>
-            <ul className={`${styles.sideDropdown} ${isProductDropdownOpen ? styles.show : ""}`}>
+            <ul
+              className={`${styles.sideDropdown} ${
+                isProductDropdownOpen ? styles.show : ""
+              }`}>
               <li>
                 <Link href="/components/taikhoan">Quản lý tài khoản</Link>
+
               </li>
               
             </ul>
@@ -87,18 +99,32 @@ export default function Menu() {
               Đơn Hàng
               <i className={`bx bx-chevron-right ${styles.iconRight}`}></i>
             </Link>
-            <ul className={`${styles.sideDropdown} ${isOrderDropdownOpen ? styles.show : ""}`}>
+            <ul
+              className={`${styles.sideDropdown} ${
+                isOrderDropdownOpen ? styles.show : ""
+              }`}>
               <li>
                 <Link href="/components/quanlydonhang">Quản lý đơn hàng</Link>
               </li>
               <li>
-                <Link href="quanlygiohang.html">Quản lý giỏ hàng</Link>
+                <Link href="/quanlygiohang">Quản lý giỏ hàng</Link>
               </li>
             </ul>
+          </li>
+          <li className={styles.divider} data-text="Voucher">
+            Voucher
+          </li>
+          <li>
+            <Link href="/components/voucher">
+              <i className={`bx bx-qr ${styles.icon}`}></i>
+              Quản lý Voucher
+            </Link>
           </li>
         </ul>
         <div className={styles.ads}>
           <div className={styles.wrapper}>
+
+
             <Link style={{ textDecoration: "none" }} href="#" className={styles.btnUpgrade}>
               Đăng xuất
             </Link>
@@ -119,13 +145,13 @@ export default function Menu() {
           </a>
           <span className={styles.divider}></span>
           <div className="dropdown profile">
+
             <a
               className="dropdown-toggle d-flex align-items-center"
               href="#"
               id="profileDropdown"
               data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+              aria-expanded="false">
               <img
                 src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVvcGxlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
                 alt=""
@@ -134,7 +160,9 @@ export default function Menu() {
                 height="40"
               />
             </a>
-            <ul className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`} aria-labelledby="profileDropdown">
+            <ul
+              className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`}
+              aria-labelledby="profileDropdown">
               <li>
                 <a className={`dropdown-item ${styles.dropdownItem}`} href="#">
                   <i className="bx bxs-user-circle icon"></i>

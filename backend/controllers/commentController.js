@@ -13,7 +13,6 @@ exports.showAllComment = async (req, res) => {
     const totalComments = await CMT.count();
     const totalPages = Math.ceil(totalComments / limit);
     res.status(200).json({ comments, totalComments, totalPages, currentPage: page });
-    res.status(200).json({ comments });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: "Lỗi server" });
@@ -94,24 +93,4 @@ exports.getAllComment = async (req, res) => {
   }
 };
 
-//sửa bình luận theo _id nguoi_dung và _id sản phẩm
-exports.editComment = async (req, res) => {
-  try {
-    const { id_nguoi_dung, id_san_pham } = req.params;
-    const { noi_dung, sao } = req.body;
-    //kiểm tra xem bình luận có tồn tại không
-    const comment = await CMT.findOne({ where: { id_nguoi_dung, id_san_pham } });
-    if (!comment) {
-      return res.status(400).json({ message: "Không tìm thấy bình luận" });
-    }
-    //sửa bình luận
-    comment.noi_dung = noi_dung;
-    comment.sao = sao;
-    await comment.save();
-    res.status(200).json({ comment });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: "Lỗi server" });
-  }
-};
 
