@@ -8,22 +8,35 @@ const { Sequelize,Op } = require("sequelize");
 
 exports.getAllProducts = async (req, res) => {
   try {
-    const { limit = 5, page = 1 } = req.query;
+    const { ten_san_pham, limit = 5, page = 1 } = req.query;
+    let filter = {
+      [Op.and]: [],
+    };
+
+    if (ten_san_pham) {
+      filter[Op.and].push({ ten_san_pham: { [Op.substring]: ten_san_pham } });
+    }
+
     const offset = (page - 1) * limit;
-    const products = await Product.findAndCountAll({
+    const productCount = await Product.count({ where: filter });
+
+    // nếu số lượng sản phẩm nhỏ hơn hoặc bằng 5 thì hiển thị tất cả sản phẩm không cần phân trang
+    if (productCount <= 5) {
+      const products = await Product.findAll({ where: filter });
+      return res.json({ products, totalProducts: productCount });
+    }
+
+    // nếu số lượng sản phẩm lớn hơn 5 thì phân trang
+    const { rows: products, count: totalProducts } = await Product.findAndCountAll({
+      where: filter,
       limit: parseInt(limit),
       offset: parseInt(offset),
     });
 
-    if (products.count === 0) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
-    }
-
-    const totalPage = Math.ceil(products.count / limit);
-    const totalProducts = products.count;
+    const totalPage = Math.ceil(totalProducts / limit);
 
     res.json({
-      products: products.rows,
+      products,
       currentPage: parseInt(page),
       totalPage,
       totalProducts,
@@ -32,6 +45,7 @@ exports.getAllProducts = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 
   //show sản phẩm theo danh mục show lun thông tin danh mục sản phẩm
