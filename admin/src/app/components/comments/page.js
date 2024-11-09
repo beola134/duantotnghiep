@@ -66,10 +66,6 @@ export default function CommentsPage() {
                   <i className="fas fa-file-pdf"></i> Xuất PDF
                 </button>
                 &nbsp;
-                <button className={styles.sp7}>
-                  &nbsp;
-                  <i className="fas fa-trash-alt"></i> Xóa tất cả
-                </button>
               </div>
             </div>
 

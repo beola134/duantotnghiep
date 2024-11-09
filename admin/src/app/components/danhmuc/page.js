@@ -5,23 +5,22 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
-
 export default function DanhMuc() {
   const [categories, setCategories] = useState([]);
   const [displayCategories, setDisplayCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [itemsPerPage, setItemsPerPage] = useState(5); 
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-//tìm kiếm
+  //tìm kiếm
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
-   const handleSearch = (query) => {
+  const handleSearch = (query) => {
     const filteredCategories = categories.filter((category) =>
       removeAccents(category.danh_muc.toLowerCase()).includes(query)
-      );
+    );
     setDisplayCategories(filteredCategories.slice(0, itemsPerPage));
     setCurrentPage(1);
   };
@@ -33,14 +32,12 @@ export default function DanhMuc() {
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery, categories, itemsPerPage]);
-//phân trang 
+  //phân trang
   useEffect(() => {
- 
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     setDisplayCategories(categories.slice(start, end));
   }, [categories, itemsPerPage, currentPage]);
-
 
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(Number(e.target.value));
@@ -55,7 +52,6 @@ export default function DanhMuc() {
 
   const totalPages = Math.ceil(categories.length / itemsPerPage);
 
-
   const uploadFile = () => {
     Swal.fire({
       title: "Chưa khả dụng",
@@ -65,12 +61,10 @@ export default function DanhMuc() {
     });
   };
 
- 
   const printData = () => {
     window.print();
   };
 
-  
   const copyData = () => {
     const table = document.getElementById("productTable");
     const range = document.createRange();
@@ -115,33 +109,7 @@ export default function DanhMuc() {
     });
   };
 
-  // Hàm xóa tất cả dữ liệu
-  const deleteAll = async () => {
-    const result = await Swal.fire({
-      title: "Xác nhận",
-      text: "Bạn có chắc chắn muốn xóa tất cả không?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
-    });
-
-    if (result.isConfirmed) {
-      const tableBody = document.querySelector("#productTable tbody");
-      tableBody.innerHTML = "";
-
-      Swal.fire({
-        title: "Đã xóa",
-        text: "Tất cả dữ liệu đã được xóa!",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-    }
-  };
-
-  const  deleteCategory = async (id) => {
+  const deleteCategory = async (id) => {
     const result = await Swal.fire({
       title: "Xác nhận",
       text: "Bạn có chắc chắn muốn xóa danh mục này không?",
@@ -155,19 +123,14 @@ export default function DanhMuc() {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(
-          `http://localhost:5000/cate/deletecate/${id}`,
-          {
-            method: "DELETE",
-          }
-        );
+        const response = await fetch(`http://localhost:5000/cate/deletecate/${id}`, {
+          method: "DELETE",
+        });
         if (!response.ok) {
           throw new Error("Lỗi khi xóa danh mục");
         }
-        
-        setCategories((prevCategory) =>
-          prevCategory.filter((category) => category._id !== id)
-        );
+
+        setCategories((prevCategory) => prevCategory.filter((category) => category._id !== id));
 
         Swal.fire({
           title: "Thành công",
@@ -186,7 +149,7 @@ export default function DanhMuc() {
     }
   };
 
-// lấy dữ liệu danh sách danh mục
+  // lấy dữ liệu danh sách danh mục
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -250,10 +213,6 @@ export default function DanhMuc() {
                   <i className="fas fa-file-pdf"></i> Xuất PDF
                 </button>
                 &nbsp;
-                <button className={styles.sp7} onClick={deleteAll}>
-                  &nbsp;
-                  <i className="fas fa-trash-alt"></i> Xóa tất cả
-                </button>
               </div>
             </div>
 
@@ -261,11 +220,7 @@ export default function DanhMuc() {
               <div className={styles.tableControls}>
                 <label htmlFor="entries" style={{ fontWeight: "bold" }}>
                   Hiện&nbsp;
-                  <select
-                    id="entries"
-                    value={itemsPerPage}
-                    onChange={handleItemsPerPageChange}
-                  >
+                  <select id="entries" value={itemsPerPage} onChange={handleItemsPerPageChange}>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
@@ -276,11 +231,13 @@ export default function DanhMuc() {
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
                     Tìm kiếm:
                   </label>
-                  <input type="text"
+                  <input
+                    type="text"
                     id="search"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={handleSearch}/>
+                    onKeyDown={handleSearch}
+                  />
                 </div>
               </div>
               <table id="productTable" className={styles.productTable}>
@@ -289,21 +246,11 @@ export default function DanhMuc() {
                     <th style={{ width: "3%" }}>
                       <input type="checkbox" id="selectAll" />
                     </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>
-                      ID danh mục
-                    </th>
-                    <th style={{ width: "40%", textAlign: "center" }}>
-                      Ghi chú
-                    </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      Tên danh mục
-                    </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      Ảnh danh mục
-                    </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      Chức năng
-                    </th>
+                    <th style={{ width: "12%", textAlign: "center" }}>ID danh mục</th>
+                    <th style={{ width: "40%", textAlign: "center" }}>Ghi chú</th>
+                    <th style={{ width: "15%", textAlign: "center" }}>Tên danh mục</th>
+                    <th style={{ width: "15%", textAlign: "center" }}>Ảnh danh mục</th>
+                    <th style={{ width: "15%", textAlign: "center" }}>Chức năng</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -319,17 +266,11 @@ export default function DanhMuc() {
                       </td>
                       <td>{item.danh_muc}</td>
                       <td>
-                        <img
-                          src={`http://localhost:5000/images/${item.hinh_anh2}`}
-                          alt={item.danh_muc}
-                        />
+                        <img src={`http://localhost:5000/images/${item.hinh_anh2}`} alt={item.danh_muc} />
                       </td>
 
                       <td>
-                        <Link
-                          href={`/components/suadanhmuc/${item._id}`}
-                          className={`${styles.btn} ${styles.edit}`}
-                        >
+                        <Link href={`/components/suadanhmuc/${item._id}`} className={`${styles.btn} ${styles.edit}`}>
                           ✏️
                         </Link>{" "}
                         &nbsp;
@@ -348,28 +289,24 @@ export default function DanhMuc() {
               </table>
 
               <div className={styles.pagination}>
-                <span>Hiện 1 đến {displayCategories.length} của {categories.length} danh mục</span>
+                <span>
+                  Hiện 1 đến {displayCategories.length} của {categories.length} danh mục
+                </span>
                 <div className={styles.paginationControls}>
                   <button
                     className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
                   >
                     Lùi
                   </button>
-                  <button
-                    className={`${styles.paginationButton} ${styles.active}`}
-                  >
+                  <button className={`${styles.paginationButton} ${styles.active}`}>
                     {currentPage} / {totalPages}
                   </button>
-                  
+
                   <button
                     className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
                   >
                     Tiếp

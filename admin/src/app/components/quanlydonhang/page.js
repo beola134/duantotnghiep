@@ -11,7 +11,7 @@ export default function DonHang() {
   const [currentPage, setCurrentPage] = useState(1);
   const [donHangs, setDonhang] = useState([]);
   const [nguoiDungMap, setNguoiDungMap] = useState({});
-   const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   //tìm kiếm
@@ -35,7 +35,6 @@ export default function DonHang() {
     setCurrentPage(1);
   };
 
-
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       handleSearch(removeAccents(searchQuery.toLowerCase()));
@@ -44,12 +43,11 @@ export default function DonHang() {
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery, donHangs, itemsPerPage]);
 
-
-// phân trang
+  // phân trang
   useEffect(() => {
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    setDisplayDonhang(donHangs.slice(start, end));  
+    setDisplayDonhang(donHangs.slice(start, end));
   }, [donHangs, itemsPerPage, currentPage]);
 
   const handleItemsPerPageChange = (e) => {
@@ -64,8 +62,6 @@ export default function DonHang() {
   };
 
   const totalPages = Math.ceil(donHangs.length / itemsPerPage);
-
-
 
   const uploadFile = () => {
     Swal.fire({
@@ -124,34 +120,7 @@ export default function DonHang() {
     });
   };
 
-
-  const deleteAll = async () => {
-    const result = await Swal.fire({
-      title: "Xác nhận",
-      text: "Bạn có chắc chắn muốn xóa tất cả không?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
-    });
-
-    if (result.isConfirmed) {
-      const tableBody = document.querySelector("#productTable tbody");
-      tableBody.innerHTML = "";
-
-      Swal.fire({
-        title: "Đã xóa",
-        text: "Tất cả dữ liệu đã được xóa!",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-    }
-  };
-
-  
-//lấy dữ liệu danh sách đơn hàng
+  //lấy dữ liệu danh sách đơn hàng
   useEffect(() => {
     const fetchDonhang = async () => {
       try {
@@ -162,12 +131,8 @@ export default function DonHang() {
         const data = await response.json();
         setDonhang(data.donHangs);
 
-        
-        const idNguoiDungList = [
-          ...new Set(data.donHangs.map((dh) => dh.id_nguoi_dung)),
-        ];
+        const idNguoiDungList = [...new Set(data.donHangs.map((dh) => dh.id_nguoi_dung))];
 
-       
         const nguoiDungData = await Promise.all(
           idNguoiDungList.map(async (id) => {
             const res = await fetch(`http://localhost:5000/users/${id}`);
@@ -191,45 +156,39 @@ export default function DonHang() {
     fetchDonhang();
   }, []);
   //cập nhật trạng thái đơn hàng
-    const handleStatusChange = async (id, newStatus) => {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/donhang/update/${id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ trang_thai: newStatus }),
-          }
-        );
+  const handleStatusChange = async (id, newStatus) => {
+    try {
+      const response = await fetch(`http://localhost:5000/donhang/update/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ trang_thai: newStatus }),
+      });
 
-        if (!response.ok) {
-          throw new Error("Lỗi cập nhật trạng thái");
-        }
-
-        
-        setDonhang((prevDonHangs) =>
-          prevDonHangs.map((donHang) =>
-            donHang._id === id ? { ...donHang, trang_thai: newStatus } : donHang
-          )
-        );
-
-        Swal.fire({
-          title: "Thành công",
-          text: "Trạng thái đơn hàng đã được cập nhật!",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-      } catch (error) {
-        Swal.fire({
-          title: "Lỗi",
-          text: "Không thể cập nhật trạng thái",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+      if (!response.ok) {
+        throw new Error("Lỗi cập nhật trạng thái");
       }
-    };
+
+      setDonhang((prevDonHangs) =>
+        prevDonHangs.map((donHang) => (donHang._id === id ? { ...donHang, trang_thai: newStatus } : donHang))
+      );
+
+      Swal.fire({
+        title: "Thành công",
+        text: "Trạng thái đơn hàng đã được cập nhật!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    } catch (error) {
+      Swal.fire({
+        title: "Lỗi",
+        text: "Không thể cập nhật trạng thái",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -273,10 +232,6 @@ export default function DonHang() {
                   <i className="fas fa-file-pdf"></i> Xuất PDF
                 </button>
                 &nbsp;
-                <button className={styles.sp7} onClick={deleteAll}>
-                  &nbsp;
-                  <i className="fas fa-trash-alt"></i> Xóa tất cả
-                </button>
               </div>
             </div>
 
@@ -284,11 +239,7 @@ export default function DonHang() {
               <div className={styles.tableControls}>
                 <label htmlFor="entries" style={{ fontWeight: "bold" }}>
                   Hiện&nbsp;
-                  <select
-                    id="entries"
-                    value={itemsPerPage}
-                    onChange={handleItemsPerPageChange}
-                  >
+                  <select id="entries" value={itemsPerPage} onChange={handleItemsPerPageChange}>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
@@ -299,11 +250,13 @@ export default function DonHang() {
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
                     Tìm kiếm:
                   </label>
-                  <input type="text"
-                  id="search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={handleSearch} />
+                  <input
+                    type="text"
+                    id="search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleSearch}
+                  />
                 </div>
               </div>
               <table id="productTable" className={styles.productTable}>
@@ -312,30 +265,14 @@ export default function DonHang() {
                     <th style={{ width: "3%" }}>
                       <input type="checkbox" id="selectAll" />
                     </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      ID đơn hàng
-                    </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>
-                      Địa chỉ
-                    </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>
-                      Tên khách hàng
-                    </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Số điện thoại
-                    </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Ghi chú
-                    </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Ngày mua
-                    </th>
-                    <th style={{ width: "11%", textAlign: "center" }}>
-                      Tổng tiền
-                    </th>
-                    <th style={{ width: "17%", textAlign: "center" }}>
-                      Tình trạng
-                    </th>
+                    <th style={{ width: "15%", textAlign: "center" }}>ID đơn hàng</th>
+                    <th style={{ width: "12%", textAlign: "center" }}>Địa chỉ</th>
+                    <th style={{ width: "12%", textAlign: "center" }}>Tên khách hàng</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Số điện thoại</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Ghi chú</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Ngày mua</th>
+                    <th style={{ width: "11%", textAlign: "center" }}>Tổng tiền</th>
+                    <th style={{ width: "17%", textAlign: "center" }}>Tình trạng</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -348,14 +285,8 @@ export default function DonHang() {
                       <td>
                         <p className={styles.mota}>{item.dia_chi}</p>
                       </td>
-                      <td>
-                        {nguoiDungMap[item.id_nguoi_dung]?.ho_ten ||
-                          "Đang tải..."}
-                      </td>
-                      <td>
-                        {nguoiDungMap[item.id_nguoi_dung]?.dien_thoai ||
-                          "Đang tải..."}
-                      </td>
+                      <td>{nguoiDungMap[item.id_nguoi_dung]?.ho_ten || "Đang tải..."}</td>
+                      <td>{nguoiDungMap[item.id_nguoi_dung]?.dien_thoai || "Đang tải..."}</td>
                       <td>{item.ghi_chu}</td>
                       <td>{item.thoi_gian_tao}</td>
                       <td>{item.tong_tien.toLocaleString("vi-VN")}₫</td>
@@ -371,34 +302,19 @@ export default function DonHang() {
                               border: "1px solid black",
                             }}
                           >
-                            <option
-                              value="Chờ xác nhận"
-                              style={{ backgroundColor: "black", color: "white" }}
-                            >
+                            <option value="Chờ xác nhận" style={{ backgroundColor: "black", color: "white" }}>
                               Chờ xác nhận
                             </option>
-                            <option
-                              value="Đã xác nhận"
-                              style={{ backgroundColor: "black", color: "white" }}
-                            >
+                            <option value="Đã xác nhận" style={{ backgroundColor: "black", color: "white" }}>
                               Đã xác nhận
                             </option>
-                            <option
-                              value="Đóng gói"
-                              style={{ backgroundColor: "black", color: "white" }}
-                            >
+                            <option value="Đóng gói" style={{ backgroundColor: "black", color: "white" }}>
                               Đóng gói
                             </option>
-                            <option
-                              value="Đang giao hàng"
-                              style={{ backgroundColor: "black", color: "white" }}
-                            >
+                            <option value="Đang giao hàng" style={{ backgroundColor: "black", color: "white" }}>
                               Đang giao hàng
                             </option>
-                            <option
-                              value="Giao hàng thành công"
-                              style={{ backgroundColor: "black", color: "white" }}
-                            >
+                            <option value="Giao hàng thành công" style={{ backgroundColor: "black", color: "white" }}>
                               Giao hàng thành công
                             </option>
                             <option
@@ -412,7 +328,6 @@ export default function DonHang() {
                               Đơn hàng đã hủy
                             </option>
                           </select>
-
                         </p>
                       </td>
                     </tr>
@@ -421,23 +336,28 @@ export default function DonHang() {
               </table>
 
               <div className={styles.pagination}>
-                <span>Hiện 1 đến {displayDonhang.length} của {donHangs.length} đơn hàng</span>
+                <span>
+                  Hiện 1 đến {displayDonhang.length} của {donHangs.length} đơn hàng
+                </span>
                 <div className={styles.paginationControls}>
-                  <button className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
-                    disabled={currentPage === 1}>Lùi</button>
                   <button
-                    className={`${styles.paginationButton}  ${styles.active}`}
+                    className={styles.paginationButton}
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
                   >
+                    Lùi
+                  </button>
+                  <button className={`${styles.paginationButton}  ${styles.active}`}>
                     {currentPage} / {totalPages}
                   </button>
-          
-                  <button className={styles.paginationButton} onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
-                    disabled={currentPage === totalPages}>Tiếp</button>
+
+                  <button
+                    className={styles.paginationButton}
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                  >
+                    Tiếp
+                  </button>
                 </div>
               </div>
             </div>
