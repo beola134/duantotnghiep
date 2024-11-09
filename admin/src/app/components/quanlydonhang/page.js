@@ -14,12 +14,12 @@ export default function DonHang() {
    const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  //tìm kiếm
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
-  const handleSearch = (e) => {
-  if (e.key === "Enter") {
-    const query = removeAccents(searchQuery.toLowerCase());
+
+  const handleSearch = (query) => {
     const filteredDonhangs = donHangs.filter((donHang) => {
       const userName = nguoiDungMap[donHang.id_nguoi_dung]?.ho_ten || "";
       const phoneNumber = nguoiDungMap[donHang.id_nguoi_dung]?.dien_thoai || "";
@@ -28,13 +28,24 @@ export default function DonHang() {
         removeAccents(userName.toLowerCase()).includes(query) ||
         phoneNumber.includes(query) ||
         removeAccents(trangThai.toLowerCase()).includes(query)
-
       );
     });
+
     setDisplayDonhang(filteredDonhangs.slice(0, itemsPerPage));
     setCurrentPage(1);
-  }
-};
+  };
+
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      handleSearch(removeAccents(searchQuery.toLowerCase()));
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery, donHangs, itemsPerPage]);
+
+
+// phân trang
   useEffect(() => {
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
@@ -140,7 +151,7 @@ export default function DonHang() {
   };
 
   
-
+//lấy dữ liệu danh sách đơn hàng
   useEffect(() => {
     const fetchDonhang = async () => {
       try {
@@ -179,6 +190,7 @@ export default function DonHang() {
 
     fetchDonhang();
   }, []);
+  //cập nhật trạng thái đơn hàng
     const handleStatusChange = async (id, newStatus) => {
       try {
         const response = await fetch(

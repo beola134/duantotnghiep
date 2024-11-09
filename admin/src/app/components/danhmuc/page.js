@@ -14,21 +14,26 @@ export default function DanhMuc() {
   const [itemsPerPage, setItemsPerPage] = useState(5); 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-
+//tìm kiếm
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
-  const handleSearch = (e) => {
-    if (e.key === "Enter") {
-      const query = removeAccents(searchQuery.toLowerCase());
-      const filteredCategories = categories.filter((category) =>
-        removeAccents(category.danh_muc.toLowerCase()).includes(query)
+   const handleSearch = (query) => {
+    const filteredCategories = categories.filter((category) =>
+      removeAccents(category.danh_muc.toLowerCase()).includes(query)
       );
-      setDisplayCategories(filteredCategories.slice(0, itemsPerPage));
-      setCurrentPage(1);
-    }
+    setDisplayCategories(filteredCategories.slice(0, itemsPerPage));
+    setCurrentPage(1);
   };
 
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      handleSearch(removeAccents(searchQuery.toLowerCase()));
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchQuery, categories, itemsPerPage]);
+//phân trang 
   useEffect(() => {
  
     const start = (currentPage - 1) * itemsPerPage;
@@ -181,7 +186,7 @@ export default function DanhMuc() {
     }
   };
 
-
+// lấy dữ liệu danh sách danh mục
   useEffect(() => {
     const fetchCategories = async () => {
       try {
