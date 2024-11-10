@@ -8,22 +8,35 @@ const { Sequelize,Op } = require("sequelize");
 
 exports.getAllProducts = async (req, res) => {
   try {
-    const { limit = 5, page = 1 } = req.query;
+    const { ten_san_pham, limit = 5, page = 1 } = req.query;
+    let filter = {
+      [Op.and]: [],
+    };
+
+    if (ten_san_pham) {
+      filter[Op.and].push({ ten_san_pham: { [Op.substring]: ten_san_pham } });
+    }
+
     const offset = (page - 1) * limit;
-    const products = await Product.findAndCountAll({
+    const productCount = await Product.count({ where: filter });
+
+    // nếu số lượng sản phẩm nhỏ hơn hoặc bằng 5 thì hiển thị tất cả sản phẩm không cần phân trang
+    if (productCount <= 5) {
+      const products = await Product.findAll({ where: filter });
+      return res.json({ products, totalProducts: productCount });
+    }
+
+    // nếu số lượng sản phẩm lớn hơn 5 thì phân trang
+    const { rows: products, count: totalProducts } = await Product.findAndCountAll({
+      where: filter,
       limit: parseInt(limit),
       offset: parseInt(offset),
     });
 
-    if (products.count === 0) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
-    }
-
-    const totalPage = Math.ceil(products.count / limit);
-    const totalProducts = products.count;
+    const totalPage = Math.ceil(totalProducts / limit);
 
     res.json({
-      products: products.rows,
+      products,
       currentPage: parseInt(page),
       totalPage,
       totalProducts,
@@ -32,6 +45,7 @@ exports.getAllProducts = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 
   //show sản phẩm theo danh mục show lun thông tin danh mục sản phẩm
@@ -306,3 +320,30 @@ exports.getRelatedProducts = async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   }
+
+
+  exports.checkProductQuantity = async (req, res) => {
+    try {
+      const product = await Product.findOne({ where: { _id: req.params.id } });
+      if (!product) {
+        return res.status(404).json({ error: "Không tìm thấy sản phẩm" });
+      }
+      if (product.so_luong === 0) {
+        return res.status(400).json({ error: "Sản phẩm đã hết hàng" });
+      }
+  
+      const requestedQuantity = parseInt(req.query.quantity, 10);
+      if (isNaN(requestedQuantity) || requestedQuantity <= 0) {
+        return res.status(400).json({ error: "Số lượng yêu cầu không hợp lệ" });
+      }
+  
+      if (requestedQuantity > product.so_luong) {
+        return res.status(400).json({ error: "Số lượng sản phẩm không đủ" });
+      }
+  
+      res.json({ product });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+  
