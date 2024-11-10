@@ -12,6 +12,8 @@ export default function SanPham() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, settotalPage] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const itemsPerPage = 5;
   const uploadFile = () => {
     Swal.fire({
       title: "Chưa khả dụng",
@@ -70,33 +72,6 @@ export default function SanPham() {
       confirmButtonText: "OK",
     });
   };
-
-  // Hàm xóa tất cả dữ liệu
-  const deleteAll = async () => {
-    const result = await Swal.fire({
-      title: "Xác nhận",
-      text: "Bạn có chắc chắn muốn xóa tất cả không?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
-    });
-
-    if (result.isConfirmed) {
-      const tableBody = document.querySelector("#productTable tbody");
-      tableBody.innerHTML = "";
-
-      Swal.fire({
-        title: "Đã xóa",
-        text: "Tất cả dữ liệu đã được xóa!",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-    }
-  };
-
 
   // Hàm tìm kiếm sản phẩm
   const searchProducts = async (query) => {
@@ -198,6 +173,7 @@ export default function SanPham() {
       const data = await response.json();
       settotalPage(data.totalPage);
       setProducts(data.products);
+      setTotalProducts(data.totalProducts);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -207,6 +183,9 @@ export default function SanPham() {
   useEffect(() => {
     fetchProducts();
   }, [currentPage]);
+  // Tính chỉ số bắt đầu và kết thúc của sản phẩm cho trang hiện tại
+  const startItemIndex = (currentPage - 1) * itemsPerPage + 1;
+  const endItemIndex = Math.min(currentPage * itemsPerPage, totalProducts);
   const handlePageChange = (page) => {
     setCurrentPage(page);
     fetchProducts();
@@ -219,6 +198,8 @@ export default function SanPham() {
           <div className={styles.title} style={{ fontWeight: "bold" }}>
             Danh Sách Sản Phẩm
           </div>
+          
+
           <div className={styles.timestamp} id="timestamp"></div>
         </div>
         <div className={styles.bg}>
@@ -228,7 +209,8 @@ export default function SanPham() {
               <Link href="/components/themsanpham" className={styles.sp}>
                 <i className="fas fa-plus"></i> Tạo mới sản phẩm
               </Link>
-              <div className={styles.buttonGroup}>
+            </div>
+            <div className={styles.buttonGroup}>
                 <button className={styles.sp2} onClick={uploadFile}>
                   &nbsp;
                   <i className="fas fa-file-upload"></i> Tải từ file
@@ -250,13 +232,8 @@ export default function SanPham() {
                 <button className={styles.sp6} onClick={exportToPDF}>
                   <i className="fas fa-file-pdf"></i> Xuất PDF
                 </button>
-                &nbsp;
-                <button className={styles.sp7} onClick={deleteAll}>
-                  &nbsp;
-                  <i className="fas fa-trash-alt"></i> Xóa tất cả
-                </button>
+               
               </div>
-            </div>
               <div className={styles.tableControls}>
                 <div className={styles.search}>
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
@@ -363,6 +340,7 @@ export default function SanPham() {
               </table>
 
               <div className={styles.pagination}>
+              <span>Hiện {startItemIndex} đến {endItemIndex} của {totalProducts} sản phẩm</span>
                 <div className={styles.paginationControls}>
                   <button
                     className={`${styles.paginationButton} ${
