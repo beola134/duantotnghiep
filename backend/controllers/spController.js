@@ -320,3 +320,30 @@ exports.getRelatedProducts = async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   }
+
+
+  exports.checkProductQuantity = async (req, res) => {
+    try {
+      const product = await Product.findOne({ where: { _id: req.params.id } });
+      if (!product) {
+        return res.status(404).json({ error: "Không tìm thấy sản phẩm" });
+      }
+      if (product.so_luong === 0) {
+        return res.status(400).json({ error: "Sản phẩm đã hết hàng" });
+      }
+  
+      const requestedQuantity = parseInt(req.query.quantity, 10);
+      if (isNaN(requestedQuantity) || requestedQuantity <= 0) {
+        return res.status(400).json({ error: "Số lượng yêu cầu không hợp lệ" });
+      }
+  
+      if (requestedQuantity > product.so_luong) {
+        return res.status(400).json({ error: "Số lượng sản phẩm không đủ" });
+      }
+  
+      res.json({ product });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+  
