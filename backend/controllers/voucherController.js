@@ -2,12 +2,14 @@ const voucher = require("../models/voucher");
 
 //thêm voucher
 const addVoucher = async (req, res) => {
-  const { ma_voucher, gia_tri, bat_dau, ket_thuc, mo_ta } = req.body;
+  const { ma_voucher, gia_tri,phan_tram,so_luong, bat_dau, ket_thuc, mo_ta } = req.body;
 
   try {
     const newVoucher = await voucher.create({
       ma_voucher,
       gia_tri,
+      phan_tram,
+      so_luong,
       bat_dau,
       ket_thuc,
       mo_ta,
