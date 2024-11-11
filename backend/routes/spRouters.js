@@ -38,4 +38,8 @@ router.post("/timkiem", productController.searchProducts);
 //http://localhost:5000/product/related/:id
 router.get("/related/:id", productController.getRelatedProducts);
 
+//kiểm tra số lượng sản phẩm còn lại
+//http://localhost:5000/product/check/:id
+router.get("/check/:id", productController.checkProductQuantity);
+
 module.exports = router;

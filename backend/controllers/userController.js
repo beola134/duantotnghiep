@@ -28,8 +28,31 @@ exports.getUserById = async (req, res) => {
 // API lấy thông tin tất cả người dùng
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await Users.findAll();
-    res.json({users});
+    const { ten_dang_nhap, limit = 5, page = 1 } = req.query;
+    let filter = {
+      [Op.and]: [],
+    };
+    if (ten_dang_nhap) {
+      filter[Op.and].push({ ten_dang_nhap: { [Op.substring]: ten_dang_nhap } });
+    }
+    const offset = (page - 1) * limit;
+    const userCount = await Users.count({ where: filter });
+    if (userCount <= 5) {
+      const users = await Users.findAll({ where: filter });
+      return res.json({ users, totalUsers: userCount });
+    }
+    const { rows: users, count: totalUsers } = await Users.findAndCountAll({
+      where: filter,
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+    });
+    const totalPage = Math.ceil(totalUsers / limit);
+    res.json({
+      users,
+      currentPage: parseInt(page),
+      totalPage,
+      totalUsers,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

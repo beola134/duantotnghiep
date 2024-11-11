@@ -169,6 +169,21 @@ const updateDonHang = async (req, res) => {
     }
     donHang.trang_thai = trang_thai;
     await donHang.save();
+    if (trang_thai === "Đơn hàng đã hủy") {
+      const chiTietDonHangs = await ChiTietDonHang.findAll({
+        where: { id_don_hang: id },
+      });
+      if (chiTietDonHangs.length > 0) {
+        const updateProducts = chiTietDonHangs.map(async (ct) => {
+          const product = await Product.findByPk(ct.id_san_pham);
+          if (product) {
+            product.so_luong += ct.so_luong;
+            await product.save();
+          }
+        });
+        await Promise.all(updateProducts);
+      }
+    }
     res.json({ message: "Cập nhật trạng thái đơn hàng thành công", donHang });
   } catch (error) {
     console.error("Lỗi khi cập nhật trạng thái đơn hàng:", error);
