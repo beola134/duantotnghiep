@@ -13,13 +13,14 @@ export default function TaiKhoan() {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
 //tìm kiếm
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
   const handleSearch = (e) => {
     const query = removeAccents(searchQuery.toLowerCase());
-    const filteredTaiKhoan = users.filter((user) => {
+    const filtered= users.filter((user) => {
       const userName = user.ho_ten || "";
       const phone = user.dien_thoai || "";
       const email = user.email || "";
@@ -32,7 +33,7 @@ export default function TaiKhoan() {
       );
     });
 
-    setDisplayUsers(filteredTaiKhoan.slice(0, itemsPerPage));
+    setFilteredUsers(filtered);
     setCurrentPage(1);
   };
   useEffect(() => {
@@ -76,12 +77,13 @@ export default function TaiKhoan() {
     }
   };
   
-
+//phân trang
   useEffect(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    setDisplayUsers(users.slice(start, end));
-  }, [users, itemsPerPage, currentPage]);
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const dataToShow = searchQuery ? filteredUsers : users;
+  setDisplayUsers(dataToShow.slice(start, end));
+}, [filteredUsers, users, itemsPerPage, currentPage, searchQuery]);
 
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(Number(e.target.value));
@@ -94,7 +96,10 @@ export default function TaiKhoan() {
     });
   };
 
-  const totalPages = Math.ceil(users.length / itemsPerPage);
+ const totalPages = Math.ceil(
+  (searchQuery ? filteredUsers.length : users.length) / itemsPerPage
+);
+
 
   const uploadFile = () => {
     Swal.fire({
@@ -159,32 +164,7 @@ export default function TaiKhoan() {
     }
   };
 
-  const deleteAll = async () => {
-    const result = await Swal.fire({
-      title: "Xác nhận",
-      text: "Bạn có chắc chắn muốn xóa tất cả không?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
-    });
-
-    if (result.isConfirmed) {
-      if (typeof document !== "undefined") {
-        const tableBody = document.querySelector("#productTable tbody");
-        tableBody.innerHTML = "";
-      }
-
-      Swal.fire({
-        title: "Đã xóa",
-        text: "Tất cả dữ liệu đã được xóa!",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-    }
-  };
+  
 
   const deleteUser = async (id) => {
     const result = await Swal.fire({
@@ -284,10 +264,7 @@ export default function TaiKhoan() {
                   <i className="fas fa-file-pdf"></i> Xuất PDF
                 </button>
                 &nbsp;
-                <button className={styles.sp7} onClick={deleteAll}>
-                  &nbsp;
-                  <i className="fas fa-trash-alt"></i> Xóa tất cả
-                </button>
+                
               </div>
             </div>
 
@@ -326,23 +303,21 @@ export default function TaiKhoan() {
                     <th style={{ width: "15%", textAlign: "center" }}>
                       ID tài khoản
                     </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>
+                    <th style={{ width: "15%", textAlign: "center" }}>
                       Họ và tên
                     </th>
                     <th style={{ width: "12%", textAlign: "center" }}>Ảnh</th>
                     <th style={{ width: "10%", textAlign: "center" }}>
                       Địa chỉ
                     </th>
-                    <th style={{ width: "13%", textAlign: "center" }}>Email</th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
+                    <th style={{ width: "18%", textAlign: "center" }}>Email</th>
+                    <th style={{ width: "12%", textAlign: "center" }}>
                       Số điện thoại
                     </th>
                     <th style={{ width: "15%", textAlign: "center" }}>
                       Chức vụ
                     </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Chức năng
-                    </th>
+                   
                   </tr>
                 </thead>
                 <tbody>
@@ -367,6 +342,7 @@ export default function TaiKhoan() {
                       <td>
                         <p className={styles.chucvu}>
                          <select
+                          style={{ textAlign: "center" }}
                           value={item.quyen}
                           onChange={(e) => handleRoleChange(item._id, Number(e.target.value))}
                           className={styles.roleSelect}
@@ -377,47 +353,39 @@ export default function TaiKhoan() {
                         </p>
                       </td>
 
-                      <td>
-                        <Link
-                          href={`/components/suataikhoan/${item._id}`}
-                          className={`${styles.btn} ${styles.edit}`}
-                        >
-                          ✏️
-                        </Link>{" "}
-                        &nbsp;
-                        <button
-                          className={`${styles.btn} ${styles.delete}`}
-                          style={{margin: "auto"}}
-                          id="deleteButton"
-                          onClick={() => deleteUser(item._id)}
-                        >
-                          🗑️
-                        </button>
-                        &nbsp;
-                      </td>
+                      
                     </tr>
                   ))}
                 </tbody>
               </table>
 
               <div className={styles.pagination}>
-                <span>Hiện 1 đến {displayUsers.length} của {users.length} người dùng</span>
+                <span>Hiện 1 đến {displayUsers.length} của {filteredUsers.length || users.length} người dùng</span>
                 <div className={styles.paginationControls}>
-                  <button className={styles.paginationButton}
+                 <button
+                    className={styles.paginationButton}
                     onClick={() =>
                       setCurrentPage((prev) => Math.max(prev - 1, 1))
                     }
-                    disabled={currentPage === 1}>Lùi</button>
+                    disabled={currentPage === 1}
+                  >
+                   ‹
+                  </button>
                   <button
-                    className={`${styles.paginationButton}  ${styles.active}`}
+                    className={`${styles.paginationButton} ${styles.active}`}
                   >
                     {currentPage} / {totalPages}
                   </button>
-          
-                  <button className={styles.paginationButton} onClick={() =>
+                  
+                  <button
+                    className={styles.paginationButton}
+                    onClick={() =>
                       setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                     }
-                    disabled={currentPage === totalPages}>Tiếp</button>
+                    disabled={currentPage === totalPages}
+                  >
+                    ›
+                  </button>
                 </div>
               </div>
             </div>
