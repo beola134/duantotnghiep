@@ -8,7 +8,6 @@ export default function Menu() {
   const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
   const [isOrderDropdownOpen, setOrderDropdownOpen] = useState(false);
 
-  // Conditionally load Bootstrap JS in the client
   useEffect(() => {
     if (typeof window !== "undefined") {
       import("bootstrap/dist/js/bootstrap.bundle.min.js");
@@ -17,12 +16,12 @@ export default function Menu() {
 
   const toggleProductDropdown = () => {
     setProductDropdownOpen(!isProductDropdownOpen);
-    setOrderDropdownOpen(false); // Close other dropdown when opening this one
+    setOrderDropdownOpen(false); 
   };
 
   const toggleOrderDropdown = () => {
     setOrderDropdownOpen(!isOrderDropdownOpen);
-    setProductDropdownOpen(false); // Close other dropdown when opening this one
+    setProductDropdownOpen(false); 
   };
 
   return (
@@ -55,7 +54,7 @@ export default function Menu() {
             </Link>
           </li>
           <li>
-            <Link href="/khosanpham">
+            <Link href="/components/quanlikho">
               <i className={`bx bxs-widget ${styles.icon}`}></i>
               Quản lý kho
             </Link>
