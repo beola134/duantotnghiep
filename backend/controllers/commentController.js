@@ -118,17 +118,20 @@ exports.getAllComment = async (req, res) => {
     const { id_san_pham } = req.params;
     const { page = 1, limit = 3 } = req.query;
     const offset = (page - 1) * limit;
+    
     // Kiểm tra xem sản phẩm có tồn tại không
     const product = await Product.findOne({ where: { _id: id_san_pham } });
     if (!product) {
       return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
     }
-    // Lấy tất cả bình luận theo _id sản phẩm với phân trang
+
+    // Lấy tất cả bình luận có trang_thai = 1 theo _id sản phẩm với phân trang
     const comments = await CMT.findAll({
-      where: { id_san_pham },
+      where: { id_san_pham, trang_thai: 1 },  // Thêm điều kiện lọc trang_thai = 1
       limit,
       offset,
     });
+
     // Lấy thông tin người dùng cho từng bình luận
     const commentsWithUser = await Promise.all(
       comments.map(async (comment) => {
@@ -145,9 +148,11 @@ exports.getAllComment = async (req, res) => {
         };
       })
     );
-    // Tính tổng số bình luận theo _id sản phẩm đó
-    const totalComments = await CMT.count({ where: { id_san_pham } });
+
+    // Tính tổng số bình luận có trang_thai = 1 theo _id sản phẩm đó
+    const totalComments = await CMT.count({ where: { id_san_pham, trang_thai: 1 } });  // Cập nhật điều kiện
     const totalPages = Math.ceil(totalComments / limit); // Tổng số trang
+
     res.status(200).json({
       comments: commentsWithUser,
       totalComments,
@@ -159,3 +164,24 @@ exports.getAllComment = async (req, res) => {
     res.status(500).json({ message: "Lỗi server" });
   }
 };
+
+
+//viết api ẩn hoặc hiện bình luận
+exports.toggleComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const comment = await CMT.findOne({ where: { _id: id } });
+    if (!comment) {
+      return res.status(404).json({ message: "Không tìm thấy bình luận" });
+    }
+    const updatedComment = await comment.update({ trang_thai: !comment.trang_thai });
+    res.status(200).json({
+      message: "Cập nhật trạng thái bình luận thành công",
+      comment: updatedComment,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Lỗi server" });
+  }
+};
+

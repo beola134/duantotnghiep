@@ -21,6 +21,11 @@ const BinhLuan = sequelize.define('BinhLuan', {
         allowNull: false,
         defaultValue: Sequelize.NOW
     },
+    trang_thai: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: true
+    },
     id_nguoi_dung: {
         type: DataTypes.STRING(255),
         allowNull: true,

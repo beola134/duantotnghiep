@@ -68,6 +68,10 @@ const addDonHang = async (req, res) => {
       } else if (voucher.gia_tri) {
         totalAmount -= voucher.gia_tri;
       }
+      //giam so luong voucher
+      voucher.so_luong -= 1;
+      await voucher.save();
+
     }
     
     totalAmount = Math.max(totalAmount, 0);
@@ -172,12 +176,15 @@ const updateDonHang = async (req, res) => {
     if (!donHang) {
       return res.status(404).json({ message: "Không tìm thấy đơn hàng" });
     }
+    
     donHang.trang_thai = trang_thai;
     await donHang.save();
+
     if (trang_thai === "Đơn hàng đã hủy") {
       const chiTietDonHangs = await ChiTietDonHang.findAll({
         where: { id_don_hang: id },
       });
+      
       if (chiTietDonHangs.length > 0) {
         const updateProducts = chiTietDonHangs.map(async (ct) => {
           const product = await Product.findByPk(ct.id_san_pham);
@@ -188,15 +195,24 @@ const updateDonHang = async (req, res) => {
         });
         await Promise.all(updateProducts);
       }
+
+      // Kiểm tra và cộng lại số lượng của voucher nếu đơn hàng có voucher
+      if (donHang.id_voucher) {
+        const voucher = await Voucher.findByPk(donHang.id_voucher);
+        if (voucher) {
+          voucher.so_luong += 1;
+          await voucher.save();
+        }
+      }
     }
+
     res.json({ message: "Cập nhật trạng thái đơn hàng thành công", donHang });
   } catch (error) {
     console.error("Lỗi khi cập nhật trạng thái đơn hàng:", error);
-    res
-      .status(500)
-      .json({ message: "Lỗi khi cập nhật trạng thái đơn hàng", error });
+    res.status(500).json({ message: "Lỗi khi cập nhật trạng thái đơn hàng", error });
   }
 };
+
 
 //show all don hang theo id_nguoi_dung khi login
 const getAllDonHangByUserId = async (req, res) => {
