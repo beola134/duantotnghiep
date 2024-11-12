@@ -1494,74 +1494,83 @@ export default function Detail({ params }) {
                   {/* show bình luận  */}
                   <div className={`${styles.commentSection} ${styles.container}`}>
                     {Array.isArray(comments) && comments.length > 0 ? (
-                      comments.map((comment, index) => (
-                        <div key={index} className={styles.comment}>
-                          <div className={styles.profile}>
-                            <img src={`http://localhost:5000/images/${comment.user?.hinh_anh}`} alt="Profile Picture" />
-                          </div>
-                          <div className={styles.content}>
-                            <div className={styles.header}>
-                              <span className={styles.name}>{comment.user?.ten_dang_nhap || "Ẩn danh"}</span>
-                              <span className={styles.date}>
-                                {new Intl.DateTimeFormat("vi-VN", {
-                                  year: "numeric",
-                                  month: "2-digit",
-                                  day: "2-digit",
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  second: "2-digit",
-                                }).format(new Date(comment.ngay_binh_luan))}
-                              </span>
-                              <div className={styles.rating}>
-                                {Array.from({ length: 5 }, (_, i) => (
-                                  <FontAwesomeIcon
-                                    key={i}
-                                    icon={i < comment.sao ? solidStar : regularStar}
-                                    className={styles.star}
-                                  />
-                                ))}
-                              </div>
+                      <>
+                        {comments.map((comment, index) => (
+                          <div key={index} className={styles.comment}>
+                            <div className={styles.profile}>
+                              <img
+                                src={`http://localhost:5000/images/${comment.user?.hinh_anh}`}
+                                alt="Profile Picture"
+                              />
                             </div>
-                            <p className={styles.text}>{comment.noi_dung}</p>
+                            <div className={styles.content}>
+                              <div className={styles.header}>
+                                <span className={styles.name}>{comment.user?.ten_dang_nhap || "Ẩn danh"}</span>
+                                <span className={styles.date}>
+                                  {new Intl.DateTimeFormat("vi-VN", {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    second: "2-digit",
+                                  }).format(new Date(comment.ngay_binh_luan))}
+                                </span>
+                                <div className={styles.rating}>
+                                  {Array.from({ length: 5 }, (_, i) => (
+                                    <FontAwesomeIcon
+                                      key={i}
+                                      icon={i < comment.sao ? solidStar : regularStar}
+                                      className={styles.star}
+                                    />
+                                  ))}
+                                </div>
+                              </div>
+                              <p className={styles.text}>{comment.noi_dung}</p>
+                            </div>
                           </div>
+                        ))}
+
+                        {/* Phân trang chỉ hiển thị khi có bình luận */}
+                        <div className={styles.pagination}>
+                          {/* Prev trang đầu */}
+                          <span
+                            title="First page"
+                            className={currentPage === 1 ? styles.disabled : styles["other-page"]}
+                            onClick={() => currentPage > 1 && handlePageChange(1)}
+                          >
+                            ‹‹
+                          </span>
+                          {/* Prev 1 trang */}
+                          <span
+                            className={currentPage === 1 ? styles.disabled : styles["other-page"]}
+                            onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                          >
+                            ‹
+                          </span>
+                          {/* Trang hiện tại */}
+                          <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1}`}</span>
+                          {/* Next 1 trang */}
+                          <span
+                            className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
+                            onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                          >
+                            ›
+                          </span>
+                          {/* Next tới trang cuối */}
+                          <span
+                            className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
+                            onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
+                          >
+                            ››
+                          </span>
                         </div>
-                      ))
+                      </>
                     ) : (
-                      <p>Không có bình luận nào</p>
+                      <p style={{ color: "#999" }}>
+                        Mời bạn nhận xét về sản phẩm, hãy bình luận có văn hoá để tránh bị khoá tài khoản.
+                      </p>
                     )}
-                    <div className={styles.pagination}>
-                      {/* Prev trang đâù */}
-                      <span
-                        title="First page"
-                        className={currentPage === 1 ? styles.disabled : styles["other-page"]}
-                        onClick={() => currentPage > 1 && handlePageChange(1)}
-                      >
-                        ‹‹
-                      </span>
-                      {/* Prev 1 trang */}
-                      <span
-                        className={currentPage === 1 ? styles.disabled : styles["other-page"]}
-                        onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                      >
-                        ‹
-                      </span>
-                      {/* Trang hiện tại */}
-                      <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1}`}</span>
-                      {/* Next 1 trang*/}
-                      <span
-                        className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
-                        onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
-                      >
-                        ›
-                      </span>
-                      {/* Next tới trang cuối */}
-                      <span
-                        className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
-                        onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
-                      >
-                        ››
-                      </span>
-                    </div>
                   </div>
                 </form>
               </div>

@@ -955,9 +955,10 @@
 .commentSection {
   border: 2px solid #ddd;
   border-radius: 10px;
-  padding: 20px;
+  background-color: #fff;
+  height: 70px;
+  padding: 5px 10px;
   margin: 15px 0;
-  background-color: #f9f9f9;
 }
 
 .comment {
