@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const { v4: uuidv4 } = require('uuid'); // Import UUID v4
+const { v4: uuidv4 } = require('uuid'); 
 
 const User = sequelize.define('User', {
     _id: {
@@ -71,6 +71,11 @@ const User = sequelize.define('User', {
         type: DataTypes.DATE,
         allowNull: true,
       },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW
+    },
 }, {
     tableName: 'nguoi_dung',
     timestamps: false,
