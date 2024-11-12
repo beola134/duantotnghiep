@@ -4,14 +4,14 @@ const sequelize = require('../config/database'); //; // Adjust the path as neces
 
 //thêm voucher
 const addVoucher = async (req, res) => {
-  const { ma_voucher, gia_tri,phan_tram,soluong, bat_dau, ket_thuc, mo_ta } = req.body;
+  const { ma_voucher, gia_tri,phan_tram,so_luong, bat_dau, ket_thuc, mo_ta } = req.body;
 
   try {
     const newVoucher = await voucher.create({
       ma_voucher,
       gia_tri,
       phan_tram,
-      soluong,
+      so_luong,
       bat_dau,
       ket_thuc,
       mo_ta,
@@ -20,6 +20,8 @@ const addVoucher = async (req, res) => {
     res.status(201).json(newVoucher);
   } catch (error) {
     res.status(500).json({ error: error.message });
+    console.log(error);
+    
   }
 };
 
@@ -40,6 +42,8 @@ const getVoucherByCode = async (req, res) => {
     res.status(200).json(voucherFound);
   } catch (error) {
     res.status(500).json({ error: error.message });
+    console.log(error);
+    
   }
 };
 /////////////////////////////////////////
