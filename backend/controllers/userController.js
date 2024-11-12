@@ -187,9 +187,6 @@ exports.login = async (req, res) => {
       if (user.login_attempts >= maxLoginAttempts) {
         user.lock_until = new Date(Date.now() + lockTime);
         await user.save();
-        return res.status(400).json({
-          message: `Bạn đã nhập sai quá nhiều lần. Tài khoản bị khóa trong 15 phút.`,
-        });
       }
       await user.save();
       return res.status(400).json({ message: "Mật khẩu không hợp lệ" });
