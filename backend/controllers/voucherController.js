@@ -1,6 +1,8 @@
 const voucher = require("../models/voucher");
 const { Sequelize } = require('sequelize');
 const sequelize = require('../config/database'); //; // Adjust the path as necessary
+const { Op } = require("sequelize");
+
 
 //thêm voucher
 const addVoucher = async (req, res) => {
@@ -67,16 +69,33 @@ const getVoucherById = async (req, res) => {
 // show all vouchers
 const getAllVouchers = async (req, res) => {
   try {
-    const { limit = 5, page = 1 } = req.query;
+    const { ten_voucher, limit = 5, page = 1 } = req.query;
+
+    let filter = {
+      [Op.and]: [],
+    };
+
+    if (ten_voucher) {
+      filter[Op.and].push({ ten_voucher: { [Op.like]: `%${ten_voucher}%` } });
+    }
 
     const offset = (page - 1) * limit;
     const { rows: vouchers, count: totalVouchers } =
       await voucher.findAndCountAll({
+        where: filter,
         limit: parseInt(limit),
         offset: parseInt(offset),
       });
 
     const totalPages = Math.ceil(totalVouchers / limit);
+
+    if (vouchers.length === 0) {
+      return res.status(404).json({ message: "Không có voucher nào" });
+    }
+
+    if (page > totalPages) {
+      return res.status(404).json({ message: "Trang không tồn tại" });
+    }
 
     res.status(200).json({
       vouchers,
