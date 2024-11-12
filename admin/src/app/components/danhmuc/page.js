@@ -5,13 +5,12 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
-
 export default function DanhMuc() {
   const [categories, setCategories] = useState([]);
   const [displayCategories, setDisplayCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [itemsPerPage, setItemsPerPage] = useState(5); 
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredCategories, setFilteredCategories] = useState([]);
@@ -34,7 +33,7 @@ export default function DanhMuc() {
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery, categories, itemsPerPage]);
-//phân trang 
+  //phân trang
   useEffect(() => {
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage;
@@ -68,12 +67,10 @@ export default function DanhMuc() {
     });
   };
 
- 
   const printData = () => {
     window.print();
   };
 
-  
   const copyData = () => {
     const table = document.getElementById("productTable");
     const range = document.createRange();
@@ -134,19 +131,14 @@ export default function DanhMuc() {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(
-          `http://localhost:5000/cate/deletecate/${id}`,
-          {
-            method: "DELETE",
-          }
-        );
+        const response = await fetch(`http://localhost:5000/cate/deletecate/${id}`, {
+          method: "DELETE",
+        });
         if (!response.ok) {
           throw new Error("Lỗi khi xóa danh mục");
         }
-        
-        setCategories((prevCategory) =>
-          prevCategory.filter((category) => category._id !== id)
-        );
+
+        setCategories((prevCategory) => prevCategory.filter((category) => category._id !== id));
 
         Swal.fire({
           title: "Thành công",
@@ -165,7 +157,7 @@ export default function DanhMuc() {
     }
   };
 
-// lấy dữ liệu danh sách danh mục
+  // lấy dữ liệu danh sách danh mục
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -237,11 +229,7 @@ export default function DanhMuc() {
               <div className={styles.tableControls}>
                 <label htmlFor="entries" style={{ fontWeight: "bold" }}>
                   Hiện&nbsp;
-                  <select
-                    id="entries"
-                    value={itemsPerPage}
-                    onChange={handleItemsPerPageChange}
-                  >
+                  <select id="entries" value={itemsPerPage} onChange={handleItemsPerPageChange}>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
@@ -252,11 +240,13 @@ export default function DanhMuc() {
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
                     Tìm kiếm:
                   </label>
-                  <input type="text"
+                  <input
+                    type="text"
                     id="search"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={handleSearch}/>
+                    onKeyDown={handleSearch}
+                  />
                 </div>
               </div>
               <table id="productTable" className={styles.productTable}>
@@ -265,21 +255,11 @@ export default function DanhMuc() {
                     <th style={{ width: "3%" }}>
                       <input type="checkbox" id="selectAll" />
                     </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>
-                      ID danh mục
-                    </th>
-                    <th style={{ width: "40%", textAlign: "center" }}>
-                      Ghi chú
-                    </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      Tên danh mục
-                    </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      Ảnh danh mục
-                    </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      Chức năng
-                    </th>
+                    <th style={{ width: "12%", textAlign: "center" }}>ID danh mục</th>
+                    <th style={{ width: "40%", textAlign: "center" }}>Ghi chú</th>
+                    <th style={{ width: "15%", textAlign: "center" }}>Tên danh mục</th>
+                    <th style={{ width: "15%", textAlign: "center" }}>Ảnh danh mục</th>
+                    <th style={{ width: "15%", textAlign: "center" }}>Chức năng</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -295,10 +275,7 @@ export default function DanhMuc() {
                       </td>
                       <td>{item.danh_muc}</td>
                       <td>
-                        <img
-                          src={`http://localhost:5000/images/${item.hinh_anh2}`}
-                          alt={item.danh_muc}
-                        />
+                        <img src={`http://localhost:5000/images/${item.hinh_anh2}`} alt={item.danh_muc} />
                       </td>
 
                       <td   style={{ textAlign: "center" }}>
@@ -328,24 +305,18 @@ export default function DanhMuc() {
                 <div className={styles.paginationControls}>
                   <button
                     className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
                   >
                    ‹
                   </button>
-                  <button
-                    className={`${styles.paginationButton} ${styles.active}`}
-                  >
+                  <button className={`${styles.paginationButton} ${styles.active}`}>
                     {currentPage} / {totalPages}
                   </button>
-                  
+
                   <button
                     className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
                   >
                     ›

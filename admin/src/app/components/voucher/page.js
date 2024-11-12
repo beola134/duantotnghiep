@@ -10,9 +10,7 @@ export default function VoucherPage() {
   useEffect(() => {
     const fetchvouchers = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/voucher/getAllVouchers"
-        );
+        const response = await fetch("http://localhost:5000/voucher/getAllVouchers");
         const data = await response.json();
         setvouchers(data.vouchers);
       } catch (error) {
@@ -24,26 +22,23 @@ export default function VoucherPage() {
     fetchvouchers();
   }, []);
 
-    const deleteVoucher = async (id) => {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/voucher/deleteVoucher/${id}`,
-          {
-            method: "DELETE",
-          }
-        );
+  const deleteVoucher = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:5000/voucher/deleteVoucher/${id}`, {
+        method: "DELETE",
+      });
 
-        if (response.ok) {
-          setvouchers(vouchers.filter((voucher) => voucher._id !== id));
-          alert("Voucher đã được xóa thành công!");
-        } else {
-          alert("Có lỗi xảy ra khi xóa voucher.");
-        }
-      } catch (error) {
-        console.error("Error deleting voucher:", error);
+      if (response.ok) {
+        setvouchers(vouchers.filter((voucher) => voucher._id !== id));
+        alert("Voucher đã được xóa thành công!");
+      } else {
         alert("Có lỗi xảy ra khi xóa voucher.");
       }
-    };
+    } catch (error) {
+      console.error("Error deleting voucher:", error);
+      alert("Có lỗi xảy ra khi xóa voucher.");
+    }
+  };
 
   return (
     <div className={styles.SidebarContainer}>
@@ -83,10 +78,6 @@ export default function VoucherPage() {
                   <i className="fas fa-file-pdf"></i> Xuất PDF
                 </button>
                 &nbsp;
-                <button className={styles.sp7}>
-                  &nbsp;
-                  <i className="fas fa-trash-alt"></i> Xóa tất cả
-                </button>
               </div>
             </div>
 
@@ -114,46 +105,23 @@ export default function VoucherPage() {
                     <th style={{ width: "3%" }}>
                       <input type="checkbox" id="selectAll" />
                     </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>
-                      Id Voucher
-                    </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>
-                      Mã Voucher
-                    </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>
-                      Giá trị
-                    </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>
-                      Ngày bắt đầu
-                    </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Ngày kết thúc
-                    </th>
+                    <th style={{ width: "12%", textAlign: "center" }}>Id Voucher</th>
+                    <th style={{ width: "12%", textAlign: "center" }}>Mã Voucher</th>
+                    <th style={{ width: "12%", textAlign: "center" }}>Giá trị</th>
+                    <th style={{ width: "12%", textAlign: "center" }}>Ngày bắt đầu</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Ngày kết thúc</th>
                     <th style={{ width: "10%", textAlign: "center" }}>Mô tả</th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Chức năng
-                    </th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
                   </tr>
                 </thead>
                 <tbody>
                   {vouchers.map((voucher) => {
-                    const {
-                      _id,
-                      ma_voucher,
-                      gia_tri,
-                      bat_dau,
-                      ket_thuc,
-                      mo_ta,
-                    } = voucher;
-
+                    const { _id, ma_voucher, gia_tri, bat_dau, ket_thuc, mo_ta } = voucher;
 
                     return (
                       <tr key={_id}>
                         <td>
-                          <input
-                            type="checkbox"
-                            className={styles.rowCheckbox}
-                          />
+                          <input type="checkbox" className={styles.rowCheckbox} />
                         </td>
                         <td>{_id}</td>
                         <td style={{ textAlign: "center" }}>{ma_voucher}</td>
@@ -162,16 +130,15 @@ export default function VoucherPage() {
                         <td style={{ textAlign: "center" }}>{ket_thuc}</td>
                         <td style={{ textAlign: "center" }}>{mo_ta}</td>
                         <td style={{ textAlign: "center" }}>
-                          <Link
-                            href={`/components/suavoucher/${_id}`}
-                            className={`${styles.btn} ${styles.edit}`}>
+                          <Link href={`/components/suavoucher/${_id}`} className={`${styles.btn} ${styles.edit}`}>
                             ✏️
                           </Link>
                           &nbsp;
                           <button
                             className={`${styles.btn} ${styles.delete}`}
                             id="deleteButton"
-                            onClick={() => deleteVoucher(_id)}>
+                            onClick={() => deleteVoucher(_id)}
+                          >
                             🗑️
                           </button>
                           &nbsp;
@@ -186,10 +153,7 @@ export default function VoucherPage() {
                 <span></span>
                 <div className={styles.paginationControls}>
                   <button className={styles.paginationButton}>Lùi</button>
-                  <button
-                    className={`${styles.paginationButton} ${styles.active}`}>
-                    1
-                  </button>
+                  <button className={`${styles.paginationButton} ${styles.active}`}>1</button>
                   <button className={styles.paginationButton}>2</button>
                   <button className={styles.paginationButton}>Tiếp</button>
                 </div>

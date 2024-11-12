@@ -1,28 +1,28 @@
 const CMT = require("../models/comment");
 const Product = require("../models/product");
 const Users = require("../models/users");
-const { Op } = require('sequelize');
+const { Op } = require("sequelize");
 const { DonHang, ChiTietDonHang } = require("../models");
 // Show tất cả bình luận
 exports.showAllComment = async (req, res) => {
   try {
-    const { page = 1, limit = 2, ten_dang_nhap } = req.query;
+    const { page = 1, limit = 5, ten_dang_nhap } = req.query;
     const offset = (page - 1) * limit;
     let filter = {};
     if (ten_dang_nhap) {
       const users = await Users.findAll({
         where: {
           ten_dang_nhap: {
-            [Op.like]: `%${ten_dang_nhap}%` // Tìm kiếm phần của tên đăng nhập
-          }
-        }
+            [Op.like]: `%${ten_dang_nhap}%`, // Tìm kiếm phần của tên đăng nhập
+          },
+        },
       });
 
       if (users.length === 0) {
         return res.status(404).json({ message: "Không tìm thấy người dùng" });
       }
-      const userIds = users.map(user => user._id);
-      filter = { id_nguoi_dung: { [Op.in]: userIds } }; 
+      const userIds = users.map((user) => user._id);
+      filter = { id_nguoi_dung: { [Op.in]: userIds } };
     }
     const comments = await CMT.findAll({
       where: filter,
@@ -63,7 +63,6 @@ exports.showAllComment = async (req, res) => {
   }
 };
 
-
 //Bình luận sản phẩm theo _id sản phẩm và _id người dùng
 exports.addComment = async (req, res) => {
   try {
@@ -72,7 +71,7 @@ exports.addComment = async (req, res) => {
     // Kiểm tra xem sản phẩm và người dùng có tồn tại không
     const [product, user] = await Promise.all([
       Product.findOne({ where: { _id: id_san_pham } }),
-      Users.findOne({ where: { _id: id_nguoi_dung } })
+      Users.findOne({ where: { _id: id_nguoi_dung } }),
     ]);
 
     if (!product) {
@@ -84,7 +83,7 @@ exports.addComment = async (req, res) => {
 
     // Kiểm tra xem người dùng đã mua sản phẩm chưa
     const orderDetail = await ChiTietDonHang.findOne({
-      where: { id_san_pham }
+      where: { id_san_pham },
     });
     if (!orderDetail) {
       return res.status(400).json({ message: "Người dùng chưa mua sản phẩm" });
@@ -106,13 +105,12 @@ exports.addComment = async (req, res) => {
         sao: comment.sao,
         id_nguoi_dung: comment.id_nguoi_dung,
         id_san_pham: comment.id_san_pham,
-      }
+      },
     });
   } catch (error) {
     res.status(500).json({ message: "Lỗi server", error: error.message });
   }
 };
-
 
 //lấy tất cả bình luận theo _id sản phẩm
 exports.getAllComment = async (req, res) => {
@@ -161,5 +159,3 @@ exports.getAllComment = async (req, res) => {
     res.status(500).json({ message: "Lỗi server" });
   }
 };
-
-

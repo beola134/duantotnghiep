@@ -71,33 +71,6 @@ export default function SanPham() {
     });
   };
 
-  // Hàm xóa tất cả dữ liệu
-  const deleteAll = async () => {
-    const result = await Swal.fire({
-      title: "Xác nhận",
-      text: "Bạn có chắc chắn muốn xóa tất cả không?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
-    });
-
-    if (result.isConfirmed) {
-      const tableBody = document.querySelector("#productTable tbody");
-      tableBody.innerHTML = "";
-
-      Swal.fire({
-        title: "Đã xóa",
-        text: "Tất cả dữ liệu đã được xóa!",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-    }
-  };
-
-
   // Hàm tìm kiếm sản phẩm
   const searchProducts = async (query) => {
     try {
@@ -251,10 +224,7 @@ export default function SanPham() {
                   <i className="fas fa-file-pdf"></i> Xuất PDF
                 </button>
                 &nbsp;
-                <button className={styles.sp7} onClick={deleteAll}>
-                  &nbsp;
-                  <i className="fas fa-trash-alt"></i> Xóa tất cả
-                </button>
+                
               </div>
             </div>
               <div className={styles.tableControls}>

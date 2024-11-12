@@ -97,6 +97,7 @@ export default function Detail({ params }) {
   }, []);
 
   // thêm bình luận sản phẩm theo id người dùng và id sản phẩm
+  // kiểm tra người dùng đã mua sản phẩm chưa mới được bình luận sản phẩm
   const addComment = async () => {
     if (user) {
       if (commentText && star) {
@@ -113,11 +114,18 @@ export default function Detail({ params }) {
               id_san_pham: params.id,
             }),
           });
-          if (!response.ok) {
-            throw new Error("Lỗi không thể thêm bình luận");
-          }
           const data = await response.json();
-          console.log(data);
+          if (!response.ok) {
+            if (data.message === "Người dùng chưa mua sản phẩm") {
+              return Swal.fire({
+                icon: "warning",
+                title: "Bạn cần mua sản phẩm này để có thể bình luận",
+              });
+            }
+            throw new Error(data.message || "Lỗi không thể thêm bình luận");
+          }
+
+          console.log(data.message);
 
           setCommentText("");
           setStar(0);
@@ -577,9 +585,11 @@ export default function Detail({ params }) {
               <div className={styles.boxPriceRightBot}>
                 <div className={`${styles.btnBuy} ${styles.buyRow} ${styles.cls}`}>
                   <form action="">
-                    <button type="submit" className={`${styles.btBuySp} ${styles.buySp} ${styles.submit}`}>
-                      Mua ngay
-                    </button>
+                    <div className={styles.numberInput}>
+                      <button className={styles.button}>-</button>
+                      <input className={styles.input} type="number" id="number" value="1" />
+                      <button className={styles.button}>+</button>
+                    </div>
                     <button
                       type="button"
                       className={`${styles.btBuySp} ${styles.buySp} ${styles.submit}`}
@@ -1320,200 +1330,11 @@ export default function Detail({ params }) {
         </div>
       </div>
       <div className={styles.clear}></div>
-      {/* mô tả chi tiết  */}
-      <div className={`${styles.tabContent} ${styles.cls} ${styles.container} `}>
-        <div className={styles.tabContentChars}>
-          <div className={styles.titleDescription}>
-            Mô tả Đồng hồ nam Tissot Chemin des Tourelles Powermatic 80 T139.807.22.038.00
-          </div>
-          <div className={styles.prodetailsTabContent}>
-            <div className={styles.tabContentRight}>
-              <div className={`${styles.description} ${styles.boxdesc}`} id="boxdesc">
-                <div id="boxContentLinfo" style={{ maxHeight: "400px" }}>
-                  <div className={styles.boxContentLinfoInner}>
-                    <p>
-                      Tissot Chemin des Tourelles Powermatic 80 là chiếc đồng hồ tự động do Thụy Sĩ sản xuất, được biết
-                      đến với thiết kế bóng bẩy và khả năng dự trữ năng lượng lâu dài. Đồng hồ được cung cấp bởi bộ máy
-                      Powermatic 80, có khả năng dự trữ năng lượng trong 80 giờ. Điều này có nghĩa là đồng hồ có thể
-                      hoạt động liên tục trong 3 ngày mà không bị lên dây cót.
-                    </p>
 
-                    <p>&nbsp;</p>
-
-                    <h2>
-                      <strong>
-                        Đánh giá về thiết kế&nbsp;Tissot Chemin des Tourelles Powermatic 80&nbsp;T139.807.22.038.00
-                      </strong>
-                    </h2>
-
-                    <p>&nbsp;</p>
-
-                    <p>
-                      <Link href="#">T139.807.22.038.00</Link>
-                      có đường kính&nbsp;39mm, vỏ bằng thép không gỉ 316L với mạ&nbsp;PVD bằng vàng hồng. Đồng hồ có mặt
-                      số màu trắng&nbsp;với các kim và vạch chỉ giờ màu vàng. Đồng hồ cũng có lịch&nbsp;ngày ở vị trí 6
-                      giờ.
-                    </p>
-
-                    <p>
-                      <img
-                        class="lazy"
-                        alt=""
-                        style={{ display: "inline-block", opacity: "1" }}
-                        src="/image/item/detail-hinh2.jpg"
-                      />
-                    </p>
-
-                    <p>
-                      T139.807.22.038.00 là chiếc đồng hồ đeo tay hoàn hảo để đeo hàng ngày. Đồng hồ cũng có khả năng
-                      chống nước ở độ sâu 50 mét, vì vậy nó có thể được đeo hàng ngày như đi làm văn phòng, đi chơi...
-                    </p>
-
-                    <p>Đặc điểm:</p>
-
-                    <p>
-                      - Bộ máy&nbsp;Powermatic 80 với dự trữ năng lượng 80 giờ
-                      <br />
-                      - Vỏ thép không gỉ mạ vàng hồng PVD
-                      <br />
-                      - Mặt số màu trắng&nbsp;với kim và vạch số màu vàng
-                      <br />
-                      - Lịch&nbsp;ngày ở vị trí 6 giờ
-                      <br />
-                      - Chống nước đến 50 mét
-                      <br />
-                      Tissot T139.807.22.038.00 là sự lựa chọn tuyệt vời cho bất kỳ ai đang tìm kiếm một chiếc đồng hồ
-                      thời trang và đáng tin cậy. Đồng hồ có khả năng dự trữ năng lượng lâu dài, thiết kế kiểu dáng đẹp
-                      và vỏ thép không gỉ bền bỉ.
-                    </p>
-
-                    <p>
-                      <img
-                        class="lazy"
-                        alt=""
-                        style={{ display: "inline-block", opacity: "1" }}
-                        src="/public/img/item/detail-hinh3.jpg"
-                      />
-                    </p>
-
-                    <p>
-                      T139.807.22.038.00 đã nhận được đánh giá tích cực từ các nhà phê bình cũng như khách hàng. Chiếc
-                      đồng hồ này đã được ca ngợi vì thiết kế bóng bẩy, khả năng dự trữ năng lượng lâu dài và độ bền của
-                      nó.
-                    </p>
-
-                    <p>
-                      <img
-                        class="lazy"
-                        alt=""
-                        style={{ display: "inline-block", opacity: "1" }}
-                        src="/public/img/item/detail-hinh4.jpg"
-                      />
-                    </p>
-
-                    <p>
-                      Dưới đây là một vài trích dẫn từ các đánh giá về T139.807.22.038.00 của các trang chuyên đánh giá
-                      đồng hồ:
-                    </p>
-
-                    <p>
-                      <em>
-                        - "T139.807.22.038.00 là chiếc đồng hồ thời trang và đáng tin cậy, hoàn hảo để đeo hàng ngày."
-                      </em>
-                      - Watchtime
-                      <br />
-                      <em>
-                        - "Bộ máy Powermatic 80 là sự lựa chọn tuyệt vời cho bất kỳ ai đang tìm kiếm một chiếc đồng hồ
-                        có khả năng dự trữ năng lượng lâu dài."
-                      </em>
-                      - Hodinkee
-                      <br />-<em> "Vỏ thép không gỉ rất bền và sẽ tồn tại trong nhiều năm tới."</em> - Gear Patrol
-                    </p>
-
-                    <ul>
-                      <li>
-                        <p>
-                          <strong>
-                            <Link href="#" title="Top 10 mẫu đồng hồ Tissot mới nhất năm 2023">
-                              TOP 10 MẪU ĐỒNG HỒ TISSOT MỚI NHẤT NĂM 2023
-                            </Link>
-                          </strong>
-                        </p>
-                      </li>
-                    </ul>
-
-                    <p>&nbsp;</p>
-
-                    <h2>
-                      <strong>Địa chỉ&nbsp;mua đồng hồ Tissot&nbsp;T139.807.22.038.00 chính hãng uy tín&nbsp;</strong>
-                    </h2>
-
-                    <p>&nbsp;</p>
-
-                    <p>
-                      Hiện tại mẫu đồng hồ T139.807.22.038.00 có sẵn để mua tại Duy Anh Watch. Đại lý ủy quyền chính
-                      thức của Tissot tại Việt Nam. Khách hàng có thể tới tham khảo sản phẩm tại các showroom:&nbsp;
-                    </p>
-
-                    <p>
-                      - Địa chỉ: 200A Phố Huế, Quận Hai Bà Trưng, Hà Nội (gần ngã tư Phố Huế - Tô Hiến Thành - Nguyễn
-                      Công Trứ)
-                    </p>
-
-                    <p>Điện thoại: (024)2.214.8336</p>
-
-                    <p>- Địa chỉ: F4-B08, Tầng 4, Trung Tâm Thương Mại Lotte Center, 54 Liễu Giai, Q.Ba Đình, Hà Nội</p>
-
-                    <p>Điện thoại: (024)32676.555</p>
-
-                    <p>- Địa chỉ: Tầng 2, TTTM Vincom Trần Duy Hưng, 119 Trần Duy Hưng, Cầu Giấy, Hà Nội</p>
-
-                    <p>Điện thoại: (024)6656.6660</p>
-
-                    <p>
-                      - Địa chỉ: 205 Trần Hưng Đạo, phường Cô Giang, Quận 1, TP.Hồ Chí Minh (gần Ngân hàng Vietinbank)
-                    </p>
-
-                    <p>Điện thoại: 0836.88.99.86</p>
-
-                    <p>- Địa chỉ: 300 Hai Bà Trưng, phường Tân Định, Quận 1, TP. Hồ Chí Minh (gần nhà thờ Tân Định)</p>
-
-                    <p>Điện thoại: 08899.36168</p>
-
-                    {/* <div className={styles.youtubeEmbedWrapper}>
-                      <iframe
-                        className="lazyif"
-                        loading="lazy"
-                        allow=";"
-                        allowFullScreen
-                        frameBorder="0"
-                        height="360"
-                        style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
-                        width="640"
-                        src="https://www.youtube.com/embed/TUvPHS9q3oo"
-                      ></iframe>
-                    </div> */}
-                    <p>
-                      <br />
-                      T139.807.22.038.00 là sự lựa chọn tuyệt vời cho bất kỳ ai đang tìm kiếm một chiếc đồng hồ thời
-                      trang và đáng tin cậy. Đồng hồ có khả năng dự trữ năng lượng lâu dài, thiết kế kiểu dáng đẹp và vỏ
-                      thép không gỉ bền bỉ. Đồng hồ cũng có khả năng chống nước ở độ sâu 50 mét, vì vậy nó có thể được
-                      đeo khi bơi hoặc lặn với ống thở nhẹ.
-                    </p>
-                  </div>
-                </div>
-
-                <div className={styles.readmore} id="readmore-desc">
-                  <span className="closed">Hiển thị thêm</span>
-                </div>
-
-                <div className={styles.productTags}></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* mô tả chi tiết */}
       <div class={styles.clear}></div>
+      {/* mô tả chi tiết */}
+
       {/* sản phẩm liên quan */}
       <div
         className={`${styles.relatedProducts} ${styles.favourite} ${styles.mt20} ${styles.textCenter} ${styles.container}`}
@@ -1673,74 +1494,83 @@ export default function Detail({ params }) {
                   {/* show bình luận  */}
                   <div className={`${styles.commentSection} ${styles.container}`}>
                     {Array.isArray(comments) && comments.length > 0 ? (
-                      comments.map((comment, index) => (
-                        <div key={index} className={styles.comment}>
-                          <div className={styles.profile}>
-                            <img src={`http://localhost:5000/images/${comment.user?.hinh_anh}`} alt="Profile Picture" />
-                          </div>
-                          <div className={styles.content}>
-                            <div className={styles.header}>
-                              <span className={styles.name}>{comment.user?.ten_dang_nhap || "Ẩn danh"}</span>
-                              <span className={styles.date}>
-                                {new Intl.DateTimeFormat("vi-VN", {
-                                  year: "numeric",
-                                  month: "2-digit",
-                                  day: "2-digit",
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  second: "2-digit",
-                                }).format(new Date(comment.ngay_binh_luan))}
-                              </span>
-                              <div className={styles.rating}>
-                                {Array.from({ length: 5 }, (_, i) => (
-                                  <FontAwesomeIcon
-                                    key={i}
-                                    icon={i < comment.sao ? solidStar : regularStar}
-                                    className={styles.star}
-                                  />
-                                ))}
-                              </div>
+                      <>
+                        {comments.map((comment, index) => (
+                          <div key={index} className={styles.comment}>
+                            <div className={styles.profile}>
+                              <img
+                                src={`http://localhost:5000/images/${comment.user?.hinh_anh}`}
+                                alt="Profile Picture"
+                              />
                             </div>
-                            <p className={styles.text}>{comment.noi_dung}</p>
+                            <div className={styles.content}>
+                              <div className={styles.header}>
+                                <span className={styles.name}>{comment.user?.ten_dang_nhap || "Ẩn danh"}</span>
+                                <span className={styles.date}>
+                                  {new Intl.DateTimeFormat("vi-VN", {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    second: "2-digit",
+                                  }).format(new Date(comment.ngay_binh_luan))}
+                                </span>
+                                <div className={styles.rating}>
+                                  {Array.from({ length: 5 }, (_, i) => (
+                                    <FontAwesomeIcon
+                                      key={i}
+                                      icon={i < comment.sao ? solidStar : regularStar}
+                                      className={styles.star}
+                                    />
+                                  ))}
+                                </div>
+                              </div>
+                              <p className={styles.text}>{comment.noi_dung}</p>
+                            </div>
                           </div>
+                        ))}
+
+                        {/* Phân trang chỉ hiển thị khi có bình luận */}
+                        <div className={styles.pagination}>
+                          {/* Prev trang đầu */}
+                          <span
+                            title="First page"
+                            className={currentPage === 1 ? styles.disabled : styles["other-page"]}
+                            onClick={() => currentPage > 1 && handlePageChange(1)}
+                          >
+                            ‹‹
+                          </span>
+                          {/* Prev 1 trang */}
+                          <span
+                            className={currentPage === 1 ? styles.disabled : styles["other-page"]}
+                            onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                          >
+                            ‹
+                          </span>
+                          {/* Trang hiện tại */}
+                          <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1}`}</span>
+                          {/* Next 1 trang */}
+                          <span
+                            className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
+                            onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                          >
+                            ›
+                          </span>
+                          {/* Next tới trang cuối */}
+                          <span
+                            className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
+                            onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
+                          >
+                            ››
+                          </span>
                         </div>
-                      ))
+                      </>
                     ) : (
-                      <p>Không có bình luận nào</p>
+                      <p style={{ color: "#999" }}>
+                        Mời bạn nhận xét về sản phẩm, hãy bình luận có văn hoá để tránh bị khoá tài khoản.
+                      </p>
                     )}
-                    <div className={styles.pagination}>
-                      {/* Prev trang đâù */}
-                      <span
-                        title="First page"
-                        className={currentPage === 1 ? styles.disabled : styles["other-page"]}
-                        onClick={() => currentPage > 1 && handlePageChange(1)}
-                      >
-                        ‹‹
-                      </span>
-                      {/* Prev 1 trang */}
-                      <span
-                        className={currentPage === 1 ? styles.disabled : styles["other-page"]}
-                        onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                      >
-                        ‹
-                      </span>
-                      {/* Trang hiện tại */}
-                      <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1}`}</span>
-                      {/* Next 1 trang*/}
-                      <span
-                        className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
-                        onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
-                      >
-                        ›
-                      </span>
-                      {/* Next tới trang cuối */}
-                      <span
-                        className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
-                        onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
-                      >
-                        ››
-                      </span>
-                    </div>
                   </div>
                 </form>
               </div>
