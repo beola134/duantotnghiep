@@ -16,33 +16,27 @@ const Voucher = sequelize.define('Voucher', {
     gia_tri: {
         type: DataTypes.INTEGER,  
         allowNull: true, 
-        defaultValue: null
     },
     phan_tram: {
         type: DataTypes.INTEGER,  
         allowNull: true, 
-        defaultValue: null
     },
     so_luong: {
         type: DataTypes.INTEGER,  
         allowNull: true, 
-        defaultValue: null
     },
     bat_dau: {
         type: DataTypes.DATE, 
         allowNull: true,
-        defaultValue: null
     },
     ket_thuc: {
         type: DataTypes.DATE,  
         allowNull: true,
-        defaultValue: null
 
     },
     mo_ta: {
         type: DataTypes.STRING(100),  
         allowNull: true,
-        defaultValue: null
     }
 }, {
     tableName: 'voucher',  
