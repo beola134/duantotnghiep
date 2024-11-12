@@ -14,13 +14,14 @@ export default function DonHang() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filteredDonhangs, setFilteredDonhangs] = useState([]);
   //tìm kiếm
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
 
   const handleSearch = (query) => {
-    const filteredDonhangs = donHangs.filter((donHang) => {
+    const filtered = donHangs.filter((donHang) => {
       const userName = nguoiDungMap[donHang.id_nguoi_dung]?.ho_ten || "";
       const phoneNumber = nguoiDungMap[donHang.id_nguoi_dung]?.dien_thoai || "";
       const trangThai = donHang.trang_thai || "";
@@ -30,8 +31,7 @@ export default function DonHang() {
         removeAccents(trangThai.toLowerCase()).includes(query)
       );
     });
-
-    setDisplayDonhang(filteredDonhangs.slice(0, itemsPerPage));
+    setFilteredDonhangs(filtered);
     setCurrentPage(1);
   };
 
@@ -43,12 +43,14 @@ export default function DonHang() {
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery, donHangs, itemsPerPage]);
 
-  // phân trang
-  useEffect(() => {
+
+// phân trang
+ useEffect(() => {
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    setDisplayDonhang(donHangs.slice(start, end));
-  }, [donHangs, itemsPerPage, currentPage]);
+    const dataToShow = searchQuery ? filteredDonhangs : donHangs;
+    setDisplayDonhang(dataToShow.slice(start, end));
+  }, [filteredDonhangs, donHangs, itemsPerPage, currentPage, searchQuery]);
 
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(Number(e.target.value));
@@ -61,7 +63,11 @@ export default function DonHang() {
     });
   };
 
-  const totalPages = Math.ceil(donHangs.length / itemsPerPage);
+  const totalPages = Math.ceil(
+    (searchQuery ? filteredDonhangs.length : donHangs.length) / itemsPerPage
+  );
+
+
 
   const uploadFile = () => {
     Swal.fire({
@@ -120,7 +126,10 @@ export default function DonHang() {
     });
   };
 
-  //lấy dữ liệu danh sách đơn hàng
+
+
+  
+//lấy dữ liệu danh sách đơn hàng
   useEffect(() => {
     const fetchDonhang = async () => {
       try {
@@ -156,39 +165,63 @@ export default function DonHang() {
     fetchDonhang();
   }, []);
   //cập nhật trạng thái đơn hàng
-  const handleStatusChange = async (id, newStatus) => {
-    try {
-      const response = await fetch(`http://localhost:5000/donhang/update/${id}`, {
+    const handleStatusChange = async (id, newStatus) => {
+  if (
+    newStatus === "Giao hàng thành công" ||
+    newStatus === "Đơn hàng đã hủy"
+  ) {
+    // Hỏi xác nhận
+    const result = await Swal.fire({
+      title: "Xác nhận cập nhật",
+      text: `Bạn có chắc muốn cập nhật trạng thái thành "${newStatus}"?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Đồng ý",
+      cancelButtonText: "Hủy",
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:5000/donhang/update/${id}`,
+      {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ trang_thai: newStatus }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Lỗi cập nhật trạng thái");
       }
+    );
 
-      setDonhang((prevDonHangs) =>
-        prevDonHangs.map((donHang) => (donHang._id === id ? { ...donHang, trang_thai: newStatus } : donHang))
-      );
-
-      Swal.fire({
-        title: "Thành công",
-        text: "Trạng thái đơn hàng đã được cập nhật!",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-    } catch (error) {
-      Swal.fire({
-        title: "Lỗi",
-        text: "Không thể cập nhật trạng thái",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
+    if (!response.ok) {
+      throw new Error("Lỗi cập nhật trạng thái");
     }
-  };
+
+    setDonhang((prevDonHangs) =>
+      prevDonHangs.map((donHang) =>
+        donHang._id === id ? { ...donHang, trang_thai: newStatus } : donHang
+      )
+    );
+
+    Swal.fire({
+      title: "Thành công",
+      text: "Trạng thái đơn hàng đã được cập nhật!",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+  } catch (error) {
+    Swal.fire({
+      title: "Lỗi",
+      text: "Không thể cập nhật trạng thái",
+      icon: "error",
+      confirmButtonText: "OK",
+    });
+  }
+};
 
   if (loading) {
     return <p>Loading...</p>;
@@ -232,6 +265,7 @@ export default function DonHang() {
                   <i className="fas fa-file-pdf"></i> Xuất PDF
                 </button>
                 &nbsp;
+                
               </div>
             </div>
 
@@ -297,32 +331,42 @@ export default function DonHang() {
                             value={item.trang_thai}
                             onChange={(e) => handleStatusChange(item._id, e.target.value)}
                             style={{
-                              backgroundColor: item.trang_thai === "Đơn hàng đã hủy" ? "white" : "black",
-                              color: item.trang_thai === "Đơn hàng đã hủy" ? "black" : "white",
-                              border: "1px solid black",
+                              textAlign: "center",
+                              backgroundColor: item.trang_thai === "Đơn hàng đã hủy" ? "#dc3545" : "#28a745",
+                              color: "white",
+                              border: "1px solid white",
                             }}
+                            disabled={item.trang_thai === "Giao hàng thành công" || item.trang_thai === "Đơn hàng đã hủy"}
                           >
-                            <option value="Chờ xác nhận" style={{ backgroundColor: "black", color: "white" }}>
+                            <option
+                              value="Chờ xác nhận"
+                              style={{ backgroundColor: "#28a745", color: "white" }}
+                            >
                               Chờ xác nhận
                             </option>
-                            <option value="Đã xác nhận" style={{ backgroundColor: "black", color: "white" }}>
+                            <option
+                              value="Đã xác nhận"
+                              style={{ backgroundColor: "#28a745", color: "white" }}
+                            >
                               Đã xác nhận
                             </option>
-                            <option value="Đóng gói" style={{ backgroundColor: "black", color: "white" }}>
-                              Đóng gói
-                            </option>
-                            <option value="Đang giao hàng" style={{ backgroundColor: "black", color: "white" }}>
+                            <option
+                              value="Đang giao hàng"
+                              style={{ backgroundColor: "#28a745", color: "white" }}
+                            >
                               Đang giao hàng
                             </option>
-                            <option value="Giao hàng thành công" style={{ backgroundColor: "black", color: "white" }}>
+                            <option
+                              value="Giao hàng thành công"
+                              style={{ backgroundColor: "#28a745", color: "white" }}
+                            >
                               Giao hàng thành công
                             </option>
                             <option
                               value="Đơn hàng đã hủy"
                               style={{
-                                backgroundColor: "white",
-                                color: "black",
-                                border: "1px solid black",
+                                backgroundColor: "#dc3545", 
+                                color: "white",
                               }}
                             >
                               Đơn hàng đã hủy
@@ -336,27 +380,34 @@ export default function DonHang() {
               </table>
 
               <div className={styles.pagination}>
-                <span>
-                  Hiện 1 đến {displayDonhang.length} của {donHangs.length} đơn hàng
-                </span>
+                <span>Hiện 1 đến {displayDonhang.length} của {filteredDonhangs.length || donHangs.length} đơn hàng</span>
                 <div className={styles.paginationControls}>
                   <button
                     className={styles.paginationButton}
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
                     disabled={currentPage === 1}
+                  >
+                   ‹
+                  </button>
+                  <button
+                    className={`${styles.paginationButton} ${styles.active}`}
                   >
                     Lùi
                   </button>
                   <button className={`${styles.paginationButton}  ${styles.active}`}>
                     {currentPage} / {totalPages}
                   </button>
-
+                  
                   <button
                     className={styles.paginationButton}
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
                     disabled={currentPage === totalPages}
                   >
-                    Tiếp
+                    ›
                   </button>
                 </div>
               </div>

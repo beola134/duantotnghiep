@@ -33,9 +33,9 @@
   padding-bottom: 10px;
   font-size: 16px;
   margin: 0 5px;
-  transition: color 0.3s ease; /* Hiệu ứng chuyển màu mượt mà */
-  color: #777777; /* Màu mặc định của tab */
-  border-bottom: none; /* Bỏ gạch chân mặc định */
+  transition: color 0.3s ease; 
+  color: #777777; 
+  border-bottom: none; 
 }
 
 .tabItem:hover {
@@ -44,11 +44,11 @@
 .tabItem:hover::after {
   content: "";
   position: absolute;
-  bottom: 0px; /* Căn chỉnh dòng gạch ngang dưới tiêu đề */
+  bottom: 0px; 
   left: 0;
   width: 115px;
-  height: 2px; /* Độ dày của dòng */
-  background-color: #796752; /* Màu sắc của dòng */
+  height: 2px; 
+  background-color: #796752; 
 }
 .active1 {
   color: #796752;
@@ -56,18 +56,18 @@
 .active1::after {
   content: "";
   position: absolute;
-  bottom: 0px; /* Căn chỉnh dòng gạch ngang dưới tiêu đề */
+  bottom: 0px; 
   left: 0;
   width: 115px;
-  height: 2px; /* Độ dày của dòng */
-  background-color: #796752; /* Màu sắc của dòng */
+  height: 2px; 
+  background-color: #796752; 
 }
 .active1::before {
   content: "";
   position: absolute;
-  bottom: 0px; /* Căn chỉnh dòng gạch ngang dưới tiêu đề */
+  bottom: 0px; 
   width: 12170px;
-  height: 0.5px; /* Độ dày của dòng */
+  height: 0.5px; 
   border-bottom: rgb(169, 98, 50, 0.2) 0.5px solid;
   margin-left: -3333px;
 }
@@ -100,19 +100,19 @@
 .watch {
   padding-left: 30px;
   text-align: center;
-  position: relative; /* Sử dụng relative để có thể đặt các thành phần con (badge) tuyệt đối bên trong */
+  position: relative;
   width: 200px;
 }
 
 .watch img {
   position: relative;
 
-  transition: transform 0.5s ease-in-out; /* Thêm hiệu ứng chuyển đổi mượt mà */
+  transition: transform 0.5s ease-in-out; 
   z-index: 1;
   margin: 0 auto;
 }
 .watch img:hover {
-  transform: scale(1.05); /* Phóng to hình ảnh nhẹ khi hover (tăng kích thước 5%) */
+  transform: scale(1.05); 
 }
 
 .watch p {
@@ -136,14 +136,13 @@
 
 .discountBadge {
   position: absolute;
-  top: -15px; /* Đặt vị trí góc trên của badge */
-  left: 10px; /* Đặt vị trí góc trái của badge */
-  background-color: red; /* Màu nền đỏ */
-  color: white; /* Màu chữ trắng */
-  padding: 5px 5px; /* Căn chỉnh nội dung bên trong badge */
-  border-radius: 50%; /* Tạo hình tròn */
-  font-size: 10px; /* Cỡ chữ nhỏ */
-  font-weight: bold; /* Chữ đậm */
+  top: -15px;
+  left: 10px; 
+  background-color: red; 
+  color: white; 
+  padding: 5px 0px; 
+  border-radius: 50%;
+  font-size: 10px; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -157,32 +156,32 @@
 }
 
 .xemThem {
-  display: flex; /* Sử dụng flexbox để căn giữa */
-  justify-content: center; /* Căn giữa theo chiều ngang */
-  align-items: center; /* Căn giữa theo chiều dọc nếu cần */
-  margin: 50px auto; /* Thêm khoảng cách ở trên và dưới */
+  display: flex; 
+  justify-content: center;
+  align-items: center; 
+  margin: 50px auto; 
 }
 
 .xemThem::after {
   content: "";
-  position: relative; /* Đặt gạch ngang ở vị trí tuyệt đối */
+  position: relative; 
   left: 0;
   right: 0;
-  border-top: 1px solid rgba(161, 147, 142, 0.881); /* Gạch ngang */
-  transform: translateY(-50%); /* Căn giữa gạch ngang */
+  border-top: 1px solid rgba(161, 147, 142, 0.881);
+  transform: translateY(-50%); 
   width: 1170px;
   margin: auto;
 }
 
 .xemThem p {
   padding-top: 10px;
-  background-color: #796752; /* Nền màu để tách chữ ra khỏi gạch ngang */
-  width: 600px; /* Độ rộng của phần chữ */
-  height: 35px; /* Chiều cao của phần chữ */
-  border: 777777 solid 1px; /* Border xung quanh */
-  border-radius: 20px; /* Bo góc */
-  position: absolute; /* Để tạo gạch ngang */
-  text-align: center; /* Căn giữa chữ trong phần tử */
+  background-color: #796752;
+  width: 600px; 
+  height: 35px; 
+  border: 777777 solid 1px; 
+  border-radius: 20px; 
+  position: absolute;
+  text-align: center; 
   z-index: 999;
   justify-content: center;
 }
@@ -191,8 +190,8 @@
 }
 
 .xemThem p b {
-  position: relative; /* Để chữ nằm trên gạch ngang */
-  z-index: 1; /* Đưa chữ lên trên gạch ngang */
+  position: relative; 
+  z-index: 1; 
   color: #fff;
 }
 
@@ -239,61 +238,61 @@
   margin-bottom: 20px;
 }
 
-/* Định dạng cho h2 */
+
 .title .ss {
-  margin: 0; /* Bỏ khoảng cách mặc định */
-  font-size: 24px; /* Kích thước chữ */
-  font-weight: bold; /* Đậm */
+  margin: 0; 
+  font-size: 24px; 
+  font-weight: bold; 
 }
 
-/* Định dạng cho p */
+
 .title p {
-  margin: 0; /* Bỏ khoảng cách mặc định */
-  color: #000000; /* Màu chữ */
-  cursor: pointer; /* Đổi con trỏ khi di chuột */
+  margin: 0; 
+  color: #000000; 
+  cursor: pointer; 
 }
-/*thương hiệu nổi bật  */
+
 .owlItem {
   position: relative;
 }
 .slick-prev,
 .slick-next {
-  display: none !important; /* Ẩn nút */
+  display: none !important; 
 }
 .prevButton,
 .nextButton {
   width: 30px;
-  background-color: #fff; /* Màu nền */
-  color: white; /* Màu chữ */
-  border: none; /* Không viền */
-  padding-top: 10px; /* Khoảng cách */
-  margin: 10px; /* Khoảng cách giữa các nút */
-  cursor: pointer; /* Con trỏ chuột khi hover */
-  border-radius: 5px; /* Bo tròn góc */
-  transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+  background-color: #fff; 
+  color: white; 
+  border: none; 
+  padding-top: 10px; 
+  margin: 10px; 
+  cursor: pointer; 
+  border-radius: 5px; 
+  transition: background-color 0.3s; 
   position: absolute;
   z-index: 9;
   margin-top: -200px;
 }
 .prevButton {
-  left: -10px; /* Đặt nút Previous ở bên trái */
+  left: -10px; 
 }
 
 .nextButton {
-  right: -10px; /* Đặt nút Next ở bên phải */
+  right: -10px; 
 }
 .prevButton:hover,
 .nextButton:hover {
-  background-color: #777; /* Màu nền khi hover */
+  background-color: #777; 
 }
 
 .container-news {
-  width: 1170px; /* Tổng chiều rộng là 1170px */
+  width: 1170px; 
   margin: 20px auto;
   display: block;
   justify-content: space-between;
-  max-height: 850px; /* Chiều cao tối đa */
-  /* Cuộn dọc nếu vượt quá chiều cao */
+  max-height: 850px; 
+  
 }
 .section-news {
   display: flex;
@@ -306,20 +305,20 @@
 
 .news-section,
 .video-section {
-  width: 570px; /* Chia đều hai phần, mỗi phần có chiều rộng 622px */
+  width: 570px; 
   padding: 10px;
   height: auto;
 }
 
 .news-section {
-  width: 570px; /* Chiều rộng của phần news-section */
-  max-height: 850px; /* Chiều cao tối đa */
-  overflow-y: auto; /* Tạo thanh cuộn dọc khi nội dung vượt quá */
-  overflow-x: hidden; /* Ẩn thanh cuộn ngang nếu có nội dung thừa */
+  width: 570px;  
+  max-height: 850px;
+  overflow-y: auto; 
+  overflow-x: hidden; 
 
-  background-color: #fff; /* Màu nền cho phần tin tức */
+  background-color: #fff; 
 }
-/* Tiêu đề hình bình hành và đường gạch chân */
+
 .title-unline {
   position: relative;
   color: white;
@@ -329,7 +328,7 @@
   margin-bottom: 20px;
   background-color: #796752;
   display: inline-block;
-  transform: skew(-30deg); /* Tạo hiệu ứng hình bình hành */
+  transform: skew(-30deg); 
   margin-left: 20px;
 }
 

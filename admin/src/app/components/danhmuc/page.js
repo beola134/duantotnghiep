@@ -13,17 +13,18 @@ export default function DanhMuc() {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  //tìm kiếm
+  const [filteredCategories, setFilteredCategories] = useState([]);
+//tìm kiếm
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
-  const handleSearch = (query) => {
-    const filteredCategories = categories.filter((category) =>
-      removeAccents(category.danh_muc.toLowerCase()).includes(query)
-    );
-    setDisplayCategories(filteredCategories.slice(0, itemsPerPage));
-    setCurrentPage(1);
-  };
+   const handleSearch = (query) => {
+  const filtered = categories.filter((category) =>
+    removeAccents(category.danh_muc.toLowerCase()).includes(query)
+  );
+  setFilteredCategories(filtered);
+  setCurrentPage(1);
+};
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -34,10 +35,12 @@ export default function DanhMuc() {
   }, [searchQuery, categories, itemsPerPage]);
   //phân trang
   useEffect(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    setDisplayCategories(categories.slice(start, end));
-  }, [categories, itemsPerPage, currentPage]);
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const dataToShow = searchQuery ? filteredCategories : categories;
+  setDisplayCategories(dataToShow.slice(start, end));
+}, [filteredCategories, categories, itemsPerPage, currentPage, searchQuery]);
+
 
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(Number(e.target.value));
@@ -50,7 +53,10 @@ export default function DanhMuc() {
     });
   };
 
-  const totalPages = Math.ceil(categories.length / itemsPerPage);
+  const totalPages = Math.ceil(
+  (searchQuery ? filteredCategories.length : categories.length) / itemsPerPage
+);
+
 
   const uploadFile = () => {
     Swal.fire({
@@ -109,7 +115,9 @@ export default function DanhMuc() {
     });
   };
 
-  const deleteCategory = async (id) => {
+  
+
+  const  deleteCategory = async (id) => {
     const result = await Swal.fire({
       title: "Xác nhận",
       text: "Bạn có chắc chắn muốn xóa danh mục này không?",
@@ -213,6 +221,7 @@ export default function DanhMuc() {
                   <i className="fas fa-file-pdf"></i> Xuất PDF
                 </button>
                 &nbsp;
+                
               </div>
             </div>
 
@@ -269,8 +278,11 @@ export default function DanhMuc() {
                         <img src={`http://localhost:5000/images/${item.hinh_anh2}`} alt={item.danh_muc} />
                       </td>
 
-                      <td>
-                        <Link href={`/components/suadanhmuc/${item._id}`} className={`${styles.btn} ${styles.edit}`}>
+                      <td   style={{ textAlign: "center" }}>
+                        <Link
+                          href={`/components/suadanhmuc/${item._id}`}
+                          className={`${styles.btn} ${styles.edit}`}
+                        >
                           ✏️
                         </Link>{" "}
                         &nbsp;
@@ -289,16 +301,14 @@ export default function DanhMuc() {
               </table>
 
               <div className={styles.pagination}>
-                <span>
-                  Hiện 1 đến {displayCategories.length} của {categories.length} danh mục
-                </span>
+                <span>Hiện 1 đến {displayCategories.length} của {filteredCategories.length || categories.length} danh mục</span>
                 <div className={styles.paginationControls}>
                   <button
                     className={styles.paginationButton}
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
                   >
-                    Lùi
+                   ‹
                   </button>
                   <button className={`${styles.paginationButton} ${styles.active}`}>
                     {currentPage} / {totalPages}
@@ -309,7 +319,7 @@ export default function DanhMuc() {
                     onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
                   >
-                    Tiếp
+                    ›
                   </button>
                 </div>
               </div>

@@ -221,14 +221,14 @@
 
 .paginationControls {
   display: flex;
-  gap: 5px;
+  gap: 15px;
 }
 
 .paginationButton {
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 3px;
-  padding: 5px 10px;
+  padding: 5px 12px;
   cursor: pointer;
 }
 
@@ -238,9 +238,9 @@
 }
 .chucvu select{
     margin-top: 15px;
-    background-color: #000;
+    background-color: #28a745;
     border-radius: 6px;
-    border: 1px solid #000;
+    border: 0.5px solid #28a745;
     padding: 5px;  
     text-align: center;
     color: white;

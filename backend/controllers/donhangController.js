@@ -63,8 +63,13 @@ const addDonHang = async (req, res) => {
     }
 
     if (voucher) {
-      totalAmount -= voucher.gia_tri;
+      if (voucher.phan_tram) {
+        totalAmount -= (totalAmount * voucher.phan_tram) / 100;
+      } else if (voucher.gia_tri) {
+        totalAmount -= voucher.gia_tri;
+      }
     }
+    
     totalAmount = Math.max(totalAmount, 0);
     da_thanh_toan = totalAmount === 0;
     const donHang = await DonHang.create({
