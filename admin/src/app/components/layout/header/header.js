@@ -73,42 +73,23 @@ export default function Menu() {
             Tài khoản
           </li>
           <li>
-            <Link href="" onClick={toggleProductDropdown}>
+            <Link href="/components/taikhoan" onClick={toggleProductDropdown}>
               <i className={`bx bxs-user-account ${styles.icon}`}></i>
-              Tài khoản
-              <i className={`bx bx-chevron-right ${styles.iconRight}`}></i>
+              Quản Lý Tài khoản
+             
             </Link>
-            <ul
-              className={`${styles.sideDropdown} ${
-                isProductDropdownOpen ? styles.show : ""
-              }`}>
-              <li>
-                <Link href="/components/taikhoan">Quản lý tài khoản</Link>
-
-              </li>
-              
-            </ul>
+            
           </li>
           <li className={styles.divider} data-text="Đơn Hàng">
             Đơn Hàng
           </li>
           <li>
-            <Link href="#" onClick={toggleOrderDropdown}>
+            <Link href="/components/quanlydonhang" onClick={toggleOrderDropdown}>
               <i className={`bx bxs-cart ${styles.icon}`}></i>
-              Đơn Hàng
-              <i className={`bx bx-chevron-right ${styles.iconRight}`}></i>
+              Quản Lý Đơn Hàng
+              
             </Link>
-            <ul
-              className={`${styles.sideDropdown} ${
-                isOrderDropdownOpen ? styles.show : ""
-              }`}>
-              <li>
-                <Link href="/components/quanlydonhang">Quản lý đơn hàng</Link>
-              </li>
-              <li>
-                <Link href="/quanlygiohang">Quản lý giỏ hàng</Link>
-              </li>
-            </ul>
+            
           </li>
           <li className={styles.divider} data-text="Voucher">
             Voucher

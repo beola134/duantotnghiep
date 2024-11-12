@@ -18,6 +18,16 @@ const Voucher = sequelize.define('Voucher', {
         allowNull: true, 
         defaultValue: null
     },
+    phan_tram: {
+        type: DataTypes.INTEGER,  
+        allowNull: true, 
+        defaultValue: null
+    },
+    so_luong: {
+        type: DataTypes.INTEGER,  
+        allowNull: true, 
+        defaultValue: null
+    },
     bat_dau: {
         type: DataTypes.DATE, 
         allowNull: true,
