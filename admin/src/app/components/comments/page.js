@@ -4,24 +4,38 @@ import styles from "./comments.module.css";
 import { useState, useEffect } from "react";
 export default function CommentsPage() {
   const [comments, setComments] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // gọi tất cả các bình luận từ API
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/comment/showAll");
-        const data = await response.json();
-        setComments(data.comments);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchComments();
-  }, []);
 
+  // gọi tất cả các bình luận từ API
+  const fetchComments = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/comment/showAll?page=${currentPage}&ten_dang_nhap=${search}`);
+      const data = await response.json();
+      setComments(data.comments);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchComments();
+  }, [currentPage, search]);
+
+  // chức năng chuyển trang
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  // hàm xử lí thay đổi bình luận
+  const handSearchChange = (e) => {
+    setSearch(e.target.value);
+    setCurrentPage(1);
+  };
   return (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>
@@ -57,10 +71,6 @@ export default function CommentsPage() {
                   <i className="fas fa-file-pdf"></i> Xuất PDF
                 </button>
                 &nbsp;
-                <button className={styles.sp7}>
-                  &nbsp;
-                  <i className="fas fa-trash-alt"></i> Xóa tất cả
-                </button>
               </div>
             </div>
 
@@ -79,7 +89,7 @@ export default function CommentsPage() {
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
                     Tìm kiếm:
                   </label>
-                  <input type="text" id="search" />
+                  <input type="text" id="search" value={search} onChange={handSearchChange} />
                 </div>
               </div>
               <table id="productTable" className={styles.productTable}>
@@ -88,18 +98,18 @@ export default function CommentsPage() {
                     <th style={{ width: "3%" }}>
                       <input type="checkbox" id="selectAll" />
                     </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>Id bình luận</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Id bình luận</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Id sản phẩm</th>
+                    <th style={{ width: "8%", textAlign: "center" }}>Họ và tên </th>
                     <th style={{ width: "12%", textAlign: "center" }}>Nội dung</th>
                     <th style={{ width: "5%", textAlign: "center" }}>Sao</th>
                     <th style={{ width: "10%", textAlign: "center" }}>Ngày bình luận</th>
-                    <th style={{ width: "10%", textAlign: "center" }}>Id người dùng </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>Id sản phẩm</th>
                     <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
                   </tr>
                 </thead>
                 <tbody>
                   {comments.map((comment) => {
-                    const { _id, noi_dung, sao, ngay_binh_luan, id_nguoi_dung, id_san_pham } = comment;
+                    const { _id, noi_dung, sao, ngay_binh_luan, ten_dang_nhap, id_san_pham } = comment;
 
                     return (
                       <tr key={_id}>
@@ -107,6 +117,11 @@ export default function CommentsPage() {
                           <input type="checkbox" className={styles.rowCheckbox} />
                         </td>
                         <td>{_id}</td>
+                        <td>{id_san_pham}</td>
+                        <td style={{ textAlign: "center" }}>
+                          <span className={`${styles.status} ${styles.inStock} `}>{comment.user?.ten_dang_nhap}</span>
+                        </td>
+
                         <td style={{ textAlign: "center" }}>{noi_dung}</td>
                         <td style={{ textAlign: "center" }}>{sao}</td>
                         <td style={{ textAlign: "center" }}>
@@ -114,10 +129,7 @@ export default function CommentsPage() {
                             timeZone: "Asia/Ho_Chi_Minh",
                           })}
                         </td>
-                        <td>
-                          <span className={`${styles.status} ${styles.inStock}`}>{id_nguoi_dung}</span>
-                        </td>
-                        <td>{id_san_pham}</td>
+
                         <td style={{ textAlign: "center" }}>
                           <Link href={`/components/suasanpham/${_id}`} className={`${styles.btn} ${styles.edit}`}>
                             ✏️
@@ -139,12 +151,27 @@ export default function CommentsPage() {
               </table>
 
               <div className={styles.pagination}>
-                <span>Hiện 1 đến 10 của 16 danh mục</span>
                 <div className={styles.paginationControls}>
-                  <button className={styles.paginationButton}>Lùi</button>
-                  <button className={`${styles.paginationButton} ${styles.active}`}>1</button>
-                  <button className={styles.paginationButton}>2</button>
-                  <button className={styles.paginationButton}>Tiếp</button>
+                  <button
+                    className={`${styles.paginationButton} ${
+                      currentPage === 1 ? styles.disabled : styles["other-page"]
+                    }`}
+                    onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    ‹
+                  </button>
+
+                  <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPages || 1}`}</button>
+                  <button
+                    className={`${styles.paginationButton} ${
+                      currentPage === totalPages ? styles.disabled : styles["other-page"]
+                    }`}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    ›
+                  </button>
                 </div>
               </div>
             </div>

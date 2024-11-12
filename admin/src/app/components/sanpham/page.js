@@ -232,6 +232,10 @@ export default function SanPham() {
                 <button className={styles.sp6} onClick={exportToPDF}>
                   <i className="fas fa-file-pdf"></i> Xuất PDF
                 </button>
+                &nbsp;
+                
+              </div>
+            </div>
                
               </div>
               <div className={styles.tableControls}>

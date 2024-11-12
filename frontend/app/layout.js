@@ -28,6 +28,8 @@ export default function RootLayout({ children }) {
             crossOrigin="anonymous"
             nonce="uaRZ9ATs"
           />
+          <title>Trang chủ</title>
+          <link rel="icon" href="/image/item/logo.png" />
         </head>
         <body>
           <Header />

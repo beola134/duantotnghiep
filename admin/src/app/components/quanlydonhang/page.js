@@ -11,7 +11,7 @@ export default function DonHang() {
   const [currentPage, setCurrentPage] = useState(1);
   const [donHangs, setDonhang] = useState([]);
   const [nguoiDungMap, setNguoiDungMap] = useState({});
-   const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filteredDonhangs, setFilteredDonhangs] = useState([]);
@@ -34,7 +34,6 @@ export default function DonHang() {
     setFilteredDonhangs(filtered);
     setCurrentPage(1);
   };
-
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -141,12 +140,8 @@ export default function DonHang() {
         const data = await response.json();
         setDonhang(data.donHangs);
 
-        
-        const idNguoiDungList = [
-          ...new Set(data.donHangs.map((dh) => dh.id_nguoi_dung)),
-        ];
+        const idNguoiDungList = [...new Set(data.donHangs.map((dh) => dh.id_nguoi_dung))];
 
-       
         const nguoiDungData = await Promise.all(
           idNguoiDungList.map(async (id) => {
             const res = await fetch(`http://localhost:5000/users/${id}`);
@@ -278,11 +273,7 @@ export default function DonHang() {
               <div className={styles.tableControls}>
                 <label htmlFor="entries" style={{ fontWeight: "bold" }}>
                   Hiện&nbsp;
-                  <select
-                    id="entries"
-                    value={itemsPerPage}
-                    onChange={handleItemsPerPageChange}
-                  >
+                  <select id="entries" value={itemsPerPage} onChange={handleItemsPerPageChange}>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
@@ -293,11 +284,13 @@ export default function DonHang() {
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
                     Tìm kiếm:
                   </label>
-                  <input type="text"
-                  id="search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={handleSearch} />
+                  <input
+                    type="text"
+                    id="search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleSearch}
+                  />
                 </div>
               </div>
               <table id="productTable" className={styles.productTable}>
@@ -306,30 +299,14 @@ export default function DonHang() {
                     <th style={{ width: "3%" }}>
                       <input type="checkbox" id="selectAll" />
                     </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      ID đơn hàng
-                    </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>
-                      Địa chỉ
-                    </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>
-                      Tên khách hàng
-                    </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Số điện thoại
-                    </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Ghi chú
-                    </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Ngày mua
-                    </th>
-                    <th style={{ width: "11%", textAlign: "center" }}>
-                      Tổng tiền
-                    </th>
-                    <th style={{ width: "17%", textAlign: "center" }}>
-                      Tình trạng
-                    </th>
+                    <th style={{ width: "15%", textAlign: "center" }}>ID đơn hàng</th>
+                    <th style={{ width: "12%", textAlign: "center" }}>Địa chỉ</th>
+                    <th style={{ width: "12%", textAlign: "center" }}>Tên khách hàng</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Số điện thoại</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Ghi chú</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Ngày mua</th>
+                    <th style={{ width: "11%", textAlign: "center" }}>Tổng tiền</th>
+                    <th style={{ width: "17%", textAlign: "center" }}>Tình trạng</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -342,14 +319,8 @@ export default function DonHang() {
                       <td>
                         <p className={styles.mota}>{item.dia_chi}</p>
                       </td>
-                      <td>
-                        {nguoiDungMap[item.id_nguoi_dung]?.ho_ten ||
-                          "Đang tải..."}
-                      </td>
-                      <td>
-                        {nguoiDungMap[item.id_nguoi_dung]?.dien_thoai ||
-                          "Đang tải..."}
-                      </td>
+                      <td>{nguoiDungMap[item.id_nguoi_dung]?.ho_ten || "Đang tải..."}</td>
+                      <td>{nguoiDungMap[item.id_nguoi_dung]?.dien_thoai || "Đang tải..."}</td>
                       <td>{item.ghi_chu}</td>
                       <td>{item.thoi_gian_tao}</td>
                       <td>{item.tong_tien.toLocaleString("vi-VN")}₫</td>
@@ -423,6 +394,9 @@ export default function DonHang() {
                   <button
                     className={`${styles.paginationButton} ${styles.active}`}
                   >
+                    Lùi
+                  </button>
+                  <button className={`${styles.paginationButton}  ${styles.active}`}>
                     {currentPage} / {totalPages}
                   </button>
                   
