@@ -128,15 +128,15 @@
 .orderShow ul {
   list-style-type: none;
 
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* display: grid;
+  grid-template-columns: repeat(3, 1fr); */
 
   padding: 0;
 }
 
 .orderShow li {
   background-color: #fff;
-  width: 300px;
+
   margin: 10px 5px;
   padding: 15px;
   border: 1px solid #e0e0e0;
@@ -187,7 +187,7 @@
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
   outline: none;
 }
-.btnps button{
+.btnps button {
   width: 100%;
   background-color: #4caf50;
   color: #ffffff;
@@ -205,4 +205,20 @@
 .btnps button:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
+}
+
+.orderTable {
+  width: 850px;
+  height: auto;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+.orderTable th,
+.orderTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+.orderTable th {
+  background-color: #f2f2f2;
 }
