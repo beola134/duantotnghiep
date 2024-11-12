@@ -233,8 +233,5 @@
   cursor: pointer;
 }
 
-.paginationButton.active {
-  background-color: #002f6c;
-  color: white;
-}
+
 

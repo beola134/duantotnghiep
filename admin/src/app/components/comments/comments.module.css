@@ -210,8 +210,3 @@
   padding: 5px 10px;
   cursor: pointer;
 }
-
-.paginationButton.active {
-  background-color: #002f6c;
-  color: white;
-}

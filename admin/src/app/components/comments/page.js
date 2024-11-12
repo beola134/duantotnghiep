@@ -6,13 +6,14 @@ export default function CommentsPage() {
   const [comments, setComments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // gọi tất cả các bình luận từ API
 
+  // gọi tất cả các bình luận từ API
   const fetchComments = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/comment/showAll?page=${currentPage}`);
+      const response = await fetch(`http://localhost:5000/comment/showAll?page=${currentPage}&ten_dang_nhap=${search}`);
       const data = await response.json();
       setComments(data.comments);
       setTotalPages(data.totalPages);
@@ -24,12 +25,16 @@ export default function CommentsPage() {
   };
   useEffect(() => {
     fetchComments();
-  }, [currentPage]);
+  }, [currentPage, search]);
 
   // chức năng chuyển trang
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    fetchComments();
+  };
+  // hàm xử lí thay đổi bình luận
+  const handSearchChange = (e) => {
+    setSearch(e.target.value);
+    setCurrentPage(1);
   };
   return (
     <div className={styles.SidebarContainer}>
@@ -84,7 +89,7 @@ export default function CommentsPage() {
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
                     Tìm kiếm:
                   </label>
-                  <input type="text" id="search" />
+                  <input type="text" id="search" value={search} onChange={handSearchChange} />
                 </div>
               </div>
               <table id="productTable" className={styles.productTable}>
@@ -93,18 +98,18 @@ export default function CommentsPage() {
                     <th style={{ width: "3%" }}>
                       <input type="checkbox" id="selectAll" />
                     </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>Id bình luận</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Id bình luận</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Id sản phẩm</th>
+                    <th style={{ width: "8%", textAlign: "center" }}>Họ và tên </th>
                     <th style={{ width: "12%", textAlign: "center" }}>Nội dung</th>
                     <th style={{ width: "5%", textAlign: "center" }}>Sao</th>
                     <th style={{ width: "10%", textAlign: "center" }}>Ngày bình luận</th>
-                    <th style={{ width: "10%", textAlign: "center" }}>Id người dùng </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>Id sản phẩm</th>
                     <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
                   </tr>
                 </thead>
                 <tbody>
                   {comments.map((comment) => {
-                    const { _id, noi_dung, sao, ngay_binh_luan, id_nguoi_dung, id_san_pham } = comment;
+                    const { _id, noi_dung, sao, ngay_binh_luan, ten_dang_nhap, id_san_pham } = comment;
 
                     return (
                       <tr key={_id}>
@@ -112,6 +117,11 @@ export default function CommentsPage() {
                           <input type="checkbox" className={styles.rowCheckbox} />
                         </td>
                         <td>{_id}</td>
+                        <td>{id_san_pham}</td>
+                        <td style={{ textAlign: "center" }}>
+                          <span className={`${styles.status} ${styles.inStock} `}>{comment.user?.ten_dang_nhap}</span>
+                        </td>
+
                         <td style={{ textAlign: "center" }}>{noi_dung}</td>
                         <td style={{ textAlign: "center" }}>{sao}</td>
                         <td style={{ textAlign: "center" }}>
@@ -119,10 +129,7 @@ export default function CommentsPage() {
                             timeZone: "Asia/Ho_Chi_Minh",
                           })}
                         </td>
-                        <td>
-                          <span className={`${styles.status} ${styles.inStock}`}>{id_nguoi_dung}</span>
-                        </td>
-                        <td>{id_san_pham}</td>
+
                         <td style={{ textAlign: "center" }}>
                           <Link href={`/components/suasanpham/${_id}`} className={`${styles.btn} ${styles.edit}`}>
                             ✏️
@@ -152,7 +159,7 @@ export default function CommentsPage() {
                     onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
-                    Lùi
+                    ‹
                   </button>
 
                   <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPages || 1}`}</button>
@@ -163,7 +170,7 @@ export default function CommentsPage() {
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                   >
-                    Tiếp
+                    ›
                   </button>
                 </div>
               </div>
