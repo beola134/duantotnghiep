@@ -455,6 +455,49 @@ exports.filtersanphamdongho = async (req, res) => {
   }
 };
 
+// API lấy danh sách sản phẩm với phân trang, lọc, tìm kiếm và tình trạng hàng hóa
+exports.getProducts = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, search = "" } = req.query;
+    const offset = (page - 1) * limit;
+
+    const searchCondition = search
+      ? { ten_san_pham: { [Op.like]: `%${search}%` } }
+      : {};
+    
+    const { rows: products, count: totalProducts } =
+      await Product.findAndCountAll({
+        where: searchCondition,
+        offset,
+        limit: parseInt(limit),
+        attributes: [
+          "_id",
+          "ten_san_pham",
+          "ma_san_pham",
+          "so_luong",
+          "gia_san_pham",
+        ],
+      });
+
+    const productsWithStatus = products.map((product) => ({
+      ...product.dataValues,
+      status: product.so_luong > 0 ? "Còn hàng" : "Hết hàng",
+    }));
+
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    res.json({
+      currentPage: parseInt(page),
+      totalPages,
+      totalProducts,
+      products: productsWithStatus,
+    });
+  } catch (error) {
+    console.log("Error:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // xử lí lọc them dây đồng hồ
 exports.filterDayDongHo = async (req, res) => {
   try {
