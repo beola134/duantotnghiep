@@ -68,17 +68,6 @@ exports.getTotalDonHang = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-// Tính tổng số bình luận dành cho admin
-exports.getTotalComments = async (req, res) => {
-  try {
-    const totalComments = await CMT.count();
-
-    res.json({ totalComments });
-  } catch (error) {
-    console.log("Error: ", error);
-    res.status(500).json({ error: error.message });
-  }
-};
 
 // thống kê doanh thu
 exports.getDoanhThu = async (req, res) => {
