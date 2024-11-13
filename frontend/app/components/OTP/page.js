@@ -64,6 +64,12 @@ function OtpModal({ isOpen, onRequestClose }) {
   };
 
   useEffect(() => {
+    if (isOpen) {
+      setTimeLeft(180); // Đặt lại thời gian 3 phút mỗi khi mở modal
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
     if (timeLeft > 0) {
       const timer = setInterval(() => {
         setTimeLeft((prev) => prev - 1);
@@ -76,7 +82,7 @@ function OtpModal({ isOpen, onRequestClose }) {
 
   return (
     <div className={styles.overlay}>
-      <div className={styles.modal}>
+      <div className={styles.modal} onKeyDown={(e) => e.key === "Enter" && handleSubmit()}>
         <h3 className={styles.title}>Xác thực OTP</h3>
         <p className={styles.description}>Vui lòng nhập mã OTP vừa gửi tới gmail</p>
         <div className={styles.otpContainer}>
