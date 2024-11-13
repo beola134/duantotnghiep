@@ -2,6 +2,11 @@ const express = require("express");
 const router = express.Router();
 const productController = require("../controllers/productController");
 
+//show trạng thái cảu sản phẩm
+//http://localhost:5000/product/getProducts
+router.get("/getProducts", productController.getProducts);
+
+
 //show sản phẩm mới nhất theo gioi_tinh nam
 //http://localhost:5000/product/filtersanphamdongho
 router.get("/filtersanphamdongho", productController.filtersanphamdongho);
