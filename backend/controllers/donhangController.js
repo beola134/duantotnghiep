@@ -12,7 +12,7 @@ const addDonHang = async (req, res) => {
     dia_chi,
     tong_tien,
     trang_thai,
-    da_thanh_toan,
+    thanh_toan,
     phi_ship,
     thoi_gian_tao,
     id_nguoi_dung,
@@ -75,13 +75,13 @@ const addDonHang = async (req, res) => {
     }
     
     totalAmount = Math.max(totalAmount, 0);
-    da_thanh_toan = totalAmount === 0;
+    thanh_toan = totalAmount === 0;
     const donHang = await DonHang.create({
       _id: uuidv4(),
       dia_chi,
       tong_tien: totalAmount,
       trang_thai: "Chờ xác nhận",
-      da_thanh_toan: totalAmount,
+      thanh_toan: totalAmount,
       phi_ship: 30000,
       thoi_gian_tao,
       id_nguoi_dung,
@@ -155,9 +155,9 @@ const addDonHang = async (req, res) => {
 const getAllDonHang = async (req, res) => {
   try {
     const donHangs = await DonHang.findAll();
-    if (donHangs.length === 0) {
-      return res.status(404).json({ message: "Không tìm thấy đơn hàng." });
-    } 
+    // if (donHangs.length === 0) {
+    //   return res.status(404).json({ message: "Không tìm thấy đơn hàng." });
+    // } 
     return res.status(200).json({donHangs});
   } catch (error) {
     console.error("Lỗi khi lấy đơn hàng:", error);

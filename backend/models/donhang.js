@@ -21,7 +21,7 @@ const DonHang = sequelize.define('DonHang', {
         type: DataTypes.STRING(255),
         allowNull: true
     },
-    da_thanh_toan: {
+    thanh_toan: {
         type: DataTypes.BOOLEAN,
         allowNull: true
     },

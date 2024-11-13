@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import styles from "./comments.module.css";
 import { useState, useEffect } from "react";
 export default function CommentsPage() {
@@ -36,6 +35,29 @@ export default function CommentsPage() {
     setSearch(e.target.value);
     setCurrentPage(1);
   };
+  const handleToggleComment = async (id, trang_thai) => {
+    try {
+      const response = await fetch(`http://localhost:5000/comment/changeStatus/${id}`, {
+        method: "PUT",
+      });
+      const data = await response.json();
+
+      if (data.message) {
+        setComments((prevComments) =>
+          prevComments.map((comment) => (comment._id === id ? { ...comment, trang_thai: !trang_thai } : comment))
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
   return (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>

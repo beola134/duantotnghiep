@@ -7,6 +7,33 @@ const crypto = require("crypto");
 const { Op } = require("sequelize"); // Import Op từ Sequelize
 require("dotenv").config();
 
+// Get newest users created today
+exports.getNewUsersToday = async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Start of day
+
+    const usersToday = await Users.findAll({
+      where: {
+        createdAt: {
+          [Op.gte]: today,
+        },
+      },
+      order: [["createdAt", "DESC"]],
+    });
+
+    if (usersToday.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Không có người dùng mới hôm nay" });
+    }
+
+    res.status(200).json({ usersToday });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // API lấy thông tin người dùng theo id
 exports.getUserById = async (req, res) => {
   try {
@@ -28,33 +55,12 @@ exports.getUserById = async (req, res) => {
 // API lấy thông tin tất cả người dùng
 exports.getAllUsers = async (req, res) => {
   try {
-    const { ten_dang_nhap, limit = 5, page = 1 } = req.query;
-    let filter = {
-      [Op.and]: [],
-    };
-    if (ten_dang_nhap) {
-      filter[Op.and].push({ ten_dang_nhap: { [Op.substring]: ten_dang_nhap } });
-    }
-    const offset = (page - 1) * limit;
-    const userCount = await Users.count({ where: filter });
-    if (userCount <= 5) {
-      const users = await Users.findAll({ where: filter });
-      return res.json({ users, totalUsers: userCount });
-    }
-    const { rows: users, count: totalUsers } = await Users.findAndCountAll({
-      where: filter,
-      limit: parseInt(limit),
-      offset: parseInt(offset),
-    });
-    const totalPage = Math.ceil(totalUsers / limit);
-    res.json({
-      users,
-      currentPage: parseInt(page),
-      totalPage,
-      totalUsers,
-    });
+    const users = await Users.findAll();
+    res.status(200).json({ users });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      message: error.message,
+    });
   }
 }
 

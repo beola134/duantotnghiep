@@ -372,20 +372,85 @@ const User = ({ params }) => {
               <ul>
                 {orderShow.map((order) => (
                   <li key={order.id}>
-                    <p>Mã Đơn Hàng: {order._id}</p>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}>
+                      <p>Mã Đơn Hàng: {order._id}</p>
+                      <span className={styles.trh}>{order.trang_thai}</span>
+                    </div>
+
                     <p>
-                      Ngày Đặt:{" "}
+                      Thời gian đặt hàng:{" "}
                       {new Date(order.thoi_gian_tao).toLocaleString("vi-VN", {
                         timeZone: "Asia/Ho_Chi_Minh",
                       })}
                     </p>
+                    <p>Địa chỉ: {order.dia_chi}</p>
+
+                    {/*<div>
+                      <img
+                        src={`http://localhost:5000/images/${detail.product.hinh_anh}`}
+                        alt={detail.gia_giam}
+                        style={{ width: "50px", height: "auto" }}
+                      />
+                      <div>
+                        <p>{detail.product.ten}</p>
+                      </div>
+                    </div>*/}
+
+                    <table className={styles.orderTable}>
+                      <thead>
+                        <tr>
+                          <th>Tên Sản Phẩm</th>
+                          <th> Hình Ảnh</th>
+                          <th>Số Lượng</th>
+                          <th>Giá</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {order.chiTietDonHangs.map((detail) => (
+                          <tr key={detail._id}>
+                            <td>{detail.product.ten}</td>
+                            <td>
+                              <img
+                                src={`http://localhost:5000/images/${detail.product.hinh_anh}`}
+                                alt={detail.gia_giam}
+                                style={{ width: "50px", height: "auto" }}
+                              />
+                            </td>
+                            <td>{detail.so_luong}</td>
+                            <td>
+                              {detail.product.gia_giam.toLocaleString("vi-VN")}₫
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
 
                     <p>
-                      Tổng Giá Trị: {order.tong_tien.toLocaleString("vi-VN")}₫
+                      Phí Ship:
+                      <span
+                        style={{
+                          margin: "0px 5px",
+                          color: "black",
+                        }}>
+                        <strong>{order.phi_ship}₫</strong>
+                      </span>{" "}
                     </p>
                     <p>
-                      Trạng thái đơn hàng:
-                      <span className={styles.trh}>{order.trang_thai}</span>
+                      Tổng Giá Trị:
+                      <span
+                        style={{
+                          fontSize: "20px",
+                          margin: "0px 5px",
+                          color: "black",
+                        }}>
+                        <strong>
+                          {order.tong_tien.toLocaleString("vi-VN")}₫
+                        </strong>
+                      </span>
                     </p>
                   </li>
                 ))}
