@@ -80,17 +80,21 @@ exports.getTotalComments = async (req, res) => {
   }
 };
 
-// Tính tổng số voucher dành cho admin
-exports.getTotalVouchersCount = async (req, res) => {
+// thống kê doanh thu
+exports.getDoanhThu = async (req, res) => {
   try {
-    const totalVouchers = await Voucher.count();
-
-    res.json({ totalVouchers });
+    const doanhThu = await DonHang.sum("tong_tien", {
+      where: {
+        trang_thai: "Giao hàng thành công",
+      },
+    });
+    res.json({ doanhThu });
   } catch (error) {
     console.log("Error: ", error);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 
 
