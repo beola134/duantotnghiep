@@ -235,7 +235,7 @@ export default function SanPham() {
                 &nbsp;
                 
               </div>
-            </div>
+            
                
               </div>
               <div className={styles.tableControls}>
@@ -374,8 +374,7 @@ export default function SanPham() {
                   </span>
                 </div>
               </div>
-            </div>
-        </div>
+              </div>
       </section>
     </div>
   );

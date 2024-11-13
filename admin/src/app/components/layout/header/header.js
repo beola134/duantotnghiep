@@ -119,7 +119,7 @@ export default function Menu() {
             <i className={`bx bxs-bell ${styles.icon}`}></i>
             <span className={styles.badge}>5</span>
           </a>
-          <a href="#" className={styles.navLink}>
+          <a href="/components/comments" className={styles.navLink}>
             <i className={`bx bxs-message-square-dots ${styles.icon}`}></i>
             <span className={styles.badge}>8</span>
           </a>
