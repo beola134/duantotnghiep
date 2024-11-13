@@ -84,6 +84,47 @@ exports.getDoanhThu = async (req, res) => {
   }
 };
 
+//thông kê dooanh thu donhang theo tháng bằng sơ đồ cột theo 12 tháng
+exports.getDoanhThuDonHangTheoThang = async (req, res) => {
+  try {
+    // Lấy doanh thu theo tháng từ database
+    const doanhThuDonHangTheo = await DonHang.findAll({
+      attributes: [
+        // Lấy tháng từ thời gian tạo đơn hàng
+        [sequelize.fn("month", sequelize.col("thoi_gian_tao")), "month"], 
+        // Tính tổng doanh thu của các đơn hàng
+        [sequelize.fn("sum", sequelize.col("tong_tien")), "total"],
+      ],
+      where: {
+        trang_thai: "Giao hàng thành công", 
+      },
+      group: [sequelize.fn("month", sequelize.col("thoi_gian_tao"))],
+    });
+
+    // Tạo mảng tháng từ 1 đến 12, với doanh thu mặc định là 0
+    const doanhThuThang = new Array(12).fill(0);
+
+    // Cập nhật doanh thu cho các tháng có dữ liệu từ kết quả trả về
+    doanhThuDonHangTheo.forEach(item => {
+      const month = item.get("month") - 1
+      const totalRevenue = item.get("total") || 0;
+      doanhThuThang[month] = totalRevenue;
+    });
+
+    // Trả về kết quả với doanh thu cho tất cả 12 tháng
+    const result = doanhThuThang.map((totalRevenue, index) => ({
+      month: index + 1,
+      totalRevenue,
+    }));
+
+    res.json({ doanhThuDonHangTheo: result });
+  } catch (error) {
+    console.log("Error: ", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 
 
 
