@@ -258,7 +258,7 @@ exports.register = async (req, res) => {
     // Tạo mã OTP ngẫu nhiên
     const otp = crypto.randomInt(100000, 999999);
     // Tạo thời gian hết hạn cho mã OTP 10 phút
-    const otpExpires = Date.now() + 1* 60 * 1000; // 
+    const otpExpires = Date.now() + 3 * 60 * 1000; // 
     const user = await Users.create({
       ten_dang_nhap,
       mat_khau: hashPassword,
