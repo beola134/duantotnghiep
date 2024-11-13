@@ -3,6 +3,7 @@ const upload = require("../config/update");
 const Cate = require("../models/cate");
 const Category = require("../models/cate");
 const { Sequelize, Op } = require("sequelize");
+const { ChiTietDonHang, DonHang } = require("../models");
 
 // xử lí phần trăm giá giảm
 exports.filtersanphamdongho = async (req, res) => {
@@ -451,6 +452,64 @@ exports.filtersanphamdongho = async (req, res) => {
     });
   } catch (error) {
     console.log("Error: ", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// API lấy danh sách sản phẩm với phân trang, lọc, tìm kiếm và tình trạng hàng hóa
+exports.getProducts = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, search = "" } = req.query;
+    const offset = (page - 1) * limit;
+
+    const searchCondition = search
+      ? { ten_san_pham: { [Op.like]: `%${search}%` } }
+      : {};
+
+    const { rows: products, count: totalProducts } =
+      await Product.findAndCountAll({
+        where: searchCondition,
+        offset,
+        limit: parseInt(limit),
+        attributes: [
+          "_id",
+          "ten_san_pham",
+          "ma_san_pham",
+          "so_luong",
+          "gia_san_pham",
+        ],
+      });
+
+    const productsWithSales = await Promise.all(
+      products.map(async (product) => {
+        const soldQuantity = await ChiTietDonHang.sum("so_luong", {
+          where: {
+            id_san_pham: product._id,
+          },
+          include: {
+            model: DonHang,
+            where: { trang_thai: "Giao hàng thành công" },
+          },
+        });
+
+        return {
+          ...product.dataValues,
+          da_ban: soldQuantity || 0, 
+          trang_thai: product.so_luong > 0 ? "Còn hàng" : "Hết hàng",
+        };
+      })
+    );
+
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    res.json({
+      currentPage: parseInt(page),
+      totalPages,
+      totalProducts,
+      products: productsWithSales, 
+    });
+  } catch (error) {
+    console.log("Error:", error);
     res.status(500).json({ error: error.message });
   }
 };

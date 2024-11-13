@@ -6,6 +6,10 @@ const ThongkeController = require("../controllers/thongkeController");
 //http://localhost:5000/thongke/getTotalProducts
 router.get("/getTotalProducts", ThongkeController.getTotalProducts);
 
+//tổng số lượng sản phẩm
+//http://localhost:5000/thongke/getTotalProductsCount
+router.get("/getTotalProductsCount", ThongkeController.getTotalProductsCount)
+
 //tổng danh mục
 //http://localhost:5000/thongke/getTotalCategories
 router.get("/getTotalCategories", ThongkeController.getTotalCategories);

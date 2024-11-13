@@ -298,11 +298,17 @@ const getDonHangByUserId = async (req, res) => {
 
  const getAllOrderDetails = async (req, res) => {
    try {
-     const { limit = 5, page = 1 } = req.query;
+     const { limit = 5, page = 1, ten_san_pham = "" } = req.query;
 
      const offset = (page - 1) * limit;
+
+     const searchCondition = ten_san_pham
+       ? { ten_san_pham: { [Op.like]: `%${ten_san_pham}%` } }
+       : {};
+
      const { rows: ordersDetail, count: totalOrders } =
        await ChiTietDonHang.findAndCountAll({
+         where: searchCondition,
          limit: parseInt(limit),
          offset: parseInt(offset),
        });

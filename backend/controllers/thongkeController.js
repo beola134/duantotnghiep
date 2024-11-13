@@ -23,6 +23,17 @@ exports.getTotalProducts = async (req, res) => {
     }
 };
 
+//thống kê số lượng sản phẩm
+exports.getTotalProductsCount = async (req, res) => {
+  try {
+    const totalProductsCount = await Product.sum("so_luong");
+    res.json({ totalProductsCount });
+  } catch (error) {
+    console.log("Error: ", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Thống kê tổng danh mục sản phẩm
 exports.getTotalCategories = async (req, res) => {
   try {
