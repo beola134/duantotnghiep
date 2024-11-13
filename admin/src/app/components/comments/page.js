@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import styles from "./comments.module.css";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -51,7 +50,7 @@ export default function CommentsPage() {
         );
       }
     } catch (error) {
-      console.error(error);
+      setError(error);
     }
   };
 
