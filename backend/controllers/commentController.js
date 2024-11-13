@@ -19,7 +19,12 @@ exports.showAllComment = async (req, res) => {
       });
 
       if (users.length === 0) {
-        return res.status(404).json({ message: "Không tìm thấy người dùng" });
+        return res.status(200).json({
+          comments: [],
+          totalComments: 0,
+          totalPages: 0,
+          currentPage: page,
+        });
       }
       const userIds = users.map((user) => user._id);
       filter = { id_nguoi_dung: { [Op.in]: userIds } };
@@ -84,7 +89,17 @@ exports.addComment = async (req, res) => {
     // Kiểm tra xem người dùng đã mua sản phẩm chưa
     const orderDetail = await ChiTietDonHang.findOne({
       where: { id_san_pham },
+      include: [
+        {
+          model: DonHang,
+          as: "DonHang",
+          where: {
+            id_nguoi_dung,         
+           },
+        },
+      ],
     });
+
     if (!orderDetail) {
       return res.status(400).json({ message: "Người dùng chưa mua sản phẩm" });
     }
@@ -109,6 +124,9 @@ exports.addComment = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Lỗi server", error: error.message });
+
+    
+    
   }
 };
 

@@ -420,7 +420,7 @@ const User = ({ params }) => {
                                 style={{ width: "50px", height: "auto" }}
                               />
                             </td>
-                            <td>{detail.product.so_luong2}</td>
+                            <td>{detail.so_luong}</td>
                             <td>
                               {detail.product.gia_giam.toLocaleString("vi-VN")}₫
                             </td>
