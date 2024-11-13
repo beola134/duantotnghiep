@@ -391,11 +391,7 @@ export default function DonHang() {
                   >
                    ‹
                   </button>
-                  <button
-                    className={`${styles.paginationButton} ${styles.active}`}
-                  >
-                    Lùi
-                  </button>
+                
                   <button className={`${styles.paginationButton}  ${styles.active}`}>
                     {currentPage} / {totalPages}
                   </button>
