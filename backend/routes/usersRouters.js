@@ -7,7 +7,7 @@ const googleLogin = require("../controllers/logingoogleController");
 
 // thêm người dùng
 //http://localhost:5000/users/getNewUsersToday
-router.post("/getNewUsersToday", usersController.getNewUsersToday);
+router.get("/getNewUsersToday", usersController.getNewUsersToday);
 
 // thêm người dùng
 //http://localhost:5000/users/addUser

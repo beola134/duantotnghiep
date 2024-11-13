@@ -69,14 +69,14 @@ const getVoucherById = async (req, res) => {
 // show all vouchers
 const getAllVouchers = async (req, res) => {
   try {
-    const { ten_voucher, limit = 5, page = 1 } = req.query;
+    const { ma_voucher, limit = 5, page = 1 } = req.query;
 
     let filter = {
       [Op.and]: [],
     };
 
-    if (ten_voucher) {
-      filter[Op.and].push({ ten_voucher: { [Op.like]: `%${ten_voucher}%` } });
+    if (ma_voucher) {
+      filter[Op.and].push({ ma_voucher: { [Op.like]: `%${ma_voucher}%` } });
     }
 
     const offset = (page - 1) * limit;

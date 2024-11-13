@@ -3,6 +3,7 @@ const upload = require("../config/update");
 const Cate = require("../models/cate");
 const Category = require("../models/cate");
 const { Sequelize, Op } = require("sequelize");
+const { ChiTietDonHang, DonHang } = require("../models");
 
 // xử lí phần trăm giá giảm
 exports.filtersanphamdongho = async (req, res) => {
@@ -464,7 +465,7 @@ exports.getProducts = async (req, res) => {
     const searchCondition = search
       ? { ten_san_pham: { [Op.like]: `%${search}%` } }
       : {};
-    
+
     const { rows: products, count: totalProducts } =
       await Product.findAndCountAll({
         where: searchCondition,
@@ -479,10 +480,25 @@ exports.getProducts = async (req, res) => {
         ],
       });
 
-    const productsWithStatus = products.map((product) => ({
-      ...product.dataValues,
-      status: product.so_luong > 0 ? "Còn hàng" : "Hết hàng",
-    }));
+    const productsWithSales = await Promise.all(
+      products.map(async (product) => {
+        const soldQuantity = await ChiTietDonHang.sum("so_luong", {
+          where: {
+            id_san_pham: product._id,
+          },
+          include: {
+            model: DonHang,
+            where: { trang_thai: "Giao hàng thành công" },
+          },
+        });
+
+        return {
+          ...product.dataValues,
+          da_ban: soldQuantity || 0, 
+          trang_thai: product.so_luong > 0 ? "Còn hàng" : "Hết hàng",
+        };
+      })
+    );
 
     const totalPages = Math.ceil(totalProducts / limit);
 
@@ -490,7 +506,7 @@ exports.getProducts = async (req, res) => {
       currentPage: parseInt(page),
       totalPages,
       totalProducts,
-      products: productsWithStatus,
+      products: productsWithSales, 
     });
   } catch (error) {
     console.log("Error:", error);
