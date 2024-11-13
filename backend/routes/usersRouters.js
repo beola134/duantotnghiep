@@ -5,7 +5,7 @@ const upload = require("../config/update");
 const crypto = require("crypto");
 const googleLogin = require("../controllers/logingoogleController");
 
-// thêm người dùng
+// người dùng mới
 //http://localhost:5000/users/getNewUsersToday
 router.post("/getNewUsersToday", usersController.getNewUsersToday);
 
