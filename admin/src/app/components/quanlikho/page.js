@@ -1,6 +1,6 @@
 "use client";
 import "bootstrap/dist/css/bootstrap.min.css";
-import styles from "./sanpham.module.css";
+import styles from "./quanlikho.module.css";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -116,51 +116,7 @@ export default function SanPham() {
     return () => clearTimeout(delayDebounce);
   }, [searchQuery]);
 
-  // Hàm xóa sản phẩm
-  const deleteProduct = async (id) => {
-    const result = await Swal.fire({
-      title: "Xác nhận",
-      text: "Bạn có chắc chắn muốn xóa sản phẩm này không?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
-    });
-
-    if (result.isConfirmed) {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/product/xoasp/${id}`,
-          {
-            method: "DELETE",
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Lỗi khi xóa sản phẩm");
-        }
-        setProducts((prevProducts) =>
-          prevProducts.filter((product) => product._id !== id)
-        );
-
-        Swal.fire({
-          title: "Thành công",
-          text: "Sản phẩm đã được xóa thành công!",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-      } catch (error) {
-        Swal.fire({
-          title: "Lỗi",
-          text: error.message,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-      }
-    }
-  };
-
+  
   // Hàm tải toàn bộ sản phẩm ban đầu
   const fetchProducts = async () => {
     try {
@@ -196,7 +152,7 @@ export default function SanPham() {
       <section id={styles.content}>
         <div className={styles.header1}>
           <div className={styles.title} style={{ fontWeight: "bold" }}>
-            Danh Sách Sản Phẩm
+            Kho
           </div>
           
 
@@ -204,12 +160,6 @@ export default function SanPham() {
         </div>
         <div className={styles.bg}>
           <div className={styles.container}>
-            
-            <div className={styles.actions}>
-              <Link href="/components/themsanpham" className={styles.sp}>
-                <i className="fas fa-plus"></i> Tạo mới sản phẩm
-              </Link>
-            </div>
             <div className={styles.buttonGroup}>
                 <button className={styles.sp2} onClick={uploadFile}>
                   &nbsp;
@@ -232,10 +182,6 @@ export default function SanPham() {
                 <button className={styles.sp6} onClick={exportToPDF}>
                   <i className="fas fa-file-pdf"></i> Xuất PDF
                 </button>
-                &nbsp;
-                
-              </div>
-            
                
               </div>
               <div className={styles.tableControls}>
@@ -278,7 +224,7 @@ export default function SanPham() {
                       Mã sản phẩm
                     </th>
                     <th style={{ width: "15%", textAlign: "center" }}>
-                      Chức năng
+                      Trạng thái
                     </th>
                   </tr>
                 </thead>
@@ -320,22 +266,7 @@ export default function SanPham() {
                         </td>
                         <td>{gia_giam.toLocaleString("vi-VN")}₫</td>
                         <td>{ma_san_pham}</td>
-                        <td>
-                          <Link
-                            href={`/components/suasanpham/${_id}`}
-                            className={`${styles.btn} ${styles.edit}`}
-                          >
-                            ✏️
-                          </Link>{" "}
-                          &nbsp;
-                          <button
-                            className={`${styles.btn} ${styles.delete}`}
-                            id="deleteButton"
-                            onClick={() => deleteProduct(_id)}
-                          >
-                            🗑️
-                          </button>
-                          &nbsp;
+                        <td style={{ textAlign: "center" }}>Còn hàng 
                         </td>
                       </tr>
                     );
@@ -374,7 +305,8 @@ export default function SanPham() {
                   </span>
                 </div>
               </div>
-              </div>
+            </div>
+        </div>
       </section>
     </div>
   );
