@@ -64,4 +64,11 @@ router.post("/auth/google", googleLogin.googleLogin);
 //xóa người dùng
 //http://localhost:5000/users/delete/:id
 router.delete("/delete/:id", usersController.deleteUser);
+
+//api quên mật khẩu gửi mã otp
+//http://localhost:5000/users/sendOTPquenmk
+router.post("/sendOTPquenmk", usersController.sendOTPquenmk);
+//api đổi mật khẩu quên mật khẩu resetPasswordByOTP
+//http://localhost:5000/users/resetPasswordByOTP
+router.post("/resetPasswordByOTP", usersController.resetPasswordByOTP);
 module.exports = router;
