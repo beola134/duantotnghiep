@@ -474,6 +474,7 @@ exports.getProducts = async (req, res) => {
         attributes: [
           "_id",
           "ten_san_pham",
+          "hinh_anh",
           "ma_san_pham",
           "so_luong",
           "gia_san_pham",
