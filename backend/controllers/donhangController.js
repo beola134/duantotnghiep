@@ -324,7 +324,7 @@ const getDonHangByUserId = async (req, res) => {
 
  const getAllOrderDetails = async (req, res) => {
    try {
-     const { limit = 5, page = 1, ten_san_pham = "" } = req.query;
+     const { limit = 2, page = 1, ten_san_pham = "" } = req.query;
 
      const offset = (page - 1) * limit;
 
