@@ -95,7 +95,6 @@
 
 .selected {
   border: 2px solid black;
-  
 }
 
 .paymentOption img {
@@ -265,4 +264,15 @@
   border: none;
   border-radius: 10px;
   cursor: pointer;
+}
+/* Thông báo lỗi */
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-left: 10px;
+}
+/* Hiển thị lỗi cho input */
+.form .inputError {
+  border-inline: 2px solid red;
 }
