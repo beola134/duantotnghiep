@@ -215,7 +215,7 @@ export default function ThanhToan() {
               <p className={styles.productTitle}>Thông tin khách hàng</p>
               <div className={styles.inputGroup}>
                 <input type="email" placeholder="Email" value={user ? user.email : ""} readOnly />
-                <input type="text" placeholder="Điện thoại" value={user ? user.dien_thoai : ""}  />
+                <input type="text" placeholder="Điện thoại" value={user ? user.dien_thoai : ""} readOnly />
               </div>
             </div>
 
@@ -350,7 +350,9 @@ export default function ThanhToan() {
 
               <p>
                 Phí vận chuyển:
-                <span className={styles.price}>{totalAmount > 500000 ? "Miễn phí" : "30.000₫"}</span>
+                <span className={styles.price}>
+                  {totalAmount > 1000000 ? "Miễn phí" : "30.000₫"}
+                </span>
               </p>
               <p className={styles.totalAmount}>
                 Tổng thanh toán:
