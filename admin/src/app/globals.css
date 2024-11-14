@@ -68,3 +68,7 @@ textarea {
   background-color: #fff;
   color: #333;
 }
+main {
+	width: 100%;
+	padding: 24px 20px 20px 20px;
+}
