@@ -45,7 +45,15 @@ const addDonHang = async (req, res) => {
       }
     }
 
-    // totalAmount += 30000;
+      // totalAmount += 30000;
+      //nếu totalAmount > 1.000.000 thì miễn phí ship và ngược lại thì phí ship = 30.000
+      if (totalAmount > 1000000) {
+        totalAmount = totalAmount;
+        phi_ship = "Miễn phí";
+      } else {
+        totalAmount += 30000;
+        phi_ship = 30000;
+      }
 
     let voucher = null;
     if (ma_voucher) {
@@ -68,10 +76,8 @@ const addDonHang = async (req, res) => {
       } else if (voucher.gia_tri) {
         totalAmount -= voucher.gia_tri;
       }
-      //giam so luong voucher
       voucher.so_luong -= 1;
       await voucher.save();
-
     }
     
     totalAmount = Math.max(totalAmount, 0);
@@ -82,7 +88,7 @@ const addDonHang = async (req, res) => {
       tong_tien: totalAmount,
       trang_thai: "Chờ xác nhận",
       thanh_toan: totalAmount,
-      phi_ship: 30000,
+      phi_ship,
       thoi_gian_tao,
       id_nguoi_dung,
       id_phuong_thuc_thanh_toan: id_phuong_thuc_thanh_toan || null,
@@ -107,6 +113,21 @@ const addDonHang = async (req, res) => {
     }
     const user = await Users.findByPk(id_nguoi_dung);
     if (!user) throw new Error("Người dùng không tồn tại");
+
+    const { email, dia_chi: user_dia_chi, dien_thoai, ho_ten } = req.body.user || {};
+    if (email && email !== user.email) {
+      user.email = email;
+    }
+    if (user_dia_chi && user_dia_chi !== user.dia_chi) {
+      user.dia_chi = user_dia_chi;
+    }
+    if (dien_thoai && dien_thoai !== user.dien_thoai) {
+      user.dien_thoai = dien_thoai;
+    }
+    if (ho_ten && ho_ten !== user.ho_ten) {
+      user.ho_ten = ho_ten;
+    }
+    await user.save();
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -154,7 +175,10 @@ const addDonHang = async (req, res) => {
 //show tất cả đơn hàng
 const getAllDonHang = async (req, res) => {
   try {
-    const donHangs = await DonHang.findAll();
+    const donHangs = await DonHang.findAll(
+      { order: [["thoi_gian_tao", "DESC"]] }
+      
+    );
     // if (donHangs.length === 0) {
     //   return res.status(404).json({ message: "Không tìm thấy đơn hàng." });
     // } 
@@ -218,10 +242,12 @@ const updateDonHang = async (req, res) => {
 const getAllDonHangByUserId = async (req, res) => {
   try {
     const { id_nguoi_dung } = req.params;
-
+    const statuses = ["Chờ xác nhận", "Đã xác nhận", "Đang giao hàng"];
     // Lấy tất cả đơn hàng theo id_nguoi_dung
     const orders = await DonHang.findAll({
-      where: { id_nguoi_dung },
+      where: { id_nguoi_dung,
+        trang_thai: statuses,
+       },
       include: [
         {
           model: ChiTietDonHang,

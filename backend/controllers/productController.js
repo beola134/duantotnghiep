@@ -473,6 +473,7 @@ exports.getProducts = async (req, res) => {
         limit: parseInt(limit),
         attributes: [
           "_id",
+          "hinh_anh",
           "ten_san_pham",
           "hinh_anh",
           "ma_san_pham",

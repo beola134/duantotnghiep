@@ -509,8 +509,8 @@ exports.sendOTPquenmk = async (req, res) => {
     }
     // Tạo mã OTP ngẫu nhiên
     const otp = crypto.randomInt(100000, 999999); // Tạo OTP 6 chữ số
-    // Tạo thời gian hết hạn cho mã OTP (2 phút)
-    const otpExpires = Date.now() + 2 * 60 * 1000;
+    // Tạo thời gian hết hạn cho mã OTP (5 phút)
+    const otpExpires = Date.now() + 5 * 60 * 1000;
     // Lưu mã OTP vào cơ sở dữ liệu
     user.otp = otp;
     user.otpExpires = otpExpires;
@@ -527,7 +527,7 @@ exports.sendOTPquenmk = async (req, res) => {
       from: 'nguyentantai612004@gmail.com', 
       to: email,
       subject: "Mã OTP xác thực tài khoản",
-      text: `Mã OTP của bạn là: ${otp}. Mã OTP sẽ hết hạn trong 2 phút.`,
+      text: `Mã OTP của bạn là: ${otp}. Mã OTP sẽ hết hạn trong  5 phút.`,
     };
 
     // Gửi email
