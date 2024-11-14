@@ -8,27 +8,31 @@ import { faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import Loading from "../../loading/page";
-const locTHNam = [
-  {id: "danh_muc=CASIO&gioi_tinh=Nam", title: "CASIO"},
-  {id: "danh_muc=MICHAELKORS&gioi_tinh=Nam", title: "MICHAELKORS"},
-  {id: "danh_muc=HAMILTON&gioi_tinh=Nam", title: "HAMILTON"},
-  {id: "danh_muc=TITONI&gioi_tinh=Nam", title: "TITONI"},
-  {id: "danh_muc=CLAUDEBERNARD&gioi_tinh=Nam", title: "CLAUDEBERNARD"},
-  {id: "danh_muc=OLYMPIANUS&gioi_tinh=Nam", title: "OLYMPIANUS"},
-  {id: "danh_muc=FREDERIQUECONSTANT&gioi_tinh=Nam", title: "FREDERIQUECONSTANT"},
-  {id: "danh_muc=EDOX&gioi_tinh=Nam", title: "EDOX"},
-  {id: "danh_muc=CERTINA&gioi_tinh=Nam", title: "CERTINA"},
-  {id: "danh_muc=CALVINKLEIN&gioi_tinh=Nam", title: "CALVINKLEIN"},
-  {id: "danh_muc=DANIELWELLINGTON&gioi_tinh=Nam", title: "DANIELWELLINGTON"},
-  {id: "danh_muc=MIDO&gioi_tinh=Nam", title: "MIDO"},
-  {id: "danh_muc=CITIZEN&gioi_tinh=Nam", title: "CITIZEN"},
-  {id: "danh_muc=SEIKO&gioi_tinh=Nam", title: "SEIKO"},
-  {id: "danh_muc=ORIENT&gioi_tinh=Nam", title: "ORIENT"},
-  {id: "danh_muc=FOSSIL&gioi_tinh=Nam", title: "FOSSIL"},
-  {id: "danh_muc=SKAGEN&gioi_tinh=Nam", title: "SKAGEN"},
-  {id: "danh_muc=LONGINES&gioi_tinh=Nam", title: "LONGINES"},
-  {id: "danh_muc=TISSOT&gioi_tinh=Nam", title: "TISSOT"}
+import { useSelector } from "react-redux";
 
+const locTHNam = [
+  { id: "danh_muc=CASIO&gioi_tinh=Nam", title: "CASIO" },
+  { id: "danh_muc=MICHAELKORS&gioi_tinh=Nam", title: "MICHAELKORS" },
+  { id: "danh_muc=HAMILTON&gioi_tinh=Nam", title: "HAMILTON" },
+  { id: "danh_muc=TITONI&gioi_tinh=Nam", title: "TITONI" },
+  { id: "danh_muc=CLAUDEBERNARD&gioi_tinh=Nam", title: "CLAUDEBERNARD" },
+  { id: "danh_muc=OLYMPIANUS&gioi_tinh=Nam", title: "OLYMPIANUS" },
+  {
+    id: "danh_muc=FREDERIQUECONSTANT&gioi_tinh=Nam",
+    title: "FREDERIQUECONSTANT",
+  },
+  { id: "danh_muc=EDOX&gioi_tinh=Nam", title: "EDOX" },
+  { id: "danh_muc=CERTINA&gioi_tinh=Nam", title: "CERTINA" },
+  { id: "danh_muc=CALVINKLEIN&gioi_tinh=Nam", title: "CALVINKLEIN" },
+  { id: "danh_muc=DANIELWELLINGTON&gioi_tinh=Nam", title: "DANIELWELLINGTON" },
+  { id: "danh_muc=MIDO&gioi_tinh=Nam", title: "MIDO" },
+  { id: "danh_muc=CITIZEN&gioi_tinh=Nam", title: "CITIZEN" },
+  { id: "danh_muc=SEIKO&gioi_tinh=Nam", title: "SEIKO" },
+  { id: "danh_muc=ORIENT&gioi_tinh=Nam", title: "ORIENT" },
+  { id: "danh_muc=FOSSIL&gioi_tinh=Nam", title: "FOSSIL" },
+  { id: "danh_muc=SKAGEN&gioi_tinh=Nam", title: "SKAGEN" },
+  { id: "danh_muc=LONGINES&gioi_tinh=Nam", title: "LONGINES" },
+  { id: "danh_muc=TISSOT&gioi_tinh=Nam", title: "TISSOT" },
 ];
 const locTHNu = [
   { id: "danh_muc=CASIO&gioi_tinh=Nữ", title: "CASIO" },
@@ -62,7 +66,10 @@ const locTHDoi = [
   { id: "danh_muc=MICHAELKORS&gioi_tinh=Đồng Hồ Đôi", title: "MICHAELKORS" },
   { id: "danh_muc=HAMILTON&gioi_tinh=Đồng Hồ Đôi", title: "HAMILTON" },
   { id: "danh_muc=TITONI&gioi_tinh=Đồng Hồ Đôi", title: "TITONI" },
-  { id: "danh_muc=CLAUDEBERNARD&gioi_tinh=Đồng Hồ Đôi", title: "CLAUDEBERNARD" },
+  {
+    id: "danh_muc=CLAUDEBERNARD&gioi_tinh=Đồng Hồ Đôi",
+    title: "CLAUDEBERNARD",
+  },
   { id: "danh_muc=OLYMPIANUS&gioi_tinh=Đồng Hồ Đôi", title: "OLYMPIANUS" },
   {
     id: "danh_muc=FREDERIQUECONSTANT&gioi_tinh=Đồng Hồ Đôi",
@@ -87,139 +94,321 @@ const locTHDoi = [
 
 const locgiaNam = [
   { id: "muc_gia=Dưới 2 triệu&gioi_tinh=Nam", title: "DƯỚI 2 TRIỆU" },
-  { id: "muc_gia=Từ 2 triệu đến 5 triệu&gioi_tinh=Nam", title: "TỪ 2 TRIỆU ĐẾN 5 TRIỆU" },
-  { id: "muc_gia=Từ 5 triệu đến 10 triệu&gioi_tinh=Nam", title: "TỪ 5 TRIỆU ĐẾN 10 TRIỆU" },
-  { id: "muc_gia=Từ 10 triệu đến 20 triệu&gioi_tinh=Nam", title: "TỪ 10 TRIỆU ĐẾN 20 TRIỆU" },
-  { id: "muc_gia=Từ 20 triệu đến 30 triệu&gioi_tinh=Nam", title: "TỪ 20 TRIỆU ĐẾN 30 TRIỆU" },
-  { id: "muc_gia=Từ 30 triệu đến 50 triệu&gioi_tinh=Nam", title: "TỪ 30 TRIỆU ĐẾN 50 TRIỆU" },
-  { id: "muc_gia=Từ 50 triệu đến 100 triệu&gioi_tinh=Nam", title: "TỪ 50 TRIỆU ĐẾN 100 TRIỆU " },
+  {
+    id: "muc_gia=Từ 2 triệu đến 5 triệu&gioi_tinh=Nam",
+    title: "TỪ 2 TRIỆU ĐẾN 5 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 5 triệu đến 10 triệu&gioi_tinh=Nam",
+    title: "TỪ 5 TRIỆU ĐẾN 10 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 10 triệu đến 20 triệu&gioi_tinh=Nam",
+    title: "TỪ 10 TRIỆU ĐẾN 20 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 20 triệu đến 30 triệu&gioi_tinh=Nam",
+    title: "TỪ 20 TRIỆU ĐẾN 30 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 30 triệu đến 50 triệu&gioi_tinh=Nam",
+    title: "TỪ 30 TRIỆU ĐẾN 50 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 50 triệu đến 100 triệu&gioi_tinh=Nam",
+    title: "TỪ 50 TRIỆU ĐẾN 100 TRIỆU ",
+  },
   { id: "muc_gia=Trên 100 triệu&gioi_tinh=Nam", title: "TRÊN 100 TRIỆU" },
 ];
 const locLoaiMayNam = [
-  { id: "loai_may=Automatic&gioi_tinh=Nam", title: "Automatic (Máy cơ tự động)" },
+  {
+    id: "loai_may=Automatic&gioi_tinh=Nam",
+    title: "Automatic (Máy cơ tự động)",
+  },
   { id: "loai_may=Quartz&gioi_tinh=Nam", title: "Quartz (Máy pin - điện tử)" },
-  { id: "loai_may=Eco-Drive&gioi_tinh=Nam", title: "Eco-Drive (Năng lượng ánh sáng)" },
-  { id: "loai_may=Quartz Chronograph&gioi_tinh=Nam", title: "Quartz Chronograph (Máy pin bấm giờ thể thao)" },
-  { id: "loai_may=Automatic Chronometer&gioi_tinh=Nam", title: "Automatic Chronometer (Máy cơ tự động chuẩn COSC)" },
-  { id: "loai_may=Quartz Chronometer&gioi_tinh=Nam", title: "Quartz Chronometer (Máy pin chuẩn COSC)" },
-  { id: "loai_may=Automatic Chronograph&gioi_tinh=Nam", title: "Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)" },
-  { id: "loai_may=Quartz Solar&gioi_tinh=Nam", title: "Quartz Solar (Năng lượng ánh sáng)" },
-  { id: "loai_may=Manual winding&gioi_tinh=Nam", title: "Manual winding (Đồng hồ cơ lên dây cót bằng tay)" }
-  
+  {
+    id: "loai_may=Eco-Drive&gioi_tinh=Nam",
+    title: "Eco-Drive (Năng lượng ánh sáng)",
+  },
+  {
+    id: "loai_may=Quartz Chronograph&gioi_tinh=Nam",
+    title: "Quartz Chronograph (Máy pin bấm giờ thể thao)",
+  },
+  {
+    id: "loai_may=Automatic Chronometer&gioi_tinh=Nam",
+    title: "Automatic Chronometer (Máy cơ tự động chuẩn COSC)",
+  },
+  {
+    id: "loai_may=Quartz Chronometer&gioi_tinh=Nam",
+    title: "Quartz Chronometer (Máy pin chuẩn COSC)",
+  },
+  {
+    id: "loai_may=Automatic Chronograph&gioi_tinh=Nam",
+    title: "Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)",
+  },
+  {
+    id: "loai_may=Quartz Solar&gioi_tinh=Nam",
+    title: "Quartz Solar (Năng lượng ánh sáng)",
+  },
+  {
+    id: "loai_may=Manual winding&gioi_tinh=Nam",
+    title: "Manual winding (Đồng hồ cơ lên dây cót bằng tay)",
+  },
 ];
 const locLoaiMayNu = [
-  { id: "loai_may=Automatic&gioi_tinh=Nữ", title: "Automatic (Máy cơ tự động)" },
+  {
+    id: "loai_may=Automatic&gioi_tinh=Nữ",
+    title: "Automatic (Máy cơ tự động)",
+  },
   { id: "loai_may=Quartz&gioi_tinh=Nữ", title: "Quartz (Máy pin - điện tử)" },
-  { id: "loai_may=Eco-Drive&gioi_tinh=Nữ", title: "Eco-Drive (Năng lượng ánh sáng)" },
-  { id: "loai_may=Quartz Chronograph&gioi_tinh=Nữ", title: "Quartz Chronograph (Máy pin bấm giờ thể thao)" },
-  { id: "loai_may=Automatic Chronometer&gioi_tinh=Nữ", title: "Automatic Chronometer (Máy cơ tự động chuẩn COSC)" },
-  { id: "loai_may=Quartz Chronometer&gioi_tinh=Nữ", title: "Quartz Chronometer (Máy pin chuẩn COSC)" },
-  { id: "loai_may=Automatic Chronograph&gioi_tinh=Nữ", title: "Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)" },
-  { id: "loai_may=Quartz Solar&gioi_tinh=Nữ", title: "Quartz Solar (Năng lượng ánh sáng)" },
-  { id: "loai_may=Manual winding&gioi_tinh=Nữ", title: "Manual winding (Đồng hồ cơ lên dây cót bằng tay)" }
-  
+  {
+    id: "loai_may=Eco-Drive&gioi_tinh=Nữ",
+    title: "Eco-Drive (Năng lượng ánh sáng)",
+  },
+  {
+    id: "loai_may=Quartz Chronograph&gioi_tinh=Nữ",
+    title: "Quartz Chronograph (Máy pin bấm giờ thể thao)",
+  },
+  {
+    id: "loai_may=Automatic Chronometer&gioi_tinh=Nữ",
+    title: "Automatic Chronometer (Máy cơ tự động chuẩn COSC)",
+  },
+  {
+    id: "loai_may=Quartz Chronometer&gioi_tinh=Nữ",
+    title: "Quartz Chronometer (Máy pin chuẩn COSC)",
+  },
+  {
+    id: "loai_may=Automatic Chronograph&gioi_tinh=Nữ",
+    title: "Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)",
+  },
+  {
+    id: "loai_may=Quartz Solar&gioi_tinh=Nữ",
+    title: "Quartz Solar (Năng lượng ánh sáng)",
+  },
+  {
+    id: "loai_may=Manual winding&gioi_tinh=Nữ",
+    title: "Manual winding (Đồng hồ cơ lên dây cót bằng tay)",
+  },
 ];
 const locLoaiMayDoi = [
-  { id: "loai_may=Automatic&gioi_tinh=Đồng Hồ Đôi", title: "Automatic (Máy cơ tự động)" },
-  { id: "loai_may=Quartz&gioi_tinh=Đồng Hồ Đôi", title: "Quartz (Máy pin - điện tử)" },
-  { id: "loai_may=Eco-Drive&gioi_tinh=Đồng Hồ Đôi", title: "Eco-Drive (Năng lượng ánh sáng)" },
-  { id: "loai_may=Quartz Chronograph&gioi_tinh=Đồng Hồ Đôi", title: "Quartz Chronograph (Máy pin bấm giờ thể thao)" },
-  { id: "loai_may=Automatic Chronometer&gioi_tinh=Đồng Hồ Đôi", title: "Automatic Chronometer (Máy cơ tự động chuẩn COSC)" },
-  { id: "loai_may=Quartz Chronometer&gioi_tinh=Đồng Hồ Đôi", title: "Quartz Chronometer (Máy pin chuẩn COSC)" },
-  { id: "loai_may=Automatic Chronograph&gioi_tinh=Đồng Hồ Đôi", title: "Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)" },
-  { id: "loai_may=Quartz Solar&gioi_tinh=Đồng Hồ Đôi", title: "Quartz Solar (Năng lượng ánh sáng)" },
-  { id: "loai_may=Manual winding&gioi_tinh=Đồng Hồ Đôi", title: "Manual winding (Đồng hồ cơ lên dây cót bằng tay)" }
-  
+  {
+    id: "loai_may=Automatic&gioi_tinh=Đồng Hồ Đôi",
+    title: "Automatic (Máy cơ tự động)",
+  },
+  {
+    id: "loai_may=Quartz&gioi_tinh=Đồng Hồ Đôi",
+    title: "Quartz (Máy pin - điện tử)",
+  },
+  {
+    id: "loai_may=Eco-Drive&gioi_tinh=Đồng Hồ Đôi",
+    title: "Eco-Drive (Năng lượng ánh sáng)",
+  },
+  {
+    id: "loai_may=Quartz Chronograph&gioi_tinh=Đồng Hồ Đôi",
+    title: "Quartz Chronograph (Máy pin bấm giờ thể thao)",
+  },
+  {
+    id: "loai_may=Automatic Chronometer&gioi_tinh=Đồng Hồ Đôi",
+    title: "Automatic Chronometer (Máy cơ tự động chuẩn COSC)",
+  },
+  {
+    id: "loai_may=Quartz Chronometer&gioi_tinh=Đồng Hồ Đôi",
+    title: "Quartz Chronometer (Máy pin chuẩn COSC)",
+  },
+  {
+    id: "loai_may=Automatic Chronograph&gioi_tinh=Đồng Hồ Đôi",
+    title: "Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)",
+  },
+  {
+    id: "loai_may=Quartz Solar&gioi_tinh=Đồng Hồ Đôi",
+    title: "Quartz Solar (Năng lượng ánh sáng)",
+  },
+  {
+    id: "loai_may=Manual winding&gioi_tinh=Đồng Hồ Đôi",
+    title: "Manual winding (Đồng hồ cơ lên dây cót bằng tay)",
+  },
 ];
 const locgiaNu = [
   { id: "muc_gia=Dưới 2 triệu&gioi_tinh=Nữ", title: "DƯỚI 2 TRIỆU" },
-  { id: "muc_gia=Từ 2 triệu đến 5 triệu&gioi_tinh=Nữ", title: "TỪ 2 TRIỆU ĐẾN 5 TRIỆU" },
-  { id: "muc_gia=Từ 5 triệu đến 10 triệu&gioi_tinh=Nữ", title: "TỪ 5 TRIỆU ĐẾN 10 TRIỆU" },
-  { id: "muc_gia=Từ 10 triệu đến 20 triệu&gioi_tinh=Nữ", title: "TỪ 10 TRIỆU ĐẾN 20 TRIỆU" },
-  { id: "muc_gia=Từ 20 triệu đến 30 triệu&gioi_tinh=Nữ", title: "TỪ 20 TRIỆU ĐẾN 30 TRIỆU" },
-  { id: "muc_gia=Từ 30 triệu đến 50 triệu&gioi_tinh=Nữ", title: "TỪ 30 TRIỆU ĐẾN 50 TRIỆU" },
-  { id: "muc_gia=Từ 50 triệu đến 100 triệu&gioi_tinh=Nữ", title: "TỪ 50 TRIỆU ĐẾN 100 TRIỆU " },
+  {
+    id: "muc_gia=Từ 2 triệu đến 5 triệu&gioi_tinh=Nữ",
+    title: "TỪ 2 TRIỆU ĐẾN 5 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 5 triệu đến 10 triệu&gioi_tinh=Nữ",
+    title: "TỪ 5 TRIỆU ĐẾN 10 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 10 triệu đến 20 triệu&gioi_tinh=Nữ",
+    title: "TỪ 10 TRIỆU ĐẾN 20 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 20 triệu đến 30 triệu&gioi_tinh=Nữ",
+    title: "TỪ 20 TRIỆU ĐẾN 30 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 30 triệu đến 50 triệu&gioi_tinh=Nữ",
+    title: "TỪ 30 TRIỆU ĐẾN 50 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 50 triệu đến 100 triệu&gioi_tinh=Nữ",
+    title: "TỪ 50 TRIỆU ĐẾN 100 TRIỆU ",
+  },
   { id: "muc_gia=Trên 100 triệu&gioi_tinh=Nữ", title: "TRÊN 100 TRIỆU" },
 ];
 const locgiaDoi = [
   { id: "muc_gia=Dưới 2 triệu&gioi_tinh=Đồng Hồ Đôi", title: "DƯỚI 2 TRIỆU" },
-  { id: "muc_gia=Từ 2 triệu đến 5 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TỪ 2 TRIỆU ĐẾN 5 TRIỆU" },
-  { id: "muc_gia=Từ 5 triệu đến 10 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TỪ 5 TRIỆU ĐẾN 10 TRIỆU" },
-  { id: "muc_gia=Từ 10 triệu đến 20 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TỪ 10 TRIỆU ĐẾN 20 TRIỆU" },
-  { id: "muc_gia=Từ 20 triệu đến 30 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TỪ 20 TRIỆU ĐẾN 30 TRIỆU" },
-  { id: "muc_gia=Từ 30 triệu đến 50 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TỪ 30 TRIỆU ĐẾN 50 TRIỆU" },
-  { id: "muc_gia=Từ 50 triệu đến 100 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TỪ 50 TRIỆU ĐẾN 100 TRIỆU " },
-  { id: "muc_gia=Trên 100 triệu&gioi_tinh=Đồng Hồ Đôi", title: "TRÊN 100 TRIỆU" },
+  {
+    id: "muc_gia=Từ 2 triệu đến 5 triệu&gioi_tinh=Đồng Hồ Đôi",
+    title: "TỪ 2 TRIỆU ĐẾN 5 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 5 triệu đến 10 triệu&gioi_tinh=Đồng Hồ Đôi",
+    title: "TỪ 5 TRIỆU ĐẾN 10 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 10 triệu đến 20 triệu&gioi_tinh=Đồng Hồ Đôi",
+    title: "TỪ 10 TRIỆU ĐẾN 20 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 20 triệu đến 30 triệu&gioi_tinh=Đồng Hồ Đôi",
+    title: "TỪ 20 TRIỆU ĐẾN 30 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 30 triệu đến 50 triệu&gioi_tinh=Đồng Hồ Đôi",
+    title: "TỪ 30 TRIỆU ĐẾN 50 TRIỆU",
+  },
+  {
+    id: "muc_gia=Từ 50 triệu đến 100 triệu&gioi_tinh=Đồng Hồ Đôi",
+    title: "TỪ 50 TRIỆU ĐẾN 100 TRIỆU ",
+  },
+  {
+    id: "muc_gia=Trên 100 triệu&gioi_tinh=Đồng Hồ Đôi",
+    title: "TRÊN 100 TRIỆU",
+  },
 ];
 const locDayNam = [
   { id: "chat_lieu_day=Dây da&gioi_tinh=Nam", title: "Dây da" },
-  { id: "chat_lieu_day=Thép không gỉ 316L mạ vàng công nghệ PVD&gioi_tinh=Nam", title: "Thép không gỉ 316L mạ vàng công nghệ PVD" },
-  { id: "chat_lieu_day=Thép không gỉ 316L dạng lưới&gioi_tinh=Nam", title: "Thép không gỉ 316L dạng lưới" },
-  { id: "chat_lieu_day=Thép không gỉ 316L dạng lắc&gioi_tinh=Nam", title: "Thép không gỉ 316L dạng lắc" },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L mạ vàng công nghệ PVD&gioi_tinh=Nam",
+    title: "Thép không gỉ 316L mạ vàng công nghệ PVD",
+  },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L dạng lưới&gioi_tinh=Nam",
+    title: "Thép không gỉ 316L dạng lưới",
+  },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L dạng lắc&gioi_tinh=Nam",
+    title: "Thép không gỉ 316L dạng lắc",
+  },
   { id: "chat_lieu_day=Dây vải&gioi_tinh=Nam", title: "Dây vải" },
-  { id: "chat_lieu_day=Thép không gỉ 316L/ Vàng 18K&gioi_tinh=Nam", title: "Thép không gỉ 316L/ Vàng 18K" },
-  { id: "chat_lieu_day=Thép không gỉ 316L/ Ceramic&gioi_tinh=Nam", title: "Thép không gỉ 316L/ Ceramic" },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L/ Vàng 18K&gioi_tinh=Nam",
+    title: "Thép không gỉ 316L/ Vàng 18K",
+  },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L/ Ceramic&gioi_tinh=Nam",
+    title: "Thép không gỉ 316L/ Ceramic",
+  },
   { id: "chat_lieu_day=Dây cao su&gioi_tinh=Nam", title: "Dây cao su" },
 ];
 const locDayNu = [
   { id: "chat_lieu_day=Dây da&gioi_tinh=Nữ", title: "Dây da" },
-  { id: "chat_lieu_day=Thép không gỉ 316L mạ vàng công nghệ PVD&gioi_tinh=Nữ", title: "Thép không gỉ 316L mạ vàng công nghệ PVD" },
-  { id: "chat_lieu_day=Thép không gỉ 316L dạng lưới&gioi_tinh=Nữ", title: "Thép không gỉ 316L dạng lưới" },
-  { id: "chat_lieu_day=Thép không gỉ 316L dạng lắc&gioi_tinh=Nữ", title: "Thép không gỉ 316L dạng lắc" },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L mạ vàng công nghệ PVD&gioi_tinh=Nữ",
+    title: "Thép không gỉ 316L mạ vàng công nghệ PVD",
+  },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L dạng lưới&gioi_tinh=Nữ",
+    title: "Thép không gỉ 316L dạng lưới",
+  },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L dạng lắc&gioi_tinh=Nữ",
+    title: "Thép không gỉ 316L dạng lắc",
+  },
   { id: "chat_lieu_day=Dây vải&gioi_tinh=Nữ", title: "Dây vải" },
-  { id: "chat_lieu_day=Thép không gỉ 316L/ Vàng 18K&gioi_tinh=Nữ", title: "Thép không gỉ 316L/ Vàng 18K" },
-  { id: "chat_lieu_day=Thép không gỉ 316L/ Ceramic&gioi_tinh=Nữ", title: "Thép không gỉ 316L/ Ceramic" },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L/ Vàng 18K&gioi_tinh=Nữ",
+    title: "Thép không gỉ 316L/ Vàng 18K",
+  },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L/ Ceramic&gioi_tinh=Nữ",
+    title: "Thép không gỉ 316L/ Ceramic",
+  },
   { id: "chat_lieu_day=Dây cao su&gioi_tinh=Nữ", title: "Dây cao su" },
 ];
 const locDayDoi = [
   { id: "chat_lieu_day=Dây da&gioi_tinh=Đồng Hồ Đôi", title: "Dây da" },
-  { id: "chat_lieu_day=Thép không gỉ 316L mạ vàng công nghệ PVD&gioi_tinh=Đồng Hồ Đôi", title: "Thép không gỉ 316L mạ vàng công nghệ PVD" },
-  { id: "chat_lieu_day=Thép không gỉ 316L dạng lưới&gioi_tinh=Đồng Hồ Đôi", title: "Thép không gỉ 316L dạng lưới" },
-  { id: "chat_lieu_day=Thép không gỉ 316L dạng lắc&gioi_tinh=Đồng Hồ Đôi", title: "Thép không gỉ 316L dạng lắc" },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L mạ vàng công nghệ PVD&gioi_tinh=Đồng Hồ Đôi",
+    title: "Thép không gỉ 316L mạ vàng công nghệ PVD",
+  },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L dạng lưới&gioi_tinh=Đồng Hồ Đôi",
+    title: "Thép không gỉ 316L dạng lưới",
+  },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L dạng lắc&gioi_tinh=Đồng Hồ Đôi",
+    title: "Thép không gỉ 316L dạng lắc",
+  },
   { id: "chat_lieu_day=Dây vải&gioi_tinh=Đồng Hồ Đôi", title: "Dây vải" },
-  { id: "chat_lieu_day=Thép không gỉ 316L/ Vàng 18K&gioi_tinh=Đồng Hồ Đôi", title: "Thép không gỉ 316L/ Vàng 18K" },
-  { id: "chat_lieu_day=Thép không gỉ 316L/ Ceramic&gioi_tinh=Đồng Hồ Đôi", title: "Thép không gỉ 316L/ Ceramic" },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L/ Vàng 18K&gioi_tinh=Đồng Hồ Đôi",
+    title: "Thép không gỉ 316L/ Vàng 18K",
+  },
+  {
+    id: "chat_lieu_day=Thép không gỉ 316L/ Ceramic&gioi_tinh=Đồng Hồ Đôi",
+    title: "Thép không gỉ 316L/ Ceramic",
+  },
   { id: "chat_lieu_day=Dây cao su&gioi_tinh=Đồng Hồ Đôi", title: "Dây cao su" },
 ];
 const locPhongCachNu = [
   { id: "phong_cach=Sang trọng&gioi_tinh=Nữ", title: "Sang trọng" },
   { id: "phong_cach=Thể thao&gioi_tinh=Nữ", title: "Thể thao" },
-  { id: "phong_cach=Thể thao sang trọng&gioi_tinh=Nữ", title: "Thể thao sang trọng" },
+  {
+    id: "phong_cach=Thể thao sang trọng&gioi_tinh=Nữ",
+    title: "Thể thao sang trọng",
+  },
   { id: "phong_cach=Quân đội&gioi_tinh=Nữ", title: "quân đội" },
   { id: "phong_cach=Thời trang&gioi_tinh=Nữ", title: "thời trang" },
-  { id: "phong_cach=Hiện đại&gioi_tinh=Nữ", title: "hiện đại" }
+  { id: "phong_cach=Hiện đại&gioi_tinh=Nữ", title: "hiện đại" },
 ];
 const locPhongCachNam = [
   { id: "phong_cach=Sang trọng&gioi_tinh=Nam", title: "Sang trọng" },
   { id: "phong_cach=Thể thao&gioi_tinh=Nam", title: "Thể thao" },
-  { id: "phong_cach=Thể thao sang trọng&gioi_tinh=Nam", title: "Thể thao sang trọng" },
+  {
+    id: "phong_cach=Thể thao sang trọng&gioi_tinh=Nam",
+    title: "Thể thao sang trọng",
+  },
   { id: "phong_cach=Quân đội&gioi_tinh=Nam", title: "quân đội" },
   { id: "phong_cach=Thời trang&gioi_tinh=Nam", title: "thời trang" },
-  { id: "phong_cach=Hiện đại&gioi_tinh=Nam", title: "hiện đại" }
+  { id: "phong_cach=Hiện đại&gioi_tinh=Nam", title: "hiện đại" },
 ];
 const locPhongCachDoi = [
   { id: "phong_cach=Sang trọng&gioi_tinh=Đồng Hồ Đôi", title: "Sang trọng" },
   { id: "phong_cach=Thể thao&gioi_tinh=Đồng Hồ Đôi", title: "Thể thao" },
-  { id: "phong_cach=Thể thao sang trọng&gioi_tinh=Đồng Hồ Đôi", title: "Thể thao sang trọng" },
+  {
+    id: "phong_cach=Thể thao sang trọng&gioi_tinh=Đồng Hồ Đôi",
+    title: "Thể thao sang trọng",
+  },
   { id: "phong_cach=Quân đội&gioi_tinh=Đồng Hồ Đôi", title: "quân đội" },
   { id: "phong_cach=Thời trang&gioi_tinh=Đồng Hồ Đôi", title: "thời trang" },
-  { id: "phong_cach=Hiện đại&gioi_tinh=Đồng Hồ Đôi", title: "hiện đại" }
+  { id: "phong_cach=Hiện đại&gioi_tinh=Đồng Hồ Đôi", title: "hiện đại" },
 ];
 const locttTH = [
-  {id: "thuong_hieu=SEIKO", title: "SEIKO"},
-  {id: "thuong_hieu=RHYTHM", title: "RHYTHM"}
+  { id: "thuong_hieu=SEIKO", title: "SEIKO" },
+  { id: "thuong_hieu=RHYTHM", title: "RHYTHM" },
 ];
 const locttGia = [
-  {id: "muc_gia=Dưới 2 triệu", title: "Dưới 2 triệu"},
-  {id: "muc_gia=Từ 2 triệu đến 5 triệu", title: "Từ 2 triệu đến 5 triệu"},
-  {id: "muc_gia=Trên 5 triệu", title: "Trên 5 triệu"}
+  { id: "muc_gia=Dưới 2 triệu", title: "Dưới 2 triệu" },
+  { id: "muc_gia=Từ 2 triệu đến 5 triệu", title: "Từ 2 triệu đến 5 triệu" },
+  { id: "muc_gia=Trên 5 triệu", title: "Trên 5 triệu" },
 ];
 const locttCL = [
-  {id: "chat_lieu_vo=Thủy tinh", title: "Thủy Tinh"},
-  {id: "chat_lieu_vo=Nhựa", title: "nhựa"},
-  {id: "chat_lieu_vo=Gỗ", title: "gỗ"}
+  { id: "chat_lieu_vo=Thủy tinh", title: "Thủy Tinh" },
+  { id: "chat_lieu_vo=Nhựa", title: "nhựa" },
+  { id: "chat_lieu_vo=Gỗ", title: "gỗ" },
 ];
-
 
 export default function Header() {
   const cx = classNames.bind(styles);
@@ -260,7 +449,6 @@ export default function Header() {
     setInputData("");
   };
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -278,6 +466,13 @@ export default function Header() {
     };
     fetchData();
   }, []);
+
+  const cartItems = useSelector((state) => state.cart.items);
+  const cartCount = cartItems.reduce(
+    (count, item) => count + Number(item.so_luong),
+    0
+  );
+
   if (loading) {
     return <Loading />;
   }
@@ -361,7 +556,7 @@ export default function Header() {
                   style={{ color: "#ffffff" }}
                 />
 
-                <span className={cx("cart-count")}>3</span>
+                <span className={cx("cart-count")}>{cartCount}</span>
               </div>
             </Link>
           </div>
