@@ -1,8 +1,6 @@
 "use client";
 import styles from "./comments.module.css";
 import { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 export default function CommentsPage() {
   const [comments, setComments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,7 +48,7 @@ export default function CommentsPage() {
         );
       }
     } catch (error) {
-      setError(error);
+      console.error(error);
     }
   };
 
@@ -133,21 +131,21 @@ export default function CommentsPage() {
                 </thead>
                 <tbody>
                   {comments.map((comment) => {
-                    const { _id, noi_dung, sao, ngay_binh_luan, id_san_pham, trang_thai } = comment;
+                    const { _id, noi_dung, sao, ngay_binh_luan, ten_dang_nhap, id_san_pham } = comment;
 
                     return (
-                      <tr key={_id} className={!trang_thai ? styles.hiddenRow : ""}>
+                      <tr key={_id}>
                         <td>
                           <input type="checkbox" className={styles.rowCheckbox} />
                         </td>
                         <td>{_id}</td>
                         <td>{id_san_pham}</td>
                         <td style={{ textAlign: "center" }}>
-                          <span className={`${styles.status} ${styles.inStock}`}>{comment.user?.ten_dang_nhap}</span>
+                          <span className={`${styles.status} ${styles.inStock} `}>{comment.user?.ten_dang_nhap}</span>
                         </td>
 
                         <td style={{ textAlign: "center" }}>{noi_dung}</td>
-                        <td style={{ textAlign: "center" }}>{sao}</td>
+                        z<td style={{ textAlign: "center" }}>{sao}</td>
                         <td style={{ textAlign: "center" }}>
                           {new Date(ngay_binh_luan).toLocaleString("vi-VN", {
                             timeZone: "Asia/Ho_Chi_Minh",
@@ -155,12 +153,18 @@ export default function CommentsPage() {
                         </td>
 
                         <td style={{ textAlign: "center" }}>
+                          <Link href={`/components/suasanpham/${_id}`} className={`${styles.btn} ${styles.edit}`}>
+                            ✏️
+                          </Link>{" "}
+                          &nbsp;
                           <button
-                            onClick={() => handleToggleComment(_id, trang_thai)}
-                            className={`${styles.btn} ${styles.edit}`}
+                            className={`${styles.btn} ${styles.delete}`}
+                            id="deleteButton"
+                            onClick={() => deleteProduct(_id)}
                           >
-                            <FontAwesomeIcon icon={trang_thai ? faEye : faEyeSlash} />
+                            🗑️
                           </button>
+                          &nbsp;
                         </td>
                       </tr>
                     );
