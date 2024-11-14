@@ -5,7 +5,11 @@ import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
 
 export default function ThanhToan() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+    dia_chi: "",
+    dien_thoai: "",
+    ho_ten: "",
+  });
   const [cartItems, setCartItems] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [discountCode, setDiscountCode] = useState("");
@@ -175,6 +179,11 @@ export default function ThanhToan() {
         so_luong: item.so_luong,
       })),
       ma_voucher: discountCode || null,
+      user: {
+        ho_ten: user.ho_ten,
+        dia_chi: user.dia_chi,
+        dien_thoai: user.dien_thoai,
+      },
     };
 
     try {
@@ -214,15 +223,30 @@ export default function ThanhToan() {
             <div className={`${styles.box} ${styles.customerInfo}`}>
               <p className={styles.productTitle}>Thông tin khách hàng</p>
               <div className={styles.inputGroup}>
-                <input type="email" placeholder="Email" value={user ? user.email : ""} readOnly />
-                <input type="text" placeholder="Điện thoại" value={user ? user.dien_thoai : ""} readOnly />
+                <input type="email" placeholder="Email" value={user.email} readOnly />
+                <input
+                  type="text"
+                  placeholder="Điện thoại"
+                  value={user.dien_thoai}
+                  onChange={(e) => setUser({ ...user, dien_thoai: e.target.value })}
+                />
               </div>
             </div>
 
             <div className={`${styles.box} ${styles.shippingPaymentInfo}`}>
               <p className={styles.productTitle}>Địa chỉ giao hàng</p>
-              <input type="text" placeholder="Họ và tên" value={user ? user.ho_ten : ""} readOnly />
-              <input type="text" placeholder="Địa chỉ" value={user ? user.dia_chi : ""} readOnly />
+              <input
+                type="text"
+                placeholder="Họ và tên"
+                value={user.ho_ten}
+                onChange={(e) => setUser({ ...user, ho_ten: e.target.value })}
+              />
+              <input
+                type="text"
+                placeholder="Địa chỉ"
+                value={user.dia_chi}
+                onChange={(e) => setUser({ ...user, dia_chi: e.target.value })}
+              />
               <textarea
                 className={styles.textarea}
                 placeholder="Ghi chú"
@@ -350,9 +374,7 @@ export default function ThanhToan() {
 
               <p>
                 Phí vận chuyển:
-                <span className={styles.price}>
-                  {totalAmount > 1000000 ? "Miễn phí" : "30.000₫"}
-                </span>
+                <span className={styles.price}>{totalAmount > 1000000 ? "Miễn phí" : "30.000₫"}</span>
               </p>
               <p className={styles.totalAmount}>
                 Tổng thanh toán:
