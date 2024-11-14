@@ -136,7 +136,7 @@ export default function Register() {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.container}>
-        <div className={styles.heading}>Sign Up</div>
+        <div className={styles.heading}>Đăng ký</div>
         <form onSubmit={formik.handleSubmit} className={styles.form}>
           <input
             type="text"
@@ -145,7 +145,7 @@ export default function Register() {
             name="name"
             onChange={formik.handleChange}
             value={formik.values.name}
-            placeholder="Name"
+            placeholder="Tên đăng nhập"
           />
           {formik.errors.name && <p className={styles.error}>{formik.errors.name}</p>}
 
@@ -156,7 +156,7 @@ export default function Register() {
             name="email"
             onChange={formik.handleChange}
             value={formik.values.email}
-            placeholder="E-mail"
+            placeholder="Email"
           />
           {formik.errors.email && <p className={styles.error}>{formik.errors.email}</p>}
 
@@ -167,7 +167,7 @@ export default function Register() {
             name="password"
             onChange={formik.handleChange}
             value={formik.values.password}
-            placeholder="Password"
+            placeholder="Mật khẩu"
           />
           {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
 
@@ -178,7 +178,7 @@ export default function Register() {
             name="confirmPassword"
             onChange={formik.handleChange}
             value={formik.values.confirmPassword}
-            placeholder="Confirm Password"
+            placeholder="Nhâp lại mật khẩu"
           />
           {formik.errors.confirmPassword && <p className={styles.error}>{formik.errors.confirmPassword}</p>}
 
@@ -193,16 +193,13 @@ export default function Register() {
           />
           {formik.errors.image && <p className={styles.error}>{formik.errors.image}</p>} */}
 
-          <span className={styles.forgotPassword}>
-            <Link href="#">Forgot password</Link>
-          </span>
-          <input type="submit" className={styles.loginButton} value="Sign Up" />
+          <input type="submit" className={styles.loginButton} value="Đăng ký" />
           <OTP isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} />
         </form>
         {!isModalOpen && (
           <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
             <div className={styles.socialAccountContainer}>
-              <span className={styles.title}>Or Sign in with</span>
+              <span className={styles.title}>Đăng nhập với</span>
 
               <GoogleLogin
                 onSuccess={handleLoginSuccess}
@@ -222,9 +219,9 @@ export default function Register() {
         )}
         <div className={styles.signUpNow}>
           <span className={styles.dontHaveAnAccount}>
-            Have an account?
+            Đã có tài khoản? &nbsp;
             <Link href="/components/login" id="gotoSignup">
-              Sign up now
+              Đăng nhập ngay
             </Link>
           </span>
         </div>

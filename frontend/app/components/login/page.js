@@ -124,7 +124,7 @@ export default function Login() {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.container}>
-        <div className={styles.heading}>Sign In</div>
+        <div className={styles.heading}>Đăng nhập</div>
         <form onSubmit={formik.handleSubmit} className={styles.form}>
           <input
             type="email"
@@ -133,7 +133,7 @@ export default function Login() {
             name="email"
             onChange={formik.handleChange}
             value={formik.values.email}
-            placeholder="E-mail"
+            placeholder="Email"
           />
           {formik.errors.email && <p className={styles.error}>{formik.errors.email}</p>}
 
@@ -144,12 +144,12 @@ export default function Login() {
             name="password"
             onChange={formik.handleChange}
             value={formik.values.password}
-            placeholder="Password"
+            placeholder="Mật khẩu"
           />
           {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
 
           <span className={styles.forgotPassword}>
-            <Link href="#">Forgot password</Link>
+            <Link href="./forgot-password">Quên mật khẩu</Link>
           </span>
 
           <input type="submit" className={styles.loginButton} value="Sign In" />
@@ -157,7 +157,7 @@ export default function Login() {
 
         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
           <div className={styles.socialAccountContainer}>
-            <span className={styles.title}>Or Sign in with</span>
+            <span className={styles.title}>Đăng nhập với</span>
 
             <GoogleLogin
               onSuccess={handleLoginSuccess}
@@ -177,9 +177,9 @@ export default function Login() {
 
         <div className={styles.signUpNow}>
           <span className={styles.dontHaveAnAccount}>
-            Don't have an account?
+            Bạn chưa có tài khoản? &nbsp;
             <Link href="/components/register" id="gotoSignup">
-              Sign up now
+              Đăng ký ngay
             </Link>
           </span>
         </div>
