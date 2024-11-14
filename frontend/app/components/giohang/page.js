@@ -11,6 +11,7 @@ import {
   setCartItems,
 } from "../redux/slices/cartSilce";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 const CartPage = () => {
   const cartItems = useSelector((state) => state.cart?.items) || [];
@@ -33,6 +34,25 @@ const CartPage = () => {
       ),
     [cartItems]
   );
+
+  const ktra = async () => {
+    for (const items of cartItems) {
+      const reponse = await fetch(
+        `http://localhost:5000/product/check/${items._id}?quantity=${items.so_luong}`
+      );
+      if (!reponse.ok) {
+        Swal.fire({
+          title: "Không đủ hàng",
+          text: `Sản phẩm: ${items.ten_san_pham} Không đủ số lượng`,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+        return;
+      }
+    }
+    window.location.href="/components/thanhtoan"
+  };
+
   return (
     <>
       <nav className={styles.nav}>
@@ -124,19 +144,24 @@ const CartPage = () => {
                           </div>
                         </td>
                         <td>
-                          {item.gia_giam.toLocaleString("vi-VN", {
+                          {(item.gia_giam > 0
+                            ? item.gia_giam
+                            : item.gia_san_pham
+                          ).toLocaleString("vi-VN", {
                             style: "currency",
                             currency: "VND",
                           })}
                         </td>
+
                         <td>
-                          {(item.gia_giam * item.so_luong).toLocaleString(
-                            "vi-VN",
-                            {
-                              style: "currency",
-                              currency: "VND",
-                            }
-                          )}
+                          {(
+                            (item.gia_giam > 0
+                              ? item.gia_giam
+                              : item.gia_san_pham) * item.so_luong
+                          ).toLocaleString("vi-VN", {
+                            style: "currency",
+                            currency: "VND",
+                          })}
                         </td>
                         <td name="delete">
                           <button
@@ -174,8 +199,8 @@ const CartPage = () => {
                     </p>
                   </div>
                 </div>
-                <Link href="/components/thanhtoan">
-                  <button type="button" id={styles.thtt}>
+                <Link href="">
+                  <button type="button" id={styles.thtt} onClick={ktra}>
                     Tiến hành thanh toán
                   </button>
                 </Link>
