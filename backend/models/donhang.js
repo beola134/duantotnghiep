@@ -26,7 +26,7 @@ const DonHang = sequelize.define('DonHang', {
         allowNull: true
     },
     phi_ship: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: DataTypes.STRING(100),
         allowNull: true
     },
     thoi_gian_tao: {
