@@ -26,5 +26,9 @@ router.get("/getTotalDonHang", ThongkeController.getTotalDonHang);
 //http://localhost:5000/thongke/getTotalRevenue
 router.get("/getTotalRevenue", ThongkeController.getDoanhThu);
 
+//tổng doanh thu theo tháng getDoanhThuDonHangTheoThang
+//http://localhost:5000/thongke/getTotalRevenueByMonth
+router.get("/getTotalRevenueByMonth", ThongkeController.getDoanhThuDonHangTheoThang);
+
 module.exports = router;
 
