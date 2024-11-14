@@ -175,7 +175,10 @@ const addDonHang = async (req, res) => {
 //show tất cả đơn hàng
 const getAllDonHang = async (req, res) => {
   try {
-    const donHangs = await DonHang.findAll();
+    const donHangs = await DonHang.findAll(
+      { order: [["thoi_gian_tao", "DESC"]] }
+      
+    );
     // if (donHangs.length === 0) {
     //   return res.status(404).json({ message: "Không tìm thấy đơn hàng." });
     // } 
@@ -239,10 +242,12 @@ const updateDonHang = async (req, res) => {
 const getAllDonHangByUserId = async (req, res) => {
   try {
     const { id_nguoi_dung } = req.params;
-
+    const statuses = ["Chờ xác nhận", "Đã xác nhận", "Đang giao hàng"];
     // Lấy tất cả đơn hàng theo id_nguoi_dung
     const orders = await DonHang.findAll({
-      where: { id_nguoi_dung },
+      where: { id_nguoi_dung,
+        trang_thai: statuses,
+       },
       include: [
         {
           model: ChiTietDonHang,
