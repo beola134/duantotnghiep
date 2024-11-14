@@ -47,14 +47,6 @@ const User = sequelize.define('User', {
         type: DataTypes.STRING(255),
         allowNull: true
     },
-    resetPasswordToken: {
-        type: DataTypes.STRING(255),
-        allowNull: true
-    },
-    resetPasswordExpires: {  //này là
-        type: DataTypes.DATE,
-        allowNull: true
-    },
     otp: {
         type: DataTypes.STRING(255),
         allowNull: true
