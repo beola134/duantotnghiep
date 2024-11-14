@@ -41,17 +41,41 @@ export default function Detail({ params }) {
     }
   };
 
-  const handleAddToCart = (e) => {
-    e.preventDefault();
+const handleAddToCart = async (e) => {
+  e.preventDefault(); // Đảm bảo ngăn chặn sự kiện ngay từ đầu
 
-    dispatch(addToCart({ item: product, so_luong }));
+  try {
+    const response = await fetch(
+      `http://localhost:5000/product/check/${product._id}?quantity=${so_luong}`
+    );
+    const data = await response.json();
+
+    if (!response.ok) {
+      Swal.fire({
+        title: "Không đủ hàng",
+        text: data.error,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    } else {
+      dispatch(addToCart({ item: product, so_luong }));
+      Swal.fire({
+        title: "Thành công!",
+        text: "Sản phẩm đã được thêm vào giỏ hàng.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    }
+  } catch (error) {
+    console.error("Error checking product quantity:", error);
     Swal.fire({
-      title: "Thành công!",
-      text: "Sản phẩm đã được thêm vào giỏ hàng.",
-      icon: "success",
+      title: "Lỗi",
+      text: "Đã xảy ra lỗi khi kiểm tra số lượng sản phẩm.",
+      icon: "error",
       confirmButtonText: "OK",
     });
-  };
+  }
+};
 
   useEffect(() => {
     const fetchDetail = async () => {

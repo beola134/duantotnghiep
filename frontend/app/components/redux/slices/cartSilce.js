@@ -19,7 +19,7 @@ const cartSlice = createSlice({
   reducers: {
     setCartItems: (state, action) => {
       state.items = action.payload;
-      state.total = calculateTotal(action.payload); // Tính toán tổng khi set
+      state.total = calculateTotal(action.payload); 
     },
     addToCart: (state, action) => {
       const existingItem = state.items.find(
