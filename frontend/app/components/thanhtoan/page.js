@@ -10,6 +10,8 @@ export default function ThanhToan() {
   const [totalAmount, setTotalAmount] = useState(0);
   const [discountCode, setDiscountCode] = useState("");
   const [discountValue, setDiscountValue] = useState(0);
+  const [discountType, setDiscountType] = useState(""); // Loại giảm giá (phần trăm hoặc số tiền)
+  const [isDiscountApplied, setIsDiscountApplied] = useState(false); // Kiểm tra mã giảm giá đã được áp dụng chưa
   const [note, setNote] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
 
@@ -53,8 +55,17 @@ export default function ThanhToan() {
   }, []);
   // Tính tổng tiền
   const calculateTotal = (items) => {
-    const total = items.reduce((sum, item) => sum + item.so_luong * item.gia_giam, 0);
-    setTotalAmount(total - discountValue);
+    const total = items.reduce(
+      (sum, item) => sum + item.so_luong * (item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham),
+      0
+    );
+    let finalTotal = total;
+    if (discountType === "gia_tri") {
+      finalTotal -= discountValue;
+    } else if (discountType === "phan_tram") {
+      finalTotal -= (total * discountValue) / 100;
+    }
+    setTotalAmount(finalTotal);
   };
   // Tăng giảm số lượng sản phẩm
   const handleIncrease = (index) => {
@@ -92,9 +103,68 @@ export default function ThanhToan() {
       }).then(() => {
         window.location.href = "/components/login?redirect=thanhtoan";
       });
-      return;
+      return false;
     }
-    // kiểm tra
+    return true;
+  };
+
+  const applyDiscount = async () => {
+    if (isDiscountApplied) return;
+    try {
+      const response = await fetch(`http://localhost:5000/voucher/ma_voucher`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ma_voucher: discountCode }),
+      });
+      if (!response.ok) {
+        throw new Error("Mã giảm giá không hợp lệ");
+      }
+      const data = await response.json();
+      if (data.gia_tri) {
+        setDiscountValue(data.gia_tri);
+        setDiscountType("gia_tri");
+      } else if (data.phan_tram) {
+        setDiscountValue(data.phan_tram);
+        setDiscountType("phan_tram");
+      }
+      calculateTotal(cartItems);
+      setIsDiscountApplied(true); // Đánh dấu mã giảm giá đã được áp dụng
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: error.message,
+      });
+      console.log(error);
+    }
+  };
+
+  // Kiểm tra xem sản phẩm còn hàng không
+  const ktra = async () => {
+    for (const items of cartItems) {
+      const reponse = await fetch(`http://localhost:5000/product/check/${items._id}?quantity=${items.so_luong}`);
+      if (!reponse.ok) {
+        Swal.fire({
+          title: "Không đủ hàng",
+          text: `Sản phẩm: ${items.ten_san_pham} Không đủ số lượng`,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const handleClick = async () => {
+    const isLoggedIn = await userLogin(); // Kiểm tra xem người dùng đã đăng nhập chưa
+    if (!isLoggedIn) return;
+
+    const isStockAvailable = await ktra();
+    if (!isStockAvailable) return;
+
     const orderDetails = {
       dia_chi: user.dia_chi,
       id_nguoi_dung: user._id,
@@ -133,31 +203,6 @@ export default function ThanhToan() {
         title: "Lỗi",
         text: "Lỗi tạo đơn hàng",
       });
-    }
-  };
-
-  const applyDiscount = async () => {
-    try {
-      const response = await fetch(`http://localhost:5000/voucher/ma_voucher`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ma_voucher: discountCode }),
-      });
-      if (!response.ok) {
-        throw new Error("Mã giảm giá không hợp lệ");
-      }
-      const data = await response.json();
-      setDiscountValue(data.gia_tri);
-      calculateTotal(cartItems);
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Lỗi",
-        text: error.message,
-      });
-      console.log(error);
     }
   };
 
@@ -258,7 +303,9 @@ export default function ThanhToan() {
                         +
                       </button>
                     </div>
-                    <p className={styles.productPrice}>{item.gia_giam.toLocaleString("vi-VN")}₫</p>
+                    <p className={styles.productPrice}>
+                      {(item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham).toLocaleString("vi-VN")}₫
+                    </p>
                   </div>
                   <button onClick={() => handleDelete(index)} className={styles.deleteBtn}>
                     🗑️
@@ -276,22 +323,48 @@ export default function ThanhToan() {
                 value={discountCode}
                 onChange={(e) => setDiscountCode(e.target.value)}
               />
-              <button onClick={applyDiscount}>Áp dụng</button>
+              <button onClick={applyDiscount} disabled={isDiscountApplied}>
+                Áp dụng
+              </button>
               <hr />
             </div>
             <div className={styles.orderSummary}>
               <p>
-                Tổng tiền hàng: <span className={styles.price}>{totalAmount.toLocaleString("vi-VN")}₫</span>
+                Tổng tiền hàng:
+                <span className={styles.price}>
+                  {cartItems
+                    .reduce(
+                      (sum, item) => sum + item.so_luong * (item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham),
+                      0
+                    )
+                    .toLocaleString("vi-VN")}
+                  ₫
+                </span>
               </p>
               <p>
-                Ưu đãi: <span className={styles.price}>-{(discountValue || 0).toLocaleString("vi-VN")}₫</span>
+                Ưu đãi:
+                <span className={styles.price}>
+                  {discountType === "phan_tram" ? `-${discountValue}%` : `-${discountValue.toLocaleString("vi-VN")}₫`}
+                </span>
+              </p>
+
+              <p>
+                Phí vận chuyển:
+                <span className={styles.price}>
+                  {totalAmount > 1000000 ? "Miễn phí" : "30.000₫"}
+                </span>
               </p>
               <p className={styles.totalAmount}>
-                Tổng thanh toán:{" "}
-                <span className={styles.price}>{(totalAmount - discountValue).toLocaleString("vi-VN")}₫</span>
+                Tổng thanh toán:
+                <span className={styles.price}>
+                  {(
+                    totalAmount - (discountType === "phan_tram" ? (totalAmount * discountValue) / 100 : discountValue)
+                  ).toLocaleString("vi-VN")}
+                  ₫
+                </span>
               </p>
             </div>
-            <button className={styles.checkoutButton} onClick={userLogin}>
+            <button className={styles.checkoutButton} onClick={handleClick}>
               Thanh toán
             </button>
           </aside>
