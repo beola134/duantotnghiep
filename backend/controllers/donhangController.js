@@ -1,4 +1,3 @@
-const GhiChu = require("../models/ghichu");
 const PhuongThucThanhToan = require("../models/pttt");
 const Product = require("../models/product");
 const Users = require("../models/users");
