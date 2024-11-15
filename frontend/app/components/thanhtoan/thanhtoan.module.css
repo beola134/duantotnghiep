@@ -266,13 +266,13 @@
   cursor: pointer;
 }
 /* Thông báo lỗi */
-.error {
+.errorText {
   color: red;
   font-size: 12px;
   margin-top: 5px;
   margin-left: 10px;
 }
 /* Hiển thị lỗi cho input */
-.form .inputError {
+.checkoutLeft .inputError {
   border-inline: 2px solid red;
 }

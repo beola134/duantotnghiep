@@ -203,6 +203,8 @@ export default function ThanhToan() {
         icon: "success",
         title: "Thành công",
         text: data.message,
+      }).then(() => {
+        window.location.href = "/";
       });
       localStorage.setItem("cartItems", JSON.stringify([]));
       setCartItems([]);
@@ -380,7 +382,9 @@ export default function ThanhToan() {
                 Tổng thanh toán:
                 <span className={styles.price}>
                   {(
-                    totalAmount - (discountType === "phan_tram" ? (totalAmount * discountValue) / 100 : discountValue)
+                    totalAmount -
+                    (discountType === "phan_tram" ? (totalAmount * discountValue) / 100 : discountValue) +
+                    (totalAmount < 1000000 ? 30000 : 0)
                   ).toLocaleString("vi-VN")}
                   ₫
                 </span>
