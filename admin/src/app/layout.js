@@ -1,5 +1,6 @@
 import Menu from "./components/layout/header/header";
 import "./globals.css";
+import 'boxicons/css/boxicons.min.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 export default function RootLayout({ children }) {
   return (
