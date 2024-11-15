@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import styles from "./thanhtoan.module.css";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ThanhToan() {
   const [user, setUser] = useState({
@@ -162,7 +164,41 @@ export default function ThanhToan() {
     return true;
   };
 
+  // Kiểm tra thông tin người dùng
+  const validateFields = () => {
+    // Kiểm tra thông tin điện thoại
+    const phoneRegex = /^[0-9]{10,11}$/;
+    if (!user.dien_thoai || !phoneRegex.test(user.dien_thoai)) {
+      toast.error("Vui lòng nhập số điện thoại hợp lệ.");
+      return false;
+    }
+
+    // Kiểm tra thông tin họ và tên
+    if (!user.ho_ten) {
+      toast.error("Vui lòng nhập họ và tên.");
+      return false;
+    }
+
+    // Kiểm tra thông tin địa chỉ
+    if (!user.dia_chi) {
+      toast.error("Vui lòng nhập địa chỉ giao hàng.");
+      return false;
+    }
+
+    // Kiểm tra phương thức thanh toán
+    if (!selectedPaymentMethod) {
+      toast.error("Vui lòng chọn phương thức thanh toán.");
+      return false;
+    }
+
+    return true; // Tất cả trường hợp hợp lệ
+  };
+
+  // Xử lý khi người dùng click vào nút thanh toán
   const handleClick = async () => {
+    const isValid = validateFields(); // Kiểm tra các trường thông tin
+    if (!isValid) return; // Nếu không hợp lệ thì dừng lại
+
     const isLoggedIn = await userLogin(); // Kiểm tra xem người dùng đã đăng nhập chưa
     if (!isLoggedIn) return;
 
@@ -221,6 +257,16 @@ export default function ThanhToan() {
     <>
       <div className={styles.container}>
         <div className={styles.checkoutContainer}>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
           <div className={styles.checkoutLeft}>
             <div className={`${styles.box} ${styles.customerInfo}`}>
               <p className={styles.productTitle}>Thông tin khách hàng</p>
@@ -243,64 +289,51 @@ export default function ThanhToan() {
                 value={user.ho_ten}
                 onChange={(e) => setUser({ ...user, ho_ten: e.target.value })}
               />
+
               <input
                 type="text"
                 placeholder="Địa chỉ"
                 value={user.dia_chi}
                 onChange={(e) => setUser({ ...user, dia_chi: e.target.value })}
               />
+
               <textarea
                 className={styles.textarea}
                 placeholder="Ghi chú"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
               ></textarea>
+
+              {/* phương thức thanh toán  */}
               <div className={styles.paymentMethods}>
-                <p className={styles.productTitle}>Phương thức thanh toán </p>
-                <div className={styles.paymentOptions}>
-                  <button
-                    className={`${styles.paymentOption} ${selectedPaymentMethod === 1 ? styles.selected : ""}`}
-                    onClick={() => setSelectedPaymentMethod(1)}
-                  >
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSjgeVcZ4-Ce-KW8KlVF1JN88mRv1moJbpUg&s"
-                      alt="Thanh toán khi nhận hàng"
-                    />
-                    <span>Thanh toán khi nhận hàng</span>
-                  </button>
-                  <button
-                    className={`${styles.paymentOption} ${selectedPaymentMethod === 2 ? styles.selected : ""}`}
-                    onClick={() => setSelectedPaymentMethod(2)}
-                  >
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGxsoe7iPccCnGraliGFCLCvbg3bO3PDtELQ&s"
-                      alt="Thanh toán bằng tài khoản ngân hàng"
-                    />
-                    <span>Thanh toán bằng tài khoản ngân hàng</span>
-                  </button>
-                  <button
-                    className={`${styles.paymentOption} ${selectedPaymentMethod === 3 ? styles.selected : ""}`}
-                    onClick={() => setSelectedPaymentMethod(3)}
-                  >
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp1v7T287-ikP1m7dEUbs2n1SbbLEqkMd1ZA&s"
-                      alt="Thanh toán bằng VNPay"
-                    />
-                    <span>Thanh toán bằng VNPay</span>
-                  </button>
-                  <button
-                    className={`${styles.paymentOption} ${selectedPaymentMethod === 4 ? styles.selected : ""}`}
-                    onClick={() => setSelectedPaymentMethod(4)}
-                  >
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmzB5_qUPLtN4E3LuVFxMvy92q1Vo10N_m2Q&s"
-                      alt="Thanh toán ví điện tử Momo"
-                    />
-                    <span>Thanh toán ví điện tử Momo</span>
-                  </button>
-                </div>
+                <p className={styles.productTitle}>Phương thức thanh toán</p>
+                <select
+                  as="select"
+                  name="phuong_thuc_thanh_toan"
+                  className={styles.paymentSelect}
+                  value={selectedPaymentMethod || ""}
+                  onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                >
+                  <option value="" className={styles.paymentOption} disabled>
+                    Chọn phương thức thanh toán
+                  </option>
+                  <option value={1} className={styles.paymentOption}>
+                    Thanh toán khi nhận hàng
+                  </option>
+                  <option value={2} className={styles.paymentOption}>
+                    Thanh toán bằng tài khoản ngân hàng
+                  </option>
+                  <option value={3} className={styles.paymentOption}>
+                    Thanh toán bằng VNPay
+                  </option>
+                  <option value={4} className={styles.paymentOption}>
+                    Thanh toán ví điện tử Momo
+                  </option>
+                </select>
               </div>
             </div>
+
+            {/* product */}
             {cartItems.map((item, index) => (
               <div className={`${styles.box} ${styles.productCard}`} key={item._id}>
                 <div className={styles.productInfo}>
@@ -312,9 +345,9 @@ export default function ThanhToan() {
                   </div>
 
                   <div style={{ margin: "20px" }} className={styles.productDetails}>
-                    <p className={styles.productName}>{item.ten_san_pham}</p>
-                    <p className={styles.productModel}>{item.loai}</p>
-                    <p className={styles.productCode}>{item.ma_san_pham}</p>
+                    <p className={styles.productName}>Tên sản phẩm: {item.ten_san_pham}</p>
+                    <p className={styles.productModel}>Loại máy: {item.loai}</p>
+                    <p className={styles.productCode}>Mã sản phẩm: {item.ma_san_pham}</p>
                     <p className={styles.productSize}>Đường kính: {item.duong_kinh}</p>
                   </div>
                 </div>
@@ -341,6 +374,7 @@ export default function ThanhToan() {
             ))}
           </div>
 
+          {/* tổng thanh toán */}
           <aside className={styles.cartSummary}>
             <div className={styles.discountCode}>
               <input
@@ -391,7 +425,7 @@ export default function ThanhToan() {
               </p>
             </div>
             <button className={styles.checkoutButton} onClick={handleClick}>
-              Thanh toán
+              Tiến hành thanh toán
             </button>
           </aside>
         </div>
