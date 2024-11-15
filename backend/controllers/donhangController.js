@@ -286,7 +286,12 @@ const getDonHangByUserId = async (req, res) => {
 
     // Lấy tất cả đơn hàng theo id_nguoi_dung
     const donHangs = await DonHang.findAll({
-      where: { id_nguoi_dung, trang_thai: "Giao hàng thành công" },
+      where: {
+        id_nguoi_dung, 
+        trang_thai: {
+          [Op.or]: ["Giao hàng thành công", "Đơn hàng đã hủy"] 
+        }
+      },
       include: [
         {
           model: ChiTietDonHang,
