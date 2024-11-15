@@ -19,7 +19,6 @@ const User = ({ params }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [avatarFile, setAvatarFile] = useState(null);
   const [activeTab, setActiveTab] = useState("profile");
-
   const [passwordData, setPasswordData] = useState({
     mat_khau: "",
     mat_khau_moi: "",
@@ -37,7 +36,6 @@ const User = ({ params }) => {
         console.error("Error fetching user data:", error);
       }
     };
-
     fetchUserData();
   }, [id]);
 
@@ -201,7 +199,9 @@ const User = ({ params }) => {
 
     setIsSubmitting(false);
   };
-
+  {
+    /*Đăng xuất*/
+  }
   const handleLayout = () => {
     Cookies.remove("token");
     Swal.fire({
@@ -440,7 +440,7 @@ const User = ({ params }) => {
                       </span>{" "}
                     </p>
                     <p>
-                      Tổng Giá Trị:
+                      Tổng Thanh Toán:
                       <span
                         style={{
                           fontSize: "20px",
