@@ -1,4 +1,4 @@
-const Cate = require("../models/cate");
+const ThuongHieu = require("../models/thuonghieu");
 const CMT = require('../models/comment');
 const Product = require('../models/product');
 const Users = require("../models/users");
