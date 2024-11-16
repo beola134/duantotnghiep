@@ -1357,12 +1357,12 @@ exports.getXuatXuMy = async (req, res) => {
   }
 };
 
-// Show sản phẩm theo id danh mục  vòng tay trang sức
-exports.getProdctsCateLoai = async (req, res) => {
+// Show sản phẩm theo id   vòng tay trang sức
+exports.getProdctsthuonghieuloai = async (req, res) => {
   try {
     const products = await Product.findAll({
       where: {
-        id_danh_muc: req.params.id,
+        id_thuong_hieu: req.params.id,
         loai: {
           [Op.in]: ["Vòng Tay", "Trang Sức"],
         },
@@ -1373,9 +1373,9 @@ exports.getProdctsCateLoai = async (req, res) => {
       return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
     }
 
-    const cate = await Category.findOne({ where: { _id: req.params.id } });
+    const th = await ThuongHieu.findOne({ where: { _id: req.params.id } });
 
-    res.json({ products, cate });
+    res.json({ products, th});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
