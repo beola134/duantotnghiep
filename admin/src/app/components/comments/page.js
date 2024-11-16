@@ -101,13 +101,7 @@ export default function CommentsPage() {
             <div className={styles.tableContainer}>
               <div className={styles.tableControls}>
                 <label htmlFor="entries" style={{ fontWeight: "bold" }}>
-                  Hiện&nbsp;
-                  <select id="entries">
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                  </select>
-                  <span>&nbsp; danh mục</span>
+                
                 </label>
                 <div className={styles.search}>
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
@@ -119,10 +113,8 @@ export default function CommentsPage() {
               <table id="productTable" className={styles.productTable}>
                 <thead>
                   <tr>
-                    <th style={{ width: "3%" }}>
-                      <input type="checkbox" id="selectAll" />
-                    </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>Id bình luận</th>
+                  
+                    <th style={{ width: "15%", textAlign: "center" }}>Id bình luận</th>
                     <th style={{ width: "10%", textAlign: "center" }}>Id sản phẩm</th>
                     <th style={{ width: "8%", textAlign: "center" }}>Họ và tên </th>
                     <th style={{ width: "12%", textAlign: "center" }}>Nội dung</th>
@@ -137,9 +129,7 @@ export default function CommentsPage() {
 
                     return (
                       <tr key={_id} className={!trang_thai ? styles.hiddenRow : ""}>
-                        <td>
-                          <input type="checkbox" className={styles.rowCheckbox} />
-                        </td>
+                      
                         <td>{_id}</td>
                         <td>{id_san_pham}</td>
                         <td style={{ textAlign: "center" }}>
