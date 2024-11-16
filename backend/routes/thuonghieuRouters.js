@@ -6,26 +6,27 @@ const thuonghieuController = require("../controllers/thuonghieuController");
 
 //show tất cả thương hiệu
 //http://localhost:5000/cate/allcate
-router.get("/allcate", cateController.getAllCates);
+router.get("/allcate", thuonghieuController.getAllCates);
 
 //show tất cả cate
-//http://localhost:5000/cate/allcatess
-router.get("/allcatess", thuonghieuController.getAllThuongHieu);
+//http://localhost:5000/thuonghieu/allthuonghieu
+router.get("/allthuonghieu", thuonghieuController.getAllThuongHieu);
 
 //show cate theo id
-//http://localhost:5000/cate/allcatess/:id
-router.get("/allcatess/:id", thuonghieuController.getthuonghieuById);
+//http://localhost:5000/thuonghieu/allthuonghieu/:id
+router.get("/allthuonghieu/:id", thuonghieuController.getthuonghieuById);
 
 //thêm danh mục
 //http://localhost:5000/cate/addcate
-router.post("/addcate", cateController.addCate);
+router.post("/addcate", thuonghieuController.addCate);
 
 //xóa danh mục
 //http://localhost:5000/cate/deletecate
-router.delete("/deletecate/:id", cateController.deleteCate);
+router.delete("/deletecate/:id", thuonghieuController.deleteCate);
 
 //sửa danh mục
 //http://localhost:5000/cate/updatecate
-router.put("/updatecate/:id", cateController.updateCate);
+router.put("/updatecate/:id", thuonghieuController.updateCate);
+
 
 module.exports = router;

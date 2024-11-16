@@ -5,7 +5,7 @@ import styles from "./chitietdanhmuc.module.css";
 import Loading from "../../loading/page";
 
 export default function DanhMuc({ params }) {
-  const { id: danh_muc } = params;
+  const { id: thuong_hieu } = params;
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,7 +16,7 @@ export default function DanhMuc({ params }) {
   const [totalPages, setTotalPages] = useState(1);
   const [filter, setFilter] = useState({
     gioi_tinh: "",
-    danh_muc: danh_muc,
+    thuong_hieu: thuong_hieu,
     muc_gia: "",
     khuyenmai: "",
     loai_may: "",
@@ -55,24 +55,24 @@ export default function DanhMuc({ params }) {
   };
 
   useEffect(() => {
-    if (danh_muc) {
-      setFilter((prevFilter) => ({ ...prevFilter, danh_muc }));
-      setCategoryName(danh_muc);
+    if (thuong_hieu) {
+      setFilter((prevFilter) => ({ ...prevFilter, thuong_hieu }));
+      setCategoryName(thuong_hieu);
       setCurrentPage(1);
       laySanPham();
     }
-  }, [danh_muc]);
+  }, [thuong_hieu]);
 
   useEffect(() => {
     laySanPham();
   }, [filter, currentPage]);
   useEffect(() => {
-    if (filter.danh_muc) {
-      setCategoryName(filter.danh_muc);
+    if (filter.thuong_hieu) {
+      setCategoryName(filter.thuong_hieu);
       setCurrentPage(1);
       laySanPham();
     }
-  }, [filter.danh_muc]);
+  }, [filter.thuong_hieu]);
   const capNhatBoLoc = (filterType, value) => {
     const newFilter = { ...filter, [filterType]: value };
     setFilter(newFilter);
@@ -91,7 +91,7 @@ export default function DanhMuc({ params }) {
     setSelectedFilter([]);
     setFilter({
       gioi_tinh: "",
-      danh_muc: danh_muc,
+      thuong_hieu: thuong_hieu,
       muc_gia: "",
       khuyenmai: "",
       loai_may: "",
@@ -276,7 +276,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="LONGINES"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "LONGINES")
+                                  capNhatBoLoc("thuong_hieu", "LONGINES")
                                 }
                               >
                                 LONGINES
@@ -288,7 +288,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="TISSOT"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "TISSOT")
+                                  capNhatBoLoc("thuong_hieu", "TISSOT")
                                 }
                               >
                                 TISSOT
@@ -299,7 +299,7 @@ export default function DanhMuc({ params }) {
                                 rel="nofollow"
                                 href="#"
                                 title="MIDO"
-                                onClick={() => capNhatBoLoc("danh_muc", "MIDO")}
+                                onClick={() => capNhatBoLoc("thuong_hieu", "MIDO")}
                               >
                                 MIDO
                               </Link>
@@ -310,7 +310,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="CERTINA"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "CERTINA")
+                                  capNhatBoLoc("thuong_hieu", "CERTINA")
                                 }
                               >
                                 CERTINA
@@ -322,7 +322,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="HAMILTON"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "HAMILTON")
+                                  capNhatBoLoc("thuong_hieu", "HAMILTON")
                                 }
                               >
                                 HAMILTON
@@ -334,7 +334,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="TITONI"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "TITONI")
+                                  capNhatBoLoc("thuong_hieu", "TITONI")
                                 }
                               >
                                 TITONI
@@ -347,8 +347,8 @@ export default function DanhMuc({ params }) {
                                 title="FREDERIQUECONSTANT"
                                 onClick={() =>
                                   capNhatBoLoc(
-                                    "danh_muc",
-                                    "FREDERIQUE CONSTANT"
+                                    "thuong_hieu",
+                                    "FREDERIQUECONSTANT"
                                   )
                                 }
                               >
@@ -359,9 +359,9 @@ export default function DanhMuc({ params }) {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="CALVIN KLEIN"
+                                title="CALVINKLEIN"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "CALVINKLEIN")
+                                  capNhatBoLoc("thuong_hieu", "CALVINKLEIN")
                                 }
                               >
                                 CALVIN KLEIN
@@ -372,7 +372,7 @@ export default function DanhMuc({ params }) {
                                 rel="nofollow"
                                 href="#"
                                 title="EDOX"
-                                onClick={() => capNhatBoLoc("danh_muc", "EDOX")}
+                                onClick={() => capNhatBoLoc("thuong_hieu", "EDOX")}
                               >
                                 EDOX
                               </Link>
@@ -383,7 +383,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="CLAUDE BERNARD"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "CLAUDEBERNARD")
+                                  capNhatBoLoc("thuong_hieu", "CLAUDEBERNARD")
                                 }
                               >
                                 CLAUDE BERNARD
@@ -395,7 +395,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="SEIKO"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "SEIKO")
+                                  capNhatBoLoc("thuong_hieu", "SEIKO")
                                 }
                               >
                                 SEIKO
@@ -407,7 +407,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="CITIZEN"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "CITIZEN")
+                                  capNhatBoLoc("thuong_hieu", "CITIZEN")
                                 }
                               >
                                 CITIZEN
@@ -419,7 +419,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="ORIENT"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "ORIENT")
+                                  capNhatBoLoc("thuong_hieu", "ORIENT")
                                 }
                               >
                                 ORIENT
@@ -431,7 +431,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="CASIO"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "CASIO")
+                                  capNhatBoLoc("thuong_hieu", "CASIO")
                                 }
                               >
                                 CASIO
@@ -443,7 +443,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="OLYM PIANUS"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "OLYMPIANUS")
+                                  capNhatBoLoc("thuong_hieu", "OLYMPIANUS")
                                 }
                               >
                                 OLYM PIANUS
@@ -453,9 +453,9 @@ export default function DanhMuc({ params }) {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="DANIEL WELLINGTON"
+                                title="DANIELWELLINGTON"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "DANIELWELLINGTON")
+                                  capNhatBoLoc("thuong_hieu", "DANIELWELLINGTON")
                                 }
                               >
                                 DANIEL WELLINGTON
@@ -467,7 +467,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="FOSSIL"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "FOSSIL")
+                                  capNhatBoLoc("thuong_hieu", "FOSSIL")
                                 }
                               >
                                 FOSSIL
@@ -479,7 +479,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="SKAGEN"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "SKAGEN")
+                                  capNhatBoLoc("thuong_hieu", "SKAGEN")
                                 }
                               >
                                 SKAGEN
@@ -491,7 +491,7 @@ export default function DanhMuc({ params }) {
                                 href="#"
                                 title="MICHAEL KORS"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "MICHAELKORS")
+                                  capNhatBoLoc("thuong_hieu", "MICHAELKORS")
                                 }
                               >
                                 MICHAEL KORS

@@ -52,14 +52,14 @@ exports.getAllProducts = async (req, res) => {
     try {
       const products = await Product.findAll({
         where: {
-          id_danh_muc: req.params.id,
+          id_thuong_hieu: req.params.id,
           loai: {
             [Op.notIn]: ["Vòng Tay", "Trang Sức"],
           },
         },
       });
 
-      const cate = await Category.findOne({ where: { _id: req.params.id } });
+      const cate = await ThuongHieu.findOne({ where: { _id: req.params.id } });
 
       res.json({ products, cate });
     } catch (error) {

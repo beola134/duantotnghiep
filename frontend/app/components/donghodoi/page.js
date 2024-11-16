@@ -16,7 +16,7 @@ export default function DonghoDoi() {
 
   const [filter, setFilter] = useState({
     gioi_tinh: "Đồng Hồ Đôi",
-    danh_muc: "",
+    thuong_hieu: "",
     muc_gia: "",
     khuyenmai: "",
     loai_may: "",
@@ -41,7 +41,7 @@ export default function DonghoDoi() {
       }
       const data = await response.json();
       setProducts(data.products);
-      setTotalPages(data.totalPages);
+      setTotalPages(data.totalPages || 1);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -72,8 +72,9 @@ export default function DonghoDoi() {
 
     setSelectedFilter(newFilters);
     setFilter(newFilter);
+    setCurrentPage(1);
 
-    if (filterType === "danh_muc") {
+    if (filterType === "thuong_hieu") {
       setCategoryName(value);
     }
   };
@@ -97,7 +98,7 @@ export default function DonghoDoi() {
     const [filterType] = filterToRemove.split("=");
     const updatedFilter = { ...filter, [filterType]: "" };
 
-    if (filterType === "danh_muc") {
+    if (filterType === "thuong_hieu") {
       setCategoryName("Đồng hồ đôi");
     }
     setSelectedFilter(newFilters);
@@ -256,7 +257,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="LONGINES"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "LONGINES")
+                                  capNhatBoLoc("thuong_hieu", "LONGINES")
                                 }
                               >
                                 LONGINES
@@ -268,7 +269,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="TISSOT"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "TISSOT")
+                                  capNhatBoLoc("thuong_hieu", "TISSOT")
                                 }
                               >
                                 TISSOT
@@ -279,7 +280,7 @@ export default function DonghoDoi() {
                                 rel="nofollow"
                                 href="#"
                                 title="MIDO"
-                                onClick={() => capNhatBoLoc("danh_muc", "MIDO")}
+                                onClick={() => capNhatBoLoc("thuong_hieu", "MIDO")}
                               >
                                 MIDO
                               </Link>
@@ -290,7 +291,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="CERTINA"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "CERTINA")
+                                  capNhatBoLoc("thuong_hieu", "CERTINA")
                                 }
                               >
                                 CERTINA
@@ -302,7 +303,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="HAMILTON"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "HAMILTON")
+                                  capNhatBoLoc("thuong_hieu", "HAMILTON")
                                 }
                               >
                                 HAMILTON
@@ -314,7 +315,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="TITONI"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "TITONI")
+                                  capNhatBoLoc("thuong_hieu", "TITONI")
                                 }
                               >
                                 TITONI
@@ -324,9 +325,9 @@ export default function DonghoDoi() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="FREDERIQUE CONSTANT"
+                                title="FREDERIQUECONSTANT"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "FREDERIQUECONSTANT")
+                                  capNhatBoLoc("thuong_hieu", "FREDERIQUECONSTANT")
                                 }
                               >
                                 FREDERIQUE CONSTANT
@@ -336,9 +337,9 @@ export default function DonghoDoi() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="CALVIN KLEIN"
+                                title="CALVINKLEIN"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "CALVINKLEIN")
+                                  capNhatBoLoc("thuong_hieu", "CALVINKLEIN")
                                 }
                               >
                                 CALVIN KLEIN
@@ -349,7 +350,7 @@ export default function DonghoDoi() {
                                 rel="nofollow"
                                 href="#"
                                 title="EDOX"
-                                onClick={() => capNhatBoLoc("danh_muc", "EDOX")}
+                                onClick={() => capNhatBoLoc("thuong_hieu", "EDOX")}
                               >
                                 EDOX
                               </Link>
@@ -358,9 +359,9 @@ export default function DonghoDoi() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="CLAUDE BERNARD"
+                                title="CLAUDEBERNARD"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "CLAUDEBERNARD")
+                                  capNhatBoLoc("thuong_hieu", "CLAUDEBERNARD")
                                 }
                               >
                                 CLAUDE BERNARD
@@ -372,7 +373,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="SEIKO"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "SEIKO")
+                                  capNhatBoLoc("thuong_hieu", "SEIKO")
                                 }
                               >
                                 SEIKO
@@ -384,7 +385,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="CITIZEN"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "CITIZEN")
+                                  capNhatBoLoc("thuong_hieu", "CITIZEN")
                                 }
                               >
                                 CITIZEN
@@ -396,7 +397,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="ORIENT"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "ORIENT")
+                                  capNhatBoLoc("thuong_hieu", "ORIENT")
                                 }
                               >
                                 ORIENT
@@ -408,7 +409,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="CASIO"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "CASIO")
+                                  capNhatBoLoc("thuong_hieu", "CASIO")
                                 }
                               >
                                 CASIO
@@ -418,9 +419,9 @@ export default function DonghoDoi() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="OLYM PIANUS"
+                                title="OLYMPIANUS"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "OLYMPIANUS")
+                                  capNhatBoLoc("thuong_hieu", "OLYMPIANUS")
                                 }
                               >
                                 OLYM PIANUS
@@ -430,9 +431,9 @@ export default function DonghoDoi() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="DANIEL WELLINGTON"
+                                title="DANIELWELLINGTON"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "DANIELWELLINGTON")
+                                  capNhatBoLoc("thuong_hieu", "DANIELWELLINGTON")
                                 }
                               >
                                 DANIEL WELLINGTON
@@ -444,7 +445,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="FOSSIL"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "FOSSIL")
+                                  capNhatBoLoc("thuong_hieu", "FOSSIL")
                                 }
                               >
                                 FOSSIL
@@ -456,7 +457,7 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="SKAGEN"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "SKAGEN")
+                                  capNhatBoLoc("thuong_hieu", "SKAGEN")
                                 }
                               >
                                 SKAGEN
@@ -466,9 +467,9 @@ export default function DonghoDoi() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="MICHAEL KORS"
+                                title="MICHAELKORS"
                                 onClick={() =>
-                                  capNhatBoLoc("danh_muc", "MICHAELKORS")
+                                  capNhatBoLoc("thuong_hieu", "MICHAELKORS")
                                 }
                               >
                                 MICHAEL KORS
@@ -1987,7 +1988,7 @@ export default function DonghoDoi() {
 
                     <span
                       className={styles.currentPage}
-                    >{`Trang ${currentPage} / ${totalPages || 1}`}</span>
+                    >{`Trang ${currentPage} / ${totalPages}`}</span>
 
                     <span
                       className={
