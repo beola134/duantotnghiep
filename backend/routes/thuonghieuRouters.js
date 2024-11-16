@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const cateController = require("../controllers/thuonghieuController");
+const thuonghieuController = require("../controllers/thuonghieuController");
 //test sua lôi push cho son
 //test sua loi push cho son 2
 
@@ -10,11 +10,11 @@ router.get("/allcate", cateController.getAllCates);
 
 //show tất cả cate
 //http://localhost:5000/cate/allcatess
-router.get("/allcatess", cateController.getAllCatess);
+router.get("/allcatess", thuonghieuController.getAllThuongHieu);
 
 //show cate theo id
 //http://localhost:5000/cate/allcatess/:id
-router.get("/allcatess/:id", cateController.getCateById);
+router.get("/allcatess/:id", thuonghieuController.getthuonghieuId);
 
 //thêm danh mục
 //http://localhost:5000/cate/addcate
