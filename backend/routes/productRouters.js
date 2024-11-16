@@ -88,7 +88,7 @@ router.get("/allsp/getXuatXuNB", productController.getXuatXuNB);
 router.get("/allsp/getXuatXuMy", productController.getXuatXuMy);
 
 // Show sản phẩm theo id danh mục  vòng tay trang sức
-//http://localhost:5000/product/category/loai/:id/"
-router.get("/category/loai/:id/", productController.getProdctsCateLoai);
+//http://localhost:5000/product/thuonghieu/loai/:id/"
+router.get("/thuonghieu/loai/:id/", productController.getProdctsthuonghieuloai);
 
 module.exports = router;
