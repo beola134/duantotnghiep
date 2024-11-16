@@ -34,7 +34,7 @@ exports.getAllThuongHieu = async (req, res) => {
 };
 
 // Lấy thương hiệu theo ID
-exports.getCateById = async (req, res) => {
+exports.getthuonghieuById = async (req, res) => {
   try {
     const th = await ThuongHieu.findOne({ where: { _id: req.params.id } });
     if (!th) {
