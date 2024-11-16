@@ -2,12 +2,10 @@ const express = require("express");
 const router = express.Router();
 const productController = require("../controllers/productController");
 
-//show trạng thái cảu sản phẩm
+//show trạng thái của sản phẩm
 //http://localhost:5000/product/getProducts
 router.get("/getProducts", productController.getProducts);
-
-
-//show sản phẩm mới nhất theo gioi_tinh nam
+//bộ lọc sản phẩm đồng hồ
 //http://localhost:5000/product/filtersanphamdongho
 router.get("/filtersanphamdongho", productController.filtersanphamdongho);
 
@@ -57,39 +55,7 @@ router.get("/limit/doi", productController.getNewLimitCouple);
 //http://localhost:5000/product/new/doi
 router.get("/new/doi", productController.getNewProductsCouple);
 
-//show sản phẩm theo giá dưới 2 củ
-//http://localhost:5000/product/allsp/underTwomillion
-router.get("/allsp/underTwomillion", productController.getProductsUnderTwoMillion);
-
-//show sản phẩm theo giá từ 2 dến 5 triệu
-//http://localhost:5000/product/tu2den5
-router.get("/tu2den5", productController.getProductstu2den5trieu);
-
-//show sản phẩm theo giá từ 5 dến 10 triệu
-//http://localhost:5000/product/tu5den10
-router.get("/tu5den10", productController.getProductstu5den10trieu);
-
-//show sản phẩm theo giá từ 10 dến 20 triệu
-//http://localhost:5000/product/tu10den20
-router.get("/tu10den20", productController.getProductstu10den20trieu);
-
-//show sản phẩm theo giá từ 20 dến 30 triệu
-//http://localhost:5000/product/tu20den30
-router.get("/tu20den30", productController.getProductstu20den30trieu);
-
-//show sản phẩm theo giá từ 30 dến 50 triệu
-//http://localhost:5000/product/tu30den50
-router.get("/tu30den50", productController.getProductstu30den50trieu);
-
-//show sản phẩm theo giá từ 50 dến 100 triệu
-//http://localhost:5000/product/tu50den100
-router.get("/tu50den100", productController.getProductstu50den100trieu);
-
-//show sản phẩm theo giá trên 100 triệu
-//http://localhost:5000/product/over100
-router.get("/over100", productController.getProductsOver100trieu);
-
-// show sản phẩm theo dây đồng hồ 
+// show sản phẩm theo dây đồng hồ
 //http://localhost:5000/product/filterDayDongHo"
 router.get("/filterDayDongHo", productController.filterDayDongHo);
 
@@ -104,18 +70,6 @@ router.get("/filterBaoThuc", productController.filterBaoThuc);
 // show sản phẩm theo đồng hồ treo tuong
 //http://localhost:5000/product/filterTreoTuong"
 router.get("/filterTreoTuong", productController.filterTreoTuong);
-
-// show sản phẩm thêm chất liệu dây da
-//http://localhost:5000/product/allsp/getChatLieuDayDa"
-router.get("/allsp/getChatLieuDayDa", productController.getChatLieuDayDa);
-
-// show sản phẩm thêm chất liệu dây dù
-//http://localhost:5000/product/allsp/getChatLieuDayDu"
-router.get("/allsp/getChatLieuDayDu", productController.getChatLieuDayDu);
-
-// show sản phẩm thêm chất liệu dây caosu
-//http://localhost:5000/product/allsp/getChatLieuDayCaoSu"
-router.get("/allsp/getChatLieuDayCaoSu", productController.getChatLieuDayCaoSu);
 
 // show sản phẩm thêm Xuất xứ TS
 //http://localhost:5000/product/allsp/getXuatXuTS"

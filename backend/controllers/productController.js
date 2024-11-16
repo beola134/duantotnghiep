@@ -4,7 +4,7 @@ const ThuongHieu = require("../models/thuonghieu");
 const { Sequelize, Op } = require("sequelize");
 const { ChiTietDonHang, DonHang } = require("../models");
 
-// xử lí phần trăm giá giảm
+// Bộ lọc sản phẩm đồng hồ
 exports.filtersanphamdongho = async (req, res) => {
   try {
     const {
@@ -20,7 +20,7 @@ exports.filtersanphamdongho = async (req, res) => {
       phong_cach,
       kieu_dang,
       xuat_xu,
-      danh_muc,
+      thuong_hieu,
       limit = 20,
       page = 1,
     } = req.query;
@@ -355,13 +355,15 @@ exports.filtersanphamdongho = async (req, res) => {
           break;
       }
     }
-    if (danh_muc) {
-      const category = await Cate.findOne({ where: { danh_muc: danh_muc } });
-      console.log("category result", category);
-      if (category) {
-        filter.id_danh_muc = category._id;
+    if (thuong_hieu) {
+      const thuonghieu = await ThuongHieu.findOne({
+        where: { thuong_hieu: thuong_hieu },
+      });
+      console.log("ThuongHieu result", thuonghieu);
+      if (thuonghieu) {
+        filter.id_thuong_hieu = thuonghieu._id;
       } else {
-        return res.status(404).json({ message: "Danh mục không tồn tại" });
+        return res.status(404).json({ message: "Thương hiệu không tồn tại" });
       }
     }
     if (muc_gia) {
@@ -495,7 +497,7 @@ exports.getProducts = async (req, res) => {
 
         return {
           ...product.dataValues,
-          da_ban: soldQuantity || 0, 
+          da_ban: soldQuantity || 0,
           trang_thai: product.so_luong > 0 ? "Còn hàng" : "Hết hàng",
         };
       })
@@ -507,7 +509,7 @@ exports.getProducts = async (req, res) => {
       currentPage: parseInt(page),
       totalPages,
       totalProducts,
-      products: productsWithSales, 
+      products: productsWithSales,
     });
   } catch (error) {
     console.log("Error:", error);
@@ -1260,232 +1262,6 @@ exports.getCouple10sp = async (req, res) => {
   }
 };
 
-// lấy sản phẩm dưới 2 c
-exports.getProductsUnderTwoMillion = async (req, res) => {
-  try {
-    const allProducts = await Product.findAll({
-      where: {
-        gioi_tinh: "Nam",
-        loai: {
-          [Op.notIn]: ["Vòng tay", "Trang sức"],
-        },
-      },
-    });
-    const products = allProducts.filter((product) => {
-      if (product.gia_giam > 0) {
-        return product.gia_giam < 2000000;
-      } else {
-        return product.gia_san_pham < 2000000;
-      }
-    });
-    if (products.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "khong tìm thấy sản phẩm dưới 2 triệu" });
-    }
-    res.json({ products });
-  } catch (error) {
-    console.error("sản phẩm nam dưới 2 triệu", error.message);
-    res.status(500).json({ error: error.message });
-  }
-};
-
-//lấy sản phẩm từ 2 đến 5 triệu
-exports.getProductstu2den5trieu = async (req, res) => {
-  try {
-    const allProducts = await Product.findAll({
-      where: {
-        gioi_tinh: "Nam",
-        loai: {
-          [Op.notIn]: ["Vòng tay", "Trang sức"],
-        },
-      },
-    });
-    const products = allProducts.filter((product) => {
-      if (product.gia_giam > 0) {
-        return product.gia_giam >= 2000000 && product.gia_giam <= 5000000;
-      } else {
-        return (
-          product.gia_san_pham >= 2000000 && product.gia_san_pham <= 5000000
-        );
-      }
-    });
-
-    if (products.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "Không tìm thấy sản phẩm nào từ 2 đến 5 triệu" });
-    }
-
-    res.json({ products });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: error.message });
-  }
-};
-
-//lấy sản phẩm từ 5 đến 10 triệu
-exports.getProductstu5den10trieu = async (req, res) => {
-  try {
-    const allProducts = await Product.findAll({
-      where: {
-        gioi_tinh: "Nam",
-        loai: {
-          [Op.notIn]: ["Vòng tay", "Trang sức"],
-        },
-      },
-    });
-    const products = allProducts.filter((product) => {
-      if (product.gia_giam > 0) {
-        return product.gia_giam >= 5000000 && product.gia_giam <= 10000000;
-      } else {
-        return (
-          product.gia_san_pham >= 5000000 && product.gia_san_pham <= 10000000
-        );
-      }
-    });
-
-    res.json({ products });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: error.message });
-  }
-};
-
-//lấy sản phẩm từ 10 đến 20 triệu
-exports.getProductstu10den20trieu = async (req, res) => {
-  try {
-    const allProducts = await Product.findAll({
-      where: {
-        gioi_tinh: "Nam",
-        loai: {
-          [Op.notIn]: ["Vòng tay", "Trang sức"],
-        },
-      },
-    });
-    const products = allProducts.filter((product) => {
-      if (product.gia_giam > 0) {
-        return product.gia_giam >= 10000000 && product.gia_giam <= 20000000;
-      } else {
-        return (
-          product.gia_san_pham >= 10000000 && product.gia_san_pham <= 20000000
-        );
-      }
-    });
-
-    res.json({ products });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: error.message });
-  }
-};
-
-//lấy sản phẩm từ 20 đến 30 triệu
-exports.getProductstu20den30trieu = async (req, res) => {
-  try {
-    const allProducts = await Product.findAll({
-      where: {
-        gioi_tinh: "Nam",
-        loai: {
-          [Op.notIn]: ["Vòng tay", "Trang sức"],
-        },
-      },
-    });
-    const products = allProducts.filter((product) => {
-      if (product.gia_giam > 0) {
-        return product.gia_giam >= 20000000 && product.gia_giam <= 30000000;
-      } else {
-        return (
-          product.gia_san_pham >= 20000000 && product.gia_san_pham <= 30000000
-        );
-      }
-    });
-
-    res.json({ products });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: error.message });
-  }
-};
-//lấy sản phẩm từ 30 đến 50 triệu
-exports.getProductstu30den50trieu = async (req, res) => {
-  try {
-    const allProducts = await Product.findAll({
-      where: {
-        gioi_tinh: "Nam",
-        loai: {
-          [Op.notIn]: ["Vòng tay", "Trang sức"],
-        },
-      },
-    });
-    const products = allProducts.filter((product) => {
-      if (product.gia_giam > 0) {
-        return product.gia_giam >= 30000000 && product.gia_giam <= 50000000;
-      } else {
-        return (
-          product.gia_san_pham >= 30000000 && product.gia_san_pham <= 50000000
-        );
-      }
-    });
-
-    res.json({ products });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: error.message });
-  }
-};
-//lấy sản phẩm từ 50 đến 100 triệu
-exports.getProductstu50den100trieu = async (req, res) => {
-  try {
-    const allProducts = await Product.findAll({
-      where: {
-        gioi_tinh: "Nam",
-        loai: {
-          [Op.notIn]: ["Vòng tay", "Trang sức"],
-        },
-      },
-    });
-    const products = allProducts.filter((product) => {
-      if (product.gia_giam > 0) {
-        return product.gia_giam >= 50000000 && product.gia_giam <= 100000000;
-      } else {
-        return (
-          product.gia_san_pham >= 50000000 && product.gia_san_pham <= 100000000
-        );
-      }
-    });
-
-    res.json({ products });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: error.message });
-  }
-};
-//lấy sản phẩm treen 100 triệu
-exports.getProductsOver100trieu = async (req, res) => {
-  try {
-    const allProducts = await Product.findAll({
-      where: {
-        gioi_tinh: "Nam",
-        loai: {
-          [Op.notIn]: ["Vòng tay", "Trang sức"],
-        },
-      },
-    });
-    const products = allProducts.filter((product) => {
-      if (product.gia_giam > 0) {
-        return product.gia_giam > 100000000;
-      } else {
-        return product.gia_san_pham > 100000000;
-      }
-    });
-    res.json({ products });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ error: error.message });
-  }
-};
-
 // Lấy lọc theo Đồng hồ báo Thức
 exports.getBaoThuc = async (req, res) => {
   try {
@@ -1515,41 +1291,6 @@ exports.getTreoTuong = async (req, res) => {
   try {
     const products = await Product.findAll({
       where: { loai: "Đồng hồ treo tường" },
-    });
-    res.json({ products });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Lấy danh mục theo chat liệu dây da
-exports.getChatLieuDayDa = async (req, res) => {
-  try {
-    const products = await Product.findAll({
-      where: { chat_lieu_day: "Dây da" },
-    });
-    res.json({ products });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-// Lấy danh mục theo chat liệu dây dù
-exports.getChatLieuDayDu = async (req, res) => {
-  try {
-    const products = await Product.findAll({
-      where: { chat_lieu_day: "Dây dù" },
-    });
-    res.json({ products });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// Lấy danh mục theo chat liệu dây caosu
-exports.getChatLieuDayCaoSu = async (req, res) => {
-  try {
-    const products = await Product.findAll({
-      where: { chat_lieu_day: "Dây cao su" },
     });
     res.json({ products });
   } catch (error) {
