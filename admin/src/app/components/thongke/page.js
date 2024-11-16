@@ -165,12 +165,12 @@ export default function AdminStatistics() {
    useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/thongke/getTotalCategories');
+        const response = await fetch('http://localhost:5000/thongke/getTotalThuonghieu');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setCategories(data.totalCategories); 
+        setCategories(data.totalThuonghieu); 
         setLoading(false); 
       } catch (error) {
         setError(error.message); 
