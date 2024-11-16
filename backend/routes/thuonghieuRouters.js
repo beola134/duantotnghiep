@@ -17,16 +17,16 @@ router.get("/allthuonghieu", thuonghieuController.getAllThuongHieu);
 router.get("/allthuonghieu/:id", thuonghieuController.getthuonghieuById);
 
 //thêm danh mục
-//http://localhost:5000/cate/addcate
-router.post("/addcate", thuonghieuController.addCate);
+//http://localhost:5000/thuonghieu/addThuongHieu
+router.post("/addThuongHieu", thuonghieuController.addThuongHieu);
 
 //xóa danh mục
-//http://localhost:5000/cate/deletecate
-router.delete("/deletecate/:id", thuonghieuController.deleteCate);
+//http://localhost:5000/thuonghieu/delete
+router.delete("/delete/:id", thuonghieuController.deletethuonghieu);
 
 //sửa danh mục
-//http://localhost:5000/cate/updatecate
-router.put("/updatecate/:id", thuonghieuController.updateCate);
+//http://localhost:5000/thuonghieu/updatethuonghieu
+router.put("/updatethuonghieu/:id", thuonghieuController.updateThuongHieu);
 
 
 module.exports = router;

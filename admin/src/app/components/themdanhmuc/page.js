@@ -46,13 +46,13 @@ export default function ThemDanhMuc() {
     }
 
     const formData = new FormData();
-    formData.append("danh_muc", productName);
+    formData.append("thuong_hieu", productName);
     formData.append("hinh_anh", productImage);
     formData.append("hinh_anh2", productLogo);
     formData.append("mo_ta", description);
 
     try {
-        const response = await fetch("http://localhost:5000/cate/addcate", {
+        const response = await fetch("http://localhost:5000/thuonghieu/addThuongHieu", {
             method: "POST",
             body: formData,
         });

@@ -20,7 +20,7 @@ export default function DanhMuc() {
   };
    const handleSearch = (query) => {
   const filtered = categories.filter((category) =>
-    removeAccents(category.danh_muc.toLowerCase()).includes(query)
+    removeAccents(category.thuong_hieu.toLowerCase()).includes(query)
   );
   setFilteredCategories(filtered);
   setCurrentPage(1);
@@ -131,7 +131,7 @@ export default function DanhMuc() {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:5000/cate/deletecate/${id}`, {
+        const response = await fetch(`http://localhost:5000/thuonghieu/delete/${id}`, {
           method: "DELETE",
         });
         if (!response.ok) {
@@ -161,12 +161,12 @@ export default function DanhMuc() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:5000/cate/allcatess");
+        const response = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
         const data = await response.json();
-        setCategories(data.cates);
+        setCategories(data.th);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -263,9 +263,9 @@ export default function DanhMuc() {
                         {" "}
                         <p className={styles.mota}>{item.mo_ta}</p>
                       </td>
-                      <td>{item.danh_muc}</td>
+                      <td>{item.thuong_hieu}</td>
                       <td>
-                        <img src={`http://localhost:5000/images/${item.hinh_anh2}`} alt={item.danh_muc} />
+                        <img src={`http://localhost:5000/images/${item.hinh_anh2}`} alt={item.thuong_hieu} />
                       </td>
 
                       <td   style={{ textAlign: "center" }}>
