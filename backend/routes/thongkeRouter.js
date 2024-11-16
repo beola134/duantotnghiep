@@ -10,9 +10,9 @@ router.get("/getTotalProducts", ThongkeController.getTotalProducts);
 //http://localhost:5000/thongke/getTotalProductsCount
 router.get("/getTotalProductsCount", ThongkeController.getTotalProductsCount)
 
-//tổng danh mục
-//http://localhost:5000/thongke/getTotalCategories
-router.get("/getTotalCategories", ThongkeController.getTotalCategories);
+//tổng thương hiệu
+//http://localhost:5000/thongke/getTotalThuonghieu
+router.get("/getTotalThuonghieu", ThongkeController.getTotalThuonghieu);
 
 //tổng user
 //http://localhost:5000/thongke/getTotalUsers

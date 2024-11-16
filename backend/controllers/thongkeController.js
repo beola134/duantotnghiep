@@ -33,17 +33,17 @@ exports.getTotalProductsCount = async (req, res) => {
   }
 };
 
-// Thống kê tổng danh mục sản phẩm
-exports.getTotalCategories = async (req, res) => {
+// Thống kê tổng thương hiệu sản phẩm
+exports.getTotalThuonghieu = async (req, res) => {
   try {
-    const totalCategories = await Cate.count();
+    const totalThuonghieu = await ThuongHieu.count();
 
-    res.json({ totalCategories });
+    res.json({ totalThuonghieu });
   } catch (error) {
     console.log("Error: ", error);
     res.status(500).json({ error: error.message });
   }
-};
+}
 
 // Tính tổng số người dùng dành cho admin
 exports.getTotalUsers = async (req, res) => {
