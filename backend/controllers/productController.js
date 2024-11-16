@@ -1,7 +1,6 @@
 const Product = require("../models/product");
 const upload = require("../config/update");
-const Cate = require("../models/cate");
-const Category = require("../models/cate");
+const ThuongHieu = require("../models/thuonghieu");
 const { Sequelize, Op } = require("sequelize");
 const { ChiTietDonHang, DonHang } = require("../models");
 

@@ -1,9 +1,8 @@
 // Lấy tất cả sản phẩm
 const Product = require("../models/product");
 const upload = require("../config/update");
-const Cate = require("../models/cate");
+const ThuongHieu = require("../models/thuonghieu");
 const Users = require("../models/users");
-const Category = require("../models/cate");
 const { Sequelize,Op } = require("sequelize");
 
 exports.getAllProducts = async (req, res) => {

@@ -1,4 +1,4 @@
-const Cate = require("../models/cate");
+const ThuongHieu = require("../models/thuonghieu");
 const upload = require("../config/update");
 const { Op, where } = require('sequelize'); // Import Op từ sequelize
 

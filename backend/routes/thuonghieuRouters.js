@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const cateController = require("../controllers/cateController");
+const cateController = require("../controllers/thuonghieuController");
 //test sua lôi push cho son
 //test sua loi push cho son 2
 
