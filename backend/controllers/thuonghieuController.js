@@ -23,25 +23,24 @@ exports.getAllCates = async (req, res) => {
   }
 };
 
-
-// Lấy tất cả danh mục
-exports.getAllCatess = async (req, res) => {
+//lấy tất cả thương hiệu
+exports.getAllThuongHieu = async (req, res) => {
   try {
-    const cates = await Cate.findAll();
-    res.json({ cates });
+    const th = await ThuongHieu.findAll();
+    res.json({ th });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
- 
-// Lấy danh mục theo ID
+
+// Lấy thương hiệu theo ID
 exports.getCateById = async (req, res) => {
   try {
-    const cate = await Cate.findOne({ where: { _id: req.params.id } });
-    if (!cate) {
-      return res.status(404).json({ error: "Không tìm thấy danh mục" });
+    const th = await ThuongHieu.findOne({ where: { _id: req.params.id } });
+    if (!th) {
+      return res.status(404).json({ error: "Không tìm thấy thương hiệu" });
     }
-    res.json({ cate });
+    res.json({ th });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
