@@ -460,7 +460,7 @@ exports.filtersanphamdongho = async (req, res) => {
 // API lấy danh sách sản phẩm với phân trang, lọc, tìm kiếm và tình trạng hàng hóa
 exports.getProducts = async (req, res) => {
   try {
-    const { page = 1, limit = 10, search = "" } = req.query;
+    const { page = 1, limit = 5, search = "" } = req.query;
     const offset = (page - 1) * limit;
 
     const searchCondition = search
