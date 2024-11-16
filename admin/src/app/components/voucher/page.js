@@ -147,10 +147,8 @@ export default function VoucherPage() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-                <th style={{ width: "3%" }}>
-                  <input type="checkbox" id="selectAll" />
-                </th>
-                <th style={{ width: "12%", textAlign: "center" }}>
+               
+                <th style={{ width: "15%", textAlign: "center" }}>
                   Id Voucher
                 </th>
                 <th style={{ width: "12%", textAlign: "center" }}>
@@ -184,9 +182,6 @@ export default function VoucherPage() {
 
                 return (
                   <tr key={_id}>
-                    <td>
-                      <input type="checkbox" className={styles.rowCheckbox} />
-                    </td>
                     <td>{_id}</td>
                     <td style={{ textAlign: "center" }}>{ma_voucher}</td>
                     <td style={{ textAlign: "center" }}>{gia_tri}</td>

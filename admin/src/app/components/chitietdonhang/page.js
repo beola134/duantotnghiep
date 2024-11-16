@@ -190,19 +190,7 @@ export default function ChiTietDonHang() {
 
             <div className={styles.tableContainer}>
               <div className={styles.tableControls}>
-                <label htmlFor="entries" style={{ fontWeight: "bold" }}>
-                  Hiện&nbsp;
-                  <select
-                    id="entries"
-                    value={itemsPerPage}
-                    onChange={handleItemsPerPageChange}
-                  >
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                  </select>
-                  <span>&nbsp; người dùng</span>
-                </label>
+             
                 <div className={styles.search}>
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
                     Tìm kiếm:
@@ -219,10 +207,7 @@ export default function ChiTietDonHang() {
               <table id="productTable" className={styles.productTable}>
                 <thead>
                   <tr>
-                    <th style={{ width: "3%" }}>
-                      <input type="checkbox" id="selectAll" />
-                    </th>
-                    <th style={{ width: "32%", textAlign: "center" }}>ID</th>
+                    <th style={{ width: "35%", textAlign: "center" }}>ID</th>
                     <th style={{ width: "25%", textAlign: "center" }}>
                       Giá Sản phẩm
                     </th>
@@ -243,9 +228,7 @@ export default function ChiTietDonHang() {
                 <tbody>
                   {displayUsers.map((item) => (
                     <tr key={item._id}>
-                      <td>
-                        <input type="checkbox" className={styles.rowCheckbox} />
-                      </td>
+                     
                       <td>{item._id}</td>
                       <td>
                         <p className={styles.mota}>

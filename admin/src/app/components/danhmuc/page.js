@@ -228,13 +228,7 @@ export default function DanhMuc() {
             <div className={styles.tableContainer}>
               <div className={styles.tableControls}>
                 <label htmlFor="entries" style={{ fontWeight: "bold" }}>
-                  Hiện&nbsp;
-                  <select id="entries" value={itemsPerPage} onChange={handleItemsPerPageChange}>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                  </select>
-                  <span>&nbsp; danh mục</span>
+                
                 </label>
                 <div className={styles.search}>
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
@@ -252,10 +246,8 @@ export default function DanhMuc() {
               <table id="productTable" className={styles.productTable}>
                 <thead>
                   <tr>
-                    <th style={{ width: "3%" }}>
-                      <input type="checkbox" id="selectAll" />
-                    </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>ID danh mục</th>
+                    
+                    <th style={{ width: "15%", textAlign: "center" }}>ID danh mục</th>
                     <th style={{ width: "40%", textAlign: "center" }}>Ghi chú</th>
                     <th style={{ width: "15%", textAlign: "center" }}>Tên danh mục</th>
                     <th style={{ width: "15%", textAlign: "center" }}>Ảnh danh mục</th>
@@ -265,9 +257,7 @@ export default function DanhMuc() {
                 <tbody>
                   {displayCategories.map((item) => (
                     <tr key={item._id}>
-                      <td>
-                        <input type="checkbox" className={styles.rowCheckbox} />
-                      </td>
+                      
                       <td>{item._id}</td>
                       <td>
                         {" "}
