@@ -9,12 +9,12 @@ const thuonghieuController = require("../controllers/thuonghieuController");
 router.get("/allcate", thuonghieuController.getAllCates);
 
 //show tất cả cate
-//http://localhost:5000/cate/allcatess
-router.get("/allcatess", thuonghieuController.getAllThuongHieu);
+//http://localhost:5000/thuonghieu/allthuonghieu
+router.get("/allthuonghieu", thuonghieuController.getAllThuongHieu);
 
 //show cate theo id
-//http://localhost:5000/cate/allcatess/:id
-router.get("/allcatess/:id", thuonghieuController.getthuonghieuById);
+//http://localhost:5000/thuonghieu/allthuonghieu/:id
+router.get("/allthuonghieu/:id", thuonghieuController.getthuonghieuById);
 
 //thêm danh mục
 //http://localhost:5000/cate/addcate
@@ -27,5 +27,6 @@ router.delete("/deletecate/:id", thuonghieuController.deleteCate);
 //sửa danh mục
 //http://localhost:5000/cate/updatecate
 router.put("/updatecate/:id", thuonghieuController.updateCate);
+
 
 module.exports = router;

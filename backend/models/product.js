@@ -110,7 +110,7 @@ const Product = sequelize.define('Product', {
         allowNull: false,
         defaultValue: Sequelize.NOW
     },
-    id_danh_muc: {
+    id_thuong_hieu: {
         type: DataTypes.STRING(255),
         allowNull: false
 
