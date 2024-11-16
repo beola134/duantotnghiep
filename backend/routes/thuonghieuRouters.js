@@ -14,7 +14,7 @@ router.get("/allcatess", thuonghieuController.getAllThuongHieu);
 
 //show cate theo id
 //http://localhost:5000/cate/allcatess/:id
-router.get("/allcatess/:id", thuonghieuController.getthuonghieuId);
+router.get("/allcatess/:id", thuonghieuController.getthuonghieuById);
 
 //thêm danh mục
 //http://localhost:5000/cate/addcate
