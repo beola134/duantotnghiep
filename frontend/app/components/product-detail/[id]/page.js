@@ -88,7 +88,7 @@ const handleAddToCart = async (e) => {
         }
         const data = await response.json();
         setProducts(data.product);
-        setCate(data.cate);
+        setCate(data.th);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -332,7 +332,7 @@ const handleAddToCart = async (e) => {
               <img
                 className={styles.imageGiftCat}
                 src={`http://localhost:5000/images/${cate.hinh_anh}`}
-                alt={cate.danh_muc}
+                alt={cate.thuong_hieu}
               />
             </div>
             <div className={styles.productName}>

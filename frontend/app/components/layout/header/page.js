@@ -452,12 +452,12 @@ export default function Header() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/cate/allthuonghieu");
+        const response = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
         const data = await response.json();
-        setCategory(data.thuonghieu);
+        setCategory(data.th);
       } catch (error) {
         setError(error.message);
       } finally {
