@@ -5,7 +5,7 @@ const danhmucController = require("../controllers/danhmucController");
 ///tất cả các api liên quan đến danh mục
 //show tất cả danh mục
 //http://localhost:5000/cate/allcate
-router.get("/allcate", danhmucController.getAllCates);
+router.get("/allcate", danhmucController.getAlldk);
 
 //thêm danh mục
 //http://localhost:5000/cate/addcate
