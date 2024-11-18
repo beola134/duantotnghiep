@@ -1068,7 +1068,7 @@ const handleAddToCart = async (e) => {
                         <td className={styles.titleCharactestic} width="40%">
                           Size dây:
                         </td>
-                        <td className={styles.contentCharactestic}>20mm</td>
+                        <td className={styles.contentCharactestic}>{product.size_day}</td>
                       </tr>
                       <tr className={styles.tr0} valign="top">
                         <td className={styles.titleCharactestic} width="40%">
@@ -1106,7 +1106,7 @@ const handleAddToCart = async (e) => {
                         <td className={styles.titleCharactestic} width="40%">
                           Màu mặt:
                         </td>
-                        <td className={styles.contentCharactestic}>Trắng</td>
+                        <td className={styles.contentCharactestic}>{product.mau_mat}</td>
                       </tr>
                       <tr className={styles.tr1} valign="top">
                         <td className={styles.titleCharactestic} width="40%">
@@ -1120,7 +1120,7 @@ const handleAddToCart = async (e) => {
                         <td className={styles.titleCharactestic} width="40%">
                           Xuất xứ thương hiệu:
                         </td>
-                        <td className={styles.contentCharactestic}>Thụy sĩ</td>
+                        <td className={styles.contentCharactestic}>{product.xuat_xu}</td>
                       </tr>
                     </tbody>
                   </table>
