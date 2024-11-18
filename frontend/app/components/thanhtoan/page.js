@@ -114,6 +114,7 @@ export default function ThanhToan() {
     return true;
   };
 
+  // Áp dụng mã giảm giá
   const applyDiscount = async () => {
     if (isDiscountApplied) return;
     try {
@@ -136,7 +137,7 @@ export default function ThanhToan() {
         setDiscountType("phan_tram");
       }
       calculateTotal(cartItems);
-      setIsDiscountApplied(true); // Đánh dấu mã giảm giá đã được áp dụng
+      setIsDiscountApplied(true);
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -197,14 +198,15 @@ export default function ThanhToan() {
   // Xử lý khi người dùng click vào nút thanh toán
   const handleClick = async () => {
     const isValid = validateFields(); // Kiểm tra các trường thông tin
-    if (!isValid) return; // Nếu không hợp lệ thì dừng lại
+    if (!isValid) return;
 
     const isLoggedIn = await userLogin(); // Kiểm tra xem người dùng đã đăng nhập chưa
     if (!isLoggedIn) return;
 
-    const isStockAvailable = await ktra();
+    const isStockAvailable = await ktra(); // Kiểm tra xem sản phẩm còn hàng không
     if (!isStockAvailable) return;
 
+    // Tạo đơn hàng
     const orderDetails = {
       dia_chi: user.dia_chi,
       id_nguoi_dung: user._id,
