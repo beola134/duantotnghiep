@@ -23,9 +23,14 @@ router.delete("/deletecate/:id", danhmucController.deleteCate);
 //http://localhost:5000/cate/updatecate/:id", danhmucController.updateCate);
 router.put("/updatecate/:id", danhmucController.updateCate);
 
-/////////////////////////////////////////////////////////////
-//viết api lấy chi tiết từng danh mục
-//viết api show tất cả danh mục phân trang tìm kiếm
+////////////////////////////////header//////////////////////
+//http://localhost:5000/cate/danhmuc
+router.get('/danhmuc', danhmucController.getdanhmuc);
+
+//getSanPhamKhac
+//http://localhost:5000/cate/getSanPhamKhac
+router.get('/getSanPhamKhac', danhmucController.getSanPhamKhac);
+
 
 
 module.exports = router;
