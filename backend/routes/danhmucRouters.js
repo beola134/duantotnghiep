@@ -20,6 +20,8 @@ router.delete("/deletecate/:id", danhmucController.deleteCate);
 router.put("/updatecate/:id", danhmucController.updateCate);
 
 /////////////////////////////////////////////////////////////
+//viết api lấy chi tiết từng danh mục
+//viết api show tất cả danh mục phân trang tìm kiếm
 
 
 module.exports = router;
