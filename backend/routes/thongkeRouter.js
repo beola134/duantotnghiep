@@ -3,7 +3,11 @@ const router = express.Router();
 const ThongkeController = require("../controllers/thongkeController");
 
 // người dùng mới
-//http://localhost:5000/users/getNewUsersToday
+//http://localhost:5000/thongke/getAllOrdersWithUserDetails
+router.get("/getAllOrdersWithUserDetails",ThongkeController.getAllOrdersWithUserDetails);
+
+// người dùng mới
+//http://localhost:5000/thongke/getNewUsersToday
 router.get("/getNewUsersToday", ThongkeController.getNewUsersToday);
 
 //thống kế tổng sản phẩm
