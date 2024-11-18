@@ -2,7 +2,7 @@ const Cate = require("../models/danhmuc");
 const upload = require("../config/update");
 
 // Lấy tất cả danh mục
-exports.getAllCates = async (req, res) => {
+exports.getAlldk = async (req, res) => {
   try {
     const cates = await Cate.findAll();
     res.json(cates);
