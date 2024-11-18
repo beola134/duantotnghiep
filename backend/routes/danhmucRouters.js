@@ -19,4 +19,7 @@ router.delete("/deletecate/:id", danhmucController.deleteCate);
 //http://localhost:5000/cate/updatecate/:id", danhmucController.updateCate);
 router.put("/updatecate/:id", danhmucController.updateCate);
 
+/////////////////////////////////////////////////////////////
+
+
 module.exports = router;

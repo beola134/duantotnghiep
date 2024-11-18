@@ -57,19 +57,19 @@ router.get("/new/doi", productController.getNewProductsCouple);
 
 // show sản phẩm theo dây đồng hồ
 //http://localhost:5000/product/filterDayDongHo"
-router.get("/filterDayDongHo", productController.filterDayDongHo);
+router.get("/filterDayDongHo/:categoryId", productController.filterDayDongHo);
 
 // show sản phẩm theo đồng hồ để bàn
 //http://localhost:5000/product/filterDeBan"
-router.get("/filterDeBan", productController.filterDeBan);
+router.get("/filterDeBan/:categoryId", productController.filterDeBan);
 
 // show sản phẩm theo đồng hồ báo thức
 //http://localhost:5000/product/filterBaoThuc"
-router.get("/filterBaoThuc", productController.filterBaoThuc);
+router.get("/filterBaoThuc/:categoryId", productController.filterBaoThuc);
 
 // show sản phẩm theo đồng hồ treo tuong
 //http://localhost:5000/product/filterTreoTuong"
-router.get("/filterTreoTuong", productController.filterTreoTuong);
+router.get("/filterTreoTuong/:categoryId", productController.filterTreoTuong);
 
 // show sản phẩm thêm Xuất xứ TS
 //http://localhost:5000/product/allsp/getXuatXuTS"
@@ -87,8 +87,8 @@ router.get("/allsp/getXuatXuNB", productController.getXuatXuNB);
 //http://localhost:5000/product/allsp/getXuatXuMy"
 router.get("/allsp/getXuatXuMy", productController.getXuatXuMy);
 
-// Show sản phẩm theo id danh mục  vòng tay trang sức
-//http://localhost:5000/product/thuonghieu/loai/:id/"
-router.get("/thuonghieu/loai/:id/", productController.getProdctsthuonghieuloai);
+
+//http://localhost:5000/product/getProductByCate/:id
+router.get("/getProductByCate/:id", productController.getProductByCate);
 
 module.exports = router;

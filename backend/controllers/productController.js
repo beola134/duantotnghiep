@@ -3,6 +3,7 @@ const upload = require("../config/update");
 const ThuongHieu = require("../models/thuonghieu");
 const { Sequelize, Op } = require("sequelize");
 const { ChiTietDonHang, DonHang } = require("../models");
+const Cate = require("../models/danhmuc");
 
 // Bộ lọc sản phẩm đồng hồ
 exports.filtersanphamdongho = async (req, res) => {
@@ -520,8 +521,9 @@ exports.getProducts = async (req, res) => {
 // xử lí lọc them dây đồng hồ
 exports.filterDayDongHo = async (req, res) => {
   try {
+    const { categoryId } = req.params;   
     const category = await Cate.findOne({
-      where: { _id: "92ad8d9a-fba0-48db-a93d-6974bb5a9ed9" },
+      where:{ _id: categoryId }
     });
     if (!category) {
       return res.status(404).json({ message: "Danh mục không tồn tại" });
@@ -542,40 +544,40 @@ exports.filterDayDongHo = async (req, res) => {
     if (size_day) {
       switch (size_day) {
         case "Size 26-24mm":
-          filter.size_day = "26-24mm";
+          filter.size_day = { [Op.between]: [24, 26] };
           break;
         case "Size 26-22mm":
-          filter.size_day = "26-22mm";
+          filter.size_day = { [Op.between]: [22, 26] };
           break;
         case "Size 24-22mm":
-          filter.size_day = "24-22mm";
+          filter.size_day = { [Op.between]: [22, 24] };
           break;
         case "Size 24-20mm":
-          filter.size_day = "24-20mm";
+          filter.size_day = { [Op.between]: [20, 24] };
           break;
         case "Size 22-20mm":
-          filter.size_day = "22-20mm";
+          filter.size_day = { [Op.between]: [20, 22] };
           break;
         case "Size 21-18mm":
-          filter.size_day = "21-18mm";
+          filter.size_day = { [Op.between]: [18, 21] };
           break;
         case "Size 20-18mm":
-          filter.size_day = "20-18mm";
+          filter.size_day = { [Op.between]: [18, 20] };
           break;
         case "Size 19-18mm":
-          filter.size_day = "19-18mm";
+          filter.size_day = { [Op.between]: [18, 19] };
           break;
         case "Size 18-16mm":
-          filter.size_day = "18-16mm";
+          filter.size_day = { [Op.between]: [16, 18] };
           break;
         case "Size 16-14mm":
-          filter.size_day = "16-14mm";
+          filter.size_day = { [Op.between]: [14, 16] };
           break;
         case "Size 14-12mm":
-          filter.size_day = "14-12mm";
+          filter.size_day = { [Op.between]: [12, 14] };
           break;
         case "Size 12-10mm":
-          filter.size_day = "";
+          filter.size_day = { [Op.between]: [10, 12] };
           break;
         default:
           filter.size_day = size_day;
@@ -586,13 +588,13 @@ exports.filterDayDongHo = async (req, res) => {
     if (mau_day) {
       switch (mau_day) {
         case "Nâu (Brown)":
-          filter.mau_day = "Nâu (Brown)";
+          filter.mau_day = "Nâu";
           break;
         case "Nâu (Tan)":
           filter.mau_day = "Nâu (Tan)";
           break;
         case "Xanh (Green)":
-          filter.mau_day = "Xanh (Green)";
+          filter.mau_day = "Xanh Lá";
           break;
         case "Xanh (Navy)":
           filter.mau_day = "Xanh (Navy)";
@@ -676,8 +678,9 @@ exports.filterDayDongHo = async (req, res) => {
 // xử lí lọc them đồng hồ để bàn
 exports.filterDeBan = async (req, res) => {
   try {
+    const { categoryId } = req.params;
     const category = await Cate.findOne({
-      where: { _id: "09204055-d105-4c21-90e3-58ee82d2f65a" },
+      where: { _id: categoryId },
     });
     if (!category) {
       return res.status(404).json({ message: "Danh mục không tồn tại" });
@@ -752,8 +755,9 @@ exports.filterDeBan = async (req, res) => {
 // xử lí lọc them đồng hồ báo thức
 exports.filterBaoThuc = async (req, res) => {
   try {
+    const { categoryId } = req.params;
     const category = await Cate.findOne({
-      where: { _id: "ba2c7104-9bb0-448b-920a-3baffebbb7d6" },
+      where: { _id: categoryId },
     });
     if (!category) {
       return res.status(404).json({ message: "Danh mục không tồn tại" });
@@ -821,8 +825,9 @@ exports.filterBaoThuc = async (req, res) => {
 // xử lí lọc them đồng hồ TREO TƯỜNG
 exports.filterTreoTuong = async (req, res) => {
   try {
+    const { categoryId } = req.params;
     const category = await Cate.findOne({
-      where: { _id: "14257815-7fd6-41ac-9cd1-6a5d54f0eaa4" },
+      where: { _id: categoryId },
     });
     if (!category) {
       return res.status(404).json({ message: "Danh mục không tồn tại" });
@@ -1358,24 +1363,15 @@ exports.getXuatXuMy = async (req, res) => {
 };
 
 // Show sản phẩm theo id   vòng tay trang sức
-exports.getProdctsthuonghieuloai = async (req, res) => {
+exports.getProductByCate = async (req, res) => {
   try {
+    const { id } = req.params;
     const products = await Product.findAll({
       where: {
-        id_thuong_hieu: req.params.id,
-        loai: {
-          [Op.in]: ["Vòng Tay", "Trang Sức"],
-        },
+        id_danh_muc: id,
       },
     });
-
-    if (products.length === 0) {
-      return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
-    }
-
-    const th = await ThuongHieu.findOne({ where: { _id: req.params.id } });
-
-    res.json({ products, th});
+    res.json({ products });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
