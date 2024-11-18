@@ -14,9 +14,9 @@ export default function Thuonghieu() {
   useEffect(() => {
     const fetchCates = async () => {
       try {
-        const res = await fetch("http://localhost:5000/cate/allcate");
+        const res = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
         const data = await res.json();
-        setCates(data.cates);
+        setCates(data.th);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -65,10 +65,10 @@ export default function Thuonghieu() {
                 const { _id, hinh_anh2 } = item;
                 return (
                   <div className={styles.item} key={_id}>
-                    <Link href={`/components/chitietdanhmuc/${item.danh_muc}`}>
+                    <Link href={`/components/chitietdanhmuc/${item.thuong_hieu}`}>
                       <img
                         src={`http://localhost:5000/images/${hinh_anh2}`}
-                        alt={`Hình ảnh thương hiệu ${item.danh_muc}`}
+                        alt={`Hình ảnh thương hiệu ${item.thuong_hieu}`}
                       />
                     </Link>
                   </div>
@@ -88,10 +88,10 @@ export default function Thuonghieu() {
             const { _id, hinh_anh2 } = item;
             return (
               <div className={styles.item} key={_id}>
-                <Link href={`/components/chitietdanhmuc/${item.danh_muc}`}>
+                <Link href={`/components/chitietdanhmuc/${item.thuong_hieu}`}>
                   <img
                     src={`http://localhost:5000/images/${hinh_anh2}`}
-                    alt={`Hình ảnh thương hiệu ${item.danh_muc}`}
+                    alt={`Hình ảnh thương hiệu ${item.thuong_hieu}`}
                   />
                 </Link>
               </div>

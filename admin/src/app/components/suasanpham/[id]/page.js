@@ -30,7 +30,7 @@ export default function SuaSanPham({ params }) {
     size_day: "",
     mau_day: "",
     do_dai_day: "",
-    id_danh_muc: "",
+    id_thuong_hieu: "",
     mo_ta: "",
     hinh_anh: null,
   });
@@ -42,10 +42,10 @@ export default function SuaSanPham({ params }) {
     const fetchProductAndCategories = async () => {
       try {
         const cateResponse = await fetch(
-          "http://localhost:5000/cate/allcatess"
+          "http://localhost:5000/thuonghieu/allthuonghieu"
         );
         const cateData = await cateResponse.json();
-        setCategories(cateData.cates);
+        setCategories(cateData.th);
 
         const productResponse = await fetch(
           `http://localhost:5000/product/chitietsp/${id}`
@@ -78,8 +78,8 @@ export default function SuaSanPham({ params }) {
     e.preventDefault();
     setErrorMessage("");
 
-    const { ten_san_pham, gia_san_pham, id_danh_muc } = formData;
-    if (!ten_san_pham || !gia_san_pham || !id_danh_muc) {
+    const { ten_san_pham, gia_san_pham, id_thuong_hieu } = formData;
+    if (!ten_san_pham || !gia_san_pham || !id_thuong_hieu) {
       setErrorMessage("Vui lòng điền tất cả các trường bắt buộc.");
       return;
     }
@@ -192,17 +192,17 @@ export default function SuaSanPham({ params }) {
 
               {/* Dropdown danh mục */}
               <div className={styles.formGroup}>
-                <label htmlFor="id_danh_muc">Danh mục</label>
+                <label htmlFor="id_thuong_hieu">Danh mục</label>
                 <select
-                  id="id_danh_muc"
-                  name="id_danh_muc"
-                  value={formData.id_danh_muc}
+                  id="id_thuong_hieu"
+                  name="id_thuong_hieu"
+                  value={formData.id_thuong_hieu}
                   onChange={handleChange}
                 >
                   <option value="">Chọn danh mục</option>
                   {cates.map((category) => (
                     <option key={category._id} value={category._id}>
-                      {category.danh_muc}
+                      {category.thuong_hieu}
                     </option>
                   ))}
                 </select>

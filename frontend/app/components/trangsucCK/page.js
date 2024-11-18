@@ -33,7 +33,7 @@ export default function TrangsucCK() {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/product/category/loai/8f42f090-d363-4ba3-ac77-d9936133b670"
+          "http://localhost:5000/product/thuonghieu/loai/8f42f090-d363-4ba3-ac77-d9936133b670"
         );
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");

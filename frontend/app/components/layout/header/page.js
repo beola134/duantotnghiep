@@ -11,85 +11,85 @@ import Loading from "../../loading/page";
 import { useSelector } from "react-redux";
 
 const locTHNam = [
-  { id: "danh_muc=CASIO&gioi_tinh=Nam", title: "CASIO" },
-  { id: "danh_muc=MICHAELKORS&gioi_tinh=Nam", title: "MICHAELKORS" },
-  { id: "danh_muc=HAMILTON&gioi_tinh=Nam", title: "HAMILTON" },
-  { id: "danh_muc=TITONI&gioi_tinh=Nam", title: "TITONI" },
-  { id: "danh_muc=CLAUDEBERNARD&gioi_tinh=Nam", title: "CLAUDEBERNARD" },
-  { id: "danh_muc=OLYMPIANUS&gioi_tinh=Nam", title: "OLYMPIANUS" },
+  { id: "thuong_hieu=CASIO&gioi_tinh=Nam", title: "CASIO" },
+  { id: "thuong_hieu=MICHAELKORS&gioi_tinh=Nam", title: "MICHAELKORS" },
+  { id: "thuong_hieu=HAMILTON&gioi_tinh=Nam", title: "HAMILTON" },
+  { id: "thuong_hieu=TITONI&gioi_tinh=Nam", title: "TITONI" },
+  { id: "thuong_hieu=CLAUDEBERNARD&gioi_tinh=Nam", title: "CLAUDEBERNARD" },
+  { id: "thuong_hieu=OLYMPIANUS&gioi_tinh=Nam", title: "OLYMPIANUS" },
   {
-    id: "danh_muc=FREDERIQUECONSTANT&gioi_tinh=Nam",
+    id: "thuong_hieu=FREDERIQUECONSTANT&gioi_tinh=Nam",
     title: "FREDERIQUECONSTANT",
   },
-  { id: "danh_muc=EDOX&gioi_tinh=Nam", title: "EDOX" },
-  { id: "danh_muc=CERTINA&gioi_tinh=Nam", title: "CERTINA" },
-  { id: "danh_muc=CALVINKLEIN&gioi_tinh=Nam", title: "CALVINKLEIN" },
-  { id: "danh_muc=DANIELWELLINGTON&gioi_tinh=Nam", title: "DANIELWELLINGTON" },
-  { id: "danh_muc=MIDO&gioi_tinh=Nam", title: "MIDO" },
-  { id: "danh_muc=CITIZEN&gioi_tinh=Nam", title: "CITIZEN" },
-  { id: "danh_muc=SEIKO&gioi_tinh=Nam", title: "SEIKO" },
-  { id: "danh_muc=ORIENT&gioi_tinh=Nam", title: "ORIENT" },
-  { id: "danh_muc=FOSSIL&gioi_tinh=Nam", title: "FOSSIL" },
-  { id: "danh_muc=SKAGEN&gioi_tinh=Nam", title: "SKAGEN" },
-  { id: "danh_muc=LONGINES&gioi_tinh=Nam", title: "LONGINES" },
-  { id: "danh_muc=TISSOT&gioi_tinh=Nam", title: "TISSOT" },
+  { id: "thuong_hieu=EDOX&gioi_tinh=Nam", title: "EDOX" },
+  { id: "thuong_hieu=CERTINA&gioi_tinh=Nam", title: "CERTINA" },
+  { id: "thuong_hieu=CALVINKLEIN&gioi_tinh=Nam", title: "CALVINKLEIN" },
+  { id: "thuong_hieu=DANIELWELLINGTON&gioi_tinh=Nam", title: "DANIELWELLINGTON" },
+  { id: "thuong_hieu=MIDO&gioi_tinh=Nam", title: "MIDO" },
+  { id: "thuong_hieu=CITIZEN&gioi_tinh=Nam", title: "CITIZEN" },
+  { id: "thuong_hieu=SEIKO&gioi_tinh=Nam", title: "SEIKO" },
+  { id: "thuong_hieu=ORIENT&gioi_tinh=Nam", title: "ORIENT" },
+  { id: "thuong_hieu=FOSSIL&gioi_tinh=Nam", title: "FOSSIL" },
+  { id: "thuong_hieu=SKAGEN&gioi_tinh=Nam", title: "SKAGEN" },
+  { id: "thuong_hieu=LONGINES&gioi_tinh=Nam", title: "LONGINES" },
+  { id: "thuong_hieu=TISSOT&gioi_tinh=Nam", title: "TISSOT" },
 ];
 const locTHNu = [
-  { id: "danh_muc=CASIO&gioi_tinh=Nữ", title: "CASIO" },
-  { id: "danh_muc=MICHAELKORS&gioi_tinh=Nữ", title: "MICHAELKORS" },
-  { id: "danh_muc=HAMILTON&gioi_tinh=Nữ", title: "HAMILTON" },
-  { id: "danh_muc=TITONI&gioi_tinh=Nữ", title: "TITONI" },
-  { id: "danh_muc=CLAUDEBERNARD&gioi_tinh=Nữ", title: "CLAUDEBERNARD" },
-  { id: "danh_muc=OLYMPIANUS&gioi_tinh=Nữ", title: "OLYMPIANUS" },
+  { id: "thuong_hieu=CASIO&gioi_tinh=Nữ", title: "CASIO" },
+  { id: "thuong_hieu=MICHAELKORS&gioi_tinh=Nữ", title: "MICHAELKORS" },
+  { id: "thuong_hieu=HAMILTON&gioi_tinh=Nữ", title: "HAMILTON" },
+  { id: "thuong_hieu=TITONI&gioi_tinh=Nữ", title: "TITONI" },
+  { id: "thuong_hieu=CLAUDEBERNARD&gioi_tinh=Nữ", title: "CLAUDEBERNARD" },
+  { id: "thuong_hieu=OLYMPIANUS&gioi_tinh=Nữ", title: "OLYMPIANUS" },
   {
-    id: "danh_muc=FREDERIQUECONSTANT&gioi_tinh=Nữ",
+    id: "thuong_hieu=FREDERIQUECONSTANT&gioi_tinh=Nữ",
     title: "FREDERIQUECONSTANT",
   },
-  { id: "danh_muc=EDOX&gioi_tinh=Nữ", title: "EDOX" },
-  { id: "danh_muc=CERTINA&gioi_tinh=Nữ", title: "CERTINA" },
-  { id: "danh_muc=CALVIN KLEIN&gioi_tinh=Nữ", title: "CALVIN KLEIN" },
+  { id: "thuong_hieu=EDOX&gioi_tinh=Nữ", title: "EDOX" },
+  { id: "thuong_hieu=CERTINA&gioi_tinh=Nữ", title: "CERTINA" },
+  { id: "thuong_hieu=CALVIN KLEIN&gioi_tinh=Nữ", title: "CALVIN KLEIN" },
   {
-    id: "danh_muc=DANIELWELLINGTON&gioi_tinh=Nữ",
+    id: "thuong_hieu=DANIELWELLINGTON&gioi_tinh=Nữ",
     title: "DANIELWELLINGTON",
   },
-  { id: "danh_muc=MIDO&gioi_tinh=Nữ", title: "MIDO" },
-  { id: "danh_muc=CITIZEN&gioi_tinh=Nữ", title: "CITIZEN" },
-  { id: "danh_muc=SEIKO&gioi_tinh=Nữ", title: "SEIKO" },
-  { id: "danh_muc=ORIENT&gioi_tinh=Nữ", title: "ORIENT" },
-  { id: "danh_muc=FOSSIL&gioi_tinh=Nữ", title: "FOSSIL" },
-  { id: "danh_muc=SKAGEN&gioi_tinh=Nữ", title: "SKAGEN" },
-  { id: "danh_muc=LONGINES&gioi_tinh=Nữ", title: "LONGINES" },
-  { id: "danh_muc=TISSOT&gioi_tinh=Nữ", title: "TISSOT" },
+  { id: "thuong_hieu=MIDO&gioi_tinh=Nữ", title: "MIDO" },
+  { id: "thuong_hieu=CITIZEN&gioi_tinh=Nữ", title: "CITIZEN" },
+  { id: "thuong_hieu=SEIKO&gioi_tinh=Nữ", title: "SEIKO" },
+  { id: "thuong_hieu=ORIENT&gioi_tinh=Nữ", title: "ORIENT" },
+  { id: "thuong_hieu=FOSSIL&gioi_tinh=Nữ", title: "FOSSIL" },
+  { id: "thuong_hieu=SKAGEN&gioi_tinh=Nữ", title: "SKAGEN" },
+  { id: "thuong_hieu=LONGINES&gioi_tinh=Nữ", title: "LONGINES" },
+  { id: "thuong_hieu=TISSOT&gioi_tinh=Nữ", title: "TISSOT" },
 ];
 const locTHDoi = [
-  { id: "danh_muc=CASIO&gioi_tinh=Đồng Hồ Đôi", title: "CASIO" },
-  { id: "danh_muc=MICHAELKORS&gioi_tinh=Đồng Hồ Đôi", title: "MICHAELKORS" },
-  { id: "danh_muc=HAMILTON&gioi_tinh=Đồng Hồ Đôi", title: "HAMILTON" },
-  { id: "danh_muc=TITONI&gioi_tinh=Đồng Hồ Đôi", title: "TITONI" },
+  { id: "thuong_hieu=CASIO&gioi_tinh=Đồng Hồ Đôi", title: "CASIO" },
+  { id: "thuong_hieu=MICHAELKORS&gioi_tinh=Đồng Hồ Đôi", title: "MICHAELKORS" },
+  { id: "thuong_hieu=HAMILTON&gioi_tinh=Đồng Hồ Đôi", title: "HAMILTON" },
+  { id: "thuong_hieu=TITONI&gioi_tinh=Đồng Hồ Đôi", title: "TITONI" },
   {
-    id: "danh_muc=CLAUDEBERNARD&gioi_tinh=Đồng Hồ Đôi",
+    id: "thuong_hieu=CLAUDEBERNARD&gioi_tinh=Đồng Hồ Đôi",
     title: "CLAUDEBERNARD",
   },
-  { id: "danh_muc=OLYMPIANUS&gioi_tinh=Đồng Hồ Đôi", title: "OLYMPIANUS" },
+  { id: "thuong_hieu=OLYMPIANUS&gioi_tinh=Đồng Hồ Đôi", title: "OLYMPIANUS" },
   {
-    id: "danh_muc=FREDERIQUECONSTANT&gioi_tinh=Đồng Hồ Đôi",
+    id: "thuong_hieu=FREDERIQUECONSTANT&gioi_tinh=Đồng Hồ Đôi",
     title: "FREDERIQUECONSTANT",
   },
-  { id: "danh_muc=EDOX&gioi_tinh=Đồng Hồ Đôi", title: "EDOX" },
-  { id: "danh_muc=CERTINA&gioi_tinh=Đồng Hồ Đôi", title: "CERTINA" },
-  { id: "danh_muc=CALVINKLEIN&gioi_tinh=Đồng Hồ Đôi", title: "CALVINKLEIN" },
+  { id: "thuong_hieu=EDOX&gioi_tinh=Đồng Hồ Đôi", title: "EDOX" },
+  { id: "thuong_hieu=CERTINA&gioi_tinh=Đồng Hồ Đôi", title: "CERTINA" },
+  { id: "thuong_hieu=CALVINKLEIN&gioi_tinh=Đồng Hồ Đôi", title: "CALVINKLEIN" },
   {
-    id: "danh_muc=DANIELWELLINGTON&gioi_tinh=Đồng Hồ Đôi",
+    id: "thuong_hieu=DANIELWELLINGTON&gioi_tinh=Đồng Hồ Đôi",
     title: "DANIELWELLINGTON",
   },
-  { id: "danh_muc=MIDO&gioi_tinh=Đồng Hồ Đôi", title: "MIDO" },
-  { id: "danh_muc=CITIZEN&gioi_tinh=Đồng Hồ Đôi", title: "CITIZEN" },
-  { id: "danh_muc=SEIKO&gioi_tinh=Đồng Hồ Đôi", title: "SEIKO" },
-  { id: "danh_muc=ORIENT&gioi_tinh=Đồng Hồ Đôi", title: "ORIENT" },
-  { id: "danh_muc=FOSSIL&gioi_tinh=Đồng Hồ Đôi", title: "FOSSIL" },
-  { id: "danh_muc=SKAGEN&gioi_tinh=Đồng Hồ Đôi", title: "SKAGEN" },
-  { id: "danh_muc=LONGINES&gioi_tinh=Đồng Hồ Đôi", title: "LONGINES" },
-  { id: "danh_muc=TISSOT&gioi_tinh=Đồng Hồ Đôi", title: "TISSOT" },
+  { id: "thuong_hieu=MIDO&gioi_tinh=Đồng Hồ Đôi", title: "MIDO" },
+  { id: "thuong_hieu=CITIZEN&gioi_tinh=Đồng Hồ Đôi", title: "CITIZEN" },
+  { id: "thuong_hieu=SEIKO&gioi_tinh=Đồng Hồ Đôi", title: "SEIKO" },
+  { id: "thuong_hieu=ORIENT&gioi_tinh=Đồng Hồ Đôi", title: "ORIENT" },
+  { id: "thuong_hieu=FOSSIL&gioi_tinh=Đồng Hồ Đôi", title: "FOSSIL" },
+  { id: "thuong_hieu=SKAGEN&gioi_tinh=Đồng Hồ Đôi", title: "SKAGEN" },
+  { id: "thuong_hieu=LONGINES&gioi_tinh=Đồng Hồ Đôi", title: "LONGINES" },
+  { id: "thuong_hieu=TISSOT&gioi_tinh=Đồng Hồ Đôi", title: "TISSOT" },
 ];
 
 const locgiaNam = [
@@ -453,12 +453,12 @@ export default function Header() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/cate/allcate");
+        const response = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
         const data = await response.json();
-        setCategory(data.cates);
+        setCategory(data.th);
       } catch (error) {
         setError(error.message);
       } finally {

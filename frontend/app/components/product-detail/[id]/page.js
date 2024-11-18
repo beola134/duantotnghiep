@@ -85,7 +85,7 @@ export default function Detail({ params }) {
         }
         const data = await response.json();
         setProducts(data.product);
-        setCate(data.cate);
+        setCate(data.th);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -317,7 +317,7 @@ export default function Detail({ params }) {
               <img
                 className={styles.imageGiftCat}
                 src={`http://localhost:5000/images/${cate.hinh_anh}`}
-                alt={cate.danh_muc}
+                alt={cate.thuong_hieu}
               />
             </div>
             <div className={styles.productName}>
@@ -994,7 +994,7 @@ export default function Detail({ params }) {
                         <td className={styles.titleCharactestic} width="40%">
                           Size dây:
                         </td>
-                        <td className={styles.contentCharactestic}>20mm</td>
+                        <td className={styles.contentCharactestic}>{product.size_day}</td>
                       </tr>
                       <tr className={styles.tr0} valign="top">
                         <td className={styles.titleCharactestic} width="40%">
@@ -1027,7 +1027,7 @@ export default function Detail({ params }) {
                         <td className={styles.titleCharactestic} width="40%">
                           Màu mặt:
                         </td>
-                        <td className={styles.contentCharactestic}>Trắng</td>
+                        <td className={styles.contentCharactestic}>{product.mau_mat}</td>
                       </tr>
                       <tr className={styles.tr1} valign="top">
                         <td className={styles.titleCharactestic} width="40%">
@@ -1039,7 +1039,7 @@ export default function Detail({ params }) {
                         <td className={styles.titleCharactestic} width="40%">
                           Xuất xứ thương hiệu:
                         </td>
-                        <td className={styles.contentCharactestic}>Thụy sĩ</td>
+                        <td className={styles.contentCharactestic}>{product.xuat_xu}</td>
                       </tr>
                     </tbody>
                   </table>

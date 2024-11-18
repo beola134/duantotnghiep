@@ -29,7 +29,7 @@ export default function ThemSanPham() {
     size_day: "",
     mau_day: "",
     do_dai_day: "",
-    id_danh_muc: "",
+    id_thuong_hieu: "",
     mo_ta: "",
     hinh_anh: null,
   });
@@ -41,10 +41,10 @@ export default function ThemSanPham() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:5000/cate/allcatess");
+        const response = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
         const data = await response.json();
-        setCategories(data.cates);
-        if (data.cates.length === 0) {
+        setCategories(data.th);
+        if (data.th.length === 0) {
           setErrorMessage("Không tìm thấy danh mục nào.");
         }
       } catch (error) {
@@ -83,7 +83,7 @@ export default function ThemSanPham() {
       gia_san_pham,
       ma_san_pham,
       so_luong,
-      id_danh_muc,
+      id_thuong_hieu,
       hinh_anh,
     } = formData;
 
@@ -94,7 +94,7 @@ export default function ThemSanPham() {
     }
     if (!ma_san_pham) newErrors.ma_san_pham = "Vui lòng nhập mã sản phẩm.";
     if (!so_luong) newErrors.so_luong = "Vui lòng nhập số lượng.";
-    if (!id_danh_muc) newErrors.id_danh_muc = "Vui lòng chọn danh mục.";
+    if (!id_thuong_hieu) newErrors.id_thuong_hieu = "Vui lòng chọn danh mục.";
     if (!hinh_anh) newErrors.hinh_anh = "Vui lòng chọn hình ảnh sản phẩm.";
 
     setErrors(newErrors);
@@ -223,22 +223,22 @@ export default function ThemSanPham() {
 
               {/* Dropdown danh mục */}
               <div className={styles.formGroup}>
-                <label htmlFor="id_danh_muc">Danh mục</label>
+                <label htmlFor="id_thuong_hieu">Danh mục</label>
                 <select
-                  id="id_danh_muc"
-                  name="id_danh_muc"
-                  value={formData.id_danh_muc}
+                  id="id_thuong_hieu"
+                  name="id_thuong_hieu"
+                  value={formData.id_thuong_hieu}
                   onChange={handleChange}
                 >
                   <option value="">Chọn danh mục</option>
                   {cates.map((category) => (
                     <option key={category._id} value={category._id}>
-                      {category.danh_muc}
+                      {category.thuong_hieu}
                     </option>
                   ))}
                 </select>
-                {errors.id_danh_muc && (
-                  <span className="text-danger">{errors.id_danh_muc}</span>
+                {errors.id_thuong_hieu && (
+                  <span className="text-danger">{errors.id_thuong_hieu}</span>
                 )}
               </div>
               <div className={styles.formGroup}>

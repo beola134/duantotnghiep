@@ -169,10 +169,8 @@ export default function SanPham() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-                <th style={{ width: "3%" }}>
-                  <input type="checkbox" id="selectAll" />
-                </th>
-                <th style={{ width: "12%", textAlign: "center" }}>
+               
+                <th style={{ width: "15%", textAlign: "center" }}>
                   ID sản phẩm
                 </th>
                 <th style={{ width: "20%", textAlign: "center" }}>
@@ -205,9 +203,7 @@ export default function SanPham() {
 
                 return (
                   <tr key={_id}>
-                    <td>
-                      <input type="checkbox" className={styles.rowCheckbox} />
-                    </td>
+                   
                     <td>{_id}</td>
                     <td>{ten_san_pham}</td>
                     <td>

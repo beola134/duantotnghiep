@@ -65,13 +65,7 @@ export default function ThanhToan() {
       (sum, item) => sum + item.so_luong * (item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham),
       0
     );
-    let finalTotal = total;
-    if (discountType === "gia_tri") {
-      finalTotal -= discountValue;
-    } else if (discountType === "phan_tram") {
-      finalTotal -= (total * discountValue) / 100;
-    }
-    setTotalAmount(finalTotal);
+    setTotalAmount(total);
   };
   // Tăng giảm số lượng sản phẩm
   const handleIncrease = (index) => {
