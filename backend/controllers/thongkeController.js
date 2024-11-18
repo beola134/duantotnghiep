@@ -8,7 +8,34 @@ const Voucher = require("../models/voucher");
 const ChiTietDonHang = require("../models/chitietdonhang");
 const DonHang = require("../models/donhang");
 const { Op } = require('sequelize');
-const sequelize = require('../config/database'); 
+const sequelize = require('../config/database');
+
+// Get newest users created today
+exports.getNewUsersToday = async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Start of day
+
+    const usersToday = await Users.findAll({
+      where: {
+        createdAt: {
+          [Op.gte]: today,
+        },
+      },
+      order: [["createdAt", "DESC"]],
+    });
+
+    if (usersToday.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Không có người dùng mới hôm nay" });
+    }
+
+    res.status(200).json({ usersToday });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // Thống kê tổng số sản phẩm
 exports.getTotalProducts = async (req, res) => {

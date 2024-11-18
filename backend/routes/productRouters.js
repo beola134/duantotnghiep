@@ -5,6 +5,7 @@ const productController = require("../controllers/productController");
 //show trạng thái của sản phẩm
 //http://localhost:5000/product/getProducts
 router.get("/getProducts", productController.getProducts);
+
 //bộ lọc sản phẩm đồng hồ
 //http://localhost:5000/product/filtersanphamdongho
 router.get("/filtersanphamdongho", productController.filtersanphamdongho);
