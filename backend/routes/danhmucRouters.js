@@ -7,6 +7,10 @@ const danhmucController = require("../controllers/danhmucController");
 //http://localhost:5000/cate/allcate
 router.get("/allcate", danhmucController.getAlldk);
 
+//show danh mục theo id
+//http://localhost:5000/cate/allcate/:id
+router.get("/allcate/:id", danhmucController.getCateById);
+
 //thêm danh mục
 //http://localhost:5000/cate/addcate
 router.post("/addcate", danhmucController.addCate);
