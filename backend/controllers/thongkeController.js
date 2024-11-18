@@ -36,14 +36,15 @@ exports.getNewUsersToday = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-  // Hiển thị tất cả đơn hàng với hình ảnh và tên người dùng
+// Hiển thị tất cả đơn hàng với hình ảnh và tên người dùng
 exports.getAllOrdersWithUserDetails = async (req, res) => {
   try {
     const orders = await DonHang.findAll({
       include: [
         {
-          model: Users,
-          attributes: ["id_nguoi_dung"], 
+          model: DonHang,
+          as: "User", // Alias phải khớp với model
+          attributes: ["id", "id_nguoi_dung", "hinh_anh"], 
         },
       ],
     });
@@ -63,7 +64,9 @@ exports.getAllOrdersWithUserDetails = async (req, res) => {
       id_voucher: order.id_voucher,
 
       user: {
-        id_nguoi_dung: order.User.id_nguoi_dung,
+        id: order.User?.id,
+        id_nguoi_dung: order.User?.id_nguoi_dung,
+        hinh_anh: order.User?.hinh_anh,
       },
     }));
 
@@ -73,6 +76,8 @@ exports.getAllOrdersWithUserDetails = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 
 // Thống kê tổng số sản phẩm

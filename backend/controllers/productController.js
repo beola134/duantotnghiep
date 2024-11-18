@@ -30,15 +30,8 @@ exports.filtersanphamdongho = async (req, res) => {
     let filter = {
       [Op.and]: [],
     };
-    filter.loai = {
-      [Op.notIn]: [
-        "Dây đồng hồ",
-        "Vòng tay",
-        "Trang sức",
-        "Đồng hồ để bàn",
-        "Đồng hồ báo thức",
-      ],
-    };
+    filter[Op.and].push({ id_danh_muc: null })
+    
     if (gioi_tinh) {
       switch (gioi_tinh) {
         case "Nam":
