@@ -4,6 +4,7 @@ const upload = require("../config/update");
 const ThuongHieu = require("../models/thuonghieu");
 const Users = require("../models/users");
 const { Sequelize,Op } = require("sequelize");
+const Cate = require("../models/danhmuc");
 
 exports.getAllProducts = async (req, res) => {
   try {
@@ -115,11 +116,15 @@ exports.getAllProducts = async (req, res) => {
           mau_day,
           do_dai_day,
           id_thuong_hieu: thuonghieuId,
+          id_danh_muc: danhmucId,
         } = req.body;
         const hinh_anh = req.file ? req.file.originalname : "";
         // Kiểm tra danh mục
         if (!thuonghieuId || !(await ThuongHieu.findOne({ where: { _id: thuonghieuId } }))) {
           return res.status(400).json({ error: "ID thương hiệu không hợp lệ" });
+        }
+        if (danhmucId && !(await Cate.findOne({ where: { _id: danhmucId } }))) {
+          return res.status(400).json({ error: "ID danh mục không hợp lệ" });
         }
         // Tạo và lưu sản phẩm
         const product = await Product.create({
@@ -148,6 +153,8 @@ exports.getAllProducts = async (req, res) => {
           mau_day,
           do_dai_day,
           id_thuong_hieu: thuonghieuId,
+          id_danh_muc: danhmucId,
+
         });
         res.json({ product });
       });

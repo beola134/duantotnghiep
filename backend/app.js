@@ -15,6 +15,7 @@ var voucherRouter = require('./routes/voucherRouters');
 var saleRouter = require('./routes/saleRouters');
 var spRouter = require('./routes/spRouters');
 var thongkeRouter = require('./routes/thongkeRouter');
+var danhMucRouter = require('./routes/danhmucRouters');
 
 var app = express();
 app.use(cors());
@@ -39,6 +40,7 @@ app.use('/voucher', voucherRouter);
 app.use('/sale', saleRouter);
 app.use('/product', spRouter);
 app.use('/thongke', thongkeRouter);
+app.use('/cate', danhMucRouter);
 
 
 sequelize.authenticate()

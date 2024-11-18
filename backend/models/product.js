@@ -114,6 +114,10 @@ const Product = sequelize.define('Product', {
         type: DataTypes.STRING(255),
         allowNull: false
 
+    },
+    id_danh_muc: {
+        type: DataTypes.STRING(255),
+        allowNull: true
     }
 
 }, {
