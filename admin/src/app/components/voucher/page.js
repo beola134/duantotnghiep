@@ -55,9 +55,7 @@ export default function VoucherPage() {
   };
 
   const handlePageChange = (page) => {
-    console.log("Current page:", page);
-    console.log("Total Pages:", totalPage);
-    setCurrentPage(1);
+    setCurrentPage(page);
   };
 
   const deleteVoucher = async (id) => {
