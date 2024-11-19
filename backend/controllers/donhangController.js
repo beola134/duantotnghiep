@@ -43,17 +43,6 @@ const addDonHang = async (req, res) => {
         }
       }
     }
-
-      // totalAmount += 30000;
-      //nếu totalAmount > 1.000.000 thì miễn phí ship và ngược lại thì phí ship = 30.000
-      if (totalAmount > 1000000) {
-        totalAmount = totalAmount;
-        phi_ship = "Miễn phí";
-      } else {
-        totalAmount += 30000;
-        phi_ship = 30000;
-      }
-
     let voucher = null;
     if (ma_voucher) {
       voucher = await Voucher.findOne({
