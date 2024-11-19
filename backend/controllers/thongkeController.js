@@ -193,8 +193,48 @@ exports.getDoanhThuDonHangTheoThang = async (req, res) => {
   }
 };
 
+//thống kê sản phẩm bán chạy nhất theo biễu đồ cột và trạng thái là giao hàng thành công
+exports.getSanPhamBanChayNhat = async (req, res) => {
+  try {
+    const topProducts = await ChiTietDonHang.findAll({
+      attributes: [
+        "id_san_pham",
+        [sequelize.fn("sum", sequelize.col("so_luong")), "total"],
+      ],
+      include: [
+        {
+          model: DonHang,
+          as: "DonHang",
+          attributes: [],
+          where: {
+            trang_thai: "Giao hàng thành công",
+          },
+        },
+      ],
+      group: ["id_san_pham"],
+      order: [[sequelize.literal("total"), "DESC"]],
+      limit: 5,
+    });
 
+    const result = await Promise.all(
+      topProducts.map(async (product) => {
+        const productDetail = await Product.findByPk(product.id_san_pham);
+        return {
+          id_san_pham: product.id_san_pham,
+          ten_san_pham: productDetail.ten_san_pham,
+          total: product.get("total"),
+        };
+      })
+    );
 
+    res.json({ topProducts: result });
+    
+  } catch (error) {
+    
+    console.log("Error: ", error);
+    res.status(500).json({ error: error.message });
+  }
+}
 
 
 
