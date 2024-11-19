@@ -5,7 +5,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sequelize = require('./config/database'); // Import sequelize instance
-var cateRouter = require('./routes/cateRouters');
+var thuonghieuRouter = require('./routes/thuonghieuRouters');
 var productRouter = require('./routes/productRouters');
 var userRouter = require('./routes/usersRouters');
 var commentRouter = require('./routes/commentRouters');
@@ -15,6 +15,7 @@ var voucherRouter = require('./routes/voucherRouters');
 var saleRouter = require('./routes/saleRouters');
 var spRouter = require('./routes/spRouters');
 var thongkeRouter = require('./routes/thongkeRouter');
+var danhMucRouter = require('./routes/danhmucRouters');
 
 var app = express();
 app.use(cors());
@@ -29,7 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/cate', cateRouter);
+app.use('/thuonghieu', thuonghieuRouter);
 app.use('/product', productRouter);
 app.use('/users', userRouter);
 app.use('/comment', commentRouter);
@@ -39,6 +40,7 @@ app.use('/voucher', voucherRouter);
 app.use('/sale', saleRouter);
 app.use('/product', spRouter);
 app.use('/thongke', thongkeRouter);
+app.use('/cate', danhMucRouter);
 
 
 sequelize.authenticate()

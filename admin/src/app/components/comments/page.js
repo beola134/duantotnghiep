@@ -1,6 +1,8 @@
 "use client";
 import styles from "./comments.module.css";
 import { useState, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 export default function CommentsPage() {
   const [comments, setComments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -99,13 +101,7 @@ export default function CommentsPage() {
             <div className={styles.tableContainer}>
               <div className={styles.tableControls}>
                 <label htmlFor="entries" style={{ fontWeight: "bold" }}>
-                  Hiện&nbsp;
-                  <select id="entries">
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                  </select>
-                  <span>&nbsp; danh mục</span>
+                
                 </label>
                 <div className={styles.search}>
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
@@ -117,10 +113,8 @@ export default function CommentsPage() {
               <table id="productTable" className={styles.productTable}>
                 <thead>
                   <tr>
-                    <th style={{ width: "3%" }}>
-                      <input type="checkbox" id="selectAll" />
-                    </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>Id bình luận</th>
+                  
+                    <th style={{ width: "15%", textAlign: "center" }}>Id bình luận</th>
                     <th style={{ width: "10%", textAlign: "center" }}>Id sản phẩm</th>
                     <th style={{ width: "8%", textAlign: "center" }}>Họ và tên </th>
                     <th style={{ width: "12%", textAlign: "center" }}>Nội dung</th>
@@ -131,21 +125,19 @@ export default function CommentsPage() {
                 </thead>
                 <tbody>
                   {comments.map((comment) => {
-                    const { _id, noi_dung, sao, ngay_binh_luan, ten_dang_nhap, id_san_pham } = comment;
+                    const { _id, noi_dung, sao, ngay_binh_luan, id_san_pham, trang_thai } = comment;
 
                     return (
-                      <tr key={_id}>
-                        <td>
-                          <input type="checkbox" className={styles.rowCheckbox} />
-                        </td>
+                      <tr key={_id} className={!trang_thai ? styles.hiddenRow : ""}>
+                      
                         <td>{_id}</td>
                         <td>{id_san_pham}</td>
                         <td style={{ textAlign: "center" }}>
-                          <span className={`${styles.status} ${styles.inStock} `}>{comment.user?.ten_dang_nhap}</span>
+                          <span className={`${styles.status} ${styles.inStock}`}>{comment.user?.ten_dang_nhap}</span>
                         </td>
 
                         <td style={{ textAlign: "center" }}>{noi_dung}</td>
-                        z<td style={{ textAlign: "center" }}>{sao}</td>
+                        <td style={{ textAlign: "center" }}>{sao}</td>
                         <td style={{ textAlign: "center" }}>
                           {new Date(ngay_binh_luan).toLocaleString("vi-VN", {
                             timeZone: "Asia/Ho_Chi_Minh",
@@ -153,18 +145,12 @@ export default function CommentsPage() {
                         </td>
 
                         <td style={{ textAlign: "center" }}>
-                          <Link href={`/components/suasanpham/${_id}`} className={`${styles.btn} ${styles.edit}`}>
-                            ✏️
-                          </Link>{" "}
-                          &nbsp;
                           <button
-                            className={`${styles.btn} ${styles.delete}`}
-                            id="deleteButton"
-                            onClick={() => deleteProduct(_id)}
+                            onClick={() => handleToggleComment(_id, trang_thai)}
+                            className={`${styles.btn} ${styles.edit}`}
                           >
-                            🗑️
+                            <FontAwesomeIcon icon={trang_thai ? faEye : faEyeSlash} />
                           </button>
-                          &nbsp;
                         </td>
                       </tr>
                     );

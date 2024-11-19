@@ -26,8 +26,9 @@ const DonHang = sequelize.define('DonHang', {
         allowNull: true
     },
     phi_ship: {
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: true
+        type: DataTypes.STRING(100),
+        allowNull: true,
+        defaultValue: 'Miễn phí'
     },
     thoi_gian_tao: {
         type: Sequelize.DATE,

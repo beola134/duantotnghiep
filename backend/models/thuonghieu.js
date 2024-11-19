@@ -1,14 +1,14 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const { v4: uuidv4 } = require('uuid');
-const Category = sequelize.define('Category', {
+const ThuongHieu = sequelize.define('ThuongHieu', {
     _id: {
         type: DataTypes.UUID,
         defaultValue: uuidv4,
         allowNull: false,
         primaryKey: true
     },
-    danh_muc: {
+    thuong_hieu: {
         type: DataTypes.STRING(255),
         allowNull: true
     },
@@ -26,8 +26,8 @@ const Category = sequelize.define('Category', {
 
     }
 }, {
-    tableName: 'danh_muc',
+    tableName: 'thuong_hieu',
     timestamps: false
 });
 
-module.exports = Category;
+module.exports = ThuongHieu;

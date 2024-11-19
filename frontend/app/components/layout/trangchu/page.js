@@ -196,9 +196,9 @@ export default function Main() {
   const [category, setCategory] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:5000/cate/allcate");
+      const response = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
       const data = await response.json();
-      setCategory(data.cates);
+      setCategory(data.th);
     };
 
     fetchData();
@@ -518,9 +518,9 @@ export default function Main() {
             {category.map((item) => (
               <div key={item._id}>
                 <div className={styles.item}>
-                  <a href="#" title={item.danh_muc}>
+                  <a href="#" title={item.thuong_hieu}>
                     <img
-                      alt={item.danh_muc}
+                      alt={item.thuong_hieu}
                       width="280"
                       height="130"
                       src={`http://localhost:5000/images/${item.hinh_anh2}`}
@@ -586,7 +586,7 @@ export default function Main() {
                         {category.map((item) => (
                             <div className={styles.item} key={item._id}>
                                 <img
-                                  alt={item.danh_muc}
+                                  alt={item.thuong_hieu}
                                   width="390"
                                   height="50"
                                   src={`http://localhost:5000/images/${item.hinh_anh}`}   

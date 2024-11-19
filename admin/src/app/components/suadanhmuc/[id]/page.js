@@ -17,10 +17,11 @@ export default function SuaDanhMuc() {
     useEffect(() => {
     const fetchCategory = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/cate/allcatess/${id}`);
+            const response = await fetch(`http://localhost:5000/thuonghieu/allthuonghieu/${id}`);
             if (response.ok) {
                 const data = await response.json();
-                setProductName(data.cate);
+                setProductName(data.th.thuong_hieu);
+                setDescription(data.th.mo_ta);
                 
             } else {
                 Swal.fire("Error", "Không tìm thấy danh mục!", "error");
@@ -37,13 +38,13 @@ export default function SuaDanhMuc() {
         e.preventDefault();
 
         const formData = new FormData();
-        formData.append("danh_muc", productName);
+        formData.append("thuong_hieu", productName);
         if (productImage) formData.append("hinh_anh", productImage);
         if (productLogo) formData.append("hinh_anh2", productLogo);
         formData.append("mo_ta", description);
 
         try {
-            const response = await fetch(`http://localhost:5000/cate/updatecate/${id}`, {
+            const response = await fetch(`http://localhost:5000/thuonghieu/updatethuonghieu/${id}`, {
                 method: "PUT",
                 body: formData,
             });
@@ -81,7 +82,7 @@ export default function SuaDanhMuc() {
                                 <input
                                     type="text"
                                     id="product-name"
-                                    value={productName.danh_muc}
+                                    value={productName}
                                     onChange={(e) => setProductName(e.target.value)}
                                 />
                             </div>
@@ -107,7 +108,7 @@ export default function SuaDanhMuc() {
                                 <label htmlFor="description">Mô tả danh mục</label>
                                 <textarea
                                     id="description"
-                                    value={productName.mo_ta}
+                                    value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
                             </div>

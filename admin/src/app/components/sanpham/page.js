@@ -99,7 +99,7 @@ export default function SanPham() {
     }
   };
 
-  const debouncedFetchProducts = debounce(fetchProducts,300);
+  const debouncedFetchProducts = debounce(fetchProducts, 300);
 
   useEffect(() => {
     debouncedFetchProducts();
@@ -110,10 +110,7 @@ export default function SanPham() {
   };
 
   const startProductIndex = (currentPage - 1) * itemsPerPage + 1;
-  const endProductIndex = Math.min(
-    currentPage * itemsPerPage,
-    totalProducts
-  );
+  const endProductIndex = Math.min(currentPage * itemsPerPage, totalProducts);
 
   const deleteProduct = async (id) => {
     const result = await Swal.fire({
@@ -157,7 +154,6 @@ export default function SanPham() {
     }
   };
 
-  
   return (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>
@@ -174,29 +170,29 @@ export default function SanPham() {
               </Link>
             </div>
             <div className={styles.buttonGroup}>
-                <button className={styles.sp2} onClick={uploadFile}>
-                  &nbsp;
-                  <i className="fas fa-file-upload"></i> Tải từ file
-                </button>
+              <button className={styles.sp2} onClick={uploadFile}>
                 &nbsp;
-                <button className={styles.sp3} onClick={printData}>
-                  <i className="fas fa-print"></i> In dữ liệu
-                </button>
+                <i className="fas fa-file-upload"></i> Tải từ file
+              </button>
+              &nbsp;
+              <button className={styles.sp3} onClick={printData}>
+                <i className="fas fa-print"></i> In dữ liệu
+              </button>
+              &nbsp;
+              <button className={styles.sp4} onClick={copyData}>
+                <i className="fas fa-copy"></i> Sao chép
+              </button>
+              &nbsp;
+              <button className={styles.sp5} onClick={exportToExcel}>
                 &nbsp;
-                <button className={styles.sp4} onClick={copyData}>
-                  <i className="fas fa-copy"></i> Sao chép
-                </button>
-                &nbsp;
-                <button className={styles.sp5} onClick={exportToExcel}>
-                  &nbsp;
-                  <i className="fas fa-file-excel"></i> Xuất Excel
-                </button>
-                &nbsp;
-                <button className={styles.sp6} onClick={exportToPDF}>
-                  <i className="fas fa-file-pdf"></i> Xuất PDF
-                </button>
-                &nbsp;
-              </div>
+                <i className="fas fa-file-excel"></i> Xuất Excel
+              </button>
+              &nbsp;
+              <button className={styles.sp6} onClick={exportToPDF}>
+                <i className="fas fa-file-pdf"></i> Xuất PDF
+              </button>
+              &nbsp;
+            </div>
           </div>
           <div className={styles.tableControls}>
             <div className={styles.search}>
@@ -215,17 +211,21 @@ export default function SanPham() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-                <th style={{ width: "3%" }}>
-                  <input type="checkbox" id="selectAll" />
+                
+                <th style={{ width: "15%", textAlign: "center" }}>
+                  ID sản phẩm
                 </th>
-                <th>ID sản phẩm</th>
-                <th>Tên sản phẩm</th>
-                <th>Ảnh</th>
-                <th>Số lượng</th>
-                <th>Giá tiền</th>
-                <th>Giá giảm</th>
-                <th>Mã sản phẩm</th>
-                <th>Chức năng</th>
+                <th style={{ width: "20%", textAlign: "center" }}>
+                  Tên sản phẩm
+                </th>
+                <th style={{ width: "10%", textAlign: "center" }}>Ảnh</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Số lượng</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Giá tiền</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Giá giảm</th>
+                <th style={{ width: "15%", textAlign: "center" }}>
+                  Mã sản phẩm
+                </th>
+                <th style={{ width: "15%", textAlign: "center" }}>Chức năng</th>
               </tr>
             </thead>
             <tbody>
@@ -242,9 +242,7 @@ export default function SanPham() {
 
                 return (
                   <tr key={_id}>
-                    <td>
-                      <input type="checkbox" className={styles.rowCheckbox} />
-                    </td>
+                   
                     <td>{_id}</td>
                     <td>{ten_san_pham}</td>
                     <td>
@@ -254,16 +252,24 @@ export default function SanPham() {
                       />
                     </td>
                     <td style={{ textAlign: "center" }}>{so_luong}</td>
-                    <td>{gia_san_pham.toLocaleString("vi-VN")}₫</td>
-                    <td>{gia_giam.toLocaleString("vi-VN")}₫</td>
-                    <td>{ma_san_pham}</td>
+                    <td style={{ textAlign: "center" }}>
+                      {gia_san_pham.toLocaleString("vi-VN")}₫
+                    </td>
+                    <td style={{ textAlign: "center" }}>
+                      {gia_giam.toLocaleString("vi-VN")}₫
+                    </td>
+                    <td style={{ textAlign: "center" }}>{ma_san_pham}</td>
                     <td>
+                      {" "}
+                      &nbsp; &nbsp; &nbsp;
                       <Link
+                        style={{ textAlign: "center" }}
                         href={`/components/suasanpham/${_id}`}
                         className={`${styles.btn} ${styles.edit}`}
                       >
                         ✏️
-                      </Link>
+                      </Link>{" "}
+                      &nbsp; &nbsp;
                       <button
                         className={`${styles.btn} ${styles.delete}`}
                         onClick={() => deleteProduct(_id)}

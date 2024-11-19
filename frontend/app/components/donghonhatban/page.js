@@ -18,7 +18,7 @@ export default function Donghonu() {
   // Bộ lọc mặc định cho đồng hồ nữ
   const [filter, setFilter] = useState({
     gioi_tinh: "",
-    danh_muc: "",
+    thuong_hieu: "",
     muc_gia: "",
     khuyenmai: "",
     loai_may: "",
@@ -44,7 +44,7 @@ export default function Donghonu() {
       }
       const data = await response.json();
       setProducts(data.products); // Cập nhật danh sách sản phẩm
-      setTotalPages(data.totalPages); // Cập nhật tổng số trang
+      setTotalPages(data.totalPages || 1); // Cập nhật tổng số trang
     } catch (error) {
       setError(error.message);
     } finally {
@@ -80,9 +80,10 @@ export default function Donghonu() {
     // Cập nhật trạng thái bộ lọc
     setSelectedFilter(newFilters);
     setFilter(newFilter);
+    setCurrentPage(1);
 
     // Đặt lại danh mục khi chọn một danh mục khác
-    if (filterType === "danh_muc") {
+    if (filterType === "thuong_hieu") {
       setCategoryName(value);
     }
   };
@@ -110,7 +111,7 @@ export default function Donghonu() {
     const updatedFilter = { ...filter, [filterType]: "" }; // Xóa giá trị của bộ lọc bị xoá
 
     // Nếu xoá danh mục (brand), đặt lại tiêu đề về đồng hồ nam
-    if (filterType === "danh_muc") {
+    if (filterType === "thuong_hieu") {
       setCategoryName("Đồng hồ nữ");
     }
     setSelectedFilter(newFilters);
@@ -251,7 +252,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="LONGINES"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "LONGINES")
+                                  handleFilterChange("thuong_hieu", "LONGINES")
                                 }>
                                 LONGINES
                               </Link>
@@ -262,7 +263,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="TISSOT"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "TISSOT")
+                                  handleFilterChange("thuong_hieu", "TISSOT")
                                 }>
                                 TISSOT
                               </Link>
@@ -273,7 +274,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="MIDO"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "MIDO")
+                                  handleFilterChange("thuong_hieu", "MIDO")
                                 }>
                                 MIDO
                               </Link>
@@ -284,7 +285,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="CERTINA"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "CERTINA")
+                                  handleFilterChange("thuong_hieu", "CERTINA")
                                 }>
                                 CERTINA
                               </Link>
@@ -295,7 +296,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="HAMILTON"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "HAMILTON")
+                                  handleFilterChange("thuong_hieu", "HAMILTON")
                                 }>
                                 HAMILTON
                               </Link>
@@ -306,7 +307,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="TITONI"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "TITONI")
+                                  handleFilterChange("thuong_hieu", "TITONI")
                                 }>
                                 TITONI
                               </Link>
@@ -318,7 +319,7 @@ export default function Donghonu() {
                                 title="FREDERIQUE CONSTANT"
                                 onClick={() =>
                                   handleFilterChange(
-                                    "danh_muc",
+                                    "thuong_hieu",
                                     "FREDERIQUECONSTANT"
                                   )
                                 }>
@@ -331,7 +332,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="CALVIN KLEIN"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "CALVINKLEIN")
+                                  handleFilterChange("thuong_hieu", "CALVINKLEIN")
                                 }>
                                 CALVIN KLEIN
                               </Link>
@@ -342,7 +343,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="EDOX"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "EDOX")
+                                  handleFilterChange("thuong_hieu", "EDOX")
                                 }>
                                 EDOX
                               </Link>
@@ -354,7 +355,7 @@ export default function Donghonu() {
                                 title="CLAUDE BERNARD"
                                 onClick={() =>
                                   handleFilterChange(
-                                    "danh_muc",
+                                    "thuong_hieu",
                                     "CLAUDEBERNARD"
                                   )
                                 }>
@@ -367,7 +368,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="SEIKO"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "SEIKO")
+                                  handleFilterChange("thuong_hieu", "SEIKO")
                                 }>
                                 SEIKO
                               </Link>
@@ -378,7 +379,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="CITIZEN"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "CITIZEN")
+                                  handleFilterChange("thuong_hieu", "CITIZEN")
                                 }>
                                 CITIZEN
                               </Link>
@@ -389,7 +390,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="ORIENT"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "ORIENT")
+                                  handleFilterChange("thuong_hieu", "ORIENT")
                                 }>
                                 ORIENT
                               </Link>
@@ -400,7 +401,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="CASIO"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "CASIO")
+                                  handleFilterChange("thuong_hieu", "CASIO")
                                 }>
                                 CASIO
                               </Link>
@@ -411,7 +412,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="OLYM PIANUS"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "OLYMPIANUS")
+                                  handleFilterChange("thuong_hieu", "OLYMPIANUS")
                                 }>
                                 OLYM PIANUS
                               </Link>
@@ -423,7 +424,7 @@ export default function Donghonu() {
                                 title="DANIELWELLINGTON"
                                 onClick={() =>
                                   handleFilterChange(
-                                    "danh_muc",
+                                    "thuong_hieu",
                                     "DANIELWELLINGTON"
                                   )
                                 }>
@@ -436,7 +437,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="FOSSIL"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "FOSSIL")
+                                  handleFilterChange("thuong_hieu", "FOSSIL")
                                 }>
                                 FOSSIL
                               </Link>
@@ -447,7 +448,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="SKAGEN"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "SKAGEN")
+                                  handleFilterChange("thuong_hieu", "SKAGEN")
                                 }>
                                 SKAGEN
                               </Link>
@@ -458,7 +459,7 @@ export default function Donghonu() {
                                 href="#"
                                 title="MICHAEL KORS"
                                 onClick={() =>
-                                  handleFilterChange("danh_muc", "MICHAELKORS")
+                                  handleFilterChange("thuong_hieu", "MICHAELKORS")
                                 }>
                                 MICHAEL KORS
                               </Link>

@@ -63,7 +63,6 @@ export default function Menu() {
             Bình luận
           </li>
           <li>
-
             <Link href="/components/comments">
               <i className={`bx bxs-comment-detail ${styles.icon}`}></i>
               Quản lý bình luận
@@ -76,20 +75,28 @@ export default function Menu() {
             <Link href="/components/taikhoan" onClick={toggleProductDropdown}>
               <i className={`bx bxs-user-account ${styles.icon}`}></i>
               Quản Lý Tài khoản
-             
             </Link>
-            
           </li>
           <li className={styles.divider} data-text="Đơn Hàng">
             Đơn Hàng
           </li>
           <li>
-            <Link href="/components/quanlydonhang" onClick={toggleOrderDropdown}>
+            <Link
+              href="/components/quanlydonhang"
+              onClick={toggleOrderDropdown}
+            >
               <i className={`bx bxs-cart ${styles.icon}`}></i>
               Quản Lý Đơn Hàng
-              
             </Link>
-            
+          </li>
+          <li>
+            <Link
+              href="/components/chitietdonhang"
+              onClick={toggleOrderDropdown}
+            >
+              <i className={`bx bxs-cart ${styles.icon}`}></i>
+              Quản Lý Chi Tiết Đơn Hàng
+            </Link>
           </li>
           <li className={styles.divider} data-text="Voucher">
             Voucher
@@ -103,9 +110,11 @@ export default function Menu() {
         </ul>
         <div className={styles.ads}>
           <div className={styles.wrapper}>
-
-
-            <Link style={{ textDecoration: "none" }} href="#" className={styles.btnUpgrade}>
+            <Link
+              style={{ textDecoration: "none" }}
+              href="#"
+              className={styles.btnUpgrade}
+            >
               Đăng xuất
             </Link>
           </div>
@@ -125,13 +134,13 @@ export default function Menu() {
           </a>
           <span className={styles.divider}></span>
           <div className="dropdown profile">
-
             <a
               className="dropdown-toggle d-flex align-items-center"
               href="#"
               id="profileDropdown"
               data-bs-toggle="dropdown"
-              aria-expanded="false">
+              aria-expanded="false"
+            >
               <img
                 src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVvcGxlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
                 alt=""
@@ -142,7 +151,8 @@ export default function Menu() {
             </a>
             <ul
               className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`}
-              aria-labelledby="profileDropdown">
+              aria-labelledby="profileDropdown"
+            >
               <li>
                 <a className={`dropdown-item ${styles.dropdownItem}`} href="#">
                   <i className="bx bxs-user-circle icon"></i>

@@ -16,6 +16,7 @@ const User = ({ params }) => {
     hinh_anh: "",
   });
   const [orderShow, setOrderShow] = useState([]);
+  const [ShowLichsu, setShowLichsu] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [avatarFile, setAvatarFile] = useState(null);
   const [activeTab, setActiveTab] = useState("profile");
@@ -65,7 +66,27 @@ const User = ({ params }) => {
       fetchOrderShow();
     }
   };
-
+  useEffect(() => {
+    if (activeTab === "ShowLichsu") {
+      const fetchShowLichsu = async () => {
+        try {
+          const res = await fetch(
+            `http://localhost:5000/donhang/history/${id}`
+          );
+          const data = await res.json();
+          if (data.donHangs && Array.isArray(data.donHangs)) {
+            setShowLichsu(data.donHangs);
+          } else {
+            setShowLichsu([]);
+          }
+        } catch (error) {
+          console.error("Lỗi khi lấy lịch sử đơn hàng:", error);
+          setShowLichsu([]);
+        }
+      };
+      fetchShowLichsu();
+    }
+  }, [activeTab, id]);
   const fetchOrderShow = async () => {
     try {
       const res = await fetch(`http://localhost:5000/donhang/show/${id}`);
@@ -240,26 +261,34 @@ const User = ({ params }) => {
           <p>
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => handleTabClick("profile")}>
+              onClick={() => handleTabClick("profile")}
+            >
               Hồ Sơ
             </span>
           </p>
 
           <p>
-            <span style={{ cursor: "pointer" }}>Lịch sử mua hàng</span>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleTabClick("ShowLichsu")}
+            >
+              Lịch sử mua hàng
+            </span>
           </p>
 
           <p>
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => handleTabClick("orderShow")}>
+              onClick={() => handleTabClick("orderShow")}
+            >
               Trạng thái đơn hàng
             </span>
           </p>
           <p>
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => handleTabClick("changePassword")}>
+              onClick={() => handleTabClick("changePassword")}
+            >
               Đổi mật khẩu
             </span>
           </p>
@@ -347,7 +376,8 @@ const User = ({ params }) => {
                     <button
                       type="submit"
                       onClick={handleSave}
-                      className="save-button">
+                      className="save-button"
+                    >
                       Cập nhật
                     </button>
                   </div>
@@ -357,7 +387,8 @@ const User = ({ params }) => {
                   <button
                     type="button"
                     onClick={() => setIsEditing(true)}
-                    className="edit-button">
+                    className="edit-button"
+                  >
                     Chỉnh sửa
                   </button>
                 </div>
@@ -365,6 +396,66 @@ const User = ({ params }) => {
             </form>
           </div>
         )}
+        {activeTab === "ShowLichsu" && (
+          <div className={styles.ShowLichsu}>
+            <h2>Lịch sử mua hàng</h2>
+            {ShowLichsu.length > 0 ? (
+              <ul>
+                {ShowLichsu.map((order) => (
+                  <li key={order.id}>
+                    <div className={styles.orderHeader}>
+                      <p>Mã Đơn Hàng: {order._id}</p>
+                      <span className={styles.trh}>{order.trang_thai}</span>
+                    </div>
+
+                    <p>
+                      Thời gian đặt hàng:{" "}
+                      {new Date(order.thoi_gian_tao).toLocaleString("vi-VN", {
+                        timeZone: "Asia/Ho_Chi_Minh",
+                      })}
+                    </p>
+
+                    {order.chiTietDonHangs.map((detail) => (
+                      <div key={detail._id} className={styles.productCard}>
+                        <img
+                          src={`http://localhost:5000/images/${detail.product.hinh_anh}`}
+                          alt={detail.product.ten}
+                          className={styles.productImage}
+                        />
+                        <div className={styles.productInfo}>
+                          <br></br>
+                          <p className={styles.productName}>
+                            {detail.product.ten}
+                          </p>
+                          <br></br>
+                          <p>
+                            Số lượng: <strong>{detail.so_luong}</strong>
+                          </p>
+                          <p style={{ float: "right" }}>
+                            Giá:{" "}
+                            <strong>
+                              {detail.product.gia_giam.toLocaleString("vi-VN")}₫
+                            </strong>
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+
+                    <div className={styles.orderSummary}>
+                      <p>Tổng Giá Trị:</p>
+                      <span className={styles.summaryValue}>
+                        {order.tong_tien.toLocaleString("vi-VN")}₫
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>Bạn chưa có đơn hàng.</p>
+            )}
+          </div>
+        )}
+
         {activeTab === "orderShow" && (
           <div className={styles.orderShow}>
             <h2>Trạng thái đơn hàng</h2>
@@ -376,7 +467,8 @@ const User = ({ params }) => {
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
-                      }}>
+                      }}
+                    >
                       <p>Mã Đơn Hàng: {order._id}</p>
                       <span className={styles.trh}>{order.trang_thai}</span>
                     </div>
@@ -435,7 +527,8 @@ const User = ({ params }) => {
                         style={{
                           margin: "0px 5px",
                           color: "black",
-                        }}>
+                        }}
+                      >
                         <strong>{order.phi_ship}₫</strong>
                       </span>{" "}
                     </p>
@@ -446,7 +539,8 @@ const User = ({ params }) => {
                           fontSize: "20px",
                           margin: "0px 5px",
                           color: "black",
-                        }}>
+                        }}
+                      >
                         <strong>
                           {order.tong_tien.toLocaleString("vi-VN")}₫
                         </strong>

@@ -3,13 +3,21 @@ import { useEffect, useState } from "react";
 import styles from "./thanhtoan.module.css";
 import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ThanhToan() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+    dia_chi: "",
+    dien_thoai: "",
+    ho_ten: "",
+  });
   const [cartItems, setCartItems] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [discountCode, setDiscountCode] = useState("");
   const [discountValue, setDiscountValue] = useState(0);
+  const [discountType, setDiscountType] = useState(""); // Loại giảm giá (phần trăm hoặc số tiền)
+  const [isDiscountApplied, setIsDiscountApplied] = useState(false); // Kiểm tra mã giảm giá đã được áp dụng chưa
   const [note, setNote] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
 
@@ -53,8 +61,11 @@ export default function ThanhToan() {
   }, []);
   // Tính tổng tiền
   const calculateTotal = (items) => {
-    const total = items.reduce((sum, item) => sum + item.so_luong * item.gia_giam, 0);
-    setTotalAmount(total - discountValue);
+    const total = items.reduce(
+      (sum, item) => sum + item.so_luong * (item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham),
+      0
+    );
+    setTotalAmount(total);
   };
   // Tăng giảm số lượng sản phẩm
   const handleIncrease = (index) => {
@@ -92,9 +103,104 @@ export default function ThanhToan() {
       }).then(() => {
         window.location.href = "/components/login?redirect=thanhtoan";
       });
-      return;
+      return false;
     }
-    // kiểm tra
+    return true;
+  };
+
+  // Áp dụng mã giảm giá
+  const applyDiscount = async () => {
+    if (isDiscountApplied) return;
+    try {
+      const response = await fetch(`http://localhost:5000/voucher/ma_voucher`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ma_voucher: discountCode }),
+      });
+      if (!response.ok) {
+        throw new Error("Mã giảm giá không hợp lệ");
+      }
+      const data = await response.json();
+      if (data.gia_tri) {
+        setDiscountValue(data.gia_tri);
+        setDiscountType("gia_tri");
+      } else if (data.phan_tram) {
+        setDiscountValue(data.phan_tram);
+        setDiscountType("phan_tram");
+      }
+      calculateTotal(cartItems);
+      setIsDiscountApplied(true);
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: error.message,
+      });
+      console.log(error);
+    }
+  };
+
+  // Kiểm tra xem sản phẩm còn hàng không
+  const ktra = async () => {
+    for (const items of cartItems) {
+      const reponse = await fetch(`http://localhost:5000/product/check/${items._id}?quantity=${items.so_luong}`);
+      if (!reponse.ok) {
+        Swal.fire({
+          title: "Không đủ hàng",
+          text: `Sản phẩm: ${items.ten_san_pham} Không đủ số lượng`,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+        return false;
+      }
+    }
+    return true;
+  };
+
+  // Kiểm tra thông tin người dùng
+  const validateFields = () => {
+    // Kiểm tra thông tin điện thoại
+    const phoneRegex = /^[0-9]{10,11}$/;
+    if (!user.dien_thoai || !phoneRegex.test(user.dien_thoai)) {
+      toast.error("Vui lòng nhập số điện thoại hợp lệ.");
+      return false;
+    }
+
+    // Kiểm tra thông tin họ và tên
+    if (!user.ho_ten) {
+      toast.error("Vui lòng nhập họ và tên.");
+      return false;
+    }
+
+    // Kiểm tra thông tin địa chỉ
+    if (!user.dia_chi) {
+      toast.error("Vui lòng nhập địa chỉ giao hàng.");
+      return false;
+    }
+
+    // Kiểm tra phương thức thanh toán
+    if (!selectedPaymentMethod) {
+      toast.error("Vui lòng chọn phương thức thanh toán.");
+      return false;
+    }
+
+    return true; // Tất cả trường hợp hợp lệ
+  };
+
+  // Xử lý khi người dùng click vào nút thanh toán
+  const handleClick = async () => {
+    const isValid = validateFields(); // Kiểm tra các trường thông tin
+    if (!isValid) return;
+
+    const isLoggedIn = await userLogin(); // Kiểm tra xem người dùng đã đăng nhập chưa
+    if (!isLoggedIn) return;
+
+    const isStockAvailable = await ktra(); // Kiểm tra xem sản phẩm còn hàng không
+    if (!isStockAvailable) return;
+
+    // Tạo đơn hàng
     const orderDetails = {
       dia_chi: user.dia_chi,
       id_nguoi_dung: user._id,
@@ -105,6 +211,11 @@ export default function ThanhToan() {
         so_luong: item.so_luong,
       })),
       ma_voucher: discountCode || null,
+      user: {
+        ho_ten: user.ho_ten,
+        dia_chi: user.dia_chi,
+        dien_thoai: user.dien_thoai,
+      },
     };
 
     try {
@@ -124,6 +235,8 @@ export default function ThanhToan() {
         icon: "success",
         title: "Thành công",
         text: data.message,
+      }).then(() => {
+        window.location.href = "/";
       });
       localStorage.setItem("cartItems", JSON.stringify([]));
       setCartItems([]);
@@ -136,100 +249,87 @@ export default function ThanhToan() {
     }
   };
 
-  const applyDiscount = async () => {
-    try {
-      const response = await fetch(`http://localhost:5000/voucher/ma_voucher`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ma_voucher: discountCode }),
-      });
-      if (!response.ok) {
-        throw new Error("Mã giảm giá không hợp lệ");
-      }
-      const data = await response.json();
-      setDiscountValue(data.gia_tri);
-      calculateTotal(cartItems);
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Lỗi",
-        text: error.message,
-      });
-      console.log(error);
-    }
-  };
-
   return (
     <>
       <div className={styles.container}>
         <div className={styles.checkoutContainer}>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
           <div className={styles.checkoutLeft}>
             <div className={`${styles.box} ${styles.customerInfo}`}>
               <p className={styles.productTitle}>Thông tin khách hàng</p>
               <div className={styles.inputGroup}>
-                <input type="email" placeholder="Email" value={user ? user.email : ""} readOnly />
-                <input type="text" placeholder="Điện thoại" value={user ? user.dien_thoai : ""} readOnly />
+                <input type="email" placeholder="Email" value={user.email} readOnly />
+                <input
+                  type="text"
+                  placeholder="Điện thoại"
+                  value={user.dien_thoai}
+                  onChange={(e) => setUser({ ...user, dien_thoai: e.target.value })}
+                />
               </div>
             </div>
 
             <div className={`${styles.box} ${styles.shippingPaymentInfo}`}>
               <p className={styles.productTitle}>Địa chỉ giao hàng</p>
-              <input type="text" placeholder="Họ và tên" value={user ? user.ho_ten : ""} readOnly />
-              <input type="text" placeholder="Địa chỉ" value={user ? user.dia_chi : ""} readOnly />
+              <input
+                type="text"
+                placeholder="Họ và tên"
+                value={user.ho_ten}
+                onChange={(e) => setUser({ ...user, ho_ten: e.target.value })}
+              />
+
+              <input
+                type="text"
+                placeholder="Địa chỉ"
+                value={user.dia_chi}
+                onChange={(e) => setUser({ ...user, dia_chi: e.target.value })}
+              />
+
               <textarea
                 className={styles.textarea}
                 placeholder="Ghi chú"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
               ></textarea>
+
+              {/* phương thức thanh toán  */}
               <div className={styles.paymentMethods}>
-                <p className={styles.productTitle}>Phương thức thanh toán </p>
-                <div className={styles.paymentOptions}>
-                  <button
-                    className={`${styles.paymentOption} ${selectedPaymentMethod === 1 ? styles.selected : ""}`}
-                    onClick={() => setSelectedPaymentMethod(1)}
-                  >
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSjgeVcZ4-Ce-KW8KlVF1JN88mRv1moJbpUg&s"
-                      alt="Thanh toán khi nhận hàng"
-                    />
-                    <span>Thanh toán khi nhận hàng</span>
-                  </button>
-                  <button
-                    className={`${styles.paymentOption} ${selectedPaymentMethod === 2 ? styles.selected : ""}`}
-                    onClick={() => setSelectedPaymentMethod(2)}
-                  >
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGxsoe7iPccCnGraliGFCLCvbg3bO3PDtELQ&s"
-                      alt="Thanh toán bằng tài khoản ngân hàng"
-                    />
-                    <span>Thanh toán bằng tài khoản ngân hàng</span>
-                  </button>
-                  <button
-                    className={`${styles.paymentOption} ${selectedPaymentMethod === 3 ? styles.selected : ""}`}
-                    onClick={() => setSelectedPaymentMethod(3)}
-                  >
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp1v7T287-ikP1m7dEUbs2n1SbbLEqkMd1ZA&s"
-                      alt="Thanh toán bằng VNPay"
-                    />
-                    <span>Thanh toán bằng VNPay</span>
-                  </button>
-                  <button
-                    className={`${styles.paymentOption} ${selectedPaymentMethod === 4 ? styles.selected : ""}`}
-                    onClick={() => setSelectedPaymentMethod(4)}
-                  >
-                    <img
-                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmzB5_qUPLtN4E3LuVFxMvy92q1Vo10N_m2Q&s"
-                      alt="Thanh toán ví điện tử Momo"
-                    />
-                    <span>Thanh toán ví điện tử Momo</span>
-                  </button>
-                </div>
+                <p className={styles.productTitle}>Phương thức thanh toán</p>
+                <select
+                  as="select"
+                  name="phuong_thuc_thanh_toan"
+                  className={styles.paymentSelect}
+                  value={selectedPaymentMethod || ""}
+                  onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                >
+                  <option value="" className={styles.paymentOption} disabled>
+                    Chọn phương thức thanh toán
+                  </option>
+                  <option value={1} className={styles.paymentOption}>
+                    Thanh toán khi nhận hàng
+                  </option>
+                  <option value={2} className={styles.paymentOption}>
+                    Thanh toán bằng tài khoản ngân hàng
+                  </option>
+                  <option value={3} className={styles.paymentOption}>
+                    Thanh toán bằng VNPay
+                  </option>
+                  <option value={4} className={styles.paymentOption}>
+                    Thanh toán ví điện tử Momo
+                  </option>
+                </select>
               </div>
             </div>
+
+            {/* product */}
             {cartItems.map((item, index) => (
               <div className={`${styles.box} ${styles.productCard}`} key={item._id}>
                 <div className={styles.productInfo}>
@@ -241,9 +341,9 @@ export default function ThanhToan() {
                   </div>
 
                   <div style={{ margin: "20px" }} className={styles.productDetails}>
-                    <p className={styles.productName}>{item.ten_san_pham}</p>
-                    <p className={styles.productModel}>{item.loai}</p>
-                    <p className={styles.productCode}>{item.ma_san_pham}</p>
+                    <p className={styles.productName}>Tên sản phẩm: {item.ten_san_pham}</p>
+                    <p className={styles.productModel}>Loại máy: {item.loai}</p>
+                    <p className={styles.productCode}>Mã sản phẩm: {item.ma_san_pham}</p>
                     <p className={styles.productSize}>Đường kính: {item.duong_kinh}</p>
                   </div>
                 </div>
@@ -258,7 +358,9 @@ export default function ThanhToan() {
                         +
                       </button>
                     </div>
-                    <p className={styles.productPrice}>{item.gia_giam.toLocaleString("vi-VN")}₫</p>
+                    <p className={styles.productPrice}>
+                      {(item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham).toLocaleString("vi-VN")}₫
+                    </p>
                   </div>
                   <button onClick={() => handleDelete(index)} className={styles.deleteBtn}>
                     🗑️
@@ -268,6 +370,7 @@ export default function ThanhToan() {
             ))}
           </div>
 
+          {/* tổng thanh toán */}
           <aside className={styles.cartSummary}>
             <div className={styles.discountCode}>
               <input
@@ -276,23 +379,49 @@ export default function ThanhToan() {
                 value={discountCode}
                 onChange={(e) => setDiscountCode(e.target.value)}
               />
-              <button onClick={applyDiscount}>Áp dụng</button>
+              <button onClick={applyDiscount} disabled={isDiscountApplied}>
+                Áp dụng
+              </button>
               <hr />
             </div>
             <div className={styles.orderSummary}>
               <p>
-                Tổng tiền hàng: <span className={styles.price}>{totalAmount.toLocaleString("vi-VN")}₫</span>
+                Tổng tiền hàng:
+                <span className={styles.price}>
+                  {cartItems
+                    .reduce(
+                      (sum, item) => sum + item.so_luong * (item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham),
+                      0
+                    )
+                    .toLocaleString("vi-VN")}
+                  ₫
+                </span>
               </p>
               <p>
-                Ưu đãi: <span className={styles.price}>-{(discountValue || 0).toLocaleString("vi-VN")}₫</span>
+                Ưu đãi:
+                <span className={styles.price}>
+                  {discountType === "phan_tram" ? `-${discountValue}%` : `-${discountValue.toLocaleString("vi-VN")}₫`}
+                </span>
+              </p>
+
+              <p>
+                Phí vận chuyển:
+                <span className={styles.price}>{totalAmount > 1000000 ? "Miễn phí" : "30.000₫"}</span>
               </p>
               <p className={styles.totalAmount}>
-                Tổng thanh toán:{" "}
-                <span className={styles.price}>{(totalAmount - discountValue).toLocaleString("vi-VN")}₫</span>
+                Tổng thanh toán:
+                <span className={styles.price}>
+                  {(
+                    totalAmount -
+                    (discountType === "phan_tram" ? (totalAmount * discountValue) / 100 : discountValue) +
+                    (totalAmount < 1000000 ? 30000 : 0)
+                  ).toLocaleString("vi-VN")}
+                  ₫
+                </span>
               </p>
             </div>
-            <button className={styles.checkoutButton} onClick={userLogin}>
-              Thanh toán
+            <button className={styles.checkoutButton} onClick={handleClick}>
+              Tiến hành thanh toán
             </button>
           </aside>
         </div>
