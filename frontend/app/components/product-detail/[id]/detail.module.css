@@ -478,12 +478,14 @@
 .clearfix {
   clear: both;
 }
+/* thông tin chi tiết */
 .scrollNavItem.active {
   position: relative;
   border-bottom: 0px;
 }
 .productTabsUl .scrollNavItem {
   width: calc(100% / 3 - 4px);
+  border-bottom: 3px solid #ebebeb;
   margin: 0px 2px;
   border-left: 0px;
   box-sizing: border-box;
@@ -592,6 +594,13 @@
   max-width: 100%;
   height: auto !important;
   border: 1px solid rgba(243, 243, 243, 0.8);
+}
+.hide {
+  display: none !important;
+}
+
+.prodetailsTab {
+  display: block;
 }
 
 /* detail-chứng nhận  */
