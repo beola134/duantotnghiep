@@ -39,43 +39,30 @@ exports.getNewUsersToday = async (req, res) => {
 // Hiển thị tất cả đơn hàng với hình ảnh và tên người dùng
 exports.getAllOrdersWithUserDetails = async (req, res) => {
   try {
-    const orders = await DonHang.findAll({
-      include: [
-        {
-          model: DonHang,
-          as: "User", // Alias phải khớp với model
-          attributes: ["id", "id_nguoi_dung", "hinh_anh"], 
-        },
-      ],
-    });
-
-    if (!orders || orders.length === 0) {
-      return res.status(404).json({ message: "Không tìm thấy đơn hàng nào" });
-    }
-
-    const result = orders.map((order) => ({
-      _id: order._id,
-      tong_tien: order.tong_tien,
-      trang_thai: order.trang_thai,
-      thoi_gian_tao: order.thoi_gian_tao,
-      thanh_toan: order.thanh_toan,
-      id_phuong_thuc_thanh_toan: order.id_phuong_thuc_thanh_toan,
-      ghi_chu: order.ghi_chu,
-      id_voucher: order.id_voucher,
-
-      user: {
-        id: order.User?.id,
-        id_nguoi_dung: order.User?.id_nguoi_dung,
-        hinh_anh: order.User?.hinh_anh,
-      },
-    }));
-
+    const orders = await DonHang.findAll({});
+    const result = await Promise.all(
+      orders.map(async (order) => {
+        const user = await Users.findOne({ where: { _id: order.id_nguoi_dung } });
+        return {
+          ...order. dataValues,
+          user: user
+            ? {
+              _id: user._id,
+              ho_ten: user.ho_ten,
+              email: user.email,
+              hinh_anh: user.hinh_anh,
+            }
+            : null,
+        }
+      })
+    );
     res.status(200).json({ orders: result });
   } catch (error) {
-    console.log("Error: ", error);
+    console.error("Error: ", error);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 
 
