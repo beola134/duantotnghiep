@@ -124,6 +124,24 @@ export default function AdminStatistics() {
   const [tongDoanhThu, setTongDoanhThu] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userNew, setUsernew] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/thongke/getNewUsersToday');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setUsernew(data.usersToday); 
+        setLoading(false); 
+      } catch (error) {
+        setError(error.message); 
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []); 
 
    
   useEffect(() => {
@@ -259,7 +277,7 @@ export default function AdminStatistics() {
           <i className={cx("bx", "bx bxs-category")}></i>
           <span className={cx("text")}>
             <h3>{categories}</h3>
-            <p>Danh mục</p>
+            <p>Thương Hiệu</p>
           </span>
         </li>
       </ul>
@@ -377,7 +395,7 @@ export default function AdminStatistics() {
         </div>
         <div className={cx("content-data")}>
           <div className={cx("head")}>
-            <h3>User</h3>
+            <h3>Người dùng mới</h3>
             <div className={cx("menu", "dropdown")}>
               <i
                 className={`bx bx-dots-horizontal-rounded ${cx("icon")}`}
@@ -411,22 +429,24 @@ export default function AdminStatistics() {
             <table className={cx("customer-table")}>
               <thead className={cx("cuttom1")}>
                 <tr>
-                  <th style={{ width: "20%" }}>ID</th>
-                  <th>Tên khách hàng</th>
-                  <th>Ngày sinh</th>
-                  <th>Số điện thoại</th>
+                  <th >ID</th>
+                  <th >Tên khách hàng</th>
+                  <th>Email</th>
+                  <th >Số điện thoại</th>
                 </tr>
               </thead>
               <tbody>
-                {/* Lặp dữ liệu ví dụ */}
-                {Array.from({ length: 7 }).map((_, index) => (
-                  <tr key={index}>
-                    <td>#183</td>
-                    <td>Hột vịt muối</td>
-                    <td>21/7/1992</td>
-                    <td>0921387221</td>
+                {userNew.map((item, index) => (
+                  <tr key={item._id} style={{"text-align": "center"}}>
+                    <td>{index + 1}</td> 
+                    <td>{item.ho_ten}</td>
+                    <td>{item.email}</td>
+                    <td>{item.dien_thoai}</td>
                   </tr>
-                ))}
+                  ))}
+                
+                  
+                
               </tbody>
             </table>
           </div>

@@ -467,8 +467,8 @@ export default function Main() {
               <div className={styles.dongHoDoi}>
                 {productsNewDoi.map((item) => (
                   <div key={item._id} className={styles.watch}>
-                    <div className={styles.discountBadge}>
-                      - {roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
+                    <div className={styles.discountBadge} >
+                      -{roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
@@ -518,7 +518,8 @@ export default function Main() {
             {category.map((item) => (
               <div key={item._id}>
                 <div className={styles.item}>
-                  <a href="#" title={item.thuong_hieu}>
+                  
+                  <Link href={`/components/chitietdanhmuc/${item.thuong_hieu}`} title={item.thuong_hieu}>
                     <img
                       alt={item.thuong_hieu}
                       width="280"
@@ -526,7 +527,8 @@ export default function Main() {
                       src={`http://localhost:5000/images/${item.hinh_anh2}`}
                       style={{ opacity: 1, display: "block" }}
                     />
-                  </a>
+                  </Link>
+                  
                 </div>
               </div>
             ))}
@@ -570,7 +572,8 @@ export default function Main() {
         <div className={styles.certificateSection}>
           <div className={styles.text}>
             <h3 className={styles.textTitle}>Đại lý ủy quyền chính thức các thương hiệu lớn</h3>
-            <p className={styles.xtc}>Xem tất cả</p>
+            
+            <p className={styles.xtc}><Link href="/components/thuonghieu">Xem tất cả</Link></p>
 
             <p className={styles.textBrand}>
               Chứng nhận Duy Anh Watch là đại lý ủy quyền chính thức của thương hiệu LONGINES tại Việt Nam (

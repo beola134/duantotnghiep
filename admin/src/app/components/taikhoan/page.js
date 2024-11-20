@@ -313,18 +313,18 @@ export default function TaiKhoan() {
                     <tr key={item._id}>
                      
                       <td>{item._id}</td>
-                      <td>
+                      <td style={{ textAlign: "center" }}>
                         <p className={styles.mota}>{item.ho_ten}</p>
                       </td>
-                      <td>
+                      <td style={{ textAlign: "center" }}>
                         <img
                           src={`http://localhost:5000/images/${item.hinh_anh}`}
                           alt={item.danh_muc}
                         />
                       </td>
-                      <td>{item.dia_chi}</td>
-                      <td>{item.email}</td>
-                      <td>{item.dien_thoai}</td>
+                      <td style={{ textAlign: "center" }}>{item.dia_chi}</td>
+                      <td style={{ textAlign: "center" }}> {item.email}</td>
+                      <td style={{ textAlign: "center" }}>{item.dien_thoai}</td>
                       <td>
                         <p className={styles.chucvu}>
                          <select
