@@ -1,117 +1,83 @@
 'use client'
 import styles from "./thongke.module.css";
-import "boxicons/css/boxicons.min.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import classNames from 'classnames/bind';
-import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
-import dynamic from 'next/dynamic';
-const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 const cx = classNames.bind(styles);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 
 export default function AdminStatistics() {
-  const chartRef1 = useRef(null);
-  const chartRef2 = useRef(null);
-
-  const chartOptions1 = {
-    series: [{
-      name: 'series1',
-      data: [31, 40, 28, 51, 42, 109, 100]
-    }, {
-      name: 'series2',
-      data: [11, 32, 45, 32, 34, 52, 41]
-    }],
-    chart: {
-      height: 350,
-      type: 'area'
-    },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      curve: 'smooth'
-    },
-    xaxis: {
-      type: 'category',
-      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
-    },
-    tooltip: {
-      x: {
-        format: 'dd/MM/yy HH:mm'
-      }
-    }
-  };
-
-  const chartOptions2 = {
-    series: [
-      {
-        name: 'Q1 Budget',
-        group: 'budget',
-        data: [44000, 55000, 41000, 67000, 22000, 43000]
-      },
-      {
-        name: 'Q1 Actual',
-        group: 'actual',
-        data: [48000, 50000, 40000, 65000, 25000, 40000]
-      },
-      {
-        name: 'Q2 Budget',
-        group: 'budget',
-        data: [13000, 36000, 20000, 8000, 13000, 27000]
-      },
-      {
-        name: 'Q2 Actual',
-        group: 'actual',
-        data: [20000, 40000, 25000, 10000, 12000, 28000]
-      }
-    ],
-    chart: {
-      type: 'bar',
-      height: 350,
-      stacked: true
-    },
-    stroke: {
-      width: 1,
-      colors: ['#fff']
-    },
-    dataLabels: {
-      formatter: (val) => {
-        return val / 1000 + 'K';
-      }
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false
-      }
-    },
-    xaxis: {
-      categories: [
-        'Online advertising',
-        'Sales Training',
-        'Print advertising',
-        'Catalogs',
-        'Meetings',
-        'Public relations'
-      ]
-    },
-    fill: {
-      opacity: 1
-    },
-    colors: ['#80c7fd', '#008FFB', '#80f1cb', '#00E396'],
-    yaxis: {
-      labels: {
-        formatter: (val) => {
-          return val / 1000 + 'K';
+  const [doanhthuthang, setdoanhthuthang ]= useState([]);
+  const [spbanchay, setspbanchay]= useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/thongke/getTotalRevenueByMonth');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
         }
+        const data = await response.json();
+        setdoanhthuthang(data.doanhThuDonHangTheo); 
+        setLoading(false); 
+      } catch (error) {
+        setError(error.message); 
+        setLoading(false);
       }
-    },
-    legend: {
-      position: 'top',
-      horizontalAlign: 'left'
-    }
-  };
+    };
+    fetchData();
+  }, []); 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/thongke/getTopProducts');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setspbanchay(data.topProducts); 
+        setLoading(false); 
+      } catch (error) {
+        setError(error.message); 
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []); 
 
+   const labels = doanhthuthang.map(item => item.month); 
+  const data = doanhthuthang.map(item => item.totalRevenue); 
+  const labels2 = spbanchay.map(product => product.ten_san_pham);
+  const data2 = spbanchay.map(product => parseInt(product.total));
+
+  const chartData = {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Doanh thu tháng',
+        data: data,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 2,
+      },
+    ],
+  };
+  const chartData2 = {
+    labels: labels2,
+    datasets: [
+      {
+        label: 'Số lượng bán ra',
+        data: data2,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 2,
+      },
+    ],
+  };
+  
+
+  
 
 
 
@@ -125,6 +91,27 @@ export default function AdminStatistics() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userNew, setUsernew] = useState([]);
+  const [oder, setOder] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/thongke/getAllOrdersWithUserDetails');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setOder(data.orders); 
+        setLoading(false); 
+      } catch (error) {
+        setError(error.message); 
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []); 
+
+
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -309,7 +296,7 @@ export default function AdminStatistics() {
       <div className={cx("data")}>
         <div className={cx("content-data")}>
           <div className={cx("head")}>
-            <h3>Dữ liệu đầu vào tháng 6</h3>
+            <h3>Biểu đồ doanh thu 12 tháng</h3>
             <div className={cx("menu", "dropdown")}>
               <i
                 className="bx bx-dots-horizontal-rounded icon"
@@ -341,12 +328,7 @@ export default function AdminStatistics() {
           </div>
           <div className={cx("chart")}>
             <div id="chart1">
-              <ReactApexChart
-                options={chartOptions1}
-                series={chartOptions1.series}
-                type="area"
-                height={350}
-              />
+              <Bar data={chartData} />
             </div>
           </div>
         </div>
@@ -384,12 +366,7 @@ export default function AdminStatistics() {
           </div>
           <div className={cx("chat-box")}>
             <div id="chart">
-              <ReactApexChart
-                options={chartOptions2}
-                series={chartOptions2.series}
-                type="bar"
-                height={350}
-              />
+              <Bar data={chartData2} />
             </div>
           </div>
         </div>
@@ -494,125 +471,28 @@ export default function AdminStatistics() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <div className={cx("user-info")}>
-                        <img
-                          src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
-                          alt="User Image"
-                        />
-                        <span>John Doe</span>
-                      </div>
-                    </td>
-                    <td>01-10-2021</td>
-                    <td>
-                      <span className={`${cx("status", "completed")}`}>
-                        Hoàn Thành
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className={cx("user-info")}>
-                        <img
-                          src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
-                          alt="User Image"
-                        />
-                        <span>John Doe</span>
-                      </div>
-                    </td>
-                    <td>01-10-2021</td>
-                    <td>
-                      <span className={`${cx("status", "completed")}`}>
-                        Hoàn Thành
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className={cx("user-info")}>
-                        <img
-                          src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
-                          alt="User Image"
-                        />
-                        <span>John Doe</span>
-                      </div>
-                    </td>
-                    <td>01-10-2021</td>
-                    <td>
-                      <span className={`${cx("status", "completed")}`}>
-                        Hoàn Thành
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className={cx("user-info")}>
-                        <img
-                          src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
-                          alt="User Image"
-                        />
-                        <span>John Doe</span>
-                      </div>
-                    </td>
-                    <td>01-10-2021</td>
-                    <td>
-                      <span className={`${cx("status", "completed")}`}>
-                        Hoàn Thành
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className={cx("user-info")}>
-                        <img
-                          src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
-                          alt="User Image"
-                        />
-                        <span>John Doe</span>
-                      </div>
-                    </td>
-                    <td>01-10-2021</td>
-                    <td>
-                      <span className={`${cx("status", "completed")}`}>
-                        Hoàn Thành
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className={cx("user-info")}>
-                        <img
-                          src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
-                          alt="User Image"
-                        />
-                        <span>John Doe</span>
-                      </div>
-                    </td>
-                    <td>01-10-2021</td>
-                    <td>
-                      <span className={`${cx("status", "completed")}`}>
-                        Hoàn Thành
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div className={cx("user-info")}>
-                        <img
-                          src="https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
-                          alt="User Image"
-                        />
-                        <span>John Doe</span>
-                      </div>
-                    </td>
-                    <td>01-10-2021</td>
-                    <td>
-                      <span className={`${cx("status", "completed")}`}>
-                        Hoàn Thành
-                      </span>
-                    </td>
-                  </tr>
+                  {oder.map((item)=>(
+                    <tr>
+                      <td>
+                        <div className={cx("user-info")}>
+                          <img
+                            src={`http://localhost:5000/images/${item.user.hinh_anh}`}
+                            alt="User Image"
+                          />
+                          <span>{item.user.ho_ten}</span>
+                        </div>
+                      </td>
+                      <td>{new Date(item.thoi_gian_tao).toLocaleDateString('vi-VN')}</td>
+                      <td>
+                        <span className={`${cx("status", "completed")}`}>
+                          {item.trang_thai}
+                        </span>
+                      </td>
+                    </tr>
+                    ))}
+                    
+                  
+                  
                 </tbody>
               </table>
             </div>
