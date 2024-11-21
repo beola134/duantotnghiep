@@ -27,7 +27,7 @@ export default function Daydongho() {
     try {
       const queryParams = new URLSearchParams({ ...filter, page: currentPage });
       const response = await fetch(
-        `http://localhost:5000/product/filterDayDongHo?${queryParams}`
+        `http://localhost:5000/product/filterDayDongHo/d3906bb8-4728-460e-8280-230deb79178c?${queryParams}`
       );
       if (!response.ok) {
         throw new Error("Lỗi không thể tải dữ liệu");
