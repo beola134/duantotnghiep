@@ -112,7 +112,7 @@ const getAllVouchers = async (req, res) => {
 // cập nhật voucher
 const updateVoucher = async (req, res) => {
   const { id } = req.params;
-  const { ma_voucher, gia_tri, bat_dau, ket_thuc, mo_ta } = req.body;
+  const { ma_voucher, gia_tri, bat_dau, ket_thuc,so_luong,phan_tram, mo_ta } = req.body;
 
   try {
     const voucherToUpdate = await voucher.findOne({ where: { _id: id } });
@@ -125,6 +125,8 @@ const updateVoucher = async (req, res) => {
     voucherToUpdate.gia_tri = gia_tri || voucherToUpdate.gia_tri;
     voucherToUpdate.bat_dau = bat_dau || voucherToUpdate.bat_dau;
     voucherToUpdate.ket_thuc = ket_thuc || voucherToUpdate.ket_thuc;
+    voucherToUpdate.so_luong = so_luong || voucherToUpdate.so_luong;
+    voucherToUpdate.phan_tram = phan_tram || voucherToUpdate.phan_tram;
     voucherToUpdate.mo_ta = mo_ta || voucherToUpdate.mo_ta;
 
     await voucherToUpdate.save();
@@ -154,7 +156,6 @@ const deleteVouCher = async (req, res) => {
 
 
 ////////////////////////////////////
-
 
 
 
