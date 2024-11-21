@@ -1,4 +1,3 @@
-const GhiChu = require("../models/ghichu");
 const PhuongThucThanhToan = require("../models/pttt");
 const Product = require("../models/product");
 const Users = require("../models/users");
@@ -44,17 +43,6 @@ const addDonHang = async (req, res) => {
         }
       }
     }
-
-      // totalAmount += 30000;
-      //nếu totalAmount > 1.000.000 thì miễn phí ship và ngược lại thì phí ship = 30.000
-      if (totalAmount > 1000000) {
-        totalAmount = totalAmount;
-        phi_ship = "Miễn phí";
-      } else {
-        totalAmount += 30000;
-        phi_ship = 30000;
-      }
-
     let voucher = null;
     if (ma_voucher) {
       voucher = await Voucher.findOne({
@@ -287,7 +275,12 @@ const getDonHangByUserId = async (req, res) => {
 
     // Lấy tất cả đơn hàng theo id_nguoi_dung
     const donHangs = await DonHang.findAll({
-      where: { id_nguoi_dung, trang_thai: "Giao hàng thành công" },
+      where: {
+        id_nguoi_dung, 
+        trang_thai: {
+          [Op.or]: ["Giao hàng thành công", "Đơn hàng đã hủy"] 
+        }
+      },
       include: [
         {
           model: ChiTietDonHang,
@@ -324,7 +317,7 @@ const getDonHangByUserId = async (req, res) => {
 
  const getAllOrderDetails = async (req, res) => {
    try {
-     const { limit = 5, page = 1, ten_san_pham = "" } = req.query;
+     const { limit = 2, page = 1, ten_san_pham = "" } = req.query;
 
      const offset = (page - 1) * limit;
 

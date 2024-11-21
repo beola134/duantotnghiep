@@ -18,7 +18,7 @@ export default function DonghoNam() {
   // Bộ lọc mặc định cho đồng hồ nam
   const [filter, setFilter] = useState({
     gioi_tinh: "Nam",
-    danh_muc: "",
+    thuong_hieu: "",
     muc_gia: "",
     khuyenmai: "",
     loai_may: "",
@@ -43,7 +43,7 @@ export default function DonghoNam() {
       }
       const data = await response.json();
       setProducts(data.products); // Cập nhật danh sách sản phẩm
-      setTotalPages(data.totalPages); // Cập nhật tổng số trang
+      setTotalPages(data.totalPages || 1); // Cập nhật tổng số trang
     } catch (error) {
       setError(error.message);
     } finally {
@@ -77,9 +77,9 @@ export default function DonghoNam() {
     // Cập nhật trạng thái bộ lọc
     setSelectedFilter(newFilters);
     setFilter(newFilter);
-
+    setCurrentPage(1);
     // Đặt lại danh mục khi chọn một danh mục khác
-    if (filterType === "danh_muc") {
+    if (filterType === "thuong_hieu") {
       setCategoryName(value);
     }
   };
@@ -105,7 +105,7 @@ export default function DonghoNam() {
     const updatedFilter = { ...filter, [filterType]: "" }; // Xóa giá trị của bộ lọc bị xoá
 
     // Nếu xoá danh mục (brand), đặt lại tiêu đề về đồng hồ nam
-    if (filterType === "danh_muc") {
+    if (filterType === "thuong_hieu") {
       setCategoryName("Đồng hồ nam");
     }
     setSelectedFilter(newFilters);
@@ -223,7 +223,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="LONGINES"
-                                onClick={() => handleFilterChange("danh_muc", "LONGINES")}
+                                onClick={() => handleFilterChange("thuong_hieu", "LONGINES")}
                               >
                                 LONGINES
                               </Link>
@@ -233,7 +233,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="TISSOT"
-                                onClick={() => handleFilterChange("danh_muc", "TISSOT")}
+                                onClick={() => handleFilterChange("thuong_hieu", "TISSOT")}
                               >
                                 TISSOT
                               </Link>
@@ -243,7 +243,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="MIDO"
-                                onClick={() => handleFilterChange("danh_muc", "MIDO")}
+                                onClick={() => handleFilterChange("thuong_hieu", "MIDO")}
                               >
                                 MIDO
                               </Link>
@@ -253,7 +253,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="CERTINA"
-                                onClick={() => handleFilterChange("danh_muc", "CERTINA")}
+                                onClick={() => handleFilterChange("thuong_hieu", "CERTINA")}
                               >
                                 CERTINA
                               </Link>
@@ -263,7 +263,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="HAMILTON"
-                                onClick={() => handleFilterChange("danh_muc", "HAMILTON")}
+                                onClick={() => handleFilterChange("thuong_hieu", "HAMILTON")}
                               >
                                 HAMILTON
                               </Link>
@@ -273,7 +273,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="TITONI"
-                                onClick={() => handleFilterChange("danh_muc", "TITONI")}
+                                onClick={() => handleFilterChange("thuong_hieu", "TITONI")}
                               >
                                 TITONI
                               </Link>
@@ -282,8 +282,8 @@ export default function DonghoNam() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="FREDERIQUE CONSTANT"
-                                onClick={() => handleFilterChange("danh_muc", "FREDERIQUECONSTANT")}
+                                title="FREDERIQUECONSTANT"
+                                onClick={() => handleFilterChange("thuong_hieu", "FREDERIQUECONSTANT")}
                               >
                                 FREDERIQUE CONSTANT
                               </Link>
@@ -292,8 +292,8 @@ export default function DonghoNam() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="CALVIN KLEIN"
-                                onClick={() => handleFilterChange("danh_muc", "CALVINKLEIN")}
+                                title="CALVINKLEIN"
+                                onClick={() => handleFilterChange("thuong_hieu", "CALVINKLEIN")}
                               >
                                 CALVIN KLEIN
                               </Link>
@@ -303,7 +303,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="EDOX"
-                                onClick={() => handleFilterChange("danh_muc", "EDOX")}
+                                onClick={() => handleFilterChange("thuong_hieu", "EDOX")}
                               >
                                 EDOX
                               </Link>
@@ -312,8 +312,8 @@ export default function DonghoNam() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="CLAUDE BERNARD"
-                                onClick={() => handleFilterChange("danh_muc", "CLAUDEBERNARD")}
+                                title="CLAUDEBERNARD"
+                                onClick={() => handleFilterChange("thuong_hieu", "CLAUDEBERNARD")}
                               >
                                 CLAUDE BERNARD
                               </Link>
@@ -323,7 +323,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="SEIKO"
-                                onClick={() => handleFilterChange("danh_muc", "SEIKO")}
+                                onClick={() => handleFilterChange("thuong_hieu", "SEIKO")}
                               >
                                 SEIKO
                               </Link>
@@ -333,7 +333,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="CITIZEN"
-                                onClick={() => handleFilterChange("danh_muc", "CITIZEN")}
+                                onClick={() => handleFilterChange("thuong_hieu", "CITIZEN")}
                               >
                                 CITIZEN
                               </Link>
@@ -343,7 +343,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="ORIENT"
-                                onClick={() => handleFilterChange("danh_muc", "ORIENT")}
+                                onClick={() => handleFilterChange("thuong_hieu", "ORIENT")}
                               >
                                 ORIENT
                               </Link>
@@ -353,7 +353,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="CASIO"
-                                onClick={() => handleFilterChange("danh_muc", "CASIO")}
+                                onClick={() => handleFilterChange("thuong_hieu", "CASIO")}
                               >
                                 CASIO
                               </Link>
@@ -362,8 +362,8 @@ export default function DonghoNam() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="OLYM PIANUS"
-                                onClick={() => handleFilterChange("danh_muc", "OLYMPIANUS")}
+                                title="OLYMPIANUS"
+                                onClick={() => handleFilterChange("thuong_hieu", "OLYMPIANUS")}
                               >
                                 OLYM PIANUS
                               </Link>
@@ -372,8 +372,8 @@ export default function DonghoNam() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="DANIEL WELLINGTON"
-                                onClick={() => handleFilterChange("danh_muc", "DANIELWELLINGTON")}
+                                title="DANIELWELLINGTON"
+                                onClick={() => handleFilterChange("thuong_hieu", "DANIELWELLINGTON")}
                               >
                                 DANIEL WELLINGTON
                               </Link>
@@ -383,7 +383,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="FOSSIL"
-                                onClick={() => handleFilterChange("danh_muc", "FOSSIL")}
+                                onClick={() => handleFilterChange("thuong_hieu", "FOSSIL")}
                               >
                                 FOSSIL
                               </Link>
@@ -393,7 +393,7 @@ export default function DonghoNam() {
                                 rel="nofollow"
                                 href="#"
                                 title="SKAGEN"
-                                onClick={() => handleFilterChange("danh_muc", "SKAGEN")}
+                                onClick={() => handleFilterChange("thuong_hieu", "SKAGEN")}
                               >
                                 SKAGEN
                               </Link>
@@ -402,8 +402,8 @@ export default function DonghoNam() {
                               <Link
                                 rel="nofollow"
                                 href="#"
-                                title="MICHAEL KORS"
-                                onClick={() => handleFilterChange("danh_muc", "MICHAELKORS")}
+                                title="MICHAELKORS"
+                                onClick={() => handleFilterChange("thuong_hieu", "MICHAELKORS")}
                               >
                                 MICHAEL KORS
                               </Link>
@@ -1602,7 +1602,7 @@ export default function DonghoNam() {
                       ‹
                     </span>
                     {/* Trang hiện tại */}
-                    <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1}`}</span>
+                    <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1 }`}</span>
                     {/* Next 1 trang*/}
                     <span
                       className={currentPage === totalPages ? styles.disabled : styles["other-page"]}

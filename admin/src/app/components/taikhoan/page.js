@@ -271,17 +271,7 @@ export default function TaiKhoan() {
             <div className={styles.tableContainer}>
               <div className={styles.tableControls}>
                 <label htmlFor="entries" style={{ fontWeight: "bold" }}>
-                  Hiện&nbsp;
-                  <select
-                    id="entries"
-                    value={itemsPerPage}
-                    onChange={handleItemsPerPageChange}
-                  >
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                  </select>
-                  <span>&nbsp; người dùng</span>
+                 
                 </label>
                 <div className={styles.search}>
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
@@ -297,10 +287,8 @@ export default function TaiKhoan() {
               <table id="productTable" className={styles.productTable}>
                 <thead>
                   <tr>
-                    <th style={{ width: "3%" }}>
-                      <input type="checkbox" id="selectAll" />
-                    </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
+                  
+                    <th style={{ width: "18%", textAlign: "center" }}>
                       ID tài khoản
                     </th>
                     <th style={{ width: "15%", textAlign: "center" }}>
@@ -323,9 +311,7 @@ export default function TaiKhoan() {
                 <tbody>
                   {displayUsers.map((item) => (
                     <tr key={item._id}>
-                      <td>
-                        <input type="checkbox" className={styles.rowCheckbox} />
-                      </td>
+                     
                       <td>{item._id}</td>
                       <td>
                         <p className={styles.mota}>{item.ho_ten}</p>

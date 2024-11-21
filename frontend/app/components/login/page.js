@@ -100,7 +100,7 @@ export default function Login() {
         icon: "success",
         showConfirmButton: true,
       }).then(() => {
-        window.location.href = "http://localhost:3001";
+        window.location.href = "/";
       });
     } catch (error) {
       Swal.fire({

@@ -20,7 +20,7 @@ export default function DanhMuc() {
   };
    const handleSearch = (query) => {
   const filtered = categories.filter((category) =>
-    removeAccents(category.danh_muc.toLowerCase()).includes(query)
+    removeAccents(category.thuong_hieu.toLowerCase()).includes(query)
   );
   setFilteredCategories(filtered);
   setCurrentPage(1);
@@ -131,7 +131,7 @@ export default function DanhMuc() {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(`http://localhost:5000/cate/deletecate/${id}`, {
+        const response = await fetch(`http://localhost:5000/thuonghieu/delete/${id}`, {
           method: "DELETE",
         });
         if (!response.ok) {
@@ -161,12 +161,12 @@ export default function DanhMuc() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:5000/cate/allcatess");
+        const response = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
         const data = await response.json();
-        setCategories(data.cates);
+        setCategories(data.th);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -228,13 +228,7 @@ export default function DanhMuc() {
             <div className={styles.tableContainer}>
               <div className={styles.tableControls}>
                 <label htmlFor="entries" style={{ fontWeight: "bold" }}>
-                  Hiện&nbsp;
-                  <select id="entries" value={itemsPerPage} onChange={handleItemsPerPageChange}>
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                  </select>
-                  <span>&nbsp; danh mục</span>
+                
                 </label>
                 <div className={styles.search}>
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
@@ -252,10 +246,8 @@ export default function DanhMuc() {
               <table id="productTable" className={styles.productTable}>
                 <thead>
                   <tr>
-                    <th style={{ width: "3%" }}>
-                      <input type="checkbox" id="selectAll" />
-                    </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>ID danh mục</th>
+                    
+                    <th style={{ width: "15%", textAlign: "center" }}>ID danh mục</th>
                     <th style={{ width: "40%", textAlign: "center" }}>Ghi chú</th>
                     <th style={{ width: "15%", textAlign: "center" }}>Tên danh mục</th>
                     <th style={{ width: "15%", textAlign: "center" }}>Ảnh danh mục</th>
@@ -265,17 +257,15 @@ export default function DanhMuc() {
                 <tbody>
                   {displayCategories.map((item) => (
                     <tr key={item._id}>
-                      <td>
-                        <input type="checkbox" className={styles.rowCheckbox} />
-                      </td>
+                      
                       <td>{item._id}</td>
                       <td>
                         {" "}
                         <p className={styles.mota}>{item.mo_ta}</p>
                       </td>
-                      <td>{item.danh_muc}</td>
+                      <td>{item.thuong_hieu}</td>
                       <td>
-                        <img src={`http://localhost:5000/images/${item.hinh_anh2}`} alt={item.danh_muc} />
+                        <img src={`http://localhost:5000/images/${item.hinh_anh2}`} alt={item.thuong_hieu} />
                       </td>
 
                       <td   style={{ textAlign: "center" }}>
