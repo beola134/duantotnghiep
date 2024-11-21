@@ -111,7 +111,7 @@ exports.updateCate = async (req, res) => {
 //show danh muc theo id  5307799c-55ae-4bfd-83d4-3ed6e219ff5f và d3906bb8-4728-460e-8280-230deb79178c
 exports.getdanhmuc = async (req, res) => {
   try {
-    const ids = ['5307799c-55ae-4bfd-83d4-3ed6e219ff5f', 'd3906bb8-4728-460e-8280-230deb79178c'];
+    const ids = ['d3906bb8-4728-460e-8280-230deb79178c'];
     const cates = await Cate.findAll({ where: { _id: ids } });
     if (!cates) {
       return res.status(404).json({ error: "Không tìm thấy danh mục" });
