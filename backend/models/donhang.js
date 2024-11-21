@@ -21,6 +21,10 @@ const DonHang = sequelize.define('DonHang', {
         type: DataTypes.STRING(255),
         allowNull: true
     },
+    trang_thai_thanh_toan: {
+        type: DataTypes.STRING(255),
+        allowNull: true
+    },
     thanh_toan: {
         type: DataTypes.BOOLEAN,
         allowNull: true
@@ -50,7 +54,11 @@ const DonHang = sequelize.define('DonHang', {
     id_voucher: {
         type: DataTypes.STRING(255),
         allowNull: true
-    }
+    },
+    app_trans_id: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        unique: true}, 
 }, {
     tableName: 'don_hang',
     timestamps: false

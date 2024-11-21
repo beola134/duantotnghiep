@@ -82,6 +82,7 @@ const addDonHang = async (req, res) => {
       id_phuong_thuc_thanh_toan: id_phuong_thuc_thanh_toan || null,
       ghi_chu,
       id_voucher: voucher ? voucher._id : null,
+      app_trans_id: `${new Date().getTime()}_${id_nguoi_dung}`,
     });
 
     if (chi_tiet_don_hang && chi_tiet_don_hang.length > 0) {
