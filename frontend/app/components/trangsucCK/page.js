@@ -11,36 +11,41 @@ export default function TrangsucCK() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // 7. Hàm sắp xếp sản phẩm theo giá
+  const itemsPerPage = 10; // Số sản phẩm mỗi trang
+
+  // 1. Hàm sắp xếp sản phẩm
   const sortProducts = (products) => {
     if (sortOption === "asc") {
       return [...products].sort((a, b) => a.gia_giam - b.gia_giam); // Giá từ thấp đến cao
     } else if (sortOption === "desc") {
       return [...products].sort((a, b) => b.gia_giam - a.gia_giam); // Giá từ cao đến thấp
     }
-    return products; // Trả về danh sách gốc nếu không sắp xếp
+    return products; // Trả về danh sách gốc nếu không có sắp xếp
   };
-  // 8. Cập nhật tuỳ chọn sắp xếp
+
+  // 2. Cập nhật tuỳ chọn sắp xếp
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
   };
 
+  // 3. Đổi trang
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
+  // 4. Lấy dữ liệu sản phẩm từ API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/product/thuonghieu/loai/8f42f090-d363-4ba3-ac77-d9936133b670"
+          "http://localhost:5000/product/getProductByCate/e21693ed-8073-4739-af67-70064aed8d60"
         );
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
         const data = await response.json();
         setProducts(data.products);
-        setTotalPages(Math.ceil(data.products.length / 10)); // Giả sử mỗi trang hiển thị 10 sản phẩm
+        setTotalPages(Math.ceil(data.products.length / itemsPerPage));
       } catch (error) {
         setError(error.message);
       } finally {
@@ -49,7 +54,12 @@ export default function TrangsucCK() {
     };
     fetchProducts();
   }, []);
-  const displayedProducts = sortProducts(products);
+
+  // 5. Tính toán sản phẩm hiển thị
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const displayedProducts = sortProducts(products).slice(startIndex, endIndex);
+
   return (
     <>
       <div className={styles["container-header"]}>
@@ -75,8 +85,6 @@ export default function TrangsucCK() {
                       <option value="">Sắp xếp theo</option>
                       <option value="asc">Giá từ thấp tới cao</option>
                       <option value="desc">Giá từ cao tới thấp</option>
-                      <option value="newest">Mới nhất</option>
-                      <option value="hot">Sản phẩm hot</option>
                     </select>
                     <div className={styles.clear}></div>
                   </div>
@@ -89,7 +97,6 @@ export default function TrangsucCK() {
                         <p>{error}</p>
                       ) : (
                         <div className={styles["product-grid"]}>
-                          {/* item-1 */}
                           {displayedProducts.map((product) => {
                             const {
                               _id,
@@ -124,10 +131,6 @@ export default function TrangsucCK() {
                                         alt={ten}
                                         width="300"
                                         height="363"
-                                        style={{
-                                          display: "inline-block",
-                                          opacity: "1",
-                                        }}
                                       />
                                     </Link>
                                   </figure>
@@ -170,10 +173,7 @@ export default function TrangsucCK() {
                                       %
                                     </span>
                                   </div>
-                                  <div className={styles.clear}></div>
                                 </div>
-                                {/* end .frame-inner */}
-                                <div className={styles.clear}></div>
                               </div>
                             );
                           })}
@@ -182,7 +182,6 @@ export default function TrangsucCK() {
                     </div>
                   </section>
 
-                  {/* Phân trang */}
                   <div className={styles.pagination}>
                     <span
                       title="First page"
@@ -206,7 +205,7 @@ export default function TrangsucCK() {
                       ‹
                     </span>
                     <span className={styles.currentPage}>
-                      {`Trang ${currentPage} / ${totalPages || 1}`}
+                      {`Trang ${currentPage} / ${totalPages}`}
                     </span>
                     <span
                       className={
@@ -233,10 +232,8 @@ export default function TrangsucCK() {
                     </span>
                   </div>
                 </div>
-                <div className={styles.clear}></div>
               </div>
             </div>
-            <div className={styles.clear}></div>
           </div>
         </div>
       </div>
