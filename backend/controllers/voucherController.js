@@ -69,7 +69,7 @@ const getVoucherById = async (req, res) => {
 // show all vouchers
 const getAllVouchers = async (req, res) => {
   try {
-    const { ma_voucher, limit = 5, page = 1 } = req.query;
+    const { ma_voucher, limit = 2, page = 1 } = req.query;
 
     let filter = {
       [Op.and]: [],

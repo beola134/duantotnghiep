@@ -4,7 +4,7 @@ import styles from "./voucher.module.css";
 import { useState, useEffect } from "react";
 
 export default function VoucherPage() {
-  const [vouchers, setvouchers] = useState([]);
+  const [vouchers, setVouchers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -23,27 +23,27 @@ export default function VoucherPage() {
     };
   };
 
-  const fetchvouchers = async () => {
+  const fetchVouchers = async () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:5000/voucher/getAllVouchers?page=${currentPage}&ma_voucher=${searchQuery}`
+        `http://localhost:5000/voucher/getAllVouchers?page=${currentPage}&ma_voucher=${searchQuery}&limit=${itemsPerPage}`
       );
       if (!response.ok) {
         throw new Error("Lỗi không thể tải dữ liệu");
       }
       const data = await response.json();
-      setTotalPage(data.totalPage || 1);
-      setvouchers(data.vouchers);
+      setTotalPage(data.totalPages || 1);
+      setVouchers(data.vouchers);
       setTotalVouchers(data.totalVouchers);
     } catch (error) {
-      setError(error);
+      setError(error.message);
     } finally {
       setLoading(false);
     }
   };
 
-  const debouncedFetchVouchers = debounce(fetchvouchers, 300);
+  const debouncedFetchVouchers = debounce(fetchVouchers, 300);
 
   useEffect(() => {
     debouncedFetchVouchers();
@@ -55,7 +55,9 @@ export default function VoucherPage() {
   };
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    if (page >= 1 && page <= totalPage) {
+      setCurrentPage(page);
+    }
   };
 
   const deleteVoucher = async (id) => {
@@ -68,7 +70,7 @@ export default function VoucherPage() {
       );
 
       if (response.ok) {
-        setvouchers(vouchers.filter((voucher) => voucher._id !== id));
+        setVouchers(vouchers.filter((voucher) => voucher._id !== id));
         alert("Voucher đã được xóa thành công!");
       } else {
         alert("Có lỗi xảy ra khi xóa voucher.");
@@ -83,7 +85,7 @@ export default function VoucherPage() {
   const endVoucherIndex = Math.min(currentPage * itemsPerPage, totalVouchers);
 
   if (loading) return <div>Đang tải dữ liệu...</div>;
-  if (error) return <div>Có lỗi xảy ra: {error.message}</div>;
+  if (error) return <div>Có lỗi xảy ra: {error}</div>;
 
   return (
     <div className={styles.SidebarContainer}>
@@ -124,7 +126,7 @@ export default function VoucherPage() {
                 <i className="fas fa-file-pdf"></i> Xuất PDF
               </button>
               &nbsp;
-            </div>{" "}
+            </div>
           </div>
 
           <div className={styles.tableControls}>
@@ -145,7 +147,6 @@ export default function VoucherPage() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-               
                 <th style={{ width: "15%", textAlign: "center" }}>
                   Id Voucher
                 </th>
@@ -183,7 +184,7 @@ export default function VoucherPage() {
                     <td>{_id}</td>
                     <td style={{ textAlign: "center" }}>{ma_voucher}</td>
                     <td style={{ textAlign: "center" }}>{gia_tri}</td>
-                    <td style={{ textAlign: "center" }}>{phan_tram}</td>
+                    <td style={{ textAlign: "center" }}>{phan_tram}%</td>
                     <td style={{ textAlign: "center" }}>{so_luong}</td>
                     <td style={{ textAlign: "center" }}>{bat_dau}</td>
                     <td style={{ textAlign: "center" }}>{ket_thuc}</td>
@@ -197,7 +198,6 @@ export default function VoucherPage() {
                       &nbsp;
                       <button
                         className={`${styles.btn} ${styles.delete}`}
-                        id="deleteButton"
                         onClick={() => deleteVoucher(_id)}>
                         🗑️
                       </button>
@@ -211,8 +211,8 @@ export default function VoucherPage() {
 
           <div className={styles.pagination}>
             <span>
-              Hiện {startVoucherIndex} đến {endVoucherIndex} của
-              {totalVouchers} sản phẩm
+              Hiện {startVoucherIndex} đến {endVoucherIndex} của {totalVouchers}{" "}
+              sản phẩm
             </span>
             <div className={styles.paginationControls}>
               <button
@@ -228,6 +228,7 @@ export default function VoucherPage() {
               <button className={styles.paginationButton}>
                 {`Trang ${currentPage} / ${totalPage}`}
               </button>
+
               <button
                 className={`${styles.paginationButton} ${
                   currentPage === totalPage

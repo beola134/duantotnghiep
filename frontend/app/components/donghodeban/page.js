@@ -24,7 +24,7 @@ export default function TrangsucCK() {
     try {
       const queryParams = new URLSearchParams({ ...filter, page: currentPage });
       const response = await fetch(
-        `http://localhost:5000/product/filterDeBan?${queryParams}`
+        `http://localhost:5000/product/filterDeBan/e9dd7461-30f5-42f4-9f69-512df6bdd51c?${queryParams}`
       );
       if (!response.ok) {
         throw new Error("Lỗi không thể tải dữ liệu");
@@ -269,7 +269,7 @@ export default function TrangsucCK() {
                   <div className={styles["field-title"]}>
                     <div className={styles["title-name"]}>
                       <div className={styles["cat-title"]}>
-                        <h1>ĐỒNG HỒ BÁO THỨC</h1>
+                        <h1>ĐỒNG HỒ ĐỂ BÀN</h1>
                       </div>
                     </div>
 

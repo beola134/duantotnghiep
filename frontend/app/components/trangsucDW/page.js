@@ -11,6 +11,8 @@ export default function TrangsucCK() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  const itemsPerPage = 10;
+
   // 7. Hàm sắp xếp sản phẩm theo giá
   const sortProducts = (products) => {
     if (sortOption === "asc") {
@@ -33,14 +35,14 @@ export default function TrangsucCK() {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/product/thuonghieu/loai/902a8bb2-fdea-473d-8779-6f815503e8c2"
+          "http://localhost:5000/product/getProductByCate/08bcf894-7d6b-4488-8639-701306321e22"
         );
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
         const data = await response.json();
         setProducts(data.products);
-        setTotalPages(Math.ceil(data.products.length / 10)); // Giả sử mỗi trang hiển thị 10 sản phẩm
+        setTotalPages(Math.ceil(data.products.length / itemsPerPage)); // Giả sử mỗi trang hiển thị 10 sản phẩm
       } catch (error) {
         setError(error.message);
       } finally {
@@ -49,7 +51,10 @@ export default function TrangsucCK() {
     };
     fetchProducts();
   }, []);
-  const displayedProducts = sortProducts(products);
+  
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const displayedProducts = sortProducts(products).slice(startIndex, endIndex);
   return (
     <>
       <div className={styles["container-header"]}>
