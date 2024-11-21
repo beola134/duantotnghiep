@@ -5,7 +5,7 @@ import styles from "./suadanhmuc.module.css";
 import Swal from "sweetalert2";
 import { useRouter, useParams } from "next/navigation";
 
-export default function SuaDanhMuc() {
+export default function SuaThuongHieu() {
     const [productName, setProductName] = useState("");
     const [productImage, setProductImage] = useState(null);
     const [productLogo, setProductLogo] = useState(null);
@@ -24,7 +24,7 @@ export default function SuaDanhMuc() {
                 setDescription(data.th.mo_ta);
                 
             } else {
-                Swal.fire("Error", "Không tìm thấy danh mục!", "error");
+                Swal.fire("Error", "Không tìm thấy thương hiệu!", "error");
             }
         } catch (error) {
             console.error("Error fetching category:", error);
@@ -53,9 +53,9 @@ export default function SuaDanhMuc() {
                 Swal.fire({
                     icon: "success",
                     title: "Thành công",
-                    text: "Sửa danh mục thành công!",
+                    text: "Sửa thương hiệu thành công!",
                 }).then(() => {
-                    router.push("/components/danhmuc");
+                    router.push("/components/thuonghieu");
                 });
             } else {
                 Swal.fire("Error", "Có lỗi xảy ra!", "error");
@@ -78,7 +78,7 @@ export default function SuaDanhMuc() {
                     <form onSubmit={handleSubmit}>
                         <div className={styles.container1}>
                             <div className={styles.formGroup}>
-                                <label htmlFor="product-name">Tên danh mục</label>
+                                <label htmlFor="product-name">Tên thương hiệu</label>
                                 <input
                                     type="text"
                                     id="product-name"
@@ -87,7 +87,7 @@ export default function SuaDanhMuc() {
                                 />
                             </div>
                             <div className={styles.formGroup}>
-                                <label htmlFor="product-image">Ảnh danh mục</label>
+                                <label htmlFor="product-image">Ảnh thương hiệu</label>
                                 <input
                                     type="file"
                                     id="product-image"
@@ -96,7 +96,7 @@ export default function SuaDanhMuc() {
                                 />
                             </div>
                             <div className={styles.formGroup}>
-                                <label htmlFor="product-logo">Ảnh danh mục 2 (logo)</label>
+                                <label htmlFor="product-logo">Ảnh thương hiệu 2 (logo)</label>
                                 <input
                                     type="file"
                                     id="product-logo"
@@ -105,7 +105,7 @@ export default function SuaDanhMuc() {
                                 />
                             </div>
                             <div className={styles.formGroup}>
-                                <label htmlFor="description">Mô tả danh mục</label>
+                                <label htmlFor="description">Mô tả thương hiệu</label>
                                 <textarea
                                     id="description"
                                     value={description}
@@ -118,7 +118,7 @@ export default function SuaDanhMuc() {
                             <button
                                 type="button"
                                 className="btn btn-outline-secondary"
-                                onClick={() => router.push("/components/danhmuc")}
+                                onClick={() => router.push("/components/thuonghieu")}
                             >
                                 Hủy bỏ
                             </button>

@@ -443,11 +443,15 @@ export default function Header() {
       console.error("Error fetching user details:", error);
     }
   };
-  const handleSearch = () => {
-    if (inputData && isMounted) {
+  const handleSearch = (event) => {
+    if (
+      (event.type === "click" || event.key === "Enter") &&
+      inputData &&
+      isMounted
+    ) {
       router.push(`/components/search?query=${inputData}`);
+      setInputData(""); 
     }
-    setInputData("");
   };
 
   useEffect(() => {
@@ -504,6 +508,7 @@ export default function Header() {
               value={inputData}
               onChange={(event) => setInputData(event.target.value)}
               type="text"
+              onKeyDown={handleSearch}
               placeholder="Bạn muốn tìm ..."
               className={cx("input")}
             />
@@ -584,8 +589,8 @@ export default function Header() {
             </Link>
             <ul className={cx("dropdown-menu")}>
               {category.map((item) => (
-                <li className={cx("dropdown-menu-li")} key={item.danh_muc}>
-                  <Link href={`/components/chitietdanhmuc/${item.danh_muc}`} style={{ color: "white" }}>
+                <li className={cx("dropdown-menu-li")} key={item.thuong_hieu}>
+                  <Link href={`/components/chitietdanhmuc/${item.thuong_hieu}`} style={{ color: "white" }}>
                     <img
                       className={cx("dropdown-menu-img")}
                       src={`http://localhost:5000/images/${item.hinh_anh}`}

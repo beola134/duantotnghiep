@@ -120,7 +120,7 @@ export default function DanhMuc() {
   const  deleteCategory = async (id) => {
     const result = await Swal.fire({
       title: "Xác nhận",
-      text: "Bạn có chắc chắn muốn xóa danh mục này không?",
+      text: "Bạn có chắc chắn muốn xóa thương hiệu này không?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -135,7 +135,7 @@ export default function DanhMuc() {
           method: "DELETE",
         });
         if (!response.ok) {
-          throw new Error("Lỗi khi xóa danh mục");
+          throw new Error("Lỗi khi xóa thương hiệu");
         }
 
         setCategories((prevCategory) => prevCategory.filter((category) => category._id !== id));
@@ -157,7 +157,7 @@ export default function DanhMuc() {
     }
   };
 
-  // lấy dữ liệu danh sách danh mục
+  // lấy dữ liệu danh sách thương hiệu
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -188,15 +188,15 @@ export default function DanhMuc() {
       <section id={styles.content}>
         <div className={styles.header1}>
           <div className={styles.title} style={{ fontWeight: "bold" }}>
-            Danh Sách Danh Mục
+            Danh Sách Thương Hiệu
           </div>
           <div className={styles.timestamp} id="timestamp"></div>
         </div>
         <div className={styles.bg}>
           <div className={styles.container}>
             <div className={styles.actions}>
-              <Link href="/components/themdanhmuc" className={styles.sp}>
-                <i className="fas fa-plus"></i> Tạo mới danh mục
+              <Link href="/components/themthuonghieu" className={styles.sp}>
+                <i className="fas fa-plus"></i> Thêm thương hiệu mới
               </Link>
               <div className={styles.buttonGroup}>
                 <button className={styles.sp2} onClick={uploadFile}>
@@ -247,10 +247,10 @@ export default function DanhMuc() {
                 <thead>
                   <tr>
                     
-                    <th style={{ width: "15%", textAlign: "center" }}>ID danh mục</th>
+                    <th style={{ width: "15%", textAlign: "center" }}>ID thương hiệu</th>
                     <th style={{ width: "40%", textAlign: "center" }}>Ghi chú</th>
-                    <th style={{ width: "15%", textAlign: "center" }}>Tên danh mục</th>
-                    <th style={{ width: "15%", textAlign: "center" }}>Ảnh danh mục</th>
+                    <th style={{ width: "15%", textAlign: "center" }}>Tên thương hiệu</th>
+                    <th style={{ width: "15%", textAlign: "center" }}>Ảnh thương hiệu</th>
                     <th style={{ width: "15%", textAlign: "center" }}>Chức năng</th>
                   </tr>
                 </thead>
@@ -259,18 +259,18 @@ export default function DanhMuc() {
                     <tr key={item._id}>
                       
                       <td>{item._id}</td>
-                      <td>
-                        {" "}
+                      <td style={{ textAlign: "center" }}>
+                        
                         <p className={styles.mota}>{item.mo_ta}</p>
                       </td>
-                      <td>{item.thuong_hieu}</td>
-                      <td>
+                      <td style={{ textAlign: "center" }}>{item.thuong_hieu}</td>
+                      <td style={{ textAlign: "center" }}>
                         <img src={`http://localhost:5000/images/${item.hinh_anh2}`} alt={item.thuong_hieu} />
                       </td>
 
                       <td   style={{ textAlign: "center" }}>
                         <Link
-                          href={`/components/suadanhmuc/${item._id}`}
+                          href={`/components/suathuonghieu/${item._id}`}
                           className={`${styles.btn} ${styles.edit}`}
                         >
                           ✏️
@@ -291,7 +291,7 @@ export default function DanhMuc() {
               </table>
 
               <div className={styles.pagination}>
-                <span>Hiện 1 đến {displayCategories.length} của {filteredCategories.length || categories.length} danh mục</span>
+                <span>Hiện 1 đến {displayCategories.length} của {filteredCategories.length || categories.length} thương hiệu</span>
                 <div className={styles.paginationControls}>
                   <button
                     className={styles.paginationButton}

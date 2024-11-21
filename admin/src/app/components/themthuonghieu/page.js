@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 
 
-export default function ThemDanhMuc() {
+export default function ThemThuongHieu() {
     const [productName, setProductName] = useState("");
     const [productImage, setProductImage] = useState(null);
     const [productLogo, setProductLogo] = useState(null);
@@ -63,7 +63,7 @@ export default function ThemDanhMuc() {
                 title: "Thành công",
                 text: "Thêm danh mục thành công!",
             }).then(() => {
-                    router.push("/components/danhmuc");
+                    router.push("/components/thuonghieu");
                 });
         } else {
             Swal.fire({
@@ -88,7 +88,7 @@ export default function ThemDanhMuc() {
       <section id={styles.content}>
         <div className={styles.header1}>
           <div className={styles.title} style={{ fontWeight: "bold" }}>
-            Thêm Danh Mục
+            Thêm Thương Hiệu
           </div>
           <div className={styles.timestamp} id="timestamp"></div>
         </div>
@@ -96,7 +96,7 @@ export default function ThemDanhMuc() {
           <form onSubmit={handleSubmit}>
             <div className={styles.container1}>
               <div className={styles.formGroup}>
-                <label htmlFor="product-name">Tên danh mục</label>
+                <label htmlFor="product-name">Tên thương hiệu</label>
                 <input
                     type="text"
                     id="product-name"
@@ -106,7 +106,7 @@ export default function ThemDanhMuc() {
                 />
               </div>
               <div className={styles.formGroup}>
-                <label htmlFor="product-image">Ảnh danh mục</label>
+                <label htmlFor="product-image">Ảnh thương hiệu</label>
                 <input
                     type="file"
                     id="product-image"
@@ -115,7 +115,7 @@ export default function ThemDanhMuc() {
                 />
               </div>
               <div className={styles.formGroup}>
-                <label htmlFor="product-logo">Ảnh danh mục 2 (logo)</label>
+                <label htmlFor="product-logo">Ảnh thương hiẹu 2 (logo)</label>
                 <input
                     type="file"
                     id="product-logo"
@@ -124,7 +124,7 @@ export default function ThemDanhMuc() {
                 />
               </div>
               <div className={styles.formGroup}>
-                 <label htmlFor="description">Mô tả danh mục</label>
+                 <label htmlFor="description">Mô tả thương hiệu</label>
                 <textarea
                     id="description"
                     name="description"

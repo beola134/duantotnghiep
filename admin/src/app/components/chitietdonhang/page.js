@@ -230,13 +230,13 @@ export default function ChiTietDonHang() {
                     <tr key={item._id}>
                      
                       <td>{item._id}</td>
-                      <td>
+                      <td style={{ textAlign: "center" }}>
                         <p className={styles.mota}>
                           {item.gia_san_pham.toLocaleString("vi-VN")}đ
                         </p>
                       </td>
-                      <td>{item.ten_san_pham}</td>
-                      <td>{item.so_luong}</td>
+                      <td style={{ textAlign: "center" }}>{item.ten_san_pham}</td>
+                      <td style={{ textAlign: "center" }}>{item.so_luong}</td>
                       <td>{item.id_don_hang}</td>
                       <td>{item.id_san_pham}</td>
                     </tr>
