@@ -6,25 +6,9 @@ import classNames from "classnames/bind";
 import Script from "next/script";
 import BannerSlide1 from "../../bannerslide1/page";
 import BannerSlide2 from "../../bannerslide2/page";
+import Link from "next/link";
 
-const items = [
-  { src: "/image/item/Thuonghieu-carousel/casio.webp", alt: "Casio" },
-  { src: "/image/item/Thuonghieu-carousel/orient.webp", alt: "Orient" },
-  { src: "/image/item/Thuonghieu-carousel/citizen.webp", alt: "Citizen" },
-  { src: "/image/item/Thuonghieu-carousel/seiko.webp", alt: "Seiko" },
-  { src: "/image/item/Thuonghieu-carousel/frederique-constant-geneve.webp", alt: "Frederique Constant Geneve" },
-  { src: "/image/item/Thuonghieu-carousel/certina.webp", alt: "Certina" },
-  { src: "/image/item/Thuonghieu-carousel/titoni.webp", alt: "Titoni" },
-  { src: "/image/item/Thuonghieu-carousel/hamilton.webp", alt: "Hamilton" },
-  { src: "/image/item/Thuonghieu-carousel/mido.webp", alt: "Mido" },
-  { src: "/image/item/Thuonghieu-carousel/tissot.webp", alt: "Tissot" },
-  { src: "/image/item/Thuonghieu-carousel/longines.webp", alt: "Longines" },
-  { src: "/image/item/Thuonghieu-carousel/maurice-lacroix.webp", alt: "Maurice Lacroix" },
-  { src: "/image/item/Thuonghieu-carousel/fossil.webp", alt: "Fossil" },
-  { src: "/image/item/Thuonghieu-carousel/danicel-wellington.webp", alt: "Danicel Wellington" },
-  { src: "/image/item/Thuonghieu-carousel/calvin-klein.webp", alt: "Calvin Klein" },
-  { src: "/image/item/Thuonghieu-carousel/Olym Pianus.webp", alt: "Olym Pianus" },
-];
+
 const cx = classNames.bind(styles);
 export default function Banner() {
   
@@ -48,6 +32,16 @@ export default function Banner() {
 
     return () => clearInterval(interval);
   }, [slider]); 
+  const [thuongHieu, setThuonghieu] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
+      const data = await response.json();
+      setThuonghieu(data.th);
+    };
+
+    fetchData();
+  }, []);
   return (
     <>
       <BannerSlide1 />
@@ -114,10 +108,13 @@ export default function Banner() {
         <div className={cx("pav-slide-content")}>
           <div className={cx("fs-slider-home", "fs-slider-home-content", "brand-slider")}>
             <Slider {...settings}>
-              {items.map((item, index) => (
-                <div className={cx("item")} key={index}>
-                  <img src={item.src} alt={item.alt} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
-                </div>
+              {thuongHieu.map((item, index) => (
+                 <Link href={`/components/chitietdanhmuc/${item.thuong_hieu}`}>
+                <div className={cx("item")} key={item._id}>
+                 
+                    <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.thuong_hieu} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
+                  
+                </div></Link>
               ))}
             </Slider>
           </div>

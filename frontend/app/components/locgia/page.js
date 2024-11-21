@@ -141,31 +141,32 @@ export default function DonghoNam() {
     }
   };
 
-  const handleClearFilters = () => {
-    setSelectedFilter([]);
-    setFilter({
-      gioi_tinh: "Nam",
-    });
-    setCurrentPage(1);
-    setCategoryName("Đồng hồ nam");
-    fetchProducts();
-  };
+ const handleClearFilters = () => {
+  setSelectedFilter([]);
+  setFilter({
+    gioi_tinh: "Nam", 
+  });
+  setCurrentPage(1);
+  // Không thay đổi categoryName
+  fetchProducts();
+};
 
   const handleRemoveFilter = (filterToRemove) => {
-    const newFilters = selectedFilter.filter(
-      (filter) => filter !== filterToRemove
-    );
+  const newFilters = selectedFilter.filter(
+    (filter) => filter !== filterToRemove
+  );
 
-    const [filterType] = filterToRemove.split("=");
-    const updatedFilter = { ...filter, [filterType]: "" };
+  const [filterType] = filterToRemove.split("=");
+  const updatedFilter = { ...filter, [filterType]: "" };
 
-    if (filterType === "thuong_hieu") {
-      setCategoryName("Đồng hồ nam");
-    }
-    setSelectedFilter(newFilters);
-    setFilter(updatedFilter);
-    fetchProducts();
-  };
+  if (filterType === "thuong_hieu" && newFilters.length > 0) {
+    setCategoryName(newFilters[0].split("=")[1] || categoryName);
+  }
+
+  setSelectedFilter(newFilters);
+  setFilter(updatedFilter);
+  fetchProducts();
+};
 
   const sortProducts = (products) => {
     if (sortOption === "asc") {

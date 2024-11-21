@@ -48,9 +48,9 @@ export default function Menu() {
             </Link>
           </li>
           <li>
-            <Link href="/components/danhmuc">
+            <Link href="/components/thuonghieu">
               <i className={`bx bxs-widget ${styles.icon}`}></i>
-              Quản lý danh mục
+              Quản lý thương hiệu
             </Link>
           </li>
           <li>

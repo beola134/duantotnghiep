@@ -1,7 +1,8 @@
 import SanPham from "./components/sanpham/page";
-import DanhMuc from "./components/danhmuc/page";
+import DanhMuc from "./components/thuonghieu/page";
 import DonHang from "./components/quanlydonhang/page";
 import AdminStatistics from "./components/thongke/page";
+
 
 
 
