@@ -16,12 +16,12 @@ export default function Menu() {
 
   const toggleProductDropdown = () => {
     setProductDropdownOpen(!isProductDropdownOpen);
-    setOrderDropdownOpen(false); 
+    setOrderDropdownOpen(false);
   };
 
   const toggleOrderDropdown = () => {
     setOrderDropdownOpen(!isOrderDropdownOpen);
-    setProductDropdownOpen(false); 
+    setProductDropdownOpen(false);
   };
 
   return (
@@ -54,6 +54,12 @@ export default function Menu() {
             </Link>
           </li>
           <li>
+            <Link href="/components/danhmuc">
+              <i className={`bx bxs-widget ${styles.icon}`}></i>
+              Quản lý danh mục
+            </Link>
+          </li>
+          <li>
             <Link href="/components/quanlikho">
               <i className={`bx bxs-widget ${styles.icon}`}></i>
               Quản lý kho
@@ -83,8 +89,7 @@ export default function Menu() {
           <li>
             <Link
               href="/components/quanlydonhang"
-              onClick={toggleOrderDropdown}
-            >
+              onClick={toggleOrderDropdown}>
               <i className={`bx bxs-cart ${styles.icon}`}></i>
               Quản Lý Đơn Hàng
             </Link>
@@ -92,8 +97,7 @@ export default function Menu() {
           <li>
             <Link
               href="/components/chitietdonhang"
-              onClick={toggleOrderDropdown}
-            >
+              onClick={toggleOrderDropdown}>
               <i className={`bx bxs-cart ${styles.icon}`}></i>
               Quản Lý Chi Tiết Đơn Hàng
             </Link>
@@ -113,8 +117,7 @@ export default function Menu() {
             <Link
               style={{ textDecoration: "none" }}
               href="#"
-              className={styles.btnUpgrade}
-            >
+              className={styles.btnUpgrade}>
               Đăng xuất
             </Link>
           </div>
@@ -139,8 +142,7 @@ export default function Menu() {
               href="#"
               id="profileDropdown"
               data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+              aria-expanded="false">
               <img
                 src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVvcGxlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
                 alt=""
@@ -151,8 +153,7 @@ export default function Menu() {
             </a>
             <ul
               className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`}
-              aria-labelledby="profileDropdown"
-            >
+              aria-labelledby="profileDropdown">
               <li>
                 <a className={`dropdown-item ${styles.dropdownItem}`} href="#">
                   <i className="bx bxs-user-circle icon"></i>

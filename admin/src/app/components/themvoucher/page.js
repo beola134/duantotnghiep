@@ -10,6 +10,8 @@ export default function ThemVoucher() {
   const [giatri, setgiatri] = useState("");
   const [ngayBD, setngayBD] = useState("");
   const [ngayKT, setngayKT] = useState("");
+  const [soluong, setsoluong] = useState("");
+  const [phantram, setphantram] = useState("");
   const [mota, setmota] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
@@ -51,14 +53,32 @@ export default function ThemVoucher() {
       });
       return;
     }
+    if (!soluong) {
+      Swal.fire({
+        icon: "warning",
+        title: "Thiếu thông tin",
+        text: "Vui lòng ngày kết thúc tính giá trị voucher",
+      });
+      return;
+    }
+    if (!phantram) {
+      Swal.fire({
+        icon: "warning",
+        title: "Thiếu thông tin",
+        text: "Vui lòng ngày kết thúc tính giá trị voucher",
+      });
+      return;
+    }
 
-  const formData = {
-    ma_voucher: maVouchers,
-    gia_tri: giatri,
-    bat_dau: ngayBD,
-    ket_thuc: ngayKT,
-    mo_ta: mota,
-  };
+    const formData = {
+      ma_voucher: maVouchers,
+      gia_tri: giatri,
+      bat_dau: ngayBD,
+      ket_thuc: ngayKT,
+      mo_ta: mota,
+      so_luong: soluong,
+      phan_tram: phantram,
+    };
 
     try {
       const response = await fetch("http://localhost:5000/voucher", {
@@ -125,6 +145,24 @@ export default function ThemVoucher() {
                     id="giatri"
                     className="giatri"
                     onChange={(e) => setgiatri(e.target.value)}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="phantram">Phần trăm</label>
+                  <input
+                    type="text"
+                    id="phantram"
+                    className="phantram"
+                    onChange={(e) => setphantram(e.target.value)}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="giatri">Số lượng</label>
+                  <input
+                    type="text"
+                    id="soluong"
+                    className="soluong"
+                    onChange={(e) => setsoluong(e.target.value)}
                   />
                 </div>
                 <div className={styles.formGroup}>
