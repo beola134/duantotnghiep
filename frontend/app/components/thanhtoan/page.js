@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import Swal from "sweetalert2";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 export default function ThanhToan() {
   const [user, setUser] = useState({
@@ -20,6 +21,7 @@ export default function ThanhToan() {
   const [isDiscountApplied, setIsDiscountApplied] = useState(false); // Kiểm tra mã giảm giá đã được áp dụng chưa
   const [note, setNote] = useState("");
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+  const [isEditing, setIsEditing] = useState(false); // Dùng để kiểm tra trạng thái nhập liệu
 
   // Lấy thông tin người dùng từ token
   useEffect(() => {
@@ -67,6 +69,12 @@ export default function ThanhToan() {
     );
     setTotalAmount(total);
   };
+  const amount = Math.round(
+    totalAmount -
+      (discountType === "phan_tram" ? (totalAmount * discountValue) / 100 : discountValue) +
+      (totalAmount < 1000000 ? 30000 : 0)
+  );
+
   // Tăng giảm số lượng sản phẩm
   const handleIncrease = (index) => {
     const updatedCartItems = [...cartItems];
@@ -191,16 +199,36 @@ export default function ThanhToan() {
 
   // Xử lý khi người dùng click vào nút thanh toán
   const handleClick = async () => {
-    const isValid = validateFields(); // Kiểm tra các trường thông tin
+    // Lấy token từ cookie
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+
+    if (!token) {
+      // Nếu không có token, yêu cầu người dùng đăng nhập
+      Swal.fire({
+        icon: "warning",
+        title: "Cảnh báo",
+        text: "Vui lòng đăng nhập để tiếp tục thanh toán",
+      }).then(() => {
+        window.location.href = "/components/login?redirect=thanhtoan";
+      });
+      return;
+    }
+
+    // Kiểm tra tính hợp lệ của các trường thông tin
+    const isValid = validateFields();
     if (!isValid) return;
 
-    const isLoggedIn = await userLogin(); // Kiểm tra xem người dùng đã đăng nhập chưa
+    // Kiểm tra xem người dùng đã đăng nhập chưa
+    const isLoggedIn = await userLogin();
     if (!isLoggedIn) return;
 
-    const isStockAvailable = await ktra(); // Kiểm tra xem sản phẩm còn hàng không
+    // Kiểm tra xem sản phẩm còn hàng không
+    const isStockAvailable = await ktra();
     if (!isStockAvailable) return;
 
-    // Tạo đơn hàng
     const orderDetails = {
       dia_chi: user.dia_chi,
       id_nguoi_dung: user._id,
@@ -217,35 +245,77 @@ export default function ThanhToan() {
         dien_thoai: user.dien_thoai,
       },
     };
+    //in ra thông tin đơn hàng
+    console.log(orderDetails);
 
-    try {
-      const response = await fetch("http://localhost:5000/donhang/donhang", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderDetails),
-      });
-      if (!response.ok) {
-        throw new Error("Lỗi tạo đơn hàng");
+    // Xử lý thanh toán qua ZaloPay
+    if (selectedPaymentMethod === "3") {
+      try {
+        const paymentResponse = await axios.post("http://localhost:5000/pttt/zalo", {
+          amount: amount,
+          orderDetails,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (paymentResponse.data.return_code === 1) {
+          window.location.href = paymentResponse.data.order_url; // Chuyển hướng đến ZaloPay
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Lỗi",
+            text: "Thanh toán qua ZaloPay không thành công",
+          });
+        }
+      } catch (error) {
+        console.error("Error during payment:", error.message || error);
+        if (error.response) {
+          console.error("Response Data:", error.response.data);
+          console.error("Response Status:", error.response.status);
+        }
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Lỗi trong quá trình thanh toán",
+        });
       }
-      const data = await response.json();
-      console.log(data);
-      Swal.fire({
-        icon: "success",
-        title: "Thành công",
-        text: data.message,
-      }).then(() => {
-        window.location.href = "/";
-      });
-      localStorage.setItem("cartItems", JSON.stringify([]));
-      setCartItems([]);
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Lỗi",
-        text: "Lỗi tạo đơn hàng",
-      });
+    } else {
+      // Xử lý thanh toán qua các phương thức khác
+      try {
+        const response = await fetch("http://localhost:5000/donhang/donhang", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(orderDetails),
+        });
+
+        if (!response.ok) {
+          throw new Error("Lỗi tạo đơn hàng");
+        }
+
+        const data = await response.json();
+        console.log(data);
+
+        Swal.fire({
+          icon: "success",
+          title: "Thành công",
+          text: data.message,
+        }).then(() => {
+          window.location.href = "/"; // Điều hướng về trang chủ sau khi thành công
+        });
+
+        // Xóa giỏ hàng sau khi tạo đơn thành công
+        localStorage.setItem("cartItems", JSON.stringify([]));
+        setCartItems([]);
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Lỗi tạo đơn hàng",
+        });
+      }
     }
   };
 
@@ -271,8 +341,15 @@ export default function ThanhToan() {
                 <input
                   type="text"
                   placeholder="Điện thoại"
-                  value={user.dien_thoai}
-                  onChange={(e) => setUser({ ...user, dien_thoai: e.target.value })}
+                  value={user.dien_thoai || ""} // Tránh giá trị undefined
+                  onChange={(e) => {
+                    setIsEditing(true);
+                    setUser((prevUser) => ({
+                      ...prevUser,
+                      dien_thoai: e.target.value,
+                    }));
+                  }}
+                  readOnly={!isEditing && user.dien_thoai}
                 />
               </div>
             </div>
@@ -282,15 +359,29 @@ export default function ThanhToan() {
               <input
                 type="text"
                 placeholder="Họ và tên"
-                value={user.ho_ten}
-                onChange={(e) => setUser({ ...user, ho_ten: e.target.value })}
+                value={user.ho_ten || ""}
+                onChange={(e) => {
+                  setIsEditing(true);
+                  setUser((prevUser) => ({
+                    ...prevUser,
+                    ho_ten: e.target.value,
+                  }));
+                }}
+                readOnly={!isEditing && user.ho_ten}
               />
 
               <input
                 type="text"
                 placeholder="Địa chỉ"
                 value={user.dia_chi}
-                onChange={(e) => setUser({ ...user, dia_chi: e.target.value })}
+                onChange={(e) => {
+                  setIsEditing(true);
+                  setUser((prevUser) => ({
+                    ...prevUser,
+                    dia_chi: e.target.value,
+                  }));
+                }}
+                readOnly={!isEditing && user.dia_chi}
               />
 
               <textarea
@@ -320,7 +411,7 @@ export default function ThanhToan() {
                     Thanh toán bằng tài khoản ngân hàng
                   </option>
                   <option value={3} className={styles.paymentOption}>
-                    Thanh toán bằng VNPay
+                    Thanh toán bằng ZaloPay
                   </option>
                   <option value={4} className={styles.paymentOption}>
                     Thanh toán ví điện tử Momo
@@ -334,7 +425,7 @@ export default function ThanhToan() {
               <div className={`${styles.box} ${styles.productCard}`} key={item._id}>
                 <div className={styles.productInfo}>
                   <div className={styles.productLeft}>
-                    <p className={styles.productTitle}>Sản phẩm mua</p>
+                    <p className={styles.productTitle}>Sản phẩm</p>
                     <div className={styles.productImage}>
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
                     </div>
