@@ -269,7 +269,7 @@ export default function SanPham() {
                       >
                         ✏️
                       </Link>{" "}
-                      &nbsp; &nbsp;
+                      &nbsp;
                       <button
                         className={`${styles.btn} ${styles.delete}`}
                         onClick={() => deleteProduct(_id)}

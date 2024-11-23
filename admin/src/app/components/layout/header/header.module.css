@@ -79,26 +79,15 @@
   transition: background 0.3s ease;
   text-decoration: none;
 }
-#sidebar .sideMenu > li > a:hover {
+#sidebar .sideMenu a.active {
   background: var(--grey);
 }
-
-#sidebar .sideMenu > li > a.active .iconRight {
-  transform: rotateZ(90deg);
-}
-
-#sidebar .sideMenu > li > a.active,
-#sidebar .sideMenu a.active:hover {
-  background: var(--blue);
-  color: var(--light);
-}
-
 #sidebar .divider {
   margin-top: 24px;
   font-size: 12px;
   text-transform: uppercase;
   font-weight: 700;
-  color: var(--dark-grey);
+  color: var(--blue);
 }
 
 #sidebar .sideDropdown {
@@ -247,7 +236,7 @@ nav .formGroup .icon {
   top: 50%;
   transform: translateY(-50%);
   right: 16px;
-  color: var(--dark-grey);
+  color: var(--blue);
 }
 
 nav .navLink {
