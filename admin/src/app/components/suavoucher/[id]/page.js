@@ -11,6 +11,8 @@ export default function SuaVoucher() {
   const [ngayBD, setngayBD] = useState("");
   const [ngayKT, setngayKT] = useState("");
   const [mota, setmota] = useState("");
+  const [soluong, setsoluong] = useState("");
+  const [phantram, setphantram] = useState("");
   const router = useRouter();
   const { id } = useParams();
 
@@ -25,6 +27,8 @@ export default function SuaVoucher() {
           console.log("Data from API:", data);
           setmaVouchers(data.ma_voucher);
           setgiatri(data.gia_tri);
+          setsoluong(data.so_luong);
+          setphantram(data.phan_tram);
           setngayBD(data.bat_dau);
           setngayKT(data.ket_thuc);
           setmota(data.mo_ta);
@@ -42,7 +46,7 @@ export default function SuaVoucher() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!maVouchers || !giatri || !ngayBD || !ngayKT) {
+    if (!maVouchers || !soluong || !phantram || !giatri || !ngayBD || !ngayKT) {
       Swal.fire({
         icon: "warning",
         title: "Thiếu thông tin",
@@ -61,13 +65,15 @@ export default function SuaVoucher() {
       return;
     }
 
-const formData = {
-  ma_voucher: maVouchers,
-  gia_tri: giatri,
-  bat_dau: ngayBD,
-  ket_thuc: ngayKT,
-  mo_ta: mota,
-};
+    const formData = {
+      ma_voucher: maVouchers,
+      gia_tri: giatri,
+      so_luong: soluong,
+      phan_tram: phantram,
+      bat_dau: ngayBD,
+      ket_thuc: ngayKT,
+      mo_ta: mota,
+    };
 
     try {
       const response = await fetch(
@@ -131,6 +137,26 @@ const formData = {
                 />
               </div>
               <div className={styles.formGroup}>
+                <label htmlFor="phantram">Phần trăm</label>
+                <input
+                  type="text"
+                  id="phantram"
+                  className="phantram"
+                  value={phantram}
+                  onChange={(e) => setphantram(e.target.value)}
+                />
+              </div>{" "}
+              <div className={styles.formGroup}>
+                <label htmlFor="soluong">Số Lượng</label>
+                <input
+                  type="text"
+                  id="soluong"
+                  className="soluong"
+                  value={soluong}
+                  onChange={(e) => setsoluong(e.target.value)}
+                />
+              </div>
+              <div className={styles.formGroup}>
                 <label htmlFor="ngayBD">
                   Ngày bắt đầu tính giá trị voucher
                 </label>
@@ -163,7 +189,6 @@ const formData = {
                   onChange={(e) => setmota(e.target.value)}
                 />
               </div>
-
               <button
                 type="submit"
                 className="btn btn-outline-primary"
