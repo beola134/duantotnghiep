@@ -5,37 +5,23 @@ import { useState, useEffect } from "react";
 
 export default function DanhmucPage() {
   const [cates, setDanhmuc] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
-  const [totalCates, setTotalCates] = useState(0);
-  const itemsPerPage = 5;
-
-  const debounce = (func, delay) => {
-    let timeoutId;
-    return (...args) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        func(...args);
-      }, delay);
-    };
-  };
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const fetchDanhmuc = async () => {
-    setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:5000/cate/allcate?page=${currentPage}&ten_danh_muc=${searchQuery}&limit=${itemsPerPage}`
+        `http://localhost:5000/cate/allcate?page=${currentPage}&ten_danh_muc=${searchQuery}`
       );
       if (!response.ok) {
         throw new Error("Lỗi không thể tải dữ liệu");
       }
       const data = await response.json();
-      setTotalPage(data.totalPages || 1);
+      setTotalPage(data.totalPages);
       setDanhmuc(data.cates);
-      setTotalCates(data.totalCates);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -43,31 +29,26 @@ export default function DanhmucPage() {
     }
   };
 
-  const debouncedFetchDanhmuc = debounce(fetchDanhmuc, 300);
-
   useEffect(() => {
-    debouncedFetchDanhmuc();
+    fetchDanhmuc();
   }, [currentPage, searchQuery]);
 
-  const handleSearchChange = (e) => {
+  // chức năng chuyển trang
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // hàm xử lí thay đổi danh mục
+  const handSearchChange = (e) => {
     setSearchQuery(e.target.value);
     setCurrentPage(1);
   };
 
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPage) {
-      setCurrentPage(page);
-    }
-  };
-
   const deleteDanhmuc = async (id) => {
     try {
-      const response = await fetch(
-        `http://localhost:5000/cate/deletecate/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`http://localhost:5000/cate/deletecate/${id}`, {
+        method: "DELETE",
+      });
 
       if (response.ok) {
         setDanhmuc(cates.filter((cate) => cate._id !== id));
@@ -80,9 +61,6 @@ export default function DanhmucPage() {
       alert("Có lỗi xảy ra khi Danh mục.");
     }
   };
-
-  const startDanhmucIndex = (currentPage - 1) * itemsPerPage + 1;
-  const endDanhmucIndex = Math.min(currentPage * itemsPerPage, totalCates);
 
   if (loading) return <div>Đang tải dữ liệu...</div>;
   if (error) return <div>Có lỗi xảy ra: {error}</div>;
@@ -138,7 +116,7 @@ export default function DanhmucPage() {
                 type="text"
                 id="search"
                 value={searchQuery}
-                onChange={handleSearchChange}
+                onChange={handSearchChange}
                 placeholder="Nhập tên danh mục..."
               />
             </div>
@@ -147,12 +125,8 @@ export default function DanhmucPage() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-                <th style={{ width: "15%", textAlign: "center" }}>
-                  Id Danh mục
-                </th>
-                <th style={{ width: "12%", textAlign: "center" }}>
-                  Tên danh mục
-                </th>
+                <th style={{ width: "15%", textAlign: "center" }}>Id Danh mục</th>
+                <th style={{ width: "12%", textAlign: "center" }}>Tên danh mục</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Hình ảnh</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Mô tả</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
@@ -171,15 +145,11 @@ export default function DanhmucPage() {
                     </td>
                     <td style={{ textAlign: "center" }}>{mo_ta}</td>
                     <td style={{ textAlign: "center" }}>
-                      <Link
-                        href={`/components/suadanhmuc/${_id}`}
-                        className={`${styles.btn} ${styles.edit}`}>
+                      <Link href={`/components/suadanhmuc/${_id}`} className={`${styles.btn} ${styles.edit}`}>
                         ✏️
                       </Link>
                       &nbsp;
-                      <button
-                        className={`${styles.btn} ${styles.delete}`}
-                        onClick={() => deleteDanhmuc(_id)}>
+                      <button className={`${styles.btn} ${styles.delete}`} onClick={() => deleteDanhmuc(_id)}>
                         🗑️
                       </button>
                       &nbsp;
@@ -189,37 +159,24 @@ export default function DanhmucPage() {
               })}
             </tbody>
           </table>
-
           <div className={styles.pagination}>
-            <span>
-              Hiện {startDanhmucIndex} đến {endDanhmucIndex} của {totalCates}{" "}
-              sản phẩm
-            </span>
             <div className={styles.paginationControls}>
               <button
-                className={`${styles.paginationButton} ${
-                  currentPage === 1 ? styles.disabled : styles["other-page"]
-                }`}
-                onClick={() =>
-                  currentPage > 1 && handlePageChange(currentPage - 1)
-                }
-                disabled={currentPage === 1}>
+                className={`${styles.paginationButton} ${currentPage === 1 ? styles.disabled : styles["other-page"]}`}
+                onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
                 ‹
               </button>
-              <button className={styles.paginationButton}>
-                {`Trang ${currentPage} / ${totalPage}`}
-              </button>
+              <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPage}`}</button>
 
               <button
                 className={`${styles.paginationButton} ${
-                  currentPage === totalPage
-                    ? styles.disabled
-                    : styles["other-page"]
+                  currentPage === totalPage ? styles.disabled : styles["other-page"]
                 }`}
-                onClick={() =>
-                  currentPage < totalPage && handlePageChange(currentPage + 1)
-                }
-                disabled={currentPage === totalPage}>
+                onClick={() => currentPage < totalPage && handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPage}
+              >
                 ›
               </button>
             </div>
