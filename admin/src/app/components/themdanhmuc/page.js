@@ -30,6 +30,14 @@ export default function ThemDanhmuc() {
       });
       return;
     }
+    if (!mota) {
+      Swal.fire({
+        icon: "warning",
+        title: "Thiếu thông tin",
+        text: "Vui lòng nhập mô tả danh mục!",
+      });
+      return;
+    }
 
     const formData = new FormData();
     formData.append("ten_danh_muc", tendanhmuc);

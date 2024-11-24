@@ -15,11 +15,11 @@ const DanhMuc = sequelize.define('DanhMuc', {
   },
   mo_ta: {
     type: DataTypes.TEXT,
-    allowNull: true
+    allowNull: false
   },
   hinh_anh: {
     type: DataTypes.STRING(255),
-    allowNull: true
+    allowNull: false
   }
 }, {
   tableName: 'danh_muc',

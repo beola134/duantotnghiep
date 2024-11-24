@@ -30,7 +30,7 @@ const Product = sequelize.define('Product', {
     },
     mo_ta: {
         type: DataTypes.TEXT,
-        allowNull: true
+        allowNull: false
     },
     do_chiu_nuoc: {
         type: DataTypes.STRING(50),
@@ -38,7 +38,7 @@ const Product = sequelize.define('Product', {
     },
     xuat_xu: {
         type: DataTypes.STRING(100),
-        allowNull: true
+        allowNull: false
     },
     gioi_tinh: {
         type: DataTypes.STRING(50),
@@ -46,7 +46,7 @@ const Product = sequelize.define('Product', {
     },
     so_luong: {
         type: DataTypes.INTEGER,
-        allowNull: true
+        allowNull: false
     },
     loai_may: {
         type: DataTypes.STRING(100),
@@ -86,7 +86,7 @@ const Product = sequelize.define('Product', {
     },
     ma_san_pham: {
         type: DataTypes.STRING(255),
-        allowNull: true
+        allowNull: false
     },
     thuong_hieu: {
         type: DataTypes.STRING(100),

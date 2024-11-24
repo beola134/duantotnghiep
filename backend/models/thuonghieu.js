@@ -14,15 +14,15 @@ const ThuongHieu = sequelize.define('ThuongHieu', {
     },
     mo_ta: {
         type: DataTypes.TEXT,
-        allowNull: true
+        allowNull: false
     },
     hinh_anh: {
         type: DataTypes.STRING(255),
-        allowNull: true
+        allowNull: false
     },
     hinh_anh2:{
         type: DataTypes.STRING(255),
-        allowNull: true
+        allowNull: false
 
     }
 }, {

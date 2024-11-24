@@ -36,6 +36,14 @@ export default function ThemThuongHieu() {
         });
         return;
     }
+    if (!productLogo) {
+        Swal.fire({
+            icon: "warning",
+            title: "Thiếu thông tin",
+            text: "Vui lòng chọn hình ảnh cho danh mục!",
+        });
+        return;
+    }
     if (!description) {
         Swal.fire({
             icon: "warning",

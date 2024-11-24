@@ -29,11 +29,11 @@ export default function ThemVoucher() {
       });
       return;
     }
-    if (!giatri) {
+    if (giatri && phantram) {
       Swal.fire({
         icon: "warning",
-        title: "Thiếu thông tin",
-        text: "Vui lòng nhập giá trị voucher",
+        title: "Thông tin không hợp lệ",
+        text: "Vui lòng chỉ nhập giá trị hoặc phần trăm",
       });
       return;
     }
@@ -53,22 +53,7 @@ export default function ThemVoucher() {
       });
       return;
     }
-    if (!soluong) {
-      Swal.fire({
-        icon: "warning",
-        title: "Thiếu thông tin",
-        text: "Vui lòng ngày kết thúc tính giá trị voucher",
-      });
-      return;
-    }
-    if (!phantram) {
-      Swal.fire({
-        icon: "warning",
-        title: "Thiếu thông tin",
-        text: "Vui lòng ngày kết thúc tính giá trị voucher",
-      });
-      return;
-    }
+
 
     const formData = {
       ma_voucher: maVouchers,

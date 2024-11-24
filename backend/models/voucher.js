@@ -27,11 +27,11 @@ const Voucher = sequelize.define('Voucher', {
     },
     bat_dau: {
         type: DataTypes.DATE, 
-        allowNull: true,
+        allowNull: false,
     },
     ket_thuc: {
         type: DataTypes.DATE,  
-        allowNull: true,
+        allowNull: false,
 
     },
     mo_ta: {
