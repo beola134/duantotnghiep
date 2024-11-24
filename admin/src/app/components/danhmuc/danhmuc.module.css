@@ -195,7 +195,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 20px;
+  margin: 20px 0 0 86.2%;
 }
 
 .paginationControls {
@@ -209,13 +209,4 @@
   border-radius: 3px;
   padding: 5px 10px;
   cursor: pointer;
-}
-
-.paginationButton.active {
-  background-color: #002f6c;
-  color: white;
-}
-
-.paginationButton:hover {
-  background-color: #f0f0f0;
 }

@@ -6,20 +6,14 @@ import { useState, useEffect } from "react";
 
 export default function Menu() {
   const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
-  const [isOrderDropdownOpen, setOrderDropdownOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState("");
 
-  const isActive = (path) => currentPath === path || currentPath === "/";
+  const isActive = (path) => currentPath === path;
 
   useEffect(() => {
-
     if (typeof window !== "undefined") {
       const pathname = window.location.pathname;
-      if (pathname === "/") {
-        setCurrentPath("/components/thongke");
-      } else {
-        setCurrentPath(pathname);
-      }
+      setCurrentPath(pathname === "/" ? "/components/thongke" : pathname);
     }
   }, []);
 
@@ -29,15 +23,6 @@ export default function Menu() {
     }
   }, []);
 
-  const toggleProductDropdown = () => {
-    setProductDropdownOpen(!isProductDropdownOpen);
-    setOrderDropdownOpen(false);
-  };
-
-  const toggleOrderDropdown = () => {
-    setOrderDropdownOpen(!isOrderDropdownOpen);
-    setProductDropdownOpen(false);
-  };
   const handleLinkClick = (path) => {
     setCurrentPath(path);
   };
@@ -76,9 +61,7 @@ export default function Menu() {
           <li>
             <Link
               href="/components/thuonghieu"
-              className={
-                isActive("/components/thuonghieu") ? styles.active : ""
-              }
+              className={isActive("/components/thuonghieu") ? styles.active : ""}
               onClick={() => handleLinkClick("/components/thuonghieu")}
             >
               <i className={`bx bxs-widget ${styles.icon}`}></i>
@@ -87,17 +70,20 @@ export default function Menu() {
           </li>
           <li>
             <Link
-              href="/components/quanlikho"
-              className={isActive("/components/quanlikho") ? styles.active : ""}
-              onClick={() => handleLinkClick("/components/quanlikho")}
+              href="/components/danhmuc"
+              className={isActive("/components/danhmuc") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/danhmuc")}
             >
-            <Link href="/components/danhmuc">
               <i className={`bx bxs-widget ${styles.icon}`}></i>
               Quản lý danh mục
             </Link>
           </li>
           <li>
-            <Link href="/components/quanlikho">
+            <Link
+              href="/components/quanlikho"
+              className={isActive("/components/quanlikho") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/quanlikho")}
+            >
               <i className={`bx bxs-widget ${styles.icon}`}></i>
               Quản lý kho
             </Link>
@@ -121,8 +107,8 @@ export default function Menu() {
           <li>
             <Link
               href="/components/taikhoan"
-              onClick={toggleProductDropdown}
               className={isActive("/components/taikhoan") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/taikhoan")}
             >
               <i className={`bx bxs-user-account ${styles.icon}`}></i>
               Quản Lý Tài khoản
@@ -134,12 +120,9 @@ export default function Menu() {
           <li>
             <Link
               href="/components/quanlydonhang"
-              onClick={toggleOrderDropdown}
-              className={
-                isActive("/components/quanlydonhang") ? styles.active : ""
-              }
+              className={isActive("/components/quanlydonhang") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/quanlydonhang")}
             >
-              onClick={toggleOrderDropdown}>
               <i className={`bx bxs-cart ${styles.icon}`}></i>
               Quản Lý Đơn Hàng
             </Link>
@@ -147,12 +130,9 @@ export default function Menu() {
           <li>
             <Link
               href="/components/chitietdonhang"
-              onClick={toggleOrderDropdown}
-              className={
-                isActive("/components/chitietdonhang") ? styles.active : ""
-              }
+              className={isActive("/components/chitietdonhang") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/chitietdonhang")}
             >
-              onClick={toggleOrderDropdown}>
               <i className={`bx bxs-cart ${styles.icon}`}></i>
               Quản Lý Chi Tiết Đơn Hàng
             </Link>
@@ -173,10 +153,7 @@ export default function Menu() {
         </ul>
         <div className={styles.ads}>
           <div className={styles.wrapper}>
-            <Link
-              style={{ textDecoration: "none" }}
-              href="#"
-              className={styles.btnUpgrade}>
+            <Link style={{ textDecoration: "none" }} href="#" className={styles.btnUpgrade}>
               Đăng xuất
             </Link>
           </div>
@@ -201,7 +178,8 @@ export default function Menu() {
               href="#"
               id="profileDropdown"
               data-bs-toggle="dropdown"
-              aria-expanded="false">
+              aria-expanded="false"
+            >
               <img
                 src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVvcGxlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
                 alt=""
@@ -210,9 +188,7 @@ export default function Menu() {
                 height="40"
               />
             </a>
-            <ul
-              className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`}
-              aria-labelledby="profileDropdown">
+            <ul className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`} aria-labelledby="profileDropdown">
               <li>
                 <a className={`dropdown-item ${styles.dropdownItem}`} href="#">
                   <i className="bx bxs-user-circle icon"></i>
