@@ -10,7 +10,7 @@ const ThuongHieu = sequelize.define('ThuongHieu', {
     },
     thuong_hieu: {
         type: DataTypes.STRING(255),
-        allowNull: true
+        allowNull: false
     },
     mo_ta: {
         type: DataTypes.TEXT,

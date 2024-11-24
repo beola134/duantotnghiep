@@ -75,6 +75,7 @@ const addDonHang = async (req, res) => {
       dia_chi,
       tong_tien: totalAmount,
       trang_thai: "Chờ xác nhận",
+      trang_thai_thanh_toan: thanh_toan ? "Đã thanh toán" : "Chưa thanh toán",
       thanh_toan: totalAmount,
       phi_ship,
       thoi_gian_tao,

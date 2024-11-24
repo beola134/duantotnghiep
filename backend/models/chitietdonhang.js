@@ -11,24 +11,24 @@ const ChiTietDonHang = sequelize.define('ChiTietDonHang', {
     },
     gia_san_pham: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: true
+        allowNull: false
     },
     ten_san_pham: {
         type: DataTypes.STRING(255),
-        allowNull: true
+        allowNull: false
     },
     so_luong: {
         type: DataTypes.INTEGER,
-        allowNull: true
+        allowNull: false
     },
 
     id_don_hang: {
         type: DataTypes.STRING(255),
-        allowNull: true
+        allowNull: false,
     },
     id_san_pham: {
         type: DataTypes.STRING(255),
-        allowNull: true
+        allowNull: false,
     }
 }, {
     tableName: 'chi_tiet_don_hang',
