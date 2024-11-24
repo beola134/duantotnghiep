@@ -1,4 +1,3 @@
-/*sidebar-left*/
 .SidebarContainer {
   background-color: #f1f0f6;
 }
@@ -79,15 +78,26 @@
   transition: background 0.3s ease;
   text-decoration: none;
 }
-#sidebar .sideMenu a.active {
+#sidebar .sideMenu > li > a:hover {
   background: var(--grey);
 }
+
+#sidebar .sideMenu > li > a.active .iconRight {
+  transform: rotateZ(90deg);
+}
+
+#sidebar .sideMenu > li > a.active,
+#sidebar .sideMenu a.active:hover {
+  background: var(--blue);
+  color: var(--light);
+}
+
 #sidebar .divider {
   margin-top: 24px;
   font-size: 12px;
   text-transform: uppercase;
   font-weight: 700;
-  color: var(--blue);
+  color: var(--dark-grey);
 }
 
 #sidebar .sideDropdown {
@@ -178,123 +188,79 @@
   width: calc(100% - 60px);
   left: 60px;
 }
-#content {
-  position: relative;
-  width: calc(100% - 260px);
-  left: 260px;
-  transition: all 0.3s ease;
-}
 
-#sidebar.hide + #content {
-  width: calc(100% - 60px);
-  left: 60px;
-}
-.nav {
-  background: var(--light);
-  height: 64px;
-  padding: 0 20px;
+.header1 {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  grid-gap: 28px;
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 100;
+  background-color: white;
+  width: 98%;
+  border-left: 5px solid #ffcc00;
+  margin: 10px;
+  padding: 10px 10px 0px 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  height: auto;
+}
+.header1 .title {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.timestamp {
+  font-family: Arial, sans-serif;
+}
+.bg {
+  background-color: #ffffff;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  height: auto;
+}
+/*form*/
+.container1 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 20px;
 }
 
-nav .toggleSidebar {
-  font-size: 18px;
+.container1 > .formGroup:last-of-type {
+  grid-column: 1 / -1;
+}
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.formGroup label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: rgba(248, 246, 246, 0.712);
+}
+.btn.delete {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-.nav form {
-  max-width: 400px;
-  width: 100%;
-  margin-right: auto;
-}
-
-nav .formGroup {
-  position: relative;
-}
-
-nav .formGroup input {
-  width: 100%;
-  background: var(--grey);
-  border-radius: 5px;
+.btn.edit {
+  background-color: #ffc107;
+  color: #fff;
+  padding: 5px 10px;
   border: none;
-  outline: none;
-  padding: 10px 36px 10px 16px;
-  transition: all 0.3s ease;
-}
-
-nav .formGroup input:focus {
-  box-shadow: 0 0 0 1px var(--blue), 0 0 0 4px var(--light-blue);
-}
-
-nav .formGroup .icon {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 16px;
-  color: var(--blue);
-}
-
-nav .navLink {
-  position: relative;
-}
-
-nav .navLink .icon {
-  font-size: 18px;
-  color: var(--dark);
-}
-
-nav .navLink .badge {
-  position: absolute;
-  top: -12px;
-  right: -12px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 2px solid var(--light);
-  background: var(--red);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--light);
-  font-size: 10px;
-  font-weight: 700;
-}
-nav .divider {
-  width: 1px;
-  background: var(--grey);
-  height: 12px;
-  display: block;
-}
-/* ProfileDropdown.module.css */
-nav .dropdownMenu {
-  margin-top: 10px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-nav.dropdownItem {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  font-weight: 500;
-  color: #333;
-}
-
-nav .dropdownItemHover {
-  background-color: #f1f1f1;
-  color: #000;
-}
-
-nav .roundedCircle {
-  transition: border 0.3s ease;
-}
-
-nav .roundedCircleHover {
-  border: 2px solid #007bff;
+  border-radius: 5px;
+  cursor: pointer;
 }

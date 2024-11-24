@@ -100,9 +100,7 @@ export default function CommentsPage() {
 
             <div className={styles.tableContainer}>
               <div className={styles.tableControls}>
-                <label htmlFor="entries" style={{ fontWeight: "bold" }}>
-                
-                </label>
+                <label htmlFor="entries" style={{ fontWeight: "bold" }}></label>
                 <div className={styles.search}>
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
                     Tìm kiếm:
@@ -113,7 +111,6 @@ export default function CommentsPage() {
               <table id="productTable" className={styles.productTable}>
                 <thead>
                   <tr>
-                  
                     <th style={{ width: "15%", textAlign: "center" }}>Id bình luận</th>
                     <th style={{ width: "10%", textAlign: "center" }}>Id sản phẩm</th>
                     <th style={{ width: "8%", textAlign: "center" }}>Họ và tên </th>
@@ -129,7 +126,6 @@ export default function CommentsPage() {
 
                     return (
                       <tr key={_id} className={!trang_thai ? styles.hiddenRow : ""}>
-                      
                         <td>{_id}</td>
                         <td>{id_san_pham}</td>
                         <td style={{ textAlign: "center" }}>

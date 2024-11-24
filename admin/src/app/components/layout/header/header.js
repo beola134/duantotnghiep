@@ -6,7 +6,16 @@ import { useState, useEffect } from "react";
 
 export default function Menu() {
   const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
-  const [isOrderDropdownOpen, setOrderDropdownOpen] = useState(false);
+  const [currentPath, setCurrentPath] = useState("");
+
+  const isActive = (path) => currentPath === path;
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const pathname = window.location.pathname;
+      setCurrentPath(pathname === "/" ? "/components/thongke" : pathname);
+    }
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -14,14 +23,8 @@ export default function Menu() {
     }
   }, []);
 
-  const toggleProductDropdown = () => {
-    setProductDropdownOpen(!isProductDropdownOpen);
-    setOrderDropdownOpen(false); 
-  };
-
-  const toggleOrderDropdown = () => {
-    setOrderDropdownOpen(!isOrderDropdownOpen);
-    setProductDropdownOpen(false); 
+  const handleLinkClick = (path) => {
+    setCurrentPath(path);
   };
 
   return (
@@ -33,8 +36,12 @@ export default function Menu() {
         </Link>
         <ul className={styles.sideMenu}>
           <li>
-            <Link href="/" className={styles.active}>
-              <i className={`bx bxs-dashboard ${styles.icon}`}></i>
+            <Link
+              href="/components/thongke"
+              className={isActive("/components/thongke") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/thongke")}
+            >
+              <i className={`bx bxs-chart ${styles.icon}`}></i>
               Thống Kê
             </Link>
           </li>
@@ -42,19 +49,41 @@ export default function Menu() {
             Sản Phẩm
           </li>
           <li>
-            <Link href="/components/sanpham">
-              <i className={`bx bxs-chart ${styles.icon}`}></i>
+            <Link
+              href="/components/sanpham"
+              className={isActive("/components/sanpham") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/sanpham")}
+            >
+              <i className={`bx bxs-widget ${styles.icon}`}></i>
               Quản lý sản phẩm
             </Link>
           </li>
           <li>
-            <Link href="/components/thuonghieu">
+            <Link
+              href="/components/thuonghieu"
+              className={isActive("/components/thuonghieu") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/thuonghieu")}
+            >
               <i className={`bx bxs-widget ${styles.icon}`}></i>
               Quản lý thương hiệu
             </Link>
           </li>
           <li>
-            <Link href="/components/quanlikho">
+            <Link
+              href="/components/danhmuc"
+              className={isActive("/components/danhmuc") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/danhmuc")}
+            >
+              <i className={`bx bxs-widget ${styles.icon}`}></i>
+              Quản lý danh mục
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/components/quanlikho"
+              className={isActive("/components/quanlikho") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/quanlikho")}
+            >
               <i className={`bx bxs-widget ${styles.icon}`}></i>
               Quản lý kho
             </Link>
@@ -63,7 +92,11 @@ export default function Menu() {
             Bình luận
           </li>
           <li>
-            <Link href="/components/comments">
+            <Link
+              href="/components/comments"
+              className={isActive("/components/comments") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/comments")}
+            >
               <i className={`bx bxs-comment-detail ${styles.icon}`}></i>
               Quản lý bình luận
             </Link>
@@ -72,7 +105,11 @@ export default function Menu() {
             Tài khoản
           </li>
           <li>
-            <Link href="/components/taikhoan" onClick={toggleProductDropdown}>
+            <Link
+              href="/components/taikhoan"
+              className={isActive("/components/taikhoan") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/taikhoan")}
+            >
               <i className={`bx bxs-user-account ${styles.icon}`}></i>
               Quản Lý Tài khoản
             </Link>
@@ -83,7 +120,8 @@ export default function Menu() {
           <li>
             <Link
               href="/components/quanlydonhang"
-              onClick={toggleOrderDropdown}
+              className={isActive("/components/quanlydonhang") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/quanlydonhang")}
             >
               <i className={`bx bxs-cart ${styles.icon}`}></i>
               Quản Lý Đơn Hàng
@@ -92,7 +130,8 @@ export default function Menu() {
           <li>
             <Link
               href="/components/chitietdonhang"
-              onClick={toggleOrderDropdown}
+              className={isActive("/components/chitietdonhang") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/chitietdonhang")}
             >
               <i className={`bx bxs-cart ${styles.icon}`}></i>
               Quản Lý Chi Tiết Đơn Hàng
@@ -102,7 +141,11 @@ export default function Menu() {
             Voucher
           </li>
           <li>
-            <Link href="/components/voucher">
+            <Link
+              href="/components/voucher"
+              className={isActive("/components/voucher") ? styles.active : ""}
+              onClick={() => handleLinkClick("/components/voucher")}
+            >
               <i className={`bx bx-qr ${styles.icon}`}></i>
               Quản lý Voucher
             </Link>
@@ -110,11 +153,7 @@ export default function Menu() {
         </ul>
         <div className={styles.ads}>
           <div className={styles.wrapper}>
-            <Link
-              style={{ textDecoration: "none" }}
-              href="#"
-              className={styles.btnUpgrade}
-            >
+            <Link style={{ textDecoration: "none" }} href="#" className={styles.btnUpgrade}>
               Đăng xuất
             </Link>
           </div>
@@ -149,10 +188,7 @@ export default function Menu() {
                 height="40"
               />
             </a>
-            <ul
-              className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`}
-              aria-labelledby="profileDropdown"
-            >
+            <ul className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`} aria-labelledby="profileDropdown">
               <li>
                 <a className={`dropdown-item ${styles.dropdownItem}`} href="#">
                   <i className="bx bxs-user-circle icon"></i>
