@@ -134,7 +134,7 @@ export default function Menu() {
               onClick={() => handleLinkClick("/components/chitietdonhang")}
             >
               <i className={`bx bxs-cart ${styles.icon}`}></i>
-              Quản Lý Chi Tiết Đơn Hàng
+              Quản Lý Sản Phẩm Đã Bán
             </Link>
           </li>
           <li className={styles.divider} data-text="Voucher">
