@@ -26,9 +26,8 @@ exports.getNewUsersToday = async (req, res) => {
     });
 
     if (usersToday.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "Không có người dùng mới hôm nay" });
+     console.log(usersToday, "Không có người dùng mới hôm");
+     
     }
 
     res.status(200).json({ usersToday });
