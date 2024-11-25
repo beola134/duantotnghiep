@@ -16,7 +16,7 @@ const User = sequelize.define('User', {
     },
     mat_khau: {
         type: DataTypes.STRING(255),
-        allowNull: true
+        allowNull: false
     },
     ho_ten: {
         type: DataTypes.STRING(255),
@@ -36,11 +36,11 @@ const User = sequelize.define('User', {
     },
     hinh_anh: {
         type: DataTypes.STRING(255),
-        allowNull: true
+        allowNull: false
     },
     quyen: {
         type: DataTypes.STRING(255),
-        allowNull: true,
+        allowNull: false,
         defaultValue: '2'
     },
     googleId:{

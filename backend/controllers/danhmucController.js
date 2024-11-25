@@ -19,7 +19,7 @@ exports.getCateById = async (req, res) => {
 exports.getAlldk = async (req, res) => {
   try {
     // Lấy các tham số từ query, với giá trị mặc định cho limit và page
-    const { limit = 2, page = 1, ten_danh_muc = "" } = req.query;
+    const { limit = 4, page = 1, ten_danh_muc = "" } = req.query;
     const offset = (page - 1) * limit;
     const searchCondition = ten_danh_muc ? { ten_danh_muc: { [Op.like]: `%${ten_danh_muc}%` } } : {};
     const { rows: cates, count: totalCates } = await Cate.findAndCountAll({

@@ -6,7 +6,7 @@ const CryptoJS = require("crypto-js");
 const moment = require("moment");
 const qs = require("qs");
 const Product = require("../models/product");
-const ChiTietDonHang = require("../models/chiTietDonHang");
+const ChiTietDonHang = require("../models/chitietdonhang");
 //them phuong thuc thanh toan
 exports.addPttt = async (req, res) => {
   try {

@@ -85,6 +85,8 @@ export default function ThemSanPham() {
       so_luong,
       id_thuong_hieu,
       hinh_anh,
+      xuat_xu,
+      mo_ta,
     } = formData;
 
     if (!ten_san_pham) newErrors.ten_san_pham = "Vui lòng nhập tên sản phẩm.";
@@ -96,6 +98,8 @@ export default function ThemSanPham() {
     if (!so_luong) newErrors.so_luong = "Vui lòng nhập số lượng.";
     if (!id_thuong_hieu) newErrors.id_thuong_hieu = "Vui lòng chọn danh mục.";
     if (!hinh_anh) newErrors.hinh_anh = "Vui lòng chọn hình ảnh sản phẩm.";
+    if (!xuat_xu) newErrors.xuat_xu = "Vui lòng nhập xuất xứ sản phẩm.";
+    if (!mo_ta) newErrors.mo_ta = "Vui lòng nhập mô tả sản phẩm.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -273,6 +277,9 @@ export default function ThemSanPham() {
                   value={formData.xuat_xu}
                   onChange={handleChange}
                 />
+                {errors.so_luong && (
+                  <span className="text-danger">{errors.xuat_xu}</span>
+                )}
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="gioi_tinh">Giới tính</label>
@@ -447,6 +454,9 @@ export default function ThemSanPham() {
                   value={formData.mo_ta}
                   onChange={handleChange}
                 />
+                {errors.hinh_anh && (
+                  <span className="text-danger">{errors.mo_ta}</span>
+                )}
               </div>
               {errorMessage && (
                 <div className="alert alert-danger">{errorMessage}</div>

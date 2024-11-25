@@ -10,11 +10,11 @@ const BinhLuan = sequelize.define('BinhLuan', {
     },
     noi_dung: {
         type: DataTypes.TEXT,
-        allowNull: true
+        allowNull: false,   
     },
     sao: {
         type: DataTypes.INTEGER,
-        allowNull: true
+        allowNull: false
     },
     ngay_binh_luan: {
         type: Sequelize.DATE,
@@ -23,17 +23,17 @@ const BinhLuan = sequelize.define('BinhLuan', {
     },
     trang_thai: {
         type: DataTypes.BOOLEAN,
-        allowNull: true,
+        allowNull: false,
         defaultValue: true
     },
     id_nguoi_dung: {
         type: DataTypes.STRING(255),
-        allowNull: true,
+        allowNull: false,
         index: true
     },
     id_san_pham: {
         type: DataTypes.STRING(255),
-        allowNull: true,
+        allowNull: false, 
         index: true
     }
 }, {
