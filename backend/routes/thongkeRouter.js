@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const ThongkeController = require("../controllers/thongkeController");
 
-// người dùng mới
+// đơn hàng theo id người dùng
 //http://localhost:5000/thongke/getAllOrdersWithUserDetails
 router.get("/getAllOrdersWithUserDetails",ThongkeController.getAllOrdersWithUserDetails);
 
