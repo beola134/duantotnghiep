@@ -30,8 +30,8 @@ exports.filtersanphamdongho = async (req, res) => {
     let filter = {
       [Op.and]: [],
     };
-    filter[Op.and].push({ id_danh_muc: null })
-    
+    filter[Op.and].push({ id_danh_muc: null });
+
     if (gioi_tinh) {
       switch (gioi_tinh) {
         case "Nam":
@@ -514,9 +514,9 @@ exports.getProducts = async (req, res) => {
 // xử lí lọc them dây đồng hồ
 exports.filterDayDongHo = async (req, res) => {
   try {
-    const { categoryId } = req.params;   
+    const { categoryId } = req.params;
     const category = await Cate.findOne({
-      where:{ _id: categoryId }
+      where: { _id: categoryId },
     });
     if (!category) {
       return res.status(404).json({ message: "Danh mục không tồn tại" });
@@ -993,7 +993,7 @@ exports.getNewProductsMale = async (req, res) => {
     const products = await Product.findAll({
       where: {
         gioi_tinh: "Nam",
-        loai: { [Op.not]: "Vòng Tay" },
+        id_danh_muc: null,
       },
       order: [["createdAt", "DESC"]],
     });
@@ -1013,7 +1013,7 @@ exports.getNewProductsFeMale = async (req, res) => {
     const products = await Product.findAll({
       where: {
         gioi_tinh: "Nữ",
-        loai: { [Op.not]: "Vòng Tay" },
+        id_danh_muc: null,
       },
       order: [["createdAt", "DESC"]],
     });
@@ -1033,7 +1033,7 @@ exports.getNewProductsCouple = async (req, res) => {
     const products = await Product.findAll({
       where: {
         gioi_tinh: "Đồng Hồ Đôi",
-        loai: { [Op.not]: "Vòng Tay" },
+        id_danh_muc: null,
       },
       order: [["createdAt", "DESC"]],
     });
@@ -1053,7 +1053,7 @@ exports.getNewLimitMale = async (req, res) => {
     const products = await Product.findAll({
       where: {
         gioi_tinh: "Nam",
-        loai: { [Op.not]: "Vòng Tay" },
+        id_danh_muc: null,
       },
       order: [["createdAt", "DESC"]],
       limit: 10,
@@ -1074,7 +1074,7 @@ exports.getNewLimitFeMale = async (req, res) => {
     const products = await Product.findAll({
       where: {
         gioi_tinh: "Nữ",
-        loai: { [Op.not]: "Vòng Tay" },
+        id_danh_muc: null,
       },
       order: [["createdAt", "DESC"]],
       limit: 10,
@@ -1095,7 +1095,7 @@ exports.getNewLimitCouple = async (req, res) => {
     const products = await Product.findAll({
       where: {
         gioi_tinh: "Đồng Hồ Đôi",
-        loai: { [Op.not]: "Vòng Tay" },
+        id_danh_muc: null,
       },
       order: [["createdAt", "DESC"]],
       limit: 10,
@@ -1123,7 +1123,7 @@ exports.getMale = async (req, res) => {
 
     const { rows: products, count: totalProducts } =
       await Product.findAndCountAll({
-        where: { gioi_tinh: "Nam" },
+        where: { gioi_tinh: "Nam", id_danh_muc: null },
         order: [["createdAt", "DESC"]],
         limit,
         offset,
@@ -1150,7 +1150,7 @@ exports.getMale = async (req, res) => {
 exports.getMale10sp = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { gioi_tinh: "Nam" },
+      where: { gioi_tinh: "Nam", id_danh_muc: null },
       limit: 10,
     });
     res.json({ products });
@@ -1173,7 +1173,7 @@ exports.getFeMale = async (req, res) => {
       await Product.findAndCountAll({
         where: {
           gioi_tinh: "Nữ",
-          loai: { [Op.not]: "Vòng Tay" },
+          id_danh_muc: null,
         },
         order: [["createdAt", "DESC"]],
         limit,
@@ -1203,6 +1203,7 @@ exports.getFeMale10sp = async (req, res) => {
     const products = await Product.findAll({
       where: {
         gioi_tinh: "Nữ",
+        id_danh_muc: null,
       },
       limit: 10,
     });
@@ -1224,7 +1225,7 @@ exports.getCouple = async (req, res) => {
     const offset = (page - 1) * limit;
     const { rows: products, count: totalProducts } =
       await Product.findAndCountAll({
-        where: { gioi_tinh: "Đồng Hồ Đôi" },
+        where: { gioi_tinh: "Đồng Hồ Đôi", id_danh_muc: null },
         order: [["createdAt", "DESC"]],
         limit,
         offset,
@@ -1251,7 +1252,7 @@ exports.getCouple = async (req, res) => {
 exports.getCouple10sp = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { gioi_tinh: "Đồng Hồ Đôi" },
+      where: { gioi_tinh: "Đồng Hồ Đôi", id_danh_muc: null },
       limit: 10,
     });
     res.json({ products });
@@ -1302,7 +1303,7 @@ exports.getXuatXuTS = async (req, res) => {
     const products = await Product.findAll({
       where: {
         xuat_xu: "Thụy Sỹ",
-        loai: { [Op.not]: "Trang sức" },
+        id_danh_muc: null,
       },
     });
     res.json({ products });
@@ -1316,7 +1317,7 @@ exports.getXuatXuTD = async (req, res) => {
     const products = await Product.findAll({
       where: {
         xuat_xu: "Thụy Điển",
-        loai: { [Op.not]: "Trang sức" },
+        id_danh_muc: null,
       },
     });
     res.json({ products });
@@ -1330,12 +1331,7 @@ exports.getXuatXuNB = async (req, res) => {
     const products = await Product.findAll({
       where: {
         xuat_xu: "Nhật Bản",
-        loai: {
-          [Op.notIn]: ["Đồng hồ để bàn", "Đồng hồ báo thức"],
-        },
-        thuong_hieu: {
-          [Op.notIn]: ["Đồng hồ treo tường RHYTHM", "Đồng hồ treo tường SEIKO"],
-        },
+        id_danh_muc: null,
       },
     });
     res.json({ products });
@@ -1347,7 +1343,7 @@ exports.getXuatXuNB = async (req, res) => {
 exports.getXuatXuMy = async (req, res) => {
   try {
     const products = await Product.findAll({
-      where: { xuat_xu: "Mỹ" },
+      where: { xuat_xu: "Mỹ", id_danh_muc: null },
     });
     res.json({ products });
   } catch (error) {
