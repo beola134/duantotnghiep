@@ -144,11 +144,18 @@ export default function DonghoNam() {
  const handleClearFilters = () => {
   setSelectedFilter([]);
   setFilter({
-    gioi_tinh: "Nam", 
-  });
+    gioi_tinh: filter.gioi_tinh,
+
+  })
   setCurrentPage(1);
-  // Không thay đổi categoryName
-  fetchProducts();
+  setCategoryName(
+    filter.gioi_tinh === "Nam"
+    ? "Đồng hồ nam"
+    :filter.gioi_tinh === "Nữ"
+    ? "Đồng hồ nữ"
+    :"Đồng hồ đôi"
+  );
+   
 };
 
   const handleRemoveFilter = (filterToRemove) => {
