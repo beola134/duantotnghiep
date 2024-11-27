@@ -282,7 +282,7 @@ export default function TrangsucCK() {
                       <option value="asc">Giá từ thấp tới cao</option>
                       <option value="desc">Giá từ cao tới thấp</option>
                       <option value="newest">Mới nhất</option>
-                      <option value="hot">Sản phẩm hot</option>
+                  
                     </select>
                     <div className={styles.clear}></div>
                   </div>
