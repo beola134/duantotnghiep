@@ -11,7 +11,7 @@ export default function BannerSlide1() {
 
   const cates = [
     { src: "/image/banner/banner1.jpg", alt: "Banner 1" },
-    { src: "/image/banner/banner2.png", alt: "Banner 2" },
+    { src: "/image/banner/banner2.jpg", alt: "Banner 2" },
     { src: "/image/banner/banner3.jpg", alt: "Banner 3" },
   ];
 
