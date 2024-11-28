@@ -35,22 +35,36 @@ const CartPage = () => {
     [cartItems]
   );
 
-  const ktra = async () => {
-    for (const items of cartItems) {
-      const reponse = await fetch(
-        `http://localhost:5000/product/check/${items._id}?quantity=${items.so_luong}`
-      );
-      if (!reponse.ok) {
-        Swal.fire({
-          title: "Không đủ hàng",
-          text: `Sản phẩm: ${items.ten_san_pham} Không đủ số lượng`,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-        return;
+  const ktra = async (items, newQuantity) => {
+    const reponse = await fetch(
+      `http://localhost:5000/product/check/${items._id}?quantity=${newQuantity}`
+    );
+    const data = await reponse.json();
+    if (!reponse.ok) {
+      Swal.fire({
+        title: "Không đủ hàng",
+        text: `Sản phẩm: ${items.ten_san_pham} Không đủ số lượng `,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleCheckout = async () => {
+    let canProceed = true;
+    for (const item of cartItems) {
+      const isStockAvailable = await ktra(item, item.so_luong);
+      if (!isStockAvailable) {
+        canProceed = false;
+        break; // dừng lại nếu 1 sản phẩm không đủ hàng
       }
     }
-    window.location.href="/components/thanhtoan"
+    if (canProceed) {
+      window.location.href = "/components/thanhtoan";
+    }
   };
 
   return (
@@ -111,14 +125,20 @@ const CartPage = () => {
                           <div className={styles.quantitycontrol}>
                             <button
                               className={styles.decreasebtn}
-                              onClick={() => {
+                              onClick={async () => {
                                 if (item.so_luong > 1) {
-                                  dispatch(
-                                    updateCartItemQuantity({
-                                      _id: item._id,
-                                      so_luong: item.so_luong - 1,
-                                    })
+                                  const isStockAvailable = await ktra(
+                                    item,
+                                    item.so_luong - 1
                                   );
+                                  if (isStockAvailable) {
+                                    dispatch(
+                                      updateCartItemQuantity({
+                                        _id: item._id,
+                                        so_luong: item.so_luong - 1,
+                                      })
+                                    );
+                                  }
                                 }
                               }}>
                               -
@@ -131,14 +151,20 @@ const CartPage = () => {
                             />
                             <button
                               className={styles.increasebtn}
-                              onClick={() =>
-                                dispatch(
-                                  updateCartItemQuantity({
-                                    _id: item._id,
-                                    so_luong: item.so_luong + 1,
-                                  })
-                                )
-                              }>
+                              onClick={async () => {
+                                const isStockAvailable = await ktra(
+                                  item,
+                                  item.so_luong + 1
+                                );
+                                if (isStockAvailable) {
+                                  dispatch(
+                                    updateCartItemQuantity({
+                                      _id: item._id,
+                                      so_luong: item.so_luong + 1,
+                                    })
+                                  );
+                                }
+                              }}>
                               +
                             </button>
                           </div>
@@ -200,7 +226,10 @@ const CartPage = () => {
                   </div>
                 </div>
                 <Link href="">
-                  <button type="button" id={styles.thtt} onClick={ktra}>
+                  <button
+                    type="button"
+                    id={styles.thtt}
+                    onClick={handleCheckout}>
                     Tiến hành thanh toán
                   </button>
                 </Link>
