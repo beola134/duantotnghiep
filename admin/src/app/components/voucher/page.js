@@ -70,6 +70,18 @@ export default function VoucherPage() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+          let currentPage = 1;
+          let totalPages = 1;
+          const getAllVouchers = [];
+          while (currentPage <= totalPages) {
+            const response = await fetch(
+              `http://localhost:5000/voucher/getAllVouchers?page=${currentPage}`
+            );
+            const data = await response.json();
+            getAllVouchers.push(...data.vouchers);
+            totalPages = data.totalPages;
+            currentPage++;
+          }
           const workbook = new ExcelJS.Workbook();
           const worksheet = workbook.addWorksheet("Danh sách Voucher");
           worksheet.columns = [
@@ -92,7 +104,7 @@ export default function VoucherPage() {
             cell.alignment = { vertical: "middle", horizontal: "center" };
           });
           await Promise.all(
-            vouchers.map(async (item, index) => {
+            getAllVouchers.map(async (item, index) => {
               worksheet.addRow({
                 _id: item._id,
                 ma_voucher: item.ma_voucher,
@@ -157,65 +169,103 @@ export default function VoucherPage() {
     doc.setTextColor(40);
     doc.text("Danh sách voucher", 10, 10);
 
-    // Định dạng bảng PDF với autoTable
-    doc.autoTable({
-      html: "#productTable", // Sử dụng bảng HTML để xuất
-      startY: 20,
-      styles: {
-        font: "Roboto",
-        fontSize: 10,
-        cellPadding: 4,
-        valign: "middle",
-        halign: "center",
-        textColor: 20,
-        lineColor: [200, 200, 200],
-      },
-      headStyles: {
-        fillColor: [0, 112, 192],
-        textColor: [255, 255, 255],
-        fontStyle: "bold",
-      },
-      columnStyles: {
-        0: { halign: "center", cellWidth: 25 },
-        1: { halign: "left", cellWidth: 20 },
-        2: { halign: "center", cellWidth: 20 },
-        3: { halign: "center", cellWidth: 20 },
-        4: { halign: "center", cellWidth: 25 },
-        5: { halign: "center", cellWidth: 25 },
-        6: { halign: "center", cellWidth: 25 },
-        7: { halign: "left", cellWidth: 25 },
-        8: { halign: "center", cellWidth: 25 },
-      },
+    try {
+      let currentPage = 1;
+      let totalPages = 1;
+      const allVouchers = [];
 
-      columns: [
-        { header: "ID voucher", dataKey: "_id" },
-        { header: "Mã voucher", dataKey: "ma_voucher" },
-        { header: "Giá trị", dataKey: "gia_tri" },
-        { header: "Phần trăm", dataKey: "phan_tram" },
-        { header: "Số lượng", dataKey: "so_luong" },
-        { header: "Ngày bắt đầu", dataKey: "bat_dau" },
-        { header: "Ngày kết thúc", dataKey: "ket_thuc" },
-        { header: "Ghi chú", dataKey: "mo_ta" },
-      ],
-      didDrawCell: (data) => {
-        if (data.column.index === 3) {
-          const rowIndex = data.row.index;
-          const item = vouchers[rowIndex];
+      // Fetch all pages
+      while (currentPage <= totalPages) {
+        const response = await fetch(
+          `http://localhost:5000/voucher/getAllVouchers?page=${currentPage}`
+        );
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch page ${currentPage}: ${response.statusText}`
+          );
         }
-      },
-    });
+        const data = await response.json();
+        allVouchers.push(...data.vouchers);
+        totalPages = data.totalPages;
+        currentPage++;
+      }
 
-    const date = new Date().toLocaleDateString();
-    doc.setFontSize(10);
-    doc.text(`Ngày xuất: ${date}`, 10, doc.internal.pageSize.height - 10);
-    doc.save("Voucher.pdf");
+      // Sort vouchers if needed
+      const sortedVouchers = [...allVouchers].sort((a, b) => {
+        return a._id.localeCompare(b._id);
+      });
 
-    Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu và hình ảnh đã được xuất ra PDF!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
+      // Generate PDF table
+      doc.autoTable({
+        head: [
+          [
+            "ID Voucher",
+            "Mã Voucher",
+            "Giá trị",
+            "Phần trăm",
+            "Số lượng",
+            "Ngày bắt đầu",
+            "Ngày kết thúc",
+            "Ghi chú",
+          ],
+        ],
+        body: sortedVouchers.map((item) => [
+          item._id,
+          item.ma_voucher,
+          item.gia_tri,
+          item.phan_tram,
+          item.so_luong,
+          new Date(item.bat_dau).toLocaleDateString(),
+          new Date(item.ket_thuc).toLocaleDateString(),
+          item.mo_ta || "Không có",
+        ]),
+        startY: 20,
+        styles: {
+          font: "Roboto",
+          fontSize: 10,
+          cellPadding: 4,
+          valign: "middle",
+          halign: "center",
+          textColor: 20,
+          lineColor: [200, 200, 200],
+        },
+        headStyles: {
+          fillColor: [0, 112, 192],
+          textColor: [255, 255, 255],
+          fontStyle: "bold",
+        },
+        columnStyles: {
+          0: { halign: "center", cellWidth: 25 },
+          1: { halign: "left", cellWidth: 20 },
+          2: { halign: "center", cellWidth: 20 },
+          3: { halign: "center", cellWidth: 20 },
+          4: { halign: "center", cellWidth: 25 },
+          5: { halign: "center", cellWidth: 25 },
+          6: { halign: "center", cellWidth: 25 },
+          7: { halign: "left", cellWidth: 25 },
+        },
+      });
+
+      const date = new Date().toLocaleDateString();
+      doc.setFontSize(10);
+      doc.text(`Ngày xuất: ${date}`, 10, doc.internal.pageSize.height - 10);
+      doc.save("Voucher.pdf");
+
+      Swal.fire({
+        title: "Thành công",
+        text: "Dữ liệu đã được xuất ra PDF!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    } catch (error) {
+      console.error("Lỗi khi xuất PDF:", error);
+      Swal.fire({
+        title: "Lỗi",
+        text: "Không thể xuất file PDF. Vui lòng thử lại!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
   };
 
   const convertToVietnamTime = (dateString) => {
