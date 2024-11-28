@@ -139,6 +139,18 @@ export default function DanhmucPage() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+          let currentPage = 1;
+          let totalPages = 1;
+          const allCates = [];
+          while (currentPage <= totalPages) {
+            const response = await fetch(
+              `http://localhost:5000/cate/allcate?page=${currentPage}`
+            );
+            const data = await response.json();
+            allCates.push(...data.cates);
+            totalPages = data.totalPages;
+            currentPage++;
+          }
           const workbook = new ExcelJS.Workbook();
           const worksheet = workbook.addWorksheet("Danh sách danh mục");
           worksheet.columns = [
@@ -157,7 +169,7 @@ export default function DanhmucPage() {
             cell.alignment = { vertical: "middle", horizontal: "center" };
           });
           await Promise.all(
-            cates.map(async (item, index) => {
+            allCates.map(async (item, index) => {
               worksheet.addRow({
                 _id: item._id,
                 ten_danh_muc: item.ten_danh_muc,
@@ -237,108 +249,146 @@ export default function DanhmucPage() {
     doc.setTextColor(40);
     doc.text("Danh sách danh mục", 10, 10);
 
-    const sortedCates = [...cates].sort((a, b) => {
-      return a._id.localeCompare(b._id);
-    });
+    try {
+      let currentPage = 1;
+      let totalPages = 1;
+      const allCates = [];
 
-    const images = await Promise.all(
-      sortedCates.map((item) => {
-        if (item.hinh_anh) {
-          const imageUrl = `http://localhost:5000/images/${item.hinh_anh}`;
-          return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.src = imageUrl;
-            img.onload = () => {
-              resolve({
-                id: item._id,
-                img,
-              });
-            };
-            img.onerror = () => {
-              console.error(`Không thể tải ảnh từ URL: ${imageUrl}`);
-              resolve({
-                id: item._id,
-                img: null,
-              });
-            };
-          });
-        }
-        return Promise.resolve({ id: item._id, img: null });
-      })
-    );
-
-    doc.autoTable({
-      html: "#productTable", // Sử dụng bảng HTML để xuất
-      startY: 20,
-      styles: {
-        font: "Roboto",
-        fontSize: 10,
-        cellPadding: 4,
-        valign: "middle",
-        halign: "center",
-        textColor: 20,
-        lineColor: [200, 200, 200],
-      },
-      headStyles: {
-        fillColor: [0, 112, 192],
-        textColor: [255, 255, 255],
-        fontStyle: "bold",
-      },
-      columnStyles: {
-        0: { halign: "center", cellWidth: 20 },
-        1: { halign: "left", cellWidth: 50 },
-        2: { halign: "center", cellWidth: 70 },
-        3: { halign: "center", cellWidth: 40 },
-      },
-      columns: [
-        { header: "ID danh mục", dataKey: "_id" },
-        { header: "Tên danh mục", dataKey: "ten_danh_muc" },
-        { header: "Mô tả", dataKey: "mo_ta" },
-        { header: "Hình ảnh danh mục", dataKey: "hinh_anh" },
-      ],
-      body: sortedCates.map((item) => ({
-        _id: item._id,
-        ten_danh_muc: item.ten_danh_muc,
-        mo_ta: item.mo_ta,
-        hinh_anh: item.hinh_anh ? "Hình ảnh" : "Không có",
-      })),
-      didDrawCell: (data) => {
-        if (data.column.index === 3) {
-          const rowIndex = data.row.index;
-          const imageData = images.find(
-            (img) => img.id === sortedCates[rowIndex]._id
+      // Fetch all pages
+      while (currentPage <= totalPages) {
+        const response = await fetch(
+          `http://localhost:5000/cate/allcate?page=${currentPage}`
+        );
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch page ${currentPage}: ${response.statusText}`
           );
-
-          if (imageData && imageData.img) {
-            const offsetX = data.cell.x - 60; // Căn chỉnh X
-            const offsetY = data.cell.y + 20; // Căn chỉnh Y
-            const imageWidth = Math.min(30, imageData.img.width);
-            const imageHeight = Math.min(30, imageData.img.height);
-
-            doc.addImage(
-              imageData.img,
-              imageData.img.src.endsWith(".png") ? "PNG" : "JPEG",
-              offsetX,
-              offsetY,
-              imageWidth,
-              imageHeight
-            );
-          }
         }
-      },
-    });
+        const data = await response.json();
+        allCates.push(...data.cates);
+        totalPages = data.totalPages;
+        currentPage++;
+      }
 
-    const date = new Date().toLocaleDateString();
-    doc.setFontSize(10);
-    doc.text(`Ngày xuất: ${date}`, 10, doc.internal.pageSize.height - 10);
-    doc.save("danhmuc.pdf");
+      const sortedCates = [...allCates].sort((a, b) => {
+        return a._id.localeCompare(b._id);
+      });
 
-    Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu và hình ảnh đã được xuất ra PDF!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
+      // Load all images
+      const images = await Promise.all(
+        sortedCates.map((item) => {
+          if (item.hinh_anh) {
+            const imageUrl = `http://localhost:5000/images/${item.hinh_anh}`;
+            return new Promise((resolve) => {
+              const img = new Image();
+              img.crossOrigin = "Anonymous";
+              img.src = imageUrl;
+              img.onload = () => {
+                resolve({
+                  id: item._id,
+                  img: img,
+                });
+              };
+              img.onerror = () => {
+                console.error(`Không thể tải ảnh từ URL: ${imageUrl}`);
+                resolve({
+                  id: item._id,
+                  img: null,
+                });
+              };
+            });
+          }
+          return Promise.resolve({ id: item._id, img: null });
+        })
+      );
+
+      // Generate PDF table
+      doc.autoTable({
+        head: [["ID danh mục", "Tên danh mục", "Mô tả", "Hình ảnh danh mục"]],
+        body: sortedCates.map((item) => [
+          item._id,
+          item.ten_danh_muc,
+          item.mo_ta,
+          item.hinh_anh ? "Hình ảnh" : "Không có",
+        ]),
+        startY: 20,
+        styles: {
+          font: "Roboto",
+          fontSize: 10,
+          cellPadding: 4,
+          valign: "middle",
+          halign: "center",
+          textColor: 20,
+          lineColor: [200, 200, 200],
+        },
+        headStyles: {
+          fillColor: [0, 112, 192],
+          textColor: [255, 255, 255],
+          fontStyle: "bold",
+        },
+        columnStyles: {
+          0: { halign: "center", cellWidth: 30 },
+          1: { halign: "left", cellWidth: 50 },
+          2: { halign: "left", cellWidth: 80 },
+          3: { halign: "center", cellWidth: 40 },
+        },
+        didDrawCell: (data) => {
+          if (data.column.index === 3 && data.cell.raw === "Hình ảnh") {
+            const rowIndex = data.row.index;
+            const imageData = images.find(
+              (img) => img.id === sortedCates[rowIndex]._id
+            );
+
+            if (imageData && imageData.img) {
+              const img = imageData.img;
+              const imgWidth = 30;
+              const imgHeight = 30;
+              const posX = data.cell.x + (data.cell.width - imgWidth) / 2;
+              const posY = data.cell.y + 1;
+
+              // Convert Image to Data URL
+              const canvas = document.createElement("canvas");
+              canvas.width = img.width;
+              canvas.height = img.height;
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(img, 0, 0);
+              const imgData = canvas.toDataURL(
+                img.src.endsWith(".png") ? "image/png" : "image/jpeg"
+              );
+
+              doc.addImage(
+                imgData,
+                img.src.endsWith(".png") ? "PNG" : "JPEG",
+                posX,
+                posY,
+                imgWidth,
+                imgHeight
+              );
+            }
+          }
+        },
+      });
+
+      const date = new Date().toLocaleDateString();
+      doc.setFontSize(10);
+      doc.text(`Ngày xuất: ${date}`, 10, doc.internal.pageSize.height - 10);
+      doc.save("danhmuc.pdf");
+
+      Swal.fire({
+        title: "Thành công",
+        text: "Dữ liệu và hình ảnh đã được xuất ra PDF!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    } catch (error) {
+      console.error("Lỗi khi xuất PDF:", error);
+      Swal.fire({
+        title: "Lỗi",
+        text: "Không thể xuất file PDF. Vui lòng thử lại!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
   };
 
   if (loading) return <div>Đang tải dữ liệu...</div>;
@@ -404,14 +454,14 @@ export default function DanhmucPage() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-                <th style={{ width: "15%", textAlign: "center" }}>
+                <th style={{ width: "10%", textAlign: "center" }}>
                   Id Danh mục
                 </th>
-                <th style={{ width: "12%", textAlign: "center" }}>
+                <th style={{ width: "10%", textAlign: "center" }}>
                   Tên danh mục
                 </th>
-                <th style={{ width: "10%", textAlign: "center" }}>Hình ảnh</th>
-                <th style={{ width: "10%", textAlign: "center" }}>Mô tả</th>
+                <th style={{ width: "15%", textAlign: "center" }}>Hình ảnh</th>
+                <th style={{ width: "20%", textAlign: "center" }}>Mô tả</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
               </tr>
             </thead>
@@ -439,7 +489,9 @@ export default function DanhmucPage() {
                       <td style={{ width: "10%", textAlign: "center" }}>
                         <img src={`http://localhost:5000/images/${hinh_anh}`} />
                       </td>
-                      <td style={{ textAlign: "center" }}>{mo_ta}</td>
+                      <td style={{ textAlign: "center" }}>
+                        <p className={styles.mota}>{mo_ta}</p>
+                      </td>
                       <td style={{ textAlign: "center" }}>
                         <Link
                           href={`/components/suadanhmuc/${_id}`}
