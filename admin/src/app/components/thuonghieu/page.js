@@ -197,15 +197,58 @@ const exportToPDF = async () => {
   doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
   doc.setFont("Roboto");
 
-  // Tiêu đề file PDF
   doc.setFontSize(16);
   doc.setTextColor(40);
   doc.text("Danh sách thương hiệu", 10, 10);
 
-  // Định dạng bảng PDF với autoTable
+  const getBase64ImageFromURL = (url) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.src = url;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const base64 = canvas.toDataURL("image/png", 1.0);
+        resolve(base64);
+      };
+      img.onerror = (error) => reject(error);
+    });
+  };
+
+  const imageCache = {};
+  for (const item of categories) {
+    if (item.hinh_anh2) {
+      const imageUrl = `http://localhost:5000/images/${item.hinh_anh2}`;
+      try {
+        const base64Image = await getBase64ImageFromURL(imageUrl);
+        imageCache[item.hinh_anh2] = base64Image;
+      } catch (error) {
+        console.error(`Không thể tải ảnh: ${imageUrl}`, error);
+      }
+    }
+  }
+
+  // Thêm một hàng trống vào đầu bảng
+  const dataTable = [
+    // Hàng trống đầu tiên
+    { _id: "", mo_ta: "", thuong_hieu: "", hinh_anh2: "" }, // Hàng trống
+
+    // Dữ liệu các hàng tiếp theo
+    ...categories.map((item) => ({
+      _id: item._id,
+      mo_ta: item.mo_ta,
+      thuong_hieu: item.thuong_hieu,
+      hinh_anh2: item.hinh_anh2,
+    })),
+  ];
+
+  // Tạo bảng với startY = 40 để tạo khoảng trống giữa tiêu đề và dữ liệu đầu tiên
   doc.autoTable({
-    html: "#productTable", // Sử dụng bảng HTML để xuất
-    startY: 20,
+    body: dataTable, // Sử dụng dữ liệu với hàng trống đầu tiên
     styles: {
       font: "Roboto",
       fontSize: 10,
@@ -222,9 +265,9 @@ const exportToPDF = async () => {
     },
     columnStyles: {
       0: { halign: "center", cellWidth: 20 },
-      1: { halign: "left", cellWidth: 50 }, // Ghi chú
-      2: { halign: "center", cellWidth: 70 }, // Tên thương hiệu
-      3: { halign: "center", cellWidth: 40 }, // Hình ảnh
+      1: { halign: "left", cellWidth: 50 },
+      2: { halign: "center", cellWidth: 50 },
+      3: { halign: "center", cellWidth: 50 },
     },
     columns: [
       { header: "ID thương hiệu", dataKey: "_id" },
@@ -233,45 +276,38 @@ const exportToPDF = async () => {
       { header: "Ảnh thương hiệu", dataKey: "hinh_anh2" },
     ],
     didDrawCell: (data) => {
-      if (data.column.index === 3) {
-        const rowIndex = data.row.index;
-        const item = displayCategories[rowIndex];
+      
+      if (data.row.index > 0) {
+        const rowIndex = data.row.index - 1; 
+        const item = categories[rowIndex];
 
-        if (item && item.hinh_anh2) {
-          const imageUrl = `http://localhost:5000/images/${item.hinh_anh2}`;
-          const img = new Image();
-          img.src = imageUrl;
+        if (
+          item &&
+          item.hinh_anh2 &&
+          imageCache[item.hinh_anh2] &&
+          data.column.index === 3
+        ) {
+          const base64Image = imageCache[item.hinh_anh2];
+          const yPosition = data.cell.y + data.cell.height / 2 - 30 / 2;
 
-          img.onload = () => {
-            const imageFormat = imageUrl.endsWith(".png") ? "PNG" : "JPEG";
-            const offsetX = data.cell.x + 5; // X offset để căn chỉnh ảnh với ô
-            const offsetY = data.cell.y + 2; // Y offset để căn chỉnh ảnh với ô
-            const imageWidth = Math.min(30, img.width); 
-            const imageHeight = Math.min(30, img.height);
-
-            doc.addImage(
-              img,
-              imageFormat,
-              offsetX, 
-              offsetY, 
-              imageWidth, 
-              imageHeight 
-            );
-          };
-
-          img.onerror = (error) => {
-            console.error(`Không thể tải ảnh: ${imageUrl}`, error);
-          };
+          doc.addImage(
+            base64Image,
+            "PNG",
+            data.cell.x + data.cell.width / 2 - 15, 
+            yPosition,
+            30, 
+            30  
+          );
         }
       }
     },
+    startY: 20, 
+    margin: { top: 30 }
   });
-
   const date = new Date().toLocaleDateString();
   doc.setFontSize(10);
   doc.text(`Ngày xuất: ${date}`, 10, doc.internal.pageSize.height - 10);
   doc.save("Thuonghieu.pdf");
-
   Swal.fire({
     title: "Thành công",
     text: "Dữ liệu và hình ảnh đã được xuất ra PDF!",
@@ -279,11 +315,6 @@ const exportToPDF = async () => {
     confirmButtonText: "OK",
   });
 };
-
-
-
-
-
 
 
 
