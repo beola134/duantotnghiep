@@ -510,7 +510,7 @@ export default function Main() {
         <div className={styles.title}>
           <p className={styles.titleIndex}>THƯƠNG HIỆU NỔI BẬT</p>
           <p>
-            <a href="#">Xem tất cả &raquo;</a>
+            <Link href="/components/thuonghieu">Xem tất cả &raquo;</Link>
           </p>
         </div>
         <div className={styles.owlItem}>
