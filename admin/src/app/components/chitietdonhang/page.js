@@ -7,7 +7,6 @@ import "jspdf-autotable";
 import ExcelJS from "exceljs";
 import RobotoRegular from "../taikhoan/Roboto-Regular.base64";
 
-// pdf
 
 
 export default function ChiTietDonHang() {
@@ -15,7 +14,7 @@ export default function ChiTietDonHang() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [displayUsers, setDisplayUsers] = useState([]);
-  const [itemsPerPage, setItemsPerPage  ] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -84,19 +83,21 @@ export default function ChiTietDonHang() {
   }
   
   const copyData = () => {
-    const table = document.getElementById("productTable");
-    const range = document.createRange();
-    range.selectNode(table);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-    document.execCommand("copy");
+    if (typeof document !== "undefined") {
+      const table = document.getElementById("productTable");
+      const range = document.createRange();
+      range.selectNode(table);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      document.execCommand("copy");
 
-    Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu đã được sao chép!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
+      Swal.fire({
+        title: "Thành công",
+        text: "Dữ liệu đã được sao chép!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    }
   };
   
   // Hàm xuất dữ liệu ra Excel
@@ -111,8 +112,10 @@ export default function ChiTietDonHang() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+
           const workbook = new ExcelJS.Workbook();
           const worksheet = workbook.addWorksheet("Danh Sách Sản Phẩm Đã Bán");
+          
           worksheet.columns = [
             { header: "ID", key: "_id", width: 20 },
             { header: "Giá Sản Phẩm", key: "gia_san_pham", width: 25 },
@@ -438,5 +441,5 @@ export default function ChiTietDonHang() {
         </div>
       </section>
     </div>
-);
+  );
 }
