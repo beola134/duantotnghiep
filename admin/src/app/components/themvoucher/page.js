@@ -54,7 +54,6 @@ export default function ThemVoucher() {
       return;
     }
 
-
     const formData = {
       ma_voucher: maVouchers,
       gia_tri: giatri,
@@ -181,16 +180,22 @@ export default function ThemVoucher() {
                     onChange={(e) => setmota(e.target.value)}
                   />
                 </div>
-                {errorMessage && (
-                  <div className="alert alert-danger">{errorMessage}</div>
-                )}
                 <button
                   type="submit"
                   className="btn btn-outline-primary"
                   onClick={handleSubmit}>
                   Thêm
                 </button>
-                <button type="button" className="btn btn-outline-secondary">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={() =>
+                    Swal.fire({
+                      icon: "info",
+                      title: "Hủy bỏ",
+                      text: "Bạn đã hủy thêm voucher.",
+                    })
+                  }>
                   Hủy bỏ
                 </button>
               </div>

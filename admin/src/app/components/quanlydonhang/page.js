@@ -4,6 +4,11 @@ import styles from "./donhang.module.css";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import ExcelJS from "exceljs";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import RobotoRegular from "../taikhoan/Roboto-Regular.base64";
+
 const statusOptions = [
   "Chờ xác nhận",
   "Đã xác nhận",
@@ -106,32 +111,216 @@ export default function DonHang() {
   };
 
   // Hàm xuất dữ liệu ra Excel
-  const exportToExcel = () => {
-    const table = document.getElementById("productTable");
-    const workbook = XLSX.utils.table_to_book(table);
-    XLSX.writeFile(workbook, "products.xlsx");
-
+  const exportToExcel = async () => {
     Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu đã được xuất ra Excel!",
-      icon: "success",
-      confirmButtonText: "OK",
+      title: "Xác nhận",
+      text: "Bạn có chắc chắn muốn xuất dữ liệu ra file Excel?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Xuất",
+      cancelButtonText: "Hủy",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          // Tạo workbook mới
+          const workbook = new ExcelJS.Workbook();
+          const worksheet = workbook.addWorksheet("Danh sách đơn hàng");
+
+          // Định nghĩa cột
+          worksheet.columns = [
+            { header: "ID đơn hàng", key: "_id", width: 18 },
+            { header: "Địa chỉ", key: "dia_chi", width: 25 },
+            { header: "Tên khách hàng", key: "ho_ten", width: 20 },
+            { header: "Số điện thoại", key: "dien_thoai", width: 15 },
+            { header: "Ghi chú", key: "ghi_chu", width: 25 },
+            { header: "Ngày mua", key: "thoi_gian_tao", width: 15 },
+            { header: "Tổng tiền", key: "tong_tien", width: 15 },
+            { header: "Tình trạng", key: "trang_thai", width: 20 },
+          ];
+
+          // Thiết lập định dạng cho dòng tiêu đề
+          worksheet.getRow(1).eachCell((cell) => {
+            cell.font = { bold: true, color: { argb: "FFFFFF" } };
+            cell.fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: "0070C0" },
+            };
+            cell.alignment = { vertical: "middle", horizontal: "center" };
+          });
+
+          // Lấy dữ liệu từ bảng HTML và thêm vào Excel
+          const rows = Array.from(
+            document.querySelectorAll("#productTable tbody tr")
+          );
+
+          rows.forEach((row) => {
+            const cols = row.querySelectorAll("td");
+            const id = cols[0].textContent.trim();
+            const diaChi = cols[1].textContent.trim();
+            const hoTen = cols[2].textContent.trim();
+            const dienThoai = cols[3].textContent.trim();
+            const ghiChu = cols[4].textContent.trim();
+            const ngayMua = cols[5].textContent.trim();
+            const tongTien = cols[6].textContent.trim();
+            const tinhTrang =
+              cols[7].querySelector("select").options[
+                cols[7].querySelector("select").selectedIndex
+              ].text;
+
+            // Thêm dòng vào worksheet
+            worksheet.addRow({
+              _id: id,
+              dia_chi: diaChi,
+              ho_ten: hoTen,
+              dien_thoai: dienThoai,
+              ghi_chu: ghiChu,
+              thoi_gian_tao: ngayMua,
+              tong_tien: tongTien,
+              trang_thai: tinhTrang,
+            });
+          });
+
+          // Thiết lập border cho các ô
+          worksheet.eachRow((row) => {
+            row.eachCell((cell) => {
+              cell.border = {
+                top: { style: "thin" },
+                left: { style: "thin" },
+                bottom: { style: "thin" },
+                right: { style: "thin" },
+              };
+            });
+          });
+
+          // Tạo file Excel và tải về
+          const buffer = await workbook.xlsx.writeBuffer();
+          const blob = new Blob([buffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "danh_sach_don_hang.xlsx";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+
+          Swal.fire({
+            title: "Thành công",
+            text: "Dữ liệu đã được xuất ra file Excel!",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+        } catch (error) {
+          console.error("Lỗi khi xuất Excel:", error);
+          Swal.fire({
+            title: "Lỗi",
+            text: "Không thể xuất file Excel. Vui lòng thử lại!",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        }
+      }
     });
   };
+
 
   // Hàm xuất dữ liệu ra PDF
   const exportToPDF = () => {
-    const doc = new jsPDF();
-    doc.autoTable({ html: "#productTable" });
-    doc.save("products.pdf");
-
     Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu đã được xuất ra PDF!",
-      icon: "success",
-      confirmButtonText: "OK",
+      title: "Xác nhận",
+      text: "Bạn có chắc chắn muốn xuất dữ liệu ra file PDF?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Xuất",
+      cancelButtonText: "Hủy",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          const doc = new jsPDF();
+          doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
+          doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+          doc.setFont("Roboto");
+          doc.setFontSize(18);
+          doc.text("Danh sách đơn hàng", 14, 20);
+          const rows = [];
+          const headers = [
+            "ID đơn hàng",
+            "Địa chỉ",
+            "Tên khách hàng",
+            "Số điện thoại",
+            "Ghi chú",
+            "Ngày mua",
+            "Tổng tiền",
+            "Tình trạng",
+          ];
+          const tableRows = document.querySelectorAll("#productTable tbody tr");
+          tableRows.forEach((row) => {
+            const cols = row.querySelectorAll("td");
+            const id = cols[0].textContent.trim();
+            const diaChi = cols[1].textContent.trim();
+            const hoTen = cols[2].textContent.trim();
+            const dienThoai = cols[3].textContent.trim();
+            const ghiChu = cols[4].textContent.trim();
+            const ngayMua = cols[5].textContent.trim();
+            const tongTien = cols[6].textContent.trim();
+            const tinhTrang =
+              cols[7].querySelector("select").options[
+                cols[7].querySelector("select").selectedIndex
+              ].text;
+            rows.push([
+              id,
+              diaChi,
+              hoTen,
+              dienThoai,
+              ghiChu,
+              ngayMua,
+              tongTien,
+              tinhTrang,
+            ]);
+          });
+          doc.autoTable({
+            head: [headers],
+            body: rows,
+            startY: 30,
+            theme: "grid",
+            headStyles: {
+              fillColor: [0, 112, 192],
+              textColor: [255, 255, 255],
+            },
+            styles: { font: "Roboto", fontSize: 10 },
+            columnStyles: {
+              0: { cellWidth: 25 }, // ID đơn hàng
+              1: { cellWidth: 20 }, // Địa chỉ
+              2: { cellWidth: 30 }, // Tên khách hàng
+              3: { cellWidth: 20 }, // Số điện thoại
+              4: { cellWidth: 15 }, // Ghi chú
+              5: { cellWidth: 25 }, // Ngày mua
+              6: { cellWidth: 30 }, // Tổng tiền
+              7: { cellWidth: 27 }, // Tình trạng
+            },
+          });
+          doc.save("danh_sach_don_hang.pdf");
+          Swal.fire({
+            title: "Thành công",
+            text: "Dữ liệu đã được xuất ra file PDF!",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+        } catch (error) {
+          console.error("Lỗi khi xuất PDF:", error);
+          Swal.fire({
+            title: "Lỗi",
+            text: "Không thể xuất file PDF. Vui lòng thử lại!",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        }
+      }
     });
   };
+
 
 
 
@@ -293,6 +482,7 @@ export default function DonHang() {
                   />
                 </div>
               </div>
+              {displayDonhang.length > 0 ? (
               <table id="productTable" className={styles.productTable}>
                 <thead>
                   <tr>
@@ -338,7 +528,12 @@ export default function DonHang() {
                           "Đang tải..."}
                       </td>
                       <td>{item.ghi_chu}</td>
-                      <td>{item.thoi_gian_tao}</td>
+                      <td>{new Intl.DateTimeFormat('vi-VN', { 
+                        day: '2-digit', 
+                        month: '2-digit', 
+                        year: 'numeric'
+                  
+                      }).format(new Date(item.thoi_gian_tao))}</td>
                       <td>{item.tong_tien.toLocaleString("vi-VN")}₫</td>
 
                       <td style={{ "text-align": "center" }}>
@@ -391,10 +586,23 @@ export default function DonHang() {
                   ))}
                 </tbody>
               </table>
+              ) : (
+                <p
+                  style={{
+                    textAlign: "center",
+                    marginTop: "20px",
+                    fontStyle: "italic",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Không tìm thấy dữ liệu cần tìm.
+                </p>
+              )}
+
 
               <div className={styles.pagination}>
                 <span>
-                  Hiện 1 đến {displayDonhang.length} của{" "}
+                  Hiện thị {displayDonhang.length} của{" "}
                   {filteredDonhangs.length || donHangs.length} đơn hàng
                 </span>
                 <div className={styles.paginationControls}>

@@ -297,34 +297,6 @@ export default function AdminStatistics() {
         <div className={cx("content-data")}>
           <div className={cx("head")}>
             <h3>Biểu đồ doanh thu 12 tháng</h3>
-            <div className={cx("menu", "dropdown")}>
-              <i
-                className="bx bx-dots-horizontal-rounded icon"
-                id="dropdownMenuButton"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              ></i>
-              <ul
-                className={cx("dropdown-menu", "dropdown-menu-end")}
-                aria-labelledby="dropdownMenuButton"
-              >
-                <li>
-                  <a className={cx("dropdown-item")} href="#">
-                    Edit
-                  </a>
-                </li>
-                <li>
-                  <a className={cx("dropdown-item")} href="#">
-                    Save
-                  </a>
-                </li>
-                <li>
-                  <a className={cx("dropdown-item")} href="#">
-                    Remove
-                  </a>
-                </li>
-              </ul>
-            </div>
           </div>
           <div className={cx("chart")}>
             <div id="chart1">
@@ -335,34 +307,6 @@ export default function AdminStatistics() {
         <div className={cx("content-data")}>
           <div className={cx("head")}>
             <h3>Trạng Thái Đơn Hàng</h3>
-            <div className={cx("menu", "dropdown")}>
-              <i
-                className="bx bx-dots-horizontal-rounded icon"
-                id={cx("dropdownMenuButton")}
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              ></i>
-              <ul
-                className="dropdown-menu dropdown-menu-end"
-                aria-labelledby="dropdownMenuButton"
-              >
-                <li>
-                  <a className={cx("dropdown-item")} href="#">
-                    Edit
-                  </a>
-                </li>
-                <li>
-                  <a className={cx("dropdown-item")} href="#">
-                    Save
-                  </a>
-                </li>
-                <li>
-                  <a className={cx("dropdown-item")} href="#">
-                    Remove
-                  </a>
-                </li>
-              </ul>
-            </div>
           </div>
           <div className={cx("chat-box")}>
             <div id="chart">
@@ -373,92 +317,45 @@ export default function AdminStatistics() {
         <div className={cx("content-data")}>
           <div className={cx("head")}>
             <h3>Người dùng mới</h3>
-            <div className={cx("menu", "dropdown")}>
-              <i
-                className={`bx bx-dots-horizontal-rounded ${cx("icon")}`}
-                id="dropdownMenuButton"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              ></i>
-              <ul
-                className="dropdown-menu dropdown-menu-end"
-                aria-labelledby="dropdownMenuButton"
-              >
-                <li>
-                  <a className={cx("dropdown-item")} href="#">
-                    Edit
-                  </a>
-                </li>
-                <li>
-                  <a className={cx("dropdown-item")} href="#">
-                    Save
-                  </a>
-                </li>
-                <li>
-                  <a className={cx("dropdown-item")} href="#">
-                    Remove
-                  </a>
-                </li>
-              </ul>
-            </div>
           </div>
           <div className={cx("chat-box")}>
-            <table className={cx("customer-table")}>
-              <thead className={cx("cuttom1")}>
-                <tr>
-                  <th >ID</th>
-                  <th >Tên khách hàng</th>
-                  <th>Email</th>
-                  <th >Số điện thoại</th>
-                </tr>
-              </thead>
-              <tbody>
-                {userNew.map((item, index) => (
-                  <tr key={item._id} style={{"text-align": "center"}}>
-                    <td>{index + 1}</td> 
-                    <td>{item.ho_ten}</td>
-                    <td>{item.email}</td>
-                    <td>{item.dien_thoai}</td>
+            {userNew.length > 0 ? (
+              <table className={cx("customer-table")}>
+                <thead className={cx("cuttom1")}>
+                  <tr>
+                    <th>ID</th>
+                    <th>Tên khách hàng</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
                   </tr>
+                </thead>
+                <tbody>
+                  {userNew.map((item, index) => (
+                    <tr key={item._id} style={{ textAlign: "center" }}>
+                      <td>{index + 1}</td>
+                      <td>{item.ho_ten}</td>
+                      <td>{item.email}</td>
+                      <td>{item.dien_thoai}</td>
+                    </tr>
                   ))}
-                
-                  
-                
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            ) : (
+              <p
+                style={{
+                  textAlign: "center",
+                  marginTop: "20px",
+                  fontStyle: "italic",
+                }}
+              >
+                Không có người mới ngày hôm nay.
+              </p>
+            )}
           </div>
         </div>
         <div className={cx("content-data")}>
           <div className={cx("head")}>
             <h3>Trạng Thái Đơn Hàng</h3>
-            <div className={`${cx("menu")} dropdown`}>
-              <i
-                className={`bx bx-dots-horizontal-rounded ${cx("icon")}`}
-                id="dropdownMenuButton"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              ></i>
-              <ul
-                className="dropdown-menu dropdown-menu-end"
-                aria-labelledby="dropdownMenuButton"
-              >
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Edit
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Save
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Remove
-                  </a>
-                </li>
-              </ul>
-            </div>
           </div>
           <div className={cx("chat-box")}>
             <div className={cx("table-container")}>
@@ -471,7 +368,7 @@ export default function AdminStatistics() {
                   </tr>
                 </thead>
                 <tbody>
-                  {oder.map((item)=>(
+                  {oder.map((item) => (
                     <tr>
                       <td>
                         <div className={cx("user-info")}>
@@ -482,17 +379,18 @@ export default function AdminStatistics() {
                           <span>{item.user.ho_ten}</span>
                         </div>
                       </td>
-                      <td>{new Date(item.thoi_gian_tao).toLocaleDateString('vi-VN')}</td>
+                      <td>
+                        {new Date(item.thoi_gian_tao).toLocaleDateString(
+                          "vi-VN"
+                        )}
+                      </td>
                       <td>
                         <span className={`${cx("status", "completed")}`}>
                           {item.trang_thai}
                         </span>
                       </td>
                     </tr>
-                    ))}
-                    
-                  
-                  
+                  ))}
                 </tbody>
               </table>
             </div>

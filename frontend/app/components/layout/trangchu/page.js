@@ -250,7 +250,7 @@ export default function Main() {
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
                     </Link>
                     <p>
-                      <small>{item.ten_san_pham}</small>
+                      <h3 >{item.ten_san_pham}</h3>
                     </p>
                     <br />
                     <b>{item.ma_san_pham}</b>
@@ -506,11 +506,11 @@ export default function Main() {
           </div>
         </div>
       </section>
-      <section className={styles.slideSection}>
+      <section className={styles.slideSection} style={{marginBottom: "150px"}}>
         <div className={styles.title}>
           <p className={styles.titleIndex}>THƯƠNG HIỆU NỔI BẬT</p>
           <p>
-            <a href="#">Xem tất cả &raquo;</a>
+            <Link href="/components/thuonghieu">Xem tất cả &raquo;</Link>
           </p>
         </div>
         <div className={styles.owlItem}>
@@ -608,64 +608,61 @@ export default function Main() {
         </div>
       </div>
       <div className={cx("container-news")}>
-        <h2 className={cx("title-unline")}>TIN TỨC - VIDEO</h2>
+        <h2 className={cx("title-unline")}><p>TIN TỨC - VIDEO</p></h2>
         <div className={cx("section-news")}>
           {/* Phần tin tức */}
           <div className={cx("news-section")}>
             <div className={cx("item-left")}>
               <div className={cx("item-1")}>
                 <div className={cx("news-item")}>
-                  <h4>Lịch sử thương hiệu đồng hồ Maurice Lacroix</h4>
-                  <p>
-                    Với tuổi đời còn non trẻ trong làng chế tác đồng hồ Thụy Sỹ nhưng Maurice Lacroix đã dần khẳng định
-                    được vị thế là nhà...
+                  <h4 style={{ fontWeight: "bold", marginBottom: "10px", maxWidth: "290px" }}>Mạnh mẽ, tươi trẻ cùng đồng hồ quataz mặt xanh lá</h4>
+                  <p style={{ maxWidth: "290px"}}>
+                    Xanh lá - màu sắc của sự sống và hy vọng, là biểu tượng hoàn hảo cho mùa lễ hội. Đồng hồ mặt xanh lá cây không chỉ là...
                   </p>
                   <p>
                     <i className="fa-solid fa-calendar-days"></i>
-                    <small>04/10/2024</small>
+                    <small>23/11/2024</small>
                   </p>
                 </div>
                 <img
-                  src="/image/item/icons/maurice-lacroix-brand-luxe-history_1728024212.jpg.webp"
-                  alt="Maurice Lacroix"
+                  src="/image/item/icons/12_1732510594.jpg.webp"
+                  alt=""
                 />
               </div>
 
-              {/* Lặp lại các item tương tự */}
+             
               <div className={cx("item-1")}>
                 <div className={cx("news-item")}>
-                  <h4>Lịch sử thương hiệu đồng hồ Maurice Lacroix</h4>
-                  <p>
-                    Với tuổi đời còn non trẻ trong làng chế tác đồng hồ Thụy Sỹ nhưng Maurice Lacroix đã dần khẳng định
-                    được vị thế là nhà...
+                  <h4 style={{ fontWeight: "bold" , marginBottom: "10px", maxWidth: "290px"}}>Giáng sinh thêm phần rực rỡ với top 10 mẫu đồng hồ cơ mặt xanh lá</h4>
+                  <p style={{ maxWidth: "290px"}}>
+                    Đồng hồ cơ mặt số màu xanh lá cây, một màu sắc của sự tươi trẻ, hy vọng và tràn đầy năng lượng, rất phù hợp với không...
                   </p>
                   <p>
                     <i className="fa-solid fa-calendar-days"></i>
-                    <small>04/10/2024</small>
+                    <small>23/11/2024</small>
                   </p>
                 </div>
                 <img
-                  src="/image/item/icons/maurice-lacroix-brand-luxe-history_1728024212.jpg.webp"
-                  alt="Maurice Lacroix"
+                  src="/image/item/icons/11_1732510806.jpg.webp"
+                  alt=""
                 />
               </div>
 
-              {/* Và tiếp tục thêm các item khác */}
+              
               <div className={cx("item-1")}>
                 <div className={cx("news-item")}>
-                  <h4>Lịch sử thương hiệu đồng hồ Maurice Lacroix</h4>
-                  <p>
-                    Với tuổi đời còn non trẻ trong làng chế tác đồng hồ Thụy Sỹ nhưng Maurice Lacroix đã dần khẳng định
-                    được vị thế là nhà...
+                  <h4 style={{ fontWeight: "bold", marginBottom: "10px", maxWidth: "290px" }}>Lựa chòn màu mặt đồng hồ theo nguyên tắc phong thủy  </h4>
+                  <p style={{ maxWidth: "290px"}}>
+                    Lựa chọn màu mặt đồng hồ theo nguyên tắc phong thủy để giúp giúp tăng cường năng lượng và sức khỏe cũng như những vấn đề...
                   </p>
                   <p>
                     <i className="fa-solid fa-calendar-days"></i>
-                    <small>04/10/2024</small>
+                    <small>25/11/2024</small>
                   </p>
                 </div>
                 <img
-                  src="/image/item/icons/maurice-lacroix-brand-luxe-history_1728024212.jpg.webp"
-                  alt="Maurice Lacroix"
+                  src="/image/item/icons/26_1732525206-copy.jpg.webp"
+                  alt=""
                 />
               </div>
             </div>
@@ -680,27 +677,27 @@ export default function Main() {
 
             {/* Video chính */}
             <div className={cx("video-wrapper")}>
-              <iframe src="https://www.youtube.com/embed/H32605581" frameBorder="0" allowFullScreen></iframe>
+              <iframe src="https://www.youtube.com/embed/LiE0xipwl2I?si=ANkzcG22yghBN08r" frameBorder="0" allowFullScreen></iframe>
             </div>
             <h4 className={cx("title-video")}>Review Đồng Hồ Hamilton Jazzmaster GMT Auto H32605581</h4>
 
             {/* Video liên quan */}
             <div className={cx("related-videos")}>
               <div className={cx("related-video")}>
-                <iframe src="https://www.youtube.com/embed/ID1" frameBorder="0" allowFullScreen></iframe>
-                <p className={cx("title-videos")}>Review Đồng Hồ</p>
+                <iframe src="https://www.youtube.com/embed/LiE0xipwl2I?si=ANkzcG22yghBN08r" frameBorder="0" allowFullScreen></iframe>
+                <p className={cx("title-videos")}>Hamilton</p>
               </div>
               <div className={cx("related-video")}>
-                <iframe src="https://www.youtube.com/embed/ID2" frameBorder="0" allowFullScreen></iframe>
-                <p className={cx("title-videos")}>Review Đồng Hồ</p>
+                <iframe src="https://www.youtube.com/embed/_UJ3h-G0pn4?si=In0FlUgsrfiT2glH" frameBorder="0" allowFullScreen></iframe>
+                <p className={cx("title-videos")}>Mido</p>
               </div>
               <div className={cx("related-video")}>
-                <iframe src="https://www.youtube.com/embed/ID3" frameBorder="0" allowFullScreen></iframe>
-                <p className={cx("title-videos")}>Review Đồng Hồ</p>
+                <iframe src="https://www.youtube.com/embed/BEISZyun0rU?si=xOC6s2Pa7KCi9Are" frameBorder="0" allowFullScreen></iframe>
+                <p className={cx("title-videos")}>Titoni Airmaster</p>
               </div>
               <div className={cx("related-video")}>
-                <iframe src="https://www.youtube.com/embed/ID3" frameBorder="0" allowFullScreen></iframe>
-                <p className={cx("title-videos")}>Review Đồng Hồ</p>
+                <iframe src="https://www.youtube.com/embed/33cvhTzmb2M?si=wFO3GqTy37A1IAxz" frameBorder="0" allowFullScreen></iframe>
+                <p className={cx("title-videos")}>Longines</p>
               </div>
             </div>
           </div>
