@@ -22,6 +22,61 @@ export default function VoucherPage() {
       }, delay);
     };
   };
+  const uploadFile = () => {
+    Swal.fire({
+      title: "Chưa khả dụng",
+      text: "Tính năng tải file chưa được triển khai!",
+      icon: "info",
+      confirmButtonText: "OK",
+    });
+  };
+  const printData = () => {
+    window.print();
+  };
+
+  const copyData = () => {
+    const table = document.getElementById("productTable");
+    const range = document.createRange();
+    range.selectNode(table);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
+
+    Swal.fire({
+      title: "Thành công",
+      text: "Dữ liệu đã được sao chép!",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+  };
+
+  // Hàm xuất dữ liệu ra Excel
+  const exportToExcel = () => {
+    const table = document.getElementById("productTable");
+    const workbook = XLSX.utils.table_to_book(table);
+    XLSX.writeFile(workbook, "products.xlsx");
+
+    Swal.fire({
+      title: "Thành công",
+      text: "Dữ liệu đã được xuất ra Excel!",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+  };
+
+  // Hàm xuất dữ liệu ra PDF
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    doc.autoTable({ html: "#productTable" });
+    doc.save("products.pdf");
+
+    Swal.fire({
+      title: "Thành công",
+      text: "Dữ liệu đã được xuất ra PDF!",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+  };
 
   const fetchVouchers = async () => {
     setLoading(true);
@@ -61,6 +116,16 @@ export default function VoucherPage() {
   };
 
   const deleteVoucher = async (id) => {
+    const result = await Swal.fire({
+      title: "Xác nhận",
+      text: "Bạn có chắc chắn muốn xóa danh mục này không?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
+    });
     try {
       const response = await fetch(
         `http://localhost:5000/voucher/deleteVoucher/${id}`,
@@ -71,13 +136,25 @@ export default function VoucherPage() {
 
       if (response.ok) {
         setVouchers(vouchers.filter((voucher) => voucher._id !== id));
-        alert("Voucher đã được xóa thành công!");
+        Swal.fire({
+          icon: "success",
+          title: "Xóa thành công!",
+          text: "Danh mục đã được xóa thành công!",
+        });
       } else {
-        alert("Có lỗi xảy ra khi xóa voucher.");
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Có lỗi xảy ra khi xóa Danh mục.",
+        });
       }
     } catch (error) {
       console.error("Error deleting voucher:", error);
-      alert("Có lỗi xảy ra khi xóa voucher.");
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: "Đã xảy ra lỗi khi xóa Danh mục.",
+      });
     }
   };
 
@@ -106,24 +183,27 @@ export default function VoucherPage() {
             <div className={styles.buttonGroup}>
               <button className={styles.sp2}>
                 &nbsp;
-                <i className="fas fa-file-upload"></i> Tải từ file
+                <i className="fas fa-file-upload" onClick={uploadFile}></i> Tải
+                từ file
               </button>
               &nbsp;
               <button className={styles.sp3}>
-                <i className="fas fa-print"></i> In dữ liệu
+                <i className="fas fa-print" onClick={printData}></i> In dữ liệu
               </button>
               &nbsp;
               <button className={styles.sp4}>
-                <i className="fas fa-copy"></i> Sao chép
+                <i className="fas fa-copy" onClick={copyData}></i> Sao chép
               </button>
               &nbsp;
               <button className={styles.sp5}>
                 &nbsp;
-                <i className="fas fa-file-excel"></i> Xuất Excel
+                <i className="fas fa-file-excel" onClick={uploadFile}></i> Xuất
+                Excel
               </button>
               &nbsp;
               <button className={styles.sp6}>
-                <i className="fas fa-file-pdf"></i> Xuất PDF
+                <i className="fas fa-file-pdf" onClick={exportToPDF}></i> Xuất
+                PDF
               </button>
               &nbsp;
             </div>
@@ -167,45 +247,59 @@ export default function VoucherPage() {
               </tr>
             </thead>
             <tbody>
-              {vouchers.map((voucher) => {
-                const {
-                  _id,
-                  ma_voucher,
-                  gia_tri,
-                  phan_tram,
-                  so_luong,
-                  bat_dau,
-                  ket_thuc,
-                  mo_ta,
-                } = voucher;
+              {vouchers.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="9"
+                    style={{
+                      textAlign: "center",
+                      color: "red",
+                      fontWeight: "bold",
+                    }}>
+                    Không có voucher
+                  </td>
+                </tr>
+              ) : (
+                vouchers.map((voucher) => {
+                  const {
+                    _id,
+                    ma_voucher,
+                    gia_tri,
+                    phan_tram,
+                    so_luong,
+                    bat_dau,
+                    ket_thuc,
+                    mo_ta,
+                  } = voucher;
 
-                return (
-                  <tr key={_id}>
-                    <td>{_id}</td>
-                    <td style={{ textAlign: "center" }}>{ma_voucher}</td>
-                    <td style={{ textAlign: "center" }}>{gia_tri}</td>
-                    <td style={{ textAlign: "center" }}>{phan_tram}%</td>
-                    <td style={{ textAlign: "center" }}>{so_luong}</td>
-                    <td style={{ textAlign: "center" }}>{bat_dau}</td>
-                    <td style={{ textAlign: "center" }}>{ket_thuc}</td>
-                    <td style={{ textAlign: "center" }}>{mo_ta}</td>
-                    <td style={{ textAlign: "center" }}>
-                      <Link
-                        href={`/components/suavoucher/${_id}`}
-                        className={`${styles.btn} ${styles.edit}`}>
-                        ✏️
-                      </Link>
-                      &nbsp;
-                      <button
-                        className={`${styles.btn} ${styles.delete}`}
-                        onClick={() => deleteVoucher(_id)}>
-                        🗑️
-                      </button>
-                      &nbsp;
-                    </td>
-                  </tr>
-                );
-              })}
+                  return (
+                    <tr key={_id}>
+                      <td>{_id}</td>
+                      <td style={{ textAlign: "center" }}>{ma_voucher}</td>
+                      <td style={{ textAlign: "center" }}>{gia_tri}</td>
+                      <td style={{ textAlign: "center" }}>{phan_tram}%</td>
+                      <td style={{ textAlign: "center" }}>{so_luong}</td>
+                      <td style={{ textAlign: "center" }}>{bat_dau}</td>
+                      <td style={{ textAlign: "center" }}>{ket_thuc}</td>
+                      <td style={{ textAlign: "center" }}>{mo_ta}</td>
+                      <td style={{ textAlign: "center" }}>
+                        <Link
+                          href={`/components/suavoucher/${_id}`}
+                          className={`${styles.btn} ${styles.edit}`}>
+                          ✏️
+                        </Link>
+                        &nbsp;
+                        <button
+                          className={`${styles.btn} ${styles.delete}`}
+                          onClick={() => deleteVoucher(_id)}>
+                          🗑️
+                        </button>
+                        &nbsp;
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
 

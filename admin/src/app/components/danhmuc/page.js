@@ -2,6 +2,7 @@
 import Link from "next/link";
 import styles from "./danhmuc.module.css";
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
 export default function DanhmucPage() {
   const [cates, setDanhmuc] = useState([]);
@@ -10,6 +11,8 @@ export default function DanhmucPage() {
   const [totalPage, setTotalPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [totalCates, settotalCates] = useState(0);
+  const itemsPerPage = 5;
 
   const fetchDanhmuc = async () => {
     try {
@@ -22,6 +25,7 @@ export default function DanhmucPage() {
       const data = await response.json();
       setTotalPage(data.totalPages);
       setDanhmuc(data.cates);
+      settotalCates(data.totalCates);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -45,22 +49,50 @@ export default function DanhmucPage() {
   };
 
   const deleteDanhmuc = async (id) => {
+    const result = await Swal.fire({
+      title: "Xác nhận",
+      text: "Bạn có chắc chắn muốn xóa danh mục này không?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
+    });
     try {
-      const response = await fetch(`http://localhost:5000/cate/deletecate/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:5000/cate/deletecate/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
         setDanhmuc(cates.filter((cate) => cate._id !== id));
-        alert("Danh mục đã được xóa thành công!");
+        Swal.fire({
+          icon: "success",
+          title: "Xóa thành công!",
+          text: "Danh mục đã được xóa thành công!",
+        });
       } else {
-        alert("Có lỗi xảy ra khi xóa Danh mục.");
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: "Có lỗi xảy ra khi xóa Danh mục.",
+        });
       }
     } catch (error) {
       console.error("Error deleting Danh mục:", error);
-      alert("Có lỗi xảy ra khi Danh mục.");
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: "Đã xảy ra lỗi khi xóa Danh mục.",
+      });
     }
   };
+
+  const startDanhmucIndex = (currentPage - 1) * itemsPerPage + 1;
+  const endDanhmucIndex = Math.min(currentPage * itemsPerPage, totalCates);
 
   if (loading) return <div>Đang tải dữ liệu...</div>;
   if (error) return <div>Có lỗi xảy ra: {error}</div>;
@@ -125,58 +157,94 @@ export default function DanhmucPage() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-                <th style={{ width: "15%", textAlign: "center" }}>Id Danh mục</th>
-                <th style={{ width: "12%", textAlign: "center" }}>Tên danh mục</th>
+                <th style={{ width: "15%", textAlign: "center" }}>
+                  Id Danh mục
+                </th>
+                <th style={{ width: "12%", textAlign: "center" }}>
+                  Tên danh mục
+                </th>
                 <th style={{ width: "10%", textAlign: "center" }}>Hình ảnh</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Mô tả</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
               </tr>
             </thead>
             <tbody>
-              {cates.map((cate) => {
-                const { _id, ten_danh_muc, mo_ta, hinh_anh } = cate;
+              {cates.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="5"
+                    style={{
+                      textAlign: "center",
+                      color: "red",
+                      fontWeight: "bold",
+                    }}>
+                    Không có danh mục
+                  </td>
+                </tr>
+              ) : (
+                cates.map((cate) => {
+                  const { _id, ten_danh_muc, mo_ta, hinh_anh } = cate;
 
-                return (
-                  <tr key={_id}>
-                    <td>{_id}</td>
-                    <td style={{ textAlign: "center" }}>{ten_danh_muc}</td>
-                    <td style={{ width: "10%", textAlign: "center" }}>
-                      <img src={`http://localhost:5000/images/${hinh_anh}`} />
-                    </td>
-                    <td style={{ textAlign: "center" }}>{mo_ta}</td>
-                    <td style={{ textAlign: "center" }}>
-                      <Link href={`/components/suadanhmuc/${_id}`} className={`${styles.btn} ${styles.edit}`}>
-                        ✏️
-                      </Link>
-                      &nbsp;
-                      <button className={`${styles.btn} ${styles.delete}`} onClick={() => deleteDanhmuc(_id)}>
-                        🗑️
-                      </button>
-                      &nbsp;
-                    </td>
-                  </tr>
-                );
-              })}
+                  return (
+                    <tr key={_id}>
+                      <td>{_id}</td>
+                      <td style={{ textAlign: "center" }}>{ten_danh_muc}</td>
+                      <td style={{ width: "10%", textAlign: "center" }}>
+                        <img src={`http://localhost:5000/images/${hinh_anh}`} />
+                      </td>
+                      <td style={{ textAlign: "center" }}>{mo_ta}</td>
+                      <td style={{ textAlign: "center" }}>
+                        <Link
+                          href={`/components/suadanhmuc/${_id}`}
+                          className={`${styles.btn} ${styles.edit}`}>
+                          ✏️
+                        </Link>
+                        &nbsp;
+                        <button
+                          className={`${styles.btn} ${styles.delete}`}
+                          onClick={() => deleteDanhmuc(_id)}>
+                          🗑️
+                        </button>
+                        &nbsp;
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
           <div className={styles.pagination}>
+            <span>
+              Hiện {startDanhmucIndex} đến {endDanhmucIndex} của {totalCates}{" "}
+              {""}
+              sản phẩm
+            </span>
             <div className={styles.paginationControls}>
               <button
-                className={`${styles.paginationButton} ${currentPage === 1 ? styles.disabled : styles["other-page"]}`}
-                onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
+                className={`${styles.paginationButton} ${
+                  currentPage === 1 ? styles.disabled : styles["other-page"]
+                }`}
+                onClick={() =>
+                  currentPage > 1 && handlePageChange(currentPage - 1)
+                }
+                disabled={currentPage === 1}>
                 ‹
               </button>
-              <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPage}`}</button>
+              <button
+                className={
+                  styles.paginationButton
+                }>{`Trang ${currentPage} / ${totalPage}`}</button>
 
               <button
                 className={`${styles.paginationButton} ${
-                  currentPage === totalPage ? styles.disabled : styles["other-page"]
+                  currentPage === totalPage
+                    ? styles.disabled
+                    : styles["other-page"]
                 }`}
-                onClick={() => currentPage < totalPage && handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPage}
-              >
+                onClick={() =>
+                  currentPage < totalPage && handlePageChange(currentPage + 1)
+                }
+                disabled={currentPage === totalPage}>
                 ›
               </button>
             </div>

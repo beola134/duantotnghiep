@@ -566,12 +566,15 @@ export default function Header() {
                         ? user.user.hinh_anh
                         : `http://localhost:5000/images/${user.user.hinh_anh}`
                     }
-                    width="300"
-                    height="363"
+                    width="200"
+                    height="100"
                     style={{
                       display: "inline-block",
-                      opacity: "1",
+                      width: "160px",
+                      height: "29px",
+                      marginTop: "5px",
                       borderRadius: "50%",
+                      objectFit: "cover",
                     }}
                   />
                 </Link>
