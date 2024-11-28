@@ -26,10 +26,11 @@ export default function Detail({ params }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const sliderRef = useRef(null);
+  const [so_luong, setSo_luong] = useState(1);
+
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
 
-  const [so_luong, setSo_luong] = useState(1);
   const handleIncrease = (e) => {
     e.preventDefault();
     setSo_luong((prev) => prev + 1);
@@ -183,6 +184,7 @@ export default function Detail({ params }) {
             showConfirmButton: false,
             timer: 1500,
           });
+          window.location.reload();
         } catch (error) {
           setError(error.message);
         }
@@ -242,13 +244,15 @@ export default function Detail({ params }) {
       {/* FrameLeft */}
       <div className={`${styles.topProductDetail} ${styles.container}  ${styles.cls}`}>
         <div className={styles.frameLeft}>
-          <div className={styles.discountPro}>
-            -
-            <span id="discount-pro">
-              {roundDiscount(Math.round(((product.gia_san_pham - product.gia_giam) / product.gia_san_pham) * 100))}
-            </span>
-            <span>%</span>
-          </div>
+          {product.gia_giam > 0 && (
+            <div className={styles.discountPro}>
+              -
+              <span id="discount-pro">
+                {roundDiscount(Math.round(((product.gia_san_pham - product.gia_giam) / product.gia_san_pham) * 100))}
+              </span>
+              <span>%</span>
+            </div>
+          )}
           <div
             style={{
               position: "relative",
@@ -290,25 +294,6 @@ export default function Detail({ params }) {
             </div>
           </div>
           <div className={styles.slideFT}></div>
-          <div className={styles.hitShare}>
-            {/* <!-- Facebook Like Button --> */}
-            <div
-              className="fb-like"
-              data-href="https://www.yourwebsite.com"
-              data-width="250"
-              data-layout="button"
-              data-action="like"
-              data-size="small"
-              data-share="false"
-            ></div>
-            {/* <!-- Facebook Share Button --> */}
-            <div
-              className="fb-share-button"
-              data-href="https://www.yourwebsite.com"
-              data-width="250"
-              data-layout="button"
-            ></div>
-          </div>
         </div>
         {/* frame center */}
         <div className={styles.frameCenter}>
@@ -352,13 +337,32 @@ export default function Detail({ params }) {
                 <span className={styles.fl}>:</span>
                 <div className={`${styles.liRight} ${styles.fl}`}>{product.duong_kinh}</div>
               </li>
-              <li className={`${styles.statusProduct} ${styles.statusProduct11}`}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 -3.5 170 170">
-                  <path d="M142.196 30.4125C142.586 30.0637 142.897 29.6356 143.109 29.1567C143.32 28.6778 143.427 28.1592 143.422 27.6357C143.417 27.1122 143.3 26.5959 143.079 26.1213C142.858 25.6467 142.538 25.2248 142.141 24.8838C141.722 24.5249 141.307 24.1678 140.895 23.8127C137.751 21.1093 134.5 18.3102 131.1 15.9225C105.123 -2.36044 78.1316 -2.4633 50.8803 7.23287C26.2068 16.0055 10.3619 33.5563 3.77909 59.3882C-3.56415 88.249 2.86618 113.71 22.9048 135.073C23.4261 135.625 23.9582 136.177 24.4895 136.704C35.2539 147.469 48.6614 154.115 59.2847 158.739C63.8445 160.731 87.2404 163.149 93.5707 162.206C131.19 156.588 155.946 135.37 164.569 99.8725C166.215 92.9194 167.035 85.7962 167.011 78.6508C166.974 71.1466 165.712 63.6988 163.275 56.6012C163.097 56.0703 162.805 55.5851 162.418 55.1805C162.031 54.7759 161.56 54.4618 161.037 54.2606C160.515 54.0595 159.954 53.9764 159.396 54.0171C158.838 54.0579 158.295 54.2216 157.808 54.4965L157.706 54.5547C156.931 54.9984 156.336 55.7005 156.027 56.5381C155.717 57.3757 155.712 58.2954 156.012 59.1364C158.212 65.2371 159.334 71.674 159.327 78.1592C159.251 85.9394 158.198 93.6792 156.192 101.197C150.248 122.8 136.038 138.545 112.75 149.315C89.0741 160.65 55.1215 149.19 46.0879 143.226C36.1031 136.4 27.3663 127.908 20.2596 118.121C9.11418 102.34 6.61369 79.6587 12.6028 58.9229C15.4055 49.3489 20.3036 40.5185 26.9421 33.0722C33.5806 25.6259 41.793 19.7503 50.9838 15.8714C74.8941 5.93474 98.8852 4.18192 122.285 19.0635C125.422 21.061 133.422 27.3424 137.465 30.5501C138.143 31.0882 138.99 31.3691 139.855 31.3432C140.721 31.3172 141.549 30.986 142.194 30.4082L142.196 30.4125Z"></path>
-                  <path d="M74.6287 104.313C76.2312 102.79 77.1115 102.019 77.9173 101.177C103.753 74.1855 132.047 49.8851 160.508 25.7727C161.584 24.8619 162.685 23.7 163.958 23.3737C165.493 22.9815 167.996 23.4326 168.682 24.2661C169.133 24.8821 169.418 25.6035 169.509 26.3612C169.601 27.1189 169.496 27.8875 169.206 28.5932C168.537 30.3474 166.907 31.8498 165.429 33.1629C156.607 41.0019 147.538 48.5708 138.872 56.5716C120.756 73.3024 102.756 90.1576 84.8704 107.137C77.0334 114.561 74.0173 114.862 66.8059 106.929C62.0589 101.705 47.7328 84.0973 43.3455 78.5495C42.7256 77.6872 42.1735 76.7781 41.6941 75.8305C40.7045 74.0756 40.0576 72.1419 42.0246 70.7814C44.2158 69.2662 45.7707 70.8473 47.0696 72.4937C48.384 74.1607 49.5048 75.9916 50.9121 77.5713C55.2811 82.4737 69.908 99.1421 74.6287 104.313Z"></path>
-                </svg>
-                Sẵn hàng
-              </li>
+              {product.so_luong > 0 ? (
+                <li className={`${styles.statusProduct} ${styles.statusProduct11}`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 -3.5 170 170">
+                    <path d="M142.196 30.4125C142.586 30.0637 142.897 29.6356 143.109 29.1567C143.32 28.6778 143.427 28.1592 143.422 27.6357C143.417 27.1122 143.3 26.5959 143.079 26.1213C142.858 25.6467 142.538 25.2248 142.141 24.8838C141.722 24.5249 141.307 24.1678 140.895 23.8127C137.751 21.1093 134.5 18.3102 131.1 15.9225C105.123 -2.36044 78.1316 -2.4633 50.8803 7.23287C26.2068 16.0055 10.3619 33.5563 3.77909 59.3882C-3.56415 88.249 2.86618 113.71 22.9048 135.073C23.4261 135.625 23.9582 136.177 24.4895 136.704C35.2539 147.469 48.6614 154.115 59.2847 158.739C63.8445 160.731 87.2404 163.149 93.5707 162.206C131.19 156.588 155.946 135.37 164.569 99.8725C166.215 92.9194 167.035 85.7962 167.011 78.6508C166.974 71.1466 165.712 63.6988 163.275 56.6012C163.097 56.0703 162.805 55.5851 162.418 55.1805C162.031 54.7759 161.56 54.4618 161.037 54.2606C160.515 54.0595 159.954 53.9764 159.396 54.0171C158.838 54.0579 158.295 54.2216 157.808 54.4965L157.706 54.5547C156.931 54.9984 156.336 55.7005 156.027 56.5381C155.717 57.3757 155.712 58.2954 156.012 59.1364C158.212 65.2371 159.334 71.674 159.327 78.1592C159.251 85.9394 158.198 93.6792 156.192 101.197C150.248 122.8 136.038 138.545 112.75 149.315C89.0741 160.65 55.1215 149.19 46.0879 143.226C36.1031 136.4 27.3663 127.908 20.2596 118.121C9.11418 102.34 6.61369 79.6587 12.6028 58.9229C15.4055 49.3489 20.3036 40.5185 26.9421 33.0722C33.5806 25.6259 41.793 19.7503 50.9838 15.8714C74.8941 5.93474 98.8852 4.18192 122.285 19.0635C125.422 21.061 133.422 27.3424 137.465 30.5501C138.143 31.0882 138.99 31.3691 139.855 31.3432C140.721 31.3172 141.549 30.986 142.194 30.4082L142.196 30.4125Z"></path>
+                    <path d="M74.6287 104.313C76.2312 102.79 77.1115 102.019 77.9173 101.177C103.753 74.1855 132.047 49.8851 160.508 25.7727C161.584 24.8619 162.685 23.7 163.958 23.3737C165.493 22.9815 167.996 23.4326 168.682 24.2661C169.133 24.8821 169.418 25.6035 169.509 26.3612C169.601 27.1189 169.496 27.8875 169.206 28.5932C168.537 30.3474 166.907 31.8498 165.429 33.1629C156.607 41.0019 147.538 48.5708 138.872 56.5716C120.756 73.3024 102.756 90.1576 84.8704 107.137C77.0334 114.561 74.0173 114.862 66.8059 106.929C62.0589 101.705 47.7328 84.0973 43.3455 78.5495C42.7256 77.6872 42.1735 76.7781 41.6941 75.8305C40.7045 74.0756 40.0576 72.1419 42.0246 70.7814C44.2158 69.2662 45.7707 70.8473 47.0696 72.4937C48.384 74.1607 49.5048 75.9916 50.9121 77.5713C55.2811 82.4737 69.908 99.1421 74.6287 104.313Z"></path>
+                  </svg>
+                  Sẵn hàng
+                </li>
+              ) : (
+                <li
+                  style={{ color: "red" }}
+                  className={`${styles.statusProduct} ${styles.statusProduct11} ${styles.statusProductHetHang}`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 -3.5 170 170">
+                    <path
+                      fill="currentColor"
+                      d="M142.196 30.4125C142.586 30.0637 142.897 29.6356 143.109 29.1567C143.32 28.6778 143.427 28.1592 143.422 27.6357C143.417 27.1122 143.3 26.5959 143.079 26.1213C142.858 25.6467 142.538 25.2248 142.141 24.8838C141.722 24.5249 141.307 24.1678 140.895 23.8127C137.751 21.1093 134.5 18.3102 131.1 15.9225C105.123 -2.36044 78.1316 -2.4633 50.8803 7.23287C26.2068 16.0055 10.3619 33.5563 3.77909 59.3882C-3.56415 88.249 2.86618 113.71 22.9048 135.073C23.4261 135.625 23.9582 136.177 24.4895 136.704C35.2539 147.469 48.6614 154.115 59.2847 158.739C63.8445 160.731 87.2404 163.149 93.5707 162.206C131.19 156.588 155.946 135.37 164.569 99.8725C166.215 92.9194 167.035 85.7962 167.011 78.6508C166.974 71.1466 165.712 63.6988 163.275 56.6012C163.097 56.0703 162.805 55.5851 162.418 55.1805C162.031 54.7759 161.56 54.4618 161.037 54.2606C160.515 54.0595 159.954 53.9764 159.396 54.0171C158.838 54.0579 158.295 54.2216 157.808 54.4965L157.706 54.5547C156.931 54.9984 156.336 55.7005 156.027 56.5381C155.717 57.3757 155.712 58.2954 156.012 59.1364C158.212 65.2371 159.334 71.674 159.327 78.1592C159.251 85.9394 158.198 93.6792 156.192 101.197C150.248 122.8 136.038 138.545 112.75 149.315C89.0741 160.65 55.1215 149.19 46.0879 143.226C36.1031 136.4 27.3663 127.908 20.2596 118.121C9.11418 102.34 6.61369 79.6587 12.6028 58.9229C15.4055 49.3489 20.3036 40.5185 26.9421 33.0722C33.5806 25.6259 41.793 19.7503 50.9838 15.8714C74.8941 5.93474 98.8852 4.18192 122.285 19.0635C125.422 21.061 133.422 27.3424 137.465 30.5501C138.143 31.0882 138.99 31.3691 139.855 31.3432C140.721 31.3172 141.549 30.986 142.194 30.4082L142.196 30.4125Z"
+                    ></path>
+                    <path
+                      fill="currentColor"
+                      d="M74.6287 104.313C76.2312 102.79 77.1115 102.019 77.9173 101.177C103.753 74.1855 132.047 49.8851 160.508 25.7727C161.584 24.8619 162.685 23.7 163.958 23.3737C165.493 22.9815 167.996 23.4326 168.682 24.2661C169.133 24.8821 169.418 25.6035 169.509 26.3612C169.601 27.1189 169.496 27.8875 169.206 28.5932C168.537 30.3474 166.907 31.8498 165.429 33.1629C156.607 41.0019 147.538 48.5708 138.872 56.5716C120.756 73.3024 102.756 90.1576 84.8704 107.137C77.0334 114.561 74.0173 114.862 66.8059 106.929C62.0589 101.705 47.7328 84.0973 43.3455 78.5495C42.7256 77.6872 42.1735 76.7781 41.6941 75.8305C40.7045 74.0756 40.0576 72.1419 42.0246 70.7814C44.2158 69.2662 45.7707 70.8473 47.0696 72.4937C48.384 74.1607 49.5048 75.9916 50.9121 77.5713C55.2811 82.4737 69.908 99.1421 74.6287 104.313Z"
+                    ></path>
+                  </svg>
+                  Hết hàng
+                </li>
+              )}
             </ul>
             <div className={styles.boxGift}>
               <div className={styles.titleGift}>Khuyến mãi</div>
@@ -529,93 +533,6 @@ export default function Detail({ params }) {
               </div>
             </div>
             <div className={styles.clear}></div>
-            <div className={styles.orderFast}>
-              <form name="form_regis_phone" id="form_regis_phone" method="post">
-                <div className={styles.wrapperInfor}>
-                  <input
-                    type="text"
-                    name="telephone_buy_fast"
-                    id="telephone_buy_fast"
-                    placeholder="Để lại số điện thoại..."
-                    className={`${styles.keyword} ${styles.txtPhone} ${styles.inputText}`}
-                  />
-                  <select name="cities_buy_fast" id="cities_buy_fast">
-                    <option value="">Tỉnh/Thành Phố</option>
-                    <option value="1473">Hà Nội</option>
-                    <option value="1474">TP HCM</option>
-                    <option value="1475">Hải Phòng</option>
-                    <option value="1482">Bắc Giang</option>
-                    <option value="1483">Bắc Kạn</option>
-                    <option value="1484">Bắc Ninh</option>
-                    <option value="1485">Cao Bằng</option>
-                    <option value="1486">Điện Biên</option>
-                    <option value="1487">Hà Giang</option>
-                    <option value="1488">Hà Nam</option>
-                    <option value="1489">Hải Dương</option>
-                    <option value="1490">Hòa Bình</option>
-                    <option value="1491">Hưng Yên</option>
-                    <option value="1492">Lai Châu</option>
-                    <option value="1493">Lạng Sơn</option>
-                    <option value="1494">Lào Cai</option>
-                    <option value="1495">Nam Định</option>
-                    <option value="1496">Ninh Bình</option>
-                    <option value="1497">Phú Thọ</option>
-                    <option value="1498">Quảng Ninh</option>
-                    <option value="1499">Sơn La</option>
-                    <option value="1500">Thái Bình</option>
-                    <option value="1501">Thái Nguyên</option>
-                    <option value="1502">Thanh Hóa</option>
-                    <option value="1503">Tuyên Quang</option>
-                    <option value="1504">Vĩnh Phúc</option>
-                    <option value="1505">Yên Bái</option>
-                    <option value="1506">Đà Nẵng</option>
-                    <option value="1507">Bình Định</option>
-                    <option value="1508">Bình Phước</option>
-                    <option value="1509">Bình Thuận</option>
-                    <option value="1510">Đắk Lắk</option>
-                    <option value="1511">Đắk Nông</option>
-                    <option value="1512">Gia Lai</option>
-                    <option value="1513">Hà Tĩnh</option>
-                    <option value="1514">Khánh Hòa</option>
-                    <option value="1515">Kon Tum</option>
-                    <option value="1516">Lâm Đồng</option>
-                    <option value="1517">Nghệ An</option>
-                    <option value="1518">Ninh Thuận</option>
-                    <option value="1519">Phú Yên</option>
-                    <option value="1520">Quảng Bình</option>
-                    <option value="1521">Quảng Nam</option>
-                    <option value="1522">Quảng Ngãi</option>
-                    <option value="1523">Quảng Trị</option>
-                    <option value="1524">Thừa Thiên Huế</option>
-                    <option value="1525">Cần Thơ</option>
-                    <option value="1526">An Giang</option>
-                    <option value="1527">Bà Rịa - Vũng Tàu</option>
-                    <option value="1528">Bạc Liêu</option>
-                    <option value="1529">Bến Tre</option>
-                    <option value="1530">Bình Dương</option>
-                    <option value="1531">Cà Mau</option>
-                    <option value="1532">Đồng Nai</option>
-                    <option value="1533">Đồng Tháp</option>
-                    <option value="1534">Hậu Giang</option>
-                    <option value="1535">Kiên Giang</option>
-                    <option value="1536">Long An</option>
-                    <option value="1537">Sóc Trăng</option>
-                    <option value="1538">Tây Ninh</option>
-                    <option value="1539">Tiền Giang</option>
-                    <option value="1540">Trà Vinh</option>
-                    <option value="1541">Vĩnh Long</option>
-                    <option value="1542">Nước Ngoài</option>
-                    <option value="1543">Bắc Kinh</option>
-                  </select>
-                  <input
-                    type="button"
-                    name="submit-res"
-                    value="Gửi"
-                    className={`${styles.btPhone} ${styles.buttonSub} ${styles.button}`}
-                  />
-                </div>
-              </form>
-            </div>
           </div>
         </div>
         {/* frame right */}
@@ -623,36 +540,53 @@ export default function Detail({ params }) {
         <div className={styles.frameRight}>
           <div className={styles.boxPriceRight}>
             <div className={styles.boxPriceRightTop}>
-              <div className={styles.priceOld}>
-                <span>Giá</span>
-                <span className={styles.priceOld}> {product.gia_san_pham.toLocaleString("vi-VN")}₫</span>
-              </div>
-              <div className={styles.priceCurrent}>
-                <div className={styles.titlePriceCurrent}>Giá KM:</div>
-                <div className={styles.numberPriceCurrent}>
-                  <input type="hidden" value="1" className={styles.bkProductQty} />
-                  <span className={styles.bkProductPrice}>{product.gia_giam.toLocaleString("vi-VN")}₫</span>
+              {product.gia_giam > 0 ? (
+                <>
+                  <div className={styles.priceOld}>
+                    <span>Giá </span>
+                    <span className={styles.priceOld}>{product.gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                  </div>
+                  <div className={styles.priceCurrent}>
+                    <div className={styles.titlePriceCurrent}>Giá KM:</div>
+                    <div className={styles.numberPriceCurrent}>
+                      <input type="hidden" value="1" className={styles.bkProductQty} />
+                      <span className={styles.bkProductPrice}>{product.gia_giam.toLocaleString("vi-VN")}₫</span>
+                    </div>
+                    <div className={styles.noteVat}>(Giá trên đã bao gồm VAT)</div>
+                  </div>
+                </>
+              ) : (
+                <div className={styles.priceCurrent}>
+                  <div className={styles.titlePriceCurrent}>Giá:</div>
+                  <div className={styles.numberPriceCurrent}>
+                    <input type="hidden" value="1" className={styles.bkProductQty} />
+                    <span className={styles.bkProductPrice}>{product.gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                  </div>
+                  <div className={styles.noteVat}>(Giá trên đã bao gồm VAT)</div>
                 </div>
-                <div className={styles.noteVat}>(Giá trên đã bao gồm VAT)</div>
-              </div>
+              )}
               <div className={styles.clear}></div>
               <div className={styles.boxPriceRightBot}>
                 <div className={`${styles.btnBuy} ${styles.buyRow} ${styles.cls}`}>
                   {/*tăng giảm số lượng*/}
                   <form onSubmit={handleAddToCart}>
-                    <div className={styles.numberInput}>
-                      <button type="button" className={styles.button} onClick={handleDecrease}>
-                        -
-                      </button>
-                      <input className={styles.input} min="1" type="number" id="number" value={so_luong} readonly />
-                      <button type="button" className={styles.button} onClick={handleIncrease}>
-                        +
-                      </button>
-                    </div>
+                    {product.so_luong > 0 && (
+                      <div>
+                        <div className={styles.numberInput}>
+                          <button type="button" className={styles.button} onClick={handleDecrease}>
+                            -
+                          </button>
+                          <input className={styles.input} min="1" type="number" id="number" value={so_luong} readOnly />
+                          <button type="button" className={styles.button} onClick={handleIncrease}>
+                            +
+                          </button>
+                        </div>
 
-                    <button type="submit" className={`${styles.btBuySp} ${styles.buySp} ${styles.submit}`}>
-                      Thêm vào giỏ hàng
-                    </button>
+                        <button type="submit" className={`${styles.btBuySp} ${styles.buySp} ${styles.submit}`}>
+                          Thêm vào giỏ hàng
+                        </button>
+                      </div>
+                    )}
 
                     <button
                       style={{ marginBottom: "20px" }}
@@ -936,111 +870,40 @@ export default function Detail({ params }) {
                 <div className={`${styles.tableCondensed} ${styles.compareTable}`}>
                   <table className={styles.table} border="0" cellPadding="0" width="100%">
                     <tbody>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Giới tính:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.gioi_tinh}</td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Kiểu dáng:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.kieu_dang}</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Loại máy:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.loai_may}</td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Phong cách:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.phong_cach}</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Mặt kính:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.mat_kinh}</td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Đường kính:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.duong_kinh}</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Chất liệu vỏ:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.chat_lieu_vo}</td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Độ dày:
-                        </td>
-                        <td className={styles.contentCharactestic}>11.2mm</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Chất liệu dây:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.chat_lieu_day}</td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Size dây:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.size_day}</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Độ chịu nước:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.do_chiu_nuoc}</td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Lug to Lug:
-                        </td>
-                        <td className={styles.contentCharactestic}>45mm</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Tính năng khác:
-                        </td>
-                        <td className={styles.contentCharactestic}>
-                          Lịch ngày. Caliber Powermatic 80.111, 23 chân kính, lò xo cân bằng Nivachron, trữ cót 80h.
-                          Sapphire chống lóa.
-                        </td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Bảo hành chính hãng:
-                        </td>
-                        <td className={styles.contentCharactestic}>2 năm quốc tế</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Màu mặt:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.mau_mat}</td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Bảo hành Duy Anh:
-                        </td>
-                        <td className={styles.contentCharactestic}>5 năm (đã bao gồm Bảo hành Quốc tế).</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Xuất xứ thương hiệu:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.xuat_xu}</td>
-                      </tr>
+                      {[
+                        { label: "Giới tính:", value: product.gioi_tinh },
+                        { label: "Kiểu dáng:", value: product.kieu_dang },
+                        { label: "Loại máy:", value: product.loai_may },
+                        { label: "Phong cách:", value: product.phong_cach },
+                        { label: "Mặt kính:", value: product.mat_kinh },
+                        { label: "Đường kính:", value: product.duong_kinh && `${product.duong_kinh}` },
+                        { label: "Chất liệu vỏ:", value: product.chat_lieu_vo },
+                        { label: "Độ dày:", value: product.doday && `${product.doday}` },
+                        { label: "Chất liệu dây:", value: product.chat_lieu_day },
+                        { label: "Size dây:", value: product.size_day },
+                        { label: "Độ chịu nước:", value: product.do_chiu_nuoc },
+                        { label: "Lug to Lug:", value: product.lug_to_lug && `${product.lug_to_lug}` },
+                        { label: "Tính năng khác:", value: product.tinh_nang_khac },
+                        { label: "Bảo hành chính hãng:", value: product.bao_hanh_chinh_hang },
+                        { label: "Màu mặt:", value: product.mau_mat },
+                        { label: "Bảo hành Duy Anh:", value: product.bao_hanh_duy_anh },
+                        { label: "Xuất xứ thương hiệu:", value: product.xuat_xu },
+                        { label: "Thương hiệu:", value: product.thuong_hieu },
+                        { label: "Màu dây:", value: product.mau_day },
+                        { label: "Độ dài dây:", value: product.do_dai_day },
+                        { label: "Bảo hành chính hãng:", value: "2 năm quốc tế" },
+                        { label: "Bảo hành wristly:", value: "5 năm (đã bao gồm bảo hành quốc tế)" },
+                      ]
+                        .filter((item) => item.value)
+                        .map((item, index) => (
+                          <tr key={index} className={index % 2 === 0 ? styles.tr0 : styles.tr1} valign="top">
+                            {" "}
+                            <td className={styles.titleCharactestic} width="40%">
+                              {item.label}
+                            </td>
+                            <td className={styles.contentCharactestic}>{item.value}</td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>
