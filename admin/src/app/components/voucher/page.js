@@ -2,6 +2,11 @@
 import Link from "next/link";
 import styles from "./voucher.module.css";
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
+import ExcelJS from "exceljs";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import RobotoRegular from "./Roboto-Regular.base64";
 
 export default function VoucherPage() {
   const [vouchers, setVouchers] = useState([]);
@@ -22,6 +27,7 @@ export default function VoucherPage() {
       }, delay);
     };
   };
+
   const uploadFile = () => {
     Swal.fire({
       title: "Chưa khả dụng",
@@ -30,6 +36,7 @@ export default function VoucherPage() {
       confirmButtonText: "OK",
     });
   };
+
   const printData = () => {
     window.print();
   };
@@ -51,31 +58,178 @@ export default function VoucherPage() {
   };
 
   // Hàm xuất dữ liệu ra Excel
-  const exportToExcel = () => {
-    const table = document.getElementById("productTable");
-    const workbook = XLSX.utils.table_to_book(table);
-    XLSX.writeFile(workbook, "products.xlsx");
+  const exportToExcel = async () => {
+    console.log(vouchers);
+    Swal.fire({
+      title: "Xác nhận",
+      text: "Bạn có chắc chắn muốn xuất dữ liệu ra file Excel?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Xuất",
+      cancelButtonText: "Hủy",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const workbook = new ExcelJS.Workbook();
+          const worksheet = workbook.addWorksheet("Danh sách Voucher");
+          worksheet.columns = [
+            { header: "ID voucher", key: "_id", width: 20 },
+            { header: "Mã voucher", key: "ma_voucher", width: 25 },
+            { header: "Giá trị", key: "gia_tri", width: 25 },
+            { header: "Phần trăm", key: "phan_tram", width: 25 },
+            { header: "Số lượng", key: "so_luong", width: 25 },
+            { header: "Ngày bắt đầu", key: "bat_dau", width: 25 },
+            { header: "Ngày kết thúc", key: "ket_thuc", width: 25 },
+            { header: "Ghi chú", key: "mo_ta", width: 40 },
+          ];
+          worksheet.getRow(1).eachCell((cell) => {
+            cell.font = { bold: true, color: { argb: "FFFFFF" } };
+            cell.fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: "0070C0" },
+            };
+            cell.alignment = { vertical: "middle", horizontal: "center" };
+          });
+          await Promise.all(
+            vouchers.map(async (item, index) => {
+              worksheet.addRow({
+                _id: item._id,
+                ma_voucher: item.ma_voucher,
+                gia_tri: item.gia_tri,
+                phan_tram: item.phan_tram,
+                so_luong: item.so_luong,
+                bat_dau: item.bat_dau,
+                ket_thuc: item.ket_thuc,
+                mo_ta: item.mo_ta,
+              });
+            })
+          );
+          worksheet.eachRow((row) => {
+            row.eachCell((cell) => {
+              cell.border = {
+                top: { style: "thin" },
+                left: { style: "thin" },
+                bottom: { style: "thin" },
+                right: { style: "thin" },
+              };
+            });
+          });
+          const buffer = await workbook.xlsx.writeBuffer();
+          const blob = new Blob([buffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "voucher.xlsx";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+
+          Swal.fire({
+            title: "Thành công",
+            text: "Dữ liệu đã được xuất ra file Excel!",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+        } catch (error) {
+          console.error("Lỗi khi xuất Excel:", error);
+          Swal.fire({
+            title: "Lỗi",
+            text: "Không thể xuất file Excel. Vui lòng thử lại!",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        }
+      }
+    });
+  };
+  //xuất file pdf
+  const exportToPDF = async () => {
+    const doc = new jsPDF();
+    doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
+    doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+    doc.setFont("Roboto");
+
+    // Tiêu đề file PDF
+    doc.setFontSize(16);
+    doc.setTextColor(40);
+    doc.text("Danh sách voucher", 10, 10);
+
+    // Định dạng bảng PDF với autoTable
+    doc.autoTable({
+      html: "#productTable", // Sử dụng bảng HTML để xuất
+      startY: 20,
+      styles: {
+        font: "Roboto",
+        fontSize: 10,
+        cellPadding: 4,
+        valign: "middle",
+        halign: "center",
+        textColor: 20,
+        lineColor: [200, 200, 200],
+      },
+      headStyles: {
+        fillColor: [0, 112, 192],
+        textColor: [255, 255, 255],
+        fontStyle: "bold",
+      },
+      columnStyles: {
+        0: { halign: "center", cellWidth: 25 },
+        1: { halign: "left", cellWidth: 20 },
+        2: { halign: "center", cellWidth: 20 },
+        3: { halign: "center", cellWidth: 20 },
+        4: { halign: "center", cellWidth: 25 },
+        5: { halign: "center", cellWidth: 25 },
+        6: { halign: "center", cellWidth: 25 },
+        7: { halign: "left", cellWidth: 25 },
+        8: { halign: "center", cellWidth: 25 },
+      },
+
+      columns: [
+        { header: "ID voucher", dataKey: "_id" },
+        { header: "Mã voucher", dataKey: "ma_voucher" },
+        { header: "Giá trị", dataKey: "gia_tri" },
+        { header: "Phần trăm", dataKey: "phan_tram" },
+        { header: "Số lượng", dataKey: "so_luong" },
+        { header: "Ngày bắt đầu", dataKey: "bat_dau" },
+        { header: "Ngày kết thúc", dataKey: "ket_thuc" },
+        { header: "Ghi chú", dataKey: "mo_ta" },
+      ],
+      didDrawCell: (data) => {
+        if (data.column.index === 3) {
+          const rowIndex = data.row.index;
+          const item = vouchers[rowIndex];
+        }
+      },
+    });
+
+    const date = new Date().toLocaleDateString();
+    doc.setFontSize(10);
+    doc.text(`Ngày xuất: ${date}`, 10, doc.internal.pageSize.height - 10);
+    doc.save("Voucher.pdf");
 
     Swal.fire({
       title: "Thành công",
-      text: "Dữ liệu đã được xuất ra Excel!",
+      text: "Dữ liệu và hình ảnh đã được xuất ra PDF!",
       icon: "success",
       confirmButtonText: "OK",
     });
   };
 
-  // Hàm xuất dữ liệu ra PDF
-  const exportToPDF = () => {
-    const doc = new jsPDF();
-    doc.autoTable({ html: "#productTable" });
-    doc.save("products.pdf");
-
-    Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu đã được xuất ra PDF!",
-      icon: "success",
-      confirmButtonText: "OK",
+  const convertToVietnamTime = (dateString) => {
+    const date = new Date(dateString);
+    const formatter = new Intl.DateTimeFormat("vi-VN", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false, // Chế độ 24 giờ
     });
+    return formatter.format(date);
   };
 
   const fetchVouchers = async () => {
@@ -91,6 +245,13 @@ export default function VoucherPage() {
       setTotalPage(data.totalPages || 1);
       setVouchers(data.vouchers);
       setTotalVouchers(data.totalVouchers);
+      setVouchers(
+        data.vouchers.map((voucher) => ({
+          ...voucher,
+          bat_dau: convertToVietnamTime(voucher.bat_dau),
+          ket_thuc: convertToVietnamTime(voucher.ket_thuc),
+        }))
+      );
     } catch (error) {
       setError(error.message);
     } finally {
@@ -179,33 +340,30 @@ export default function VoucherPage() {
               <Link href="/components/themvoucher" className={styles.sp}>
                 <i className="fas fa-plus"></i> Tạo mới voucher
               </Link>
-            </div>
-            <div className={styles.buttonGroup}>
-              <button className={styles.sp2}>
+              <div className={styles.buttonGroup}>
+                <button className={styles.sp2} onClick={uploadFile}>
+                  &nbsp;
+                  <i className="fas fa-file-upload"></i> Tải từ file
+                </button>
                 &nbsp;
-                <i className="fas fa-file-upload" onClick={uploadFile}></i> Tải
-                từ file
-              </button>
-              &nbsp;
-              <button className={styles.sp3}>
-                <i className="fas fa-print" onClick={printData}></i> In dữ liệu
-              </button>
-              &nbsp;
-              <button className={styles.sp4}>
-                <i className="fas fa-copy" onClick={copyData}></i> Sao chép
-              </button>
-              &nbsp;
-              <button className={styles.sp5}>
+                <button className={styles.sp3} onClick={printData}>
+                  <i className="fas fa-print"></i> In dữ liệu
+                </button>
                 &nbsp;
-                <i className="fas fa-file-excel" onClick={uploadFile}></i> Xuất
-                Excel
-              </button>
-              &nbsp;
-              <button className={styles.sp6}>
-                <i className="fas fa-file-pdf" onClick={exportToPDF}></i> Xuất
-                PDF
-              </button>
-              &nbsp;
+                <button className={styles.sp4} onClick={copyData}>
+                  <i className="fas fa-copy"></i> Sao chép
+                </button>
+                &nbsp;
+                <button className={styles.sp5} onClick={exportToExcel}>
+                  &nbsp;
+                  <i className="fas fa-file-excel"></i> Xuất Excel
+                </button>
+                &nbsp;
+                <button className={styles.sp6} onClick={exportToPDF}>
+                  <i className="fas fa-file-pdf"></i> Xuất PDF
+                </button>
+                &nbsp;
+              </div>
             </div>
           </div>
 
