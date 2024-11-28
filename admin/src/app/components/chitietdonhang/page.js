@@ -79,8 +79,10 @@ export default function ChiTietDonHang() {
   };
 
   const printData = () => {
+    if (typeof window !== "undefined") {
       window.print();
-  }
+    }
+  };
   
   const copyData = () => {
     if (typeof document !== "undefined") {
@@ -363,47 +365,59 @@ export default function ChiTietDonHang() {
                   />
                 </div>
               </div>
-              <table id="productTable" className={styles.productTable}>
-                <thead>
-                  <tr>
-                    <th style={{ width: "35%", textAlign: "center" }}>ID</th>
-                    <th style={{ width: "25%", textAlign: "center" }}>
-                      Giá Sản phẩm
-                    </th>
-                    <th style={{ width: "25%", textAlign: "center" }}>
-                      Tên sản phẩm
-                    </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      Số lượng
-                    </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      ID đơn hàng
-                    </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      ID sản phẩm
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {displayUsers.map((item) => (
-                    <tr key={item._id}>
-                      <td>{item._id}</td>
-                      <td style={{ textAlign: "center" }}>
-                        <p className={styles.mota}>
-                          {item.gia_san_pham.toLocaleString("vi-VN")}đ
-                        </p>
-                      </td>
-                      <td style={{ textAlign: "center" }}>
-                        {item.ten_san_pham}
-                      </td>
-                      <td style={{ textAlign: "center" }}>{item.so_luong}</td>
-                      <td>{item.id_don_hang}</td>
-                      <td>{item.id_san_pham}</td>
+              {displayUsers.length > 0 ? (
+                <table id="productTable" className={styles.productTable}>
+                  <thead>
+                    <tr>
+                      <th style={{ width: "35%", textAlign: "center" }}>ID</th>
+                      <th style={{ width: "25%", textAlign: "center" }}>
+                        Giá Sản phẩm
+                      </th>
+                      <th style={{ width: "25%", textAlign: "center" }}>
+                        Tên sản phẩm
+                      </th>
+                      <th style={{ width: "15%", textAlign: "center" }}>
+                        Số lượng
+                      </th>
+                      <th style={{ width: "15%", textAlign: "center" }}>
+                        ID đơn hàng
+                      </th>
+                      <th style={{ width: "15%", textAlign: "center" }}>
+                        ID sản phẩm
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-
+                  </thead>
+                  <tbody>
+                    {displayUsers.map((item) => (
+                      <tr key={item._id}>
+                        <td>{item._id}</td>
+                        <td style={{ textAlign: "center" }}>
+                          <p className={styles.mota}>
+                            {item.gia_san_pham.toLocaleString("vi-VN")}đ
+                          </p>
+                        </td>
+                        <td style={{ textAlign: "center" }}>
+                          {item.ten_san_pham}
+                        </td>
+                        <td style={{ textAlign: "center" }}>{item.so_luong}</td>
+                        <td>{item.id_don_hang}</td>
+                        <td>{item.id_san_pham}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p
+                  style={{
+                    textAlign: "center",
+                    marginTop: "20px",
+                    fontStyle: "italic",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Không tìm thấy dữ liệu cần tìm.
+                </p>
+              )}
               <div className={styles.pagination}>
                 <span>
                   Hiện 1 đến {displayUsers.length} của{" "}
