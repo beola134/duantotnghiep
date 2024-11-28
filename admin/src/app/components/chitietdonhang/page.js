@@ -1,55 +1,13 @@
 "use client";
-import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./donhang.module.css";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import * as XLSX from "xlsx";
-
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import ExcelJS from "exceljs";
+import RobotoRegular from "../taikhoan/Roboto-Regular.base64";
 
-const exportToPDF = () => {
-  if (typeof document !== "undefined") {
-    const doc = new jsPDF();
-
-    // Add title
-    doc.text("Chi Tiết Đơn Hàng", 14, 10);
-
-    // Auto table
-    doc.autoTable({
-      html: "#productTable",
-      startY: 20,
-      styles: { fontSize: 10 },
-    });
-
-    // Save the PDF
-    doc.save("OrderDetails.pdf");
-
-    Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu đã được xuất ra PDF!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
-  }
-};
-
-const exportToExcel = () => {
-  if (typeof document !== "undefined") {
-    const table = document.getElementById("productTable");
-    const worksheet = XLSX.utils.table_to_sheet(table);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "OrderDetails");
-
-    XLSX.writeFile(workbook, "OrderDetails.xlsx");
-    Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu đã được xuất ra Excel!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
-  }
-};
+// pdf
 
 
 export default function ChiTietDonHang() {
@@ -57,7 +15,7 @@ export default function ChiTietDonHang() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [displayUsers, setDisplayUsers] = useState([]);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage  ] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -122,59 +80,205 @@ export default function ChiTietDonHang() {
   };
 
   const printData = () => {
-    if (typeof window !== "undefined") {
       window.print();
-    }
-  };
-
+  }
+  
   const copyData = () => {
-    if (typeof document !== "undefined") {
-      const table = document.getElementById("productTable");
-      const range = document.createRange();
-      range.selectNode(table);
-      window.getSelection().removeAllRanges();
-      window.getSelection().addRange(range);
-      document.execCommand("copy");
+    const table = document.getElementById("productTable");
+    const range = document.createRange();
+    range.selectNode(table);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
 
-      Swal.fire({
-        title: "Thành công",
-        text: "Dữ liệu đã được sao chép!",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-    }
+    Swal.fire({
+      title: "Thành công",
+      text: "Dữ liệu đã được sao chép!",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+  };
+  
+  // Hàm xuất dữ liệu ra Excel
+  const exportToExcel = async () => {
+    Swal.fire({
+      title: "Xác nhận",
+      text: "Bạn có chắc chắn muốn xuất dữ liệu ra file Excel?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Xuất",
+      cancelButtonText: "Hủy",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const workbook = new ExcelJS.Workbook();
+          const worksheet = workbook.addWorksheet("Danh Sách Sản Phẩm Đã Bán");
+          worksheet.columns = [
+            { header: "ID", key: "_id", width: 20 },
+            { header: "Giá Sản Phẩm", key: "gia_san_pham", width: 25 },
+            { header: "Tên Sản Phẩm", key: "ten_san_pham", width: 25 },
+            { header: "Số Lượng", key: "so_luong", width: 40 },
+            { header: "ID Đơn Hàng", key: "id_don_hang", width: 20 },
+            { header: "ID Sản Phẩm", key: "id_san_pham", width: 20 },
+          ];
+          worksheet.getRow(1).eachCell((cell) => {
+            cell.font = { bold: true, color: { argb: "FFFFFF" } };
+            cell.fill = {
+              type: "pattern",
+              pattern: "solid",
+              fgColor: { argb: "0070C0" },
+            };
+            cell.alignment = { vertical: "middle", horizontal: "center" };
+          });
+          // Lấy dữ liệu từ bảng HTML và thêm vào Excel
+          const rows = Array.from(
+            document.querySelectorAll("#productTable tbody tr")
+          );
+           rows.forEach((row) => {
+             const cols = row.querySelectorAll("td");
+             const id = cols[0].textContent.trim();
+             const giaSanPham = cols[1].textContent.trim();
+             const tenSanPham = cols[2].textContent.trim();
+             const soLuong = cols[3].textContent.trim();
+             const idDonHang = cols[4].textContent.trim();
+             const idSanPham = cols[5].textContent.trim();
+             // Thêm dòng vào worksheet
+             worksheet.addRow({
+               _id: id,
+               gia_san_pham: giaSanPham,
+               ten_san_pham: tenSanPham,
+               so_luong: soLuong,
+               id_don_hang: idDonHang,
+               id_san_pham: idSanPham,
+             });
+           });
+          worksheet.eachRow((row) => {
+            row.eachCell((cell) => {
+              cell.border = {
+                top: { style: "thin" },
+                left: { style: "thin" },
+                bottom: { style: "thin" },
+                right: { style: "thin" },
+              };
+            });
+          });
+            const buffer = await workbook.xlsx.writeBuffer();
+            const blob = new Blob([buffer], {
+              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "chi_tiet_don_hang.xlsx";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+
+          Swal.fire({
+            title: "Thành công",
+            text: "Dữ liệu đã được xuất ra file Excel!",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+        } catch (error) {
+          console.error("Lỗi khi xuất Excel:", error);
+          Swal.fire({
+            title: "Lỗi",
+            text: "Không thể xuất file Excel. Vui lòng thử lại!",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        }
+      }
+    });
   };
 
-  const exportToExcel = () => {
-    if (typeof document !== "undefined" && typeof XLSX !== "undefined") {
-      const table = document.getElementById("productTable");
-      const workbook = XLSX.utils.table_to_book(table);
-      XLSX.writeFile(workbook, "products.xlsx");
-
-      Swal.fire({
-        title: "Thành công",
-        text: "Dữ liệu đã được xuất ra Excel!",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-    }
-  };
-
+  // Hàm xuất dữ liệu ra PDF
   const exportToPDF = () => {
-    if (typeof document !== "undefined" && typeof jsPDF !== "undefined") {
-      const doc = new jsPDF();
-      doc.autoTable({ html: "#productTable" });
-      doc.save("products.pdf");
+    Swal.fire({
+      title: "Xác nhận",
+      text: "Bạn có chắc chắn muốn xuất dữ liệu ra file PDF?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Xuất",
+      cancelButtonText: "Hủy",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          const doc = new jsPDF();
+          doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
+          doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+          doc.setFont("Roboto");
+          doc.setFontSize(18);
+          doc.text("Chi tiết đơn hàng", 14, 20);
+          const rows = [];
+          const headers = [
+            "ID",
+            "Giá Sản Phẩm",
+            "Tên Sản Phẩm",
+            "Số Lượng",
+            "ID Đơn Hàng",
+            "ID Sản Phẩm",
+          ];
+          const tableRows = document.querySelectorAll("#productTable tbody tr");
+          tableRows.forEach((row) => {
+            const cols = row.querySelectorAll("td");
+            const _id = cols[0].textContent.trim();
+            const gia_san_pham = cols[1].textContent.trim();
+            const ten_san_pham = cols[2].textContent.trim();
+            const so_luong = cols[3].textContent.trim();
+            const id_don_hang = cols[4].textContent.trim();
+            const id_san_pham = cols[5].textContent.trim();
+            console.log(tableRows);
+            
+            rows.push([
+              _id,
+              gia_san_pham,
+              ten_san_pham,
+              so_luong,
+              id_don_hang,
+              id_san_pham,
+            ]);
+          });
+          doc.autoTable({
+            head: [headers],
+            body: rows,
+            startY: 30,
+            theme: "grid",
+            headStyles: {
+              fillColor: [0, 112, 192],
+              textColor: [255, 255, 255],
+            },
+            styles: { font: "Roboto", fontSize: 10 },
+            columnStyles: {
+              0: { cellWidth: 25 }, // ID đơn hàng
+              1: { cellWidth: 20 }, // giá sản phẩm
+              2: { cellWidth: 30 }, // Tên sp
+              3: { cellWidth: 20 }, // Số luọng
+              4: { cellWidth: 15 }, // id đơn hang
+              5: { cellWidth: 25 }, // id sản phẩm
 
-      Swal.fire({
-        title: "Thành công",
-        text: "Dữ liệu đã được xuất ra PDF!",
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-    }
+            },
+          });
+          doc.save("chi_tiet_don_hang.pdf");
+          Swal.fire({
+            title: "Thành công",
+            text: "Dữ liệu đã được xuất ra file PDF!",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+        } catch (error) {
+          console.error("Lỗi khi xuất PDF:", error);
+          Swal.fire({
+            title: "Lỗi",
+            text: "Không thể xuất file PDF. Vui lòng thử lại!",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        }
+      }
+    });
   };
-
   //lấy dữ liệu danh sách chi tiết đơn hàng
   useEffect(() => {
     const fetchUsers = async () => {
@@ -196,14 +300,19 @@ export default function ChiTietDonHang() {
     fetchUsers();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+   if (loading) {
+     return <p>Loading...</p>;
+   }
+
+   if (error) {
+     return <p>Error: {error}</p>;
+   }
   return (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>
         <div className={styles.header1}>
           <div className={styles.title} style={{ fontWeight: "bold" }}>
-            Danh Sách Tài Khoản
+            Danh Sách Sản Phẩm Đã Bán
           </div>
           <div className={styles.timestamp} id="timestamp"></div>
         </div>
@@ -238,7 +347,6 @@ export default function ChiTietDonHang() {
 
             <div className={styles.tableContainer}>
               <div className={styles.tableControls}>
-             
                 <div className={styles.search}>
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
                     Tìm kiếm:
@@ -276,14 +384,15 @@ export default function ChiTietDonHang() {
                 <tbody>
                   {displayUsers.map((item) => (
                     <tr key={item._id}>
-                     
                       <td>{item._id}</td>
                       <td style={{ textAlign: "center" }}>
                         <p className={styles.mota}>
                           {item.gia_san_pham.toLocaleString("vi-VN")}đ
                         </p>
                       </td>
-                      <td style={{ textAlign: "center" }}>{item.ten_san_pham}</td>
+                      <td style={{ textAlign: "center" }}>
+                        {item.ten_san_pham}
+                      </td>
                       <td style={{ textAlign: "center" }}>{item.so_luong}</td>
                       <td>{item.id_don_hang}</td>
                       <td>{item.id_san_pham}</td>
@@ -329,5 +438,5 @@ export default function ChiTietDonHang() {
         </div>
       </section>
     </div>
-  );
+);
 }
