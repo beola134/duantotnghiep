@@ -16,11 +16,15 @@ export default function ThemVoucher() {
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
+  const convertToVietnamTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
 
-    // Kiểm tra nếu các trường bắt buộc chưa được điền
     if (!maVouchers) {
       Swal.fire({
         icon: "warning",
@@ -57,8 +61,8 @@ export default function ThemVoucher() {
     const formData = {
       ma_voucher: maVouchers,
       gia_tri: giatri,
-      bat_dau: ngayBD,
-      ket_thuc: ngayKT,
+      bat_dau: convertToVietnamTime(ngayBD),
+      ket_thuc: convertToVietnamTime(ngayKT),
       mo_ta: mota,
       so_luong: soluong,
       phan_tram: phantram,
@@ -154,7 +158,7 @@ export default function ThemVoucher() {
                     Ngày bắt đầu tính giá trị voucher
                   </label>
                   <input
-                    type="date"
+                    type="datetime-local"
                     id="ngayBD"
                     className="ngayBD"
                     onChange={(e) => setngayBD(e.target.value)}
@@ -165,7 +169,7 @@ export default function ThemVoucher() {
                     Ngày kết thúc tính giá trị voucher
                   </label>
                   <input
-                    type="date"
+                    type="datetime-local"
                     id="ngayKT"
                     className="ngayKT"
                     onChange={(e) => setngayKT(e.target.value)}
