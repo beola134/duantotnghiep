@@ -132,7 +132,6 @@ export default function ChiTietDonHang() {
           let totalPages = 1;
           const query = removeAccents(searchQuery.toLowerCase());
 
-          // Fetch the first page to get totalPages
           const firstResponse = await fetch(
             `http://localhost:5000/donhang/getAllOrderDetails?page=${currentPage}&limit=1000&ten_san_pham=${encodeURIComponent(
               query
@@ -148,7 +147,6 @@ export default function ChiTietDonHang() {
             throw new Error("Lỗi khi tải dữ liệu để xuất Excel.");
           }
 
-          // Fetch remaining pages if any
           while (currentPage <= totalPages) {
             const response = await fetch(
               `http://localhost:5000/donhang/getAllOrderDetails?page=${currentPage}&limit=1000&ten_san_pham=${encodeURIComponent(
@@ -175,11 +173,9 @@ export default function ChiTietDonHang() {
             return;
           }
 
-          // Create Excel workbook and worksheet
           const workbook = new ExcelJS.Workbook();
           const worksheet = workbook.addWorksheet("Danh Sách Sản Phẩm Đã Bán");
 
-          // Define worksheet columns
           worksheet.columns = [
             { header: "ID", key: "_id", width: 20 },
             { header: "Giá Sản Phẩm", key: "gia_san_pham", width: 25 },
@@ -189,7 +185,6 @@ export default function ChiTietDonHang() {
             { header: "ID Sản Phẩm", key: "id_san_pham", width: 20 },
           ];
 
-          // Style the header row
           worksheet.getRow(1).eachCell((cell) => {
             cell.font = { bold: true, color: { argb: "FFFFFF" } };
             cell.fill = {
@@ -200,7 +195,7 @@ export default function ChiTietDonHang() {
             cell.alignment = { vertical: "middle", horizontal: "center" };
           });
 
-          // Add rows to the worksheet
+    
           allOrders.forEach((item) => {
             worksheet.addRow({
               _id: item._id,
@@ -212,7 +207,6 @@ export default function ChiTietDonHang() {
             });
           });
 
-          // Style borders for all cells
           worksheet.eachRow((row) => {
             row.eachCell((cell) => {
               cell.border = {
@@ -224,7 +218,6 @@ export default function ChiTietDonHang() {
             });
           });
 
-          // Generate buffer from workbook
           const buffer = await workbook.xlsx.writeBuffer();
           const blob = new Blob([buffer], {
             type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -237,7 +230,6 @@ export default function ChiTietDonHang() {
           a.click();
           document.body.removeChild(a);
 
-          // Show success message
           Swal.fire({
             title: "Thành công",
             text: "Dữ liệu đã được xuất ra file Excel!",
