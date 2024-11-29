@@ -14,34 +14,11 @@ export default function SanPham() {
   const [totalPage, setTotalPage] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
   const itemsPerPage = 5;
-  const uploadFile = () => {
-    Swal.fire({
-      title: "Chưa khả dụng",
-      text: "Tính năng tải file chưa được triển khai!",
-      icon: "info",
-      confirmButtonText: "OK",
-    });
-  };
 
   const printData = () => {
     window.print();
   };
 
-  const copyData = () => {
-    const table = document.getElementById("productTable");
-    const range = document.createRange();
-    range.selectNode(table);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-    document.execCommand("copy");
-
-    Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu đã được sao chép!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
-  };
   const exportToExcel = () => {
     const table = document.getElementById("productTable");
     const workbook = XLSX.utils.table_to_book(table);
@@ -170,17 +147,8 @@ export default function SanPham() {
               </Link>
             </div>
             <div className={styles.buttonGroup}>
-              <button className={styles.sp2} onClick={uploadFile}>
-                &nbsp;
-                <i className="fas fa-file-upload"></i> Tải từ file
-              </button>
-              &nbsp;
               <button className={styles.sp3} onClick={printData}>
                 <i className="fas fa-print"></i> In dữ liệu
-              </button>
-              &nbsp;
-              <button className={styles.sp4} onClick={copyData}>
-                <i className="fas fa-copy"></i> Sao chép
               </button>
               &nbsp;
               <button className={styles.sp5} onClick={exportToExcel}>
