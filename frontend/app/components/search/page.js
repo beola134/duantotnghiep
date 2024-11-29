@@ -113,53 +113,64 @@ export default function Search() {
           </div>
 
           {/* Điều khiển phân trang */}
-          <div className={cx("pagination")}>
-          
-          {currentPage > 1 && (
-            <button
-              title="First page"
-              className={cx("other-page")}
-              onClick={() => handlePageChange(1)}
-            >
-              ‹‹
-            </button>
-          )}
-
-          
-          {currentPage > 1 && (
-            <button
-              className={cx("other-page")}
-              onClick={() => handlePageChange(currentPage - 1)}
-            >
-              ‹
-            </button>
-          )}
-
-          
-          <span className={cx("currentPage")}>
-            {`Trang ${currentPage} / ${totalPages || 1}`}
-          </span>
-
-          
-          {currentPage < totalPages && (
-            <button
-              className={cx("other-page")}
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
-              ›
-            </button>
-          )}
-
-          
-          {currentPage < totalPages && (
-            <button
-              className={cx("other-page")}
-              onClick={() => handlePageChange(totalPages)}
-            >
-              ››
-            </button>
-          )}
-        </div>
+          <div className={styles.pagination}>
+                    {/* Prev trang đâù */}
+                    <span
+                      title="First page"
+                      className={
+                        currentPage === 1
+                          ? styles.disabled
+                          : styles["other-page"]
+                      }
+                      onClick={() => currentPage > 1 && handlePageChange(1)}
+                    >
+                      ‹‹
+                    </span>
+                    {/* Prev 1 trang */}
+                    <span
+                      className={
+                        currentPage === 1
+                          ? styles.disabled
+                          : styles["other-page"]
+                      }
+                      onClick={() =>
+                        currentPage > 1 && handlePageChange(currentPage - 1)
+                      }
+                    >
+                      ‹
+                    </span>
+                    {/* Trang hiện tại */}
+                    <span
+                      className={styles.currentPage}
+                    >{`Trang ${currentPage} / ${totalPages || 1}`}</span>
+                    {/* Next 1 trang*/}
+                    <span
+                      className={
+                        currentPage === totalPages
+                          ? styles.disabled
+                          : styles["other-page"]
+                      }
+                      onClick={() =>
+                        currentPage < totalPages &&
+                        handlePageChange(currentPage + 1)
+                      }
+                    >
+                      ›
+                    </span>
+                    {/* Next tới trang cuối */}
+                    <span
+                      className={
+                        currentPage === totalPages
+                          ? styles.disabled
+                          : styles["other-page"]
+                      }
+                      onClick={() =>
+                        currentPage < totalPages && handlePageChange(totalPages)
+                      }
+                    >
+                      ››
+                    </span>
+                  </div>
         </>
       ) : (
         <p>Không tìm thấy sản phẩm nào</p>

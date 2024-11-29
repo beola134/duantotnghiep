@@ -332,7 +332,10 @@ export default function Donghonu() {
                                 href="#"
                                 title="CALVIN KLEIN"
                                 onClick={() =>
-                                  handleFilterChange("thuong_hieu", "CALVINKLEIN")
+                                  handleFilterChange(
+                                    "thuong_hieu",
+                                    "CALVINKLEIN"
+                                  )
                                 }>
                                 CALVIN KLEIN
                               </Link>
@@ -412,7 +415,10 @@ export default function Donghonu() {
                                 href="#"
                                 title="OLYM PIANUS"
                                 onClick={() =>
-                                  handleFilterChange("thuong_hieu", "OLYMPIANUS")
+                                  handleFilterChange(
+                                    "thuong_hieu",
+                                    "OLYMPIANUS"
+                                  )
                                 }>
                                 OLYM PIANUS
                               </Link>
@@ -459,7 +465,10 @@ export default function Donghonu() {
                                 href="#"
                                 title="MICHAEL KORS"
                                 onClick={() =>
-                                  handleFilterChange("thuong_hieu", "MICHAELKORS")
+                                  handleFilterChange(
+                                    "thuong_hieu",
+                                    "MICHAELKORS"
+                                  )
                                 }>
                                 MICHAEL KORS
                               </Link>
@@ -1776,7 +1785,6 @@ export default function Donghonu() {
                       <option value="asc">Giá từ thấp tới cao</option>
                       <option value="desc">Giá từ cao tới thấp</option>
                       <option value="newest">Mới nhất</option>
-                      <option value="hot">Sản phẩm hot</option>
                     </select>
                     <div className={styles.clear}></div>
                   </div>

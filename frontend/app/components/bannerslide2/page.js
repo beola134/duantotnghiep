@@ -23,7 +23,7 @@ export default function BannerSlide1() {
       img: "/image/item/banner-product-carousel/banner-product2.webp",
       title: "Open Heart",
       type: "Bộ sưu tập mới",
-      description: "TBộ sưu tập những mẫu đồng hồ lộ máy cực đẹp",
+      description: "Bộ sưu tập những mẫu đồng hồ lộ máy cực đẹp",
       more: "VÀO CỬA HÀNG"
       },
        { src: "image/item/banner-product-carousel/banner-3.webp",

@@ -3,6 +3,54 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./donhang.module.css";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import * as XLSX from "xlsx";
+
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+
+const exportToPDF = () => {
+  if (typeof document !== "undefined") {
+    const doc = new jsPDF();
+
+    // Add title
+    doc.text("Chi Tiết Đơn Hàng", 14, 10);
+
+    // Auto table
+    doc.autoTable({
+      html: "#productTable",
+      startY: 20,
+      styles: { fontSize: 10 },
+    });
+
+    // Save the PDF
+    doc.save("OrderDetails.pdf");
+
+    Swal.fire({
+      title: "Thành công",
+      text: "Dữ liệu đã được xuất ra PDF!",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+  }
+};
+
+const exportToExcel = () => {
+  if (typeof document !== "undefined") {
+    const table = document.getElementById("productTable");
+    const worksheet = XLSX.utils.table_to_sheet(table);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "OrderDetails");
+
+    XLSX.writeFile(workbook, "OrderDetails.xlsx");
+    Swal.fire({
+      title: "Thành công",
+      text: "Dữ liệu đã được xuất ra Excel!",
+      icon: "success",
+      confirmButtonText: "OK",
+    });
+  }
+};
+
 
 export default function ChiTietDonHang() {
   const [users, setUser] = useState([]);

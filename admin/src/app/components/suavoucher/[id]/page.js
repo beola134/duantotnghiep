@@ -16,6 +16,16 @@ export default function SuaVoucher() {
   const router = useRouter();
   const { id } = useParams();
 
+  const convertToVietnamTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString();
+  };
+  const convertFromVietnamTime = (dateString) => {
+    const date = new Date(dateString);
+    const localDate = new Date(date.getTime() - 7 * 60 * 60 * 1000);
+    return localDate.toISOString().slice(0, 16); // Format for input[type="datetime-local"]
+  };
+
   useEffect(() => {
     const fetchVoucher = async () => {
       try {
@@ -29,8 +39,8 @@ export default function SuaVoucher() {
           setgiatri(data.gia_tri);
           setsoluong(data.so_luong);
           setphantram(data.phan_tram);
-          setngayBD(data.bat_dau);
-          setngayKT(data.ket_thuc);
+          setngayBD(convertFromVietnamTime(data.bat_dau));
+          setngayKT(convertFromVietnamTime(data.ket_thuc));
           setmota(data.mo_ta);
         } else {
           Swal.fire("Error", "Không tìm thấy voucher!", "error");
@@ -70,8 +80,8 @@ export default function SuaVoucher() {
       gia_tri: giatri,
       so_luong: soluong,
       phan_tram: phantram,
-      bat_dau: ngayBD,
-      ket_thuc: ngayKT,
+      bat_dau: convertToVietnamTime(ngayBD),
+      ket_thuc: convertToVietnamTime(ngayKT),
       mo_ta: mota,
     };
 
@@ -161,7 +171,7 @@ export default function SuaVoucher() {
                   Ngày bắt đầu tính giá trị voucher
                 </label>
                 <input
-                  type="text"
+                  type="datetime-local"
                   id="ngayBD"
                   className="ngayBD"
                   value={ngayBD}
@@ -173,7 +183,7 @@ export default function SuaVoucher() {
                   Ngày kết thúc tính giá trị voucher
                 </label>
                 <input
-                  type="text"
+                  type="datetime-local"
                   id="ngayKT"
                   className="ngayKT"
                   value={ngayKT}
