@@ -127,12 +127,9 @@ export default function VoucherPage() {
       cancelButtonText: "Hủy",
     });
     try {
-      const response = await fetch(
-        `http://localhost:5000/voucher/deleteVoucher/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`http://localhost:5000/voucher/deleteVoucher/${id}`, {
+        method: "DELETE",
+      });
 
       if (response.ok) {
         setVouchers(vouchers.filter((voucher) => voucher._id !== id));
@@ -181,29 +178,18 @@ export default function VoucherPage() {
               </Link>
             </div>
             <div className={styles.buttonGroup}>
-              <button className={styles.sp2}>
+              &nbsp;
+              <button className={styles.sp3} onClick={printData}>
+                <i className="fas fa-print"></i> In dữ liệu
+              </button>
+              &nbsp;
+              <button className={styles.sp5} onClick={exportToExcel}>
                 &nbsp;
-                <i className="fas fa-file-upload" onClick={uploadFile}></i> Tải
-                từ file
+                <i className="fas fa-file-excel"></i> Xuất Excel
               </button>
               &nbsp;
-              <button className={styles.sp3}>
-                <i className="fas fa-print" onClick={printData}></i> In dữ liệu
-              </button>
-              &nbsp;
-              <button className={styles.sp4}>
-                <i className="fas fa-copy" onClick={copyData}></i> Sao chép
-              </button>
-              &nbsp;
-              <button className={styles.sp5}>
-                &nbsp;
-                <i className="fas fa-file-excel" onClick={uploadFile}></i> Xuất
-                Excel
-              </button>
-              &nbsp;
-              <button className={styles.sp6}>
-                <i className="fas fa-file-pdf" onClick={exportToPDF}></i> Xuất
-                PDF
+              <button className={styles.sp6} onClick={exportToPDF}>
+                <i className="fas fa-file-pdf"></i> Xuất PDF
               </button>
               &nbsp;
             </div>
@@ -227,21 +213,13 @@ export default function VoucherPage() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-                <th style={{ width: "15%", textAlign: "center" }}>
-                  Id Voucher
-                </th>
-                <th style={{ width: "12%", textAlign: "center" }}>
-                  Mã Voucher
-                </th>
+                <th style={{ width: "15%", textAlign: "center" }}>Id Voucher</th>
+                <th style={{ width: "12%", textAlign: "center" }}>Mã Voucher</th>
                 <th style={{ width: "12%", textAlign: "center" }}>Giá trị</th>
                 <th style={{ width: "12%", textAlign: "center" }}>Phần trăm</th>
                 <th style={{ width: "12%", textAlign: "center" }}>Số Lượng</th>
-                <th style={{ width: "12%", textAlign: "center" }}>
-                  Ngày bắt đầu
-                </th>
-                <th style={{ width: "10%", textAlign: "center" }}>
-                  Ngày kết thúc
-                </th>
+                <th style={{ width: "12%", textAlign: "center" }}>Ngày bắt đầu</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Ngày kết thúc</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Mô tả</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
               </tr>
@@ -255,22 +233,14 @@ export default function VoucherPage() {
                       textAlign: "center",
                       color: "red",
                       fontWeight: "bold",
-                    }}>
+                    }}
+                  >
                     Không có voucher
                   </td>
                 </tr>
               ) : (
                 vouchers.map((voucher) => {
-                  const {
-                    _id,
-                    ma_voucher,
-                    gia_tri,
-                    phan_tram,
-                    so_luong,
-                    bat_dau,
-                    ket_thuc,
-                    mo_ta,
-                  } = voucher;
+                  const { _id, ma_voucher, gia_tri, phan_tram, so_luong, bat_dau, ket_thuc, mo_ta } = voucher;
 
                   return (
                     <tr key={_id}>
@@ -283,15 +253,11 @@ export default function VoucherPage() {
                       <td style={{ textAlign: "center" }}>{ket_thuc}</td>
                       <td style={{ textAlign: "center" }}>{mo_ta}</td>
                       <td style={{ textAlign: "center" }}>
-                        <Link
-                          href={`/components/suavoucher/${_id}`}
-                          className={`${styles.btn} ${styles.edit}`}>
+                        <Link href={`/components/suavoucher/${_id}`} className={`${styles.btn} ${styles.edit}`}>
                           ✏️
                         </Link>
                         &nbsp;
-                        <button
-                          className={`${styles.btn} ${styles.delete}`}
-                          onClick={() => deleteVoucher(_id)}>
+                        <button className={`${styles.btn} ${styles.delete}`} onClick={() => deleteVoucher(_id)}>
                           🗑️
                         </button>
                         &nbsp;
@@ -305,34 +271,25 @@ export default function VoucherPage() {
 
           <div className={styles.pagination}>
             <span>
-              Hiện {startVoucherIndex} đến {endVoucherIndex} của {totalVouchers}{" "}
-              sản phẩm
+              Hiện {startVoucherIndex} đến {endVoucherIndex} của {totalVouchers} sản phẩm
             </span>
             <div className={styles.paginationControls}>
               <button
-                className={`${styles.paginationButton} ${
-                  currentPage === 1 ? styles.disabled : styles["other-page"]
-                }`}
-                onClick={() =>
-                  currentPage > 1 && handlePageChange(currentPage - 1)
-                }
-                disabled={currentPage === 1}>
+                className={`${styles.paginationButton} ${currentPage === 1 ? styles.disabled : styles["other-page"]}`}
+                onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
                 ‹
               </button>
-              <button className={styles.paginationButton}>
-                {`Trang ${currentPage} / ${totalPage}`}
-              </button>
+              <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPage}`}</button>
 
               <button
                 className={`${styles.paginationButton} ${
-                  currentPage === totalPage
-                    ? styles.disabled
-                    : styles["other-page"]
+                  currentPage === totalPage ? styles.disabled : styles["other-page"]
                 }`}
-                onClick={() =>
-                  currentPage < totalPage && handlePageChange(currentPage + 1)
-                }
-                disabled={currentPage === totalPage}>
+                onClick={() => currentPage < totalPage && handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPage}
+              >
                 ›
               </button>
             </div>

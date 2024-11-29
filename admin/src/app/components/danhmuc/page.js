@@ -60,12 +60,9 @@ export default function DanhmucPage() {
       cancelButtonText: "Hủy",
     });
     try {
-      const response = await fetch(
-        `http://localhost:5000/cate/deletecate/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`http://localhost:5000/cate/deletecate/${id}`, {
+        method: "DELETE",
+      });
 
       if (response.ok) {
         setDanhmuc(cates.filter((cate) => cate._id !== id));
@@ -114,17 +111,9 @@ export default function DanhmucPage() {
               </Link>
             </div>
             <div className={styles.buttonGroup}>
-              <button className={styles.sp2}>
-                &nbsp;
-                <i className="fas fa-file-upload"></i> Tải từ file
-              </button>
               &nbsp;
               <button className={styles.sp3}>
                 <i className="fas fa-print"></i> In dữ liệu
-              </button>
-              &nbsp;
-              <button className={styles.sp4}>
-                <i className="fas fa-copy"></i> Sao chép
               </button>
               &nbsp;
               <button className={styles.sp5}>
@@ -157,12 +146,8 @@ export default function DanhmucPage() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-                <th style={{ width: "15%", textAlign: "center" }}>
-                  Id Danh mục
-                </th>
-                <th style={{ width: "12%", textAlign: "center" }}>
-                  Tên danh mục
-                </th>
+                <th style={{ width: "15%", textAlign: "center" }}>Id Danh mục</th>
+                <th style={{ width: "12%", textAlign: "center" }}>Tên danh mục</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Hình ảnh</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Mô tả</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
@@ -177,7 +162,8 @@ export default function DanhmucPage() {
                       textAlign: "center",
                       color: "red",
                       fontWeight: "bold",
-                    }}>
+                    }}
+                  >
                     Không có danh mục
                   </td>
                 </tr>
@@ -194,15 +180,11 @@ export default function DanhmucPage() {
                       </td>
                       <td style={{ textAlign: "center" }}>{mo_ta}</td>
                       <td style={{ textAlign: "center" }}>
-                        <Link
-                          href={`/components/suadanhmuc/${_id}`}
-                          className={`${styles.btn} ${styles.edit}`}>
+                        <Link href={`/components/suadanhmuc/${_id}`} className={`${styles.btn} ${styles.edit}`}>
                           ✏️
                         </Link>
                         &nbsp;
-                        <button
-                          className={`${styles.btn} ${styles.delete}`}
-                          onClick={() => deleteDanhmuc(_id)}>
+                        <button className={`${styles.btn} ${styles.delete}`} onClick={() => deleteDanhmuc(_id)}>
                           🗑️
                         </button>
                         &nbsp;
@@ -215,36 +197,26 @@ export default function DanhmucPage() {
           </table>
           <div className={styles.pagination}>
             <span>
-              Hiện {startDanhmucIndex} đến {endDanhmucIndex} của {totalCates}{" "}
-              {""}
+              Hiện {startDanhmucIndex} đến {endDanhmucIndex} của {totalCates} {""}
               sản phẩm
             </span>
             <div className={styles.paginationControls}>
               <button
-                className={`${styles.paginationButton} ${
-                  currentPage === 1 ? styles.disabled : styles["other-page"]
-                }`}
-                onClick={() =>
-                  currentPage > 1 && handlePageChange(currentPage - 1)
-                }
-                disabled={currentPage === 1}>
+                className={`${styles.paginationButton} ${currentPage === 1 ? styles.disabled : styles["other-page"]}`}
+                onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
                 ‹
               </button>
-              <button
-                className={
-                  styles.paginationButton
-                }>{`Trang ${currentPage} / ${totalPage}`}</button>
+              <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPage}`}</button>
 
               <button
                 className={`${styles.paginationButton} ${
-                  currentPage === totalPage
-                    ? styles.disabled
-                    : styles["other-page"]
+                  currentPage === totalPage ? styles.disabled : styles["other-page"]
                 }`}
-                onClick={() =>
-                  currentPage < totalPage && handlePageChange(currentPage + 1)
-                }
-                disabled={currentPage === totalPage}>
+                onClick={() => currentPage < totalPage && handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPage}
+              >
                 ›
               </button>
             </div>

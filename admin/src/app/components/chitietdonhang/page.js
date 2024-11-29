@@ -51,7 +51,6 @@ const exportToExcel = () => {
   }
 };
 
-
 export default function ChiTietDonHang() {
   const [users, setUser] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -108,9 +107,7 @@ export default function ChiTietDonHang() {
     });
   };
 
-  const totalPages = Math.ceil(
-    (searchQuery ? filteredUsers.length : users.length) / itemsPerPage
-  );
+  const totalPages = Math.ceil((searchQuery ? filteredUsers.length : users.length) / itemsPerPage);
 
   const uploadFile = () => {
     Swal.fire({
@@ -179,9 +176,7 @@ export default function ChiTietDonHang() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/donhang/getAllOrderDetails"
-        );
+        const response = await fetch("http://localhost:5000/donhang/getAllOrderDetails");
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -211,17 +206,9 @@ export default function ChiTietDonHang() {
           <div className={styles.container}>
             <div className={styles.actions}>
               <div className={styles.buttonGroup}>
-                <button className={styles.sp2} onClick={uploadFile}>
-                  &nbsp;
-                  <i className="fas fa-file-upload"></i> Tải từ file
-                </button>
                 &nbsp;
                 <button className={styles.sp3} onClick={printData}>
                   <i className="fas fa-print"></i> In dữ liệu
-                </button>
-                &nbsp;
-                <button className={styles.sp4} onClick={copyData}>
-                  <i className="fas fa-copy"></i> Sao chép
                 </button>
                 &nbsp;
                 <button className={styles.sp5} onClick={exportToExcel}>
@@ -238,7 +225,6 @@ export default function ChiTietDonHang() {
 
             <div className={styles.tableContainer}>
               <div className={styles.tableControls}>
-             
                 <div className={styles.search}>
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
                     Tìm kiếm:
@@ -249,6 +235,7 @@ export default function ChiTietDonHang() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={handleSearch}
+                    placeholder="Nhập tên sản phẩm..."
                   />
                 </div>
               </div>
@@ -256,32 +243,19 @@ export default function ChiTietDonHang() {
                 <thead>
                   <tr>
                     <th style={{ width: "35%", textAlign: "center" }}>ID</th>
-                    <th style={{ width: "25%", textAlign: "center" }}>
-                      Giá Sản phẩm
-                    </th>
-                    <th style={{ width: "25%", textAlign: "center" }}>
-                      Tên sản phẩm
-                    </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      Số lượng
-                    </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      ID đơn hàng
-                    </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      ID sản phẩm
-                    </th>
+                    <th style={{ width: "25%", textAlign: "center" }}>Giá Sản phẩm</th>
+                    <th style={{ width: "25%", textAlign: "center" }}>Tên sản phẩm</th>
+                    <th style={{ width: "15%", textAlign: "center" }}>Số lượng</th>
+                    <th style={{ width: "15%", textAlign: "center" }}>ID đơn hàng</th>
+                    <th style={{ width: "15%", textAlign: "center" }}>ID sản phẩm</th>
                   </tr>
                 </thead>
                 <tbody>
                   {displayUsers.map((item) => (
                     <tr key={item._id}>
-                     
                       <td>{item._id}</td>
                       <td style={{ textAlign: "center" }}>
-                        <p className={styles.mota}>
-                          {item.gia_san_pham.toLocaleString("vi-VN")}đ
-                        </p>
+                        <p className={styles.mota}>{item.gia_san_pham.toLocaleString("vi-VN")}đ</p>
                       </td>
                       <td style={{ textAlign: "center" }}>{item.ten_san_pham}</td>
                       <td style={{ textAlign: "center" }}>{item.so_luong}</td>
@@ -294,30 +268,23 @@ export default function ChiTietDonHang() {
 
               <div className={styles.pagination}>
                 <span>
-                  Hiện 1 đến {displayUsers.length} của{" "}
-                  {filteredUsers.length || users.length} chi tiết đơn hàng
+                  Hiện 1 đến {displayUsers.length} của {filteredUsers.length || users.length} chi tiết đơn hàng
                 </span>
                 <div className={styles.paginationControls}>
                   <button
                     className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
                   >
                     ‹
                   </button>
-                  <button
-                    className={`${styles.paginationButton} ${styles.active}`}
-                  >
-                    {currentPage} / {totalPages}
+                  <button className={`${styles.paginationButton} ${styles.active}`}>
+                    {` Trang ${currentPage} / ${totalPages}`}
                   </button>
 
                   <button
                     className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
                   >
                     ›

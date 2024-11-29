@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import styles from "./register.module.css";
 import OTP from "../OTP/page";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const schema = Yup.object().shape({
   name: Yup.string()
@@ -42,6 +43,7 @@ const schema = Yup.object().shape({
 
 export default function Register() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -133,6 +135,11 @@ export default function Register() {
     });
   };
 
+  // Hàm để đổi trạng thái ẩn/hiện mật khẩu
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className={styles.mainContainer}>
       <div className={styles.container}>
@@ -160,26 +167,36 @@ export default function Register() {
           />
           {formik.errors.email && <p className={styles.error}>{formik.errors.email}</p>}
 
-          <input
-            type="password"
-            className={`${styles.input} ${formik.errors.password ? styles.inputError : ""}`}
-            id="password"
-            name="password"
-            onChange={formik.handleChange}
-            value={formik.values.password}
-            placeholder="Mật khẩu"
-          />
+          <div className={styles.passwordWrapper}>
+            <input
+              type={showPassword ? "text" : "password"}
+              className={`${styles.input} ${formik.errors.password ? styles.inputError : ""}`}
+              id="password"
+              name="password"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              placeholder="Mật khẩu"
+            />
+            <div className={styles.togglePasswordIcon} onClick={togglePasswordVisibility}>
+              {showPassword ? <FaEye /> : <FaEyeSlash />}
+            </div>
+          </div>
           {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
 
-          <input
-            type="password"
-            className={`${styles.input} ${formik.errors.confirmPassword ? styles.inputError : ""}`}
-            id="confirmPassword"
-            name="confirmPassword"
-            onChange={formik.handleChange}
-            value={formik.values.confirmPassword}
-            placeholder="Nhâp lại mật khẩu"
-          />
+          <div className={styles.passwordWrapper}>
+            <input
+              type={showPassword ? "text" : "password"}
+              className={`${styles.input} ${formik.errors.confirmPassword ? styles.inputError : ""}`}
+              id="confirmPassword"
+              name="confirmPassword"
+              onChange={formik.handleChange}
+              value={formik.values.confirmPassword}
+              placeholder="Nhâp lại mật khẩu"
+            />
+            <div className={styles.togglePasswordIcon} onClick={togglePasswordVisibility}>
+              {showPassword ? <FaEye /> : <FaEyeSlash />}
+            </div>
+          </div>
           {formik.errors.confirmPassword && <p className={styles.error}>{formik.errors.confirmPassword}</p>}
 
           {/* <input

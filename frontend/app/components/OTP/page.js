@@ -24,6 +24,17 @@ function OtpModal({ isOpen, onRequestClose }) {
     }
   };
 
+  // Xử lý sự kiện dán mã OTP từ clipboard
+
+  const handlePaste = (e) => {
+    const pastedValue = e.clipboardData.getData("Text");
+    // Lọc chỉ lấy số từ dữ liệu dán vào
+    const otpValue = pastedValue.replace(/\D/g, "").slice(0, 6); // Giới hạn tối đa 6 chữ số
+    const newOtp = otpValue.split("");
+    while (newOtp.length < 6) newOtp.push(""); // Đảm bảo rằng có đủ 6 ô
+    setOtp(newOtp);
+  };
+
   const handleSubmit = async () => {
     const otpValue = otp.join("");
     if (otpValue.length < 6) {
@@ -85,7 +96,7 @@ function OtpModal({ isOpen, onRequestClose }) {
       <div className={styles.modal} onKeyDown={(e) => e.key === "Enter" && handleSubmit()}>
         <h3 className={styles.title}>Xác thực OTP</h3>
         <p className={styles.description}>Vui lòng nhập mã OTP vừa gửi tới gmail</p>
-        <div className={styles.otpContainer}>
+        <div className={styles.otpContainer} onPaste={handlePaste}>
           {otp.map((digit, index) => (
             <input
               key={index}

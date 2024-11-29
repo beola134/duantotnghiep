@@ -233,12 +233,6 @@
   cursor: pointer;
 }
 
-.paginationButton.active {
-  background-color: #002f6c;
-  color: white;
-}
-
-
 .trangthai select{
   direction: rtl;
   max-width: 180px; 
