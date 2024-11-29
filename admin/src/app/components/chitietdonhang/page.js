@@ -11,13 +11,53 @@ import RobotoRegular from "../taikhoan/Roboto-Regular.base64";
 
 export default function ChiTietDonHang() {
   const [users, setUser] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [displayUsers, setDisplayUsers] = useState([]);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [detail, setDetails] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // Truy vấn tìm kiếm
+  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+  const [totalPage, setTotalPage] = useState(1); // Tổng số trang
+  const [loading, setLoading] = useState(true); // Trạng thái tải
+  const [error, setError] = useState(null); // Lỗi
+  const [totalDetails, setTotalDetails] = useState(0); // Tổng số đơn hàng
+  const itemsPerPage = 5; // Số mục trên mỗi trang
+
+  // Hàm lấy dữ liệu chi tiết đơn hàng từ API
+  const fetchDetail = async () => {
+    try {
+      setLoading(true); // Bắt đầu tải
+      const response = await fetch(
+        `http://localhost:5000/donhang/getAllOrderDetails?page=${currentPage}&ten_san_pham=${searchQuery}`
+      );
+      if (!response.ok) {
+        throw new Error("Lỗi không thể tải dữ liệu");
+      }
+      const data = await response.json();
+
+      // Cập nhật dữ liệu vào state
+      setTotalPage(data.totalPages);
+      setDetails(data.details);
+      setTotalDetails(data.totalDetails);
+    } catch (error) {
+      setError(error.message); // Cập nhật lỗi
+    } finally {
+      setLoading(false); // Kết thúc tải
+    }
+  };
+
+  // Gọi hàm fetchDetail mỗi khi currentPage hoặc searchQuery thay đổi
+  useEffect(() => {
+    fetchDetail();
+  }, [currentPage, searchQuery]);
+  
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  }
+  const handSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1);
+  }
+
   //tìm kiếm
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -69,6 +109,9 @@ export default function ChiTietDonHang() {
     (searchQuery ? filteredUsers.length : users.length) / itemsPerPage
   );
 
+  const startDetails = (currentPage - 1) * itemsPerPage + 1;
+  const endDetails = Math.min(currentPage * itemsPerPage, totalPages)
+
   const uploadFile = () => {
     Swal.fire({
       title: "Chưa khả dụng",
@@ -83,7 +126,7 @@ export default function ChiTietDonHang() {
       window.print();
     }
   };
-  
+
   const copyData = () => {
     if (typeof document !== "undefined") {
       const table = document.getElementById("productTable");
@@ -101,7 +144,7 @@ export default function ChiTietDonHang() {
       });
     }
   };
-  
+
   // Hàm xuất dữ liệu ra Excel
   const exportToExcel = async () => {
     Swal.fire({
@@ -114,10 +157,9 @@ export default function ChiTietDonHang() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-
           const workbook = new ExcelJS.Workbook();
           const worksheet = workbook.addWorksheet("Danh Sách Sản Phẩm Đã Bán");
-          
+
           worksheet.columns = [
             { header: "ID", key: "_id", width: 20 },
             { header: "Giá Sản Phẩm", key: "gia_san_pham", width: 25 },
@@ -139,24 +181,24 @@ export default function ChiTietDonHang() {
           const rows = Array.from(
             document.querySelectorAll("#productTable tbody tr")
           );
-           rows.forEach((row) => {
-             const cols = row.querySelectorAll("td");
-             const id = cols[0].textContent.trim();
-             const giaSanPham = cols[1].textContent.trim();
-             const tenSanPham = cols[2].textContent.trim();
-             const soLuong = cols[3].textContent.trim();
-             const idDonHang = cols[4].textContent.trim();
-             const idSanPham = cols[5].textContent.trim();
-             // Thêm dòng vào worksheet
-             worksheet.addRow({
-               _id: id,
-               gia_san_pham: giaSanPham,
-               ten_san_pham: tenSanPham,
-               so_luong: soLuong,
-               id_don_hang: idDonHang,
-               id_san_pham: idSanPham,
-             });
-           });
+          rows.forEach((row) => {
+            const cols = row.querySelectorAll("td");
+            const id = cols[0].textContent.trim();
+            const giaSanPham = cols[1].textContent.trim();
+            const tenSanPham = cols[2].textContent.trim();
+            const soLuong = cols[3].textContent.trim();
+            const idDonHang = cols[4].textContent.trim();
+            const idSanPham = cols[5].textContent.trim();
+            // Thêm dòng vào worksheet
+            worksheet.addRow({
+              _id: id,
+              gia_san_pham: giaSanPham,
+              ten_san_pham: tenSanPham,
+              so_luong: soLuong,
+              id_don_hang: idDonHang,
+              id_san_pham: idSanPham,
+            });
+          });
           worksheet.eachRow((row) => {
             row.eachCell((cell) => {
               cell.border = {
@@ -167,10 +209,10 @@ export default function ChiTietDonHang() {
               };
             });
           });
-            const buffer = await workbook.xlsx.writeBuffer();
-            const blob = new Blob([buffer], {
-              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            });
+          const buffer = await workbook.xlsx.writeBuffer();
+          const blob = new Blob([buffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          });
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
@@ -235,7 +277,7 @@ export default function ChiTietDonHang() {
             const id_don_hang = cols[4].textContent.trim();
             const id_san_pham = cols[5].textContent.trim();
             console.log(tableRows);
-            
+
             rows.push([
               _id,
               gia_san_pham,
@@ -262,7 +304,6 @@ export default function ChiTietDonHang() {
               3: { cellWidth: 20 }, // Số luọng
               4: { cellWidth: 15 }, // id đơn hang
               5: { cellWidth: 25 }, // id sản phẩm
-
             },
           });
           doc.save("chi_tiet_don_hang.pdf");
@@ -305,13 +346,13 @@ export default function ChiTietDonHang() {
     fetchUsers();
   }, []);
 
-   if (loading) {
-     return <p>Loading...</p>;
-   }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
-   if (error) {
-     return <p>Error: {error}</p>;
-   }
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
   return (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>
@@ -361,7 +402,7 @@ export default function ChiTietDonHang() {
                     id="search"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={handleSearch}
+                    onKeyDown={handSearchChange}
                   />
                 </div>
               </div>
@@ -420,31 +461,37 @@ export default function ChiTietDonHang() {
               )}
               <div className={styles.pagination}>
                 <span>
-                  Hiện 1 đến {displayUsers.length} của{" "}
-                  {filteredUsers.length || users.length} chi tiết đơn hàng
+                  Hiện 1 đến {startDetails} của{endDetails}
+                  {totalDetails}
+                  {""} chi tiết đơn hàng
                 </span>
                 <div className={styles.paginationControls}>
                   <button
-                    className={styles.paginationButton}
+                    className={`${styles.paginationControls}${
+                      currentPage === 1 ? styles.disabled : styles["other-page"]
+                    }`}
                     onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                      currentPage > 1 && handlePageChange(currentPage - 1)
                     }
                     disabled={currentPage === 1}
                   >
                     ‹
                   </button>
-                  <button
-                    className={`${styles.paginationButton} ${styles.active}`}
-                  >
-                    {currentPage} / {totalPages}
+                  <button className={styles.paginationButton}>
+                    {`Trang ${currentPage} / ${totalPages}`}
                   </button>
 
                   <button
-                    className={styles.paginationButton}
+                    className={`${styles.paginationButton}${
+                      currentPage === totalPage
+                        ? styles.disabled
+                        : styles["other-page"]
+                    }`}
                     onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                      currentPage < totalPage &&
+                      handlePageChange(currentPage + 1)
                     }
-                    disabled={currentPage === totalPages}
+                    disabled={currentPage === totalPage}
                   >
                     ›
                   </button>
