@@ -26,7 +26,6 @@ export default function Detail({ params }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const sliderRef = useRef(null);
-  const [so_luong, setSo_luong] = useState(1);
 
   const dispatch = useDispatch();
 
@@ -41,12 +40,17 @@ export default function Detail({ params }) {
     if (product && product._id) {
       const fetchProductQuantity = async () => {
         try {
-          const response = await fetch(`http://localhost:5000/product/check/${product._id}`);
+          const response = await fetch(
+            `http://localhost:5000/product/check/${product._id}?quantity=${so_luong}`
+          );
           if (!response.ok) {
-            throw new Error("Lỗi không thể tải dữ liệu");
+            const errorData = await response.json();
+            throw new Error(
+              `Error fetching product quantity: ${JSON.stringify(errorData)}`
+            );
           }
           const data = await response.json();
-          setMaxQuantity(data.so_luong);
+          setMaxQuantity(data.product.so_luong);
         } catch (error) {
           console.error("Error fetching product quantity:", error);
         }
@@ -54,7 +58,7 @@ export default function Detail({ params }) {
 
       fetchProductQuantity();
     }
-  }, [product]);
+  }, [product, so_luong]);
 
   const handleIncrease = (e) => {
     e.preventDefault();
@@ -64,7 +68,7 @@ export default function Detail({ params }) {
     console.log("totalRequested:", totalRequested);
     console.log("maxQuantity:", maxQuantity);
 
-    if (totalRequested < maxQuantity) {
+    if (maxQuantity !== undefined && totalRequested <= maxQuantity) {
       setSo_luong((prev) => prev + 1);
     } else {
       Swal.fire({
