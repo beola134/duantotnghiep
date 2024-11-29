@@ -26,6 +26,8 @@ export default function Detail({ params }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const sliderRef = useRef(null);
+  const [so_luong, setSo_luong] = useState(1);
+
   const dispatch = useDispatch();
 
   const cartState = useSelector((state) => state.cart);
@@ -271,6 +273,7 @@ export default function Detail({ params }) {
             showConfirmButton: false,
             timer: 1500,
           });
+          window.location.reload();
         } catch (error) {
           setError(error.message);
         }
@@ -663,93 +666,6 @@ export default function Detail({ params }) {
               </div>
             </div>
             <div className={styles.clear}></div>
-            <div className={styles.orderFast}>
-              <form name="form_regis_phone" id="form_regis_phone" method="post">
-                <div className={styles.wrapperInfor}>
-                  <input
-                    type="text"
-                    name="telephone_buy_fast"
-                    id="telephone_buy_fast"
-                    placeholder="Để lại số điện thoại..."
-                    className={`${styles.keyword} ${styles.txtPhone} ${styles.inputText}`}
-                  />
-                  <select name="cities_buy_fast" id="cities_buy_fast">
-                    <option value="">Tỉnh/Thành Phố</option>
-                    <option value="1473">Hà Nội</option>
-                    <option value="1474">TP HCM</option>
-                    <option value="1475">Hải Phòng</option>
-                    <option value="1482">Bắc Giang</option>
-                    <option value="1483">Bắc Kạn</option>
-                    <option value="1484">Bắc Ninh</option>
-                    <option value="1485">Cao Bằng</option>
-                    <option value="1486">Điện Biên</option>
-                    <option value="1487">Hà Giang</option>
-                    <option value="1488">Hà Nam</option>
-                    <option value="1489">Hải Dương</option>
-                    <option value="1490">Hòa Bình</option>
-                    <option value="1491">Hưng Yên</option>
-                    <option value="1492">Lai Châu</option>
-                    <option value="1493">Lạng Sơn</option>
-                    <option value="1494">Lào Cai</option>
-                    <option value="1495">Nam Định</option>
-                    <option value="1496">Ninh Bình</option>
-                    <option value="1497">Phú Thọ</option>
-                    <option value="1498">Quảng Ninh</option>
-                    <option value="1499">Sơn La</option>
-                    <option value="1500">Thái Bình</option>
-                    <option value="1501">Thái Nguyên</option>
-                    <option value="1502">Thanh Hóa</option>
-                    <option value="1503">Tuyên Quang</option>
-                    <option value="1504">Vĩnh Phúc</option>
-                    <option value="1505">Yên Bái</option>
-                    <option value="1506">Đà Nẵng</option>
-                    <option value="1507">Bình Định</option>
-                    <option value="1508">Bình Phước</option>
-                    <option value="1509">Bình Thuận</option>
-                    <option value="1510">Đắk Lắk</option>
-                    <option value="1511">Đắk Nông</option>
-                    <option value="1512">Gia Lai</option>
-                    <option value="1513">Hà Tĩnh</option>
-                    <option value="1514">Khánh Hòa</option>
-                    <option value="1515">Kon Tum</option>
-                    <option value="1516">Lâm Đồng</option>
-                    <option value="1517">Nghệ An</option>
-                    <option value="1518">Ninh Thuận</option>
-                    <option value="1519">Phú Yên</option>
-                    <option value="1520">Quảng Bình</option>
-                    <option value="1521">Quảng Nam</option>
-                    <option value="1522">Quảng Ngãi</option>
-                    <option value="1523">Quảng Trị</option>
-                    <option value="1524">Thừa Thiên Huế</option>
-                    <option value="1525">Cần Thơ</option>
-                    <option value="1526">An Giang</option>
-                    <option value="1527">Bà Rịa - Vũng Tàu</option>
-                    <option value="1528">Bạc Liêu</option>
-                    <option value="1529">Bến Tre</option>
-                    <option value="1530">Bình Dương</option>
-                    <option value="1531">Cà Mau</option>
-                    <option value="1532">Đồng Nai</option>
-                    <option value="1533">Đồng Tháp</option>
-                    <option value="1534">Hậu Giang</option>
-                    <option value="1535">Kiên Giang</option>
-                    <option value="1536">Long An</option>
-                    <option value="1537">Sóc Trăng</option>
-                    <option value="1538">Tây Ninh</option>
-                    <option value="1539">Tiền Giang</option>
-                    <option value="1540">Trà Vinh</option>
-                    <option value="1541">Vĩnh Long</option>
-                    <option value="1542">Nước Ngoài</option>
-                    <option value="1543">Bắc Kinh</option>
-                  </select>
-                  <input
-                    type="button"
-                    name="submit-res"
-                    value="Gửi"
-                    className={`${styles.btPhone} ${styles.buttonSub} ${styles.button}`}
-                  />
-                </div>
-              </form>
-            </div>
           </div>
         </div>
         {/* frame right */}
