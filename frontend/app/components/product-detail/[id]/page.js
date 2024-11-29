@@ -26,7 +26,6 @@ export default function Detail({ params }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const sliderRef = useRef(null);
-  const [so_luong, setSo_luong] = useState(1);
 
   const dispatch = useDispatch();
 
