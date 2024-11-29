@@ -65,9 +65,7 @@ export default function ChiTietDonHang() {
     });
   };
 
-  const totalPages = Math.ceil(
-    (searchQuery ? filteredUsers.length : users.length) / itemsPerPage
-  );
+  const totalPages = Math.ceil((searchQuery ? filteredUsers.length : users.length) / itemsPerPage);
 
   const uploadFile = () => {
     Swal.fire({
@@ -288,9 +286,7 @@ export default function ChiTietDonHang() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:5000/donhang/getAllOrderDetails"
-        );
+        const response = await fetch("http://localhost:5000/donhang/getAllOrderDetails");
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -325,17 +321,9 @@ export default function ChiTietDonHang() {
           <div className={styles.container}>
             <div className={styles.actions}>
               <div className={styles.buttonGroup}>
-                <button className={styles.sp2} onClick={uploadFile}>
-                  &nbsp;
-                  <i className="fas fa-file-upload"></i> Tải từ file
-                </button>
                 &nbsp;
                 <button className={styles.sp3} onClick={printData}>
                   <i className="fas fa-print"></i> In dữ liệu
-                </button>
-                &nbsp;
-                <button className={styles.sp4} onClick={copyData}>
-                  <i className="fas fa-copy"></i> Sao chép
                 </button>
                 &nbsp;
                 <button className={styles.sp5} onClick={exportToExcel}>
@@ -362,6 +350,7 @@ export default function ChiTietDonHang() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={handleSearch}
+                    placeholder="Nhập tên sản phẩm..."
                   />
                 </div>
               </div>
@@ -420,30 +409,23 @@ export default function ChiTietDonHang() {
               )}
               <div className={styles.pagination}>
                 <span>
-                  Hiện 1 đến {displayUsers.length} của{" "}
-                  {filteredUsers.length || users.length} chi tiết đơn hàng
+                  Hiện 1 đến {displayUsers.length} của {filteredUsers.length || users.length} chi tiết đơn hàng
                 </span>
                 <div className={styles.paginationControls}>
                   <button
                     className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
                   >
                     ‹
                   </button>
-                  <button
-                    className={`${styles.paginationButton} ${styles.active}`}
-                  >
-                    {currentPage} / {totalPages}
+                  <button className={`${styles.paginationButton} ${styles.active}`}>
+                    {` Trang ${currentPage} / ${totalPages}`}
                   </button>
 
                   <button
                     className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
                   >
                     ›

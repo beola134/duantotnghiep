@@ -139,37 +139,22 @@ export default function SanPham() {
                 <th style={{ width: "10%", textAlign: "center" }}>Ảnh</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Số lượng</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Giá tiền</th>
-                <th style={{ width: "15%", textAlign: "center" }}>
-                  Mã sản phẩm
-                </th>
+                <th style={{ width: "15%", textAlign: "center" }}>Mã sản phẩm</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Đã bán</th>
-                <th style={{ width: "15%", textAlign: "center" }}>
-                  Trạng thái
-                </th>
+                <th style={{ width: "15%", textAlign: "center" }}>Trạng thái</th>
               </tr>
             </thead>
             <tbody>
               {products.map((product) => {
-                const {
-                  _id,
-                  ten_san_pham,
-                  hinh_anh,
-                  ma_san_pham,
-                  gia_san_pham,
-                  so_luong,
-                  trang_thai,
-                  da_ban,
-                } = product;
+                const { _id, ten_san_pham, hinh_anh, ma_san_pham, gia_san_pham, so_luong, trang_thai, da_ban } =
+                  product;
 
                 return (
                   <tr key={_id}>
                     <td>{_id}</td>
                     <td>{ten_san_pham}</td>
                     <td>
-                      <img
-                        src={`http://localhost:5000/images/${hinh_anh}`}
-                        alt="Sản phẩm"
-                      />
+                      <img src={`http://localhost:5000/images/${hinh_anh}`} alt="Sản phẩm" />
                     </td>
                     <td style={{ textAlign: "center" }}>{so_luong}</td>
                     <td>{gia_san_pham.toLocaleString("vi-VN")}₫</td>
@@ -197,28 +182,18 @@ export default function SanPham() {
             </span>
             <div className={styles.paginationControls}>
               <button
-                className={`${styles.paginationButton} ${
-                  currentPage === 1 ? styles.disabled : styles["other-page"]
-                }`}
-                onClick={() =>
-                  currentPage > 1 && handlePageChange(currentPage - 1)
-                }
+                className={`${styles.paginationButton} ${currentPage === 1 ? styles.disabled : styles["other-page"]}`}
+                onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
               >
                 ‹
               </button>
-              <button className={styles.paginationButton}>
-                {`Trang ${currentPage} / ${totalPages}`}
-              </button>
+              <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPages}`}</button>
               <button
                 className={`${styles.paginationButton} ${
-                  currentPage === totalPages
-                    ? styles.disabled
-                    : styles["other-page"]
+                  currentPage === totalPages ? styles.disabled : styles["other-page"]
                 }`}
-                onClick={() =>
-                  currentPage < totalPages && handlePageChange(currentPage + 1)
-                }
+                onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >
                 ›

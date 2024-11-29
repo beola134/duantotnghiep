@@ -64,12 +64,9 @@ export default function DanhmucPage() {
       cancelButtonText: "Hủy",
     });
     try {
-      const response = await fetch(
-        `http://localhost:5000/cate/deletecate/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`http://localhost:5000/cate/deletecate/${id}`, {
+        method: "DELETE",
+      });
 
       if (response.ok) {
         setDanhmuc(cates.filter((cate) => cate._id !== id));
@@ -474,7 +471,8 @@ export default function DanhmucPage() {
                       textAlign: "center",
                       color: "red",
                       fontWeight: "bold",
-                    }}>
+                    }}
+                  >
                     Không có danh mục
                   </td>
                 </tr>
@@ -493,15 +491,11 @@ export default function DanhmucPage() {
                         <p className={styles.mota}>{mo_ta}</p>
                       </td>
                       <td style={{ textAlign: "center" }}>
-                        <Link
-                          href={`/components/suadanhmuc/${_id}`}
-                          className={`${styles.btn} ${styles.edit}`}>
+                        <Link href={`/components/suadanhmuc/${_id}`} className={`${styles.btn} ${styles.edit}`}>
                           ✏️
                         </Link>
                         &nbsp;
-                        <button
-                          className={`${styles.btn} ${styles.delete}`}
-                          onClick={() => deleteDanhmuc(_id)}>
+                        <button className={`${styles.btn} ${styles.delete}`} onClick={() => deleteDanhmuc(_id)}>
                           🗑️
                         </button>
                         &nbsp;
@@ -514,36 +508,26 @@ export default function DanhmucPage() {
           </table>
           <div className={styles.pagination}>
             <span>
-              Hiện {startDanhmucIndex} đến {endDanhmucIndex} của {totalCates}{" "}
-              {""}
+              Hiện {startDanhmucIndex} đến {endDanhmucIndex} của {totalCates} {""}
               sản phẩm
             </span>
             <div className={styles.paginationControls}>
               <button
-                className={`${styles.paginationButton} ${
-                  currentPage === 1 ? styles.disabled : styles["other-page"]
-                }`}
-                onClick={() =>
-                  currentPage > 1 && handlePageChange(currentPage - 1)
-                }
-                disabled={currentPage === 1}>
+                className={`${styles.paginationButton} ${currentPage === 1 ? styles.disabled : styles["other-page"]}`}
+                onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
                 ‹
               </button>
-              <button
-                className={
-                  styles.paginationButton
-                }>{`Trang ${currentPage} / ${totalPage}`}</button>
+              <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPage}`}</button>
 
               <button
                 className={`${styles.paginationButton} ${
-                  currentPage === totalPage
-                    ? styles.disabled
-                    : styles["other-page"]
+                  currentPage === totalPage ? styles.disabled : styles["other-page"]
                 }`}
-                onClick={() =>
-                  currentPage < totalPage && handlePageChange(currentPage + 1)
-                }
-                disabled={currentPage === totalPage}>
+                onClick={() => currentPage < totalPage && handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPage}
+              >
                 ›
               </button>
             </div>
