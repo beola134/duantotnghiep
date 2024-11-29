@@ -62,7 +62,7 @@ export default function DanhMuc() {
   (searchQuery ? filteredCategories.length : categories.length) / itemsPerPage
 );
 
-
+console.log(categories)
   const uploadFile = () => {
     Swal.fire({
       title: "Chưa khả dụng",
@@ -315,7 +315,6 @@ const exportToPDF = async () => {
     confirmButtonText: "OK",
   });
 };
-
 
 
 
