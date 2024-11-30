@@ -408,18 +408,12 @@ export default function DanhmucPage() {
               </Link>
             </div>
             <div className={styles.buttonGroup}>
-              <button className={styles.sp2} onClick={uploadFile}>
-                &nbsp;
-                <i className="fas fa-file-upload"></i> Tải từ file
-              </button>
               &nbsp;
               <button className={styles.sp3} onClick={printData}>
                 <i className="fas fa-print"></i> In dữ liệu
               </button>
               &nbsp;
-              <button className={styles.sp4} onClick={copyData}>
-                <i className="fas fa-copy"></i> Sao chép
-              </button>
+            
               &nbsp;
               <button className={styles.sp5} onClick={exportToExcel}>
                 &nbsp;
