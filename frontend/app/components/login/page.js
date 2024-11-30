@@ -6,6 +6,8 @@ import Swal from "sweetalert2";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import Link from "next/link";
 import styles from "./login.module.css";
+import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 // Định nghĩa schema với yup
 const schema = yup.object().shape({
@@ -24,6 +26,7 @@ const schema = yup.object().shape({
 });
 
 export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -121,6 +124,11 @@ export default function Login() {
     });
   };
 
+  // Hàm để đổi trạng thái ẩn/hiện mật khẩu
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className={styles.mainContainer}>
       <div className={styles.container}>
@@ -137,15 +145,20 @@ export default function Login() {
           />
           {formik.errors.email && <p className={styles.error}>{formik.errors.email}</p>}
 
-          <input
-            type="password"
-            className={`${styles.input} ${formik.errors.password ? styles.inputError : ""}`}
-            id="password"
-            name="password"
-            onChange={formik.handleChange}
-            value={formik.values.password}
-            placeholder="Mật khẩu"
-          />
+          <div className={styles.passwordWrapper}>
+            <input
+              type={showPassword ? "text" : "password"}
+              className={`${styles.input} ${formik.errors.password ? styles.inputError : ""}`}
+              id="password"
+              name="password"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              placeholder="Mật khẩu"
+            />
+            <div className={styles.togglePasswordIcon} onClick={togglePasswordVisibility}>
+              {showPassword ? <FaEye /> : <FaEyeSlash />}
+            </div>
+          </div>
           {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
 
           <span className={styles.forgotPassword}>

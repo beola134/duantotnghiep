@@ -3,6 +3,10 @@ import styles from "./comments.module.css";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import * as XLSX from "xlsx";
+
 export default function CommentsPage() {
   const [comments, setComments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -53,6 +57,48 @@ export default function CommentsPage() {
       console.error(error);
     }
   };
+  // hiển thị số sản phẩm trên mỗi trang
+  const totalComment = comments.length;
+  const startDanhmucIndex = (currentPage - 1) * 10 + 1;
+  const endDanhmucIndex = currentPage * 10 > totalComment ? totalComment : currentPage * 10;
+
+  // Hàm xuất file pdf
+  const handleExportPDF = async () => {
+    const table = document.getElementById("productTable");
+    if (!table) {
+      alert("Không tìm thấy bảng dữ liệu!");
+      return;
+    }
+
+    const canvas = await html2canvas(table);
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF("p", "mm", "a4");
+    const imgWidth = 210;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+    pdf.save("table-data.pdf");
+  };
+
+  // Hàm xuất file excel
+
+  const exportToExcel = () => {
+    const table = document.getElementById("productTable");
+    if (!table) {
+      alert("Không tìm thấy bảng dữ liệu!");
+      return;
+    }
+
+    const workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+
+    const worksheet = workbook.Sheets.Sheet1;
+
+    const columnWidths = [{ wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 20 }, { wch: 10 }, { wch: 20 }, { wch: 10 }];
+
+    worksheet["!cols"] = columnWidths;
+
+    XLSX.writeFile(workbook, "table-data.xlsx");
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -73,25 +119,24 @@ export default function CommentsPage() {
           <div className={styles.container}>
             <div className={styles.actions}>
               <div className={styles.buttonGroup}>
-                <button className={styles.sp2}>
-                  &nbsp;
-                  <i className="fas fa-file-upload"></i> Tải từ file
-                </button>
-                &nbsp;
-                <button className={styles.sp3}>
+                <button
+                  className={styles.sp3}
+                  onClick={() => {
+                    const originalContent = document.body.innerHTML;
+                    const tableContent = document.getElementById("productTable").outerHTML;
+                    document.body.innerHTML = tableContent;
+                    window.print();
+                    document.body.innerHTML = originalContent;
+                  }}
+                >
                   <i className="fas fa-print"></i> In dữ liệu
                 </button>
                 &nbsp;
-                <button className={styles.sp4}>
-                  <i className="fas fa-copy"></i> Sao chép
-                </button>
-                &nbsp;
-                <button className={styles.sp5}>
-                  &nbsp;
+                <button className={styles.sp5} onClick={exportToExcel}>
                   <i className="fas fa-file-excel"></i> Xuất Excel
                 </button>
                 &nbsp;
-                <button className={styles.sp6}>
+                <button className={styles.sp6} onClick={handleExportPDF}>
                   <i className="fas fa-file-pdf"></i> Xuất PDF
                 </button>
                 &nbsp;
@@ -105,7 +150,13 @@ export default function CommentsPage() {
                   <label htmlFor="search" style={{ fontWeight: "bold" }}>
                     Tìm kiếm:
                   </label>
-                  <input type="text" id="search" value={search} onChange={handSearchChange} />
+                  <input
+                    type="text"
+                    id="search"
+                    value={search}
+                    onChange={handSearchChange}
+                    placeholder="Nhập tên người dùng..."
+                  />
                 </div>
               </div>
               <table id="productTable" className={styles.productTable}>
@@ -121,40 +172,58 @@ export default function CommentsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {comments.map((comment) => {
-                    const { _id, noi_dung, sao, ngay_binh_luan, id_san_pham, trang_thai } = comment;
+                  {comments.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="7"
+                        style={{
+                          textAlign: "center",
+                          color: "red",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Không có bình luận nào
+                      </td>
+                    </tr>
+                  ) : (
+                    comments.map((comment) => {
+                      const { _id, noi_dung, sao, ngay_binh_luan, id_san_pham, trang_thai } = comment;
 
-                    return (
-                      <tr key={_id} className={!trang_thai ? styles.hiddenRow : ""}>
-                        <td>{_id}</td>
-                        <td>{id_san_pham}</td>
-                        <td style={{ textAlign: "center" }}>
-                          <span className={`${styles.status} ${styles.inStock}`}>{comment.user?.ten_dang_nhap}</span>
-                        </td>
+                      return (
+                        <tr key={_id} className={!trang_thai ? styles.hiddenRow : ""}>
+                          <td>{_id}</td>
+                          <td>{id_san_pham}</td>
+                          <td style={{ textAlign: "center" }}>
+                            <span className={`${styles.status} ${styles.inStock}`}>{comment.user?.ten_dang_nhap}</span>
+                          </td>
 
-                        <td style={{ textAlign: "center" }}>{noi_dung}</td>
-                        <td style={{ textAlign: "center" }}>{sao}</td>
-                        <td style={{ textAlign: "center" }}>
-                          {new Date(ngay_binh_luan).toLocaleString("vi-VN", {
-                            timeZone: "Asia/Ho_Chi_Minh",
-                          })}
-                        </td>
+                          <td style={{ textAlign: "center" }}>{noi_dung}</td>
+                          <td style={{ textAlign: "center" }}>{sao}</td>
+                          <td style={{ textAlign: "center" }}>
+                            {new Date(ngay_binh_luan).toLocaleString("vi-VN", {
+                              timeZone: "Asia/Ho_Chi_Minh",
+                            })}
+                          </td>
 
-                        <td style={{ textAlign: "center" }}>
-                          <button
-                            onClick={() => handleToggleComment(_id, trang_thai)}
-                            className={`${styles.btn} ${styles.edit}`}
-                          >
-                            <FontAwesomeIcon icon={trang_thai ? faEye : faEyeSlash} />
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                          <td style={{ textAlign: "center" }}>
+                            <button
+                              onClick={() => handleToggleComment(_id, trang_thai)}
+                              className={`${styles.btn} ${styles.edit}`}
+                            >
+                              <FontAwesomeIcon icon={trang_thai ? faEye : faEyeSlash} />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
                 </tbody>
               </table>
 
               <div className={styles.pagination}>
+                <span className={styles.totalComment}>
+                  Hiện {startDanhmucIndex} đến {endDanhmucIndex} của {totalComment} bình luận
+                </span>
                 <div className={styles.paginationControls}>
                   <button
                     className={`${styles.paginationButton} ${

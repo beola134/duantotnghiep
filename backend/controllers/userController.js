@@ -59,8 +59,8 @@ exports.forgotPassword = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "nguyentantai612004@gmail.com",
-        pass: "dmez voqj ozar xfzw",
+        user: "watchwristly@gmail.com",
+        pass: "nebb uwva xdvb rvih",
       },
     });
 
@@ -247,8 +247,8 @@ exports.register = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "nguyentantai612004@gmail.com",
-        pass: "dmez voqj ozar xfzw",
+        user: "watchwristly@gmail.com",
+        pass: "nebb uwva xdvb rvih",
       },
     });
 
@@ -493,8 +493,8 @@ exports.sendOTPquenmk = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "nguyentantai612004@gmail.com", 
-        pass: "dmez voqj ozar xfzw",
+        user: "watchwristly@gmail.com",
+        pass: "nebb uwva xdvb rvih",
       },
     });
     const mailOptions = {

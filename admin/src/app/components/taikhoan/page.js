@@ -9,9 +9,6 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import RobotoRegular from "./Roboto-Regular.base64";
 
-
-
-    
 export default function TaiKhoan() {
   const [users, setUser] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,13 +18,13 @@ export default function TaiKhoan() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
-//tìm kiếm
+  //tìm kiếm
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
   const handleSearch = (e) => {
     const query = removeAccents(searchQuery.toLowerCase());
-    const filtered= users.filter((user) => {
+    const filtered = users.filter((user) => {
       const userName = user.ho_ten || "";
       const phone = user.dien_thoai || "";
       const email = user.email || "";
@@ -51,7 +48,6 @@ export default function TaiKhoan() {
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery, users, itemsPerPage]);
 
-
   //cập nhật quyền người dùng
   const handleRoleChange = async (id, newRole) => {
     try {
@@ -62,11 +58,7 @@ export default function TaiKhoan() {
       });
       if (!response.ok) throw new Error("Lỗi khi cập nhật chức vụ");
 
-      setUser((prevUsers) =>
-        prevUsers.map((user) =>
-          user._id === id ? { ...user, quyen: newRole } : user
-        )
-      );
+      setUser((prevUsers) => prevUsers.map((user) => (user._id === id ? { ...user, quyen: newRole } : user)));
 
       Swal.fire({
         title: "Thành công",
@@ -83,14 +75,14 @@ export default function TaiKhoan() {
       });
     }
   };
-  
-//phân trang
+
+  //phân trang
   useEffect(() => {
-  const start = (currentPage - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-  const dataToShow = searchQuery ? filteredUsers : users;
-  setDisplayUsers(dataToShow.slice(start, end));
-}, [filteredUsers, users, itemsPerPage, currentPage, searchQuery]);
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const dataToShow = searchQuery ? filteredUsers : users;
+    setDisplayUsers(dataToShow.slice(start, end));
+  }, [filteredUsers, users, itemsPerPage, currentPage, searchQuery]);
 
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(Number(e.target.value));
@@ -103,10 +95,7 @@ export default function TaiKhoan() {
     });
   };
 
- const totalPages = Math.ceil(
-  (searchQuery ? filteredUsers.length : users.length) / itemsPerPage
-);
-
+  const totalPages = Math.ceil((searchQuery ? filteredUsers.length : users.length) / itemsPerPage);
 
   const uploadFile = () => {
     Swal.fire({
@@ -179,9 +168,7 @@ export default function TaiKhoan() {
           });
 
           // Lấy dữ liệu từ bảng HTML và thêm vào Excel
-          const rows = Array.from(
-            document.querySelectorAll("#productTable tbody tr")
-          );
+          const rows = Array.from(document.querySelectorAll("#productTable tbody tr"));
           rows.forEach((row) => {
             const cols = row.querySelectorAll("td");
             const id = cols[0].textContent.trim();
@@ -245,101 +232,85 @@ export default function TaiKhoan() {
       }
     });
   };
-//xuất pdf
+  //xuất pdf
 
+  const exportToPDF = () => {
+    Swal.fire({
+      title: "Xác nhận",
+      text: "Bạn có chắc chắn muốn xuất dữ liệu ra file PDF?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Xuất",
+      cancelButtonText: "Hủy",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          // Tạo một tài liệu PDF mới
+          const doc = new jsPDF();
 
-const exportToPDF = () => {
-  Swal.fire({
-    title: "Xác nhận",
-    text: "Bạn có chắc chắn muốn xuất dữ liệu ra file PDF?",
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonText: "Xuất",
-    cancelButtonText: "Hủy",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      try {
-        // Tạo một tài liệu PDF mới
-        const doc = new jsPDF();
+          // Nhúng font Roboto
+          doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
+          doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+          doc.setFont("Roboto");
 
-        // Nhúng font Roboto
-        doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
-        doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
-        doc.setFont("Roboto");
+          // Tiêu đề
+          doc.setFontSize(18);
+          doc.text("Danh sách tài khoản", 14, 20);
 
-        // Tiêu đề
-        doc.setFontSize(18);
-        doc.text("Danh sách tài khoản", 14, 20);
+          // Lấy dữ liệu từ bảng HTML
+          const rows = [];
+          const headers = ["ID tài khoản", "Họ và tên", "Địa chỉ", "Email", "Số điện thoại", "Chức vụ"];
 
-        // Lấy dữ liệu từ bảng HTML
-        const rows = [];
-        const headers = [
-          "ID tài khoản",
-          "Họ và tên",
-          "Địa chỉ",
-          "Email",
-          "Số điện thoại",
-          "Chức vụ",
-        ];
+          const tableRows = document.querySelectorAll("#productTable tbody tr");
+          tableRows.forEach((row) => {
+            const cols = row.querySelectorAll("td");
+            const id = cols[0].textContent.trim();
+            const hoTen = cols[1].textContent.trim();
+            const diaChi = cols[3].textContent.trim();
+            const email = cols[4].textContent.trim();
+            const dienThoai = cols[5].textContent.trim();
+            const chucVu = cols[6].querySelector("select").value === "1" ? "Quản trị viên" : "Khách hàng";
 
-        const tableRows = document.querySelectorAll("#productTable tbody tr");
-        tableRows.forEach((row) => {
-          const cols = row.querySelectorAll("td");
-          const id = cols[0].textContent.trim();
-          const hoTen = cols[1].textContent.trim();
-          const diaChi = cols[3].textContent.trim();
-          const email = cols[4].textContent.trim();
-          const dienThoai = cols[5].textContent.trim();
-          const chucVu =
-            cols[6].querySelector("select").value === "1"
-              ? "Quản trị viên"
-              : "Khách hàng";
+            rows.push([id, hoTen, diaChi, email, dienThoai, chucVu]);
+          });
 
-          rows.push([id, hoTen, diaChi, email, dienThoai, chucVu]);
-        });
+          // Tạo bảng trong PDF
+          doc.autoTable({
+            head: [headers],
+            body: rows,
+            startY: 30,
+            theme: "grid",
+            headStyles: { fillColor: [0, 112, 192], textColor: [255, 255, 255] },
+            styles: { font: "Roboto", fontSize: 10 },
+            columnStyles: {
+              0: { cellWidth: 30 },
+              1: { cellWidth: 30 },
+              2: { cellWidth: 30 },
+              3: { cellWidth: 40 },
+              4: { cellWidth: 20 },
+              5: { cellWidth: 30 },
+            },
+          });
+          doc.save("danh_sach_tai_khoan.pdf");
 
-        // Tạo bảng trong PDF
-        doc.autoTable({
-          head: [headers],
-          body: rows,
-          startY: 30,
-          theme: "grid",
-          headStyles: { fillColor: [0, 112, 192], textColor: [255, 255, 255] },
-          styles: { font: "Roboto", fontSize: 10 },
-          columnStyles: {
-            0: { cellWidth: 30 }, 
-            1: { cellWidth: 30 }, 
-            2: { cellWidth: 30 }, 
-            3: { cellWidth: 40 }, 
-            4: { cellWidth: 20 }, 
-            5: { cellWidth: 30 }, 
-          },
-        });
-        doc.save("danh_sach_tai_khoan.pdf");
-
-        Swal.fire({
-          title: "Thành công",
-          text: "Dữ liệu đã được xuất ra file PDF!",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-      } catch (error) {
-        console.error("Lỗi khi xuất PDF:", error);
-        Swal.fire({
-          title: "Lỗi",
-          text: "Không thể xuất file PDF. Vui lòng thử lại!",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
+          Swal.fire({
+            title: "Thành công",
+            text: "Dữ liệu đã được xuất ra file PDF!",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+        } catch (error) {
+          console.error("Lỗi khi xuất PDF:", error);
+          Swal.fire({
+            title: "Lỗi",
+            text: "Không thể xuất file PDF. Vui lòng thử lại!",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        }
       }
-    }
-  });
-};
-
-
-
-
-  
+    });
+  };
 
   const deleteUser = async (id) => {
     const result = await Swal.fire({
@@ -380,7 +351,7 @@ const exportToPDF = () => {
       }
     }
   };
-//lấy dữ liệu danh sách tài khoản
+  //lấy dữ liệu danh sách tài khoản
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -417,17 +388,9 @@ const exportToPDF = () => {
                 <i className="fas fa-plus"></i> Tạo mới tài khoản
               </Link>
               <div className={styles.buttonGroup}>
-                <button className={styles.sp2} onClick={uploadFile}>
-                  &nbsp;
-                  <i className="fas fa-file-upload"></i> Tải từ file
-                </button>
                 &nbsp;
                 <button className={styles.sp3} onClick={printData}>
                   <i className="fas fa-print"></i> In dữ liệu
-                </button>
-                &nbsp;
-                <button className={styles.sp4} onClick={copyData}>
-                  <i className="fas fa-copy"></i> Sao chép
                 </button>
                 &nbsp;
                 <button className={styles.sp5} onClick={exportToExcel}>
@@ -455,6 +418,7 @@ const exportToPDF = () => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={handleSearch}
+                    placeholder="Nhập tên người dùng..."
                   />
                 </div>
               </div>
@@ -462,25 +426,13 @@ const exportToPDF = () => {
                 <table id="productTable" className={styles.productTable}>
                   <thead>
                     <tr>
-                      <th style={{ width: "18%", textAlign: "center" }}>
-                        ID tài khoản
-                      </th>
-                      <th style={{ width: "15%", textAlign: "center" }}>
-                        Họ và tên
-                      </th>
+                      <th style={{ width: "18%", textAlign: "center" }}>ID tài khoản</th>
+                      <th style={{ width: "15%", textAlign: "center" }}>Họ và tên</th>
                       <th style={{ width: "12%", textAlign: "center" }}>Ảnh</th>
-                      <th style={{ width: "10%", textAlign: "center" }}>
-                        Địa chỉ
-                      </th>
-                      <th style={{ width: "18%", textAlign: "center" }}>
-                        Email
-                      </th>
-                      <th style={{ width: "12%", textAlign: "center" }}>
-                        Số điện thoại
-                      </th>
-                      <th style={{ width: "15%", textAlign: "center" }}>
-                        Chức vụ
-                      </th>
+                      <th style={{ width: "10%", textAlign: "center" }}>Địa chỉ</th>
+                      <th style={{ width: "18%", textAlign: "center" }}>Email</th>
+                      <th style={{ width: "12%", textAlign: "center" }}>Số điện thoại</th>
+                      <th style={{ width: "15%", textAlign: "center" }}>Chức vụ</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -491,27 +443,17 @@ const exportToPDF = () => {
                           <p className={styles.mota}>{item.ho_ten}</p>
                         </td>
                         <td style={{ textAlign: "center" }}>
-                          <img
-                            src={`http://localhost:5000/images/${item.hinh_anh}`}
-                            alt={item.danh_muc}
-                          />
+                          <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.danh_muc} />
                         </td>
                         <td style={{ textAlign: "center" }}>{item.dia_chi}</td>
                         <td style={{ textAlign: "center" }}> {item.email}</td>
-                        <td style={{ textAlign: "center" }}>
-                          {item.dien_thoai}
-                        </td>
+                        <td style={{ textAlign: "center" }}>{item.dien_thoai}</td>
                         <td>
                           <p className={styles.chucvu}>
                             <select
                               style={{ textAlign: "center" }}
                               value={item.quyen}
-                              onChange={(e) =>
-                                handleRoleChange(
-                                  item._id,
-                                  Number(e.target.value)
-                                )
-                              }
+                              onChange={(e) => handleRoleChange(item._id, Number(e.target.value))}
                               className={styles.roleSelect}
                             >
                               <option value="1">Quản trị viên</option>
@@ -538,30 +480,23 @@ const exportToPDF = () => {
 
               <div className={styles.pagination}>
                 <span>
-                  Hiện thị {displayUsers.length} của{" "}
-                  {filteredUsers.length || users.length} người dùng
+                  Hiện thị {displayUsers.length} của {filteredUsers.length || users.length} người dùng
                 </span>
                 <div className={styles.paginationControls}>
                   <button
                     className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
                   >
                     ‹
                   </button>
-                  <button
-                    className={`${styles.paginationButton} ${styles.active}`}
-                  >
-                    {currentPage} / {totalPages}
+                  <button className={`${styles.paginationButton} ${styles.active}`}>
+                    {` Trang ${currentPage} / ${totalPages}`}
                   </button>
 
                   <button
                     className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
                   >
                     ›
