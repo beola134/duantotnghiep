@@ -142,11 +142,8 @@ export default function TaiKhoan() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          // Tạo workbook mới
           const workbook = new ExcelJS.Workbook();
           const worksheet = workbook.addWorksheet("Danh sách tài khoản");
-
-          // Định nghĩa cột
           worksheet.columns = [
             { header: "ID tài khoản", key: "_id", width: 20 },
             { header: "Họ và tên", key: "ho_ten", width: 25 },
@@ -167,25 +164,17 @@ export default function TaiKhoan() {
             cell.alignment = { vertical: "middle", horizontal: "center" };
           });
 
-          // Lấy dữ liệu từ bảng HTML và thêm vào Excel
-          const rows = Array.from(document.querySelectorAll("#productTable tbody tr"));
-          rows.forEach((row) => {
-            const cols = row.querySelectorAll("td");
-            const id = cols[0].textContent.trim();
-            const hoTen = cols[1].textContent.trim();
-            const diaChi = cols[3].textContent.trim();
-            const email = cols[4].textContent.trim();
-            const dienThoai = cols[5].textContent.trim();
-            const chucVu = cols[6].querySelector("select").value;
+          // Lặp qua dữ liệu users và thêm vào Excel
+          users.forEach((user) => {
 
             // Thêm dòng vào worksheet
             worksheet.addRow({
-              _id: id,
-              ho_ten: hoTen,
-              dia_chi: diaChi,
-              email: email,
-              dien_thoai: dienThoai,
-              quyen: chucVu === "1" ? "Quản trị viên" : "Khách hàng",
+              _id: user._id || "N/A",
+              ho_ten: user.ho_ten || "N/A",
+              dia_chi: user.dia_chi || "N/A",
+              email: user.email || "N/A",
+              dien_thoai: user.dien_thoai || "N/A",
+              quyen: user.quyen === "1" ? "Quản trị viên" : "Khách hàng",
             });
           });
 
@@ -200,7 +189,6 @@ export default function TaiKhoan() {
               };
             });
           });
-
           // Tạo file Excel và tải về
           const buffer = await workbook.xlsx.writeBuffer();
           const blob = new Blob([buffer], {
@@ -213,7 +201,6 @@ export default function TaiKhoan() {
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
-
           Swal.fire({
             title: "Thành công",
             text: "Dữ liệu đã được xuất ra file Excel!",
@@ -232,67 +219,62 @@ export default function TaiKhoan() {
       }
     });
   };
-  //xuất pdf
 
-  const exportToPDF = () => {
-    Swal.fire({
-      title: "Xác nhận",
-      text: "Bạn có chắc chắn muốn xuất dữ liệu ra file PDF?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Xuất",
-      cancelButtonText: "Hủy",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        try {
-          // Tạo một tài liệu PDF mới
-          const doc = new jsPDF();
 
-          // Nhúng font Roboto
-          doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
-          doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
-          doc.setFont("Roboto");
-
-          // Tiêu đề
-          doc.setFontSize(18);
-          doc.text("Danh sách tài khoản", 14, 20);
-
-          // Lấy dữ liệu từ bảng HTML
-          const rows = [];
-          const headers = ["ID tài khoản", "Họ và tên", "Địa chỉ", "Email", "Số điện thoại", "Chức vụ"];
-
-          const tableRows = document.querySelectorAll("#productTable tbody tr");
-          tableRows.forEach((row) => {
-            const cols = row.querySelectorAll("td");
-            const id = cols[0].textContent.trim();
-            const hoTen = cols[1].textContent.trim();
-            const diaChi = cols[3].textContent.trim();
-            const email = cols[4].textContent.trim();
-            const dienThoai = cols[5].textContent.trim();
-            const chucVu = cols[6].querySelector("select").value === "1" ? "Quản trị viên" : "Khách hàng";
-
-            rows.push([id, hoTen, diaChi, email, dienThoai, chucVu]);
-          });
-
-          // Tạo bảng trong PDF
-          doc.autoTable({
-            head: [headers],
-            body: rows,
-            startY: 30,
-            theme: "grid",
-            headStyles: { fillColor: [0, 112, 192], textColor: [255, 255, 255] },
-            styles: { font: "Roboto", fontSize: 10 },
-            columnStyles: {
-              0: { cellWidth: 30 },
-              1: { cellWidth: 30 },
-              2: { cellWidth: 30 },
-              3: { cellWidth: 40 },
-              4: { cellWidth: 20 },
-              5: { cellWidth: 30 },
-            },
-          });
-          doc.save("danh_sach_tai_khoan.pdf");
-
+//xuất pdf
+const exportToPDF = () => {
+  Swal.fire({
+    title: "Xác nhận",
+    text: "Bạn có chắc chắn muốn xuất dữ liệu ra file PDF?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Xuất",
+    cancelButtonText: "Hủy",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      try {
+        const doc = new jsPDF();
+        doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
+        doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+        doc.setFont("Roboto");
+        doc.setFontSize(18);
+        doc.text("Danh sách tài khoản", 14, 20);
+        const rows = [];
+        const headers = [
+          "ID tài khoản",
+          "Họ và tên",
+          "Địa chỉ",
+          "Email",
+          "Số điện thoại",
+          "Chức vụ",
+        ];
+        users.forEach((user) => {
+          const id = user._id || "N/A";
+          const hoTen = user.ho_ten || "N/A";
+          const diaChi = user.dia_chi || "N/A";
+          const email = user.email || "N/A";
+          const dienThoai = user.dien_thoai || "N/A";
+          const chucVu = user.quyen === "1" ? "Quản trị viên" : "Khách hàng";
+          rows.push([id, hoTen, diaChi, email, dienThoai, chucVu]);
+        });
+        doc.autoTable({
+          head: [headers],
+          body: rows,
+          startY: 30,
+          theme: "grid",
+          headStyles: { fillColor: [0, 112, 192], textColor: [255, 255, 255] },
+          styles: { font: "Roboto", fontSize: 10 },
+          columnStyles: {
+            0: { cellWidth: 30 }, // ID tài khoản
+            1: { cellWidth: 30 }, // Họ và tên
+            2: { cellWidth: 30 }, // Địa chỉ
+            3: { cellWidth: 40 }, // Email
+            4: { cellWidth: 20 }, // Số điện thoại
+            5: { cellWidth: 30 }, // Chức vụ
+          },
+        });
+        // Lưu file PDF
+        doc.save("danh_sach_tai_khoan.pdf");
           Swal.fire({
             title: "Thành công",
             text: "Dữ liệu đã được xuất ra file PDF!",
