@@ -88,15 +88,16 @@ const getAllVouchers = async (req, res) => {
       });
 
     const totalPages = Math.ceil(totalVouchers / limit);
-
-    if (vouchers.length === 0) {
-      return res.status(404).json({ message: "Không có voucher nào" });
-    }
-
-    if (page > totalPages) {
-      return res.status(404).json({ message: "Trang không tồn tại" });
-    }
-
+if (!voucher || vouchers.length === 0) {
+  return res.status(200).json({
+    vouchers: [],
+    currentPage: parseInt(page),
+    totalPages: 0,
+    totalVouchers: 0,
+    message: "Không tìm thấy voucher",
+  });
+}
+    
     res.status(200).json({
       vouchers,
       currentPage: parseInt(page),

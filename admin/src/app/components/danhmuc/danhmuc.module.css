@@ -195,7 +195,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 20px 0 0 86.2%;
+  margin: 20px;
 }
 
 .paginationControls {
@@ -209,4 +209,32 @@
   border-radius: 3px;
   padding: 5px 10px;
   cursor: pointer;
+}
+.productTable th,
+.productTable td {
+  border: 1px solid #dee2e6;
+  padding: 8px;
+  text-align: left;
+  word-break: break-word;
+}
+.mota {
+  max-height: 130px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+.mota::-webkit-scrollbar {
+    width: 8px;
+}
+.mota::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 10px;
+}
+
+.mota::-webkit-scrollbar-thumb {
+    background-color: #2222; 
+    border-radius: 10px;
+    border: 2px solid #f1f1f1; 
+}
+.mota::-webkit-scrollbar-thumb:hover {
+    background-color: #555; 
 }

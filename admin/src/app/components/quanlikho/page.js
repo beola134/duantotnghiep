@@ -15,33 +15,8 @@ export default function SanPham() {
   const [totalProducts, setTotalProducts] = useState(0);
   const itemsPerPage = 5;
 
-  const uploadFile = () => {
-    Swal.fire({
-      title: "Chưa khả dụng",
-      text: "Tính năng tải file chưa được triển khai!",
-      icon: "info",
-      confirmButtonText: "OK",
-    });
-  };
-
   const printData = () => {
     window.print();
-  };
-
-  const copyData = () => {
-    const table = document.getElementById("productTable");
-    const range = document.createRange();
-    range.selectNode(table);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-    document.execCommand("copy");
-
-    Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu đã được sao chép!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
   };
   const exportToExcel = () => {
     const table = document.getElementById("productTable");
@@ -122,31 +97,17 @@ export default function SanPham() {
         </div>
         <div className={styles.bg}>
           <div className={styles.container}>
-            <div className={styles.actions}>
-              <Link href="/components/themsanpham" className={styles.sp}>
-                <i className="fas fa-plus"></i> Tạo mới sản phẩm
-              </Link>
-            </div>
             <div className={styles.buttonGroup}>
-              <button className={styles.sp2} onClick={uploadFile}>
-                &nbsp;
-                <i className="fas fa-file-upload"></i> Tải từ file
-              </button>
-              &nbsp;
-              <button className={styles.sp3} onClick={printData}>
+              <button className={styles.sp1} onClick={printData}>
                 <i className="fas fa-print"></i> In dữ liệu
               </button>
               &nbsp;
-              <button className={styles.sp4} onClick={copyData}>
-                <i className="fas fa-copy"></i> Sao chép
-              </button>
-              &nbsp;
-              <button className={styles.sp5} onClick={exportToExcel}>
+              <button className={styles.sp2} onClick={exportToExcel}>
                 &nbsp;
                 <i className="fas fa-file-excel"></i> Xuất Excel
               </button>
               &nbsp;
-              <button className={styles.sp6} onClick={exportToPDF}>
+              <button className={styles.sp3} onClick={exportToPDF}>
                 <i className="fas fa-file-pdf"></i> Xuất PDF
               </button>
               &nbsp;
@@ -169,7 +130,6 @@ export default function SanPham() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-               
                 <th style={{ width: "15%", textAlign: "center" }}>
                   ID sản phẩm
                 </th>
@@ -179,44 +139,37 @@ export default function SanPham() {
                 <th style={{ width: "10%", textAlign: "center" }}>Ảnh</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Số lượng</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Giá tiền</th>
-                <th style={{ width: "15%", textAlign: "center" }}>
-                  Mã sản phẩm
-                </th>
+                <th style={{ width: "15%", textAlign: "center" }}>Mã sản phẩm</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Đã bán</th>
-                <th style={{ width: "15%", textAlign: "center" }}>
-                  Trạng thái
-                </th>
+                <th style={{ width: "15%", textAlign: "center" }}>Trạng thái</th>
               </tr>
             </thead>
             <tbody>
               {products.map((product) => {
-                const {
-                  _id,
-                  ten_san_pham,
-                  hinh_anh,
-                  ma_san_pham,
-                  gia_san_pham,
-                  so_luong,
-                  trang_thai,
-                  da_ban,
-                } = product;
+                const { _id, ten_san_pham, hinh_anh, ma_san_pham, gia_san_pham, so_luong, trang_thai, da_ban } =
+                  product;
 
                 return (
                   <tr key={_id}>
-                   
                     <td>{_id}</td>
                     <td>{ten_san_pham}</td>
                     <td>
-                      <img
-                        src={`http://localhost:5000/images/${hinh_anh}`}
-                        alt="Sản phẩm"
-                      />
+                      <img src={`http://localhost:5000/images/${hinh_anh}`} alt="Sản phẩm" />
                     </td>
                     <td style={{ textAlign: "center" }}>{so_luong}</td>
                     <td>{gia_san_pham.toLocaleString("vi-VN")}₫</td>
                     <td style={{ textAlign: "center" }}>{ma_san_pham}</td>
                     <td style={{ textAlign: "center" }}>{da_ban}</td>
-                    <td style={{ textAlign: "center" }}>{trang_thai}</td>
+                    <td style={{ textAlign: "center" }}>
+                      <button
+                        className={`${styles.statusButton} ${
+                          trang_thai === "Còn hàng" ? styles.green : styles.red
+                        }`}
+                      >
+                        {" "}
+                        {trang_thai}
+                      </button>
+                    </td>
                   </tr>
                 );
               })}
@@ -225,32 +178,22 @@ export default function SanPham() {
           <div className={styles.pagination}>
             <span>
               Hiện {startProductIndex} đến {endProductIndex} của {totalProducts}{" "}
-              sản phẩm
+              sản phẩm  
             </span>
             <div className={styles.paginationControls}>
               <button
-                className={`${styles.paginationButton} ${
-                  currentPage === 1 ? styles.disabled : styles["other-page"]
-                }`}
-                onClick={() =>
-                  currentPage > 1 && handlePageChange(currentPage - 1)
-                }
+                className={`${styles.paginationButton} ${currentPage === 1 ? styles.disabled : styles["other-page"]}`}
+                onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
               >
                 ‹
               </button>
-              <button className={styles.paginationButton}>
-                {`Trang ${currentPage} / ${totalPages}`}
-              </button>
+              <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPages}`}</button>
               <button
                 className={`${styles.paginationButton} ${
-                  currentPage === totalPages
-                    ? styles.disabled
-                    : styles["other-page"]
+                  currentPage === totalPages ? styles.disabled : styles["other-page"]
                 }`}
-                onClick={() =>
-                  currentPage < totalPages && handlePageChange(currentPage + 1)
-                }
+                onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >
                 ›

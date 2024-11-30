@@ -192,7 +192,27 @@ const CartPage = () => {
                         <td name="delete">
                           <button
                             style={{ border: "none", cursor: "pointer" }}
-                            onClick={() => dispatch(removeFromCart(item._id))}>
+                            onClick={() =>
+                              Swal.fire({
+                                title: "Bạn có chắc muốn xóa sản phẩm này?",
+                                text: "Hành động này không thể hoàn tác!",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#d33",
+                                cancelButtonColor: "#3085d6",
+                                confirmButtonText: "Xóa",
+                                cancelButtonText: "Hủy",
+                              }).then((result) => {
+                                if (result.isConfirmed) {
+                                  dispatch(removeFromCart(item._id)); // Gọi action để xóa sản phẩm
+                                  Swal.fire(
+                                    "Đã xóa!",
+                                    "Sản phẩm đã được xóa khỏi giỏ hàng.",
+                                    "success"
+                                  );
+                                }
+                              })
+                            }>
                             <FontAwesomeIcon
                               icon={faTrash}
                               style={{

@@ -222,12 +222,12 @@ const User = ({ params }) => {
 
     setIsSubmitting(false);
   };
-  useEffect(() => {
+ {/*useEffect(() => {
     const savedTab = localStorage.getItem("activeTab");
     if (savedTab) {
       setActiveTab(savedTab); 
     }
-  }, []);
+  }, []);*/}
   {
     /*Đăng xuất*/
   }

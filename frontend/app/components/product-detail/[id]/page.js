@@ -26,13 +26,59 @@ export default function Detail({ params }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const sliderRef = useRef(null);
-  const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart);
-
   const [so_luong, setSo_luong] = useState(1);
+
+  const dispatch = useDispatch();
+
+  const cartState = useSelector((state) => state.cart);
+  const cart = Array.isArray(cartState) ? cartState : cartState.items || [];
+
+  const currentCartItem = product ? cart.find((cartItem) => cartItem._id === product._id) : null;
+
+  const [maxQuantity, setMaxQuantity] = useState(0);
+
+  useEffect(() => {
+    if (product && product._id) {
+      const fetchProductQuantity = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:5000/product/check/${product._id}?quantity=${so_luong}`
+          );
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(
+              `Error fetching product quantity: ${JSON.stringify(errorData)}`
+            );
+          }
+          const data = await response.json();
+          setMaxQuantity(data.product.so_luong);
+        } catch (error) {
+          console.error("Error fetching product quantity:", error);
+        }
+      };
+
+      fetchProductQuantity();
+    }
+  }, [product, so_luong]);
+
   const handleIncrease = (e) => {
     e.preventDefault();
-    setSo_luong((prev) => prev + 1);
+    const currentQuantity = currentCartItem ? currentCartItem.so_luong : 0;
+    const totalRequested = currentQuantity + so_luong + 1;
+    console.log("currentQuantity:", currentQuantity);
+    console.log("totalRequested:", totalRequested);
+    console.log("maxQuantity:", maxQuantity);
+
+    if (maxQuantity !== undefined && totalRequested <= maxQuantity) {
+      setSo_luong((prev) => prev + 1);
+    } else {
+      Swal.fire({
+        title: "Không đủ hàng",
+        text: "Số lượng thêm vượt quá số lượng trong kho.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+    }
   };
 
   const handleDecrease = (e) => {
@@ -43,9 +89,39 @@ export default function Detail({ params }) {
   };
 
   const handleAddToCart = async (e) => {
-    e.preventDefault(); // Đảm bảo ngăn chặn sự kiện ngay từ đầu
+    e.preventDefault();
+
+    if (!product) {
+      Swal.fire({
+        title: "Lỗi",
+        text: "Sản phẩm không hợp lệ.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
 
     try {
+      // Inspect cart structure
+      const currentCartItem = cart.find((cartItem) =>
+        cartItem.item ? cartItem.item._id === product._id : cartItem._id === product._id
+      );
+
+      const currentQuantity = currentCartItem ? currentCartItem.so_luong : 0;
+      const totalRequested = currentQuantity + so_luong;
+
+      // Check against stock
+      if (totalRequested > product.so_luong) {
+        Swal.fire({
+          title: "Không đủ hàng",
+          text: "Số lượng thêm vượt quá số lượng trong kho.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+        return;
+      }
+
+      // Check product quantity from server
       const response = await fetch(`http://localhost:5000/product/check/${product._id}?quantity=${so_luong}`);
       const data = await response.json();
 
@@ -86,6 +162,7 @@ export default function Detail({ params }) {
         const data = await response.json();
         setProducts(data.product);
         setCate(data.th);
+        setMaxQuantity(data.so_luong);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -183,6 +260,7 @@ export default function Detail({ params }) {
             showConfirmButton: false,
             timer: 1500,
           });
+          window.location.reload();
         } catch (error) {
           setError(error.message);
         }
@@ -529,93 +607,6 @@ export default function Detail({ params }) {
               </div>
             </div>
             <div className={styles.clear}></div>
-            <div className={styles.orderFast}>
-              <form name="form_regis_phone" id="form_regis_phone" method="post">
-                <div className={styles.wrapperInfor}>
-                  <input
-                    type="text"
-                    name="telephone_buy_fast"
-                    id="telephone_buy_fast"
-                    placeholder="Để lại số điện thoại..."
-                    className={`${styles.keyword} ${styles.txtPhone} ${styles.inputText}`}
-                  />
-                  <select name="cities_buy_fast" id="cities_buy_fast">
-                    <option value="">Tỉnh/Thành Phố</option>
-                    <option value="1473">Hà Nội</option>
-                    <option value="1474">TP HCM</option>
-                    <option value="1475">Hải Phòng</option>
-                    <option value="1482">Bắc Giang</option>
-                    <option value="1483">Bắc Kạn</option>
-                    <option value="1484">Bắc Ninh</option>
-                    <option value="1485">Cao Bằng</option>
-                    <option value="1486">Điện Biên</option>
-                    <option value="1487">Hà Giang</option>
-                    <option value="1488">Hà Nam</option>
-                    <option value="1489">Hải Dương</option>
-                    <option value="1490">Hòa Bình</option>
-                    <option value="1491">Hưng Yên</option>
-                    <option value="1492">Lai Châu</option>
-                    <option value="1493">Lạng Sơn</option>
-                    <option value="1494">Lào Cai</option>
-                    <option value="1495">Nam Định</option>
-                    <option value="1496">Ninh Bình</option>
-                    <option value="1497">Phú Thọ</option>
-                    <option value="1498">Quảng Ninh</option>
-                    <option value="1499">Sơn La</option>
-                    <option value="1500">Thái Bình</option>
-                    <option value="1501">Thái Nguyên</option>
-                    <option value="1502">Thanh Hóa</option>
-                    <option value="1503">Tuyên Quang</option>
-                    <option value="1504">Vĩnh Phúc</option>
-                    <option value="1505">Yên Bái</option>
-                    <option value="1506">Đà Nẵng</option>
-                    <option value="1507">Bình Định</option>
-                    <option value="1508">Bình Phước</option>
-                    <option value="1509">Bình Thuận</option>
-                    <option value="1510">Đắk Lắk</option>
-                    <option value="1511">Đắk Nông</option>
-                    <option value="1512">Gia Lai</option>
-                    <option value="1513">Hà Tĩnh</option>
-                    <option value="1514">Khánh Hòa</option>
-                    <option value="1515">Kon Tum</option>
-                    <option value="1516">Lâm Đồng</option>
-                    <option value="1517">Nghệ An</option>
-                    <option value="1518">Ninh Thuận</option>
-                    <option value="1519">Phú Yên</option>
-                    <option value="1520">Quảng Bình</option>
-                    <option value="1521">Quảng Nam</option>
-                    <option value="1522">Quảng Ngãi</option>
-                    <option value="1523">Quảng Trị</option>
-                    <option value="1524">Thừa Thiên Huế</option>
-                    <option value="1525">Cần Thơ</option>
-                    <option value="1526">An Giang</option>
-                    <option value="1527">Bà Rịa - Vũng Tàu</option>
-                    <option value="1528">Bạc Liêu</option>
-                    <option value="1529">Bến Tre</option>
-                    <option value="1530">Bình Dương</option>
-                    <option value="1531">Cà Mau</option>
-                    <option value="1532">Đồng Nai</option>
-                    <option value="1533">Đồng Tháp</option>
-                    <option value="1534">Hậu Giang</option>
-                    <option value="1535">Kiên Giang</option>
-                    <option value="1536">Long An</option>
-                    <option value="1537">Sóc Trăng</option>
-                    <option value="1538">Tây Ninh</option>
-                    <option value="1539">Tiền Giang</option>
-                    <option value="1540">Trà Vinh</option>
-                    <option value="1541">Vĩnh Long</option>
-                    <option value="1542">Nước Ngoài</option>
-                    <option value="1543">Bắc Kinh</option>
-                  </select>
-                  <input
-                    type="button"
-                    name="submit-res"
-                    value="Gửi"
-                    className={`${styles.btPhone} ${styles.buttonSub} ${styles.button}`}
-                  />
-                </div>
-              </form>
-            </div>
           </div>
         </div>
         {/* frame right */}
@@ -644,7 +635,7 @@ export default function Detail({ params }) {
                       <button type="button" className={styles.button} onClick={handleDecrease}>
                         -
                       </button>
-                      <input className={styles.input} min="1" type="number" id="number" value={so_luong} readonly />
+                      <input className={styles.input} min="1" type="number" id="number" value={so_luong} readOnly />
                       <button type="button" className={styles.button} onClick={handleIncrease}>
                         +
                       </button>
@@ -936,111 +927,39 @@ export default function Detail({ params }) {
                 <div className={`${styles.tableCondensed} ${styles.compareTable}`}>
                   <table className={styles.table} border="0" cellPadding="0" width="100%">
                     <tbody>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Giới tính:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.gioi_tinh}</td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Kiểu dáng:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.kieu_dang}</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Loại máy:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.loai_may}</td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Phong cách:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.phong_cach}</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Mặt kính:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.mat_kinh}</td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Đường kính:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.duong_kinh}</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Chất liệu vỏ:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.chat_lieu_vo}</td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Độ dày:
-                        </td>
-                        <td className={styles.contentCharactestic}>11.2mm</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Chất liệu dây:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.chat_lieu_day}</td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Size dây:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.size_day}</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Độ chịu nước:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.do_chiu_nuoc}</td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Lug to Lug:
-                        </td>
-                        <td className={styles.contentCharactestic}>45mm</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Tính năng khác:
-                        </td>
-                        <td className={styles.contentCharactestic}>
-                          Lịch ngày. Caliber Powermatic 80.111, 23 chân kính, lò xo cân bằng Nivachron, trữ cót 80h.
-                          Sapphire chống lóa.
-                        </td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Bảo hành chính hãng:
-                        </td>
-                        <td className={styles.contentCharactestic}>2 năm quốc tế</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Màu mặt:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.mau_mat}</td>
-                      </tr>
-                      <tr className={styles.tr1} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Bảo hành Duy Anh:
-                        </td>
-                        <td className={styles.contentCharactestic}>5 năm (đã bao gồm Bảo hành Quốc tế).</td>
-                      </tr>
-                      <tr className={styles.tr0} valign="top">
-                        <td className={styles.titleCharactestic} width="40%">
-                          Xuất xứ thương hiệu:
-                        </td>
-                        <td className={styles.contentCharactestic}>{product.xuat_xu}</td>
-                      </tr>
+                      {[
+                        { label: "Giới tính:", value: product.gioi_tinh },
+                        { label: "Kiểu dáng:", value: product.kieu_dang },
+                        { label: "Loại máy:", value: product.loai_may },
+                        { label: "Phong cách:", value: product.phong_cach },
+                        { label: "Mặt kính:", value: product.mat_kinh },
+                        { label: "Đường kính:", value: product.duong_kinh && `${product.duong_kinh}mm` },
+                        { label: "Chất liệu vỏ:", value: product.chat_lieu_vo },
+                        { label: "Độ dày:", value: product.doday && `${product.doday}mm` },
+                        { label: "Chất liệu dây:", value: product.chat_lieu_day },
+                        { label: "Size dây:", value: product.size_day },
+                        { label: "Độ chịu nước:", value: product.do_chiu_nuoc },
+                        { label: "Lug to Lug:", value: product.lug_to_lug && `${product.lug_to_lug}mm` },
+                        { label: "Tính năng khác:", value: product.tinh_nang_khac },
+                        { label: "Bảo hành chính hãng:", value: product.bao_hanh_chinh_hang },
+                        { label: "Màu mặt:", value: product.mau_mat },
+                        { label: "Xuất xứ thương hiệu:", value: product.xuat_xu },
+                        { label: "Thương hiệu:", value: product.thuong_hieu },
+                        { label: "Màu dây:", value: product.mau_day },
+                        { label: "Độ dài dây:", value: product.do_dai_day },
+                        { label: "Bảo hành chính hãng:", value: "2 năm quốc tế" },
+                        { label: "Bảo hành Wristly:", value: "5 năm (đã bao gồm bảo hành quốc tế)" },
+                      ]
+                        .filter((item) => item.value)
+                        .map((item, index) => (
+                          <tr key={index} className={index % 2 === 0 ? styles.tr0 : styles.tr1} valign="top">
+                            {" "}
+                            <td className={styles.titleCharactestic} width="40%">
+                              {item.label}
+                            </td>
+                            <td className={styles.contentCharactestic}>{item.value}</td>
+                          </tr>
+                        ))}
                     </tbody>
                   </table>
                 </div>

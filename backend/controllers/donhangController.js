@@ -122,8 +122,8 @@ const addDonHang = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "nguyentantai612004@gmail.com",
-        pass: "dmez voqj ozar xfzw",
+        user: "watchwristly@gmail.com",
+        pass: "nebb uwva xdvb rvih",
       },
     });
     const mailOptions = {
@@ -335,17 +335,20 @@ const getDonHangByUserId = async (req, res) => {
        });
 
      const totalPages = Math.ceil(totalOrders / limit);
-
      if (!ordersDetail || ordersDetail.length === 0) {
-       return res.status(404).json({ message: "No products found" });
+       return res.status(200).json({
+         ordersDetail: [],
+         currentPage: parseInt(page),
+         totalPages: 0,
+         totalOrders: 0,
+       });
      }
-
      res.status(200).json({
        ordersDetail,
        currentPage: parseInt(page),
        totalPages,
        totalOrders,
-     });
+     })
    } catch (error) {
      res.status(500).json({ error: error.message });
    }
