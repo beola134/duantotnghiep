@@ -6,53 +6,56 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import ExcelJS from "exceljs";
 import RobotoRegular from "../taikhoan/Roboto-Regular.base64";
-
-
+import { start } from "@popperjs/core";
 
 export default function ChiTietDonHang() {
   const [users, setUser] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [displayUsers, setDisplayUsers] = useState([]);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(4);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredUsers, setFilteredUsers] = useState([]);
-  //tìm kiếm
+  const [totalPages, setTotalPages] = useState(1);
+
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
-  const handleSearch = (e) => {
-    const query = removeAccents(searchQuery.toLowerCase());
-    const filtered = users.filter((user) => {
-      const giadonhang = String(user.gia_san_pham || "");
-      const tensp = user.ten_san_pham || "";
-      const soluong = String(user.so_luong || "");
-      return (
-        removeAccents(giadonhang.toLowerCase()).includes(query) ||
-        removeAccents(tensp.toLowerCase()).includes(query) ||
-        removeAccents(soluong.toLowerCase()).includes(query)
-      );
-    });
 
-    setFilteredUsers(filtered);
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
     setCurrentPage(1);
   };
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      handleSearch(removeAccents(searchQuery.toLowerCase()));
-    }, 500);
 
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchQuery, users, itemsPerPage]);
+  const fetchUsers = async (page = 1, limit = itemsPerPage, query = "") => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/donhang/getAllOrderDetails?page=${page}&limit=${limit}&ten_san_pham=${query}`
+      );
 
-  //phân trang
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.ordersDetail);
+        setTotalPages(data.totalPages);
+      } else if (response.status === 404) {
+        setUser([]);
+        setTotalPages(1);
+      } else {
+        throw new Error("Lỗi không thể tải dữ liệu");
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    const dataToShow = searchQuery ? filteredUsers : users;
-    setDisplayUsers(dataToShow.slice(start, end));
-  }, [filteredUsers, users, itemsPerPage, currentPage, searchQuery]);
+    fetchUsers(
+      currentPage,
+      itemsPerPage,
+      removeAccents(searchQuery.toLowerCase())
+    );
+  }, [currentPage, itemsPerPage, searchQuery]);
 
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(Number(e.target.value));
@@ -64,8 +67,12 @@ export default function ChiTietDonHang() {
       confirmButtonText: "OK",
     });
   };
+  const startDetail = (currentPage - 1) * itemsPerPage + 1;
+  const endDetail = Math.min(
+    currentPage * itemsPerPage,
+    totalPages
+  );
 
-  const totalPages = Math.ceil((searchQuery ? filteredUsers.length : users.length) / itemsPerPage);
 
   const uploadFile = () => {
     Swal.fire({
@@ -81,7 +88,7 @@ export default function ChiTietDonHang() {
       window.print();
     }
   };
-  
+
   const copyData = () => {
     if (typeof document !== "undefined") {
       const table = document.getElementById("productTable");
@@ -99,8 +106,7 @@ export default function ChiTietDonHang() {
       });
     }
   };
-  
-  // Hàm xuất dữ liệu ra Excel
+
   const exportToExcel = async () => {
     Swal.fire({
       title: "Xác nhận",
@@ -112,18 +118,74 @@ export default function ChiTietDonHang() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+          // Show loading indicator
+          Swal.fire({
+            title: "Đang xuất...",
+            text: "Vui lòng chờ trong giây lát.",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+
+          const allOrders = [];
+          let currentPage = 1;
+          let totalPages = 1;
+          const query = removeAccents(searchQuery.toLowerCase());
+
+          const firstResponse = await fetch(
+            `http://localhost:5000/donhang/getAllOrderDetails?page=${currentPage}&limit=1000&ten_san_pham=${encodeURIComponent(
+              query
+            )}`
+          );
+
+          if (firstResponse.ok) {
+            const data = await firstResponse.json();
+            allOrders.push(...data.ordersDetail);
+            totalPages = data.totalPages;
+            currentPage += 1;
+          } else {
+            throw new Error("Lỗi khi tải dữ liệu để xuất Excel.");
+          }
+
+          while (currentPage <= totalPages) {
+            const response = await fetch(
+              `http://localhost:5000/donhang/getAllOrderDetails?page=${currentPage}&limit=1000&ten_san_pham=${encodeURIComponent(
+                query
+              )}`
+            );
+
+            if (response.ok) {
+              const data = await response.json();
+              allOrders.push(...data.ordersDetail);
+              currentPage += 1;
+            } else {
+              throw new Error(`Lỗi khi tải trang ${currentPage}`);
+            }
+          }
+
+          if (allOrders.length === 0) {
+            Swal.fire({
+              title: "Thông báo",
+              text: "Không có dữ liệu để xuất.",
+              icon: "info",
+              confirmButtonText: "OK",
+            });
+            return;
+          }
 
           const workbook = new ExcelJS.Workbook();
           const worksheet = workbook.addWorksheet("Danh Sách Sản Phẩm Đã Bán");
-          
+
           worksheet.columns = [
             { header: "ID", key: "_id", width: 20 },
-            { header: "Giá Sản Phẩm", key: "gia_san_pham", width: 25 },
-            { header: "Tên Sản Phẩm", key: "ten_san_pham", width: 25 },
-            { header: "Số Lượng", key: "so_luong", width: 40 },
-            { header: "ID Đơn Hàng", key: "id_don_hang", width: 20 },
-            { header: "ID Sản Phẩm", key: "id_san_pham", width: 20 },
+            { header: "Giá Sản Phẩm", key: "gia_san_pham", width: 25 },
+            { header: "Tên Sản Phẩm", key: "ten_san_pham", width: 25 },
+            { header: "Số Lượng", key: "so_luong", width: 15 },
+            { header: "ID Đơn Hàng", key: "id_don_hang", width: 20 },
+            { header: "ID Sản Phẩm", key: "id_san_pham", width: 20 },
           ];
+
           worksheet.getRow(1).eachCell((cell) => {
             cell.font = { bold: true, color: { argb: "FFFFFF" } };
             cell.fill = {
@@ -133,28 +195,19 @@ export default function ChiTietDonHang() {
             };
             cell.alignment = { vertical: "middle", horizontal: "center" };
           });
-          // Lấy dữ liệu từ bảng HTML và thêm vào Excel
-          const rows = Array.from(
-            document.querySelectorAll("#productTable tbody tr")
-          );
-           rows.forEach((row) => {
-             const cols = row.querySelectorAll("td");
-             const id = cols[0].textContent.trim();
-             const giaSanPham = cols[1].textContent.trim();
-             const tenSanPham = cols[2].textContent.trim();
-             const soLuong = cols[3].textContent.trim();
-             const idDonHang = cols[4].textContent.trim();
-             const idSanPham = cols[5].textContent.trim();
-             // Thêm dòng vào worksheet
-             worksheet.addRow({
-               _id: id,
-               gia_san_pham: giaSanPham,
-               ten_san_pham: tenSanPham,
-               so_luong: soLuong,
-               id_don_hang: idDonHang,
-               id_san_pham: idSanPham,
-             });
-           });
+
+    
+          allOrders.forEach((item) => {
+            worksheet.addRow({
+              _id: item._id,
+              gia_san_pham: item.gia_san_pham.toLocaleString("vi-VN") + "đ",
+              ten_san_pham: item.ten_san_pham,
+              so_luong: item.so_luong,
+              id_don_hang: item.id_don_hang,
+              id_san_pham: item.id_san_pham,
+            });
+          });
+
           worksheet.eachRow((row) => {
             row.eachCell((cell) => {
               cell.border = {
@@ -165,10 +218,11 @@ export default function ChiTietDonHang() {
               };
             });
           });
-            const buffer = await workbook.xlsx.writeBuffer();
-            const blob = new Blob([buffer], {
-              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            });
+
+          const buffer = await workbook.xlsx.writeBuffer();
+          const blob = new Blob([buffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          });
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
@@ -196,8 +250,7 @@ export default function ChiTietDonHang() {
     });
   };
 
-  // Hàm xuất dữ liệu ra PDF
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
     Swal.fire({
       title: "Xác nhận",
       text: "Bạn có chắc chắn muốn xuất dữ liệu ra file PDF?",
@@ -205,44 +258,93 @@ export default function ChiTietDonHang() {
       showCancelButton: true,
       confirmButtonText: "Xuất",
       cancelButtonText: "Hủy",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+          // Show loading indicator
+          Swal.fire({
+            title: "Đang xuất...",
+            text: "Vui lòng chờ trong giây lát.",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+
+          const allOrders = [];
+          let currentPage = 1;
+          let totalPages = 1;
+          const query = removeAccents(searchQuery.toLowerCase());
+
+          // Fetch the first page to get totalPages
+          const firstResponse = await fetch(
+            `http://localhost:5000/donhang/getAllOrderDetails?page=${currentPage}&limit=1000&ten_san_pham=${encodeURIComponent(
+              query
+            )}`
+          );
+
+          if (firstResponse.ok) {
+            const data = await firstResponse.json();
+            allOrders.push(...data.ordersDetail);
+            totalPages = data.totalPages;
+            currentPage += 1;
+          } else {
+            throw new Error("Lỗi khi tải dữ liệu để xuất PDF.");
+          }
+
+          // Fetch remaining pages if any
+          while (currentPage <= totalPages) {
+            const response = await fetch(
+              `http://localhost:5000/donhang/getAllOrderDetails?page=${currentPage}&limit=1000&ten_san_pham=${encodeURIComponent(
+                query
+              )}`
+            );
+
+            if (response.ok) {
+              const data = await response.json();
+              allOrders.push(...data.ordersDetail);
+              currentPage += 1;
+            } else {
+              throw new Error(`Lỗi khi tải trang ${currentPage}`);
+            }
+          }
+
+          if (allOrders.length === 0) {
+            Swal.fire({
+              title: "Thông báo",
+              text: "Không có dữ liệu để xuất.",
+              icon: "info",
+              confirmButtonText: "OK",
+            });
+            return;
+          }
+
+          // Create PDF document
           const doc = new jsPDF();
           doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
           doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
           doc.setFont("Roboto");
           doc.setFontSize(18);
           doc.text("Chi tiết đơn hàng", 14, 20);
-          const rows = [];
+
           const headers = [
             "ID",
-            "Giá Sản Phẩm",
-            "Tên Sản Phẩm",
-            "Số Lượng",
-            "ID Đơn Hàng",
-            "ID Sản Phẩm",
+            "Giá Sản Phẩm",
+            "Tên Sản Phẩm",
+            "Số Lượng",
+            "ID Đơn Hàng",
+            "ID Sản Phẩm",
           ];
-          const tableRows = document.querySelectorAll("#productTable tbody tr");
-          tableRows.forEach((row) => {
-            const cols = row.querySelectorAll("td");
-            const _id = cols[0].textContent.trim();
-            const gia_san_pham = cols[1].textContent.trim();
-            const ten_san_pham = cols[2].textContent.trim();
-            const so_luong = cols[3].textContent.trim();
-            const id_don_hang = cols[4].textContent.trim();
-            const id_san_pham = cols[5].textContent.trim();
-            console.log(tableRows);
-            
-            rows.push([
-              _id,
-              gia_san_pham,
-              ten_san_pham,
-              so_luong,
-              id_don_hang,
-              id_san_pham,
-            ]);
-          });
+
+          const rows = allOrders.map((item) => [
+            item._id,
+            `${item.gia_san_pham.toLocaleString("vi-VN")}đ`,
+            item.ten_san_pham,
+            item.so_luong,
+            item.id_don_hang,
+            item.id_san_pham,
+          ]);
+
           doc.autoTable({
             head: [headers],
             body: rows,
@@ -254,16 +356,18 @@ export default function ChiTietDonHang() {
             },
             styles: { font: "Roboto", fontSize: 10 },
             columnStyles: {
-              0: { cellWidth: 25 }, // ID đơn hàng
-              1: { cellWidth: 20 }, // giá sản phẩm
-              2: { cellWidth: 30 }, // Tên sp
-              3: { cellWidth: 20 }, // Số luọng
-              4: { cellWidth: 15 }, // id đơn hang
-              5: { cellWidth: 25 }, // id sản phẩm
-
+              0: { cellWidth: 25 },
+              1: { cellWidth: 30 },
+              2: { cellWidth: 50 },
+              3: { cellWidth: 20 },
+              4: { cellWidth: 25 },
+              5: { cellWidth: 25 },
             },
           });
+
           doc.save("chi_tiet_don_hang.pdf");
+
+          // Show success message
           Swal.fire({
             title: "Thành công",
             text: "Dữ liệu đã được xuất ra file PDF!",
@@ -301,13 +405,14 @@ export default function ChiTietDonHang() {
     fetchUsers();
   }, []);
 
-   if (loading) {
-     return <p>Loading...</p>;
-   }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
-   if (error) {
-     return <p>Error: {error}</p>;
-   }
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
   return (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>
@@ -348,13 +453,12 @@ export default function ChiTietDonHang() {
                     type="text"
                     id="search"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={handleSearch}
-                    placeholder="Nhập tên sản phẩm..."
+                    onChange={handleSearch}
+          
                   />
                 </div>
               </div>
-              {displayUsers.length > 0 ? (
+              {users.length > 0 ? (
                 <table id="productTable" className={styles.productTable}>
                   <thead>
                     <tr>
@@ -377,7 +481,7 @@ export default function ChiTietDonHang() {
                     </tr>
                   </thead>
                   <tbody>
-                    {displayUsers.map((item) => (
+                    {users.map((item) => (
                       <tr key={item._id}>
                         <td>{item._id}</td>
                         <td style={{ textAlign: "center" }}>
@@ -409,7 +513,9 @@ export default function ChiTietDonHang() {
               )}
               <div className={styles.pagination}>
                 <span>
-                  Hiện 1 đến {displayUsers.length} của {filteredUsers.length || users.length} chi tiết đơn hàng
+                  Hiện 1 đến {startDetail} của {endDetail} chi
+                  tiết đơn hàng
+
                 </span>
                 <div className={styles.paginationControls}>
                   <button

@@ -335,17 +335,20 @@ const getDonHangByUserId = async (req, res) => {
        });
 
      const totalPages = Math.ceil(totalOrders / limit);
-
      if (!ordersDetail || ordersDetail.length === 0) {
-       return res.status(404).json({ message: "No products found" });
+       return res.status(200).json({
+         ordersDetail: [],
+         currentPage: parseInt(page),
+         totalPages: 0,
+         totalOrders: 0,
+       });
      }
-
      res.status(200).json({
        ordersDetail,
        currentPage: parseInt(page),
        totalPages,
        totalOrders,
-     });
+     })
    } catch (error) {
      res.status(500).json({ error: error.message });
    }
