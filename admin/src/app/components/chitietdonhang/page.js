@@ -6,7 +6,6 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import ExcelJS from "exceljs";
 import RobotoRegular from "../taikhoan/Roboto-Regular.base64";
-import { start } from "@popperjs/core";
 
 export default function ChiTietDonHang() {
   const [users, setUser] = useState([]);
@@ -67,11 +66,7 @@ export default function ChiTietDonHang() {
       confirmButtonText: "OK",
     });
   };
-  const startDetail = (currentPage - 1) * itemsPerPage + 1;
-  const endDetail = Math.min(
-    currentPage * itemsPerPage,
-    totalPages
-  );
+
 
   const uploadFile = () => {
     Swal.fire({
@@ -501,8 +496,7 @@ export default function ChiTietDonHang() {
               )}
               <div className={styles.pagination}>
                 <span>
-                  Hiện 1 đến {startDetail} của {endDetail} chi
-                  tiết đơn hàng
+                  Hiện 1 đến {users.length} của {users.length} chi tiết đơn hàng
                 </span>
                 <div className={styles.paginationControls}>
                   <button
