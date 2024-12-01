@@ -564,6 +564,7 @@
   line-height: 30px;
 }
 /* detail-hướng dẫn sử dụng  */
+/* cách chỉnh đồng hồ  */
 
 .bottomDetail1 .tab {
   overflow: hidden;
@@ -573,6 +574,13 @@
 .bottomDetail1 .tab button.active {
   background: #796752;
   color: #fff;
+}
+.tabcontent1 {
+  display: none;
+}
+
+.tabcontent1.activeTab {
+  display: block;
 }
 .bottomDetail1 .tab button {
   border: none;
@@ -608,6 +616,57 @@
 .prodetailsTab {
   display: block;
 }
+
+/* hướng dẫn chọn size */
+.youtubeEmbedWrapper {
+  height: 0;
+  overflow: hidden;
+  padding-bottom: 56.25%;
+  padding-top: 30px;
+  position: relative;
+}
+.lazyif {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.description ul li {
+  padding-left: 29px !important;
+  position: relative;
+}
+.description ul li:after {
+  content: "";
+  color: #e6e6e6;
+  position: absolute;
+  top: 10px;
+  left: 8px;
+  width: 6px;
+  height: 6px;
+  background: #bdbdbd;
+  border-radius: 50%;
+}
+.description img {
+  max-width: 100%;
+  height: auto !important;
+  border: 1px solid rgba(243, 243, 243, 0.8);
+}
+.after-lazy {
+  opacity: 1;
+  display: inline-block !important;
+}
+.description table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.description table td,
+.description table #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+/* detail-hướng dẫn sử dụng  */
 
 /* detail-chứng nhận  */
 .bottomDetail .bottomDetailR {
@@ -1030,7 +1089,6 @@
 }
 
 .text {
-  color: #666;
   font-size: 14px;
   margin-top: 10px;
 }
@@ -1090,4 +1148,3 @@
   padding: 10px 5px;
   font-size: 16px;
 }
-

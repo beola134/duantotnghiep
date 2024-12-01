@@ -16,20 +16,33 @@ export default function CommentsPage() {
   const [error, setError] = useState(null);
 
   // gọi tất cả các bình luận từ API
-  const fetchComments = async () => {
+  const fetchAllComments = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/comment/showAll?page=${currentPage}&ten_dang_nhap=${search}`);
-      const data = await response.json();
-      setComments(data.comments);
-      setTotalPages(data.totalPages);
+      setLoading(true);
+      let allComments = [];
+      let page = 1;
+      let totalPages = 1;
+
+      // Lặp qua tất cả các trang
+      while (page <= totalPages) {
+        const response = await fetch(`http://localhost:5000/comment/showAll?page=${page}&ten_dang_nhap=${search}`);
+        const data = await response.json();
+        allComments = [...allComments, ...data.comments];
+        totalPages = data.totalPages;
+        page++;
+      }
+
+      setComments(allComments);
+      setTotalPages(totalPages);
     } catch (error) {
       setError(error);
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
-    fetchComments();
+    fetchAllComments();
   }, [currentPage, search]);
 
   // chức năng chuyển trang
@@ -64,40 +77,69 @@ export default function CommentsPage() {
 
   // Hàm xuất file pdf
   const handleExportPDF = async () => {
-    const table = document.getElementById("productTable");
-    if (!table) {
-      alert("Không tìm thấy bảng dữ liệu!");
-      return;
-    }
+    Swal.fire({
+      title: "Xác nhận",
+      text: "Bạn có chắc chắn muốn xuất dữ liệu ra file PDF?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Xuất",
+      cancelButtonText: "Hủy",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const table = document.getElementById("productTable");
+        if (!table) {
+          alert("Không tìm thấy bảng dữ liệu!");
+          return;
+        }
 
-    const canvas = await html2canvas(table);
-    const imgData = canvas.toDataURL("image/png");
+        const canvas = await html2canvas(table);
+        const imgData = canvas.toDataURL("image/png");
 
-    const pdf = new jsPDF("p", "mm", "a4");
-    const imgWidth = 210;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-    pdf.save("table-data.pdf");
+        const pdf = new jsPDF("p", "mm", "a4");
+        const imgWidth = 210;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+        pdf.save("table-data.pdf");
+      }
+    });
   };
 
   // Hàm xuất file excel
 
   const exportToExcel = () => {
-    const table = document.getElementById("productTable");
-    if (!table) {
-      alert("Không tìm thấy bảng dữ liệu!");
-      return;
-    }
+    Swal.fire({
+      title: "Xác nhận",
+      text: "Bạn có chắc chắn muốn xuất dữ liệu ra file Excel?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Xuất",
+      cancelButtonText: "Hủy",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const table = document.getElementById("productTable");
+        if (!table) {
+          alert("Không tìm thấy bảng dữ liệu!");
+          return;
+        }
 
-    const workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+        const workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
 
-    const worksheet = workbook.Sheets.Sheet1;
+        const worksheet = workbook.Sheets.Sheet1;
 
-    const columnWidths = [{ wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 20 }, { wch: 10 }, { wch: 20 }, { wch: 10 }];
+        const columnWidths = [
+          { wch: 15 },
+          { wch: 15 },
+          { wch: 15 },
+          { wch: 20 },
+          { wch: 10 },
+          { wch: 20 },
+          { wch: 10 },
+        ];
+        worksheet["!cols"] = columnWidths;
 
-    worksheet["!cols"] = columnWidths;
-
-    XLSX.writeFile(workbook, "table-data.xlsx");
+        XLSX.writeFile(workbook, "table-data.xlsx");
+      }
+    });
   };
 
   if (loading) {
