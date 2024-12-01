@@ -446,8 +446,6 @@
 .summaryContentCat {
   margin-bottom: 80px;
   line-height: 25px;
-  height: 360px;
-  overflow-y: hidden; /*ẩn nội dung tràn theo chiều dọc */
 }
 
 .description img {

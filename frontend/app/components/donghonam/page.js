@@ -12,6 +12,7 @@ export default function DonghoNam() {
   const [sortOption, setSortOption] = useState(""); // Tuỳ chọn sắp xếp (tăng/giảm dần)
   const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
   const [totalPages, setTotalPages] = useState(1); // Tổng số trang
+  const [isExpanded, setIsExpanded] = useState(false); // Trạng thái mô tả
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -125,6 +126,12 @@ export default function DonghoNam() {
   // 8. Cập nhật tuỳ chọn sắp xếp
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
+  };
+
+  // 9. Hiển thị mô tả
+
+  const toggleDescription = () => {
+    setIsExpanded(!isExpanded);
   };
 
   if (loading) {
@@ -1602,7 +1609,7 @@ export default function DonghoNam() {
                       ‹
                     </span>
                     {/* Trang hiện tại */}
-                    <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1 }`}</span>
+                    <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1}`}</span>
                     {/* Next 1 trang*/}
                     <span
                       className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
@@ -1636,7 +1643,10 @@ export default function DonghoNam() {
                 </div>
 
                 {/* mô tả*/}
-                <div className={`${styles.summaryContentCat} ${styles.description} ${styles.heightAuto}`}>
+                <div
+                  className={`${styles.summaryContentCat} ${styles.description} `}
+                  style={{ height: isExpanded ? "auto" : "360px", overflow: isExpanded ? "visible" : "hidden" }}
+                >
                   <h2 dir="ltr" style={{ textAlign: "justify" }}>
                     <strong>TẤT CẢ NHỮNG ĐIỀU BẠN CẦN BIẾT VỀ CÁCH CHỌN ĐỒNG HỒ NAM</strong>
                   </h2>
@@ -2518,7 +2528,7 @@ export default function DonghoNam() {
                 </div>
                 {/* Xem thêm   */}
                 <div className={styles.summaryContent}>
-                  <span>Xem thêm</span>
+                  <span onClick={toggleDescription}>{isExpanded ? "Thu gọn" : "Xem thêm"}</span>
                 </div>
                 <div className={styles.clear}></div>
                 <div className={`${styles.aq_relates} ${styles.content_li}`}></div>
