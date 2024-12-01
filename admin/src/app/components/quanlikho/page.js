@@ -127,73 +127,92 @@ export default function SanPham() {
               />
             </div>
           </div>
-          <table id="productTable" className={styles.productTable}>
-            <thead>
-              <tr>
-                <th style={{ width: "15%", textAlign: "center" }}>
-                  ID sản phẩm
-                </th>
-                <th style={{ width: "20%", textAlign: "center" }}>
-                  Tên sản phẩm
-                </th>
-                <th style={{ width: "10%", textAlign: "center" }}>Ảnh</th>
-                <th style={{ width: "10%", textAlign: "center" }}>Số lượng</th>
-                <th style={{ width: "10%", textAlign: "center" }}>Giá tiền</th>
-                <th style={{ width: "15%", textAlign: "center" }}>
-                  Mã sản phẩm
-                </th>
-                <th style={{ width: "10%", textAlign: "center" }}>Đã bán</th>
-                <th style={{ width: "15%", textAlign: "center" }}>
-                  Trạng thái
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((product) => {
-                const {
-                  _id,
-                  ten_san_pham,
-                  hinh_anh,
-                  ma_san_pham,
-                  gia_san_pham,
-                  so_luong,
-                  trang_thai,
-                  da_ban,
-                } = product;
+          {products.length > 0 ? (
+            <table id="productTable" className={styles.productTable}>
+              <thead>
+                <tr>
+                  <th style={{ width: "15%", textAlign: "center" }}>
+                    ID sản phẩm
+                  </th>
+                  <th style={{ width: "20%", textAlign: "center" }}>
+                    Tên sản phẩm
+                  </th>
+                  <th style={{ width: "10%", textAlign: "center" }}>Ảnh</th>
+                  <th style={{ width: "10%", textAlign: "center" }}>
+                    Số lượng
+                  </th>
+                  <th style={{ width: "10%", textAlign: "center" }}>
+                    Giá tiền
+                  </th>
+                  <th style={{ width: "15%", textAlign: "center" }}>
+                    Mã sản phẩm
+                  </th>
+                  <th style={{ width: "10%", textAlign: "center" }}>Đã bán</th>
+                  <th style={{ width: "15%", textAlign: "center" }}>
+                    Trạng thái
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((product) => {
+                  const {
+                    _id,
+                    ten_san_pham,
+                    hinh_anh,
+                    ma_san_pham,
+                    gia_san_pham,
+                    so_luong,
+                    trang_thai,
+                    da_ban,
+                  } = product;
 
-                return (
-                  <tr key={_id}>
-                    <td>{_id}</td>
-                    <td>{ten_san_pham}</td>
-                    <td>
-                      <img
-                        src={`http://localhost:5000/images/${hinh_anh}`}
-                        alt="Sản phẩm"
-                      />
-                    </td>
-                    <td style={{ textAlign: "center" }}>{so_luong}</td>
-                    <td>{gia_san_pham.toLocaleString("vi-VN")}₫</td>
-                    <td style={{ textAlign: "center" }}>{ma_san_pham}</td>
-                    <td style={{ textAlign: "center" }}>{da_ban}</td>
-                    <td style={{ textAlign: "center" }}>
-                      <button
-                        className={`${styles.statusButton} ${
-                          trang_thai === "Còn hàng" ? styles.green : styles.red
-                        }`}
-                      >
-                        {" "}
-                        {trang_thai}
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                  return (
+                    <tr key={_id}>
+                      <td>{_id}</td>
+                      <td>{ten_san_pham}</td>
+                      <td>
+                        <img
+                          src={`http://localhost:5000/images/${hinh_anh}`}
+                          alt="Sản phẩm"
+                        />
+                      </td>
+                      <td style={{ textAlign: "center" }}>{so_luong}</td>
+                      <td>{gia_san_pham.toLocaleString("vi-VN")}₫</td>
+                      <td style={{ textAlign: "center" }}>{ma_san_pham}</td>
+                      <td style={{ textAlign: "center" }}>{da_ban}</td>
+                      <td style={{ textAlign: "center" }}>
+                        <button
+                          className={`${styles.statusButton} ${
+                            trang_thai === "Còn hàng"
+                              ? styles.green
+                              : styles.red
+                          }`}
+                        >
+                          {" "}
+                          {trang_thai}
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          ) : (
+            <p
+              style={{
+                textAlign: "center",
+                marginTop: "20px",
+                fontStyle: "italic",
+                fontWeight: "bold",
+              }}
+            >
+              Không tìm thấy sản phẩm.
+            </p>
+          )}
           <div className={styles.pagination}>
             <span>
               Hiện {startProductIndex} đến {endProductIndex} của {totalProducts}{" "}
-              sản phẩm  
+              sản phẩm
             </span>
             <div className={styles.paginationControls}>
               <button
