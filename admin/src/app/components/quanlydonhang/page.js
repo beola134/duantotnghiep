@@ -98,7 +98,7 @@ export default function DonHang() {
       confirmButtonText: "OK",
     });
   };
-
+  
   // Hàm xuất dữ liệu ra Excel
   const exportToExcel = async () => {
     Swal.fire({
@@ -111,23 +111,18 @@ export default function DonHang() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          // Tạo workbook mới
           const workbook = new ExcelJS.Workbook();
           const worksheet = workbook.addWorksheet("Danh sách đơn hàng");
-
-          // Định nghĩa cột
           worksheet.columns = [
-            { header: "ID đơn hàng", key: "_id", width: 18 },
+            { header: "ID đơn hàng", key: "_id", width: 20 },
             { header: "Địa chỉ", key: "dia_chi", width: 25 },
             { header: "Tên khách hàng", key: "ho_ten", width: 20 },
             { header: "Số điện thoại", key: "dien_thoai", width: 15 },
-            { header: "Ghi chú", key: "ghi_chu", width: 25 },
+            { header: "Ghi chú", key: "ghi_chu", width: 40 },
             { header: "Ngày mua", key: "thoi_gian_tao", width: 15 },
             { header: "Tổng tiền", key: "tong_tien", width: 15 },
             { header: "Tình trạng", key: "trang_thai", width: 20 },
           ];
-
-          // Thiết lập định dạng cho dòng tiêu đề
           worksheet.getRow(1).eachCell((cell) => {
             cell.font = { bold: true, color: { argb: "FFFFFF" } };
             cell.fill = {
@@ -138,35 +133,39 @@ export default function DonHang() {
             cell.alignment = { vertical: "middle", horizontal: "center" };
           });
 
-          // Lấy dữ liệu từ bảng HTML và thêm vào Excel
-          const rows = Array.from(document.querySelectorAll("#productTable tbody tr"));
+          await Promise.all(
+            donHangs.map(async (item) => {
+              const hoTen =
+                nguoiDungMap[item.id_nguoi_dung]?.ho_ten || "Đang tải...";
+              const dienThoai =
+                nguoiDungMap[item.id_nguoi_dung]?.dien_thoai || "Đang tải...";
+              const thoiGianTao = item.thoi_gian_tao
+                ? new Intl.DateTimeFormat("vi-VN", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  }).format(new Date(item.thoi_gian_tao))
+                : "N/A";
+              const tinhTrang =
+                statusOptions.find((status) => status === item.trang_thai) ||
+                item.trang_thai;
+              // Thêm dòng vào worksheet
+              worksheet.addRow({
+                _id: item._id || "N/A",
+                dia_chi: item.dia_chi || "N/A",
+                ho_ten: hoTen,
+                dien_thoai: dienThoai,
+                ghi_chu: item.ghi_chu || "N/A",
+                thoi_gian_tao: thoiGianTao,
+                tong_tien: item.tong_tien
+                  ? item.tong_tien.toLocaleString("vi-VN") + "₫"
+                  : "0₫",
+                trang_thai: tinhTrang,
+              });
+            })
+          );
 
-          rows.forEach((row) => {
-            const cols = row.querySelectorAll("td");
-            const id = cols[0].textContent.trim();
-            const diaChi = cols[1].textContent.trim();
-            const hoTen = cols[2].textContent.trim();
-            const dienThoai = cols[3].textContent.trim();
-            const ghiChu = cols[4].textContent.trim();
-            const ngayMua = cols[5].textContent.trim();
-            const tongTien = cols[6].textContent.trim();
-            const tinhTrang =
-              cols[7].querySelector("select").options[cols[7].querySelector("select").selectedIndex].text;
-
-            // Thêm dòng vào worksheet
-            worksheet.addRow({
-              _id: id,
-              dia_chi: diaChi,
-              ho_ten: hoTen,
-              dien_thoai: dienThoai,
-              ghi_chu: ghiChu,
-              thoi_gian_tao: ngayMua,
-              tong_tien: tongTien,
-              trang_thai: tinhTrang,
-            });
-          });
-
-          // Thiết lập border cho các ô
+     
           worksheet.eachRow((row) => {
             row.eachCell((cell) => {
               cell.border = {
@@ -178,7 +177,6 @@ export default function DonHang() {
             });
           });
 
-          // Tạo file Excel và tải về
           const buffer = await workbook.xlsx.writeBuffer();
           const blob = new Blob([buffer], {
             type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -210,89 +208,108 @@ export default function DonHang() {
     });
   };
 
+
+
   // Hàm xuất dữ liệu ra PDF
-  const exportToPDF = () => {
-    Swal.fire({
-      title: "Xác nhận",
-      text: "Bạn có chắc chắn muốn xuất dữ liệu ra file PDF?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Xuất",
-      cancelButtonText: "Hủy",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        try {
-          const doc = new jsPDF();
-          doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
-          doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
-          doc.setFont("Roboto");
-          doc.setFontSize(18);
-          doc.text("Danh sách đơn hàng", 14, 20);
-          const rows = [];
-          const headers = [
-            "ID đơn hàng",
-            "Địa chỉ",
-            "Tên khách hàng",
-            "Số điện thoại",
-            "Ghi chú",
-            "Ngày mua",
-            "Tổng tiền",
-            "Tình trạng",
-          ];
-          const tableRows = document.querySelectorAll("#productTable tbody tr");
-          tableRows.forEach((row) => {
-            const cols = row.querySelectorAll("td");
-            const id = cols[0].textContent.trim();
-            const diaChi = cols[1].textContent.trim();
-            const hoTen = cols[2].textContent.trim();
-            const dienThoai = cols[3].textContent.trim();
-            const ghiChu = cols[4].textContent.trim();
-            const ngayMua = cols[5].textContent.trim();
-            const tongTien = cols[6].textContent.trim();
-            const tinhTrang =
-              cols[7].querySelector("select").options[cols[7].querySelector("select").selectedIndex].text;
-            rows.push([id, diaChi, hoTen, dienThoai, ghiChu, ngayMua, tongTien, tinhTrang]);
-          });
-          doc.autoTable({
-            head: [headers],
-            body: rows,
-            startY: 30,
-            theme: "grid",
-            headStyles: {
-              fillColor: [0, 112, 192],
-              textColor: [255, 255, 255],
-            },
-            styles: { font: "Roboto", fontSize: 10 },
-            columnStyles: {
-              0: { cellWidth: 25 }, // ID đơn hàng
-              1: { cellWidth: 20 }, // Địa chỉ
-              2: { cellWidth: 30 }, // Tên khách hàng
-              3: { cellWidth: 20 }, // Số điện thoại
-              4: { cellWidth: 15 }, // Ghi chú
-              5: { cellWidth: 25 }, // Ngày mua
-              6: { cellWidth: 30 }, // Tổng tiền
-              7: { cellWidth: 27 }, // Tình trạng
-            },
-          });
-          doc.save("danh_sach_don_hang.pdf");
-          Swal.fire({
-            title: "Thành công",
-            text: "Dữ liệu đã được xuất ra file PDF!",
-            icon: "success",
-            confirmButtonText: "OK",
-          });
-        } catch (error) {
-          console.error("Lỗi khi xuất PDF:", error);
-          Swal.fire({
-            title: "Lỗi",
-            text: "Không thể xuất file PDF. Vui lòng thử lại!",
-            icon: "error",
-            confirmButtonText: "OK",
-          });
-        }
+ const exportToPDF = async () => {
+  Swal.fire({
+    title: "Xác nhận",
+    text: "Bạn có chắc chắn muốn xuất dữ liệu ra file PDF?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Xuất",
+    cancelButtonText: "Hủy",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      try {
+        const doc = new jsPDF();
+        doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
+        doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+        doc.setFont("Roboto");
+        doc.setFontSize(18);
+        doc.text("Danh sách đơn hàng", 14, 20);
+
+        const headers = [
+          "ID đơn hàng",
+          "Địa chỉ",
+          "Tên khách hàng",
+          "Số điện thoại",
+          "Ghi chú",
+          "Ngày mua",
+          "Tổng tiền",
+          "Tình trạng",
+        ];
+        const rows = [];
+        donHangs.forEach((item) => {
+          const hoTen = nguoiDungMap[item.id_nguoi_dung]?.ho_ten || "Đang tải...";
+          const dienThoai = nguoiDungMap[item.id_nguoi_dung]?.dien_thoai || "Đang tải...";
+          const thoiGianTao = item.thoi_gian_tao
+            ? new Intl.DateTimeFormat("vi-VN", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              }).format(new Date(item.thoi_gian_tao))
+            : "N/A";
+          const tinhTrang =
+            statusOptions.find((status) => status === item.trang_thai) || item.trang_thai;
+          rows.push([
+            item._id || "N/A",
+            item.dia_chi || "N/A",
+            hoTen,
+            dienThoai,
+            item.ghi_chu || "N/A",
+            thoiGianTao,
+            item.tong_tien
+              ? item.tong_tien.toLocaleString("vi-VN") + "₫"
+              : "0₫",
+            tinhTrang,
+          ]);
+        });
+        doc.autoTable({
+          head: [headers],
+          body: rows,
+          startY: 30,
+          theme: "grid",
+          headStyles: {
+            fillColor: [0, 112, 192],
+            textColor: [255, 255, 255],
+          },
+          styles: { font: "Roboto", fontSize: 10 },
+          columnStyles: {
+            0: { cellWidth: 25 }, // ID đơn hàng
+            1: { cellWidth: 20 }, // Địa chỉ
+            2: { cellWidth: 30 }, // Tên khách hàng
+            3: { cellWidth: 23 }, // Số điện thoại
+            4: { cellWidth: 15 }, // Ghi chú
+            5: { cellWidth: 25 }, // Ngày mua
+            6: { cellWidth: 30 }, // Tổng tiền
+            7: { cellWidth: 27 }, // Tình trạng
+          },
+        });
+
+        // Lưu file PDF
+        doc.save("danh_sach_don_hang.pdf");
+
+        Swal.fire({
+          title: "Thành công",
+          text: "Dữ liệu đã được xuất ra file PDF!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      } catch (error) {
+        console.error("Lỗi khi xuất PDF:", error);
+        Swal.fire({
+          title: "Lỗi",
+          text: "Không thể xuất file PDF. Vui lòng thử lại!",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+
       }
-    });
-  };
+    }
+  });
+};
+
 
   //lấy dữ liệu danh sách đơn hàng
   useEffect(() => {

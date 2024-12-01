@@ -54,8 +54,11 @@ export default function DanhMuc() {
     });
   };
 
-  const totalPages = Math.ceil((searchQuery ? filteredCategories.length : categories.length) / itemsPerPage);
+  const totalPages = Math.ceil(
+  (searchQuery ? filteredCategories.length : categories.length) / itemsPerPage
+);
 
+console.log(categories)
   const uploadFile = () => {
     Swal.fire({
       title: "Chưa khả dụng",
@@ -278,21 +281,21 @@ export default function DanhMuc() {
             doc.addImage(base64Image, "PNG", data.cell.x + data.cell.width / 2 - 15, yPosition, 30, 30);
           }
         }
-      },
-      startY: 20,
-      margin: { top: 30 },
-    });
-    const date = new Date().toLocaleDateString();
-    doc.setFontSize(10);
-    doc.text(`Ngày xuất: ${date}`, 10, doc.internal.pageSize.height - 10);
-    doc.save("Thuonghieu.pdf");
-    Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu và hình ảnh đã được xuất ra PDF!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
-  };
+    },
+    startY: 20, 
+    margin: { top: 30 }
+  });
+  const date = new Date().toLocaleDateString();
+  doc.setFontSize(10);
+  doc.text(`Ngày xuất: ${date}`, 10, doc.internal.pageSize.height - 10);
+  doc.save("Thuonghieu.pdf");
+  Swal.fire({
+    title: "Thành công",
+    text: "Dữ liệu và hình ảnh đã được xuất ra PDF!",
+    icon: "success",
+    confirmButtonText: "OK",
+  });
+};
 
   //Xóa thương hiệu
   const deleteCategory = async (id) => {
