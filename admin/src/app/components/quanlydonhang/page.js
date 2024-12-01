@@ -9,13 +9,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import RobotoRegular from "../taikhoan/Roboto-Regular.base64";
 
-const statusOptions = [
-  "Chờ xác nhận",
-  "Đã xác nhận",
-  "Đang giao hàng",
-  "Giao hàng thành công",
-  "Đơn hàng đã hủy",
-];
+const statusOptions = ["Chờ xác nhận", "Đã xác nhận", "Đang giao hàng", "Giao hàng thành công", "Đơn hàng đã hủy"];
 
 export default function DonHang() {
   const [displayDonhang, setDisplayDonhang] = useState([]);
@@ -55,9 +49,8 @@ export default function DonHang() {
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery, donHangs, itemsPerPage]);
 
-
-// phân trang
- useEffect(() => {
+  // phân trang
+  useEffect(() => {
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     const dataToShow = searchQuery ? filteredDonhangs : donHangs;
@@ -75,11 +68,7 @@ export default function DonHang() {
     });
   };
 
-  const totalPages = Math.ceil(
-    (searchQuery ? filteredDonhangs.length : donHangs.length) / itemsPerPage
-  );
-
-
+  const totalPages = Math.ceil((searchQuery ? filteredDonhangs.length : donHangs.length) / itemsPerPage);
 
   const uploadFile = () => {
     Swal.fire({
@@ -109,7 +98,7 @@ export default function DonHang() {
       confirmButtonText: "OK",
     });
   };
-
+  
   // Hàm xuất dữ liệu ra Excel
   const exportToExcel = async () => {
     Swal.fire({
@@ -122,23 +111,18 @@ export default function DonHang() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          // Tạo workbook mới
           const workbook = new ExcelJS.Workbook();
           const worksheet = workbook.addWorksheet("Danh sách đơn hàng");
-
-          // Định nghĩa cột
           worksheet.columns = [
-            { header: "ID đơn hàng", key: "_id", width: 18 },
+            { header: "ID đơn hàng", key: "_id", width: 20 },
             { header: "Địa chỉ", key: "dia_chi", width: 25 },
             { header: "Tên khách hàng", key: "ho_ten", width: 20 },
             { header: "Số điện thoại", key: "dien_thoai", width: 15 },
-            { header: "Ghi chú", key: "ghi_chu", width: 25 },
+            { header: "Ghi chú", key: "ghi_chu", width: 40 },
             { header: "Ngày mua", key: "thoi_gian_tao", width: 15 },
             { header: "Tổng tiền", key: "tong_tien", width: 15 },
             { header: "Tình trạng", key: "trang_thai", width: 20 },
           ];
-
-          // Thiết lập định dạng cho dòng tiêu đề
           worksheet.getRow(1).eachCell((cell) => {
             cell.font = { bold: true, color: { argb: "FFFFFF" } };
             cell.fill = {
@@ -149,39 +133,39 @@ export default function DonHang() {
             cell.alignment = { vertical: "middle", horizontal: "center" };
           });
 
-          // Lấy dữ liệu từ bảng HTML và thêm vào Excel
-          const rows = Array.from(
-            document.querySelectorAll("#productTable tbody tr")
+          await Promise.all(
+            donHangs.map(async (item) => {
+              const hoTen =
+                nguoiDungMap[item.id_nguoi_dung]?.ho_ten || "Đang tải...";
+              const dienThoai =
+                nguoiDungMap[item.id_nguoi_dung]?.dien_thoai || "Đang tải...";
+              const thoiGianTao = item.thoi_gian_tao
+                ? new Intl.DateTimeFormat("vi-VN", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                  }).format(new Date(item.thoi_gian_tao))
+                : "N/A";
+              const tinhTrang =
+                statusOptions.find((status) => status === item.trang_thai) ||
+                item.trang_thai;
+              // Thêm dòng vào worksheet
+              worksheet.addRow({
+                _id: item._id || "N/A",
+                dia_chi: item.dia_chi || "N/A",
+                ho_ten: hoTen,
+                dien_thoai: dienThoai,
+                ghi_chu: item.ghi_chu || "N/A",
+                thoi_gian_tao: thoiGianTao,
+                tong_tien: item.tong_tien
+                  ? item.tong_tien.toLocaleString("vi-VN") + "₫"
+                  : "0₫",
+                trang_thai: tinhTrang,
+              });
+            })
           );
 
-          rows.forEach((row) => {
-            const cols = row.querySelectorAll("td");
-            const id = cols[0].textContent.trim();
-            const diaChi = cols[1].textContent.trim();
-            const hoTen = cols[2].textContent.trim();
-            const dienThoai = cols[3].textContent.trim();
-            const ghiChu = cols[4].textContent.trim();
-            const ngayMua = cols[5].textContent.trim();
-            const tongTien = cols[6].textContent.trim();
-            const tinhTrang =
-              cols[7].querySelector("select").options[
-                cols[7].querySelector("select").selectedIndex
-              ].text;
-
-            // Thêm dòng vào worksheet
-            worksheet.addRow({
-              _id: id,
-              dia_chi: diaChi,
-              ho_ten: hoTen,
-              dien_thoai: dienThoai,
-              ghi_chu: ghiChu,
-              thoi_gian_tao: ngayMua,
-              tong_tien: tongTien,
-              trang_thai: tinhTrang,
-            });
-          });
-
-          // Thiết lập border cho các ô
+     
           worksheet.eachRow((row) => {
             row.eachCell((cell) => {
               cell.border = {
@@ -193,7 +177,6 @@ export default function DonHang() {
             });
           });
 
-          // Tạo file Excel và tải về
           const buffer = await workbook.xlsx.writeBuffer();
           const blob = new Blob([buffer], {
             type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -226,106 +209,109 @@ export default function DonHang() {
   };
 
 
+
   // Hàm xuất dữ liệu ra PDF
-  const exportToPDF = () => {
-    Swal.fire({
-      title: "Xác nhận",
-      text: "Bạn có chắc chắn muốn xuất dữ liệu ra file PDF?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Xuất",
-      cancelButtonText: "Hủy",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        try {
-          const doc = new jsPDF();
-          doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
-          doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
-          doc.setFont("Roboto");
-          doc.setFontSize(18);
-          doc.text("Danh sách đơn hàng", 14, 20);
-          const rows = [];
-          const headers = [
-            "ID đơn hàng",
-            "Địa chỉ",
-            "Tên khách hàng",
-            "Số điện thoại",
-            "Ghi chú",
-            "Ngày mua",
-            "Tổng tiền",
-            "Tình trạng",
-          ];
-          const tableRows = document.querySelectorAll("#productTable tbody tr");
-          tableRows.forEach((row) => {
-            const cols = row.querySelectorAll("td");
-            const id = cols[0].textContent.trim();
-            const diaChi = cols[1].textContent.trim();
-            const hoTen = cols[2].textContent.trim();
-            const dienThoai = cols[3].textContent.trim();
-            const ghiChu = cols[4].textContent.trim();
-            const ngayMua = cols[5].textContent.trim();
-            const tongTien = cols[6].textContent.trim();
-            const tinhTrang =
-              cols[7].querySelector("select").options[
-                cols[7].querySelector("select").selectedIndex
-              ].text;
-            rows.push([
-              id,
-              diaChi,
-              hoTen,
-              dienThoai,
-              ghiChu,
-              ngayMua,
-              tongTien,
-              tinhTrang,
-            ]);
-          });
-          doc.autoTable({
-            head: [headers],
-            body: rows,
-            startY: 30,
-            theme: "grid",
-            headStyles: {
-              fillColor: [0, 112, 192],
-              textColor: [255, 255, 255],
-            },
-            styles: { font: "Roboto", fontSize: 10 },
-            columnStyles: {
-              0: { cellWidth: 25 }, // ID đơn hàng
-              1: { cellWidth: 20 }, // Địa chỉ
-              2: { cellWidth: 30 }, // Tên khách hàng
-              3: { cellWidth: 20 }, // Số điện thoại
-              4: { cellWidth: 15 }, // Ghi chú
-              5: { cellWidth: 25 }, // Ngày mua
-              6: { cellWidth: 30 }, // Tổng tiền
-              7: { cellWidth: 27 }, // Tình trạng
-            },
-          });
-          doc.save("danh_sach_don_hang.pdf");
-          Swal.fire({
-            title: "Thành công",
-            text: "Dữ liệu đã được xuất ra file PDF!",
-            icon: "success",
-            confirmButtonText: "OK",
-          });
-        } catch (error) {
-          console.error("Lỗi khi xuất PDF:", error);
-          Swal.fire({
-            title: "Lỗi",
-            text: "Không thể xuất file PDF. Vui lòng thử lại!",
-            icon: "error",
-            confirmButtonText: "OK",
-          });
-        }
+ const exportToPDF = async () => {
+  Swal.fire({
+    title: "Xác nhận",
+    text: "Bạn có chắc chắn muốn xuất dữ liệu ra file PDF?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonText: "Xuất",
+    cancelButtonText: "Hủy",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      try {
+        const doc = new jsPDF();
+        doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
+        doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+        doc.setFont("Roboto");
+        doc.setFontSize(18);
+        doc.text("Danh sách đơn hàng", 14, 20);
+
+        const headers = [
+          "ID đơn hàng",
+          "Địa chỉ",
+          "Tên khách hàng",
+          "Số điện thoại",
+          "Ghi chú",
+          "Ngày mua",
+          "Tổng tiền",
+          "Tình trạng",
+        ];
+        const rows = [];
+        donHangs.forEach((item) => {
+          const hoTen = nguoiDungMap[item.id_nguoi_dung]?.ho_ten || "Đang tải...";
+          const dienThoai = nguoiDungMap[item.id_nguoi_dung]?.dien_thoai || "Đang tải...";
+          const thoiGianTao = item.thoi_gian_tao
+            ? new Intl.DateTimeFormat("vi-VN", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              }).format(new Date(item.thoi_gian_tao))
+            : "N/A";
+          const tinhTrang =
+            statusOptions.find((status) => status === item.trang_thai) || item.trang_thai;
+          rows.push([
+            item._id || "N/A",
+            item.dia_chi || "N/A",
+            hoTen,
+            dienThoai,
+            item.ghi_chu || "N/A",
+            thoiGianTao,
+            item.tong_tien
+              ? item.tong_tien.toLocaleString("vi-VN") + "₫"
+              : "0₫",
+            tinhTrang,
+          ]);
+        });
+        doc.autoTable({
+          head: [headers],
+          body: rows,
+          startY: 30,
+          theme: "grid",
+          headStyles: {
+            fillColor: [0, 112, 192],
+            textColor: [255, 255, 255],
+          },
+          styles: { font: "Roboto", fontSize: 10 },
+          columnStyles: {
+            0: { cellWidth: 25 }, // ID đơn hàng
+            1: { cellWidth: 20 }, // Địa chỉ
+            2: { cellWidth: 30 }, // Tên khách hàng
+            3: { cellWidth: 23 }, // Số điện thoại
+            4: { cellWidth: 15 }, // Ghi chú
+            5: { cellWidth: 25 }, // Ngày mua
+            6: { cellWidth: 30 }, // Tổng tiền
+            7: { cellWidth: 27 }, // Tình trạng
+          },
+        });
+
+        // Lưu file PDF
+        doc.save("danh_sach_don_hang.pdf");
+
+        Swal.fire({
+          title: "Thành công",
+          text: "Dữ liệu đã được xuất ra file PDF!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      } catch (error) {
+        console.error("Lỗi khi xuất PDF:", error);
+        Swal.fire({
+          title: "Lỗi",
+          text: "Không thể xuất file PDF. Vui lòng thử lại!",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+
       }
-    });
-  };
+    }
+  });
+};
 
 
-
-
-  
-//lấy dữ liệu danh sách đơn hàng
+  //lấy dữ liệu danh sách đơn hàng
   useEffect(() => {
     const fetchDonhang = async () => {
       try {
@@ -361,65 +347,61 @@ export default function DonHang() {
     fetchDonhang();
   }, []);
   //cập nhật trạng thái đơn hàng
-   const handleStatusChange = (id, newStatus) => {
-  Swal.fire({
-    title: "Xác nhận thay đổi trạng thái",
-    text: `Bạn có chắc chắn muốn chuyển trạng thái thành "${newStatus}"?`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Xác nhận",
-    cancelButtonText: "Hủy",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        // Gửi yêu cầu PUT đến API
-        const response = await fetch(`http://localhost:5000/donhang/update/${id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id,
-            trang_thai: newStatus,
-          }),
-        });
+  const handleStatusChange = (id, newStatus) => {
+    Swal.fire({
+      title: "Xác nhận thay đổi trạng thái",
+      text: `Bạn có chắc chắn muốn chuyển trạng thái thành "${newStatus}"?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Hủy",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          // Gửi yêu cầu PUT đến API
+          const response = await fetch(`http://localhost:5000/donhang/update/${id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id,
+              trang_thai: newStatus,
+            }),
+          });
 
-        if (!response.ok) {
-          throw new Error(`Lỗi khi cập nhật: ${response.statusText}`);
+          if (!response.ok) {
+            throw new Error(`Lỗi khi cập nhật: ${response.statusText}`);
+          }
+
+          // Phản hồi từ API
+          const responseData = await response.json();
+
+          // Cập nhật trạng thái trong danh sách hiển thị
+          setDonhang((prevDonhang) =>
+            prevDonhang.map((don) => (don.id === id ? { ...don, trang_thai: newStatus } : don))
+          );
+
+          // Hiển thị thông báo thành công
+          Swal.fire({
+            title: "Thành công!",
+            text: `Trạng thái đã được cập nhật thành "${newStatus}".`,
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+        } catch (error) {
+          // Thông báo lỗi nếu cập nhật thất bại
+          Swal.fire({
+            title: "Lỗi",
+            text: `Không thể cập nhật trạng thái. Vui lòng thử lại.`,
+            icon: "error",
+          });
+          console.error("Lỗi khi cập nhật trạng thái:", error);
         }
-
-        // Phản hồi từ API
-        const responseData = await response.json();
-
-        // Cập nhật trạng thái trong danh sách hiển thị
-        setDonhang((prevDonhang) =>
-          prevDonhang.map((don) =>
-            don.id === id ? { ...don, trang_thai: newStatus } : don
-          )
-        );
-
-        // Hiển thị thông báo thành công
-        Swal.fire({
-          title: "Thành công!",
-          text: `Trạng thái đã được cập nhật thành "${newStatus}".`,
-          icon: "success",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-      } catch (error) {
-        // Thông báo lỗi nếu cập nhật thất bại
-        Swal.fire({
-          title: "Lỗi",
-          text: `Không thể cập nhật trạng thái. Vui lòng thử lại.`,
-          icon: "error",
-        });
-        console.error("Lỗi khi cập nhật trạng thái:", error);
       }
-    }
-  });
-};
-
-
+    });
+  };
 
   if (loading) {
     return <p>Loading...</p>;
@@ -441,17 +423,9 @@ export default function DonHang() {
           <div className={styles.container}>
             <div className={styles.actions}>
               <div className={styles.buttonGroup}>
-                <button className={styles.sp2} onClick={uploadFile}>
-                  &nbsp;
-                  <i className="fas fa-file-upload"></i> Tải từ file
-                </button>
                 &nbsp;
                 <button className={styles.sp3} onClick={printData}>
                   <i className="fas fa-print"></i> In dữ liệu
-                </button>
-                &nbsp;
-                <button className={styles.sp4} onClick={copyData}>
-                  <i className="fas fa-copy"></i> Sao chép
                 </button>
                 &nbsp;
                 <button className={styles.sp5} onClick={exportToExcel}>
@@ -479,113 +453,82 @@ export default function DonHang() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={handleSearch}
+                    placeholder="Nhập tên người dùng..."
                   />
                 </div>
               </div>
               {displayDonhang.length > 0 ? (
-              <table id="productTable" className={styles.productTable}>
-                <thead>
-                  <tr>
-                    <th style={{ width: "18%", textAlign: "center" }}>
-                      ID đơn hàng
-                    </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>
-                      Địa chỉ
-                    </th>
-                    <th style={{ width: "12%", textAlign: "center" }}>
-                      Tên khách hàng
-                    </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Số điện thoại
-                    </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Ghi chú
-                    </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Ngày mua
-                    </th>
-                    <th style={{ width: "11%", textAlign: "center" }}>
-                      Tổng tiền
-                    </th>
-                    <th style={{ width: "17%", textAlign: "center" }}>
-                      Tình trạng
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {displayDonhang.map((item) => (
-                    <tr key={item._id}>
-                      <td>{item._id}</td>
-                      <td>
-                        <p className={styles.mota}>{item.dia_chi}</p>
-                      </td>
-                      <td>
-                        {nguoiDungMap[item.id_nguoi_dung]?.ho_ten ||
-                          "Đang tải..."}
-                      </td>
-                      <td>
-                        {nguoiDungMap[item.id_nguoi_dung]?.dien_thoai ||
-                          "Đang tải..."}
-                      </td>
-                      <td>{item.ghi_chu}</td>
-                      <td>{new Intl.DateTimeFormat('vi-VN', { 
-                        day: '2-digit', 
-                        month: '2-digit', 
-                        year: 'numeric'
-                  
-                      }).format(new Date(item.thoi_gian_tao))}</td>
-                      <td>{item.tong_tien.toLocaleString("vi-VN")}₫</td>
-
-                      <td style={{ "text-align": "center" }}>
-                        <p className={styles.trangthai}>
-                          <select
-                            value={item.trang_thai}
-                            onChange={(e) =>
-                              handleStatusChange(item._id, e.target.value)
-                            }
-                            style={{
-                              textAlign: "center",
-                              backgroundColor:
-                                item.trang_thai === "Đơn hàng đã hủy"
-                                  ? "#dc3545"
-                                  : "#28a745",
-                              color: "white",
-                              border: "1px solid white",
-                            }}
-                            disabled={
-                              item.trang_thai === "Giao hàng thành công" ||
-                              item.trang_thai === "Đơn hàng đã hủy"
-                            }
-                          >
-                            {statusOptions
-                              .filter((status, index) => {
-                                const currentIndex = statusOptions.indexOf(
-                                  item.trang_thai
-                                );
-                                return index >= currentIndex; // Chỉ hiển thị các trạng thái phía sau (bao gồm trạng thái hiện tại)
-                              })
-                              .map((status) => (
-                                <option
-                                  key={status}
-                                  value={status}
-                                  style={{
-                                    backgroundColor:
-                                      status === "Đơn hàng đã hủy"
-                                        ? "#dc3545"
-                                        : "#28a745",
-                                    color: "white",
-                                  }}
-                                >
-                                  {status}
-                                </option>
-                              ))}
-                          </select>
-                        </p>
-                      </td>
+                <table id="productTable" className={styles.productTable}>
+                  <thead>
+                    <tr>
+                      <th style={{ width: "18%", textAlign: "center" }}>ID đơn hàng</th>
+                      <th style={{ width: "12%", textAlign: "center" }}>Địa chỉ</th>
+                      <th style={{ width: "12%", textAlign: "center" }}>Tên khách hàng</th>
+                      <th style={{ width: "10%", textAlign: "center" }}>Số điện thoại</th>
+                      <th style={{ width: "10%", textAlign: "center" }}>Ghi chú</th>
+                      <th style={{ width: "10%", textAlign: "center" }}>Ngày mua</th>
+                      <th style={{ width: "11%", textAlign: "center" }}>Tổng tiền</th>
+                      <th style={{ width: "17%", textAlign: "center" }}>Tình trạng</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {displayDonhang.map((item) => (
+                      <tr key={item._id}>
+                        <td>{item._id}</td>
+                        <td>
+                          <p className={styles.mota}>{item.dia_chi}</p>
+                        </td>
+                        <td>{nguoiDungMap[item.id_nguoi_dung]?.ho_ten || "Đang tải..."}</td>
+                        <td>{nguoiDungMap[item.id_nguoi_dung]?.dien_thoai || "Đang tải..."}</td>
+                        <td>{item.ghi_chu}</td>
+                        <td>
+                          {new Intl.DateTimeFormat("vi-VN", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          }).format(new Date(item.thoi_gian_tao))}
+                        </td>
+                        <td>{item.tong_tien.toLocaleString("vi-VN")}₫</td>
+
+                        <td style={{ "text-align": "center" }}>
+                          <p className={styles.trangthai}>
+                            <select
+                              value={item.trang_thai}
+                              onChange={(e) => handleStatusChange(item._id, e.target.value)}
+                              style={{
+                                textAlign: "center",
+                                backgroundColor: item.trang_thai === "Đơn hàng đã hủy" ? "#dc3545" : "#28a745",
+                                color: "white",
+                                border: "1px solid white",
+                              }}
+                              disabled={
+                                item.trang_thai === "Giao hàng thành công" || item.trang_thai === "Đơn hàng đã hủy"
+                              }
+                            >
+                              {statusOptions
+                                .filter((status, index) => {
+                                  const currentIndex = statusOptions.indexOf(item.trang_thai);
+                                  return index >= currentIndex; // Chỉ hiển thị các trạng thái phía sau (bao gồm trạng thái hiện tại)
+                                })
+                                .map((status) => (
+                                  <option
+                                    key={status}
+                                    value={status}
+                                    style={{
+                                      backgroundColor: status === "Đơn hàng đã hủy" ? "#dc3545" : "#28a745",
+                                      color: "white",
+                                    }}
+                                  >
+                                    {status}
+                                  </option>
+                                ))}
+                            </select>
+                          </p>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               ) : (
                 <p
                   style={{
@@ -599,34 +542,26 @@ export default function DonHang() {
                 </p>
               )}
 
-
               <div className={styles.pagination}>
                 <span>
-                  Hiện thị {displayDonhang.length} của{" "}
-                  {filteredDonhangs.length || donHangs.length} đơn hàng
+                  Hiện thị {displayDonhang.length} của {filteredDonhangs.length || donHangs.length} đơn hàng
                 </span>
                 <div className={styles.paginationControls}>
                   <button
                     className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
                   >
                     ‹
                   </button>
 
-                  <button
-                    className={`${styles.paginationButton}  ${styles.active}`}
-                  >
-                    {currentPage} / {totalPages}
+                  <button className={`${styles.paginationButton}  ${styles.active}`}>
+                    {` Trang ${currentPage} / ${totalPages}`}
                   </button>
 
                   <button
                     className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
                   >
                     ›

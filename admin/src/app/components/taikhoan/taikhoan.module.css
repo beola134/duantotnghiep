@@ -232,18 +232,14 @@
   cursor: pointer;
 }
 
-.paginationButton.active {
-  background-color: #002f6c;
+.chucvu select {
+  margin-top: 15px;
+  background-color: #28a745;
+  border-radius: 6px;
+  border: 0.5px solid #28a745;
+  padding: 5px;
+  text-align: center;
   color: white;
-}
-.chucvu select{
-    margin-top: 15px;
-    background-color: #28a745;
-    border-radius: 6px;
-    border: 0.5px solid #28a745;
-    padding: 5px;  
-    text-align: center;
-    color: white;
-    width: 160px;
-    direction: rtl;
+  width: 160px;
+  direction: rtl;
 }

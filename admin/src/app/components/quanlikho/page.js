@@ -216,28 +216,18 @@ export default function SanPham() {
             </span>
             <div className={styles.paginationControls}>
               <button
-                className={`${styles.paginationButton} ${
-                  currentPage === 1 ? styles.disabled : styles["other-page"]
-                }`}
-                onClick={() =>
-                  currentPage > 1 && handlePageChange(currentPage - 1)
-                }
+                className={`${styles.paginationButton} ${currentPage === 1 ? styles.disabled : styles["other-page"]}`}
+                onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
               >
                 ‹
               </button>
-              <button className={styles.paginationButton}>
-                {`Trang ${currentPage} / ${totalPages}`}
-              </button>
+              <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPages}`}</button>
               <button
                 className={`${styles.paginationButton} ${
-                  currentPage === totalPages
-                    ? styles.disabled
-                    : styles["other-page"]
+                  currentPage === totalPages ? styles.disabled : styles["other-page"]
                 }`}
-                onClick={() =>
-                  currentPage < totalPages && handlePageChange(currentPage + 1)
-                }
+                onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >
                 ›

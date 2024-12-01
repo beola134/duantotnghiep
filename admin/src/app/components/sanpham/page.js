@@ -224,16 +224,11 @@ export default function SanPham() {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(
-          `http://localhost:5000/product/xoasp/${id}`,
-          { method: "DELETE" }
-        );
+        const response = await fetch(`http://localhost:5000/product/xoasp/${id}`, { method: "DELETE" });
         if (!response.ok) {
           throw new Error("Lỗi khi xóa sản phẩm");
         }
-        setProducts((prevProducts) =>
-          prevProducts.filter((product) => product._id !== id)
-        );
+        setProducts((prevProducts) => prevProducts.filter((product) => product._id !== id));
 
         Swal.fire({
           title: "Thành công",
@@ -297,128 +292,72 @@ export default function SanPham() {
               />
             </div>
           </div>
-          {products.length > 0 ? (
-            <table id="productTable" className={styles.productTable}>
-              <thead>
-                <tr>
-                  <th style={{ width: "15%", textAlign: "center" }}>
-                    ID sản phẩm
-                  </th>
-                  <th style={{ width: "20%", textAlign: "center" }}>
-                    Tên sản phẩm
-                  </th>
-                  <th style={{ width: "10%", textAlign: "center" }}>Ảnh</th>
-                  <th style={{ width: "10%", textAlign: "center" }}>
-                    Số lượng
-                  </th>
-                  <th style={{ width: "10%", textAlign: "center" }}>
-                    Giá tiền
-                  </th>
-                  <th style={{ width: "10%", textAlign: "center" }}>
-                    Giá giảm
-                  </th>
-                  <th style={{ width: "15%", textAlign: "center" }}>
-                    Mã sản phẩm
-                  </th>
-                  <th style={{ width: "15%", textAlign: "center" }}>
-                    Chức năng
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((product) => {
-                  const {
-                    _id,
-                    ten_san_pham,
-                    ma_san_pham,
-                    gia_san_pham,
-                    gia_giam,
-                    hinh_anh,
-                    so_luong,
-                  } = product;
+          <table id="productTable" className={styles.productTable}>
+            <thead>
+              <tr>
+                <th style={{ width: "15%", textAlign: "center" }}>ID sản phẩm</th>
+                <th style={{ width: "20%", textAlign: "center" }}>Tên sản phẩm</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Ảnh</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Số lượng</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Giá tiền</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Giá giảm</th>
+                <th style={{ width: "15%", textAlign: "center" }}>Mã sản phẩm</th>
+                <th style={{ width: "15%", textAlign: "center" }}>Chức năng</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map((product) => {
+                const { _id, ten_san_pham, ma_san_pham, gia_san_pham, gia_giam, hinh_anh, so_luong } = product;
 
-                  return (
-                    <tr key={_id}>
-                      <td>{_id}</td>
-                      <td>{ten_san_pham}</td>
-                      <td>
-                        <img
-                          src={`http://localhost:5000/images/${hinh_anh}`}
-                          alt="Sản phẩm"
-                        />
-                      </td>
-                      <td style={{ textAlign: "center" }}>{so_luong}</td>
-                      <td style={{ textAlign: "center" }}>
-                        {gia_san_pham.toLocaleString("vi-VN")}₫
-                      </td>
-                      <td style={{ textAlign: "center" }}>
-                        {gia_giam.toLocaleString("vi-VN")}₫
-                      </td>
-                      <td style={{ textAlign: "center" }}>{ma_san_pham}</td>
-                      <td>
-                        {" "}
-                        &nbsp; &nbsp; &nbsp;
-                        <Link
-                          style={{ textAlign: "center" }}
-                          href={`/components/suasanpham/${_id}`}
-                          className={`${styles.btn} ${styles.edit}`}
-                        >
-                          ✏️
-                        </Link>{" "}
-                        &nbsp;
-                        <button
-                          className={`${styles.btn} ${styles.delete}`}
-                          onClick={() => deleteProduct(_id)}
-                        >
-                          🗑️
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          ) : (
-            <p
-              style={{
-                textAlign: "center",
-                marginTop: "20px",
-                fontStyle: "italic",
-                fontWeight: "bold",
-              }}
-            >
-              Không tìm thấy sản phẩm.
-            </p>
-          )}
+                return (
+                  <tr key={_id}>
+                    <td>{_id}</td>
+                    <td>{ten_san_pham}</td>
+                    <td>
+                      <img src={`http://localhost:5000/images/${hinh_anh}`} alt="Sản phẩm" />
+                    </td>
+                    <td style={{ textAlign: "center" }}>{so_luong}</td>
+                    <td style={{ textAlign: "center" }}>{gia_san_pham.toLocaleString("vi-VN")}₫</td>
+                    <td style={{ textAlign: "center" }}>{gia_giam.toLocaleString("vi-VN")}₫</td>
+                    <td style={{ textAlign: "center" }}>{ma_san_pham}</td>
+                    <td>
+                      {" "}
+                      &nbsp; &nbsp; &nbsp;
+                      <Link
+                        style={{ textAlign: "center" }}
+                        href={`/components/suasanpham/${_id}`}
+                        className={`${styles.btn} ${styles.edit}`}
+                      >
+                        ✏️
+                      </Link>{" "}
+                      &nbsp;
+                      <button className={`${styles.btn} ${styles.delete}`} onClick={() => deleteProduct(_id)}>
+                        🗑️
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
           <div className={styles.pagination}>
             <span>
-              Hiện {startProductIndex} đến {endProductIndex} của {totalProducts}{" "}
-              sản phẩm
+              Hiện {startProductIndex} đến {endProductIndex} của {totalProducts} sản phẩm
             </span>
             <div className={styles.paginationControls}>
               <button
-                className={`${styles.paginationButton} ${
-                  currentPage === 1 ? styles.disabled : styles["other-page"]
-                }`}
-                onClick={() =>
-                  currentPage > 1 && handlePageChange(currentPage - 1)
-                }
+                className={`${styles.paginationButton} ${currentPage === 1 ? styles.disabled : styles["other-page"]}`}
+                onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
               >
                 ‹
               </button>
-              <button className={styles.paginationButton}>
-                {`Trang ${currentPage} / ${totalPage}`}
-              </button>
+              <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPage}`}</button>
               <button
                 className={`${styles.paginationButton} ${
-                  currentPage === totalPage
-                    ? styles.disabled
-                    : styles["other-page"]
+                  currentPage === totalPage ? styles.disabled : styles["other-page"]
                 }`}
-                onClick={() =>
-                  currentPage < totalPage && handlePageChange(currentPage + 1)
-                }
+                onClick={() => currentPage < totalPage && handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPage}
               >
                 ›
