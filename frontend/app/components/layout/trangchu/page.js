@@ -9,7 +9,6 @@ import Link from "next/link";
 const cx = classNames.bind(styles);
 
 export default function Main() {
-   
   const [activeTab, setActiveTab] = useState("tab1");
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -17,7 +16,6 @@ export default function Main() {
   const [firstSlider, setFirstSlider] = useState(null);
   const [secondSlider, setSecondSlider] = useState(null);
 
-  
   const firstSettings = {
     arrows: false,
     dots: false,
@@ -50,7 +48,6 @@ export default function Main() {
     ],
   };
 
- 
   const secondSettings = {
     arrows: true,
     dots: false,
@@ -76,7 +73,6 @@ export default function Main() {
     ],
   };
 
- 
   const nextFirst = () => {
     if (firstSlider) {
       firstSlider.slickNext();
@@ -112,7 +108,6 @@ export default function Main() {
 
     return () => clearInterval(interval);
   }, [firstSlider, secondSlider]);
-
 
   const [productsNam, setProductsNam] = useState([]);
 
@@ -150,7 +145,6 @@ export default function Main() {
     fetchData();
   }, []);
 
-  
   const [productsNewNam, setProductsNewNam] = useState([]);
 
   useEffect(() => {
@@ -250,7 +244,7 @@ export default function Main() {
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
                     </Link>
                     <p>
-                      <h3 >{item.ten_san_pham}</h3>
+                      <h3>{item.ten_san_pham}</h3>
                     </p>
                     <br />
                     <b>{item.ma_san_pham}</b>
@@ -289,7 +283,7 @@ export default function Main() {
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
                     </Link>
                     <p>
-                      <small>{item.ten_san_pham}</small>
+                      <h3>{item.ten_san_pham}</h3>
                     </p>
                     <br />
                     <b>{item.ma_san_pham}</b>
@@ -328,7 +322,7 @@ export default function Main() {
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
                     </Link>
                     <p>
-                      <small>{item.ten_san_pham}</small>
+                      <h3>{item.ten_san_pham}</h3>
                     </p>
                     <br />
                     <b>{item.ma_san_pham}</b>
@@ -394,7 +388,7 @@ export default function Main() {
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
                     </Link>
                     <p>
-                      <small>{item.ten_san_pham}</small>
+                      <h3>{item.ten_san_pham}</h3>
                     </p>
                     <br />
                     <b>{item.ma_san_pham}</b>
@@ -404,7 +398,7 @@ export default function Main() {
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through", color: "#B1B1B1" }}>
+                      <small style={{ textDecoration: "line-through", color: "#B1B1B1", fontSize: "15px" }}>
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
@@ -434,7 +428,7 @@ export default function Main() {
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
                     </Link>
                     <p>
-                      <small>{item.ten_san_pham}</small>
+                      <h3>{item.ten_san_pham}</h3>
                     </p>
                     <br />
                     <b>{item.ma_san_pham}</b>
@@ -467,14 +461,14 @@ export default function Main() {
               <div className={styles.dongHoDoi}>
                 {productsNewDoi.map((item) => (
                   <div key={item._id} className={styles.watch}>
-                    <div className={styles.discountBadge} >
+                    <div className={styles.discountBadge}>
                       -{roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
                     </Link>
                     <p>
-                      <small>{item.ten_san_pham}</small>
+                      <h3>{item.ten_san_pham}</h3>
                     </p>
                     <br />
                     <b>{item.ma_san_pham}</b>
@@ -506,7 +500,7 @@ export default function Main() {
           </div>
         </div>
       </section>
-      <section className={styles.slideSection} style={{marginBottom: "150px"}}>
+      <section className={styles.slideSection} style={{ marginBottom: "150px" }}>
         <div className={styles.title}>
           <p className={styles.titleIndex}>THƯƠNG HIỆU NỔI BẬT</p>
           <p>
@@ -518,7 +512,6 @@ export default function Main() {
             {category.map((item) => (
               <div key={item._id}>
                 <div className={styles.item}>
-                  
                   <Link href={`/components/chitietdanhmuc/${item.thuong_hieu}`} title={item.thuong_hieu}>
                     <img
                       alt={item.thuong_hieu}
@@ -528,18 +521,17 @@ export default function Main() {
                       style={{ opacity: 1, display: "block" }}
                     />
                   </Link>
-                  
                 </div>
               </div>
             ))}
           </Slider>
 
           <button onClick={prevFirst} className={`${styles.navButton} ${styles.prevButton}`}>
-            <img src="/image/item/icons/left.png"  width="40px" height="30px" />
+            <img src="/image/item/icons/left.png" width="40px" height="30px" />
           </button>
 
           <button onClick={nextFirst} className={`${styles.navButton} ${styles.nextButton}`}>
-            <img src="/image/item/icons/right.png"  width="40px" height="30px" />
+            <img src="/image/item/icons/right.png" width="40px" height="30px" />
           </button>
         </div>
       </section>
@@ -572,8 +564,10 @@ export default function Main() {
         <div className={styles.certificateSection}>
           <div className={styles.text}>
             <h3 className={styles.textTitle}>Đại lý ủy quyền chính thức các thương hiệu lớn</h3>
-            
-            <p className={styles.xtc}><Link href="/components/thuonghieu">Xem tất cả</Link></p>
+
+            <p className={styles.xtc}>
+              <Link href="/components/thuonghieu">Xem tất cả</Link>
+            </p>
 
             <p className={styles.textBrand}>
               Chứng nhận Duy Anh Watch là đại lý ủy quyền chính thức của thương hiệu LONGINES tại Việt Nam (
@@ -587,14 +581,14 @@ export default function Main() {
                     <div className={styles.itemSlide1}>
                       <Slider ref={setSecondSlider} {...secondSettings}>
                         {category.map((item) => (
-                            <div className={styles.item} key={item._id}>
-                                <img
-                                  alt={item.thuong_hieu}
-                                  width="390"
-                                  height="50"
-                                  src={`http://localhost:5000/images/${item.hinh_anh}`}   
-                                />
-                            </div>
+                          <div className={styles.item} key={item._id}>
+                            <img
+                              alt={item.thuong_hieu}
+                              width="390"
+                              height="50"
+                              src={`http://localhost:5000/images/${item.hinh_anh}`}
+                            />
+                          </div>
                         ))}
                       </Slider>
                     </div>
@@ -608,62 +602,89 @@ export default function Main() {
         </div>
       </div>
       <div className={cx("container-news")}>
-        <h2 className={cx("title-unline")}><p>TIN TỨC - VIDEO</p></h2>
+        <h2 className={cx("title-unline")}>
+          <p>TIN TỨC - VIDEO</p>
+        </h2>
         <div className={cx("section-news")}>
           {/* Phần tin tức */}
           <div className={cx("news-section")}>
             <div className={cx("item-left")}>
               <div className={cx("item-1")}>
                 <div className={cx("news-item")}>
-                  <h4 style={{ fontWeight: "bold", marginBottom: "10px", maxWidth: "290px" }}>Mạnh mẽ, tươi trẻ cùng đồng hồ quataz mặt xanh lá</h4>
-                  <p style={{ maxWidth: "290px"}}>
-                    Xanh lá - màu sắc của sự sống và hy vọng, là biểu tượng hoàn hảo cho mùa lễ hội. Đồng hồ mặt xanh lá cây không chỉ là...
+                  <h4
+                    style={{
+                      fontWeight: "bold",
+                      marginBottom: "10px",
+                      maxWidth: "290px",
+                      fontSize: "14px",
+                      color: "#000",
+                      lineHeight: "18px",
+                    }}
+                  >
+                    Mạnh mẽ, tươi trẻ cùng đồng hồ quataz mặt xanh lá
+                  </h4>
+                  <p style={{ maxWidth: "290px" }}>
+                    Xanh lá - màu sắc của sự sống và hy vọng, là biểu tượng hoàn hảo cho mùa lễ hội. Đồng hồ mặt xanh lá
+                    cây không chỉ là...
                   </p>
                   <p>
                     <i className="fa-solid fa-calendar-days"></i>
-                    <small>23/11/2024</small>
+                    <small style={{ paddingLeft: "15px" }}>23/11/2024</small>
                   </p>
                 </div>
-                <img
-                  src="/image/item/icons/12_1732510594.jpg.webp"
-                  alt=""
-                />
+                <img src="/image/item/icons/12_1732510594.jpg.webp" alt="" />
               </div>
 
-             
               <div className={cx("item-1")}>
                 <div className={cx("news-item")}>
-                  <h4 style={{ fontWeight: "bold" , marginBottom: "10px", maxWidth: "290px"}}>Giáng sinh thêm phần rực rỡ với top 10 mẫu đồng hồ cơ mặt xanh lá</h4>
-                  <p style={{ maxWidth: "290px"}}>
-                    Đồng hồ cơ mặt số màu xanh lá cây, một màu sắc của sự tươi trẻ, hy vọng và tràn đầy năng lượng, rất phù hợp với không...
+                  <h4
+                    style={{
+                      fontWeight: "bold",
+                      marginBottom: "10px",
+                      maxWidth: "290px",
+                      fontSize: "14px",
+                      color: "#000",
+                      lineHeight: "18px",
+                    }}
+                  >
+                    Giáng sinh thêm phần rực rỡ với top 10 mẫu đồng hồ cơ mặt xanh lá
+                  </h4>
+                  <p style={{ maxWidth: "290px" }}>
+                    Đồng hồ cơ mặt số màu xanh lá cây, một màu sắc của sự tươi trẻ, hy vọng và tràn đầy năng lượng, rất
+                    phù hợp với không...
                   </p>
                   <p>
                     <i className="fa-solid fa-calendar-days"></i>
-                    <small>23/11/2024</small>
+                    <small style={{ paddingLeft: "15px" }}>23/11/2024</small>
                   </p>
                 </div>
-                <img
-                  src="/image/item/icons/11_1732510806.jpg.webp"
-                  alt=""
-                />
+                <img src="/image/item/icons/11_1732510806.jpg.webp" alt="" />
               </div>
 
-              
               <div className={cx("item-1")}>
                 <div className={cx("news-item")}>
-                  <h4 style={{ fontWeight: "bold", marginBottom: "10px", maxWidth: "290px" }}>Lựa chòn màu mặt đồng hồ theo nguyên tắc phong thủy  </h4>
-                  <p style={{ maxWidth: "290px"}}>
-                    Lựa chọn màu mặt đồng hồ theo nguyên tắc phong thủy để giúp giúp tăng cường năng lượng và sức khỏe cũng như những vấn đề...
+                  <h4
+                    style={{
+                      fontWeight: "bold",
+                      marginBottom: "10px",
+                      maxWidth: "290px",
+                      fontSize: "14px",
+                      color: "#000",
+                      lineHeight: "18px",
+                    }}
+                  >
+                    Lựa chòn màu mặt đồng hồ theo nguyên tắc phong thủy{" "}
+                  </h4>
+                  <p style={{ maxWidth: "290px" }}>
+                    Lựa chọn màu mặt đồng hồ theo nguyên tắc phong thủy để giúp giúp tăng cường năng lượng và sức khỏe
+                    cũng như những vấn đề...
                   </p>
                   <p>
                     <i className="fa-solid fa-calendar-days"></i>
-                    <small>25/11/2024</small>
+                    <small style={{ paddingLeft: "15px" }}>25/11/2024</small>
                   </p>
                 </div>
-                <img
-                  src="/image/item/icons/26_1732525206-copy.jpg.webp"
-                  alt=""
-                />
+                <img src="/image/item/icons/26_1732525206-copy.jpg.webp" alt="" />
               </div>
             </div>
           </div>
@@ -677,26 +698,46 @@ export default function Main() {
 
             {/* Video chính */}
             <div className={cx("video-wrapper")}>
-              <iframe src="https://www.youtube.com/embed/LiE0xipwl2I?si=ANkzcG22yghBN08r" frameBorder="0" allowFullScreen></iframe>
+              <iframe
+                src="https://www.youtube.com/embed/LiE0xipwl2I?si=ANkzcG22yghBN08r"
+                frameBorder="0"
+                allowFullScreen
+              ></iframe>
             </div>
             <h4 className={cx("title-video")}>Review Đồng Hồ Hamilton Jazzmaster GMT Auto H32605581</h4>
 
             {/* Video liên quan */}
             <div className={cx("related-videos")}>
               <div className={cx("related-video")}>
-                <iframe src="https://www.youtube.com/embed/LiE0xipwl2I?si=ANkzcG22yghBN08r" frameBorder="0" allowFullScreen></iframe>
+                <iframe
+                  src="https://www.youtube.com/embed/LiE0xipwl2I?si=ANkzcG22yghBN08r"
+                  frameBorder="0"
+                  allowFullScreen
+                ></iframe>
                 <p className={cx("title-videos")}>Hamilton</p>
               </div>
               <div className={cx("related-video")}>
-                <iframe src="https://www.youtube.com/embed/_UJ3h-G0pn4?si=In0FlUgsrfiT2glH" frameBorder="0" allowFullScreen></iframe>
+                <iframe
+                  src="https://www.youtube.com/embed/_UJ3h-G0pn4?si=In0FlUgsrfiT2glH"
+                  frameBorder="0"
+                  allowFullScreen
+                ></iframe>
                 <p className={cx("title-videos")}>Mido</p>
               </div>
               <div className={cx("related-video")}>
-                <iframe src="https://www.youtube.com/embed/BEISZyun0rU?si=xOC6s2Pa7KCi9Are" frameBorder="0" allowFullScreen></iframe>
+                <iframe
+                  src="https://www.youtube.com/embed/BEISZyun0rU?si=xOC6s2Pa7KCi9Are"
+                  frameBorder="0"
+                  allowFullScreen
+                ></iframe>
                 <p className={cx("title-videos")}>Titoni Airmaster</p>
               </div>
               <div className={cx("related-video")}>
-                <iframe src="https://www.youtube.com/embed/33cvhTzmb2M?si=wFO3GqTy37A1IAxz" frameBorder="0" allowFullScreen></iframe>
+                <iframe
+                  src="https://www.youtube.com/embed/33cvhTzmb2M?si=wFO3GqTy37A1IAxz"
+                  frameBorder="0"
+                  allowFullScreen
+                ></iframe>
                 <p className={cx("title-videos")}>Longines</p>
               </div>
             </div>
