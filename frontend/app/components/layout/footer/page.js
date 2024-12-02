@@ -43,11 +43,11 @@ export default function Footer() {
                 </div>
                 <div className={styles.item1}>
                   <div className={styles.title}>Hỗ trợ bán hàng</div>
-                  <div className={styles.content}>024.3991.8668</div>
+                  <div className={styles.content}>084.5487.339</div>
                 </div>
                 <div className={styles.item2}>
                   <div className={styles.title}>Hỗ trợ kỹ thuật</div>
-                  <div className={styles.content}>024.2214.8336</div>
+                  <div className={styles.content}>070.4434.597</div>
                 </div>
               </div>
               <div className={styles.item}>
@@ -55,7 +55,7 @@ export default function Footer() {
                   <i className="fa-regular fa-envelope"></i>
                 </div>
                 <div className={styles.title}>Email</div>
-                <div className={styles.content}>duyanhwatch@gmail.com</div>
+                <div className={styles.content}>watchwristly@gmail.com</div>
               </div>
             </div>
           </div>
@@ -68,10 +68,10 @@ export default function Footer() {
               <ul className={styles.menuBottom}>
                 <li className={`${styles.level0} ${styles.firstItem}`}>
                   <span className={styles.clickMobile}></span>
-                  <Link href="#">Về donghoduyanh</Link>
+                  <Link href="#">Về donghowristly</Link>
                   <ul id="menu-sub1">
                     <li className={styles.level1}>
-                      <Link href="#">Giới thiệu về donghoduyanh</Link>
+                      <Link href="#">Giới thiệu về donghowristly</Link>
                     </li>
                     <li className={styles.level1}>
                       <Link href="#">Triết lý kinh doanh</Link>
@@ -149,7 +149,7 @@ export default function Footer() {
                   cite="https://www.facebook.com/profile.php?id=61566364566665"
                   className="fb-xfbml-parse-ignore"
                 >
-                  <Link href="https://www.facebook.com/profile.php?id=61566364566665">Đồng Hồ Duy Anh</Link>
+                  <Link href="https://www.facebook.com/profile.php?id=61566364566665">Đồng Hồ Wristly</Link>
                 </blockquote>
               </div>
 
@@ -175,11 +175,11 @@ export default function Footer() {
       <div className={styles.footerBottom}>
         <div className={`${styles.container} ${styles.cls}`}>
           <div className={styles.footerBottom1}>
-            <div className={styles.title}>CÔNG TY TNHH PHÁT TRIỂN DUY ANH</div>
+            <div className={styles.title}>CÔNG TY TNHH PHÁT TRIỂN WRISTLY</div>
             <ul>
-              <li>VPGD: 200A Phố Huế, Hai Bà Trưng, Hà Nội</li>
-              <li>Điện thoại: (024)2.214.8336</li>
-              <li>MST: 0105545498 Cấp ngày: 03/10/2011 Nơi cấp: Hà Nội</li>
+              <li>VPGD: Công viên phần mềm Quang Trung, P. Tân Chánh Hiệp, Quận 12, TP.HCM</li>
+              <li>Điện thoại: (08)4.5487.399</li>
+              <li>MST: 0105545498 Cấp ngày: 03/10/2011 Nơi cấp: TP. Hồ Chí Minh</li>
             </ul>
           </div>
           <div className={styles.footerBottom2}>
@@ -187,7 +187,7 @@ export default function Footer() {
               <Link href="#">
                 <img src="/image/item/dathongbao.png" alt="Bộ công thương chứng nhận" width="148px" height="56px" />
               </Link>
-              <div className={styles.copyring}>© DuyAnhWatch-All rights reserved</div>
+              <div className={styles.copyring}>© WristlyWatch-All rights reserved</div>
             </div>
             <div className={styles.dmcaDa} style={{ width: "150px", marginTop: "4px" }}>
               <Link

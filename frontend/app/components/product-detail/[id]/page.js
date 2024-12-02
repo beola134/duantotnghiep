@@ -23,6 +23,7 @@ export default function Detail({ params }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedTab, setSelectedTab] = useState("Mô tả chi tiết");
+  const [activeTab, setActiveTab] = useState("tab-1");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const sliderRef = useRef(null);
@@ -41,14 +42,10 @@ export default function Detail({ params }) {
     if (product && product._id) {
       const fetchProductQuantity = async () => {
         try {
-          const response = await fetch(
-            `http://localhost:5000/product/check/${product._id}?quantity=${so_luong}`
-          );
+          const response = await fetch(`http://localhost:5000/product/check/${product._id}?quantity=${so_luong}`);
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(
-              `Error fetching product quantity: ${JSON.stringify(errorData)}`
-            );
+            throw new Error(`Error fetching product quantity: ${JSON.stringify(errorData)}`);
           }
           const data = await response.json();
           setMaxQuantity(data.product.so_luong);
@@ -303,10 +300,16 @@ export default function Detail({ params }) {
     setCurrentPage(page);
   };
 
-  // Lưu tab được chọn vào localStorage
+  // hàm chọn tab cha
   const handleTabClick = (tab, event) => {
     event.preventDefault();
     setSelectedTab(tab);
+  };
+
+  // hàm để đổi tab con
+  const openTab = (event, tabId) => {
+    event.preventDefault();
+    setActiveTab(tabId);
   };
 
   if (loading) {
@@ -349,43 +352,16 @@ export default function Detail({ params }) {
                 <img src="/image/item/picture1.jpg" alt="" />
                 <span>Ảnh thực tế</span>
               </div> */}
-              <div className={styles.item} style={{ maxWidth: "calc(100% / 5 -10px)" }}>
-                <img src="/image/item/picture2.jpg" alt="" />
-                <span>Video thực tế</span>
-              </div>
+
               <div className={styles.item} style={{ maxWidth: "calc(100% / 5 -10px)" }}>
                 <img src="/image/item/picture3.jpg" alt="" />
                 <span>Thông tin sản phẩm</span>
-              </div>
-              <div className={styles.item} style={{ maxWidth: "calc(100% / 5 -10px)" }}>
-                <img src="/image/item/picture4.jpg" alt="" />
-                <span>Phân biệt thật giả</span>
               </div>
               <div className={styles.item} style={{ maxWidth: "calc(100% / 5 -10px)" }}>
                 <img src="/image/item/picture5.jpg" alt="" />
                 <span>Hướng dẫn chọn size</span>
               </div>
             </div>
-          </div>
-          <div className={styles.slideFT}></div>
-          <div className={styles.hitShare}>
-            {/* <!-- Facebook Like Button --> */}
-            <div
-              className="fb-like"
-              data-href="https://www.yourwebsite.com"
-              data-width="250"
-              data-layout="button"
-              data-action="like"
-              data-size="small"
-              data-share="false"
-            ></div>
-            {/* <!-- Facebook Share Button --> */}
-            <div
-              className="fb-share-button"
-              data-href="https://www.yourwebsite.com"
-              data-width="250"
-              data-layout="button"
-            ></div>
           </div>
         </div>
         {/* frame center */}
@@ -953,7 +929,6 @@ export default function Detail({ params }) {
                         .filter((item) => item.value)
                         .map((item, index) => (
                           <tr key={index} className={index % 2 === 0 ? styles.tr0 : styles.tr1} valign="top">
-                            {" "}
                             <td className={styles.titleCharactestic} width="40%">
                               {item.label}
                             </td>
@@ -1083,21 +1058,43 @@ export default function Detail({ params }) {
               >
                 <div className={styles.tab}>
                   <button
-                    className={`${styles.tablinks1} ${styles.tabBoder} ${styles.tabCachChinhDongHo} ${styles.active}`}
+                    className={`${styles.tablinks1} ${styles.tabBoder} ${styles.tabCachChinhDongHo} ${
+                      activeTab === "tab-1" ? styles.active : ""
+                    }`}
+                    onClick={(e) => openTab(e, "tab-1")}
                   >
-                    <span className={styles.text}>Cách chỉnh đồng hồ</span>
+                    <span>Cách chỉnh đồng hồ</span>
                   </button>
-                  <button className={`${styles.tablinks1} ${styles.tabBoder} ${styles.tabHuongDanChonSize}`}>
+                  <button
+                    className={`${styles.tablinks1} ${styles.tabBoder} ${styles.tabHuongDanChonSize}
+                     ${activeTab === "tab-2" ? styles.active : ""}`}
+                    onClick={(e) => openTab(e, "tab-2")}
+                  >
                     <span>Hướng dẫn chọn size</span>
                   </button>
-                  <button className={`${styles.tablinks1} ${styles.tabBoder} ${styles.tabMucDoChongNuocCuaDongHo}`}>
+                  <button
+                    className={`${styles.tablinks1} ${styles.tabBoder} ${styles.tabMucDoChongNuocCuaDongHo}
+                    ${activeTab === "tab-3" ? styles.active : ""}`}
+                    onClick={(e) => openTab(e, "tab-3")}
+                  >
                     <span>Mức độ chống nước của đồng hồ</span>
                   </button>
-                  <button className={`${styles.tablinks1} ${styles.tabBoder} ${styles.tabHuongDanVeSinhDongHo}`}>
+                  <button
+                    className={`${styles.tablinks1} ${styles.tabBoder} ${styles.tabHuongDanVeSinhDongHo}
+                    ${activeTab === "tab-4" ? styles.active : ""}`}
+                    onClick={(e) => openTab(e, "tab-4")}
+                  >
                     <span>Hướng dẫn vệ sinh đồng hồ</span>
                   </button>
                 </div>
-                <div id="tab-2" className={`${styles.tabcontent1} ${styles.description}`}>
+
+                {/* Cách chỉnh đồng hồ */}
+                <div
+                  id="tab-1"
+                  className={`${styles.tabcontent1} ${styles.description} ${
+                    activeTab === "tab-1" ? styles.activeTab : ""
+                  }`}
+                >
                   <p style={{ textAlign: "justify" }}>
                     <br />
                     <span style={{ fontSize: "13pt" }}>
@@ -1308,6 +1305,1442 @@ export default function Detail({ params }) {
                     </span>
                   </p>
                   <p style={{ textAlign: "justify" }}>&nbsp;</p>
+                </div>
+
+                {/* Hướng dẫn chọn size */}
+                <div
+                  id="tab-2"
+                  className={`${styles.tabcontent1} ${styles.description} ${
+                    activeTab === "tab-2" ? styles.activeTab : ""
+                  }`}
+                >
+                  <div className={styles.youtubeEmbedWrapper}>
+                    <iframe
+                      className={styles.lazyif}
+                      loading="lazy"
+                      allow=";"
+                      allowFullScreen
+                      frameBorder="0"
+                      src="https://www.youtube.com/embed/iOp24ZHG_bs"
+                    ></iframe>
+                  </div>
+                  <div className={styles.youtubeEmbedWrapper}>
+                    <iframe
+                      className={styles.lazyif}
+                      loading="lazy"
+                      allow=";"
+                      allowFullScreen
+                      frameBorder="0"
+                      src="https://www.youtube.com/embed/4ZBU53adfPY"
+                    ></iframe>
+                  </div>
+                  <h2 dir="ltr">
+                    <br />
+                    <strong>I. Tìm kích thước cổ tay và lựa chọn đồng hồ phù hợp</strong>
+                  </h2>
+                  <p>
+                    Trước khi có thể tìm được chiếc đồng hồ phù hợp với cổ tay, bạn cần biết kích thước cổ tay của mình.
+                    Cổ tay của bạn mảnh, trung bình hay dày sẽ ảnh hưởng đến việc chiếc đồng hồ nào trông đẹp nhất đối
+                    với bạn. Như vậy, việc đo kích thước cổ sẽ là một phần không thể thiếu trong việc chọn đồng hồ phù
+                    hợp. Khi biết kích thước cổ tay của mình, bạn sẽ có thể chọn một chiếc đồng hồ hoàn hảo và thoải
+                    mái. Biết kích thước cũng sẽ vô cùng hữu ích nếu bạn thích mua sắm trực tuyến vì bạn sẽ có thể mua
+                    một kiểu đồng hồ vừa vặn mà không cần thử. Nó cũng có thể giúp bạn thu hẹp lựa chọn thiết kế sản
+                    phẩm. Ví dụ, nếu cổ tay mảnh, bạn nên chọn một chiếc đồng hồ đeo tay tinh xảo, nếu cổ tay dày, đồng
+                    hồ thể thao có thể là lựa chọn phù hợp hơn.
+                  </p>
+                  <h3 dir="ltr">1. Cách đo cổ tay của bạn</h3>
+                  <ul>
+                    <li dir="ltr">
+                      <p>Lấy một thước dây hoặc một sợi dây để đo kích thước cổ tay.</p>
+                    </li>
+                    <li dir="ltr">
+                      <p>
+                        Để lòng bàn tay hướng lên, mở bàn tay của bạn ra (làm như vậy sẽ đảm bảo bạn có được kích thước
+                        thật của cổ tay khi nó lớn nhất).
+                      </p>
+                    </li>
+                    <li dir="ltr">
+                      <p>
+                        Quấn thước quanh cánh tay của bạn sao cho đó là vị trí mà dây đeo đồng hồ thường đeo ở đó đặt,
+                        thường là ngay dưới xương cổ tay.
+                      </p>
+                    </li>
+                    <li dir="ltr">
+                      <p>
+                        Nếu bạn đang sử dụng đoạn dây, hãy lấy bút và đánh dấu điểm mà đầu cuối gặp nhau sau đó đo lại
+                        kích thước đoạn dây trên một cái thước phẳng
+                      </p>
+                    </li>
+                  </ul>
+                  <p className={styles.centered}>
+                    <img
+                      className="lazy after-lazy"
+                      alt=""
+                      height="412"
+                      width="650"
+                      src="/image/item/detail-hinh10.jpg"
+                      style={{ opacity: 1, display: "none" }}
+                    />
+                  </p>
+                  <p>&nbsp;</p>
+                  <h3 dir="ltr">2. Cách lựa chọn đồng hồ phù hợp đối với nam:</h3>
+                  <p>Sau khi đo chu vi tay, bạn sẽ quy ra được đường kính tối đa có thể đeo với công thức sau:</p>
+                  <ul>
+                    <li dir="ltr">
+                      <p>
+                        Đối với những đồng hồ có thiết kế đơn giản, sang trọng: (Chu vi/4) + 1 = chu vi mặt đồng hồ tối
+                        đa có thể đeo.
+                      </p>
+                    </li>
+                  </ul>
+                  <p dir="ltr">
+                    Ví dụ chu vi cổ tay là 16cm thì (16/4) + 1 = 41 (kích thước mặt đồng hồ tối đa có thể đeo là 41mm)
+                  </p>
+                  <ul>
+                    <li dir="ltr">
+                      <p>
+                        Đối với những đồng hồ thể thao có nhiều kim: (Chu vi/4) + 4 = chu vi mặt đồng hồ tối đa có thể
+                        đeo
+                      </p>
+
+                      <p>&nbsp;</p>
+                    </li>
+                  </ul>
+                  <p dir="ltr">
+                    Ví dụ chu vi cổ tay là 16cm thì (16/4) + 4 = 44 (kích thước mặt đồng hồ tối đa có thể đeo là 44mm)
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    Ngoài ra cách đo mặt phẳng tay Lug to Lug thường là chuẩn nhất (không phải đường kính mặt mà là
+                    khoảng cách giữa 2 càng gắn dây của đồng hồ). Với đồng hồ nam thì không để vấu thừa ra ngoài mặt
+                    phẳng cổ tay. Theo đó bạn có thể căn cứ vào bảng size dưới đây:
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    <img
+                      className="lazy after-lazy"
+                      alt=""
+                      height="637"
+                      width="650"
+                      src="/image/item/detail-hinh11.jpg"
+                      style={{ opacity: 1 }}
+                    />
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>&nbsp;</p>
+                  <p>
+                    <img
+                      className="lazy after-lazy"
+                      alt="vấu để vấu"
+                      height="377"
+                      width="650"
+                      src="/image/item/detail-hinh12.jpg"
+                      style={{ opacity: 1 }}
+                    />
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>&nbsp;</p>
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Inch</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Centimet</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Kích thước vỏ đồng hồ</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Khoảng cách Lug to Lug</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>5,50 ”</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>14,0 cm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 27,9 đến 34,9 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 34,9 đến 43,7 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>5,75 ”</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>14,6 cm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 29,2 đến 36,5 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 36,5 đến 45,6 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>6,00 ”</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>15,2 cm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 30,5 đến 38,1 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 38,1 đến 47,6 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>6,25 ”</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>15,9 cm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 31,8 đến 39,7 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 39,7 đến 49,6 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>6,50 ”</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>16,5 cm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 33,0 đến 41,3 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 41,3 đến 51,6 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>6,75 ”</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>17,1 cm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 34,3 đến 42,9 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 42,9 đến 53,6 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>7,00 ”</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>17,8 cm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 35,6 đến 44,5 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 44,5 đến 55,6 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>7,25 ”</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>18,4 cm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 36,8 đến 46,0 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 46 đến 57,5 ​​mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>7,50 ”</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>19,1 cm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 38,1 đến 47,6 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 47,6 đến 59,5 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>7,75 ”</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>19,7 cm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 39,4 đến 49,2 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 49,2 đến 61,5 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>8,00 ”</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>20,3 cm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 40,6 đến 50,8 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 50,8 đến 63,5 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>8,25 ”</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>21,0 cm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 41,9 đến 52,4 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                        <td>
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+
+                          <p dir="ltr">
+                            <strong>Từ 52,4 đến 65,5 mm</strong>
+                          </p>
+
+                          <p>&nbsp;</p>
+
+                          <p>&nbsp;</p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p>&nbsp;</p>
+                  <p dir="ltr">Ví dụ: kích thước đồng hồ hoàn hảo cho cổ tay 15,2 cm sẽ là 38,1 đến 47,6 mm.</p>
+
+                  <p dir="ltr">
+                    Lưu ý rằng hiện tại các hãng chưa cung cấp thông tin thông số Lug to Lug nhiều nên chủ yếu vẫn phải
+                    dùng công thức đo chu vi tay.
+                  </p>
+                  <p>&nbsp;</p>
+                  <p dir="ltr">
+                    Ngoài ra khi đo kích thước cổ tay bạn cần đo chính xác, không áng chừng vì sai số lớn và cách này
+                    không áp dụng cho dòng Casio G-Shock vì thiết kế ngoại cỡ đặc trưng của chúng.
+                  </p>
+                  <p>&nbsp;</p>
+                  <h3 dir="ltr">3. Cách lựa chọn đồng hồ phù hợp đối với nữ:</h3>
+                  <p>&nbsp;</p>
+                  <p dir="ltr">
+                    Đối với đồng hồ nữ thì không dùng công thức trên mà có chuẩn chung: đường kính 28 - 31 là trung
+                    bình, trên 31 cm là size lớn, dưới 28 cm là size nhỏ.
+                  </p>
+                  <p>&nbsp;</p>
+                  <h2 dir="ltr">
+                    <strong>II. Một số tiêu chí lựa chọn đồng hồ phù hợp với tay</strong>
+                  </h2>
+                  <p>&nbsp;</p>
+                  <p dir="ltr">
+                    Khi nói đến việc chọn một chiếc đồng hồ, điều quan trọng cần lưu ý là một kích thước không phù hợp
+                    với tất cả mọi người. Do đó, khi mua đồng hồ, bạn cần biết cách chọn đồng hồ phù hợp với cổ tay của
+                    mình. Mặc dù không có quy tắc tính toán cho kích thước hoặc hình dạng hoàn hảo cho khung tay của
+                    bạn, nhưng có những mẹo mà bạn có thể làm theo để có được một chiếc đồng hồ cân đối và tương xứng.
+                  </p>
+                  <p dir="ltr">
+                    Đồng hồ vừa vặn với cổ tay không chỉ bao gồm vỏ đồng hồ mà còn bao gồm cả dây đeo. Đồng hồ đeo tay
+                    của bạn quá chật nếu nó để lại dấu hằn trên da, còn nếu đồng hồ quá lỏng nó sẽ dễ bị lệch khỏi vị
+                    trí gây nên sự bất tiện. Đối với người mới dùng, đồng hồ của bạn phải cảm thấy thoải mái trên cổ tay
+                    và phải vừa đủ chặt để ngăn đồng hồ theo chiều dọc cổ tay trong quá trình chuyển động nhưng đủ lỏng
+                    để không hằn vào da của bạn.&nbsp;
+                  </p>
+                  <p dir="ltr">
+                    Đối với vị trí trên cổ tay, bạn không nên đeo đồng hồ của mình quá thấp. Thông thường, bạn nên đeo
+                    nó ở đầu của xương trụ (phần xương trên cổ tay của bạn nhô ra ngoài). Nếu bạn đeo đồng hồ của mình
+                    vào phần xương đó, bạn có thể sẽ cảm thấy hơi khó chịu.
+                  </p>
+                  <p>&nbsp;</p>
+                  <p dir="ltr">
+                    Hầu hết mọi người thường đeo đồng hồ trên tay đối diện với tay thuận của họ. Điều này có nghĩa là
+                    nếu bạn thuận tay phải, bạn sẽ đeo đồng hồ trên cổ tay trái. Hầu hết các nhà sản xuất đồng hồ thiết
+                    kế đồng hồ cho cổ tay trái vì phần lớn mọi người thuận tay phải. Lưu ý rằng núm chỉnh đồng hồ thường
+                    nằm ở phía bên phải của vỏ vì thế đối với những người thuận tay phải, điều này dễ dàng lên dây cót
+                    hoặc sử dụng chronograph khi đang di chuyển. Tuy nhiên, nếu bạn là người thuận tay trái thì bạn cần
+                    lưu ý điều này.
+                  </p>
+                  <p>
+                    <img
+                      className="lazy after-lazy"
+                      alt=""
+                      height="366"
+                      width="650"
+                      src="https://donghoduyanh.com/upload/images/T087_407_55_067_00.png"
+                      style={{ opacity: 1, display: "none" }}
+                    />
+                  </p>
+
+                  <p>&nbsp;</p>
+                  <p dir="ltr">
+                    <strong>
+                      Hãy nhớ rằng không có công thức hoàn hảo nào khi nói về kích thước một chiếc đồng hồ có thể vừa
+                      vặn trên cổ tay của bạn. Tuy nhiên, với những lời khuyên trên và các chi tiết quan trọng cần nhớ,
+                      có thể đảm bảo rằng bạn sẽ tìm ra chiếc đồng hồ đeo tay tốt nhất mà bạn đang tìm kiếm!
+                    </strong>
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    <strong>Bước 1</strong>:&nbsp;<strong>Đo “size tay” của bạn (Chu vi cổ tay)</strong>
+                  </p>
+                  <p>
+                    <em>Để đo chu vi cổ tay bạn chỉ cần thực hiện theo một số cách đơn giản như sau:</em>
+                  </p>
+                  <p>&nbsp;</p>
+                  <ul>
+                    <li>
+                      Cách 1: Dùng thước dây đo 1 vòng quanh cổ tay, bạn lưu ý là đo ở vị trí mà bạn đeo đồng hồ ấy nha.
+                    </li>
+                    <li>
+                      Cách 2: Trường hợp bạn không có thước dây thì bạn có thể dùng một tờ giấy quấn quanh cổ tay, sau
+                      đó hãy đo lại bằng thước kẻ tay thông thường.
+                    </li>
+                  </ul>
+                  <p>&nbsp;</p>
+                  <p>
+                    <strong>Bước 2</strong>:&nbsp;&nbsp;
+                    <strong>Tra bảng cách chọn Size đồng hồ đeo tay ở bên dưới (áp dụng cho nam và nữ luôn nhé)</strong>
+                  </p>
+                  <p>
+                    Sau khi biết được chu vi cổ tay rồi bạn hãy dùng nó để đối chiếu với bảng bên dưới xem với số đo như
+                    thế ta nên chọn Size đồng hồ nào là tối ưu nhất nhé.
+                  </p>
+                </div>
+
+                {/* Mức độ chống nước của đồng hồ */}
+                <div
+                  id="tab-3"
+                  className={`${styles.tabcontent1} ${styles.description} ${
+                    activeTab === "tab-3" ? styles.activeTab : ""
+                  }`}
+                >
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>MỨC ĐỘ CHỊU NƯỚC CỦA ĐỒNG HỒ</span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          - <strong>Độ</strong> <strong>chịu</strong> <strong>nước</strong> <strong>30</strong>
+                          <strong>mét(3BAR</strong>, <strong>3ATM)</strong>:
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>+ Có thể đeo đồng hồ khi rửa&nbsp;tay hoặc đi mưa nhẹ</span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          - <strong>Độ</strong> <strong>chịu</strong> <strong>nước</strong> <strong>50</strong>
+                          <strong>mét(5BAR</strong>, <strong>5ATM)</strong>:
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          + Có thể đeo đồng hồ khi đi mưa, rửa tay ở mức áp lực nước lớn hơn so với mức 30 mét(3BAR,
+                          3ATM).
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          - <strong>Độ chiụ nước 100 mét(10BAR</strong>, <strong>10ATM)</strong>:
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          + Có thể đeo đồng hồ khi đi mưa lớn, rửa tay dưới vòi nước có áp lực nước lớn, đi bơi, lướt
+                          sóng hoặc kết hợp một số môn thể thao dưới nước nhẹ nhàng.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          - <strong>Độ</strong> <strong>chịu</strong> <strong>nước</strong> <strong>200</strong>
+                          <strong>mét(20BAR</strong>, <strong>20ATM)</strong>:
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          + Có thể đeo đồng hồ khi đi mưa, rửa tay, bơi, lướt sóng, tham gia các môn thể thao dưới nước,
+                          lặn bằng ống thở.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          - <strong>Độ</strong> <strong>chịu</strong> <strong>nước</strong> <strong>trên</strong>
+                          <strong>200</strong> <strong>mét(20BAR</strong>, <strong>20ATM)</strong>:
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          + Có thể đeo đồng hồ khi đi mưa, rửa tay, bơi, lướt sóng, tham gia các môn thể thao dưới nước,
+                          lặn sâu bằng bình dưỡng khí.
+                          <br />- Lưu ý:
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          + Phải luôn đóng chặt núm đồng hồ trong mọi hoàn cảnh nhằm tránh đồng hồ bị vào nước.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>+ Tuyệt đối không đeo đồng hồ khi dùng nước nóng, tắm nóng lạnh hoặc xông hơi.</span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>+ Không sử dụng đồng hồ vượt quá mức độ chịu nước của nó.</span>
+                      </span>
+                    </span>
+                    <br />
+                    <br />
+                    &nbsp;
+                  </p>
+                </div>
+
+                {/* Hướng dẫn vệ sinh đồng hồ */}
+                <div
+                  id="tab-4"
+                  className={`${styles.tabcontent1} ${styles.description} ${
+                    activeTab === "tab-4" ? styles.activeTab : ""
+                  }`}
+                >
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>HƯỚNG DẪN VỆ SINH ĐỒNG HỒ</span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <strong>1. Vật dụng cần chuẩn bị:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong>
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>- Nước ấm, dung dịch xà phòng loãng hoặc dung dịch tẩy rửa nhẹ</span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>- Khăn vi sợi mềm, mỏng</span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>- Bàn chải lông mềm</span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <strong>2. Quy trình chung vệ sinh đồng hồ</strong>
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          - Tháo dây đeo ra khỏi mặt đồng hồ. Nếu như dây đeo đồng hồ của bạn là dây không tháo rời, hãy
+                          luôn chú ý khi vệ sinh chúng.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>- Vệ sinh nhẹ nhàng phần dây đeo và mặt đồng hồ.</span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>- Để khô tự nhiên trước khi đeo lại vào tay.</span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <strong>3. Vệ sinh dây đồng hồ</strong>
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <strong>
+                            <em>+ Với đồng hồ dây kim loại:</em>
+                          </strong>
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <em>Bước 1</em>: Ngâm dây đồng hồ vào dung dịch nước ấm pha một ít xà phòng trong khoảng 3-5
+                          phút
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <em>Bước </em>2: Sử dụng bàn chải lông mềm để làm sạch nốt những vết bẩn còn sót lại
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <em>Bước 3</em>: Lau lại bằng nước sạch rồi để khô tự nhiên.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          Ngoài ra, bạn có thể sử dụng kem đánh răng hay dung dịch dấm với nước để làm sạch và giúp dây
+                          sáng bóng hơn.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <strong>
+                            <em>+ Với đồng hồ dây da:</em>
+                          </strong>
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <em>Bước 1</em>: Dùng khăn mềm hơi ẩm lau nhẹ phần bề mặt của dây da.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <em>Bước 2</em>: Thấm một ít dung dịch có tính tẩy rửa nhẹ hoặc dầu ô liu lên bề mặt dây và sử
+                          dụng bàn chải lông mềm để làm sạch dây.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <em>Bước 3</em>: Lau sạch chúng bằng một chiếc khăn ẩm.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>Lưu ý: </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>Không ngâm dây da trong nước vì có thể làm dây bị ẩm, mốc và nhanh hỏng.</span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          Không sử dụng máy sấy đề làm khô, điều này dẫn đến hiện tượng dây bị co cứng lại không giữ
+                          được sự thoải mái khi đeo như ban đầu.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <strong>
+                            <em>+ Với đồng hồ dây vải:</em>
+                          </strong>
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <em>Bước 1</em>: Sử dụng dung dịch xà phòng loãng hoặc dung dịch tẩy rửa nhẹ để làm sạch dây
+                          vải rồi dùng nước sạch để làm tan hết xà phòng.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <em>Bước 2</em>: Phơi dây ra nơi thoáng mát để chúng khô hoàn toàn trước khi đeo lại.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <strong>
+                            <em>+ Với đồng hồ dây cao su</em>
+                          </strong>
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <em>Bước 1</em>: Dùng khăn mềm sạch, nhúng ẩm vào trong dung dịch xà phòng loãng hay dung dịch
+                          có tính tẩy rửa nhẹ rồi dùng để lau bề mặt dây. Đối với các vết bẩn “cứng đầu” hơn, bạn có thể
+                          để một lát rồi dùng bàn chải lông mềm để làm sạch.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <em>Bước 2</em>: Sử dụng khăn mềm để lau sạch xà phòng. Đối với các mẫu dây đeo này, bạn nên
+                          chú ý chất tẩy rửa mình sử dụng, hãy luôn chắc chắn về việc chúng không làm mất màu dây đeo
+                          của bạn.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <em>Một số lưu ý khi vệ sinh đồng hồ:</em>
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          - Do quá trình vệ sinh luôn gắn liền với nước hoặc một số các loại dung dịch khác nên hãy luôn
+                          cẩn thận để tránh việc nước vào bộ máy làm hỏng đồng hồ
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          - Luôn thử các loại dung dịch tẩy rửa ở một phần nhỏ của dây đeo để tránh hiện tượng chúng làm
+                          đổi màu dây, …
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          - Nếu đeo đồng hồ vào thời tiết oi bức, nắng nóng thì nên nới lỏng dây đeo và thường xuyên lau
+                          đồng hồ bằng khăn mềm để trách việc bụi bẩn tích tụ lâu ngày.
+                        </span>
+                      </span>
+                    </span>
+                  </p>
+
+                  <p style={{ textAlign: "justify" }}>
+                    <span style={{ fontSize: "13pt" }}>
+                      <span>
+                        <span>
+                          <span>
+                            Ngoài dây đeo, phần vỏ đồng hồ cũng như mặt kính cũng nên được vệ sinh thường xuyên. Trong
+                            khi đợi các dây đeo khô, bạn dùng khăn ẩm thấm nước ấm lau nhẹ nhàng mặt kính cũng như vỏ
+                            đồng hồ.
+                          </span>
+                        </span>
+                      </span>
+                    </span>
+                  </p>
                 </div>
               </div>
             </blockquote>

@@ -12,6 +12,7 @@ export default function DonghoNam() {
   const [sortOption, setSortOption] = useState(""); // Tuỳ chọn sắp xếp (tăng/giảm dần)
   const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
   const [totalPages, setTotalPages] = useState(1); // Tổng số trang
+  const [isExpanded, setIsExpanded] = useState(false); // Trạng thái mô tả
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -125,6 +126,12 @@ export default function DonghoNam() {
   // 8. Cập nhật tuỳ chọn sắp xếp
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
+  };
+
+  // 9. Hiển thị mô tả
+
+  const toggleDescription = () => {
+    setIsExpanded(!isExpanded);
   };
 
   if (loading) {
@@ -1602,7 +1609,7 @@ export default function DonghoNam() {
                       ‹
                     </span>
                     {/* Trang hiện tại */}
-                    <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1 }`}</span>
+                    <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1}`}</span>
                     {/* Next 1 trang*/}
                     <span
                       className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
@@ -1636,7 +1643,10 @@ export default function DonghoNam() {
                 </div>
 
                 {/* mô tả*/}
-                <div className={`${styles.summaryContentCat} ${styles.description} ${styles.heightAuto}`}>
+                <div
+                  className={`${styles.summaryContentCat} ${styles.description} `}
+                  style={{ height: isExpanded ? "auto" : "360px", overflow: isExpanded ? "visible" : "hidden" }}
+                >
                   <h2 dir="ltr" style={{ textAlign: "justify" }}>
                     <strong>TẤT CẢ NHỮNG ĐIỀU BẠN CẦN BIẾT VỀ CÁCH CHỌN ĐỒNG HỒ NAM</strong>
                   </h2>
@@ -1667,7 +1677,7 @@ export default function DonghoNam() {
                       height="800"
                       className={styles.lazy}
                       width="1200"
-                      src="/image/item/donghonam-hinh1.jpg"
+                      src="/image/item/donghonam/donghonam-hinh1.jpg"
                     />
                   </p>
 
@@ -1687,7 +1697,7 @@ export default function DonghoNam() {
                     Không nhiều người biết rằng
                     <em>
                       <strong>
-                        <Link href="#">Longines</Link>
+                        &nbsp;<Link href="#">Longines</Link>&nbsp;
                       </strong>
                     </em>
                     là một trong những thương hiệu đồng hồ lâu đời nhất thế giới. Với gần hai thế kỷ ra đời và phát
@@ -1697,7 +1707,7 @@ export default function DonghoNam() {
                     điển, nhiều phiên bản dress watch lý tưởng. Các mẫu
                     <strong>
                       <em>
-                        <Link href="#">đồng hồ nam Longines</Link>
+                        &nbsp;<Link href="#">đồng hồ nam Longines</Link>&nbsp;
                       </em>
                     </strong>
                     đã làm mê hoặc&nbsp;rất nhiều&nbsp;tín đồ yêu đồng hồ&nbsp;trên khắp thế giới hàng trăm&nbsp;năm
@@ -1710,7 +1720,7 @@ export default function DonghoNam() {
                       height="800"
                       className={styles.lazy}
                       width="1200"
-                      src="/public/img/item/donghonam-hinh2.jpg"
+                      src="/image/item/donghonam/donghonam-hinh2.jpg"
                     />
                   </p>
 
@@ -1719,7 +1729,7 @@ export default function DonghoNam() {
                     <em>
                       <strong>
                         <Link href="#">
-                          <span className={styles.highlightText}>đồng hồ unisex</span>
+                          &nbsp;<span className={styles.highlightText}>đồng hồ unisex</span>
                         </Link>
                       </strong>
                     </em>
@@ -1743,7 +1753,7 @@ export default function DonghoNam() {
                     triệu chiếc
                     <Link href="#">
                       <em>
-                        <strong>đồng hồ nam cao cấp</strong>
+                        &nbsp;<strong>đồng hồ nam cao cấp</strong>&nbsp;
                       </em>
                     </Link>
                     mỗi năm.
@@ -1755,7 +1765,7 @@ export default function DonghoNam() {
                       height="375"
                       className={styles.lazy}
                       width="1200"
-                      src="/public/img/item/donghonam-hinh3.jpg"
+                      src="/image/item/donghonam/donghonam-hinh3.jpg"
                     />
                   </p>
 
@@ -1772,7 +1782,7 @@ export default function DonghoNam() {
                     <em>
                       <strong>
                         <Link href="#">
-                          <span className={styles.highlightText}>Tissot</span>
+                          &nbsp;<span className={styles.highlightText}>Tissot</span>&nbsp;
                         </Link>
                       </strong>
                     </em>
@@ -1793,7 +1803,7 @@ export default function DonghoNam() {
                       height="800"
                       className={styles.lazy}
                       width="1200"
-                      src="/public/img/item/donghonam-hinh4.jpg"
+                      src="/image/item/donghonam/donghonam-hinh4.jpg"
                     />
                   </p>
 
@@ -1820,7 +1830,7 @@ export default function DonghoNam() {
                       height="675"
                       className={styles.lazy}
                       width="1200"
-                      src="/public/img/item/donghonam-hinh5.jpg"
+                      src="/image/item/donghonam/donghonam-hinh5.jpg"
                     />
                   </p>
 
@@ -1838,14 +1848,14 @@ export default function DonghoNam() {
                     <em>
                       <strong>
                         <Link href="#">
-                          <span className={styles.highlightText}>Hamilton</span>
+                          &nbsp;<span className={styles.highlightText}>Hamilton</span>&nbsp;
                         </Link>
                       </strong>
                     </em>
                     đã tung ra một số chiếc
                     <Link href="">
                       <em>
-                        <strong>đồng hồ đeo tay nam</strong>
+                        &nbsp;<strong>đồng hồ đeo tay nam</strong>&nbsp;
                       </em>
                     </Link>
                     đáng ngưỡng mộ, kết hợp giữa thể thao và thanh lịch được thực hiện một cách hoàn hảo, một số trong
@@ -1855,7 +1865,7 @@ export default function DonghoNam() {
                     tưởng ăn khách trên toàn thế giới, gần đây nhất là bộ&nbsp;phim Hành tinh cát (Dune II) sản xuất năm
                     2024, với chiếc&nbsp;
                     <strong>
-                      <em>Hamilton Ventura Edge Dune Limited Edition H24624330</em>
+                      <em>Hamilton Ventura Edge Dune Limited Edition H24624330</em>&nbsp;
                     </strong>
                     được xuất hiện trên tay nhân vật chính trong phim.
                   </p>
@@ -1866,7 +1876,7 @@ export default function DonghoNam() {
                       height="800"
                       className={styles.lazy}
                       width="1200"
-                      src="/public/img/item/donghonam-hinh6.jpg"
+                      src="/image/item/donghonam/donghonam-hinh6.jpg"
                     />
                   </p>
 
@@ -1881,7 +1891,7 @@ export default function DonghoNam() {
                   <p dir="ltr" className={styles.justifyText}>
                     <strong>
                       <em>
-                        <Link href="#">Mido</Link>
+                        <Link href="#">Mido</Link>&nbsp;
                       </em>
                     </strong>
                     là một nhà sản xuất đồng hồ Thụy Sĩ đã tạo dựng được danh tiếng khi kết hợp công nghệ tiên tiến với
@@ -1895,7 +1905,7 @@ export default function DonghoNam() {
                       height="800"
                       className={styles.lazy}
                       width="1200"
-                      src="/public/img/item/donghonam-hinh7.jpg"
+                      src="/image/item/donghonam/donghonam-hinh7.jpg"
                     />
                   </p>
 
@@ -1908,13 +1918,13 @@ export default function DonghoNam() {
                   </h3>
 
                   <p dir="ltr" className={styles.justifyText}>
-                    Khi tạo ra chiếc
+                    Khi tạo ra chiếc &nbsp;
                     <strong>
-                      <Link href="#">đồng hồ thạch anh</Link>
+                      <Link href="#">đồng hồ thạch anh</Link>&nbsp;
                     </strong>
                     đầu tiên vào năm 1969,
                     <strong>
-                      <Link href="#">Seiko</Link>
+                      &nbsp;<Link href="#">Seiko</Link>&nbsp;
                     </strong>
                     đã khởi động cuộc cách mạng lớn nhất của kỷ nguyên đồng hồ hiện đại. Cho đến ngày nay, thương hiệu
                     này vẫn tiếp tục cung cấp những chiếc đồng hồ tuyệt vời từ cơ khí, tự động và chạy bằng pin. Ngày
@@ -1922,7 +1932,7 @@ export default function DonghoNam() {
                     hiệu này tiếp tục sánh ngang với
                     <em>
                       <strong>
-                        <Link href="#">đồng hồ Thụy Sỹ</Link>
+                        &nbsp;<Link href="#">đồng hồ Thụy Sỹ</Link>&nbsp;
                       </strong>
                     </em>
                     . Các quy trình sản xuất đồng hồ nội bộ của hãng, bao gồm cả kỹ thuật đánh bóng truyền thống,
@@ -1936,7 +1946,7 @@ export default function DonghoNam() {
                       height="800"
                       className={styles.lazy}
                       width="1200"
-                      src="/public/img/item/donghonam-hinh8.jpg"
+                      src="/image/item/donghonam/donghonam-hinh8.jpg"
                     />
                   </p>
 
@@ -1951,18 +1961,18 @@ export default function DonghoNam() {
                   <p dir="ltr" className={styles.justifyText}>
                     Nếu muốn sở hữu một chiếc
                     <em>
-                      <strong>đồng hồ nam</strong>
+                      &nbsp;<strong>đồng hồ nam</strong>&nbsp;
                     </em>
                     đáng tin cậy và chắc chắn sẽ tồn tại suốt đời, đó là
                     <em>
                       <strong>
-                        <Link href="#">đồng hồ Casio</Link>
+                        &nbsp;<Link href="#">đồng hồ Casio</Link>
                       </strong>
                     </em>
-                    .&nbsp; Thương hiệu
+                    .&nbsp;Thương hiệu
                     <em>
                       <strong>
-                        <Link href="#">đồng hồ Nhật Bản</Link>
+                        &nbsp;<Link href="#">đồng hồ Nhật Bản</Link>&nbsp;
                       </strong>
                     </em>
                     này nên là chiếc đồng hồ đầu tiên trong danh sách của bạn, đặc biệt là vì nhiều bộ sưu tập của chúng
@@ -1975,7 +1985,7 @@ export default function DonghoNam() {
                       height="510"
                       className={styles.lazy}
                       width="1200"
-                      src="/public/img/item/donghonam-hinh9.jpg"
+                      src="/image/item/donghonam/donghonam-hinh9.jpg"
                     />
                   </p>
 
@@ -1993,7 +2003,7 @@ export default function DonghoNam() {
                       height="800"
                       className={styles.lazy}
                       width="1200"
-                      src="/public/img/item/donghonam-hinh10.jpg"
+                      src="/image/item/donghonam/donghonam-hinh10.jpg"
                     />
                   </p>
 
@@ -2004,22 +2014,21 @@ export default function DonghoNam() {
                   <h3 dir="ltr" className={styles.justifyText}>
                     <strong>1.10 Orient</strong>
                   </h3>
-
                   <p dir="ltr" className={styles.justifyText}>
                     <em>
                       <strong>
-                        <Link href="#">Orient</Link>
+                        <Link href="#">Orient</Link>&nbsp;
                       </strong>
                     </em>
                     là một trong những nhà sản xuất đồng hồ tốt nhất và được công nhận rộng rãi nhất tại Nhật Bản. Giờ
                     đây, thương hiệu này là một công ty con của Seiko, nhưng họ vẫn tiếp tục xây dựng các bộ máy của
-                    riêng mình, đó là lý do tại sao những chiếc
+                    riêng mình, đó là lý do tại sao những chiếc&nbsp;
                     <Link href="#">
                       <strong>
                         <em>đồng hồ cơ Orient</em>
                       </strong>
                     </Link>
-                    có chất lượng tuyệt vời và là một thương hiệu đáng tin cậy.
+                    &nbsp; có chất lượng tuyệt vời và là một thương hiệu đáng tin cậy.
                   </p>
 
                   <p className={styles.imageCenter}>
@@ -2028,7 +2037,7 @@ export default function DonghoNam() {
                       height="675"
                       className={styles.lazy}
                       width="1200"
-                      src="/public/img/item/donghonam-hinh11.jpg"
+                      src="/image/item/donghonam/donghonam-hinh11.jpg"
                     />
                   </p>
 
@@ -2042,8 +2051,8 @@ export default function DonghoNam() {
 
                   <p dir="ltr" className={styles.justifyText}>
                     Nếu bạn đang muốn mua một chiếc đồng hồ để đeo nhưng chưa biết nên lựa chọn như thế nào, từ việc cân
-                    nhắc những ưu và nhược điểm của các loại đồng hồ khác nhau, đến các kiểu
-                    <strong>đồng hồ nam</strong> khác nhau… thì bài viết này là dành cho bạn!
+                    nhắc những ưu và nhược điểm của các loại đồng hồ khác nhau, đến các kiểu&nbsp;
+                    <strong>đồng hồ nam</strong> &nbsp; khác nhau… thì bài viết này là dành cho bạn!
                   </p>
 
                   <p dir="ltr" className={styles.justifyText}>
@@ -2053,13 +2062,13 @@ export default function DonghoNam() {
                   </p>
 
                   <p className={styles.justifyText}>
-                    Bạn sẽ tìm thấy hướng dẫn cơ bản về
+                    Bạn sẽ tìm thấy hướng dẫn cơ bản về&nbsp;
                     <em>
-                      <strong>đồng hồ đeo tay nam</strong>
+                      <strong>đồng hồ đeo tay nam</strong>&nbsp;
                     </em>
-                    - tất cả thông tin cần thiết để lựa chọn được những mẫu
+                    - tất cả thông tin cần thiết để lựa chọn được những mẫu&nbsp;
                     <em>
-                      <strong>đồng hồ nam đẹp</strong>
+                      <strong>đồng hồ nam đẹp</strong>&nbsp;
                     </em>
                     và phù hợp với từng người.
                   </p>
@@ -2071,10 +2080,10 @@ export default function DonghoNam() {
                   </h3>
 
                   <p className={styles.justifyText}>
-                    Bạn sử dụng
+                    Bạn sử dụng &nbsp;
                     <Link href="#">
                       <strong>
-                        <em>đồng hồ</em>
+                        <em>đồng hồ</em>&nbsp;
                       </strong>
                     </Link>
                     của mình chủ yếu vào khi nào? Ở đâu? Hãy đặt ra câu hỏi và trả lời chúng. Chiếc đồng hồ được chọn
@@ -2087,7 +2096,7 @@ export default function DonghoNam() {
                         Nếu bạn là người kinh doanh, hay gặp gỡ mọi người và mặc những bộ trang phục lịch sự thì bạn có
                         thể lựa chọn những mẫu
                         <em>
-                          <strong>đồng hồ nam cổ điển</strong>
+                          &nbsp;<strong>đồng hồ nam cổ điển</strong>&nbsp;
                         </em>
                         dành cho doanh nhân.
                       </p>
@@ -2108,11 +2117,11 @@ export default function DonghoNam() {
                         Nếu bạn là mẫu người chỉ muốn lựa chọn những chiếc <strong>đồng hồ nam đơn giản</strong> là để
                         xem giờ, hỗ trợ cho cuộc sống hàng ngày thì các mẫu
                         <em>
-                          <strong>đồng hồ nam dây da</strong>
+                          &nbsp;<strong>đồng hồ nam dây da</strong>&nbsp;
                         </em>
-                        hoặc
+                        hoặc&nbsp;
                         <em>
-                          <strong>đồng hồ nam dây kim loại</strong>
+                          <strong>đồng hồ nam dây kim loại</strong>&nbsp;
                         </em>
                         đơn giản của Tissot hoặc Longines với mức giá cũng khá hợp lý.
                       </p>
@@ -2143,7 +2152,7 @@ export default function DonghoNam() {
                   <p className={styles.justifyText}>
                     <Link href="#">
                       <em>
-                        <strong>Thế giới đồng hồ nam</strong>
+                        <strong>Thế giới đồng hồ nam</strong>&nbsp;
                       </em>
                     </Link>
                     rất đa dạng và phong phú với sự góp mặt của các thương hiệu đồng hồ Thụy Sĩ và Nhật Bản – 2 cường
@@ -2158,10 +2167,10 @@ export default function DonghoNam() {
                     thuộc thương hiệu Longines – thương hiệu cao cấp của tập đoàn đồng hồ lớn nhất Thụy Sĩ Swatch có giá
                     từ vài chục đến vài trăm triệu tùy theo mẫu đồng hồ bạn chọn. Trong khi đó các thương hiệu tầm trung
                     như Tissot, Mido, Certina, Hamilton, Seiko… có mức giá từ vài triệu đến vài chục triệu. Ngoài ra nếu
-                    bạn muốn một chiếc
+                    bạn muốn một chiếc &nbsp;
                     <Link href="#">
                       <em>
-                        <strong>đồng hồ nam hàng hiệu</strong>
+                        <strong>đồng hồ nam hàng hiệu</strong>&nbsp;
                       </em>
                     </Link>
                     với mức giá mềm thì có thể kể đến thương hiệu Seiko, Citizen, Orient, Casio, Daniel Wellington… chỉ
@@ -2235,8 +2244,8 @@ export default function DonghoNam() {
                       alt="đồng hồ nam đeo tay"
                       height="800"
                       width="1200"
-                      className={`${styles.imageStyle} lazy`} // Kết hợp cả hai lớp CSS
-                      src="/public/img/item/donghonam-hinh12.jpg"
+                      className={`${styles.imageStyle} lazy`}
+                      src="/image/item/donghonam/donghonam-hinh12.jpg"
                     />
                   </p>
 
@@ -2261,7 +2270,7 @@ export default function DonghoNam() {
                     <em>
                       -
                       <strong>
-                        &nbsp;<Link href="#">Đồng hồ nam dây da</Link>
+                        &nbsp;<Link href="#">Đồng hồ nam dây da</Link>&nbsp;
                       </strong>
                     </em>
                     là món đồ cổ điển quen thuộc được nhiều người yêu thích. Vì cảm giác mềm mại, nhẹ nhàng tự nhiên, nó
@@ -2287,8 +2296,9 @@ export default function DonghoNam() {
                     &nbsp;là một lựa chọn phổ biến cho đồng hồ thể thao, phù hợp cho nhiều hoạt động thể thao. Đồng hồ
                     dây kim loại như đồng hồ nam chính hãng
                     <strong>
+                      &nbsp;
                       <em>
-                        <Link href="#">Longines</Link>
+                        <Link href="#">Longines</Link>&nbsp;
                       </em>
                     </strong>
                     thường đắt hơn dây da và cũng có thể sử dụng như một chiếc đồng hồ đeo tay cho những dịp sang trọng.
@@ -2328,9 +2338,9 @@ export default function DonghoNam() {
                   </p>
 
                   <p className={styles.justifyText}>
-                    Không có quy định
+                    Không có quy định &nbsp;
                     <em>
-                      <strong>đồng hồ nam đẹp nhất</strong>
+                      <strong>đồng hồ nam đẹp nhất</strong>&nbsp;
                     </em>
                     phải có màu sắc, kiểu dáng nào! Mặt số có vô vàn hình dáng, màu sắc, chất liệu khác nhau. Mặt đồng
                     hồ đen hoặc trắng là lựa chọn phổ biến nhất dành cho nam giới, trong khi các màu khác cũng được ưa
@@ -2345,17 +2355,17 @@ export default function DonghoNam() {
                     lựa chọn tùy theo gu thẩm mỹ của bản thân.
                   </p>
 
-                  <p className={styles.centerText}>
+                  <p className={styles.imageCenter}>
                     <img
                       alt=""
                       height="69"
-                      className={`lazy ${styles.imageStyle}`} // Kết hợp lớp CSS nếu cần
+                      className={`lazy ${styles.imageStyle} `}
                       width="300"
-                      src="/public/img/item/xem them(1).gif"
+                      src="/image/item/xem them(1).gif"
                     />
                   </p>
 
-                  <p className={styles.centerText}>
+                  <p className={styles.imageCenter}>
                     <Link href="#">NHỮNG PHIÊN BẢN ĐỒNG HỒ NAM DÂY DA MẶT XANH THỂ HIỆN NÉT CÁ TÍNH CỦA NAM GIỚI</Link>
                   </p>
 
@@ -2372,18 +2382,18 @@ export default function DonghoNam() {
                   </p>
 
                   <p className={styles.justifyText}>
-                    Có 3 loại kính đồng hồ, đó là
+                    Có 3 loại kính đồng hồ, đó là&nbsp;
                     <em>
-                      <strong>kính</strong>
+                      <strong>kính</strong>&nbsp;
                     </em>
                     <strong>
-                      <em>Acrylic, kính khoáng và kính Sapphire</em>
+                      <em>Acrylic, kính khoáng và kính Sapphire</em>&nbsp;
                     </strong>
                     với những ưu nhược điểm riêng.
                   </p>
 
                   <p className={styles.justifyText}>
-                    - Trong tất cả các loại kính đồng hồ, <em>kính đồng hồ acrylic</em> là yếu nhất, điều này là do nó
+                    - Trong tất cả các loại kính đồng hồ,<em>kính đồng hồ acrylic</em> là yếu nhất, điều này là do nó
                     được làm từ nhựa không phải từ thủy tinh. Acrylic là một loại nhựa chuyên dụng có giá thành rẻ
                     thường được tìm thấy trên các thương hiệu đồng hồ giá thấp.
                   </p>
@@ -2403,14 +2413,14 @@ export default function DonghoNam() {
                   </p>
 
                   <p className={styles.justifyText}>
-                    Nếu bạn mua
+                    Nếu bạn mua&nbsp;
                     <Link href="#">
                       <em>
                         <strong>đồng hồ nam chính hãng</strong>
                       </em>
                     </Link>
-                    từ những cửa hàng chính hãng và thương hiệu đáng tin cậy, bạn sẽ luôn được cung cấp thông tin rõ
-                    ràng về loại mặt kính của đồng hồ.
+                    &nbsp;từ những cửa hàng chính hãng và thương hiệu đáng tin cậy, bạn sẽ luôn được cung cấp thông tin
+                    rõ ràng về loại mặt kính của đồng hồ.
                   </p>
 
                   <p className={styles.justifyText}>&nbsp;</p>
@@ -2435,25 +2445,25 @@ export default function DonghoNam() {
                   <p className={styles.justifyText}>
                     Cuối cùng, lựa chọn một
                     <strong>
-                      <em>cửa hàng đồng hồ nam uy tín</em>
+                      &nbsp;<em>cửa hàng đồng hồ nam uy tín</em>
                     </strong>
                     &nbsp;để mua chiếc đồng hồ ưng ý nhất cũng là vấn đề quan trọng.
                   </p>
 
                   <p dir="ltr" className={styles.justifyText}>
-                    <strong className={styles.strongText}>Duy Anh Watch</strong> là nhà phân phối được ủy quyền chính
+                    <strong className={styles.strongText}>Wristly Watch</strong> là nhà phân phối được ủy quyền chính
                     thức của các thương hiệu đồng hồ hàng đầu thế giới của Thụy Sĩ:
                     <em>
                       <strong>
-                        <Link href="#">Longines</Link>, <Link href="#">Tissot</Link>, <Link href="#">Mido</Link>,{" "}
-                        <Link href="#">Hamilton</Link>,<Link href="#">Certina</Link>, <Link href="#">Titoni</Link>,{" "}
+                        &nbsp;<Link href="#">Longines</Link>, <Link href="#">Tissot</Link>, <Link href="#">Mido</Link>,
+                        <Link href="#">Hamilton</Link>,<Link href="#">&nbsp;Certina</Link>,<Link href="#">Titoni</Link>,{" "}
                         <Link href="#">Frederique Constant</Link>
                       </strong>
                     </em>
                     … thương hiệu đồng hồ thời trang
                     <em>
                       <strong>
-                        <Link href="#">Daniel Wellington (DW)</Link>
+                        <Link href="#">&nbsp;Daniel Wellington (DW)</Link>
                       </strong>
                     </em>
                     &nbsp;của Thụy Điển do Filip Tysander thành lập năm 2011 nhưng đã có bước tăng trưởng thần kỳ vào
@@ -2474,7 +2484,7 @@ export default function DonghoNam() {
                     đến 3 năm tùy theo mặt hàng và điều kiện riêng của thương hiệu. Bên cạnh đó bạn còn nhận được gói
                     bảo hành 5 năm cùng nhiều quyền lợi hấp dẫn tại
                     <Link href="#">
-                      <strong className={styles.strongText}>Đồng hồ Duy Anh</strong>
+                      <strong className={styles.strongText}> &nbsp;Đồng hồ Wristly</strong>
                     </Link>
                     .
                   </p>
@@ -2486,25 +2496,14 @@ export default function DonghoNam() {
                   <hr />
 
                   <p dir="ltr" className={styles.justifyText}>
-                    <strong className={styles.strongText}>Hệ thống&nbsp;mạng xã hội của Đồng hồ Duy Anh</strong>
+                    <strong className={styles.strongText}>Hệ thống&nbsp;mạng xã hội của Đồng hồ Wristly</strong>
                   </p>
 
                   <ul>
                     <li>
                       Facebook:&nbsp;
                       <Link href="#" className={styles.socialLink}>
-                        https://www.facebook.com/donghoduyanh.vn
-                      </Link>
-                    </li>
-
-                    <li>
-                      Instagram:&nbsp;
-                      <Link
-                        href="https://www.instagram.com/donghoduyanh_official/"
-                        target="_blank"
-                        className={styles.socialLink}
-                      >
-                        https://www.instagram.com/donghoduyanh_official/
+                        https://www.facebook.com/profile.php?id=61566364566665
                       </Link>
                     </li>
                   </ul>
@@ -2518,7 +2517,7 @@ export default function DonghoNam() {
                 </div>
                 {/* Xem thêm   */}
                 <div className={styles.summaryContent}>
-                  <span>Xem thêm</span>
+                  <span onClick={toggleDescription}>{isExpanded ? "Thu gọn" : "Xem thêm"}</span>
                 </div>
                 <div className={styles.clear}></div>
                 <div className={`${styles.aq_relates} ${styles.content_li}`}></div>

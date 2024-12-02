@@ -140,9 +140,7 @@ export default function DanhmucPage() {
           let totalPages = 1;
           const allCates = [];
           while (currentPage <= totalPages) {
-            const response = await fetch(
-              `http://localhost:5000/cate/allcate?page=${currentPage}`
-            );
+            const response = await fetch(`http://localhost:5000/cate/allcate?page=${currentPage}`);
             const data = await response.json();
             allCates.push(...data.cates);
             totalPages = data.totalPages;
@@ -173,9 +171,7 @@ export default function DanhmucPage() {
                 mo_ta: item.mo_ta,
                 hinh_anh: "",
               });
-              const response = await fetch(
-                `http://localhost:5000/images/${item.hinh_anh}`
-              );
+              const response = await fetch(`http://localhost:5000/images/${item.hinh_anh}`);
               if (!response.ok) {
                 throw new Error(`Không thể tải ảnh từ URL: ${item.hinh_anh}`);
               }
@@ -253,13 +249,9 @@ export default function DanhmucPage() {
 
       // Fetch all pages
       while (currentPage <= totalPages) {
-        const response = await fetch(
-          `http://localhost:5000/cate/allcate?page=${currentPage}`
-        );
+        const response = await fetch(`http://localhost:5000/cate/allcate?page=${currentPage}`);
         if (!response.ok) {
-          throw new Error(
-            `Failed to fetch page ${currentPage}: ${response.statusText}`
-          );
+          throw new Error(`Failed to fetch page ${currentPage}: ${response.statusText}`);
         }
         const data = await response.json();
         allCates.push(...data.cates);
@@ -332,9 +324,7 @@ export default function DanhmucPage() {
         didDrawCell: (data) => {
           if (data.column.index === 3 && data.cell.raw === "Hình ảnh") {
             const rowIndex = data.row.index;
-            const imageData = images.find(
-              (img) => img.id === sortedCates[rowIndex]._id
-            );
+            const imageData = images.find((img) => img.id === sortedCates[rowIndex]._id);
 
             if (imageData && imageData.img) {
               const img = imageData.img;
@@ -349,18 +339,9 @@ export default function DanhmucPage() {
               canvas.height = img.height;
               const ctx = canvas.getContext("2d");
               ctx.drawImage(img, 0, 0);
-              const imgData = canvas.toDataURL(
-                img.src.endsWith(".png") ? "image/png" : "image/jpeg"
-              );
+              const imgData = canvas.toDataURL(img.src.endsWith(".png") ? "image/png" : "image/jpeg");
 
-              doc.addImage(
-                imgData,
-                img.src.endsWith(".png") ? "PNG" : "JPEG",
-                posX,
-                posY,
-                imgWidth,
-                imgHeight
-              );
+              doc.addImage(imgData, img.src.endsWith(".png") ? "PNG" : "JPEG", posX, posY, imgWidth, imgHeight);
             }
           }
         },
@@ -408,12 +389,9 @@ export default function DanhmucPage() {
               </Link>
             </div>
             <div className={styles.buttonGroup}>
-              &nbsp;
               <button className={styles.sp3} onClick={printData}>
                 <i className="fas fa-print"></i> In dữ liệu
               </button>
-              &nbsp;
-            
               &nbsp;
               <button className={styles.sp5} onClick={exportToExcel}>
                 &nbsp;
@@ -445,12 +423,8 @@ export default function DanhmucPage() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-                <th style={{ width: "10%", textAlign: "center" }}>
-                  Id Danh mục
-                </th>
-                <th style={{ width: "10%", textAlign: "center" }}>
-                  Tên danh mục
-                </th>
+                <th style={{ width: "10%", textAlign: "center" }}>Id Danh mục</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Tên danh mục</th>
                 <th style={{ width: "15%", textAlign: "center" }}>Hình ảnh</th>
                 <th style={{ width: "20%", textAlign: "center" }}>Mô tả</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
