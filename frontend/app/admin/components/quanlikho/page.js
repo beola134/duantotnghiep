@@ -1,7 +1,6 @@
 "use client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./quanlikho.module.css";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import ExcelJS from "exceljs";
@@ -37,11 +36,11 @@ export default function SanPham() {
           const allProducts = [];
           while (currentPage <= totalPages) {
             const response = await fetch(
-              `http://localhost:5000/product/getProducts?page=${currentPage}`
+              `http://localhost:5000/product/getProducts?page=${currentPage}&search=${searchQuery}`
             );
             const data = await response.json();
             allProducts.push(...data.products);
-            totalPages = data.totalPage;
+            totalPages = data.totalPages || 1;
             currentPage++;
           }
           const workbook = new ExcelJS.Workbook();
@@ -49,12 +48,12 @@ export default function SanPham() {
           worksheet.columns = [
             { header: "ID sản phẩm", key: "_id", width: 20 },
             { header: "Tên sản phẩm", key: "ten_san_pham", width: 25 },
-            { header: "Hình ảnh", key: "hinh_anh", width: 30 },
-            { header: "Số lượng", key: "so_luong", width: 15 },
-            { header: "Giá tiền", key: "gia_san_pham", width: 15 },
             { header: "Mã sản phẩm", key: "ma_san_pham", width: 20 },
+            { header: "Giá tiền", key: "gia_san_pham", width: 15 },
+            { header: "Số lượng", key: "so_luong", width: 15 },
             { header: "Đã bán", key: "da_ban", width: 15 },
             { header: "Trạng thái", key: "trang_thai", width: 15 },
+            { header: "Hình ảnh", key: "hinh_anh", width: 30 },
           ];
           worksheet.getRow(1).eachCell((cell) => {
             cell.font = { bold: true, color: { argb: "FFFFFF" } };
@@ -70,12 +69,12 @@ export default function SanPham() {
               worksheet.addRow({
                 _id: item._id,
                 ten_san_pham: item.ten_san_pham,
-                hinh_anh: "",
-                so_luong: item.so_luong,
-                gia_san_pham: item.gia_san_pham,
-                da_ban: item.da_ban,
                 ma_san_pham: item.ma_san_pham,
+                gia_san_pham: item.gia_san_pham,
+                so_luong: item.so_luong,
+                da_ban: item.da_ban,
                 trang_thai: item.trang_thai,
+                hinh_anh: "",
               });
               if (item.hinh_anh) {
                 const response = await fetch(
@@ -92,7 +91,7 @@ export default function SanPham() {
                 });
                 const rowNumber = index + 2;
                 worksheet.addImage(imageId, {
-                  tl: { col: 2, row: rowNumber - 1 },
+  tl: { col: 7, row: rowNumber - 1 },
                   ext: { width: 50, height: 50 },
                 });
                 const currentRow = worksheet.getRow(rowNumber);
@@ -121,7 +120,7 @@ export default function SanPham() {
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
-
+  
           Swal.fire({
             title: "Thành công",
             text: "Dữ liệu đã được xuất ra file Excel!",
@@ -146,7 +145,7 @@ export default function SanPham() {
     doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
     doc.setFont("Roboto");
   
-    // Tiêu đề file PDF
+    // PDF Title
     doc.setFontSize(16);
     doc.setTextColor(40);
     doc.text("Danh sách sản phẩm", 10, 10);
@@ -156,23 +155,19 @@ export default function SanPham() {
       let totalPages = 1;
       const allProducts = [];
   
-      // Fetch all pages
+      // Fetch all product pages
       while (currentPage <= totalPages) {
-        const response = await fetch(
-          `http://localhost:5000/product/getProducts?page=${currentPage}`
-        );
+        const response = await fetch(`http://localhost:5000/product/getProducts?page=${currentPage}&search=${searchQuery}`);
         if (!response.ok) {
           throw new Error(`Failed to fetch page ${currentPage}: ${response.statusText}`);
         }
         const data = await response.json();
         allProducts.push(...data.products);
-        totalPages = data.totalPage;
+        totalPages = data.totalPages;
         currentPage++;
       }
   
-      const sortedProducts = [...allProducts].sort((a, b) => {
-        return a._id.localeCompare(b._id);
-      });
+      const sortedProducts = [...allProducts].sort((a, b) => a._id.localeCompare(b._id));
   
       // Load all images
       const images = await Promise.all(
@@ -204,21 +199,22 @@ export default function SanPham() {
   
       // Generate PDF table
       doc.autoTable({
-        head: [["ID sản phẩm", "Tên sản phẩm", "Số lượng", "Giá tiền", "Giá giảm", "Mã sản phẩm", "Hình ảnh"]],
-        body: sortedProducts.map((item) => [
-          item._id,
-          item.ten_san_pham,
-          item.so_luong,
-          `${item.gia_san_pham.toLocaleString("vi-VN")}₫`,
-          `${item.gia_giam.toLocaleString("vi-VN")}₫`,
-          item.ma_san_pham,
-          item.hinh_anh ? "Hình ảnh" : "Không có",
+        head: [["ID Sản Phẩm", "Tên Sản Phẩm", "Mã Sản Phẩm", "Giá", "Số Lượng", "Trạng Thái", "Đã Bán", "Hình Ảnh"]],
+        body: sortedProducts.map((product) => [
+          product._id,
+          product.ten_san_pham,
+          product.ma_san_pham,
+          product.gia_san_pham.toLocaleString("vi-VN") + "₫",
+          product.so_luong,
+          product.trang_thai,
+          product.da_ban,
+          product.hinh_anh ? "Hình ảnh" : "Không có",
         ]),
         startY: 20,
         styles: {
           font: "Roboto",
-          fontSize: 8,
-          cellPadding: 2,
+          fontSize: 10,
+          cellPadding: 4,
           valign: "middle",
           halign: "center",
           textColor: 20,
@@ -231,52 +227,45 @@ export default function SanPham() {
         },
         columnStyles: {
           0: { halign: "center", cellWidth: 20 },
-          1: { halign: "left", cellWidth: 30 },
-2: { halign: "center", cellWidth: 15 },
-          3: { halign: "center", cellWidth: 20 },
-          4: { halign: "center", cellWidth: 20 },
+          1: { halign: "left", cellWidth: 40 },
+2: { halign: "center", cellWidth: 20 },
+          3: { halign: "right", cellWidth: 20 },
+          4: { halign: "center", cellWidth: 15 },
           5: { halign: "center", cellWidth: 20 },
-          6: { halign: "center", cellWidth: 30 },
+          6: { halign: "center", cellWidth: 15 },
+          7: { halign: "center", cellWidth: 25 },
         },
         didDrawCell: (data) => {
-          if (data.column.index === 6 && data.cell.raw === "Hình ảnh") {
+          if (data.column.index === 7 && data.cell.raw === "Hình ảnh") {
             const rowIndex = data.row.index - 1; // Adjust for header row
-            if (rowIndex < 0 || rowIndex >= sortedProducts.length) return;
+            const product = sortedProducts[rowIndex];
   
-            const imageData = images.find(
-              (img) => img.id === sortedProducts[rowIndex]._id
-            );
+            if (product) {
+              const imageData = images.find((img) => img.id === product._id);
   
-            if (imageData && imageData.img) {
-              const img = imageData.img;
-              const imgWidth = 15;
-              const imgHeight = 15;
-              const posX = data.cell.x + (data.cell.width - imgWidth) / 2;
-              const posY = data.cell.y + 2;
+              if (imageData && imageData.img) {
+                const img = imageData.img;
+                const imgWidth = 30;
+                const imgHeight = 30;
+                const posX = data.cell.x + (data.cell.width - imgWidth) / 2;
+                const posY = data.cell.y + 2;
   
-              // Convert Image to Data URL
-              const canvas = document.createElement("canvas");
-              canvas.width = img.width;
-              canvas.height = img.height;
-              const ctx = canvas.getContext("2d");
-              ctx.drawImage(img, 0, 0);
-              const imgData = canvas.toDataURL(
-                img.src.endsWith(".png") ? "image/png" : "image/jpeg"
-              );
+                // Convert Image to Data URL
+                const canvas = document.createElement("canvas");
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0);
+                const imgData = canvas.toDataURL(img.src.endsWith(".png") ? "image/png" : "image/jpeg");
   
-              doc.addImage(
-                imgData,
-                img.src.endsWith(".png") ? "PNG" : "JPEG",
-                posX,
-                posY,
-                imgWidth,
-                imgHeight
-              );
+                doc.addImage(imgData, img.src.endsWith(".png") ? "PNG" : "JPEG", posX, posY, imgWidth, imgHeight);
+              }
             }
           }
         },
       });
   
+      // Footer with export date
       const date = new Date().toLocaleDateString();
       doc.setFontSize(10);
       doc.text(`Ngày xuất: ${date}`, 10, doc.internal.pageSize.height - 10);
