@@ -354,11 +354,15 @@ export default function Detail({ params }) {
               </div> */}
 
               <div className={styles.item} style={{ maxWidth: "calc(100% / 5 -10px)" }}>
-                <img src="/image/item/picture3.jpg" alt="" />
+                <a href="#prodetails-tab1">
+                  <img src="/image/item/picture3.jpg" alt="" />
+                </a>
                 <span>Thông tin sản phẩm</span>
               </div>
               <div className={styles.item} style={{ maxWidth: "calc(100% / 5 -10px)" }}>
-                <img src="/image/item/picture5.jpg" alt="" />
+                <a href="#">
+                  <img src="/image/item/picture5.jpg" alt="" />
+                </a>
                 <span>Hướng dẫn chọn size</span>
               </div>
             </div>
@@ -376,12 +380,9 @@ export default function Detail({ params }) {
             </div>
             <div className={styles.productName}>
               <h1 className={styles.bkProductName}>{product.ten}</h1>
-              <div className={`${styles.itemSsMain} ${styles.itemSs} ${styles.itemSs19005}`}>
-                <span className={styles.iconSs}></span>
-                <span className={styles.txtSs}>So sánh</span>
-              </div>
+              
             </div>
-            <div className={`${styles.codeManu} ${styles.mt10} ${styles.cf}`}>
+            {/* <div className={`${styles.codeManu} ${styles.mt10} ${styles.cf}`}>
               <span className={styles.rateHead}>
                 {[...Array(5)].map((_, index) => (
                   <span key={index} className={`${styles.starOn} ${styles.star}`}>
@@ -393,7 +394,7 @@ export default function Detail({ params }) {
                   (<span>1</span> đánh giá)
                 </Link>
               </span>
-            </div>
+            </div> */}
             <span className={styles.codeProduct}>Mã sản phẩm: {product.ma_san_pham}</span>
             <ul className={styles.infoMainFilter}>
               <li className={styles.cf}>
@@ -1072,6 +1073,7 @@ export default function Detail({ params }) {
                   >
                     <span>Hướng dẫn chọn size</span>
                   </button>
+
                   <button
                     className={`${styles.tablinks1} ${styles.tabBoder} ${styles.tabMucDoChongNuocCuaDongHo}
                     ${activeTab === "tab-3" ? styles.active : ""}`}
@@ -2832,10 +2834,10 @@ export default function Detail({ params }) {
                               </span>
                             </div>
 
-                            <div className={`${styles.itemSs} item-ss-20789`}>
+                            {/* <div className={`${styles.itemSs} item-ss-20789`}>
                               <span className={styles.iconSs}></span>
                               <span className={styles.txtSs}>So sánh</span>
-                            </div>
+                            </div> */}
                             <br />
                             <br />
                             <div className={styles.clear}></div>

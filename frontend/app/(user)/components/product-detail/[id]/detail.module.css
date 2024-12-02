@@ -110,7 +110,7 @@
   bottom: 8px;
 }
 
-.itemSs .iconSs {
+/* .itemSs .iconSs {
   width: 16px;
   height: 16px;
   position: absolute;
@@ -119,7 +119,7 @@
   top: 1px;
   background-image: url(/image/item/icon-sosanh.svg);
   background-repeat: no-repeat;
-}
+} */
 .codeManu .rateHead {
   float: right;
   margin-top: 0px;
