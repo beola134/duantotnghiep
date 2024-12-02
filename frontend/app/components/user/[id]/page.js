@@ -222,12 +222,14 @@ const User = ({ params }) => {
 
     setIsSubmitting(false);
   };
- {/*useEffect(() => {
+  {
+    /*useEffect(() => {
     const savedTab = localStorage.getItem("activeTab");
     if (savedTab) {
       setActiveTab(savedTab); 
     }
-  }, []);*/}
+  }, []);*/
+  }
   {
     /*Đăng xuất*/
   }
@@ -239,6 +241,50 @@ const User = ({ params }) => {
       confirmButtonText: "OK",
     }).then(() => {
       window.location.href = "/";
+    });
+  };
+
+  const huyDonHang = async (id) => {
+    Swal.fire({
+      title: "Xác nhận thay đổi trạng thái",
+      text: `Bạn có chắc chắn muốn chuyển trạng thái thành "Đơn hàng đã hủy"?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Hủy",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await fetch(
+            `http://localhost:5000/donhang/update/${id}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ trang_thai: "Đơn hàng đã hủy" }),
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(`Lỗi khi cập nhật: ${response.statusText}`);
+          }
+          Swal.fire({
+            title: "Thành công",
+            text: `Đơn hàng đã được hủy thành công.`,
+            icon: "success",
+          }).then(() => {
+            window.location.href = "/";
+          });
+        } catch (error) {
+          Swal.fire({
+            title: "Lỗi",
+            text: `Không thể cập nhật trạng thái. Vui lòng thử lại.`,
+            icon: "error",
+          });
+          console.error("Lỗi khi cập nhật trạng thái:", error);
+        }
+      }
     });
   };
 
@@ -407,7 +453,7 @@ const User = ({ params }) => {
             {ShowLichsu.length > 0 ? (
               <ul>
                 {ShowLichsu.map((order) => (
-                  <li key={order.id}>
+                  <li key={order._id}>
                     <div className={styles.orderHeader}>
                       <p>Mã Đơn Hàng: {order._id}</p>
                       <span className={styles.trh}>{order.trang_thai}</span>
@@ -484,18 +530,6 @@ const User = ({ params }) => {
                       })}
                     </p>
                     <p>Địa chỉ: {order.dia_chi}</p>
-
-                    {/*<div>
-                      <img
-                        src={`http://localhost:5000/images/${detail.product.hinh_anh}`}
-                        alt={detail.gia_giam}
-                        style={{ width: "50px", height: "auto" }}
-                      />
-                      <div>
-                        <p>{detail.product.ten}</p>
-                      </div>
-                    </div>*/}
-
                     <table className={styles.orderTable}>
                       <thead>
                         <tr>
@@ -535,19 +569,30 @@ const User = ({ params }) => {
                         <strong>{order.phi_ship}₫</strong>
                       </span>{" "}
                     </p>
-                    <p>
-                      Tổng Thanh Toán:
-                      <span
-                        style={{
-                          fontSize: "20px",
-                          margin: "0px 5px",
-                          color: "black",
-                        }}>
-                        <strong>
-                          {order.tong_tien.toLocaleString("vi-VN")}₫
-                        </strong>
-                      </span>
-                    </p>
+                    <div className={styles.cancel}>
+                      <p>
+                        Tổng Thanh Toán:
+                        <span
+                          style={{
+                            fontSize: "20px",
+                            margin: "0px 5px",
+                            color: "red",
+                          }}>
+                          <strong>
+                            {order.tong_tien.toLocaleString("vi-VN")}₫
+                          </strong>
+                        </span>
+                      </p>
+                      {order.trang_thai === "Chờ xác nhận" && (
+                        <button
+                          className="btn btn-danger"
+                          onClick={() =>
+                            huyDonHang(order._id, "Đơn hàng đã hủy")
+                          }>
+                          Hủy đơn hàng
+                        </button>
+                      )}
+                    </div>
                   </li>
                 ))}
               </ul>
