@@ -8,6 +8,7 @@ import ExcelJS from "exceljs";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import RobotoRegular from "./Roboto-Regular.base64";
+import { jwtDecode } from "jwt-decode";
 export default function SanPham() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,8 +17,22 @@ export default function SanPham() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
+  const [showInterface, setShowInterface] = useState(false);
   const itemsPerPage = 5;
-
+  useEffect(() => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+    if (token) {
+      const decoded = jwtDecode(token);
+      console.log(decoded);
+      if (decoded.quyen === 1) {
+        setShowInterface(true);
+        fetchUserDetails(decoded._id);
+      }
+    }
+  }, []);
   const printData = () => {
     window.print();
   };
@@ -77,7 +92,9 @@ export default function SanPham() {
                 hinh_anh: "",
               });
               if (item.hinh_anh) {
-                const response = await fetch(`http://localhost:5000/images/${item.hinh_anh}`);
+                const response = await fetch(
+                  `http://localhost:5000/images/${item.hinh_anh}`
+                );
                 if (!response.ok) {
                   throw new Error(`Không thể tải ảnh từ URL: ${item.hinh_anh}`);
                 }
@@ -89,7 +106,7 @@ export default function SanPham() {
                 });
                 const rowNumber = index + 2;
                 worksheet.addImage(imageId, {
-tl: { col: 6, row: rowNumber - 1 },
+                  tl: { col: 6, row: rowNumber - 1 },
                   ext: { width: 50, height: 50 },
                 });
                 const currentRow = worksheet.getRow(rowNumber);
@@ -118,7 +135,7 @@ tl: { col: 6, row: rowNumber - 1 },
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
-  
+
           Swal.fire({
             title: "Thành công",
             text: "Dữ liệu đã được xuất ra file Excel!",
@@ -142,36 +159,30 @@ tl: { col: 6, row: rowNumber - 1 },
     doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
     doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
     doc.setFont("Roboto");
-  
-    // Tiêu đề file PDF
     doc.setFontSize(16);
     doc.setTextColor(40);
     doc.text("Danh sách sản phẩm", 10, 10);
-  
     try {
       let currentPage = 1;
       let totalPages = 1;
       const allProducts = [];
-  
-      // Fetch all pages
       while (currentPage <= totalPages) {
         const response = await fetch(
           `http://localhost:5000/product/allsp?page=${currentPage}`
         );
         if (!response.ok) {
-          throw new Error(`Failed to fetch page ${currentPage}: ${response.statusText}`);
+          throw new Error(
+            `Failed to fetch page ${currentPage}: ${response.statusText}`
+          );
         }
         const data = await response.json();
         allProducts.push(...data.products);
         totalPages = data.totalPage;
         currentPage++;
       }
-  
       const sortedProducts = [...allProducts].sort((a, b) => {
         return a._id.localeCompare(b._id);
       });
-  
-      // Load all images
       const images = await Promise.all(
         sortedProducts.map((item) => {
           if (item.hinh_anh) {
@@ -198,10 +209,18 @@ tl: { col: 6, row: rowNumber - 1 },
           return Promise.resolve({ id: item._id, img: null });
         })
       );
-  
-      // Generate PDF table
       doc.autoTable({
-        head: [["ID sản phẩm", "Tên sản phẩm", "Số lượng", "Giá tiền", "Giá giảm", "Mã sản phẩm", "Hình ảnh"]],
+        head: [
+          [
+            "ID sản phẩm",
+            "Tên sản phẩm",
+            "Số lượng",
+            "Giá tiền",
+            "Giá giảm",
+            "Mã sản phẩm",
+            "Hình ảnh",
+          ],
+        ],
         body: sortedProducts.map((item) => [
           item._id,
           item.ten_san_pham,
@@ -229,7 +248,7 @@ tl: { col: 6, row: rowNumber - 1 },
         columnStyles: {
           0: { halign: "center", cellWidth: 20 },
           1: { halign: "left", cellWidth: 30 },
-2: { halign: "center", cellWidth: 15 },
+          2: { halign: "center", cellWidth: 15 },
           3: { halign: "center", cellWidth: 20 },
           4: { halign: "center", cellWidth: 20 },
           5: { halign: "center", cellWidth: 20 },
@@ -239,19 +258,16 @@ tl: { col: 6, row: rowNumber - 1 },
           if (data.column.index === 6 && data.cell.raw === "Hình ảnh") {
             const rowIndex = data.row.index - 1; // Adjust for header row
             if (rowIndex < 0 || rowIndex >= sortedProducts.length) return;
-  
+
             const imageData = images.find(
               (img) => img.id === sortedProducts[rowIndex]._id
             );
-  
             if (imageData && imageData.img) {
               const img = imageData.img;
               const imgWidth = 15;
               const imgHeight = 15;
               const posX = data.cell.x + (data.cell.width - imgWidth) / 2;
               const posY = data.cell.y + 2;
-  
-              // Convert Image to Data URL
               const canvas = document.createElement("canvas");
               canvas.width = img.width;
               canvas.height = img.height;
@@ -260,7 +276,6 @@ tl: { col: 6, row: rowNumber - 1 },
               const imgData = canvas.toDataURL(
                 img.src.endsWith(".png") ? "image/png" : "image/jpeg"
               );
-  
               doc.addImage(
                 imgData,
                 img.src.endsWith(".png") ? "PNG" : "JPEG",
@@ -273,12 +288,10 @@ tl: { col: 6, row: rowNumber - 1 },
           }
         },
       });
-  
       const date = new Date().toLocaleDateString();
       doc.setFontSize(10);
       doc.text(`Ngày xuất: ${date}`, 10, doc.internal.pageSize.height - 10);
-      doc.save("san_pham.pdf");
-  
+      doc.save("San_pham.pdf");
       Swal.fire({
         title: "Thành công",
         text: "Dữ liệu và hình ảnh đã được xuất ra PDF!",
@@ -295,7 +308,6 @@ tl: { col: 6, row: rowNumber - 1 },
       });
     }
   };
-
   const debounce = (func, delay) => {
     let timeoutId;
     return (...args) => {
@@ -328,20 +340,15 @@ tl: { col: 6, row: rowNumber - 1 },
       setLoading(false);
     }
   };
-
   const debouncedFetchProducts = debounce(fetchProducts, 300);
-
   useEffect(() => {
     debouncedFetchProducts();
   }, [currentPage, searchQuery]);
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
   const startProductIndex = (currentPage - 1) * itemsPerPage + 1;
   const endProductIndex = Math.min(currentPage * itemsPerPage, totalProducts);
-
   const deleteProduct = async (id) => {
     const result = await Swal.fire({
       title: "Xác nhận",
@@ -353,7 +360,6 @@ tl: { col: 6, row: rowNumber - 1 },
       confirmButtonText: "Xóa",
       cancelButtonText: "Hủy",
     });
-
     if (result.isConfirmed) {
       try {
         const response = await fetch(
@@ -383,8 +389,9 @@ tl: { col: 6, row: rowNumber - 1 },
       }
     }
   };
-
   return (
+    <main id={showInterface ? cx("content") : ""}>
+      {showInterface && (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>
         <div className={styles.header1}>
@@ -560,5 +567,7 @@ tl: { col: 6, row: rowNumber - 1 },
         </div>
       </section>
     </div>
+  )}
+  </main>
   );
 }

@@ -7,6 +7,7 @@ import ExcelJS from "exceljs";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import RobotoRegular from "./Roboto-Regular.base64";
+import { jwtDecode } from "jwt-decode";
 export default function SanPham() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,8 +16,22 @@ export default function SanPham() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, settotalPages] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
+  const [showInterface, setShowInterface] = useState(false);
   const itemsPerPage = 5;
-
+  useEffect(() => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+    if (token) {
+      const decoded = jwtDecode(token);
+      console.log(decoded);
+      if (decoded.quyen === 1) {
+        setShowInterface(true);
+        fetchUserDetails(decoded._id);
+      }
+    }
+  }, []);
   const printData = () => {
     window.print();
   };
@@ -91,7 +106,7 @@ export default function SanPham() {
                 });
                 const rowNumber = index + 2;
                 worksheet.addImage(imageId, {
-  tl: { col: 7, row: rowNumber - 1 },
+                  tl: { col: 7, row: rowNumber - 1 },
                   ext: { width: 50, height: 50 },
                 });
                 const currentRow = worksheet.getRow(rowNumber);
@@ -120,7 +135,6 @@ export default function SanPham() {
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
-  
           Swal.fire({
             title: "Thành công",
             text: "Dữ liệu đã được xuất ra file Excel!",
@@ -144,32 +158,30 @@ export default function SanPham() {
     doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
     doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
     doc.setFont("Roboto");
-  
-    // PDF Title
     doc.setFontSize(16);
     doc.setTextColor(40);
     doc.text("Danh sách sản phẩm", 10, 10);
-  
     try {
       let currentPage = 1;
       let totalPages = 1;
       const allProducts = [];
-  
-      // Fetch all product pages
       while (currentPage <= totalPages) {
-        const response = await fetch(`http://localhost:5000/product/getProducts?page=${currentPage}&search=${searchQuery}`);
+        const response = await fetch(
+          `http://localhost:5000/product/getProducts?page=${currentPage}&search=${searchQuery}`
+        );
         if (!response.ok) {
-          throw new Error(`Failed to fetch page ${currentPage}: ${response.statusText}`);
+          throw new Error(
+            `Failed to fetch page ${currentPage}: ${response.statusText}`
+          );
         }
         const data = await response.json();
         allProducts.push(...data.products);
         totalPages = data.totalPages;
         currentPage++;
       }
-  
-      const sortedProducts = [...allProducts].sort((a, b) => a._id.localeCompare(b._id));
-  
-      // Load all images
+      const sortedProducts = [...allProducts].sort((a, b) =>
+        a._id.localeCompare(b._id)
+      );
       const images = await Promise.all(
         sortedProducts.map((item) => {
           if (item.hinh_anh) {
@@ -196,10 +208,19 @@ export default function SanPham() {
           return Promise.resolve({ id: item._id, img: null });
         })
       );
-  
-      // Generate PDF table
       doc.autoTable({
-        head: [["ID Sản Phẩm", "Tên Sản Phẩm", "Mã Sản Phẩm", "Giá", "Số Lượng", "Trạng Thái", "Đã Bán", "Hình Ảnh"]],
+        head: [
+          [
+            "ID Sản Phẩm",
+            "Tên Sản Phẩm",
+            "Mã Sản Phẩm",
+            "Giá",
+            "Số Lượng",
+            "Trạng Thái",
+            "Đã Bán",
+            "Hình Ảnh",
+          ],
+        ],
         body: sortedProducts.map((product) => [
           product._id,
           product.ten_san_pham,
@@ -228,7 +249,7 @@ export default function SanPham() {
         columnStyles: {
           0: { halign: "center", cellWidth: 20 },
           1: { halign: "left", cellWidth: 40 },
-2: { halign: "center", cellWidth: 20 },
+          2: { halign: "center", cellWidth: 20 },
           3: { halign: "right", cellWidth: 20 },
           4: { halign: "center", cellWidth: 15 },
           5: { halign: "center", cellWidth: 20 },
@@ -239,38 +260,40 @@ export default function SanPham() {
           if (data.column.index === 7 && data.cell.raw === "Hình ảnh") {
             const rowIndex = data.row.index - 1; // Adjust for header row
             const product = sortedProducts[rowIndex];
-  
             if (product) {
               const imageData = images.find((img) => img.id === product._id);
-  
               if (imageData && imageData.img) {
                 const img = imageData.img;
                 const imgWidth = 30;
                 const imgHeight = 30;
                 const posX = data.cell.x + (data.cell.width - imgWidth) / 2;
                 const posY = data.cell.y + 2;
-  
-                // Convert Image to Data URL
                 const canvas = document.createElement("canvas");
                 canvas.width = img.width;
                 canvas.height = img.height;
                 const ctx = canvas.getContext("2d");
                 ctx.drawImage(img, 0, 0);
-                const imgData = canvas.toDataURL(img.src.endsWith(".png") ? "image/png" : "image/jpeg");
-  
-                doc.addImage(imgData, img.src.endsWith(".png") ? "PNG" : "JPEG", posX, posY, imgWidth, imgHeight);
+                const imgData = canvas.toDataURL(
+                  img.src.endsWith(".png") ? "image/png" : "image/jpeg"
+                );
+                doc.addImage(
+                  imgData,
+                  img.src.endsWith(".png") ? "PNG" : "JPEG",
+                  posX,
+                  posY,
+                  imgWidth,
+                  imgHeight
+                );
               }
             }
           }
         },
       });
-  
-      // Footer with export date
       const date = new Date().toLocaleDateString();
       doc.setFontSize(10);
       doc.text(`Ngày xuất: ${date}`, 10, doc.internal.pageSize.height - 10);
       doc.save("san_pham.pdf");
-  
+
       Swal.fire({
         title: "Thành công",
         text: "Dữ liệu và hình ảnh đã được xuất ra PDF!",
@@ -319,20 +342,18 @@ export default function SanPham() {
       setLoading(false);
     }
   };
-
   const debouncedFetchProducts = debounce(fetchProducts, 300);
-
   useEffect(() => {
     debouncedFetchProducts();
   }, [currentPage, searchQuery]);
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
   const startProductIndex = (currentPage - 1) * itemsPerPage + 1;
   const endProductIndex = Math.min(currentPage * itemsPerPage, totalProducts);
   return (
+    <main id={showInterface ? cx("content") : ""}>
+      {showInterface && (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>
         <div className={styles.header1}>
@@ -492,5 +513,7 @@ export default function SanPham() {
         </div>
       </section>
     </div>
+  )}
+  </main>
   );
 }
