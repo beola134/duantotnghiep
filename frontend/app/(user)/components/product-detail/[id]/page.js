@@ -332,13 +332,15 @@ export default function Detail({ params }) {
       {/* FrameLeft */}
       <div className={`${styles.topProductDetail} ${styles.container}  ${styles.cls}`}>
         <div className={styles.frameLeft}>
-          <div className={styles.discountPro}>
-            -
-            <span id="discount-pro">
-              {roundDiscount(Math.round(((product.gia_san_pham - product.gia_giam) / product.gia_san_pham) * 100))}
-            </span>
-            <span>%</span>
-          </div>
+          {product.gia_giam > 0 && (
+            <div className={styles.discountPro}>
+              -
+              <span id="discount-pro">
+                {roundDiscount(Math.round(((product.gia_san_pham - product.gia_giam) / product.gia_san_pham) * 100))}
+              </span>
+              <span>%</span>
+            </div>
+          )}
           <div
             style={{
               position: "relative",
@@ -613,18 +615,31 @@ export default function Detail({ params }) {
         <div className={styles.frameRight}>
           <div className={styles.boxPriceRight}>
             <div className={styles.boxPriceRightTop}>
-              <div className={styles.priceOld}>
-                <span>Giá</span>
-                <span className={styles.priceOld}> {product.gia_san_pham.toLocaleString("vi-VN")}₫</span>
-              </div>
-              <div className={styles.priceCurrent}>
-                <div className={styles.titlePriceCurrent}>Giá KM:</div>
-                <div className={styles.numberPriceCurrent}>
-                  <input type="hidden" value="1" className={styles.bkProductQty} />
-                  <span className={styles.bkProductPrice}>{product.gia_giam.toLocaleString("vi-VN")}₫</span>
+              {product.gia_giam > 0 ? (
+                <>
+                  <div className={styles.priceOld}>
+                    <span>Giá</span>
+                    <span className={styles.priceOld}> {product.gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                  </div>
+                  <div className={styles.priceCurrent}>
+                    <div className={styles.titlePriceCurrent}>Giá KM:</div>
+                    <div className={styles.numberPriceCurrent}>
+                      <input type="hidden" value="1" className={styles.bkProductQty} />
+                      <span className={styles.bkProductPrice}>{product.gia_giam.toLocaleString("vi-VN")}₫</span>
+                    </div>
+                    <div className={styles.noteVat}>(Giá trên đã bao gồm VAT)</div>
+                  </div>
+                </>
+              ) : (
+                <div className={styles.priceCurrent}>
+                  <div className={styles.titlePriceCurrent}>Giá:</div>
+                  <div className={styles.numberPriceCurrent}>
+                    <input type="hidden" value="1" className={styles.bkProductQty} />
+                    <span className={styles.bkProductPrice}>{product.gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                  </div>
+                  <div className={styles.noteVat}>(Giá trên đã bao gồm VAT)</div>
                 </div>
-                <div className={styles.noteVat}>(Giá trên đã bao gồm VAT)</div>
-              </div>
+              )}
               <div className={styles.clear}></div>
               <div className={styles.boxPriceRightBot}>
                 <div className={`${styles.btnBuy} ${styles.buyRow} ${styles.cls}`}>
