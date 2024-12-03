@@ -435,6 +435,7 @@ export default function Header() {
       fetchUserDetails(decoded._id);
     }
   }, []);
+  
   const fetchUserDetails = async (userId) => {
     try {
       const response = await fetch(`http://localhost:5000/users/${userId}`);
