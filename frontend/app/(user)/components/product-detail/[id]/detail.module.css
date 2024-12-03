@@ -136,9 +136,7 @@
   display: inline-block;
   color: #ff9727;
 }
-.hide {
-  display: none;
-}
+
 .rateHead .rateCount {
   margin-left: 5px;
   font-size: 12px;

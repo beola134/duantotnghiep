@@ -312,6 +312,15 @@ export default function Detail({ params }) {
     setActiveTab(tabId);
   };
 
+  // cuộn tab
+
+  const handleScroll = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -354,15 +363,29 @@ export default function Detail({ params }) {
               </div> */}
 
               <div className={styles.item} style={{ maxWidth: "calc(100% / 5 -10px)" }}>
-                <a href="#prodetails-tab1">
+                <button
+                  style={{
+                    border: "none",
+                    background: "none",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleScroll("prodetails-tab1")}
+                >
                   <img src="/image/item/picture3.jpg" alt="" />
-                </a>
+                </button>
                 <span>Thông tin sản phẩm</span>
               </div>
               <div className={styles.item} style={{ maxWidth: "calc(100% / 5 -10px)" }}>
-                <a href="#">
+                <button
+                  style={{
+                    border: "none",
+                    background: "none",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleScroll("tab-2")}
+                >
                   <img src="/image/item/picture5.jpg" alt="" />
-                </a>
+                </button>
                 <span>Hướng dẫn chọn size</span>
               </div>
             </div>
@@ -380,7 +403,6 @@ export default function Detail({ params }) {
             </div>
             <div className={styles.productName}>
               <h1 className={styles.bkProductName}>{product.ten}</h1>
-              
             </div>
             {/* <div className={`${styles.codeManu} ${styles.mt10} ${styles.cf}`}>
               <span className={styles.rateHead}>
