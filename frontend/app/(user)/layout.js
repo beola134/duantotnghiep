@@ -1,80 +1,42 @@
 "use client";
-import Menu from "./components/layout/header/header";
+import { useEffect } from "react";
+import Footer from "./components/layout/footer/page";
 import "./globals.css";
-import "boxicons/css/boxicons.min.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
+import Script from "next/script";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Header from "./components/layout/header/page";
+import Providers from "./components/redux/Provider";
 
 export default function RootLayout({ children }) {
-  const [showInterface, setShowinterface] = useState([false]);
-
   useEffect(() => {
-    const token = document.cookie
-      .split(";")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
-
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        if (decoded && decoded.quyen === 1) {
-          setShowinterface(true);
-        } else {
-          setShowinterface(false);
-        }
-      } catch (error) {
-        console.error("Token không hợp lệ:", error);
-        setShowinterface(false);
-      }
-    } else {
-      setShowinterface(false);
-    }
+    // Thêm FontAwesome script sau khi client render
+    const script = document.createElement("script");
+    script.src = "https://kit.fontawesome.com/9bb7080918.js";
+    script.crossOrigin = "anonymous";
+    document.body.appendChild(script);
   }, []);
+
   return (
     <html lang="en">
-      <head>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-          href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-        />
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-        />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
-        />
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <title>Trang quản trị</title>
-        <link rel="icon" href="/logo.png" />
-      </head>
-
-      <body>
-        {showInterface ? (
-          <>
-            <Menu />
-            {children}
-          </>
-        ) : (
-          <div
-            style={{ textAlign: "center", marginTop: "300px", color: "red" }}
-          >
-            <h2>Bạn không có quyền truy cập vào trang này</h2>
-          </div>
-        )}
-      </body>
+      <Providers>
+        <head>
+          {/* Chỉ chạy trên client và sau khi hydrate */}
+          <Script
+            strategy="lazyOnload"
+            src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v20.0"
+            crossOrigin="anonymous"
+            nonce="uaRZ9ATs"
+          />
+          <title>Trang chủ</title>
+          <link rel="icon" href="/image/item/logo.png" />
+        </head>
+        <body>
+          <Header />
+          {children}
+          <Footer />
+        </body>
+      </Providers>
     </html>
   );
 }
