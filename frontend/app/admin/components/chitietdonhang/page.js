@@ -51,7 +51,7 @@ export default function ChiTietDonHang() {
 
   useEffect(() => {
     const token = document.cookie
-      .split(";")
+      .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
     if (token) {

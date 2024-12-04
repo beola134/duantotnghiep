@@ -8,6 +8,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import RobotoRegular from "./Roboto-Regular.base64";
 import { jwtDecode } from "jwt-decode";
+import cx from 'classnames';
 export default function SanPham() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +29,6 @@ export default function SanPham() {
       console.log(decoded);
       if (decoded.quyen === 1) {
         setShowInterface(true);
-        fetchUserDetails(decoded._id);
       }
     }
   }, []);
