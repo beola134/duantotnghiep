@@ -312,6 +312,15 @@ export default function Detail({ params }) {
     setActiveTab(tabId);
   };
 
+  // cuộn tab
+
+  const handleScroll = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -323,13 +332,15 @@ export default function Detail({ params }) {
       {/* FrameLeft */}
       <div className={`${styles.topProductDetail} ${styles.container}  ${styles.cls}`}>
         <div className={styles.frameLeft}>
-          <div className={styles.discountPro}>
-            -
-            <span id="discount-pro">
-              {roundDiscount(Math.round(((product.gia_san_pham - product.gia_giam) / product.gia_san_pham) * 100))}
-            </span>
-            <span>%</span>
-          </div>
+          {product.gia_giam > 0 && (
+            <div className={styles.discountPro}>
+              -
+              <span id="discount-pro">
+                {roundDiscount(Math.round(((product.gia_san_pham - product.gia_giam) / product.gia_san_pham) * 100))}
+              </span>
+              <span>%</span>
+            </div>
+          )}
           <div
             style={{
               position: "relative",
@@ -354,11 +365,29 @@ export default function Detail({ params }) {
               </div> */}
 
               <div className={styles.item} style={{ maxWidth: "calc(100% / 5 -10px)" }}>
-                <img src="/image/item/picture3.jpg" alt="" />
+                <button
+                  style={{
+                    border: "none",
+                    background: "none",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleScroll("prodetails-tab1")}
+                >
+                  <img src="/image/item/picture3.jpg" alt="" />
+                </button>
                 <span>Thông tin sản phẩm</span>
               </div>
               <div className={styles.item} style={{ maxWidth: "calc(100% / 5 -10px)" }}>
-                <img src="/image/item/picture5.jpg" alt="" />
+                <button
+                  style={{
+                    border: "none",
+                    background: "none",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleScroll("tab-2")}
+                >
+                  <img src="/image/item/picture5.jpg" alt="" />
+                </button>
                 <span>Hướng dẫn chọn size</span>
               </div>
             </div>
@@ -376,12 +405,8 @@ export default function Detail({ params }) {
             </div>
             <div className={styles.productName}>
               <h1 className={styles.bkProductName}>{product.ten}</h1>
-              <div className={`${styles.itemSsMain} ${styles.itemSs} ${styles.itemSs19005}`}>
-                <span className={styles.iconSs}></span>
-                <span className={styles.txtSs}>So sánh</span>
-              </div>
             </div>
-            <div className={`${styles.codeManu} ${styles.mt10} ${styles.cf}`}>
+            {/* <div className={`${styles.codeManu} ${styles.mt10} ${styles.cf}`}>
               <span className={styles.rateHead}>
                 {[...Array(5)].map((_, index) => (
                   <span key={index} className={`${styles.starOn} ${styles.star}`}>
@@ -393,7 +418,7 @@ export default function Detail({ params }) {
                   (<span>1</span> đánh giá)
                 </Link>
               </span>
-            </div>
+            </div> */}
             <span className={styles.codeProduct}>Mã sản phẩm: {product.ma_san_pham}</span>
             <ul className={styles.infoMainFilter}>
               <li className={styles.cf}>
@@ -590,18 +615,31 @@ export default function Detail({ params }) {
         <div className={styles.frameRight}>
           <div className={styles.boxPriceRight}>
             <div className={styles.boxPriceRightTop}>
-              <div className={styles.priceOld}>
-                <span>Giá</span>
-                <span className={styles.priceOld}> {product.gia_san_pham.toLocaleString("vi-VN")}₫</span>
-              </div>
-              <div className={styles.priceCurrent}>
-                <div className={styles.titlePriceCurrent}>Giá KM:</div>
-                <div className={styles.numberPriceCurrent}>
-                  <input type="hidden" value="1" className={styles.bkProductQty} />
-                  <span className={styles.bkProductPrice}>{product.gia_giam.toLocaleString("vi-VN")}₫</span>
+              {product.gia_giam > 0 ? (
+                <>
+                  <div className={styles.priceOld}>
+                    <span>Giá</span>
+                    <span className={styles.priceOld}> {product.gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                  </div>
+                  <div className={styles.priceCurrent}>
+                    <div className={styles.titlePriceCurrent}>Giá KM:</div>
+                    <div className={styles.numberPriceCurrent}>
+                      <input type="hidden" value="1" className={styles.bkProductQty} />
+                      <span className={styles.bkProductPrice}>{product.gia_giam.toLocaleString("vi-VN")}₫</span>
+                    </div>
+                    <div className={styles.noteVat}>(Giá trên đã bao gồm VAT)</div>
+                  </div>
+                </>
+              ) : (
+                <div className={styles.priceCurrent}>
+                  <div className={styles.titlePriceCurrent}>Giá:</div>
+                  <div className={styles.numberPriceCurrent}>
+                    <input type="hidden" value="1" className={styles.bkProductQty} />
+                    <span className={styles.bkProductPrice}>{product.gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                  </div>
+                  <div className={styles.noteVat}>(Giá trên đã bao gồm VAT)</div>
                 </div>
-                <div className={styles.noteVat}>(Giá trên đã bao gồm VAT)</div>
-              </div>
+              )}
               <div className={styles.clear}></div>
               <div className={styles.boxPriceRightBot}>
                 <div className={`${styles.btnBuy} ${styles.buyRow} ${styles.cls}`}>
@@ -1072,6 +1110,7 @@ export default function Detail({ params }) {
                   >
                     <span>Hướng dẫn chọn size</span>
                   </button>
+
                   <button
                     className={`${styles.tablinks1} ${styles.tabBoder} ${styles.tabMucDoChongNuocCuaDongHo}
                     ${activeTab === "tab-3" ? styles.active : ""}`}
@@ -2832,10 +2871,10 @@ export default function Detail({ params }) {
                               </span>
                             </div>
 
-                            <div className={`${styles.itemSs} item-ss-20789`}>
+                            {/* <div className={`${styles.itemSs} item-ss-20789`}>
                               <span className={styles.iconSs}></span>
                               <span className={styles.txtSs}>So sánh</span>
-                            </div>
+                            </div> */}
                             <br />
                             <br />
                             <div className={styles.clear}></div>
