@@ -1,15 +1,17 @@
 "use client";
 import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./themdanhmuc.module.css";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 
 export default function ThemDanhmuc() {
   const [tendanhmuc, setTendanhmuc] = useState("");
   const [hinhanh, sethinhanh] = useState(null);
   const [mota, setmota] = useState("");
   const router = useRouter();
+  const [showInterface, setShowInterface] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,7 +58,7 @@ export default function ThemDanhmuc() {
           title: "Thành công",
           text: "Thêm Danh mục thành công!",
         }).then(() => {
-          router.push("/components/danhmuc");
+          router.push("/admin/components/danhmuc");
         });
       } else {
         const errorData = await response.json();
@@ -75,63 +77,80 @@ export default function ThemDanhmuc() {
       });
     }
   };
+  useEffect(() => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+    if (token) {
+      const decoded = jwtDecode(token);
+      console.log(decoded);
+      if (decoded.quyen === 1) {
+        setShowInterface(true);
+      }
+    }
+  }, []);
 
   return (
-    <div className={styles.SidebarContainer}>
-      <section id={styles.content}>
-        <div className={styles.header1}>
-          <div className={styles.title} style={{ fontWeight: "bold" }}>
-            Thêm Danh mục
-          </div>
-        </div>
-        <div className={styles.bg}>
-          <form onSubmit={handleSubmit}>
-            <div className={styles.container1}>
-              <div className={styles.formGroup}>
-                <label htmlFor="tendanhmuc">Tên danh mục</label>
-                <input
-                  type="text"
-                  id="tendanhmuc"
-                  value={tendanhmuc}
-                  onChange={(e) => setTendanhmuc(e.target.value)}
-                />
+    <main id={showInterface ? styles.loi : ""}>
+      {showInterface && (
+        <div className={styles.SidebarContainer}>
+          <section id={styles.content}>
+            <div className={styles.header1}>
+              <div className={styles.title} style={{ fontWeight: "bold" }}>
+                Thêm Danh mục
               </div>
-
-              <div className={styles.formGroup}>
-                <label htmlFor="description">Mô tả Danh mục</label>
-                <textarea
-                  id="description"
-                  value={mota}
-                  onChange={(e) => setmota(e.target.value)}
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label htmlFor="hinhAnh">Hình ảnh</label>
-                <input
-                  type="file"
-                  id="hinhAnh"
-                  accept="image/*"
-                  onChange={(e) => sethinhanh(e.target.files[0])}
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-outline-primary"
-                onClick={handleSubmit}>
-                Thêm
-              </button>
-              <button
-                type="button"
-                className="btn btn-outline-secondary"
-                onClick={() => router.back()}>
-                Hủy bỏ
-              </button>
             </div>
-          </form>
+            <div className={styles.bg}>
+              <form onSubmit={handleSubmit}>
+                <div className={styles.container1}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="tendanhmuc">Tên danh mục</label>
+                    <input
+                      type="text"
+                      id="tendanhmuc"
+                      value={tendanhmuc}
+                      onChange={(e) => setTendanhmuc(e.target.value)}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="description">Mô tả Danh mục</label>
+                    <textarea
+                      id="description"
+                      value={mota}
+                      onChange={(e) => setmota(e.target.value)}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="hinhAnh">Hình ảnh</label>
+                    <input
+                      type="file"
+                      id="hinhAnh"
+                      accept="image/*"
+                      onChange={(e) => sethinhanh(e.target.files[0])}
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="btn btn-outline-primary"
+                    onClick={handleSubmit}>
+                    Thêm
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={() => router.back()}>
+                    Hủy bỏ
+                  </button>
+                </div>
+              </form>
+            </div>
+          </section>
         </div>
-      </section>
-    </div>
+      )}
+    </main>
   );
 }

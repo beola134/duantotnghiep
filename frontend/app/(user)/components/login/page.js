@@ -40,18 +40,25 @@ export default function Login() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email: values.email, mat_khau: values.password }),
+          body: JSON.stringify({
+            email: values.email,
+            mat_khau: values.password,
+          }),
         });
         if (!res.ok) {
           const errorData = await res.json();
           throw new Error(errorData.message || "Đăng nhập thất bại");
         }
         const data = await res.json();
+        const { token, avatar } = data;
         document.cookie = `token=${data.token}; path=/; max-age=${60 * 60}`;
+        localStorage.setItem("avatar", avatar);
 
-        const token = data.token;
         const payload = jwtDecode(token);
-        const welcomeMessage = payload.quyen === 1 ? "Chào mừng quản trị viên" : "Chào mừng người dùng";
+        const welcomeMessage =
+          payload.quyen === 1
+            ? "Chào mừng quản trị viên"
+            : "Chào mừng người dùng";
 
         Swal.fire({
           title: "Đăng nhập thành công",
@@ -60,7 +67,8 @@ export default function Login() {
           showConfirmButton: true,
         }).then(() => {
           if (typeof window !== "undefined") {
-            const queryParam = new URLSearchParams(window.location.search);
+            {
+              /*const queryParam = new URLSearchParams(window.location.search);
             const redirect = queryParam.get("redirect");
             if (redirect === "thanhtoan") {
               window.location.href = "/components/thanhtoan";
@@ -68,6 +76,13 @@ export default function Login() {
               window.location.href = "/";
             } else {
               window.location.href = "/admin";
+            }*/
+            }
+
+            if (payload.quyen === 1) {
+              window.location.href = "/admin";
+            } else if (payload.quyen === 2) {
+              window.location.href = "/";
             }
           }
         });
@@ -138,30 +153,40 @@ export default function Login() {
         <form onSubmit={formik.handleSubmit} className={styles.form}>
           <input
             type="email"
-            className={`${styles.input} ${formik.errors.email ? styles.inputError : ""}`}
+            className={`${styles.input} ${
+              formik.errors.email ? styles.inputError : ""
+            }`}
             id="email"
             name="email"
             onChange={formik.handleChange}
             value={formik.values.email}
             placeholder="Email"
           />
-          {formik.errors.email && <p className={styles.error}>{formik.errors.email}</p>}
+          {formik.errors.email && (
+            <p className={styles.error}>{formik.errors.email}</p>
+          )}
 
           <div className={styles.passwordWrapper}>
             <input
               type={showPassword ? "text" : "password"}
-              className={`${styles.input} ${formik.errors.password ? styles.inputError : ""}`}
+              className={`${styles.input} ${
+                formik.errors.password ? styles.inputError : ""
+              }`}
               id="password"
               name="password"
               onChange={formik.handleChange}
               value={formik.values.password}
               placeholder="Mật khẩu"
             />
-            <div className={styles.togglePasswordIcon} onClick={togglePasswordVisibility}>
+            <div
+              className={styles.togglePasswordIcon}
+              onClick={togglePasswordVisibility}>
               {showPassword ? <FaEye /> : <FaEyeSlash />}
             </div>
           </div>
-          {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
+          {formik.errors.password && (
+            <p className={styles.error}>{formik.errors.password}</p>
+          )}
 
           <span className={styles.forgotPassword}>
             <Link href="./forgot-password">Quên mật khẩu</Link>
@@ -170,7 +195,8 @@ export default function Login() {
           <input type="submit" className={styles.loginButton} value="Sign In" />
         </form>
 
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+        <GoogleOAuthProvider
+          clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
           <div className={styles.socialAccountContainer}>
             <span className={styles.title}>Đăng nhập với</span>
 
@@ -182,8 +208,7 @@ export default function Login() {
                   <button
                     className={styles.socialButton}
                     onClick={renderProps.onClick}
-                    disabled={renderProps.disabled}
-                  ></button>
+                    disabled={renderProps.disabled}></button>
                 </div>
               )}
             />
