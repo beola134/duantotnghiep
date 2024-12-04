@@ -8,6 +8,7 @@ import ExcelJS from "exceljs";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import RobotoRegular from "./Roboto-Regular.base64";
+import { jwtDecode } from "jwt-decode";
 export default function SanPham() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,8 +17,22 @@ export default function SanPham() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
+  const [showInterface, setShowInterface] = useState(false);
   const itemsPerPage = 5;
-
+  useEffect(() => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+    if (token) {
+      const decoded = jwtDecode(token);
+      console.log(decoded);
+      if (decoded.quyen === 1) {
+        setShowInterface(true);
+        fetchUserDetails(decoded._id);
+      }
+    }
+  }, []);
   const printData = () => {
     window.print();
   };
@@ -42,19 +57,19 @@ export default function SanPham() {
             );
             const data = await response.json();
             allProducts.push(...data.products);
-            totalPages = data.totalPages;
+            totalPages = data.totalPage;
             currentPage++;
           }
           const workbook = new ExcelJS.Workbook();
           const worksheet = workbook.addWorksheet("Danh sách sản phẩm");
-          worksheet.columns =  [
-            { header: "ID sản phẩm", dataKey: "_id", width:20 },
-            { header: "Tên sản phẩm", dataKey: "ten_san_pham", width:30 },
-            { header: "Ảnh sản phẩm", dataKey: "hinh_anh", width:30 },
-            { header: "Số lượng", dataKey: "so_luong", width:20 },
-            { header: "Giá tiền", dataKey: "gia_san_pham", width:30 },
-            { header: "Giá giảm", dataKey: "gia_giam", width:30 },
-            { header: "Mã sản phẩm", dataKey: "ma_san_pham", width:30 },
+          worksheet.columns = [
+            { header: "ID sản phẩm", key: "_id", width: 20 },
+            { header: "Tên sản phẩm", key: "ten_san_pham", width: 25 },
+            { header: "Số lượng", key: "so_luong", width: 15 },
+            { header: "Giá tiền", key: "gia_san_pham", width: 15 },
+            { header: "Giá giảm", key: "gia_giam", width: 15 },
+            { header: "Mã sản phẩm", key: "ma_san_pham", width: 20 },
+            { header: "Hình ảnh", key: "hinh_anh", width: 30 },
           ];
           worksheet.getRow(1).eachCell((cell) => {
             cell.font = { bold: true, color: { argb: "FFFFFF" } };
@@ -66,35 +81,37 @@ export default function SanPham() {
             cell.alignment = { vertical: "middle", horizontal: "center" };
           });
           await Promise.all(
-            allProducts.map(async (product, index) => {
+            allProducts.map(async (item, index) => {
               worksheet.addRow({
-                _id: product._id,
-                ten_san_pham: product.ten_san_pham,
-                hinh_anh: product.hinh_anh,
-                so_luong: product.so_luong,
-                gia_san_pham: product.gia_san_pham,
-                gia_giam: product.gia_giam,
-                ma_san_pham: product.ma_san_pham,
+                _id: item._id,
+                ten_san_pham: item.ten_san_pham,
+                so_luong: item.so_luong,
+                gia_san_pham: item.gia_san_pham,
+                gia_giam: item.gia_giam,
+                ma_san_pham: item.ma_san_pham,
+                hinh_anh: "",
               });
-              const response = await fetch(
-                `http://localhost:5000/images/${product.hinh_anh}`
-              );
-              if (!response.ok) {
-                throw new Error(`Không thể tải ảnh từ URL: ${product.hinh_anh}`);
+              if (item.hinh_anh) {
+                const response = await fetch(
+                  `http://localhost:5000/images/${item.hinh_anh}`
+                );
+                if (!response.ok) {
+                  throw new Error(`Không thể tải ảnh từ URL: ${item.hinh_anh}`);
+                }
+                const imageBuffer = await response.arrayBuffer();
+                const imageExtension = item.hinh_anh.split(".").pop();
+                const imageId = workbook.addImage({
+                  buffer: imageBuffer,
+                  extension: imageExtension === "png" ? "png" : "jpeg",
+                });
+                const rowNumber = index + 2;
+                worksheet.addImage(imageId, {
+                  tl: { col: 6, row: rowNumber - 1 },
+                  ext: { width: 50, height: 50 },
+                });
+                const currentRow = worksheet.getRow(rowNumber);
+                currentRow.height = 50;
               }
-              const imageBuffer = await response.arrayBuffer();
-              const imageExtension = product.hinh_anh.split(".").pop();
-              const imageId = workbook.addImage({
-                buffer: imageBuffer,
-                extension: imageExtension === "png" ? "png" : "jpeg",
-              });
-              const rowNumber = index + 2;
-              worksheet.addImage(imageId, {
-                tl: { col: 3.2, row: rowNumber - 0.8 },
-                ext: { width: 50, height: 50 },
-              });
-              const currentRow = worksheet.getRow(rowNumber);
-              currentRow.height = 50;
             })
           );
           worksheet.eachRow((row) => {
@@ -114,7 +131,7 @@ export default function SanPham() {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = "danh_muc.xlsx";
+          a.download = "san_pham.xlsx";
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
@@ -142,17 +159,13 @@ export default function SanPham() {
     doc.addFileToVFS("Roboto-Regular.ttf", RobotoRegular);
     doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
     doc.setFont("Roboto");
-
     doc.setFontSize(16);
     doc.setTextColor(40);
     doc.text("Danh sách sản phẩm", 10, 10);
-
     try {
       let currentPage = 1;
       let totalPages = 1;
       const allProducts = [];
-
-      // Fetch all pages of products
       while (currentPage <= totalPages) {
         const response = await fetch(
           `http://localhost:5000/product/allsp?page=${currentPage}`
@@ -164,70 +177,64 @@ export default function SanPham() {
         }
         const data = await response.json();
         allProducts.push(...data.products);
-        totalPages = data.totalPages;
+        totalPages = data.totalPage;
         currentPage++;
       }
-
-      // Sort products by ID (optional)
       const sortedProducts = [...allProducts].sort((a, b) => {
         return a._id.localeCompare(b._id);
       });
-
-      // Load all product images
       const images = await Promise.all(
-        sortedProducts.map((product) => {
-          if (product.hinh_anh) {
-            const imageUrl = `http://localhost:5000/images/${product.hinh_anh}`;
+        sortedProducts.map((item) => {
+          if (item.hinh_anh) {
+            const imageUrl = `http://localhost:5000/images/${item.hinh_anh}`;
             return new Promise((resolve) => {
               const img = new Image();
               img.crossOrigin = "Anonymous";
               img.src = imageUrl;
               img.onload = () => {
                 resolve({
-                  id: product._id,
+                  id: item._id,
                   img: img,
                 });
               };
               img.onerror = () => {
                 console.error(`Không thể tải ảnh từ URL: ${imageUrl}`);
                 resolve({
-                  id: product._id,
+                  id: item._id,
                   img: null,
                 });
               };
             });
           }
-          return Promise.resolve({ id: product._id, img: null });
+          return Promise.resolve({ id: item._id, img: null });
         })
       );
-
-      // Generate the PDF table
       doc.autoTable({
         head: [
           [
             "ID sản phẩm",
             "Tên sản phẩm",
-            "Ảnh sản phẩm",
             "Số lượng",
             "Giá tiền",
             "Giá giảm",
             "Mã sản phẩm",
+            "Hình ảnh",
           ],
         ],
-        body: sortedProducts.map((product) => [
-          product._id,
-          product.ten_san_pham,
-          product.hinh_anh ? "Hình ảnh" : "Không có",
-          product.so_luong,
-          product.gia_san_pham,
-          product.gia_giam,
-          product.ma_san_pham,
+        body: sortedProducts.map((item) => [
+          item._id,
+          item.ten_san_pham,
+          item.so_luong,
+          `${item.gia_san_pham.toLocaleString("vi-VN")}₫`,
+          `${item.gia_giam.toLocaleString("vi-VN")}₫`,
+          item.ma_san_pham,
+          item.hinh_anh ? "Hình ảnh" : "Không có",
         ]),
         startY: 20,
         styles: {
           font: "Roboto",
-          fontSize: 10,
-          cellPadding: 4,
+          fontSize: 8,
+          cellPadding: 2,
           valign: "middle",
           halign: "center",
           textColor: 20,
@@ -241,27 +248,26 @@ export default function SanPham() {
         columnStyles: {
           0: { halign: "center", cellWidth: 20 },
           1: { halign: "left", cellWidth: 30 },
-          2: { halign: "center", cellWidth: 30 },
+          2: { halign: "center", cellWidth: 15 },
           3: { halign: "center", cellWidth: 20 },
-          4: { halign: "center", cellWidth: 30 },
-          5: { halign: "center", cellWidth: 30 },
+          4: { halign: "center", cellWidth: 20 },
+          5: { halign: "center", cellWidth: 20 },
           6: { halign: "center", cellWidth: 30 },
         },
         didDrawCell: (data) => {
-          if (data.column.index === 2 && data.cell.raw === "Hình ảnh") {
-            const rowIndex = data.row.index;
+          if (data.column.index === 6 && data.cell.raw === "Hình ảnh") {
+            const rowIndex = data.row.index - 1; // Adjust for header row
+            if (rowIndex < 0 || rowIndex >= sortedProducts.length) return;
+
             const imageData = images.find(
               (img) => img.id === sortedProducts[rowIndex]._id
             );
-
             if (imageData && imageData.img) {
               const img = imageData.img;
-              const imgWidth = 30;
-              const imgHeight = 30;
+              const imgWidth = 15;
+              const imgHeight = 15;
               const posX = data.cell.x + (data.cell.width - imgWidth) / 2;
-              const posY = data.cell.y + 1;
-
-              // Convert Image to Data URL
+              const posY = data.cell.y + 2;
               const canvas = document.createElement("canvas");
               canvas.width = img.width;
               canvas.height = img.height;
@@ -270,7 +276,6 @@ export default function SanPham() {
               const imgData = canvas.toDataURL(
                 img.src.endsWith(".png") ? "image/png" : "image/jpeg"
               );
-
               doc.addImage(
                 imgData,
                 img.src.endsWith(".png") ? "PNG" : "JPEG",
@@ -283,12 +288,10 @@ export default function SanPham() {
           }
         },
       });
-
       const date = new Date().toLocaleDateString();
       doc.setFontSize(10);
       doc.text(`Ngày xuất: ${date}`, 10, doc.internal.pageSize.height - 10);
-      doc.save("sanpham.pdf");
-
+      doc.save("San_pham.pdf");
       Swal.fire({
         title: "Thành công",
         text: "Dữ liệu và hình ảnh đã được xuất ra PDF!",
@@ -305,7 +308,6 @@ export default function SanPham() {
       });
     }
   };
-
   const debounce = (func, delay) => {
     let timeoutId;
     return (...args) => {
@@ -338,20 +340,15 @@ export default function SanPham() {
       setLoading(false);
     }
   };
-
   const debouncedFetchProducts = debounce(fetchProducts, 300);
-
   useEffect(() => {
     debouncedFetchProducts();
   }, [currentPage, searchQuery]);
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-
   const startProductIndex = (currentPage - 1) * itemsPerPage + 1;
   const endProductIndex = Math.min(currentPage * itemsPerPage, totalProducts);
-
   const deleteProduct = async (id) => {
     const result = await Swal.fire({
       title: "Xác nhận",
@@ -363,7 +360,6 @@ export default function SanPham() {
       confirmButtonText: "Xóa",
       cancelButtonText: "Hủy",
     });
-
     if (result.isConfirmed) {
       try {
         const response = await fetch(
@@ -393,8 +389,9 @@ export default function SanPham() {
       }
     }
   };
-
   return (
+    <main id={showInterface ? cx("content") : ""}>
+      {showInterface && (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>
         <div className={styles.header1}>
@@ -405,7 +402,7 @@ export default function SanPham() {
         <div className={styles.bg}>
           <div className={styles.container}>
             <div className={styles.actions}>
-              <Link href="/admin/components/themsanpham" className={styles.sp}>
+              <Link href="/components/themsanpham" className={styles.sp}>
                 <i className="fas fa-plus"></i> Tạo mới sản phẩm
               </Link>
             </div>
@@ -502,7 +499,7 @@ export default function SanPham() {
                         &nbsp; &nbsp; &nbsp;
                         <Link
                           style={{ textAlign: "center" }}
-                          href={`/admin/components/suasanpham/${_id}`}
+                          href={`/components/suasanpham/${_id}`}
                           className={`${styles.btn} ${styles.edit}`}
                         >
                           ✏️
@@ -570,5 +567,7 @@ export default function SanPham() {
         </div>
       </section>
     </div>
+  )}
+  </main>
   );
 }

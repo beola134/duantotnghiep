@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./daydongho.module.css";
 import Loading from "../loading/page";
-
 export default function Daydongho() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +12,6 @@ export default function Daydongho() {
   const [sortOption, setSortOption] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
   const [filter, setFilter] = useState({
     size_day: "",
     mau_day: "",
@@ -21,7 +19,6 @@ export default function Daydongho() {
     chat_lieu_day: "",
     danh_muc: "",
   });
-
   const laySanPham = async () => {
     setLoading(true);
     try {
@@ -41,20 +38,16 @@ export default function Daydongho() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     laySanPham();
   }, [filter, currentPage]);
-
   const thayDoiTrang = (trang) => {
     setCurrentPage(trang);
     laySanPham();
   };
-
   const capNhatBoLoc = (filterType, value) => {
     const newFilters = [...selectedFilter];
     const newFilter = { ...filter, [filterType]: value };
-
     const filterIndex = newFilters.findIndex((filter) =>
       filter.startsWith(`${filterType}=`)
     );
@@ -71,7 +64,6 @@ export default function Daydongho() {
       setCategoryName(value);
     }
   };
-
   const xoaTatCaBoLoc = () => {
     setSelectedFilter([]);
     setFilter({
@@ -81,15 +73,12 @@ export default function Daydongho() {
     setCategoryName("Dây đồng hồ");
     laySanPham();
   };
-
   const xoaBoLoc = (filterToRemove) => {
     const newFilters = selectedFilter.filter(
       (filter) => filter !== filterToRemove
     );
-
     const [filterType] = filterToRemove.split("=");
     const updatedFilter = { ...filter, [filterType]: "" };
-
     if (filterType === "danh_muc") {
       setCategoryName("Dây đồng hồ");
     }
@@ -97,7 +86,6 @@ export default function Daydongho() {
     setFilter(updatedFilter);
     laySanPham();
   };
-
   const sapXepSanPham = (products) => {
     if (sortOption === "asc") {
       return [...products].sort((a, b) => a.gia_san_pham - b.gia_san_pham);
@@ -106,18 +94,15 @@ export default function Daydongho() {
     }
     return products;
   };
-
   const capNhatSapXep = (e) => {
     setSortOption(e.target.value);
   };
-
   if (loading) {
     return <Loading />;
   }
   if (error) {
     return <p>Error: {error}</p>;
   }
-
   const sanPhamHienThi = sapXepSanPham(products);
   return (
     <>
@@ -126,7 +111,6 @@ export default function Daydongho() {
           <div className={styles["main-column"]}>
             <div className={styles["center-1col"]}>
               <div className={styles.clear}></div>
-
               <div className={styles.container}>
                 <div className={styles.clear}></div>
                 <div className={styles["all-summary"]}>
@@ -411,7 +395,6 @@ export default function Daydongho() {
                           </div>
                         </div>
                       </div>
-
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -495,7 +478,6 @@ export default function Daydongho() {
                           </div>
                         </div>
                       </div>
-
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -566,7 +548,6 @@ export default function Daydongho() {
                       </div>
                     </div>
                   </div>
-
                   <div className={styles["field-title"]}>
                     <div className={styles["title-name"]}>
                       <div className={styles["cat-title"]}>
@@ -615,7 +596,9 @@ export default function Daydongho() {
                               <div key={_id} className={styles.item}>
                                 <div className={styles["frame-inner"]}>
                                   <figure className={styles["product-image"]}>
-                                    <Link href={`/components/product-detail/${_id}`}>
+                                    <Link
+                                      href={`/components/product-detail/${_id}`}
+                                    >
                                       <img
                                         src={`http://localhost:5000/images/${hinh_anh}`}
                                         alt={ten}
@@ -651,7 +634,6 @@ export default function Daydongho() {
                       </div>
                     </section>
                   </div>
-
                   <div className={styles.pagination}>
                     <span
                       title="First page"
@@ -664,7 +646,6 @@ export default function Daydongho() {
                     >
                       ‹‹
                     </span>
-
                     <span
                       className={
                         currentPage === 1
@@ -677,11 +658,9 @@ export default function Daydongho() {
                     >
                       ‹
                     </span>
-
                     <span
                       className={styles.currentPage}
                     >{`Trang ${currentPage} / ${totalPages || 1}`}</span>
-
                     <span
                       className={
                         currentPage === totalPages
@@ -711,7 +690,6 @@ export default function Daydongho() {
                   </div>
                 </div>
                 <div className={styles.clear}></div>
-
                 <div className={styles.evaluateCat}>
                   <div className={`${styles.ratingArea} ${styles.cls}`}>
                     <span id="ratings">
@@ -746,14 +724,12 @@ export default function Daydongho() {
                     </span>
                   </div>
                 </div>
-
                 <div className={styles.clear}></div>
                 <div
                   className={`${styles.aq_relates} ${styles.content_li}`}
                 ></div>
               </div>
             </div>
-
             <div className={styles.clear}></div>
           </div>
         </div>

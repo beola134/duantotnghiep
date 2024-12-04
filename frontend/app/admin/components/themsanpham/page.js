@@ -4,7 +4,7 @@ import styles from "./themsanpham.module.css";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-
+import { jwtDecode } from "jwt-decode";
 export default function ThemSanPham() {
   const [formData, setFormData] = useState({
     ten_san_pham: "",
@@ -37,7 +37,21 @@ export default function ThemSanPham() {
   const [errors, setErrors] = useState({});
   const [cates, setCategories] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-
+  const [showInterface, setShowInterface] = useState(false);
+  useEffect(() => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+    if (token) {
+      const decoded = jwtDecode(token);
+      console.log(decoded);
+      if (decoded.quyen === 1) {
+        setShowInterface(true);
+        fetchUserDetails(decoded._id);
+      }
+    }
+  }, []);
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -164,6 +178,8 @@ export default function ThemSanPham() {
   };
 
   return (
+    <main id={showInterface ? cx("content") : ""}>
+      {showInterface && (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>
         <div className={styles.header1}>
@@ -474,5 +490,7 @@ export default function ThemSanPham() {
         </div>
       </section>
     </div>
+  )}
+  </main>
   );
 }
