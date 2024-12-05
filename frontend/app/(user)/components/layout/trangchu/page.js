@@ -410,7 +410,7 @@ export default function Main() {
                 ))}
                 <div className={styles.xemThem}>
                   <p>
-                    <Link href="/components/donghonew?query=gioi_tinh=Nam">
+                    <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Nam">
                       <b>XEM THÊM ĐỒNG HỒ NAM MỚI</b>
                     </Link>
                   </p>
@@ -450,7 +450,7 @@ export default function Main() {
                 ))}
                 <div className={styles.xemThem}>
                   <p>
-                    <Link href="/components/donghonew?query=gioi_tinh=Nữ">
+                    <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Nữ">
                       <b>XEM THÊM ĐỒNG HỒ NỮ MỚi</b>
                     </Link>
                   </p>
@@ -490,7 +490,7 @@ export default function Main() {
                 ))}
                 <div className={styles.xemThem}>
                   <p>
-                    <Link href="/components/donghonew?query=gioi_tinh=Đồng Hồ Đôi">
+                    <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Đồng Hồ Đôi">
                       <b>XEM THÊM ĐỒNG HỒ ĐÔI MỚI </b>
                     </Link>
                   </p>

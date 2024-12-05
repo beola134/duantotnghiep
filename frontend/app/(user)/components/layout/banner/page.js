@@ -4,8 +4,8 @@ import Slider from "react-slick";
 import styles from "./banner.module.css";
 import classNames from "classnames/bind";
 import Script from "next/script";
-import BannerSlide1 from "../../bannerslide1/page";
-import BannerSlide2 from "../../bannerslide2/page";
+import BannerSlide1 from "../bannerslide1/page";
+import BannerSlide2 from "../bannerslide2/page";
 import Link from "next/link";
 
 

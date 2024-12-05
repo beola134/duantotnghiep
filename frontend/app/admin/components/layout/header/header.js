@@ -90,9 +90,7 @@ export default function Menu() {
     <div className={styles.SidebarContainer}>
       {showMessage ? (
         <div className={styles.centeredMessageContainer}>
-          <p className={styles.centeredMessage}>
-            Bạn không có quyền truy cập vào trang này
-          </p>
+          <p className={styles.centeredMessage}>Bạn không có quyền truy cập vào trang này</p>
         </div>
       ) : (
         <>
@@ -104,11 +102,10 @@ export default function Menu() {
             <ul className={styles.sideMenu}>
               <li>
                 <Link
-                  href="/admin/components/thongke"
-                  className={
-                    isActive("/components/thongke") ? styles.active : ""
-                  }
-                  onClick={() => handleLinkClick("/components/thongke")}>
+                  href="/admin/components/quanlyadmin/thongke"
+                  className={isActive("/components/quanlyadmin/thongke") ? styles.active : ""}
+                  onClick={() => handleLinkClick("/components/quanlyadmin/thongke")}
+                >
                   <i className={`bx bxs-chart ${styles.icon}`}></i>
                   Thống Kê
                 </Link>
@@ -118,44 +115,40 @@ export default function Menu() {
               </li>
               <li>
                 <Link
-                  href="/admin/components/sanpham"
-                  className={
-                    isActive("/components/sanpham") ? styles.active : ""
-                  }
-                  onClick={() => handleLinkClick("/components/sanpham")}>
+                  href="/admin/components/quanlyadmin/sanpham"
+                  className={isActive("/components/quanlyadmin/sanpham") ? styles.active : ""}
+                  onClick={() => handleLinkClick("/components/quanlyadmin/sanpham")}
+                >
                   <i className={`bx bxs-widget ${styles.icon}`}></i>
                   Quản lý sản phẩm
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/admin/components/thuonghieu"
-                  className={
-                    isActive("/components/thuonghieu") ? styles.active : ""
-                  }
-                  onClick={() => handleLinkClick("/components/thuonghieu")}>
+                  href="/admin/components/quanlyadmin/thuonghieu"
+                  className={isActive("/components/quanlyadmin/thuonghieu") ? styles.active : ""}
+                  onClick={() => handleLinkClick("/components/quanlyadmin/thuonghieu")}
+                >
                   <i className={`bx bxs-widget ${styles.icon}`}></i>
                   Quản lý thương hiệu
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/admin/components/danhmuc"
-                  className={
-                    isActive("/components/danhmuc") ? styles.active : ""
-                  }
-                  onClick={() => handleLinkClick("/components/danhmuc")}>
+                  href="/admin/components/quanlyadmin/danhmuc"
+                  className={isActive("/components/quanlyadmin/danhmuc") ? styles.active : ""}
+                  onClick={() => handleLinkClick("/components/quanlyadmin/danhmuc")}
+                >
                   <i className={`bx bxs-widget ${styles.icon}`}></i>
                   Quản lý danh mục
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/admin/components/quanlikho"
-                  className={
-                    isActive("/components/quanlikho") ? styles.active : ""
-                  }
-                  onClick={() => handleLinkClick("/components/quanlikho")}>
+                  href="/admin/components/quanlyadmin/quanlikho"
+                  className={isActive("/components/quanlyadmin/quanlikho") ? styles.active : ""}
+                  onClick={() => handleLinkClick("/components/quanlyadmin/quanlikho")}
+                >
                   <i className={`bx bxs-widget ${styles.icon}`}></i>
                   Quản lý kho
                 </Link>
@@ -165,11 +158,10 @@ export default function Menu() {
               </li>
               <li>
                 <Link
-                  href="/admin/components/comments"
-                  className={
-                    isActive("/components/comments") ? styles.active : ""
-                  }
-                  onClick={() => handleLinkClick("/components/comments")}>
+                  href="/admin/components/quanlyadmin/comments"
+                  className={isActive("/components/quanlyadmin/comments") ? styles.active : ""}
+                  onClick={() => handleLinkClick("/components/quanlyadmin/comments")}
+                >
                   <i className={`bx bxs-comment-detail ${styles.icon}`}></i>
                   Quản lý bình luận
                 </Link>
@@ -179,11 +171,10 @@ export default function Menu() {
               </li>
               <li>
                 <Link
-                  href="/admin/components/taikhoan"
-                  className={
-                    isActive("/components/taikhoan") ? styles.active : ""
-                  }
-                  onClick={() => handleLinkClick("/components/taikhoan")}>
+                  href="/admin/components/quanlyadmin/taikhoan"
+                  className={isActive("/components/quanlyadmin/taikhoan") ? styles.active : ""}
+                  onClick={() => handleLinkClick("/components/quanlyadmin/taikhoan")}
+                >
                   <i className={`bx bxs-user-account ${styles.icon}`}></i>
                   Quản Lý Tài khoản
                 </Link>
@@ -193,22 +184,20 @@ export default function Menu() {
               </li>
               <li>
                 <Link
-                  href="/admin/components/quanlydonhang"
-                  className={
-                    isActive("/components/quanlydonhang") ? styles.active : ""
-                  }
-                  onClick={() => handleLinkClick("/components/quanlydonhang")}>
+                  href="/admin/components/quanlyadmin/quanlydonhang"
+                  className={isActive("/components/quanlyadmin/quanlydonhang") ? styles.active : ""}
+                  onClick={() => handleLinkClick("/components/quanlyadmin/quanlydonhang")}
+                >
                   <i className={`bx bxs-cart ${styles.icon}`}></i>
                   Quản Lý Đơn Hàng
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/admin/components/chitietdonhang"
-                  className={
-                    isActive("/components/chitietdonhang") ? styles.active : ""
-                  }
-                  onClick={() => handleLinkClick("/components/chitietdonhang")}>
+                  href="/admin/components/quanlyadmin/chitietdonhang"
+                  className={isActive("/components/quanlyadmin/chitietdonhang") ? styles.active : ""}
+                  onClick={() => handleLinkClick("/components/quanlyadmin/chitietdonhang")}
+                >
                   <i className={`bx bxs-cart ${styles.icon}`}></i>
                   Quản Lý Sản Phẩm Đã Bán
                 </Link>
@@ -218,11 +207,10 @@ export default function Menu() {
               </li>
               <li>
                 <Link
-                  href="/admin/components/voucher"
-                  className={
-                    isActive("/components/voucher") ? styles.active : ""
-                  }
-                  onClick={() => handleLinkClick("/components/voucher")}>
+                  href="/admin/components/quanlyadmin/voucher"
+                  className={isActive("/components/quanlyadmin/voucher") ? styles.active : ""}
+                  onClick={() => handleLinkClick("/components/quanlyadmin/voucher")}
+                >
                   <i className={`bx bx-qr ${styles.icon}`}></i>
                   Quản lý Voucher
                 </Link>
@@ -249,7 +237,8 @@ export default function Menu() {
                     href="#"
                     id="profileDropdown"
                     data-bs-toggle="dropdown"
-                    aria-expanded="false">
+                    aria-expanded="false"
+                  >
                     {/*<img
                 src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVvcGxlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
                 alt=""
@@ -270,21 +259,20 @@ export default function Menu() {
                   </a>
                   <ul
                     className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`}
-                    aria-labelledby="profileDropdown">
+                    aria-labelledby="profileDropdown"
+                  >
                     <li>
                       <Link
                         className={`dropdown-item ${styles.dropdownItem}`}
-                        href={`/admin/components/ho_so_admin/${user.user._id}`}>
+                        href={`/admin/components/ho_so_admin/${user.user._id}`}
+                      >
                         <i className="bx bxs-user-circle icon"></i>
                         Hồ sơ
                       </Link>
                     </li>
 
                     <li>
-                      <a
-                        className={`dropdown-item ${styles.dropdownItem}`}
-                        href="#"
-                        onClick={handleLayout}>
+                      <a className={`dropdown-item ${styles.dropdownItem}`} href="#" onClick={handleLayout}>
                         <i className="bx bxs-log-out-circle"></i>
                         Đăng xuất
                       </a>
@@ -298,7 +286,8 @@ export default function Menu() {
                     href="#"
                     id="profileDropdown"
                     data-bs-toggle="dropdown"
-                    aria-expanded="false">
+                    aria-expanded="false"
+                  >
                     {/*<img
                 src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGVvcGxlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
                 alt=""
@@ -317,21 +306,17 @@ export default function Menu() {
                   </a>
                   <ul
                     className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`}
-                    aria-labelledby="profileDropdown">
+                    aria-labelledby="profileDropdown"
+                  >
                     <li>
-                      <Link
-                        className={`dropdown-item ${styles.dropdownItem}`}
-                        href={"/admin/"}>
+                      <Link className={`dropdown-item ${styles.dropdownItem}`} href={"/admin/"}>
                         <i className="bx bxs-user-circle icon"></i>
                         Hồ sơ
                       </Link>
                     </li>
 
                     <li>
-                      <a
-                        className={`dropdown-item ${styles.dropdownItem}`}
-                        href="#"
-                        onClick={handleLayout}>
+                      <a className={`dropdown-item ${styles.dropdownItem}`} href="#" onClick={handleLayout}>
                         <i className="bx bxs-log-out-circle"></i>
                         Đăng xuất
                       </a>
