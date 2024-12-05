@@ -4,9 +4,9 @@ import styles from "./suasanpham.module.css";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import Link from "next/link";
+import { jwtDecode } from "jwt-decode";
 export default function SuaSanPham({ params }) {
   const { id } = params;
-
   const [formData, setFormData] = useState({
     ten_san_pham: "",
     ten: "",
@@ -34,10 +34,23 @@ export default function SuaSanPham({ params }) {
     mo_ta: "",
     hinh_anh: null,
   });
-
   const [cates, setCategories] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-
+  const [showInterface, setShowInterface] = useState(false);
+  useEffect(() => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+    if (token) {
+      const decoded = jwtDecode(token);
+      console.log(decoded);
+      if (decoded.quyen === 1) {
+        setShowInterface(true);
+        fetchUserDetails(decoded._id);
+      }
+    }
+  }, []);
   useEffect(() => {
     const fetchProductAndCategories = async () => {
       try {
@@ -138,6 +151,8 @@ export default function SuaSanPham({ params }) {
   };
 
   return (
+    <main id={showInterface ? cx("content") : ""}>
+      {showInterface && (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>
         <div className={styles.header1}>
@@ -189,8 +204,6 @@ export default function SuaSanPham({ params }) {
                   onChange={handleChange}
                 />
               </div>
-
-              {/* Dropdown danh mục */}
               <div className={styles.formGroup}>
                 <label htmlFor="id_thuong_hieu">Danh mục</label>
                 <select
@@ -421,5 +434,7 @@ export default function SuaSanPham({ params }) {
         </div>
       </section>
     </div>
+  )}
+  </main>
   );
 }

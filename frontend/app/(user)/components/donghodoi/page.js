@@ -13,7 +13,6 @@ export default function DonghoDoi() {
   const [sortOption, setSortOption] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
   const [filter, setFilter] = useState({
     gioi_tinh: "Đồng Hồ Đôi",
     thuong_hieu: "",
@@ -48,11 +47,9 @@ export default function DonghoDoi() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     laySanPham();
   }, [filter, currentPage]);
-
   const thayDoiTrang = (page) => {
     setCurrentPage(page);
     laySanPham();
@@ -60,7 +57,6 @@ export default function DonghoDoi() {
   const capNhatBoLoc = (filterType, value) => {
     const newFilters = [...selectedFilter];
     const newFilter = { ...filter, [filterType]: value };
-
     const filterIndex = newFilters.findIndex((filter) =>
       filter.startsWith(`${filterType}=`)
     );
@@ -69,16 +65,13 @@ export default function DonghoDoi() {
     } else {
       newFilters.push(`${filterType}=${value}`);
     }
-
     setSelectedFilter(newFilters);
     setFilter(newFilter);
     setCurrentPage(1);
-
     if (filterType === "thuong_hieu") {
       setCategoryName(value);
     }
   };
-
   const xoaTatCaBoLoc = () => {
     setSelectedFilter([]);
     setFilter({
@@ -88,16 +81,12 @@ export default function DonghoDoi() {
     setCategoryName("Đồng hồ đôi");
     laySanPham();
   };
-
   const xoaBoLoc = (filterToRemove) => {
-  
     const newFilters = selectedFilter.filter(
       (filter) => filter !== filterToRemove
     );
-
     const [filterType] = filterToRemove.split("=");
     const updatedFilter = { ...filter, [filterType]: "" };
-
     if (filterType === "thuong_hieu") {
       setCategoryName("Đồng hồ đôi");
     }
@@ -105,7 +94,6 @@ export default function DonghoDoi() {
     setFilter(updatedFilter);
     laySanPham();
   };
-
   const sapXepSanPham = (products) => {
     if (sortOption === "asc") {
       return [...products].sort((a, b) => a.gia_giam - b.gia_giam);
@@ -114,7 +102,6 @@ export default function DonghoDoi() {
     }
     return products;
   };
-
   const capNhatSapXep = (e) => {
     setSortOption(e.target.value);
   };
@@ -280,7 +267,9 @@ export default function DonghoDoi() {
                                 rel="nofollow"
                                 href="#"
                                 title="MIDO"
-                                onClick={() => capNhatBoLoc("thuong_hieu", "MIDO")}
+                                onClick={() =>
+                                  capNhatBoLoc("thuong_hieu", "MIDO")
+                                }
                               >
                                 MIDO
                               </Link>
@@ -327,7 +316,10 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="FREDERIQUECONSTANT"
                                 onClick={() =>
-                                  capNhatBoLoc("thuong_hieu", "FREDERIQUECONSTANT")
+                                  capNhatBoLoc(
+                                    "thuong_hieu",
+                                    "FREDERIQUECONSTANT"
+                                  )
                                 }
                               >
                                 FREDERIQUE CONSTANT
@@ -350,7 +342,9 @@ export default function DonghoDoi() {
                                 rel="nofollow"
                                 href="#"
                                 title="EDOX"
-                                onClick={() => capNhatBoLoc("thuong_hieu", "EDOX")}
+                                onClick={() =>
+                                  capNhatBoLoc("thuong_hieu", "EDOX")
+                                }
                               >
                                 EDOX
                               </Link>
@@ -433,7 +427,10 @@ export default function DonghoDoi() {
                                 href="#"
                                 title="DANIELWELLINGTON"
                                 onClick={() =>
-                                  capNhatBoLoc("thuong_hieu", "DANIELWELLINGTON")
+                                  capNhatBoLoc(
+                                    "thuong_hieu",
+                                    "DANIELWELLINGTON"
+                                  )
                                 }
                               >
                                 DANIEL WELLINGTON
@@ -478,7 +475,6 @@ export default function DonghoDoi() {
                           </div>
                         </div>
                       </div>
-
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >

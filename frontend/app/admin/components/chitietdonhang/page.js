@@ -6,7 +6,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import ExcelJS from "exceljs";
 import RobotoRegular from "../taikhoan/Roboto-Regular.base64";
-
+import { jwtDecode } from "jwt-decode";
 export default function ChiTietDonHang() {
   const [users, setUser] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,6 +15,7 @@ export default function ChiTietDonHang() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [totalPages, setTotalPages] = useState(1);
+  const [showInterface, setShowInterface] = useState(false)
 
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -48,6 +49,19 @@ export default function ChiTietDonHang() {
     }
   };
 
+  useEffect(() => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+    if (token) {
+      const decoded = jwtDecode(token);
+      console.log(decoded);
+      if (decoded.quyen === 1) {
+        setShowInterface(true);
+      }
+    }
+  },[])
   useEffect(() => {
     fetchUsers(
       currentPage,
@@ -390,145 +404,155 @@ export default function ChiTietDonHang() {
   }
 
   return (
-    <div className={styles.SidebarContainer}>
-      <section id={styles.content}>
-        <div className={styles.header1}>
-          <div className={styles.title} style={{ fontWeight: "bold" }}>
-            Danh Sách Sản Phẩm Đã Bán
-          </div>
-          <div className={styles.timestamp} id="timestamp"></div>
-        </div>
-        <div className={styles.bg}>
-          <div className={styles.container}>
-            <div className={styles.actions}>
-              <div className={styles.buttonGroup}>
-                <button className={styles.sp2} onClick={uploadFile}>
-                  &nbsp;
-                  <i className="fas fa-file-upload"></i> Tải từ file
-                </button>
-                &nbsp;
-                <button className={styles.sp3} onClick={printData}>
-                  <i className="fas fa-print"></i> In dữ liệu
-                </button>
-                &nbsp;
-                <button className={styles.sp4} onClick={copyData}>
-                  <i className="fas fa-copy"></i> Sao chép
-                </button>
-                &nbsp;
-                <button className={styles.sp5} onClick={exportToExcel}>
-                  &nbsp;
-                  <i className="fas fa-file-excel"></i> Xuất Excel
-                </button>
-                &nbsp;
-                <button className={styles.sp6} onClick={exportToPDF}>
-                  <i className="fas fa-file-pdf"></i> Xuất PDF
-                </button>
-                &nbsp;
-              </div>
+    <div
+      id={showInterface ? styles.loi : ""}
+      className={styles.SidebarContainer}
+    >
+      {showInterface && (
+        <section id={styles.content}>
+          <div className={styles.header1}>
+            <div className={styles.title} style={{ fontWeight: "bold" }}>
+              Danh Sách Sản Phẩm Đã Bán
             </div>
-
-            <div className={styles.tableContainer}>
-              <div className={styles.tableControls}>
-                <div className={styles.search}>
-                  <label htmlFor="search" style={{ fontWeight: "bold" }}>
-                    Tìm kiếm:
-                  </label>
-                  <input
-                    type="text"
-                    id="search"
-                    value={searchQuery}
-                    onChange={handleSearch}
-                  />
+            <div className={styles.timestamp} id="timestamp"></div>
+          </div>
+          <div className={styles.bg}>
+            <div className={styles.container}>
+              <div className={styles.actions}>
+                <div className={styles.buttonGroup}>
+                  <button className={styles.sp2} onClick={uploadFile}>
+                    &nbsp;
+                    <i className="fas fa-file-upload"></i> Tải từ file
+                  </button>
+                  &nbsp;
+                  <button className={styles.sp3} onClick={printData}>
+                    <i className="fas fa-print"></i> In dữ liệu
+                  </button>
+                  &nbsp;
+                  <button className={styles.sp4} onClick={copyData}>
+                    <i className="fas fa-copy"></i> Sao chép
+                  </button>
+                  &nbsp;
+                  <button className={styles.sp5} onClick={exportToExcel}>
+                    &nbsp;
+                    <i className="fas fa-file-excel"></i> Xuất Excel
+                  </button>
+                  &nbsp;
+                  <button className={styles.sp6} onClick={exportToPDF}>
+                    <i className="fas fa-file-pdf"></i> Xuất PDF
+                  </button>
+                  &nbsp;
                 </div>
               </div>
-              {users.length > 0 ? (
-                <table id="productTable" className={styles.productTable}>
-                  <thead>
-                    <tr>
-                      <th style={{ width: "35%", textAlign: "center" }}>ID</th>
-                      <th style={{ width: "25%", textAlign: "center" }}>
-                        Giá Sản phẩm
-                      </th>
-                      <th style={{ width: "25%", textAlign: "center" }}>
-                        Tên sản phẩm
-                      </th>
-                      <th style={{ width: "15%", textAlign: "center" }}>
-                        Số lượng
-                      </th>
-                      <th style={{ width: "15%", textAlign: "center" }}>
-                        ID đơn hàng
-                      </th>
-                      <th style={{ width: "15%", textAlign: "center" }}>
-                        ID sản phẩm
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {users.map((item) => (
-                      <tr key={item._id}>
-                        <td>{item._id}</td>
-                        <td style={{ textAlign: "center" }}>
-                          <p className={styles.mota}>
-                            {item.gia_san_pham.toLocaleString("vi-VN")}đ
-                          </p>
-                        </td>
-                        <td style={{ textAlign: "center" }}>
-                          {item.ten_san_pham}
-                        </td>
-                        <td style={{ textAlign: "center" }}>{item.so_luong}</td>
-                        <td>{item.id_don_hang}</td>
-                        <td>{item.id_san_pham}</td>
+
+              <div className={styles.tableContainer}>
+                <div className={styles.tableControls}>
+                  <div className={styles.search}>
+                    <label htmlFor="search" style={{ fontWeight: "bold" }}>
+                      Tìm kiếm:
+                    </label>
+                    <input
+                      type="text"
+                      id="search"
+                      value={searchQuery}
+                      onChange={handleSearch}
+                    />
+                  </div>
+                </div>
+                {users.length > 0 ? (
+                  <table id="productTable" className={styles.productTable}>
+                    <thead>
+                      <tr>
+                        <th style={{ width: "35%", textAlign: "center" }}>
+                          ID
+                        </th>
+                        <th style={{ width: "25%", textAlign: "center" }}>
+                          Giá Sản phẩm
+                        </th>
+                        <th style={{ width: "25%", textAlign: "center" }}>
+                          Tên sản phẩm
+                        </th>
+                        <th style={{ width: "15%", textAlign: "center" }}>
+                          Số lượng
+                        </th>
+                        <th style={{ width: "15%", textAlign: "center" }}>
+                          ID đơn hàng
+                        </th>
+                        <th style={{ width: "15%", textAlign: "center" }}>
+                          ID sản phẩm
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <p
-                  style={{
-                    textAlign: "center",
-                    marginTop: "20px",
-                    fontStyle: "italic",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Không tìm thấy dữ liệu cần tìm.
-                </p>
-              )}
-              <div className={styles.pagination}>
-                <span>
-                  Hiện 1 đến {users.length} của {users.length} chi tiết đơn hàng
-                </span>
-                <div className={styles.paginationControls}>
-                  <button
-                    className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
-                    disabled={currentPage === 1}
+                    </thead>
+                    <tbody>
+                      {users.map((item) => (
+                        <tr key={item._id}>
+                          <td>{item._id}</td>
+                          <td style={{ textAlign: "center" }}>
+                            <p className={styles.mota}>
+                              {item.gia_san_pham.toLocaleString("vi-VN")}đ
+                            </p>
+                          </td>
+                          <td style={{ textAlign: "center" }}>
+                            {item.ten_san_pham}
+                          </td>
+                          <td style={{ textAlign: "center" }}>
+                            {item.so_luong}
+                          </td>
+                          <td>{item.id_don_hang}</td>
+                          <td>{item.id_san_pham}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <p
+                    style={{
+                      textAlign: "center",
+                      marginTop: "20px",
+                      fontStyle: "italic",
+                      fontWeight: "bold",
+                    }}
                   >
-                    ‹
-                  </button>
-                  <button
-                    className={`${styles.paginationButton} ${styles.active}`}
-                  >
-                    {currentPage} / {totalPages}
-                  </button>
+                    Không tìm thấy dữ liệu cần tìm.
+                  </p>
+                )}
+                <div className={styles.pagination}>
+                  <span>
+                    Hiện 1 đến {users.length} của {users.length} chi tiết đơn
+                    hàng
+                  </span>
+                  <div className={styles.paginationControls}>
+                    <button
+                      className={styles.paginationButton}
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(prev - 1, 1))
+                      }
+                      disabled={currentPage === 1}
+                    >
+                      ‹
+                    </button>
+                    <button
+                      className={`${styles.paginationButton} ${styles.active}`}
+                    >
+                      {currentPage} / {totalPages}
+                    </button>
 
-                  <button
-                    className={styles.paginationButton}
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
-                    disabled={currentPage === totalPages}
-                  >
-                    ›
-                  </button>
+                    <button
+                      className={styles.paginationButton}
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                      }
+                      disabled={currentPage === totalPages}
+                    >
+                      ›
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }

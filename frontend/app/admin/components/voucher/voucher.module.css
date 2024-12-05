@@ -4,6 +4,9 @@
   left: 260px;
   transition: all 0.3s ease;
 }
+#loi {
+  background-color: #f5f6f8;
+}
 .header1 {
   display: flex;
   justify-content: space-between;
