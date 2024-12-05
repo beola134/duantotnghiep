@@ -66,24 +66,23 @@ const User = ({ params }) => {
       fetchOrderShow();
     }
   };
+  const fetchShowLichsu = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/donhang/history/${id}`);
+      const data = await res.json();
+      if (data.donHangs && Array.isArray(data.donHangs)) {
+        setShowLichsu(data.donHangs);
+      } else {
+        setShowLichsu([]);
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy lịch sử đơn hàng:", error);
+      setShowLichsu([]);
+    }
+  };
+  
   useEffect(() => {
     if (activeTab === "ShowLichsu") {
-      const fetchShowLichsu = async () => {
-        try {
-          const res = await fetch(
-            `http://localhost:5000/donhang/history/${id}`
-          );
-          const data = await res.json();
-          if (data.donHangs && Array.isArray(data.donHangs)) {
-            setShowLichsu(data.donHangs);
-          } else {
-            setShowLichsu([]);
-          }
-        } catch (error) {
-          console.error("Lỗi khi lấy lịch sử đơn hàng:", error);
-          setShowLichsu([]);
-        }
-      };
       fetchShowLichsu();
     }
   }, [activeTab, id]);
