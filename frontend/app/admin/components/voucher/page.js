@@ -7,6 +7,7 @@ import ExcelJS from "exceljs";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import RobotoRegular from "./Roboto-Regular.base64";
+import { jwtDecode } from "jwt-decode";
 
 export default function VoucherPage() {
   const [vouchers, setVouchers] = useState([]);
@@ -17,6 +18,7 @@ export default function VoucherPage() {
   const [totalPage, setTotalPage] = useState(1);
   const [totalVouchers, setTotalVouchers] = useState(0);
   const itemsPerPage = 5;
+  const [showInterface, setShowInterface] = useState(false);
 
   const debounce = (func, delay) => {
     let timeoutId;

@@ -9,6 +9,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import RobotoRegular from "./Roboto-Regular.base64";
 
+
 export default function CommentsPage() {
   const [comments, setComments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);

@@ -1,15 +1,17 @@
 "use client";
 import "bootstrap/dist/css/bootstrap.min.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./themdanhmuc.module.css";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 
 export default function ThemDanhmuc() {
   const [tendanhmuc, setTendanhmuc] = useState("");
   const [hinhanh, sethinhanh] = useState(null);
   const [mota, setmota] = useState("");
   const router = useRouter();
+  const [showInterface, setShowInterface] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,7 +58,7 @@ export default function ThemDanhmuc() {
           title: "Thành công",
           text: "Thêm Danh mục thành công!",
         }).then(() => {
-          router.push("/components/danhmuc");
+          router.push("/admin/components/danhmuc");
         });
       } else {
         const errorData = await response.json();

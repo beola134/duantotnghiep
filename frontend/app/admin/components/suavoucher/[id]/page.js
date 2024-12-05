@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./suavoucher.module.css";
 import Swal from "sweetalert2";
 import { useRouter, useParams } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 
 export default function SuaVoucher() {
   const [maVouchers, setmaVouchers] = useState("");
@@ -15,6 +16,7 @@ export default function SuaVoucher() {
   const [phantram, setphantram] = useState("");
   const router = useRouter();
   const { id } = useParams();
+  const [showInterface, setShowInterface] = useState(false);
 
   const convertToVietnamTime = (dateString) => {
     const date = new Date(dateString);
@@ -103,7 +105,7 @@ export default function SuaVoucher() {
           title: "Thành công",
           text: "Sửa voucher thành công!",
         }).then(() => {
-          router.push("/components/voucher");
+          router.push("/admin/components/voucher");
         });
       } else {
         Swal.fire("Error", "Có lỗi xảy ra!", "error");

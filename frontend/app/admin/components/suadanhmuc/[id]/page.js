@@ -4,10 +4,12 @@ import React, { useEffect, useState } from "react";
 import styles from "./suadanhmuc.module.css";
 import Swal from "sweetalert2";
 import { useRouter, useParams } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 
 export default function SuaDanhmuc() {
   const router = useRouter();
   const { id } = useParams();
+  const [showInterface, setShowInterface] = useState(false);
   const [ImageFile, setImageFile] = useState(null);
   const [danhmuc, setdanhmuc] = useState({
     ten_danh_muc: "",
@@ -44,19 +46,18 @@ export default function SuaDanhmuc() {
     setImageFile(e.target.files[0]);
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-  if (!danhmuc.ten_danh_muc.trim()) {
-    Swal.fire({
-      title: "Lỗi",
-      text: "Tên danh mục không được để trống!",
-      icon: "error",
-      confirmButtonText: "OK",
-    });
-    return;
-  }
+    if (!danhmuc.ten_danh_muc.trim()) {
+      Swal.fire({
+        title: "Lỗi",
+        text: "Tên danh mục không được để trống!",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
 
     const formData = new FormData();
     formData.append("ten_danh_muc", danhmuc.ten_danh_muc);
@@ -132,13 +133,20 @@ export default function SuaDanhmuc() {
               <div className={styles.formGroup}>
                 <label htmlFor="hinhAnh">Hình ảnh</label>
                 <div
-                  style={{ display: "flex", justifyContent: "space-between" }}>
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}>
                   <img
                     src={`http://localhost:5000/images/${danhmuc.hinh_anh}`}
                     style={{ width: "80px" }}
                   />
                   <input
-                    style={{ height: "50px", width: "90%", marginTop: "15px" }}
+                    style={{
+                      height: "50px",
+                      width: "90%",
+                      marginTop: "15px",
+                    }}
                     type="file"
                     id="avatar"
                     accept="image/*"
@@ -149,13 +157,13 @@ export default function SuaDanhmuc() {
               <button
                 type="submit"
                 className="btn btn-outline-primary"
-                onClick={() => router.push("/components/danhmuc")}>
+                onClick={() => router.push("/admin/components/danhmuc")}>
                 Cập nhật
               </button>
               <button
                 type="button"
                 className="btn btn-outline-secondary"
-                onClick={() => router.push("/components/danhmuc")}>
+                onClick={() => router.push("/admin/components/danhmuc")}>
                 Hủy bỏ
               </button>
             </div>
