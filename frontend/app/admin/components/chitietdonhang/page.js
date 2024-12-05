@@ -6,7 +6,6 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import ExcelJS from "exceljs";
 import RobotoRegular from "../taikhoan/Roboto-Regular.base64";
-import { jwtDecode } from "jwt-decode";
 export default function ChiTietDonHang() {
   const [users, setUser] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +14,6 @@ export default function ChiTietDonHang() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [totalPages, setTotalPages] = useState(1);
-  const [showInterface, setShowInterface] = useState(false)
 
   const removeAccents = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -49,19 +47,6 @@ export default function ChiTietDonHang() {
     }
   };
 
-  useEffect(() => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
-    if (token) {
-      const decoded = jwtDecode(token);
-      console.log(decoded);
-      if (decoded.quyen === 1) {
-        setShowInterface(true);
-      }
-    }
-  },[])
   useEffect(() => {
     fetchUsers(
       currentPage,
@@ -404,11 +389,7 @@ export default function ChiTietDonHang() {
   }
 
   return (
-    <div
-      id={showInterface ? styles.loi : ""}
-      className={styles.SidebarContainer}
-    >
-      {showInterface && (
+    <div className={styles.SidebarContainer}>
         <section id={styles.content}>
           <div className={styles.header1}>
             <div className={styles.title} style={{ fontWeight: "bold" }}>
@@ -552,7 +533,6 @@ export default function ChiTietDonHang() {
             </div>
           </div>
         </section>
-      )}
     </div>
   );
 }
