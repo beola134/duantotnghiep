@@ -99,94 +99,77 @@ export default function SuaDanhmuc() {
       });
     }
   };
-  useEffect(() => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
-    if (token) {
-      const decoded = jwtDecode(token);
-      console.log(decoded);
-      if (decoded.quyen === 1) {
-        setShowInterface(true);
-      }
-    }
-  }, []);
 
   return (
-    <main id={showInterface ? styles.loi : ""}>
-      {showInterface && (
-        <div className={styles.SidebarContainer}>
-          <section id={styles.content}>
-            <div className={styles.header1}>
-              <div className={styles.title} style={{ fontWeight: "bold" }}>
-                Cập nhật Danh mục
-              </div>
-            </div>
-            <div className={styles.bg}>
-              <form onSubmit={handleSubmit}>
-                <div className={styles.container1}>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="ten_danh_muc">Tên danh mục</label>
-                    <input
-                      type="text"
-                      id="ten_danh_muc"
-                      name="ten_danh_muc"
-                      value={danhmuc?.ten_danh_muc || ""}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="description">Mô tả Danh mục</label>
-                    <textarea
-                      id="description"
-                      name="mo_ta"
-                      value={danhmuc?.mo_ta || ""}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="hinhAnh">Hình ảnh</label>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}>
-                      <img
-                        src={`http://localhost:5000/images/${danhmuc.hinh_anh}`}
-                        style={{ width: "80px" }}
-                      />
-                      <input
-                        style={{
-                          height: "50px",
-                          width: "90%",
-                          marginTop: "15px",
-                        }}
-                        type="file"
-                        id="avatar"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                      />
-                    </div>
-                  </div>
-                  <button
-                    type="submit"
-                    className="btn btn-outline-primary"
-                    onClick={() => router.push("/admin/components/danhmuc")}>
-                    Cập nhật
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary"
-                    onClick={() => router.push("/admin/components/danhmuc")}>
-                    Hủy bỏ
-                  </button>
-                </div>
-              </form>
-            </div>
-          </section>
+    <div className={styles.SidebarContainer}>
+      <section id={styles.content}>
+        <div className={styles.header1}>
+          <div className={styles.title} style={{ fontWeight: "bold" }}>
+            Cập nhật Danh mục
+          </div>
         </div>
-      )}
-    </main>
+        <div className={styles.bg}>
+          <form onSubmit={handleSubmit}>
+            <div className={styles.container1}>
+              <div className={styles.formGroup}>
+                <label htmlFor="ten_danh_muc">Tên danh mục</label>
+                <input
+                  type="text"
+                  id="ten_danh_muc"
+                  name="ten_danh_muc"
+                  value={danhmuc?.ten_danh_muc || ""}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="description">Mô tả Danh mục</label>
+                <textarea
+                  id="description"
+                  name="mo_ta"
+                  value={danhmuc?.mo_ta || ""}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="hinhAnh">Hình ảnh</label>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}>
+                  <img
+                    src={`http://localhost:5000/images/${danhmuc.hinh_anh}`}
+                    style={{ width: "80px" }}
+                  />
+                  <input
+                    style={{
+                      height: "50px",
+                      width: "90%",
+                      marginTop: "15px",
+                    }}
+                    type="file"
+                    id="avatar"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="btn btn-outline-primary"
+                onClick={() => router.push("/admin/components/danhmuc")}>
+                Cập nhật
+              </button>
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                onClick={() => router.push("/admin/components/danhmuc")}>
+                Hủy bỏ
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
   );
 }
