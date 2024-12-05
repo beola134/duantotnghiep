@@ -4,7 +4,6 @@ import styles from "./themsanpham.module.css";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-
 export default function ThemSanPham() {
   const [formData, setFormData] = useState({
     ten_san_pham: "",
@@ -37,11 +36,12 @@ export default function ThemSanPham() {
   const [errors, setErrors] = useState({});
   const [cates, setCategories] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
+        const response = await fetch(
+          "http://localhost:5000/thuonghieu/allthuonghieu"
+        );
         const data = await response.json();
         setCategories(data.th);
         if (data.th.length === 0) {

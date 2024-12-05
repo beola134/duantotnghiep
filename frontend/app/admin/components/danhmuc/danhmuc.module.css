@@ -1,3 +1,6 @@
+#loi {
+  background-color: #f5f6f8;
+}
 #content {
   position: relative;
   width: calc(100% - 260px);

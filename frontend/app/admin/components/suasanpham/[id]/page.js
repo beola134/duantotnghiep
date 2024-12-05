@@ -6,7 +6,6 @@ import Swal from "sweetalert2";
 import Link from "next/link";
 export default function SuaSanPham({ params }) {
   const { id } = params;
-
   const [formData, setFormData] = useState({
     ten_san_pham: "",
     ten: "",
@@ -34,10 +33,8 @@ export default function SuaSanPham({ params }) {
     mo_ta: "",
     hinh_anh: null,
   });
-
   const [cates, setCategories] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-
   useEffect(() => {
     const fetchProductAndCategories = async () => {
       try {
@@ -189,8 +186,6 @@ export default function SuaSanPham({ params }) {
                   onChange={handleChange}
                 />
               </div>
-
-              {/* Dropdown danh mục */}
               <div className={styles.formGroup}>
                 <label htmlFor="id_thuong_hieu">Danh mục</label>
                 <select

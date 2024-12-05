@@ -92,6 +92,7 @@ export default function AdminStatistics() {
   const [error, setError] = useState(null);
   const [userNew, setUsernew] = useState([]);
   const [oder, setOder] = useState([]);
+  const [showInterfaces, setShowInterfaces] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {

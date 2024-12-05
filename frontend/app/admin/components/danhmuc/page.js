@@ -7,6 +7,7 @@ import ExcelJS from "exceljs";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import RobotoRegular from "./Roboto-Regular.base64";
+import { jwtDecode } from "jwt-decode";
 
 export default function DanhmucPage() {
   const [cates, setDanhmuc] = useState([]);
@@ -17,6 +18,17 @@ export default function DanhmucPage() {
   const [error, setError] = useState(null);
   const [totalCates, settotalCates] = useState(0);
   const itemsPerPage = 5;
+  const [showInterface, setShowInterface] = useState(false);
+
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
 
   const fetchDanhmuc = async () => {
     try {
@@ -36,9 +48,10 @@ export default function DanhmucPage() {
       setLoading(false);
     }
   };
+  const debouncedfetchDanhmuc = debounce(fetchDanhmuc, 300);
 
   useEffect(() => {
-    fetchDanhmuc();
+    debouncedfetchDanhmuc();
   }, [currentPage, searchQuery]);
 
   // chức năng chuyển trang
@@ -64,9 +77,12 @@ export default function DanhmucPage() {
       cancelButtonText: "Hủy",
     });
     try {
-      const response = await fetch(`http://localhost:5000/cate/deletecate/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:5000/cate/deletecate/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
         setDanhmuc(cates.filter((cate) => cate._id !== id));
@@ -95,33 +111,8 @@ export default function DanhmucPage() {
   const startDanhmucIndex = (currentPage - 1) * itemsPerPage + 1;
   const endDanhmucIndex = Math.min(currentPage * itemsPerPage, totalCates);
 
-  const uploadFile = () => {
-    Swal.fire({
-      title: "Chưa khả dụng",
-      text: "Tính năng tải file chưa được triển khai!",
-      icon: "info",
-      confirmButtonText: "OK",
-    });
-  };
-
   const printData = () => {
     window.print();
-  };
-
-  const copyData = () => {
-    const table = document.getElementById("productTable");
-    const range = document.createRange();
-    range.selectNode(table);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-    document.execCommand("copy");
-
-    Swal.fire({
-      title: "Thành công",
-      text: "Dữ liệu đã được sao chép!",
-      icon: "success",
-      confirmButtonText: "OK",
-    });
   };
 
   // Hàm xuất dữ liệu ra Excel
@@ -140,7 +131,9 @@ export default function DanhmucPage() {
           let totalPages = 1;
           const allCates = [];
           while (currentPage <= totalPages) {
-            const response = await fetch(`http://localhost:5000/cate/allcate?page=${currentPage}`);
+            const response = await fetch(
+              `http://localhost:5000/cate/allcate?page=${currentPage}`
+            );
             const data = await response.json();
             allCates.push(...data.cates);
             totalPages = data.totalPages;
@@ -171,7 +164,9 @@ export default function DanhmucPage() {
                 mo_ta: item.mo_ta,
                 hinh_anh: "",
               });
-              const response = await fetch(`http://localhost:5000/images/${item.hinh_anh}`);
+              const response = await fetch(
+                `http://localhost:5000/images/${item.hinh_anh}`
+              );
               if (!response.ok) {
                 throw new Error(`Không thể tải ảnh từ URL: ${item.hinh_anh}`);
               }
@@ -249,9 +244,13 @@ export default function DanhmucPage() {
 
       // Fetch all pages
       while (currentPage <= totalPages) {
-        const response = await fetch(`http://localhost:5000/cate/allcate?page=${currentPage}`);
+        const response = await fetch(
+          `http://localhost:5000/cate/allcate?page=${currentPage}`
+        );
         if (!response.ok) {
-          throw new Error(`Failed to fetch page ${currentPage}: ${response.statusText}`);
+          throw new Error(
+            `Failed to fetch page ${currentPage}: ${response.statusText}`
+          );
         }
         const data = await response.json();
         allCates.push(...data.cates);
@@ -324,7 +323,9 @@ export default function DanhmucPage() {
         didDrawCell: (data) => {
           if (data.column.index === 3 && data.cell.raw === "Hình ảnh") {
             const rowIndex = data.row.index;
-            const imageData = images.find((img) => img.id === sortedCates[rowIndex]._id);
+            const imageData = images.find(
+              (img) => img.id === sortedCates[rowIndex]._id
+            );
 
             if (imageData && imageData.img) {
               const img = imageData.img;
@@ -339,9 +340,18 @@ export default function DanhmucPage() {
               canvas.height = img.height;
               const ctx = canvas.getContext("2d");
               ctx.drawImage(img, 0, 0);
-              const imgData = canvas.toDataURL(img.src.endsWith(".png") ? "image/png" : "image/jpeg");
+              const imgData = canvas.toDataURL(
+                img.src.endsWith(".png") ? "image/png" : "image/jpeg"
+              );
 
-              doc.addImage(imgData, img.src.endsWith(".png") ? "PNG" : "JPEG", posX, posY, imgWidth, imgHeight);
+              doc.addImage(
+                imgData,
+                img.src.endsWith(".png") ? "PNG" : "JPEG",
+                posX,
+                posY,
+                imgWidth,
+                imgHeight
+              );
             }
           }
         },
@@ -423,8 +433,12 @@ export default function DanhmucPage() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-                <th style={{ width: "10%", textAlign: "center" }}>Id Danh mục</th>
-                <th style={{ width: "10%", textAlign: "center" }}>Tên danh mục</th>
+                <th style={{ width: "10%", textAlign: "center" }}>
+                  Id Danh mục
+                </th>
+                <th style={{ width: "10%", textAlign: "center" }}>
+                  Tên danh mục
+                </th>
                 <th style={{ width: "15%", textAlign: "center" }}>Hình ảnh</th>
                 <th style={{ width: "20%", textAlign: "center" }}>Mô tả</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
@@ -439,8 +453,7 @@ export default function DanhmucPage() {
                       textAlign: "center",
                       color: "red",
                       fontWeight: "bold",
-                    }}
-                  >
+                    }}>
                     Không có danh mục
                   </td>
                 </tr>
@@ -459,11 +472,15 @@ export default function DanhmucPage() {
                         <p className={styles.mota}>{mo_ta}</p>
                       </td>
                       <td style={{ textAlign: "center" }}>
-                        <Link href={`/admin/components/suadanhmuc/${_id}`} className={`${styles.btn} ${styles.edit}`}>
+                        <Link
+                          href={`/admin/components/suadanhmuc/${_id}`}
+                          className={`${styles.btn} ${styles.edit}`}>
                           ✏️
                         </Link>
                         &nbsp;
-                        <button className={`${styles.btn} ${styles.delete}`} onClick={() => deleteDanhmuc(_id)}>
+                        <button
+                          className={`${styles.btn} ${styles.delete}`}
+                          onClick={() => deleteDanhmuc(_id)}>
                           🗑️
                         </button>
                         &nbsp;
@@ -476,26 +493,36 @@ export default function DanhmucPage() {
           </table>
           <div className={styles.pagination}>
             <span>
-              Hiện {startDanhmucIndex} đến {endDanhmucIndex} của {totalCates} {""}
+              Hiện {startDanhmucIndex} đến {endDanhmucIndex} của {totalCates}{" "}
+              {""}
               sản phẩm
             </span>
             <div className={styles.paginationControls}>
               <button
-                className={`${styles.paginationButton} ${currentPage === 1 ? styles.disabled : styles["other-page"]}`}
-                onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
+                className={`${styles.paginationButton} ${
+                  currentPage === 1 ? styles.disabled : styles["other-page"]
+                }`}
+                onClick={() =>
+                  currentPage > 1 && handlePageChange(currentPage - 1)
+                }
+                disabled={currentPage === 1}>
                 ‹
               </button>
-              <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPage}`}</button>
+              <button
+                className={
+                  styles.paginationButton
+                }>{`Trang ${currentPage} / ${totalPage}`}</button>
 
               <button
                 className={`${styles.paginationButton} ${
-                  currentPage === totalPage ? styles.disabled : styles["other-page"]
+                  currentPage === totalPage
+                    ? styles.disabled
+                    : styles["other-page"]
                 }`}
-                onClick={() => currentPage < totalPage && handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPage}
-              >
+                onClick={() =>
+                  currentPage < totalPage && handlePageChange(currentPage + 1)
+                }
+                disabled={currentPage === totalPage}>
                 ›
               </button>
             </div>
