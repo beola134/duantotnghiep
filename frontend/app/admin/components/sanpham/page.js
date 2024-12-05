@@ -8,8 +8,6 @@ import ExcelJS from "exceljs";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import RobotoRegular from "./Roboto-Regular.base64";
-import { jwtDecode } from "jwt-decode";
-import cx from 'classnames';
 
 export default function SanPham() {
   const [products, setProducts] = useState([]);
@@ -19,21 +17,8 @@ export default function SanPham() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
-  const [showInterface, setShowInterface] = useState(false);
   const itemsPerPage = 5;
-  useEffect(() => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
-    if (token) {
-      const decoded = jwtDecode(token);
-      console.log(decoded);
-      if (decoded.quyen === 1) {
-        setShowInterface(true);
-      }
-    }
-  }, []);
+
   const printData = () => {
     window.print();
   };
@@ -391,8 +376,6 @@ export default function SanPham() {
     }
   };
   return (
-    <main id={showInterface ? cx("content") : ""}>
-      {showInterface && (
     <div className={styles.SidebarContainer}>
       <section id={styles.content}>
         <div className={styles.header1}>
@@ -568,7 +551,5 @@ export default function SanPham() {
         </div>
       </section>
     </div>
-  )}
-  </main>
   );
 }
