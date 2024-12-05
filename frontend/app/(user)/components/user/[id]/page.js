@@ -274,7 +274,8 @@ const User = ({ params }) => {
             text: `Đơn hàng đã được hủy thành công.`,
             icon: "success",
           }).then(() => {
-            window.location.href = "/";
+            setActiveTab("ShowLichsu");
+            fetchShowLichsu();
           });
         } catch (error) {
           Swal.fire({
