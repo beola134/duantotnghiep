@@ -20,16 +20,15 @@ export default function DanhmucPage() {
   const itemsPerPage = 5;
   const [showInterface, setShowInterface] = useState(false);
 
-    const debounce = (func, delay) => {
-      let timeoutId;
-      return (...args) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          func(...args);
-        }, delay);
-      };
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
     };
-
+  };
 
   const fetchDanhmuc = async () => {
     try {
@@ -111,7 +110,6 @@ export default function DanhmucPage() {
 
   const startDanhmucIndex = (currentPage - 1) * itemsPerPage + 1;
   const endDanhmucIndex = Math.min(currentPage * itemsPerPage, totalCates);
-
 
   const printData = () => {
     window.print();
@@ -384,182 +382,153 @@ export default function DanhmucPage() {
   if (loading) return <div>Đang tải dữ liệu...</div>;
   if (error) return <div>Có lỗi xảy ra: {error}</div>;
 
-  useEffect(() => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
-    if (token) {
-      const decoded = jwtDecode(token);
-      console.log(decoded);
-      if (decoded.quyen === 1) {
-        setShowInterface(true);
-      }
-    }
-  }, []);
-
   return (
-    <main id={showInterface ? styles.loi : ""}>
-      {showInterface && (
-        <div className={styles.SidebarContainer}>
-          <section id={styles.content}>
-            <div className={styles.header1}>
-              <div className={styles.title} style={{ fontWeight: "bold" }}>
-                Danh Sách Danh mục
-              </div>
-              <div className={styles.timestamp} id="timestamp"></div>
+    <div className={styles.SidebarContainer}>
+      <section id={styles.content}>
+        <div className={styles.header1}>
+          <div className={styles.title} style={{ fontWeight: "bold" }}>
+            Danh Sách Danh mục
+          </div>
+          <div className={styles.timestamp} id="timestamp"></div>
+        </div>
+        <div className={styles.bg}>
+          <div className={styles.container}>
+            <div className={styles.actions}>
+              <Link href="/admin/components/themdanhmuc" className={styles.sp}>
+                <i className="fas fa-plus"></i> Tạo mới Danh mục
+              </Link>
             </div>
-            <div className={styles.bg}>
-              <div className={styles.container}>
-                <div className={styles.actions}>
-                  <Link
-                    href="/admin/components/themdanhmuc"
-                    className={styles.sp}>
-                    <i className="fas fa-plus"></i> Tạo mới Danh mục
-                  </Link>
-                </div>
-                <div className={styles.buttonGroup}>
-                  <button className={styles.sp3} onClick={printData}>
-                    <i className="fas fa-print"></i> In dữ liệu
-                  </button>
-                  &nbsp;
-                  <button className={styles.sp5} onClick={exportToExcel}>
-                    &nbsp;
-                    <i className="fas fa-file-excel"></i> Xuất Excel
-                  </button>
-                  &nbsp;
-                  <button className={styles.sp6} onClick={exportToPDF}>
-                    <i className="fas fa-file-pdf"></i> Xuất PDF
-                  </button>
-                  &nbsp;
-                </div>
-              </div>
+            <div className={styles.buttonGroup}>
+              <button className={styles.sp3} onClick={printData}>
+                <i className="fas fa-print"></i> In dữ liệu
+              </button>
+              &nbsp;
+              <button className={styles.sp5} onClick={exportToExcel}>
+                &nbsp;
+                <i className="fas fa-file-excel"></i> Xuất Excel
+              </button>
+              &nbsp;
+              <button className={styles.sp6} onClick={exportToPDF}>
+                <i className="fas fa-file-pdf"></i> Xuất PDF
+              </button>
+              &nbsp;
+            </div>
+          </div>
 
-              <div className={styles.tableControls}>
-                <div className={styles.search}>
-                  <label htmlFor="search" style={{ fontWeight: "bold" }}>
-                    Tìm kiếm:
-                  </label>
-                  <input
-                    type="text"
-                    id="search"
-                    value={searchQuery}
-                    onChange={handSearchChange}
-                    placeholder="Nhập tên danh mục..."
-                  />
-                </div>
-              </div>
+          <div className={styles.tableControls}>
+            <div className={styles.search}>
+              <label htmlFor="search" style={{ fontWeight: "bold" }}>
+                Tìm kiếm:
+              </label>
+              <input
+                type="text"
+                id="search"
+                value={searchQuery}
+                onChange={handSearchChange}
+                placeholder="Nhập tên danh mục..."
+              />
+            </div>
+          </div>
 
-              <table id="productTable" className={styles.productTable}>
-                <thead>
-                  <tr>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Id Danh mục
-                    </th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Tên danh mục
-                    </th>
-                    <th style={{ width: "15%", textAlign: "center" }}>
-                      Hình ảnh
-                    </th>
-                    <th style={{ width: "20%", textAlign: "center" }}>Mô tả</th>
-                    <th style={{ width: "10%", textAlign: "center" }}>
-                      Chức năng
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {cates.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan="5"
-                        style={{
-                          textAlign: "center",
-                          color: "red",
-                          fontWeight: "bold",
-                        }}>
-                        Không có danh mục
+          <table id="productTable" className={styles.productTable}>
+            <thead>
+              <tr>
+                <th style={{ width: "10%", textAlign: "center" }}>
+                  Id Danh mục
+                </th>
+                <th style={{ width: "10%", textAlign: "center" }}>
+                  Tên danh mục
+                </th>
+                <th style={{ width: "15%", textAlign: "center" }}>Hình ảnh</th>
+                <th style={{ width: "20%", textAlign: "center" }}>Mô tả</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cates.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="5"
+                    style={{
+                      textAlign: "center",
+                      color: "red",
+                      fontWeight: "bold",
+                    }}>
+                    Không có danh mục
+                  </td>
+                </tr>
+              ) : (
+                cates.map((cate) => {
+                  const { _id, ten_danh_muc, mo_ta, hinh_anh } = cate;
+
+                  return (
+                    <tr key={_id}>
+                      <td>{_id}</td>
+                      <td style={{ textAlign: "center" }}>{ten_danh_muc}</td>
+                      <td style={{ width: "10%", textAlign: "center" }}>
+                        <img src={`http://localhost:5000/images/${hinh_anh}`} />
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        <p className={styles.mota}>{mo_ta}</p>
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        <Link
+                          href={`/admin/components/suadanhmuc/${_id}`}
+                          className={`${styles.btn} ${styles.edit}`}>
+                          ✏️
+                        </Link>
+                        &nbsp;
+                        <button
+                          className={`${styles.btn} ${styles.delete}`}
+                          onClick={() => deleteDanhmuc(_id)}>
+                          🗑️
+                        </button>
+                        &nbsp;
                       </td>
                     </tr>
-                  ) : (
-                    cates.map((cate) => {
-                      const { _id, ten_danh_muc, mo_ta, hinh_anh } = cate;
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+          <div className={styles.pagination}>
+            <span>
+              Hiện {startDanhmucIndex} đến {endDanhmucIndex} của {totalCates}{" "}
+              {""}
+              sản phẩm
+            </span>
+            <div className={styles.paginationControls}>
+              <button
+                className={`${styles.paginationButton} ${
+                  currentPage === 1 ? styles.disabled : styles["other-page"]
+                }`}
+                onClick={() =>
+                  currentPage > 1 && handlePageChange(currentPage - 1)
+                }
+                disabled={currentPage === 1}>
+                ‹
+              </button>
+              <button
+                className={
+                  styles.paginationButton
+                }>{`Trang ${currentPage} / ${totalPage}`}</button>
 
-                      return (
-                        <tr key={_id}>
-                          <td>{_id}</td>
-                          <td style={{ textAlign: "center" }}>
-                            {ten_danh_muc}
-                          </td>
-                          <td style={{ width: "10%", textAlign: "center" }}>
-                            <img
-                              src={`http://localhost:5000/images/${hinh_anh}`}
-                            />
-                          </td>
-                          <td style={{ textAlign: "center" }}>
-                            <p className={styles.mota}>{mo_ta}</p>
-                          </td>
-                          <td style={{ textAlign: "center" }}>
-                            <Link
-                              href={`/admin/components/suadanhmuc/${_id}`}
-                              className={`${styles.btn} ${styles.edit}`}>
-                              ✏️
-                            </Link>
-                            &nbsp;
-                            <button
-                              className={`${styles.btn} ${styles.delete}`}
-                              onClick={() => deleteDanhmuc(_id)}>
-                              🗑️
-                            </button>
-                            &nbsp;
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </table>
-              <div className={styles.pagination}>
-                <span>
-                  Hiện {startDanhmucIndex} đến {endDanhmucIndex} của{" "}
-                  {totalCates} {""}
-                  sản phẩm
-                </span>
-                <div className={styles.paginationControls}>
-                  <button
-                    className={`${styles.paginationButton} ${
-                      currentPage === 1 ? styles.disabled : styles["other-page"]
-                    }`}
-                    onClick={() =>
-                      currentPage > 1 && handlePageChange(currentPage - 1)
-                    }
-                    disabled={currentPage === 1}>
-                    ‹
-                  </button>
-                  <button
-                    className={
-                      styles.paginationButton
-                    }>{`Trang ${currentPage} / ${totalPage}`}</button>
-
-                  <button
-                    className={`${styles.paginationButton} ${
-                      currentPage === totalPage
-                        ? styles.disabled
-                        : styles["other-page"]
-                    }`}
-                    onClick={() =>
-                      currentPage < totalPage &&
-                      handlePageChange(currentPage + 1)
-                    }
-                    disabled={currentPage === totalPage}>
-                    ›
-                  </button>
-                </div>
-              </div>
+              <button
+                className={`${styles.paginationButton} ${
+                  currentPage === totalPage
+                    ? styles.disabled
+                    : styles["other-page"]
+                }`}
+                onClick={() =>
+                  currentPage < totalPage && handlePageChange(currentPage + 1)
+                }
+                disabled={currentPage === totalPage}>
+                ›
+              </button>
             </div>
-          </section>
+          </div>
         </div>
-      )}
-    </main>
+      </section>
+    </div>
   );
 }

@@ -115,124 +115,108 @@ export default function SuaVoucher() {
       Swal.fire("Error", "Có lỗi xảy ra!", "error");
     }
   };
-  useEffect(() => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
-    if (token) {
-      const decoded = jwtDecode(token);
-      console.log(decoded);
-      if (decoded.quyen === 1) {
-        setShowInterface(true);
-      }
-    }
-  }, []);
+
   return (
-    <main id={showInterface ? styles.loi : ""}>
-      {showInterface && (
-        <div className={styles.SidebarContainer}>
-          <section id={styles.content}>
-            <div className={styles.header1}>
-              <div className={styles.title} style={{ fontWeight: "bold" }}>
-                Cập nhật Voucher
-              </div>
-              <div className={styles.timestamp} id="timestamp"></div>
-            </div>
-            <div className={styles.bg}>
-              <form onSubmit={handleSubmit}>
-                <div className={styles.container1}>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="ma_Voucher">Mã Voucher</label>
-                    <input
-                      type="text"
-                      id="ma_Voucher"
-                      className="ma_Voucher"
-                      value={maVouchers}
-                      onChange={(e) => setmaVouchers(e.target.value)}
-                    />
-                  </div>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="giatri">Giá trị voucher</label>
-                    <input
-                      type="text"
-                      id="giatri"
-                      className="giatri"
-                      value={giatri}
-                      onChange={(e) => setgiatri(e.target.value)}
-                    />
-                  </div>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="phantram">Phần trăm</label>
-                    <input
-                      type="text"
-                      id="phantram"
-                      className="phantram"
-                      value={phantram}
-                      onChange={(e) => setphantram(e.target.value)}
-                    />
-                  </div>{" "}
-                  <div className={styles.formGroup}>
-                    <label htmlFor="soluong">Số Lượng</label>
-                    <input
-                      type="text"
-                      id="soluong"
-                      className="soluong"
-                      value={soluong}
-                      onChange={(e) => setsoluong(e.target.value)}
-                    />
-                  </div>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="ngayBD">
-                      Ngày bắt đầu tính giá trị voucher
-                    </label>
-                    <input
-                      type="datetime-local"
-                      id="ngayBD"
-                      className="ngayBD"
-                      value={ngayBD}
-                      onChange={(e) => setngayBD(e.target.value)}
-                    />
-                  </div>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="ngayKT">
-                      Ngày kết thúc tính giá trị voucher
-                    </label>
-                    <input
-                      type="datetime-local"
-                      id="ngayKT"
-                      className="ngayKT"
-                      value={ngayKT}
-                      onChange={(e) => setngayKT(e.target.value)}
-                    />
-                  </div>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="description">Mô tả voucher</label>
-                    <textarea
-                      id="description"
-                      name="description"
-                      value={mota}
-                      onChange={(e) => setmota(e.target.value)}
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="btn btn-outline-primary"
-                    onSubmit={handleSubmit}>
-                    Cập nhật
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary"
-                    onClick={() => router.push("/components/voucher")}>
-                    Hủy bỏ
-                  </button>
-                </div>
-              </form>
-            </div>
-          </section>
+    <div className={styles.SidebarContainer}>
+      <section id={styles.content}>
+        <div className={styles.header1}>
+          <div className={styles.title} style={{ fontWeight: "bold" }}>
+            Cập nhật Voucher
+          </div>
+          <div className={styles.timestamp} id="timestamp"></div>
         </div>
-      )}
-    </main>
+        <div className={styles.bg}>
+          <form onSubmit={handleSubmit}>
+            <div className={styles.container1}>
+              <div className={styles.formGroup}>
+                <label htmlFor="ma_Voucher">Mã Voucher</label>
+                <input
+                  type="text"
+                  id="ma_Voucher"
+                  className="ma_Voucher"
+                  value={maVouchers}
+                  onChange={(e) => setmaVouchers(e.target.value)}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="giatri">Giá trị voucher</label>
+                <input
+                  type="text"
+                  id="giatri"
+                  className="giatri"
+                  value={giatri}
+                  onChange={(e) => setgiatri(e.target.value)}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="phantram">Phần trăm</label>
+                <input
+                  type="text"
+                  id="phantram"
+                  className="phantram"
+                  value={phantram}
+                  onChange={(e) => setphantram(e.target.value)}
+                />
+              </div>{" "}
+              <div className={styles.formGroup}>
+                <label htmlFor="soluong">Số Lượng</label>
+                <input
+                  type="text"
+                  id="soluong"
+                  className="soluong"
+                  value={soluong}
+                  onChange={(e) => setsoluong(e.target.value)}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="ngayBD">
+                  Ngày bắt đầu tính giá trị voucher
+                </label>
+                <input
+                  type="datetime-local"
+                  id="ngayBD"
+                  className="ngayBD"
+                  value={ngayBD}
+                  onChange={(e) => setngayBD(e.target.value)}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="ngayKT">
+                  Ngày kết thúc tính giá trị voucher
+                </label>
+                <input
+                  type="datetime-local"
+                  id="ngayKT"
+                  className="ngayKT"
+                  value={ngayKT}
+                  onChange={(e) => setngayKT(e.target.value)}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="description">Mô tả voucher</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={mota}
+                  onChange={(e) => setmota(e.target.value)}
+                />
+              </div>
+              <button
+                type="submit"
+                className="btn btn-outline-primary"
+                onSubmit={handleSubmit}>
+                Cập nhật
+              </button>
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                onClick={() => router.push("/components/voucher")}>
+                Hủy bỏ
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
   );
 }
