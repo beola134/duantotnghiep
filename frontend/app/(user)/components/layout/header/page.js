@@ -424,17 +424,24 @@ export default function Header() {
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
   const [user, setUser] = useState(null);
-  useEffect(() => {
-    setIsMounted(true);
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
-    if (token) {
+useEffect(() => {
+  setIsMounted(true);
+  const token = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("token="))
+    ?.split("=")[1];
+  if (token) {
+    try {
       const decoded = jwtDecode(token);
-      fetchUserDetails(decoded._id);
+      if (decoded && decoded.quyen === 2) {
+        fetchUserDetails(decoded.userId);
+        setShowInterface(true);
+      }
+    } catch (error) {
+      console.error("Token không hợp lệ:", error);
     }
-  }, []);
+  }
+}, []);
   
   const fetchUserDetails = async (userId) => {
     try {
