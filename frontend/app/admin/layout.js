@@ -11,7 +11,7 @@ export default function RootLayout({ children }) {
 
   useEffect(() => {
     const token = document.cookie
-      .split(";")
+      .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
 
