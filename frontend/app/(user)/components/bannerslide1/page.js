@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./bannerslide1.module.css";
 import classNames from "classnames/bind";
-import Slider from "react-slick"; // Import Slider
+import Slider from "react-slick"; 
 
 const cx = classNames.bind(styles);
 
@@ -17,14 +17,14 @@ export default function BannerSlide1() {
 
   
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000, 
-    pauseOnHover: true,
+    pauseOnHover: false,
   };
   const [slider, setSlider] = useState(null); 
     useEffect(() => {

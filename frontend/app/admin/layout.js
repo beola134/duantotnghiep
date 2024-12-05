@@ -69,8 +69,9 @@ export default function RootLayout({ children }) {
           </>
         ) : (
           <div
-            style={{ textAlign: "center", marginTop: "300px", color: "red" }}
+            style={{ textAlign: "center",marginTop: "100px", color: "red" }}
           >
+            <img  src="/image/item/bg-403.png" alt=""/>
             <h2>Bạn không có quyền truy cập vào trang này</h2>
           </div>
         )}
