@@ -407,14 +407,9 @@ export default function ThanhToan() {
                   <option value={1} className={styles.paymentOption}>
                     Thanh toán khi nhận hàng
                   </option>
-                  <option value={2} className={styles.paymentOption}>
-                    Thanh toán bằng tài khoản ngân hàng
-                  </option>
+
                   <option value={3} className={styles.paymentOption}>
                     Thanh toán bằng ZaloPay
-                  </option>
-                  <option value={4} className={styles.paymentOption}>
-                    Thanh toán ví điện tử Momo
                   </option>
                 </select>
               </div>
