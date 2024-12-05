@@ -17,27 +17,6 @@ export default function CommentsPage() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showInterface, setShowInterface] = useState(false);
-
-  // lấy thông tin người dùng từ API
-  useEffect(() => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        console.log(decoded);
-        if (decoded.quyen === 1) {
-          setShowInterface(true);
-          fetchUserDetails(decoded._id);
-        }
-      } catch (error) {
-        console.error("Giải mã token không thành công.", error);
-      }
-    }
-  }, []);
 
   // gọi tất cả các bình luận từ API
   const fetchComments = async () => {
@@ -162,7 +141,7 @@ export default function CommentsPage() {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = "danh_muc.xlsx";
+          a.download = "comments-table.xlsx";
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
@@ -196,7 +175,7 @@ export default function CommentsPage() {
     // Tiêu đề file PDF
     doc.setFontSize(16);
     doc.setTextColor(40);
-    doc.text("Danh sách danh mục", 10, 10);
+    doc.text("Danh sách bình luận", 10, 10);
 
     try {
       let currentPage = 1;
@@ -263,7 +242,7 @@ export default function CommentsPage() {
       doc.text(`Ngày xuất: ${date}`, 10, doc.internal.pageSize.height - 10);
 
       // Lưu file PDF
-      doc.save("comments.pdf");
+      doc.save("comments-table.pdf");
 
       Swal.fire({
         title: "Thành công",
@@ -290,153 +269,147 @@ export default function CommentsPage() {
   }
   return (
     <div className={styles.SidebarContainer}>
-      <section id={showInterface ? styles.content : ""}>
-        {showInterface && (
-          <>
-            <div className={styles.header1}>
-              <div className={styles.title} style={{ fontWeight: "bold" }}>
-                Danh Sách Sản Phẩm
+      <section id={styles.content}>
+        <div className={styles.header1}>
+          <div className={styles.title} style={{ fontWeight: "bold" }}>
+            Danh Sách Sản Phẩm
+          </div>
+          <div className={styles.timestamp} id="timestamp"></div>
+        </div>
+        <div className={styles.bg}>
+          <div className={styles.container}>
+            <div className={styles.actions}>
+              <div className={styles.buttonGroup}>
+                <button
+                  className={styles.sp3}
+                  onClick={() => {
+                    const originalContent = document.body.innerHTML;
+                    const tableContent = document.getElementById("productTable").outerHTML;
+                    document.body.innerHTML = tableContent;
+                    window.print();
+                    document.body.innerHTML = originalContent;
+                  }}
+                >
+                  <i className="fas fa-print"></i> In dữ liệu
+                </button>
+                &nbsp;
+                <button className={styles.sp5} onClick={exportToExcel}>
+                  <i className="fas fa-file-excel"></i> Xuất Excel
+                </button>
+                &nbsp;
+                <button className={styles.sp6} onClick={exportToPDF}>
+                  <i className="fas fa-file-pdf"></i> Xuất PDF
+                </button>
+                &nbsp;
               </div>
-              <div className={styles.timestamp} id="timestamp"></div>
             </div>
-            <div className={styles.bg}>
-              <div className={styles.container}>
-                <div className={styles.actions}>
-                  <div className={styles.buttonGroup}>
-                    <button
-                      className={styles.sp3}
-                      onClick={() => {
-                        const originalContent = document.body.innerHTML;
-                        const tableContent = document.getElementById("productTable").outerHTML;
-                        document.body.innerHTML = tableContent;
-                        window.print();
-                        document.body.innerHTML = originalContent;
-                      }}
-                    >
-                      <i className="fas fa-print"></i> In dữ liệu
-                    </button>
-                    &nbsp;
-                    <button className={styles.sp5} onClick={exportToExcel}>
-                      <i className="fas fa-file-excel"></i> Xuất Excel
-                    </button>
-                    &nbsp;
-                    <button className={styles.sp6} onClick={exportToPDF}>
-                      <i className="fas fa-file-pdf"></i> Xuất PDF
-                    </button>
-                    &nbsp;
-                  </div>
-                </div>
 
-                <div className={styles.tableContainer}>
-                  <div className={styles.tableControls}>
-                    <label htmlFor="entries" style={{ fontWeight: "bold" }}></label>
-                    <div className={styles.search}>
-                      <label htmlFor="search" style={{ fontWeight: "bold" }}>
-                        Tìm kiếm:
-                      </label>
-                      <input
-                        type="text"
-                        id="search"
-                        value={search}
-                        onChange={handSearchChange}
-                        placeholder="Nhập tên người dùng..."
-                      />
-                    </div>
-                  </div>
-                  <table id="productTable" className={styles.productTable}>
-                    <thead>
-                      <tr>
-                        <th style={{ width: "15%", textAlign: "center" }}>Id bình luận</th>
-                        <th style={{ width: "10%", textAlign: "center" }}>Id sản phẩm</th>
-                        <th style={{ width: "8%", textAlign: "center" }}>Họ và tên </th>
-                        <th style={{ width: "12%", textAlign: "center" }}>Nội dung</th>
-                        <th style={{ width: "5%", textAlign: "center" }}>Sao</th>
-                        <th style={{ width: "10%", textAlign: "center" }}>Ngày bình luận</th>
-                        <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {comments.length === 0 ? (
-                        <tr>
-                          <td
-                            colSpan="7"
-                            style={{
-                              textAlign: "center",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            Không có bình luận nào
+            <div className={styles.tableContainer}>
+              <div className={styles.tableControls}>
+                <label htmlFor="entries" style={{ fontWeight: "bold" }}></label>
+                <div className={styles.search}>
+                  <label htmlFor="search" style={{ fontWeight: "bold" }}>
+                    Tìm kiếm:
+                  </label>
+                  <input
+                    type="text"
+                    id="search"
+                    value={search}
+                    onChange={handSearchChange}
+                    placeholder="Nhập tên người dùng..."
+                  />
+                </div>
+              </div>
+              <table id="productTable" className={styles.productTable}>
+                <thead>
+                  <tr>
+                    <th style={{ width: "15%", textAlign: "center" }}>Id bình luận</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Id sản phẩm</th>
+                    <th style={{ width: "8%", textAlign: "center" }}>Họ và tên </th>
+                    <th style={{ width: "12%", textAlign: "center" }}>Nội dung</th>
+                    <th style={{ width: "5%", textAlign: "center" }}>Sao</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Ngày bình luận</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {comments.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="7"
+                        style={{
+                          textAlign: "center",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Không có bình luận nào
+                      </td>
+                    </tr>
+                  ) : (
+                    comments.map((comment) => {
+                      const { _id, noi_dung, sao, ngay_binh_luan, id_san_pham, trang_thai } = comment;
+
+                      return (
+                        <tr key={_id} className={!trang_thai ? styles.hiddenRow : ""}>
+                          <td>{_id}</td>
+                          <td>{id_san_pham}</td>
+                          <td style={{ textAlign: "center" }}>
+                            <span className={`${styles.status} ${styles.inStock}`}>{comment.user?.ten_dang_nhap}</span>
+                          </td>
+
+                          <td style={{ textAlign: "center" }}>{noi_dung}</td>
+                          <td style={{ textAlign: "center" }}>{sao}</td>
+                          <td style={{ textAlign: "center" }}>
+                            {new Date(ngay_binh_luan).toLocaleString("vi-VN", {
+                              timeZone: "Asia/Ho_Chi_Minh",
+                            })}
+                          </td>
+
+                          <td style={{ textAlign: "center" }}>
+                            <button
+                              onClick={() => handleToggleComment(_id, trang_thai)}
+                              className={`${styles.btn} ${styles.edit}`}
+                            >
+                              <FontAwesomeIcon icon={trang_thai ? faEye : faEyeSlash} />
+                            </button>
                           </td>
                         </tr>
-                      ) : (
-                        comments.map((comment) => {
-                          const { _id, noi_dung, sao, ngay_binh_luan, id_san_pham, trang_thai } = comment;
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
 
-                          return (
-                            <tr key={_id} className={!trang_thai ? styles.hiddenRow : ""}>
-                              <td>{_id}</td>
-                              <td>{id_san_pham}</td>
-                              <td style={{ textAlign: "center" }}>
-                                <span className={`${styles.status} ${styles.inStock}`}>
-                                  {comment.user?.ten_dang_nhap}
-                                </span>
-                              </td>
+              <div className={styles.pagination}>
+                <span className={styles.totalComment}>
+                  Hiện {startDanhmucIndex} đến {endDanhmucIndex} của {totalComment} bình luận
+                </span>
+                <div className={styles.paginationControls}>
+                  <button
+                    className={`${styles.paginationButton} ${
+                      currentPage === 1 ? styles.disabled : styles["other-page"]
+                    }`}
+                    onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    ‹
+                  </button>
 
-                              <td style={{ textAlign: "center" }}>{noi_dung}</td>
-                              <td style={{ textAlign: "center" }}>{sao}</td>
-                              <td style={{ textAlign: "center" }}>
-                                {new Date(ngay_binh_luan).toLocaleString("vi-VN", {
-                                  timeZone: "Asia/Ho_Chi_Minh",
-                                })}
-                              </td>
-
-                              <td style={{ textAlign: "center" }}>
-                                <button
-                                  onClick={() => handleToggleComment(_id, trang_thai)}
-                                  className={`${styles.btn} ${styles.edit}`}
-                                >
-                                  <FontAwesomeIcon icon={trang_thai ? faEye : faEyeSlash} />
-                                </button>
-                              </td>
-                            </tr>
-                          );
-                        })
-                      )}
-                    </tbody>
-                  </table>
-
-                  <div className={styles.pagination}>
-                    <span className={styles.totalComment}>
-                      Hiện {startDanhmucIndex} đến {endDanhmucIndex} của {totalComment} bình luận
-                    </span>
-                    <div className={styles.paginationControls}>
-                      <button
-                        className={`${styles.paginationButton} ${
-                          currentPage === 1 ? styles.disabled : styles["other-page"]
-                        }`}
-                        onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                      >
-                        ‹
-                      </button>
-
-                      <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPages || 1}`}</button>
-                      <button
-                        className={`${styles.paginationButton} ${
-                          currentPage === totalPages ? styles.disabled : styles["other-page"]
-                        }`}
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                      >
-                        ›
-                      </button>
-                    </div>
-                  </div>
+                  <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPages || 1}`}</button>
+                  <button
+                    className={`${styles.paginationButton} ${
+                      currentPage === totalPages ? styles.disabled : styles["other-page"]
+                    }`}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    ›
+                  </button>
                 </div>
               </div>
             </div>
-          </>
-        )}
+          </div>
+        </div>
       </section>
     </div>
   );
