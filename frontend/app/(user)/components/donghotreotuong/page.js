@@ -14,6 +14,7 @@ export default function DongHoTreoTuong() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const [filter, setFilter] = useState({
     muc_gia: "",
@@ -23,6 +24,10 @@ export default function DongHoTreoTuong() {
     mau_mat: "",
     kieu_dang: "",
   });
+
+  const toggleDescription = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -161,7 +166,7 @@ export default function DongHoTreoTuong() {
                       </em>
                       tại
                       <em>
-                        <strong> Duy Anh Watch</strong>{" "}
+                        <strong> WRISTLY Watch</strong>{" "}
                       </em>
                       &nbsp;với đầy đủ các thiết kế, kiểu dáng, kích thước, màu
                       sắc...đều sẽ khiến bạn hài lòng.
@@ -785,6 +790,10 @@ export default function DongHoTreoTuong() {
                       "description",
                       "height-auto"
                     )}
+                    style={{
+                      height: isExpanded ? "auto" : "360px",
+                      overflow: isExpanded ? "visible" : "hidden",
+                    }}
                   >
                     <h2 dir="ltr" style={{ textAlign: "center" }}>
                       <span style={{ color: "#2980b9" }}>
@@ -824,7 +833,10 @@ export default function DongHoTreoTuong() {
                         />
                         <figcaption>
                           <strong>
-                            <Link href="#">Đồng hồ treo tường Seiko </Link>
+                            <Link href="#">
+                              Stonehenge, một trong những đồng hồ mặt trời được
+                              biết đến đầu tiên
+                            </Link>
                           </strong>
                         </figcaption>
                       </figure>
@@ -854,10 +866,12 @@ export default function DongHoTreoTuong() {
                           className={cx("lazy")}
                           width={1100}
                           style={{ display: "inline-block", opacity: 1 }}
-                          src="/image/item/donghotreotuong-hinh2.jpg"
+                          src="/image/item/donghotreotuong_hinh2.jpg"
                         />
                         <figcaption>
-                          <strong>Đồng hồ treo tường Seiko</strong>
+                          <strong>
+                            Đồng hồ tháp chuông Big Ben tại London
+                          </strong>
                         </figcaption>
                       </figure>
                     </div>
@@ -902,10 +916,12 @@ export default function DongHoTreoTuong() {
                           className={cx("lazy")}
                           width={1100}
                           style={{ display: "inline-block", opacity: 1 }}
-                          src="/public/img/item/donghotreotuong-hinh3.jpg"
+                          src="/image/item/donghotreotuong-hinh3.jpg"
                         />
                         <figcaption>
-                          <strong>Đồng hồ treo tường Seiko</strong>
+                          <strong>
+                            Đồng hồ treo tường trang trí không gian sống
+                          </strong>
                         </figcaption>
                       </figure>
                     </div>
@@ -921,7 +937,7 @@ export default function DongHoTreoTuong() {
                       </Link>
                       &nbsp;theo phong cách cổ điển hay sang trọng và tinh tế,
                       <strong>
-                        <Link href="#">Đồng hồ Duy Anh</Link>
+                        <Link href="#">Đồng hồ WRISTLY</Link>
                       </strong>{" "}
                       có hơn&nbsp;800+ mẫu cho bạn lựa chọn đến từ thương hiệu
                       <em>
@@ -964,14 +980,14 @@ export default function DongHoTreoTuong() {
                         </Link>
                       </li>
                       <li style={{ textAlign: "justify" }}>
-                        <Link href="#">HỆ THỐNG CỬA HÀNG CỦA DUY ANH</Link>
+                        <Link href="#">HỆ THỐNG CỬA HÀNG CỦA WRISTLY</Link>
                       </li>
                     </ul>
                     <p>&nbsp;</p>
                     <p>
                       <span style={{ color: "#2980b9" }}>
                         <em>
-                          <strong>DUY ANH WATCH</strong> luôn&nbsp;mang đến cho
+                          <strong>WRISTLY WATCH</strong> luôn&nbsp;mang đến cho
                           khách hàng những chiếc
                           <strong>đồng hồ treo tường đẹp</strong>&nbsp;đáp ứng
                           hoàn hảo&nbsp;cho cuộc&nbsp;sống hiện&nbsp;đại, thể
@@ -980,37 +996,13 @@ export default function DongHoTreoTuong() {
                         </em>
                       </span>
                     </p>
-                    <p>&nbsp;</p>
-                    <hr />
-                    <p dir="ltr">
-                      <strong>
-                        <em>
-                          Hệ thống&nbsp;mạng xã hội của Đồng hồ Duy Anh (Duy Anh
-                          Watch)
-                        </em>
-                      </strong>
-                    </p>
-                    <ul>
-                      <li>
-                        Facebook:&nbsp;
-                        <Link href="#">
-                          https://www.facebook.com/donghoduyanh.vn/
-                        </Link>
-                      </li>
-                      <li>
-                        Instagram:&nbsp;
-                        <Link href="#">
-                          https://www.instagram.com/donghoduyanh_official/
-                        </Link>
-                      </li>
-                    </ul>
-                    <hr />
-                    <p>&nbsp;</p>
                   </div>
                 </div>
                 {/* xem thêm */}
                 <div className={cx("vm-summary-content-cat")}>
-                  <span>Xem thêm</span>
+                  <span onClick={toggleDescription}>
+                    {isExpanded ? "Thu gọn" : "Xem thêm"}
+                  </span>
                 </div>
                 <div className={cx("clear")} />
                 <div className={cx("aq-relates content-li")} />
