@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
       .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-
+      
     if (token) {
       try {
         const decoded = jwtDecode(token);
