@@ -169,6 +169,17 @@ const deleteVouCher = async (req, res) => {
 
 
 ////////////////////////////////////
+//lấy tất cả vocher bên người dùng
+const getvoucher = async (req, res) => {
+  try {
+    const vouchers = await voucher.findAll();
+    res.status(200).json({vouchers});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+
+}
+
 
 
 
@@ -179,4 +190,5 @@ module.exports = {
   updateVoucher,
   deleteVouCher,
   getVoucherById,
+  getvoucher
 };

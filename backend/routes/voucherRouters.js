@@ -27,4 +27,8 @@ router.put("/updateVoucher/:id", voucher.updateVoucher);
 //http://localhost:5000/voucher/deleteVouCher/:id
 router.delete("/deleteVouCher/:id", voucher.deleteVouCher);
 
+//getvoucher
+//http://localhost:5000/voucher/getvoucher
+router.get("/getvoucher", voucher.getvoucher);
+
 module.exports = router;
