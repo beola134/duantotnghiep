@@ -57,21 +57,28 @@ export default function ThanhToan() {
   // Lấy thông tin giỏ hàng từ localStorage
   useEffect(() => {
     const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-    const updatedCartItems = cartItems.map((item) => ({ ...item, so_luong: item.so_luong ?? 1 }));
+    const updatedCartItems = cartItems.map((item) => ({
+      ...item,
+      so_luong: item.so_luong ?? 1,
+    }));
     setCartItems(cartItems);
     calculateTotal(updatedCartItems);
   }, []);
   // Tính tổng tiền
   const calculateTotal = (items) => {
     const total = items.reduce(
-      (sum, item) => sum + item.so_luong * (item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham),
+      (sum, item) =>
+        sum +
+        item.so_luong * (item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham),
       0
     );
     setTotalAmount(total);
   };
   const amount = Math.round(
     totalAmount -
-      (discountType === "phan_tram" ? (totalAmount * discountValue) / 100 : discountValue) +
+      (discountType === "phan_tram"
+        ? (totalAmount * discountValue) / 100
+        : discountValue) +
       (totalAmount < 1000000 ? 30000 : 0)
   );
 
@@ -119,17 +126,28 @@ export default function ThanhToan() {
   // Áp dụng mã giảm giá
   const applyDiscount = async () => {
     if (isDiscountApplied) return;
+    if (!discountCode || totalAmount <= 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi",
+        text: "Vui lòng nhập mã giảm giá hợp lệ và kiểm tra giá trị đơn hàng.",
+      });
+      return;
+    }
     try {
       const response = await fetch(`http://localhost:5000/voucher/ma_voucher`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ma_voucher: discountCode }),
+        body: JSON.stringify({ ma_voucher: discountCode, orderTotal: totalAmount }),
       });
+  
       if (!response.ok) {
-        throw new Error("Mã giảm giá không hợp lệ");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Mã giảm giá không hợp lệ");
       }
+  
       const data = await response.json();
       if (data.gia_tri) {
         setDiscountValue(data.gia_tri);
@@ -138,8 +156,10 @@ export default function ThanhToan() {
         setDiscountValue(data.phan_tram);
         setDiscountType("phan_tram");
       }
-      calculateTotal(cartItems);
-      setIsDiscountApplied(true);
+      
+      calculateTotal(cartItems); 
+      setIsDiscountApplied(true); 
+      toast.success("Mã giảm giá áp dụng thành công!");
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -153,7 +173,9 @@ export default function ThanhToan() {
   // Kiểm tra xem sản phẩm còn hàng không
   const ktra = async () => {
     for (const items of cartItems) {
-      const reponse = await fetch(`http://localhost:5000/product/check/${items._id}?quantity=${items.so_luong}`);
+      const reponse = await fetch(
+        `http://localhost:5000/product/check/${items._id}?quantity=${items.so_luong}`
+      );
       if (!reponse.ok) {
         Swal.fire({
           title: "Không đủ hàng",
@@ -212,7 +234,8 @@ export default function ThanhToan() {
         title: "Cảnh báo",
         text: "Vui lòng đăng nhập để tiếp tục thanh toán",
       }).then(() => {
-        window.location.href = "/components/components-login/login?redirect=thanhtoan";
+        window.location.href =
+          "/components/components-login/login?redirect=thanhtoan";
       });
       return;
     }
@@ -251,13 +274,16 @@ export default function ThanhToan() {
     // Xử lý thanh toán qua ZaloPay
     if (selectedPaymentMethod === "3") {
       try {
-        const paymentResponse = await axios.post("http://localhost:5000/pttt/zalo", {
-          amount: amount,
-          orderDetails,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const paymentResponse = await axios.post(
+          "http://localhost:5000/pttt/zalo",
+          {
+            amount: amount,
+            orderDetails,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (paymentResponse.data.return_code === 1) {
           window.location.href = paymentResponse.data.order_url; // Chuyển hướng đến ZaloPay
@@ -337,7 +363,12 @@ export default function ThanhToan() {
             <div className={`${styles.box} ${styles.customerInfo}`}>
               <p className={styles.productTitle}>Thông tin khách hàng</p>
               <div className={styles.inputGroup}>
-                <input type="email" placeholder="Email" value={user.email} readOnly />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={user.email}
+                  readOnly
+                />
                 <input
                   type="text"
                   placeholder="Điện thoại"
@@ -417,38 +448,71 @@ export default function ThanhToan() {
 
             {/* product */}
             {cartItems.map((item, index) => (
-              <div className={`${styles.box} ${styles.productCard}`} key={item._id}>
+              <div
+                className={`${styles.box} ${styles.productCard}`}
+                key={item._id}
+              >
                 <div className={styles.productInfo}>
                   <div className={styles.productLeft}>
                     <p className={styles.productTitle}>Sản phẩm</p>
                     <div className={styles.productImage}>
-                      <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
+                      <img
+                        src={`http://localhost:5000/images/${item.hinh_anh}`}
+                        alt={item.ten_san_pham}
+                      />
                     </div>
                   </div>
 
-                  <div style={{ margin: "20px" }} className={styles.productDetails}>
-                    <p className={styles.productName}>Tên sản phẩm: {item.ten_san_pham}</p>
+                  <div
+                    style={{ margin: "20px" }}
+                    className={styles.productDetails}
+                  >
+                    <p className={styles.productName}>
+                      Tên sản phẩm: {item.ten_san_pham}
+                    </p>
                     <p className={styles.productModel}>Loại máy: {item.loai}</p>
-                    <p className={styles.productCode}>Mã sản phẩm: {item.ma_san_pham}</p>
-                    <p className={styles.productSize}>Đường kính: {item.duong_kinh}</p>
+                    <p className={styles.productCode}>
+                      Mã sản phẩm: {item.ma_san_pham}
+                    </p>
+                    <p className={styles.productSize}>
+                      Đường kính: {item.duong_kinh}
+                    </p>
                   </div>
                 </div>
                 <div className={styles.productActions}>
                   <div className={styles.quantityPrice}>
                     <div className={styles.quantity}>
-                      <button onClick={() => handleDecrease(index)} className={styles.quantityBtn}>
+                      <button
+                        onClick={() => handleDecrease(index)}
+                        className={styles.quantityBtn}
+                      >
                         -
                       </button>
-                      <input type="text" value={item.so_luong} readOnly className={styles.quantityInput} />
-                      <button onClick={() => handleIncrease(index)} className={styles.quantityBtn}>
+                      <input
+                        type="text"
+                        value={item.so_luong}
+                        readOnly
+                        className={styles.quantityInput}
+                      />
+                      <button
+                        onClick={() => handleIncrease(index)}
+                        className={styles.quantityBtn}
+                      >
                         +
                       </button>
                     </div>
                     <p className={styles.productPrice}>
-                      {(item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham).toLocaleString("vi-VN")}₫
+                      {(item.gia_giam > 0
+                        ? item.gia_giam
+                        : item.gia_san_pham
+                      ).toLocaleString("vi-VN")}
+                      ₫
                     </p>
                   </div>
-                  <button onClick={() => handleDelete(index)} className={styles.deleteBtn}>
+                  <button
+                    onClick={() => handleDelete(index)}
+                    className={styles.deleteBtn}
+                  >
                     🗑️
                   </button>
                 </div>
@@ -476,7 +540,12 @@ export default function ThanhToan() {
                 <span className={styles.price}>
                   {cartItems
                     .reduce(
-                      (sum, item) => sum + item.so_luong * (item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham),
+                      (sum, item) =>
+                        sum +
+                        item.so_luong *
+                          (item.gia_giam > 0
+                            ? item.gia_giam
+                            : item.gia_san_pham),
                       0
                     )
                     .toLocaleString("vi-VN")}
@@ -486,20 +555,26 @@ export default function ThanhToan() {
               <p>
                 Ưu đãi:
                 <span className={styles.price}>
-                  {discountType === "phan_tram" ? `-${discountValue}%` : `-${discountValue.toLocaleString("vi-VN")}₫`}
+                  {discountType === "phan_tram"
+                    ? `-${discountValue}%`
+                    : `-${discountValue.toLocaleString("vi-VN")}₫`}
                 </span>
               </p>
 
               <p>
                 Phí vận chuyển:
-                <span className={styles.price}>{totalAmount > 1000000 ? "Miễn phí" : "30.000₫"}</span>
+                <span className={styles.price}>
+                  {totalAmount > 1000000 ? "Miễn phí" : "30.000₫"}
+                </span>
               </p>
               <p className={styles.totalAmount}>
                 Tổng thanh toán:
                 <span className={styles.price}>
                   {(
                     totalAmount -
-                    (discountType === "phan_tram" ? (totalAmount * discountValue) / 100 : discountValue) +
+                    (discountType === "phan_tram"
+                      ? (totalAmount * discountValue) / 100
+                      : discountValue) +
                     (totalAmount < 1000000 ? 30000 : 0)
                   ).toLocaleString("vi-VN")}
                   ₫

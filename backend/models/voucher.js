@@ -37,7 +37,11 @@ const Voucher = sequelize.define('Voucher', {
     mo_ta: {
         type: DataTypes.STRING(100),  
         allowNull: true,
-    }
+    },
+    don_hang_toi_thieu: {
+        type: DataTypes.INTEGER,  
+        allowNull: true,
+    },
 }, {
     tableName: 'voucher',  
     timestamps: false  

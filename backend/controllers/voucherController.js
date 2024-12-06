@@ -29,25 +29,35 @@ const addVoucher = async (req, res) => {
 
 //tìm kiếm voucher theo mã voucher để áp dụng cho đơn hàng dùng phương thức post
 const getVoucherByCode = async (req, res) => {
-  const { ma_voucher } = req.body;
+  const { ma_voucher, orderTotal } = req.body;
 
   try {
     const voucherFound = await voucher.findOne({ where: { ma_voucher } });
     if (!voucherFound) {
-      return res.status(404).json({ error: "Không tìm thấy voucher" });
+      return res.status(404).json({ error: `Không tìm thấy voucher với mã: ${ma_voucher}` });
     }
-    //kiểm tra xem voucher có còn hạn không
+    // Kiểm tra hạn sử dụng
     const currentDate = new Date();
     if (new Date(voucherFound.bat_dau) > currentDate || new Date(voucherFound.ket_thuc) < currentDate) {
-      return res.status(404).json({ error: "Voucher đã hết hạn" });
+      return res.status(404).json({ error: `Voucher đã hết hạn, hết hạn vào: ${voucherFound.ket_thuc}` });
     }
+    // Kiểm tra giá trị đơn hàng tối thiểu và tối đa (nếu cần)
+    const donHangToiThieu = voucherFound.don_hang_toi_thieu;
+    const donHangToiDa = donHangToiThieu + 1000000;
+    if (orderTotal < donHangToiThieu || orderTotal > donHangToiDa) { 
+      return res.status(404).json({ 
+        error: `Giá trị đơn hàng của bạn là ${orderTotal}, cần nằm trong khoảng từ ${donHangToiThieu} đến ${donHangToiDa} để sử dụng voucher.`
+      });
+    }
+
     res.status(200).json(voucherFound);
   } catch (error) {
-    res.status(500).json({ error: error.message });
-    console.log(error);
-    
+    console.error("Error fetching voucher:", error);
+    res.status(500).json({ error: "Đã xảy ra lỗi khi kiểm tra voucher" });
   }
 };
+
+
 /////////////////////////////////////////
 
 // lấy voucher theo ID
