@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import styles from "./themvoucher.module.css";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
-
+import Link from "next/link";
 export default function ThemVoucher() {
   const [maVouchers, setmaVouchers] = useState("");
   const [giatri, setgiatri] = useState("");
@@ -13,6 +13,7 @@ export default function ThemVoucher() {
   const [soluong, setsoluong] = useState("");
   const [phantram, setphantram] = useState("");
   const [mota, setmota] = useState("");
+  const [don_hang_toi_thieu, setdon_hang_toi_thieu] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
@@ -66,6 +67,7 @@ export default function ThemVoucher() {
       mo_ta: mota,
       so_luong: soluong,
       phan_tram: phantram,
+      don_hang_toi_thieu: don_hang_toi_thieu,
     };
 
     try {
@@ -83,7 +85,7 @@ export default function ThemVoucher() {
           title: "Thành công",
           text: "Thêm voucher thành công!",
         }).then(() => {
-          router.push("/admin/components/voucher");
+          router.push("/admin/components/quanlyadmin/voucher");
         });
       } else {
         const errorData = await response.json();
@@ -175,6 +177,15 @@ export default function ThemVoucher() {
                 />
               </div>
               <div className={styles.formGroup}>
+              <label htmlFor="donhangtoithieu">Đơn hàng tối thiểu</label>
+              <input
+                id="donhangtoithieu"
+                name="donhangtoithieu"
+                value={don_hang_toi_thieu}
+                onChange={(e) => setdon_hang_toi_thieu(e.target.value)}
+              />
+            </div>
+              <div className={styles.formGroup}>
                 <label htmlFor="description">Mô tả voucher</label>
                 <textarea
                   id="description"
@@ -183,24 +194,18 @@ export default function ThemVoucher() {
                   onChange={(e) => setmota(e.target.value)}
                 />
               </div>
+            
               <button
                 type="submit"
                 className="btn btn-outline-primary"
                 onClick={handleSubmit}>
                 Thêm
               </button>
-              <button
-                type="button"
-                className="btn btn-outline-secondary"
-                onClick={() =>
-                  Swal.fire({
-                    icon: "info",
-                    title: "Hủy bỏ",
-                    text: "Bạn đã hủy thêm voucher.",
-                  })
-                }>
+              <Link href="/admin/components/quanlyadmin/voucher">
+              <button type="button" className="btn btn-outline-secondary w-100">
                 Hủy bỏ
               </button>
+            </Link>
             </div>
           </form>
         </div>

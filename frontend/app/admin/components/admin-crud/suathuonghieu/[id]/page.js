@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./suadanhmuc.module.css";
 import Swal from "sweetalert2";
 import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
 
 export default function SuaThuongHieu() {
     const [productName, setProductName] = useState("");
@@ -55,7 +56,7 @@ export default function SuaThuongHieu() {
                     title: "Thành công",
                     text: "Sửa thương hiệu thành công!",
                 }).then(() => {
-                    router.push("/components/thuonghieu");
+                    router.push("/admin/components/quanlyadmin/thuonghieu");
                 });
             } else {
                 Swal.fire("Error", "Có lỗi xảy ra!", "error");
@@ -115,13 +116,11 @@ export default function SuaThuongHieu() {
                             <button type="submit" className="btn btn-outline-primary">
                                 Cập nhật
                             </button>
-                            <button
-                                type="button"
-                                className="btn btn-outline-secondary"
-                                onClick={() => router.push("/components/thuonghieu")}
-                            >
-                                Hủy bỏ
+                            <Link href="/admin/components/quanlyadmin/thuonghieu">
+                            <button type="button" className="btn btn-outline-secondary w-100">
+                            Hủy bỏ
                             </button>
+                        </Link>
                         </div>
                     </form>
                 </div>

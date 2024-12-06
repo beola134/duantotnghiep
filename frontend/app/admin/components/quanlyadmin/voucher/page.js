@@ -68,6 +68,7 @@ export default function VoucherPage() {
             { header: "Ngày bắt đầu", key: "bat_dau", width: 25 },
             { header: "Ngày kết thúc", key: "ket_thuc", width: 25 },
             { header: "Ghi chú", key: "mo_ta", width: 40 },
+            { header: "Đơn hàng tối thiểu", key: "don_hang_toi_thieu", width: 25 },
           ];
           worksheet.getRow(1).eachCell((cell) => {
             cell.font = { bold: true, color: { argb: "FFFFFF" } };
@@ -89,6 +90,7 @@ export default function VoucherPage() {
                 bat_dau: item.bat_dau,
                 ket_thuc: item.ket_thuc,
                 mo_ta: item.mo_ta,
+                don_hang_toi_thieu: item.don_hang_toi_thieu,
               });
             })
           );
@@ -180,6 +182,7 @@ export default function VoucherPage() {
           new Date(item.bat_dau).toLocaleDateString(),
           new Date(item.ket_thuc).toLocaleDateString(),
           item.mo_ta || "Không có",
+          item.don_hang_toi_thieu,
         ]),
         startY: 20,
         styles: {
@@ -386,7 +389,7 @@ export default function VoucherPage() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-                <th style={{ width: "15%", textAlign: "center" }}>Id Voucher</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Id Voucher</th>
                 <th style={{ width: "12%", textAlign: "center" }}>Mã Voucher</th>
                 <th style={{ width: "12%", textAlign: "center" }}>Giá trị</th>
                 <th style={{ width: "12%", textAlign: "center" }}>Phần trăm</th>
@@ -394,6 +397,7 @@ export default function VoucherPage() {
                 <th style={{ width: "12%", textAlign: "center" }}>Ngày bắt đầu</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Ngày kết thúc</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Mô tả</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Đơn hàng tối thiểu</th>
                 <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
               </tr>
             </thead>
@@ -413,7 +417,7 @@ export default function VoucherPage() {
                 </tr>
               ) : (
                 vouchers.map((voucher) => {
-                  const { _id, ma_voucher, gia_tri, phan_tram, so_luong, bat_dau, ket_thuc, mo_ta } = voucher;
+                  const { _id, ma_voucher, gia_tri, phan_tram, so_luong, bat_dau, ket_thuc, mo_ta ,don_hang_toi_thieu} = voucher;
 
                   return (
                     <tr key={_id}>
@@ -425,6 +429,7 @@ export default function VoucherPage() {
                       <td style={{ textAlign: "center" }}>{bat_dau}</td>
                       <td style={{ textAlign: "center" }}>{ket_thuc}</td>
                       <td style={{ textAlign: "center" }}>{mo_ta}</td>
+                      <td style={{ textAlign: "center" }}>{don_hang_toi_thieu}</td>
                       <td style={{ textAlign: "center" }}>
                         <Link
                           href={`/admin/components/admin-crud/suavoucher/${_id}`}

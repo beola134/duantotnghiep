@@ -64,19 +64,20 @@ export default function Login() {
           showConfirmButton: true,
         }).then(() => {
           if (typeof window !== "undefined") {
-            {
-              const queryParam = new URLSearchParams(window.location.search);
-              const redirect = queryParam.get("redirect");
-              if (redirect === "thanhtoan") {
-                window.location.href = "/components/components-giaodich/thanhtoan";
-              } else if (redirect === "/") {
-                window.location.href = "/";
-              } else {
-                window.location.href = "/admin";
-              }
+            const queryParam = new URLSearchParams(window.location.search);
+            const redirect = queryParam.get("redirect");
+            if (redirect === "thanhtoan") {
+              window.location.href = "/components/components-giaodich/thanhtoan";
+            } else if (redirect === "/") {
+              window.location.href = "/";
+            } else if (payload.quyen === 2) {
+              window.location.href = "http://localhost:3001/";
+            } else {
+              window.location.href = "/admin";
             }
           }
         });
+        
       } catch (error) {
         setSubmitting(false);
         Swal.fire({

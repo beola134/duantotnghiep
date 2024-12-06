@@ -6,7 +6,7 @@ const { Op } = require("sequelize");
 
 //thêm voucher
 const addVoucher = async (req, res) => {
-  const { ma_voucher, gia_tri,phan_tram,so_luong, bat_dau, ket_thuc, mo_ta } = req.body;
+  const { ma_voucher, gia_tri,phan_tram,so_luong, bat_dau, ket_thuc, mo_ta,don_hang_toi_thieu } = req.body;
 
   try {
     const newVoucher = await voucher.create({
@@ -17,6 +17,7 @@ const addVoucher = async (req, res) => {
       bat_dau,
       ket_thuc,
       mo_ta,
+      don_hang_toi_thieu
     });
 
     res.status(201).json(newVoucher);
@@ -123,7 +124,7 @@ if (!voucher || vouchers.length === 0) {
 // cập nhật voucher
 const updateVoucher = async (req, res) => {
   const { id } = req.params;
-  const { ma_voucher, gia_tri, bat_dau, ket_thuc,so_luong,phan_tram, mo_ta } = req.body;
+  const { ma_voucher, gia_tri, bat_dau, ket_thuc,so_luong,phan_tram, mo_ta,don_hang_toi_thieu } = req.body;
 
   try {
     const voucherToUpdate = await voucher.findOne({ where: { _id: id } });
@@ -139,6 +140,7 @@ const updateVoucher = async (req, res) => {
     voucherToUpdate.so_luong = so_luong || voucherToUpdate.so_luong;
     voucherToUpdate.phan_tram = phan_tram || voucherToUpdate.phan_tram;
     voucherToUpdate.mo_ta = mo_ta || voucherToUpdate.mo_ta;
+    voucherToUpdate.don_hang_toi_thieu = don_hang_toi_thieu || voucherToUpdate.don_hang_toi_thieu;
 
     await voucherToUpdate.save();
 
@@ -167,6 +169,17 @@ const deleteVouCher = async (req, res) => {
 
 
 ////////////////////////////////////
+//lấy tất cả vocher bên người dùng
+const getvoucher = async (req, res) => {
+  try {
+    const vouchers = await voucher.findAll();
+    res.status(200).json({vouchers});
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+
+}
+
 
 
 
@@ -177,4 +190,5 @@ module.exports = {
   updateVoucher,
   deleteVouCher,
   getVoucherById,
+  getvoucher
 };

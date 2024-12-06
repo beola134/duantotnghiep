@@ -64,7 +64,7 @@ export default function Menu() {
       icon: "success",
       confirmButtonText: "OK",
     }).then(() => {
-      window.location.href = "/components/login";
+      window.location.href = "/admin/components/quanlyadmin/login";
     });
   };
 
@@ -119,7 +119,7 @@ export default function Menu() {
                   className={isActive("/components/quanlyadmin/sanpham") ? styles.active : ""}
                   onClick={() => handleLinkClick("/components/quanlyadmin/sanpham")}
                 >
-                  <i className={`bx bxs-widget ${styles.icon}`}></i>
+                <i className={`bx bxs-package ${styles.icon}`}></i>
                   Quản lý sản phẩm
                 </Link>
               </li>
@@ -129,7 +129,7 @@ export default function Menu() {
                   className={isActive("/components/quanlyadmin/thuonghieu") ? styles.active : ""}
                   onClick={() => handleLinkClick("/components/quanlyadmin/thuonghieu")}
                 >
-                  <i className={`bx bxs-widget ${styles.icon}`}></i>
+                <i className={`bx bxs-tag ${styles.icon}`}></i>
                   Quản lý thương hiệu
                 </Link>
               </li>
@@ -139,7 +139,7 @@ export default function Menu() {
                   className={isActive("/components/quanlyadmin/danhmuc") ? styles.active : ""}
                   onClick={() => handleLinkClick("/components/quanlyadmin/danhmuc")}
                 >
-                  <i className={`bx bxs-widget ${styles.icon}`}></i>
+                <i className={`bx bxs-category ${styles.icon}`}></i>
                   Quản lý danh mục
                 </Link>
               </li>
@@ -149,7 +149,7 @@ export default function Menu() {
                   className={isActive("/components/quanlyadmin/quanlikho") ? styles.active : ""}
                   onClick={() => handleLinkClick("/components/quanlyadmin/quanlikho")}
                 >
-                  <i className={`bx bxs-widget ${styles.icon}`}></i>
+                <i className={`bx bxs-box ${styles.icon}`}></i>
                   Quản lý kho
                 </Link>
               </li>
@@ -188,7 +188,7 @@ export default function Menu() {
                   className={isActive("/components/quanlyadmin/quanlydonhang") ? styles.active : ""}
                   onClick={() => handleLinkClick("/components/quanlyadmin/quanlydonhang")}
                 >
-                  <i className={`bx bxs-cart ${styles.icon}`}></i>
+                <i className={`bx bxs-cart-alt ${styles.icon}`}></i>
                   Quản Lý Đơn Hàng
                 </Link>
               </li>
@@ -199,7 +199,7 @@ export default function Menu() {
                   onClick={() => handleLinkClick("/components/quanlyadmin/chitietdonhang")}
                 >
                   <i className={`bx bxs-cart ${styles.icon}`}></i>
-                  Quản Lý Sản Phẩm Đã Bán
+                  Sản Phẩm Đã Bán
                 </Link>
               </li>
               <li className={styles.divider} data-text="Voucher">
@@ -221,14 +221,15 @@ export default function Menu() {
             <nav className={styles.nav}>
               <i className={`bx bx-menu ${styles.toggleSidebar}`}></i>
               <form action="#"></form>
+              {/*
               <a href="#" className={styles.navLink}>
-                <i className={`bx bxs-bell ${styles.icon}`}></i>
-                <span className={styles.badge}>5</span>
-              </a>
-              <a href="/admin/components/comments" className={styles.navLink}>
-                <i className={`bx bxs-message-square-dots ${styles.icon}`}></i>
-                <span className={styles.badge}>8</span>
-              </a>
+              <i className={`bx bxs-bell ${styles.icon}`}></i>
+              <span className={styles.badge}>5</span>
+            </a>
+            <a href="/admin/components/comments" className={styles.navLink}>
+              <i className={`bx bxs-message-square-dots ${styles.icon}`}></i>
+              <span className={styles.badge}>8</span>
+            </a>*/}
               <span className={styles.divider}></span>
               {user ? (
                 <div className="dropdown profile">

@@ -151,7 +151,7 @@ export default function ThemSanPham() {
         icon: "success",
         confirmButtonText: "OK",
       });
-      window.location.href = "/components/sanpham";
+      window.location.href = "/admin/components/quanlyadmin/sanpham";
     } catch (error) {
       console.error("Error adding product:", error.message);
       Swal.fire({
@@ -464,8 +464,8 @@ export default function ThemSanPham() {
               <button type="submit" className="btn btn-outline-primary">
                 Thêm
               </button>
-              <Link href="/components/sanpham">
-                <button type="button" className="btn btn-outline-secondary">
+              <Link href="/admin/components/quanlyadmin/sanpham">
+                <button type="button" className="btn btn-outline-secondary w-100">
                   Hủy bỏ
                 </button>
               </Link>

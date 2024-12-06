@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./donghodoi.module.css";
-import Loading from "../loading/page";
+import Loading from "../../loading/page";
 
 export default function DonghoDoi() {
   const [products, setProducts] = useState([]);
