@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef, use } from "react";
 import styles from "./detail.module.css";
 import { useSelector, useDispatch } from "react-redux";
-import { addToCart } from "../../redux/slices/cartSilce";
+import { addToCart } from "../../components-giaodich/redux/slices/cartSilce";
 import Loading from "../../loading/page";
 import Swal from "sweetalert2";
 import Slider from "react-slick";
