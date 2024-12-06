@@ -58,7 +58,7 @@ export default function ThemDanhmuc() {
           title: "Thành công",
           text: "Thêm Danh mục thành công!",
         }).then(() => {
-          router.push("/admin/components/danhmuc");
+          router.push("/admin/components/quanlyadmin/danhmuc");
         });
       } else {
         const errorData = await response.json();

@@ -105,9 +105,6 @@
   z-index: 1;
   margin: 0 auto;
 }
-.watch img:hover {
-  transform: scale(1.05);
-}
 
 .watch p {
   color: #000;

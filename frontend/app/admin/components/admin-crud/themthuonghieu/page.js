@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import styles from "./themdanhmuc.module.css";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
-
+import Link from "next/link";
 
 
 export default function ThemThuongHieu() {
@@ -71,7 +71,7 @@ export default function ThemThuongHieu() {
                 title: "Thành công",
                 text: "Thêm danh mục thành công!",
             }).then(() => {
-                    router.push("/components/thuonghieu");
+                    router.push("/admin/components/quanlyadmin/thuonghieu");
                 });
         } else {
             Swal.fire({
@@ -146,8 +146,11 @@ export default function ThemThuongHieu() {
               <button type="submit" className="btn btn-outline-primary"  onClick={handleSubmit}>
                 Thêm
               </button>
-              <button type="button" className="btn btn-outline-secondary">Hủy bỏ</button>
-            </div>
+              <Link href="/admin/components/quanlyadmin/thuonghieu">
+              <button type="button" className="btn btn-outline-secondary w-100">
+                Hủy bỏ
+              </button>
+            </Link>            </div>
           </form>
         </div>
       </section>

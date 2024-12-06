@@ -157,13 +157,13 @@ export default function SuaDanhmuc() {
               <button
                 type="submit"
                 className="btn btn-outline-primary"
-                onClick={() => router.push("/admin/components/danhmuc")}>
+                onClick={() => router.push("/admin/components/quanlyadmin/danhmuc")}>
                 Cập nhật
               </button>
               <button
                 type="button"
                 className="btn btn-outline-secondary"
-                onClick={() => router.push("/admin/components/danhmuc")}>
+                onClick={() => router.push("/admin/components/quanlyadmin/danhmuc")}>
                 Hủy bỏ
               </button>
             </div>

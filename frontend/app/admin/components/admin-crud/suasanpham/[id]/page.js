@@ -120,7 +120,7 @@ export default function SuaSanPham({ params }) {
         confirmButtonText: "OK",
       });
 
-      window.location.href = "/components/sanpham";
+      window.location.href = "/admin/components/quanlyadmin/sanpham";
     } catch (error) {
       console.error("Lỗi khi cập nhật sản phẩm:", error.message);
 
@@ -406,8 +406,8 @@ export default function SuaSanPham({ params }) {
               <button type="submit" className="btn btn-outline-primary">
                 Cập nhật
               </button>
-              <Link href="/components/sanpham">
-              <button href="/components/sanpham" type="button" className="btn btn-outline-secondary">
+              <Link href="/admin/components/quanlyadmin/sanpham">
+              <button href="/admin/components/quanlyadmin/sanpham" type="button" className="btn btn-outline-secondary w-100">
                 Hủy bỏ
               </button>
               </Link>

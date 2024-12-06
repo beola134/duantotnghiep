@@ -265,7 +265,7 @@ export default function Main() {
                 ))}
                 <div className={styles.xemThem}>
                   <p>
-                    <Link href="/components/donghonam">
+                    <Link href="/components/components-thuonghieu/donghonam">
                       <b>XEM THÊM ĐỒNG HỒ NAM</b>
                     </Link>
                   </p>
@@ -304,7 +304,7 @@ export default function Main() {
                 ))}
                 <div className={styles.xemThem}>
                   <p>
-                    <Link href="/components/donghonu">
+                    <Link href="/components/components-thuonghieu/donghonu">
                       <b>XEM THÊM ĐỒNG HỒ NỮ</b>
                     </Link>
                   </p>
@@ -343,7 +343,7 @@ export default function Main() {
                 ))}
                 <div className={styles.xemThem}>
                   <p>
-                    <Link href="/components/donghodoi">
+                    <Link href="/components/components-thuonghieu/donghodoi">
                       <b>XEM THÊM ĐỒNG HỒ ĐÔI</b>
                     </Link>
                   </p>
