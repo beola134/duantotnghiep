@@ -17,6 +17,7 @@ const User = ({ params }) => {
   });
   const [orderShow, setOrderShow] = useState([]);
   const [ShowLichsu, setShowLichsu] = useState([]);
+  const [ShowVoucher, setShowVoucher] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [avatarFile, setAvatarFile] = useState(null);
   const [activeTab, setActiveTab] = useState("profile");
@@ -84,6 +85,26 @@ const User = ({ params }) => {
   useEffect(() => {
     if (activeTab === "ShowLichsu") {
       fetchShowLichsu();
+    }
+  }, [activeTab, id]);
+  const fetchShowVoucher = async () => {
+    try {
+      const res = await fetch(`http://localhost:5000/voucher/getvoucher`);
+      const data = await res.json();
+      if (data.vouchers && Array.isArray(data.vouchers)) {
+        setShowVoucher(data.vouchers);
+      } else {
+        setShowVoucher([]);
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy lịch sử đơn hàng:", error);
+      setShowVoucher([]);
+    }
+  };
+  
+  useEffect(() => {
+    if (activeTab === "ShowVoucher") {
+      fetchShowVoucher();
     }
   }, [activeTab, id]);
   const fetchOrderShow = async () => {
@@ -314,7 +335,13 @@ const User = ({ params }) => {
               Hồ Sơ
             </span>
           </p>
-
+          <p>
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => handleTabClick("ShowVoucher")}>
+              Ưu đãi
+            </span>
+          </p>
           <p>
             <span
               style={{ cursor: "pointer" }}
@@ -447,6 +474,54 @@ const User = ({ params }) => {
             </form>
           </div>
         )}
+        {activeTab === "ShowVoucher" && (
+  <div className={styles.ShowLichsu}>
+    <h2>Ưu đãi của tôi</h2>
+    {ShowVoucher.length > 0 ? (
+      <div className={styles.voucherCard}>
+        {ShowVoucher.sort((a, b) => new Date(a.ket_thuc) - new Date(b.ket_thuc)).map((voucher) => (
+          <li key={voucher._id} className={styles.voucherItem}>
+            <h5>VOUCHER</h5><br/>
+            <p>
+              Nhập mã <span className={styles.code}>{voucher.ma_voucher}</span>
+              <br />
+              {voucher.mo_ta}
+            </p>
+            <div className={styles.actions}>
+              <button
+                className={styles.copyBtn}
+                onClick={() => {
+                  navigator.clipboard.writeText(voucher.ma_voucher);
+                  Swal.fire({
+                    icon: "success",
+                    title: "Sao chép thành công!",
+                    text: `Mã voucher: ${voucher.ma_voucher}`,
+                    showConfirmButton: false,
+                    timer: 2000,
+                  });
+                }}
+              >
+                Copy
+              </button>
+              <span className={styles.conditions}>
+                Kết thúc:{" "}
+                {new Date(voucher.ket_thuc).toLocaleDateString("vi-VN", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
+              </span>
+            </div>
+          </li>
+        ))}
+      </div>
+    ) : (
+      <p>Bạn chưa có voucher.</p>
+    )}
+  </div>
+)}
+
+
         {activeTab === "ShowLichsu" && (
           <div className={styles.ShowLichsu}>
             <h2>Lịch sử mua hàng</h2>

@@ -318,3 +318,64 @@
   cursor: pointer;
   background-color: #4caf50;
 }
+/* voucher */
+.voucherCard {
+  display: flex;
+  width: 500px;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  margin: 16px auto;
+}
+
+.voucherCard h4 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.voucherCard p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.code {
+  font-weight: bold;
+  color: #000;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.copyBtn {
+  background-color: #ffd200;
+  color: #333;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.copyBtn:hover {
+  background-color: #ffbf00;
+}
+
+.conditions {
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.conditions:hover {
+  text-decoration: underline;
+}
