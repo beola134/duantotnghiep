@@ -64,7 +64,7 @@ export default function Menu() {
       icon: "success",
       confirmButtonText: "OK",
     }).then(() => {
-      window.location.href = "/admin/components/quanlyadmin/login";
+      window.location.href = "/components/components-login/login";
     });
   };
 
