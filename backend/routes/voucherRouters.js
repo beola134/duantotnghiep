@@ -31,4 +31,8 @@ router.delete("/deleteVouCher/:id", voucher.deleteVouCher);
 //http://localhost:5000/voucher/getvoucher
 router.get("/getvoucher", voucher.getvoucher);
 
+//ẩn voucher và hiện voucher
+//http://localhost:5000/voucher/getVoucherByStatus/:id
+router.put("/getVoucherByStatus/:id", voucher.getVoucherByStatus);
+
 module.exports = router;
