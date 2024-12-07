@@ -13,6 +13,7 @@ export default function ThemVoucher() {
   const [soluong, setsoluong] = useState("");
   const [phantram, setphantram] = useState("");
   const [mota, setmota] = useState("");
+  const [mota2, setmota2] = useState("");
   const [don_hang_toi_thieu, setdon_hang_toi_thieu] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
@@ -65,6 +66,7 @@ export default function ThemVoucher() {
       bat_dau: convertToVietnamTime(ngayBD),
       ket_thuc: convertToVietnamTime(ngayKT),
       mo_ta: mota,
+      mota2: mota2,
       so_luong: soluong,
       phan_tram: phantram,
       don_hang_toi_thieu: don_hang_toi_thieu,
@@ -177,14 +179,23 @@ export default function ThemVoucher() {
                 />
               </div>
               <div className={styles.formGroup}>
-              <label htmlFor="donhangtoithieu">Đơn hàng tối thiểu</label>
-              <input
-                id="donhangtoithieu"
-                name="donhangtoithieu"
-                value={don_hang_toi_thieu}
-                onChange={(e) => setdon_hang_toi_thieu(e.target.value)}
-              />
-            </div>
+                <label htmlFor="donhangtoithieu">Đơn hàng tối thiểu</label>
+                <input
+                  id="donhangtoithieu"
+                  name="donhangtoithieu"
+                  value={don_hang_toi_thieu}
+                  onChange={(e) => setdon_hang_toi_thieu(e.target.value)}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="donhangtoithieu">Tiêu đề</label>
+                <input
+                  id="tieu_de"
+                  name="tieu_de"
+                  value={mota2}
+                  onChange={(e) => setmota2(e.target.value)}
+                />
+              </div>
               <div className={styles.formGroup}>
                 <label htmlFor="description">Mô tả voucher</label>
                 <textarea
@@ -194,7 +205,7 @@ export default function ThemVoucher() {
                   onChange={(e) => setmota(e.target.value)}
                 />
               </div>
-            
+
               <button
                 type="submit"
                 className="btn btn-outline-primary"
@@ -202,10 +213,12 @@ export default function ThemVoucher() {
                 Thêm
               </button>
               <Link href="/admin/components/quanlyadmin/voucher">
-              <button type="button" className="btn btn-outline-secondary w-100">
-                Hủy bỏ
-              </button>
-            </Link>
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary w-100">
+                  Hủy bỏ
+                </button>
+              </Link>
             </div>
           </form>
         </div>
