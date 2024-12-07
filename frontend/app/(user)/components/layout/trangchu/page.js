@@ -5,7 +5,9 @@ import Slider from "react-slick";
 import classNames from "classnames/bind";
 import Banner from "../banner/page";
 import Link from "next/link";
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import VoucherModal from "../dieukien/page";
 const cx = classNames.bind(styles);
 
 export default function Main() {
@@ -15,7 +17,8 @@ export default function Main() {
   };
   const [firstSlider, setFirstSlider] = useState(null);
   const [secondSlider, setSecondSlider] = useState(null);
-
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedVoucherId, setSelectedVoucherId] = useState(null);
   const firstSettings = {
     arrows: false,
     dots: false,
@@ -113,7 +116,9 @@ export default function Main() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:5000/product/allsp/gioitinh-nam10sp");
+      const response = await fetch(
+        "http://localhost:5000/product/allsp/gioitinh-nam10sp"
+      );
       const data = await response.json();
       setProductsNam(data.products);
     };
@@ -125,7 +130,9 @@ export default function Main() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:5000/product/allsp/gioitinh-nu10sp");
+      const response = await fetch(
+        "http://localhost:5000/product/allsp/gioitinh-nu10sp"
+      );
       const data = await response.json();
       setProductsNu(data.products);
     };
@@ -137,7 +144,9 @@ export default function Main() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:5000/product/allsp/doi10sp");
+      const response = await fetch(
+        "http://localhost:5000/product/allsp/doi10sp"
+      );
       const data = await response.json();
       setProductsDoi(data.products);
     };
@@ -149,7 +158,9 @@ export default function Main() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:5000/product/limit/gioitinh-nam");
+      const response = await fetch(
+        "http://localhost:5000/product/limit/gioitinh-nam"
+      );
       const data = await response.json();
       setProductsNewNam(data.products);
     };
@@ -161,7 +172,9 @@ export default function Main() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:5000/product/limit/gioitinh-nu");
+      const response = await fetch(
+        "http://localhost:5000/product/limit/gioitinh-nu"
+      );
       const data = await response.json();
       setProductsNewNu(data.products);
     };
@@ -190,27 +203,110 @@ export default function Main() {
   const [category, setCategory] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
+      const response = await fetch(
+        "http://localhost:5000/thuonghieu/allthuonghieu"
+      );
       const data = await response.json();
       setCategory(data.th);
     };
 
     fetchData();
   }, []);
-
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("http://localhost:5000/voucher/getvoucher");
+      const data = await response.json();
+      setVouchers(data.vouchers);
+    };
+    fetchData();
+  }, []);
+  const [vouchers, setVouchers] = useState([]);
   // tính % sản phẩm
   const roundDiscount = (discountPercentage) => {
     const discountLevels = [10, 15, 20, 25, 30, 40, 50];
     return discountLevels.reduce((prev, curr) =>
-      Math.abs(curr - discountPercentage) < Math.abs(prev - discountPercentage) ? curr : prev
+      Math.abs(curr - discountPercentage) < Math.abs(prev - discountPercentage)
+        ? curr
+        : prev
     );
+  };
+  const handleCopy = (voucherCode) => {
+    navigator.clipboard
+      .writeText(voucherCode)
+      .then(() => {
+        toast.success(`Mã ${voucherCode} đã được sao chép thành công!`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      })
+      .catch(() => {
+        toast.error("Không thể sao chép mã. Vui lòng thử lại.", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      });
   };
 
   return (
     <>
       <Banner />
+      <ToastContainer />
       <section>
         <div className={styles.productContainer}>
+          <p className={styles.featuredTitle}>ƯU ĐÃI</p> <br /> <br />
+          <div className={styles.voucherList}>
+            {vouchers.map((vouchers) => (
+              <div key={vouchers._id} className={styles.voucherCard}>
+                <h4>VOUCHER</h4>
+                <p>
+                  Nhập mã&nbsp;
+                  <span className={styles.code}>{vouchers.ma_voucher}</span>
+                  <br />
+                  {vouchers.mo_ta}₫
+                </p>
+                <div className={styles.actions}>
+                  {vouchers.so_luong > 0 ? (
+                    <button
+                      className={styles.copyBtn}
+                      onClick={() => handleCopy(vouchers.ma_voucher)}
+                    >
+                      Copy
+                    </button>
+                  ) : (
+                    <button className={`${styles.copyBtn} ${styles.disabled} `}>Hết Voucher</button>
+                  )}
+
+                  <a
+                    onClick={() => {
+                      setSelectedVoucherId(vouchers._id);
+                      setModalOpen(true);
+                    }}
+                    className={styles.conditions}
+                  >
+                    Điều kiện
+                  </a>
+                  <VoucherModal
+                    isOpen={isModalOpen}
+                    onRequestClose={() => setModalOpen(false)}
+                    voucherId={selectedVoucherId}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+          <br /> <br /> <br />
           <p className={styles.featuredTitle}>TẤT CẢ SẢN PHẨM</p>
           <div className={styles.tab}>
             <p
@@ -238,10 +334,21 @@ export default function Main() {
                 {productsNam.map((item) => (
                   <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
-                      - {roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
+                      -{" "}
+                      {roundDiscount(
+                        Math.round(
+                          ((item.gia_san_pham - item.gia_giam) /
+                            item.gia_san_pham) *
+                            100
+                        )
+                      )}
+                      %
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
-                      <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
+                      <img
+                        src={`http://localhost:5000/images/${item.hinh_anh}`}
+                        alt={item.ten_san_pham}
+                      />
                     </Link>
                     <p>
                       <h3>{item.ten_san_pham}</h3>
@@ -254,12 +361,20 @@ export default function Main() {
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through", color: "#B1B1B1", fontSize: "15px" }}>
+                      <small
+                        style={{
+                          textDecoration: "line-through",
+                          color: "#B1B1B1",
+                          fontSize: "15px",
+                        }}
+                      >
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
                     <p>
-                      <span className={styles.priceKm}>Giá KM: {formatCurrency(item.gia_giam)}</span>
+                      <span className={styles.priceKm}>
+                        Giá KM: {formatCurrency(item.gia_giam)}
+                      </span>
                     </p>
                   </div>
                 ))}
@@ -277,10 +392,21 @@ export default function Main() {
                 {productsNu.map((item) => (
                   <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
-                      - {roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
+                      -{" "}
+                      {roundDiscount(
+                        Math.round(
+                          ((item.gia_san_pham - item.gia_giam) /
+                            item.gia_san_pham) *
+                            100
+                        )
+                      )}
+                      %
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
-                      <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
+                      <img
+                        src={`http://localhost:5000/images/${item.hinh_anh}`}
+                        alt={item.ten_san_pham}
+                      />
                     </Link>
                     <p>
                       <h3>{item.ten_san_pham}</h3>
@@ -293,12 +419,19 @@ export default function Main() {
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through", color: "#B1B1B1" }}>
+                      <small
+                        style={{
+                          textDecoration: "line-through",
+                          color: "#B1B1B1",
+                        }}
+                      >
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
                     <p>
-                      <span className={styles.priceKm}>Giá KM: {formatCurrency(item.gia_giam)}</span>
+                      <span className={styles.priceKm}>
+                        Giá KM: {formatCurrency(item.gia_giam)}
+                      </span>
                     </p>
                   </div>
                 ))}
@@ -316,10 +449,21 @@ export default function Main() {
                 {productsDoi.map((item) => (
                   <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
-                      - {roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
+                      -{" "}
+                      {roundDiscount(
+                        Math.round(
+                          ((item.gia_san_pham - item.gia_giam) /
+                            item.gia_san_pham) *
+                            100
+                        )
+                      )}
+                      %
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
-                      <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
+                      <img
+                        src={`http://localhost:5000/images/${item.hinh_anh}`}
+                        alt={item.ten_san_pham}
+                      />
                     </Link>
                     <p>
                       <h3>{item.ten_san_pham}</h3>
@@ -332,12 +476,19 @@ export default function Main() {
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through", color: "#B1B1B1" }}>
+                      <small
+                        style={{
+                          textDecoration: "line-through",
+                          color: "#B1B1B1",
+                        }}
+                      >
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
                     <p>
-                      <span className={styles.priceKm}>Giá KM: {formatCurrency(item.gia_giam)}</span>
+                      <span className={styles.priceKm}>
+                        Giá KM: {formatCurrency(item.gia_giam)}
+                      </span>
                     </p>
                   </div>
                 ))}
@@ -382,10 +533,21 @@ export default function Main() {
                 {productsNewNam.map((item) => (
                   <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
-                      - {roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
+                      -{" "}
+                      {roundDiscount(
+                        Math.round(
+                          ((item.gia_san_pham - item.gia_giam) /
+                            item.gia_san_pham) *
+                            100
+                        )
+                      )}
+                      %
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
-                      <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
+                      <img
+                        src={`http://localhost:5000/images/${item.hinh_anh}`}
+                        alt={item.ten_san_pham}
+                      />
                     </Link>
                     <p>
                       <h3>{item.ten_san_pham}</h3>
@@ -398,12 +560,20 @@ export default function Main() {
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through", color: "#B1B1B1", fontSize: "15px" }}>
+                      <small
+                        style={{
+                          textDecoration: "line-through",
+                          color: "#B1B1B1",
+                          fontSize: "15px",
+                        }}
+                      >
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
                     <p>
-                      <span className={styles.priceKm}>Giá KM: {formatCurrency(item.gia_giam)}</span>
+                      <span className={styles.priceKm}>
+                        Giá KM: {formatCurrency(item.gia_giam)}
+                      </span>
                     </p>
                     <div className={styles.overlay}>New</div>
                   </div>
@@ -422,10 +592,21 @@ export default function Main() {
                 {productsNewNu.map((item) => (
                   <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
-                      - {roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
+                      -{" "}
+                      {roundDiscount(
+                        Math.round(
+                          ((item.gia_san_pham - item.gia_giam) /
+                            item.gia_san_pham) *
+                            100
+                        )
+                      )}
+                      %
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
-                      <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
+                      <img
+                        src={`http://localhost:5000/images/${item.hinh_anh}`}
+                        alt={item.ten_san_pham}
+                      />
                     </Link>
                     <p>
                       <h3>{item.ten_san_pham}</h3>
@@ -438,12 +619,19 @@ export default function Main() {
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through", color: "#B1B1B1" }}>
+                      <small
+                        style={{
+                          textDecoration: "line-through",
+                          color: "#B1B1B1",
+                        }}
+                      >
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
                     <p>
-                      <span className={styles.priceKm}>Giá KM: {formatCurrency(item.gia_giam)}</span>
+                      <span className={styles.priceKm}>
+                        Giá KM: {formatCurrency(item.gia_giam)}
+                      </span>
                     </p>
                     <div className={styles.overlay}>New</div>
                   </div>
@@ -462,10 +650,21 @@ export default function Main() {
                 {productsNewDoi.map((item) => (
                   <div key={item._id} className={styles.watch}>
                     <div className={styles.discountBadge}>
-                      -{roundDiscount(Math.round(((item.gia_san_pham - item.gia_giam) / item.gia_san_pham) * 100))}%
+                      -
+                      {roundDiscount(
+                        Math.round(
+                          ((item.gia_san_pham - item.gia_giam) /
+                            item.gia_san_pham) *
+                            100
+                        )
+                      )}
+                      %
                     </div>
                     <Link href={`/components/product-detail/${item._id}`}>
-                      <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
+                      <img
+                        src={`http://localhost:5000/images/${item.hinh_anh}`}
+                        alt={item.ten_san_pham}
+                      />
                     </Link>
                     <p>
                       <h3>{item.ten_san_pham}</h3>
@@ -478,12 +677,19 @@ export default function Main() {
                       </small>
                     </p>
                     <p>
-                      <small style={{ textDecoration: "line-through", color: "#B1B1B1" }}>
+                      <small
+                        style={{
+                          textDecoration: "line-through",
+                          color: "#B1B1B1",
+                        }}
+                      >
                         Giá: {formatCurrency(item.gia_san_pham)}
                       </small>
                     </p>
                     <p>
-                      <span className={styles.priceKm}>Giá KM: {formatCurrency(item.gia_giam)}</span>
+                      <span className={styles.priceKm}>
+                        Giá KM: {formatCurrency(item.gia_giam)}
+                      </span>
                     </p>
                     <div className={styles.overlay}>New</div>
                   </div>
@@ -500,7 +706,10 @@ export default function Main() {
           </div>
         </div>
       </section>
-      <section className={styles.slideSection} style={{ marginBottom: "150px" }}>
+      <section
+        className={styles.slideSection}
+        style={{ marginBottom: "150px" }}
+      >
         <div className={styles.title}>
           <p className={styles.titleIndex}>THƯƠNG HIỆU NỔI BẬT</p>
           <p>
@@ -512,7 +721,10 @@ export default function Main() {
             {category.map((item) => (
               <div key={item._id}>
                 <div className={styles.item}>
-                  <Link href={`/components/chitietdanhmuc/${item.thuong_hieu}`} title={item.thuong_hieu}>
+                  <Link
+                    href={`/components/chitietdanhmuc/${item.thuong_hieu}`}
+                    title={item.thuong_hieu}
+                  >
                     <img
                       alt={item.thuong_hieu}
                       width="280"
@@ -526,11 +738,17 @@ export default function Main() {
             ))}
           </Slider>
 
-          <button onClick={prevFirst} className={`${styles.navButton} ${styles.prevButton}`}>
+          <button
+            onClick={prevFirst}
+            className={`${styles.navButton} ${styles.prevButton}`}
+          >
             <img src="/image/item/icons/left.png" width="40px" height="30px" />
           </button>
 
-          <button onClick={nextFirst} className={`${styles.navButton} ${styles.nextButton}`}>
+          <button
+            onClick={nextFirst}
+            className={`${styles.navButton} ${styles.nextButton}`}
+          >
             <img src="/image/item/icons/right.png" width="40px" height="30px" />
           </button>
         </div>
@@ -543,7 +761,10 @@ export default function Main() {
             <p>100% Hàng chính hãng</p>
           </div>
           <div className={styles.iconItem}>
-            <img src="/image/item/icons/vanchuyen.png" className={styles.vanchuyen} />
+            <img
+              src="/image/item/icons/vanchuyen.png"
+              className={styles.vanchuyen}
+            />
             <p>Miễn phí vận chuyển</p>
           </div>
           <div className={styles.iconItem}>
@@ -551,10 +772,20 @@ export default function Main() {
             <p>Bảo hành 5 năm</p>
           </div>
           <div className={styles.iconItem}>
-            <svg xmlns="http://www.w3.org/2000/svg" width={50} height={40} viewBox="0 0 24 24" className={styles.ngay}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width={50}
+              height={40}
+              viewBox="0 0 24 24"
+              className={styles.ngay}
+            >
               <g fill="none" stroke="black" strokeWidth={1}>
                 <path d="M3 20.4V3.6a.6.6 0 0 1 .6-.6h16.8a.6.6 0 0 1 .6.6v16.8a.6.6 0 0 1-.6.6H3.6a.6.6 0 0 1-.6-.6Z"></path>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 16c0-4 4-8 4-8h-5"></path>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10.5 16c0-4 4-8 4-8h-5"
+                ></path>
               </g>
             </svg>
             <p>Đổi hàng trong 7 ngày</p>
@@ -563,15 +794,17 @@ export default function Main() {
 
         <div className={styles.certificateSection}>
           <div className={styles.text}>
-            <h3 className={styles.textTitle}>Đại lý ủy quyền chính thức các thương hiệu lớn</h3>
+            <h3 className={styles.textTitle}>
+              Đại lý ủy quyền chính thức các thương hiệu lớn
+            </h3>
 
             <p className={styles.xtc}>
               <Link href="/components/thuonghieu">Xem tất cả</Link>
             </p>
 
             <p className={styles.textBrand}>
-              Chứng nhận Duy Anh Watch là đại lý ủy quyền chính thức của thương hiệu LONGINES tại Việt Nam (
-              <a href="#">Xem ngay</a>).
+              Chứng nhận Duy Anh Watch là đại lý ủy quyền chính thức của thương
+              hiệu LONGINES tại Việt Nam (<a href="#">Xem ngay</a>).
             </p>
 
             <div className={styles.sectionBrand}>
@@ -598,7 +831,11 @@ export default function Main() {
             </div>
           </div>
 
-          <img src="/image/item/icons/longines_1616385184.jpg.webp" alt="Chứng nhận" className={styles.imgChungnhan} />
+          <img
+            src="/image/item/icons/longines_1616385184.jpg.webp"
+            alt="Chứng nhận"
+            className={styles.imgChungnhan}
+          />
         </div>
       </div>
       <div className={cx("container-news")}>
@@ -624,8 +861,8 @@ export default function Main() {
                     Mạnh mẽ, tươi trẻ cùng đồng hồ quataz mặt xanh lá
                   </h4>
                   <p style={{ maxWidth: "290px" }}>
-                    Xanh lá - màu sắc của sự sống và hy vọng, là biểu tượng hoàn hảo cho mùa lễ hội. Đồng hồ mặt xanh lá
-                    cây không chỉ là...
+                    Xanh lá - màu sắc của sự sống và hy vọng, là biểu tượng hoàn
+                    hảo cho mùa lễ hội. Đồng hồ mặt xanh lá cây không chỉ là...
                   </p>
                   <p>
                     <i className="fa-solid fa-calendar-days"></i>
@@ -647,11 +884,13 @@ export default function Main() {
                       lineHeight: "18px",
                     }}
                   >
-                    Giáng sinh thêm phần rực rỡ với top 10 mẫu đồng hồ cơ mặt xanh lá
+                    Giáng sinh thêm phần rực rỡ với top 10 mẫu đồng hồ cơ mặt
+                    xanh lá
                   </h4>
                   <p style={{ maxWidth: "290px" }}>
-                    Đồng hồ cơ mặt số màu xanh lá cây, một màu sắc của sự tươi trẻ, hy vọng và tràn đầy năng lượng, rất
-                    phù hợp với không...
+                    Đồng hồ cơ mặt số màu xanh lá cây, một màu sắc của sự tươi
+                    trẻ, hy vọng và tràn đầy năng lượng, rất phù hợp với
+                    không...
                   </p>
                   <p>
                     <i className="fa-solid fa-calendar-days"></i>
@@ -676,15 +915,19 @@ export default function Main() {
                     Lựa chòn màu mặt đồng hồ theo nguyên tắc phong thủy{" "}
                   </h4>
                   <p style={{ maxWidth: "290px" }}>
-                    Lựa chọn màu mặt đồng hồ theo nguyên tắc phong thủy để giúp giúp tăng cường năng lượng và sức khỏe
-                    cũng như những vấn đề...
+                    Lựa chọn màu mặt đồng hồ theo nguyên tắc phong thủy để giúp
+                    giúp tăng cường năng lượng và sức khỏe cũng như những vấn
+                    đề...
                   </p>
                   <p>
                     <i className="fa-solid fa-calendar-days"></i>
                     <small style={{ paddingLeft: "15px" }}>25/11/2024</small>
                   </p>
                 </div>
-                <img src="/image/item/icons/26_1732525206-copy.jpg.webp" alt="" />
+                <img
+                  src="/image/item/icons/26_1732525206-copy.jpg.webp"
+                  alt=""
+                />
               </div>
             </div>
           </div>
@@ -704,7 +947,9 @@ export default function Main() {
                 allowFullScreen
               ></iframe>
             </div>
-            <h4 className={cx("title-video")}>Review Đồng Hồ Hamilton Jazzmaster GMT Auto H32605581</h4>
+            <h4 className={cx("title-video")}>
+              Review Đồng Hồ Hamilton Jazzmaster GMT Auto H32605581
+            </h4>
 
             {/* Video liên quan */}
             <div className={cx("related-videos")}>

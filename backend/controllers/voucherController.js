@@ -196,7 +196,9 @@ const deleteVouCher = async (req, res) => {
 //lấy tất cả vocher bên người dùng
 const getvoucher = async (req, res) => {
   try {
-    const vouchers = await voucher.findAll();
+    const vouchers = await voucher.findAll(
+      {limit:4}
+    );
     res.status(200).json({ vouchers });
   } catch (error) {
     res.status(500).json({ error: error.message });
