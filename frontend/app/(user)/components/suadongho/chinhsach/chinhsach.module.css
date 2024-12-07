@@ -50,7 +50,8 @@
 
 .content p {
   margin-top: 10px;
-  line-height: 1.6;
+  line-height: 2.1;
+
 }
 
 .toc {
@@ -91,6 +92,7 @@
 .h3 {
   margin-bottom: 10px;
   color: #333;
+  font-size: 25px;
 }
 
 .p {
@@ -111,3 +113,4 @@
   margin-top: -1px;
   margin-left: 15px;
 }
+

@@ -1,4 +1,5 @@
 import styles from "./suadongho.module.css";
+import Link from "next/link";
 export default function suadongho() {
   return (
     <nav className={styles.nav}>
@@ -7,13 +8,13 @@ export default function suadongho() {
           <p className={styles.h1}>DỊCH VỤ SỬA CHỮA ĐỒNG HỒ</p>
           <div className={styles.holld}>
             <div className={styles.star}>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
-              <i className="fa-solid fa-star"></i>
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
             </div>
-            <p className={styles.p}>03/10/2004</p>
+            <p className={styles.p}>12/10/2024</p>
           </div>
           <br />
           <nav className={styles.toc}>
@@ -79,7 +80,7 @@ export default function suadongho() {
           </section>
 
           <section id="section2">
-            <h3>2. THAY DÂY ĐỒNG HỒ</h3>
+            <p className={styles.h3}>2. THAY DÂY ĐỒNG HỒ</p>
             <p className={styles.p}>
               Nhằm phục vụ những phong cách thời trang đa dạng cũng như sở thích
               của tối đa khách hành, Wristly Watch hỗ trợ dịch vụ thay thế dây
@@ -98,7 +99,7 @@ export default function suadongho() {
           </section>
 
           <section id="section3">
-            <h3>3. LAU DẦU</h3>
+            <p className={styles.h3}>3. LAU DẦU</p>
             <p className={styles.p}>
               Trong các mẫu đồng hồ cơ, ngoài việc vệ sinh đồng hồ thì lau dầu
               cũng là một trong những công việc quan trọng để giữ cho đồng hồ có
@@ -116,7 +117,7 @@ export default function suadongho() {
           </section>
 
           <section id="section4">
-            <h3>4. XỬ LÝ ĐỒNG HỒ BỊ VÀO NƯỚC</h3>
+            <p className={styles.h3}>4. XỬ LÝ ĐỒNG HỒ BỊ VÀO NƯỚC</p>
             <p className={styles.p}>
               Có thể nói rằng vấn đề đồng hồ vào nước luôn là vần đề mà rất
               nhiều người quan tâm. Mọi đồng hồ (bao gồm cả đồng hồ chính hãng)
@@ -129,7 +130,7 @@ export default function suadongho() {
             </p>
           </section>
           <section id="section5">
-            <h3>5. THAY KÍNH</h3>
+            <p className={styles.h3}>5. THAY KÍNH</p>
             <p className={styles.p}>
               Nhiệm vụ chính của kính đồng hồ chính là bảo vệ cho mặt số và giúp
               cho người dùng có cái nhìn dễ dàng nhất khi theo dõi thời gian.
@@ -141,7 +142,8 @@ export default function suadongho() {
             </p>
           </section>
           <section id="section6">
-            <h3>6. ĐÁNH BÓNG DÂY, VỎ, KÍNH</h3>
+            <p className={styles.h3}>6. ĐÁNH BÓNG DÂY, VỎ, KÍNH</p>
+
             <p className={styles.p}>
               Sau một thời gian dài sử dụng, phần dây kim loại, vỏ và mặt đồng
               hồ dù chất lượng tốt đến đâu cũng đều có thể sẽ bị trầy xước. Đây
@@ -152,7 +154,8 @@ export default function suadongho() {
             </p>
           </section>
           <section id="section7">
-            <h3>7. CĂN CHỈNH ĐỘ SAI SỐ ĐỒNG HỒ CƠ</h3>
+            <p className={styles.h3}>7. CĂN CHỈNH ĐỘ SAI SỐ ĐỒNG HỒ CƠ</p>
+
             <p className={styles.p}>
               Đồng hồ cơ với những chi tiết máy móc phức tạp và độ tinh xảo cao
               luôn nhận được sự ưu ái của những người yêu thích đồng hồ. Mỗi một
@@ -164,7 +167,8 @@ export default function suadongho() {
             </p>
           </section>
           <section id="section8">
-            <h3>8.QUY TRÌNH BẢO HÀNH</h3>
+            <p className={styles.h3}>8.QUY TRÌNH BẢO HÀNH</p>
+
             <p className={styles.p}>
               Những sản phẩm đồng hồ bảo hành mà quý khách mang đến Trung tâm
               bảo hành Wristly sẽ được thao tác qua các bước sau đây:
@@ -225,7 +229,7 @@ export default function suadongho() {
             </p>
           </section>
           <section id="section9">
-            <h3>9. ĐỊA CHỈ</h3>
+            <p className={styles.h3}>9. ĐỊA CHỈ</p>
             <p className={styles.p}>
               Liên hệ với chúng tôi qua số điện thoại hoặc email để được hỗ trợ
               tốt nhất.
@@ -235,9 +239,10 @@ export default function suadongho() {
 
         <div className={styles.sidebar}>
           <ul>
-            <li>GIỚI THIỆU</li>
+            <li>
+              <Link href={"/components/suadongho/gioithieu"}>GIỚI THIỆU</Link>
+            </li>
             <li>CHÍNH SÁCH BẢO HÀNH</li>
-            <li>DỊCH VỤ SỬA CHỮA ĐỒNG HỒ</li>
           </ul>
         </div>
       </div>
