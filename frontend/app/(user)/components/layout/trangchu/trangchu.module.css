@@ -709,3 +709,66 @@
   padding: 5px 10px;
   height: 70px;
 }
+/* voucher */
+.voucherList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.voucherCard {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  width: 280px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.voucherCard h4 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.voucherCard p {
+  font-size: 14px;
+  color: #555;
+}
+
+.code {
+  font-weight: bold;
+  color: #ff9800;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.copyBtn {
+  background-color: #ff9800;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.copyBtn:hover {
+  background-color: #e68900;
+}
+
+.conditions {
+  font-size: 12px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.conditions:hover {
+  text-decoration: underline;
+}

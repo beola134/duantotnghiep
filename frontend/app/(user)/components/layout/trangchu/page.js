@@ -211,6 +211,57 @@ export default function Main() {
       <Banner />
       <section>
         <div className={styles.productContainer}>
+        <p className={styles.featuredTitle}>ƯU ĐÃI</p> <br /> <br />
+        <div className={styles.voucherList}>
+      <div className={styles.voucherCard}>
+        <h4>VOUCHER GIẢM 20K</h4>
+        <p>
+          Nhập mã <span className={styles.code}>VC-20KDON399</span>
+          <br />
+          giảm 20k cho đơn hàng từ 399k
+        </p>
+        <div className={styles.actions}>
+          <button className={styles.copyBtn}>Copy</button>
+          <a href="#" className={styles.conditions}>Điều kiện</a>
+        </div>
+      </div>
+      <div className={styles.voucherCard}>
+        <h4>VOUCHER GIẢM 20K</h4>
+        <p>
+          Nhập mã <span className={styles.code}>VC-20KDON399</span>
+          <br />
+          giảm 20k cho đơn hàng từ 399k
+        </p>
+        <div className={styles.actions}>
+          <button className={styles.copyBtn}>Copy</button>
+          <a href="#" className={styles.conditions}>Điều kiện</a>
+        </div>
+      </div>
+      <div className={styles.voucherCard}>
+        <h4>VOUCHER GIẢM 20K</h4>
+        <p>
+          Nhập mã <span className={styles.code}>VC-20KDON399</span>
+          <br />
+          giảm 20k cho đơn hàng từ 399k
+        </p>
+        <div className={styles.actions}>
+          <button className={styles.copyBtn}>Copy</button>
+          <a href="#" className={styles.conditions}>Điều kiện</a>
+        </div>
+      </div>
+      <div className={styles.voucherCard}>
+        <h4>VOUCHER GIẢM 20K</h4>
+        <p>
+          Nhập mã <span className={styles.code}>VC-20KDON399</span>
+          <br />
+          giảm 20k cho đơn hàng từ 399k
+        </p>
+        <div className={styles.actions}>
+          <button className={styles.copyBtn}>Copy</button>
+          <a href="#" className={styles.conditions}>Điều kiện</a>
+        </div>
+      </div>
+    </div><br /> <br /> <br /> 
           <p className={styles.featuredTitle}>TẤT CẢ SẢN PHẨM</p>
           <div className={styles.tab}>
             <p
