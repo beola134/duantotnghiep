@@ -269,7 +269,7 @@ export default function DonghoNam() {
                           >
                             <Link
                               rel="nofollow"
-                              href="/components/donghonew?query=gioi_tinh=Nam"
+                              href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Nam"
                                 onClick={() =>
                                   handleFilterChange("gioi_tinh", "Nam")
                                 }
@@ -279,7 +279,7 @@ export default function DonghoNam() {
                             </Link>
                             <Link
                               rel="nofollow"
-                                href="/components/donghonew?query=gioi_tinh=Nữ"
+                                href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Nữ"
                               title="Đồng hồ nữ"
                               onClick={() =>
                                   handleFilterChange("gioi_tinh", "Nữ")
@@ -289,20 +289,13 @@ export default function DonghoNam() {
                             </Link>
                             <Link
                               rel="nofollow"
-                              href="/components/donghonew?query=gioi_tinh=Đồng Hồ Đôi"
+                              href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Đồng Hồ Đôi"
                               onClick={() =>
                                   handleFilterChange("gioi_tinh", "Đồng Hồ Đôi")
                                 }
                               title="Đồng hồ đôi"
                             >
                               <span>Đồng hồ đôi</span>
-                            </Link>
-                            <Link
-                              rel="nofollow"
-                              href="/components/donghounisex"
-                              title="Đồng hồ unisex"
-                            >
-                              <span>Đồng hồ unisex</span>
                             </Link>
                           </div>
                         </div>
