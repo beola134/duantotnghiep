@@ -38,10 +38,20 @@ const Voucher = sequelize.define('Voucher', {
         type: DataTypes.STRING(100),  
         allowNull: true,
     },
+  
     don_hang_toi_thieu: {
         type: DataTypes.INTEGER,  
         allowNull: true,
     },
+    mota2: {
+        type: DataTypes.STRING(255),  
+        allowNull: true,
+    },
+    trang_thai: {
+        type: DataTypes.BOOLEAN,  
+        allowNull: false,
+        defaultValue: true
+    }
 }, {
     tableName: 'voucher',  
     timestamps: false  
