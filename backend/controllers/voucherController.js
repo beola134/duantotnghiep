@@ -234,5 +234,5 @@ module.exports = {
   deleteVouCher,
   getVoucherById,
   getvoucher,
-  getVoucherByStatus,
+  getVoucherByStatus
 };
