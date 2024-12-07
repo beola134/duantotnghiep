@@ -265,7 +265,7 @@ export default function Menu() {
                     <li>
                       <Link
                         className={`dropdown-item ${styles.dropdownItem}`}
-                        href={`/admin/components/ho_so_admin/${user.user._id}`}
+                        href={`/admin/components/quanlyadmin/ho_so_admin/${user.user._id}`}
                       >
                         <i className="bx bxs-user-circle icon"></i>
                         Hồ sơ
