@@ -449,6 +449,7 @@ export default function VoucherPage() {
                   Ngày kết thúc
                 </th>
                 <th style={{ width: "10%", textAlign: "center" }}>Mô tả</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Tiêu đề</th>
                 <th style={{ width: "10%", textAlign: "center" }}>
                   Đơn hàng tối thiểu
                 </th>
@@ -484,6 +485,7 @@ export default function VoucherPage() {
                     mo_ta,
                     don_hang_toi_thieu,
                     trang_thai,
+                    mota2,
                   } = voucher;
 
                   return (
@@ -498,6 +500,7 @@ export default function VoucherPage() {
                       <td style={{ textAlign: "center" }}>{bat_dau}</td>
                       <td style={{ textAlign: "center" }}>{ket_thuc}</td>
                       <td style={{ textAlign: "center" }}>{mo_ta}</td>
+                      <td style={{ textAlign: "center" }}>{mota2}</td>
                       <td style={{ textAlign: "center" }}>
                         {don_hang_toi_thieu}
                       </td>
