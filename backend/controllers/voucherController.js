@@ -1,12 +1,20 @@
 const voucher = require("../models/voucher");
-const { Sequelize } = require('sequelize');
-const sequelize = require('../config/database'); //; // Adjust the path as necessary
+const { Sequelize } = require("sequelize");
+const sequelize = require("../config/database"); //; // Adjust the path as necessary
 const { Op } = require("sequelize");
-
 
 //thêm voucher
 const addVoucher = async (req, res) => {
-  const { ma_voucher, gia_tri,phan_tram,so_luong, bat_dau, ket_thuc, mo_ta,don_hang_toi_thieu } = req.body;
+  const {
+    ma_voucher,
+    gia_tri,
+    phan_tram,
+    so_luong,
+    bat_dau,
+    ket_thuc,
+    mo_ta,
+    don_hang_toi_thieu,
+  } = req.body;
 
   try {
     const newVoucher = await voucher.create({
@@ -17,14 +25,13 @@ const addVoucher = async (req, res) => {
       bat_dau,
       ket_thuc,
       mo_ta,
-      don_hang_toi_thieu
+      don_hang_toi_thieu,
     });
 
     res.status(201).json(newVoucher);
   } catch (error) {
     res.status(500).json({ error: error.message });
     console.log(error);
-    
   }
 };
 
@@ -35,19 +42,28 @@ const getVoucherByCode = async (req, res) => {
   try {
     const voucherFound = await voucher.findOne({ where: { ma_voucher } });
     if (!voucherFound) {
-      return res.status(404).json({ error: `Không tìm thấy voucher với mã: ${ma_voucher}` });
+      return res
+        .status(404)
+        .json({ error: `Không tìm thấy voucher với mã: ${ma_voucher}` });
     }
     // Kiểm tra hạn sử dụng
     const currentDate = new Date();
-    if (new Date(voucherFound.bat_dau) > currentDate || new Date(voucherFound.ket_thuc) < currentDate) {
-      return res.status(404).json({ error: `Voucher đã hết hạn, hết hạn vào: ${voucherFound.ket_thuc}` });
+    if (
+      new Date(voucherFound.bat_dau) > currentDate ||
+      new Date(voucherFound.ket_thuc) < currentDate
+    ) {
+      return res
+        .status(404)
+        .json({
+          error: `Voucher đã hết hạn, hết hạn vào: ${voucherFound.ket_thuc}`,
+        });
     }
     // Kiểm tra giá trị đơn hàng tối thiểu và tối đa (nếu cần)
     const donHangToiThieu = voucherFound.don_hang_toi_thieu;
     const donHangToiDa = donHangToiThieu + 1000000;
-    if (orderTotal < donHangToiThieu || orderTotal > donHangToiDa) { 
-      return res.status(404).json({ 
-        error: `Giá trị đơn hàng của bạn là ${orderTotal}, cần nằm trong khoảng từ ${donHangToiThieu} đến ${donHangToiDa} để sử dụng voucher.`
+    if (orderTotal < donHangToiThieu || orderTotal > donHangToiDa) {
+      return res.status(404).json({
+        error: `Giá trị đơn hàng của bạn là ${orderTotal}, cần nằm trong khoảng từ ${donHangToiThieu} đến ${donHangToiDa} để sử dụng voucher.`,
       });
     }
 
@@ -57,7 +73,6 @@ const getVoucherByCode = async (req, res) => {
     res.status(500).json({ error: "Đã xảy ra lỗi khi kiểm tra voucher" });
   }
 };
-
 
 /////////////////////////////////////////
 
@@ -76,7 +91,7 @@ const getVoucherById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-                              
+
 // show all vouchers
 const getAllVouchers = async (req, res) => {
   try {
@@ -99,16 +114,16 @@ const getAllVouchers = async (req, res) => {
       });
 
     const totalPages = Math.ceil(totalVouchers / limit);
-if (!voucher || vouchers.length === 0) {
-  return res.status(200).json({
-    vouchers: [],
-    currentPage: parseInt(page),
-    totalPages: 0,
-    totalVouchers: 0,
-    message: "Không tìm thấy voucher",
-  });
-}
-    
+    if (!voucher || vouchers.length === 0) {
+      return res.status(200).json({
+        vouchers: [],
+        currentPage: parseInt(page),
+        totalPages: 0,
+        totalVouchers: 0,
+        message: "Không tìm thấy voucher",
+      });
+    }
+
     res.status(200).json({
       vouchers,
       currentPage: parseInt(page),
@@ -120,15 +135,23 @@ if (!voucher || vouchers.length === 0) {
   }
 };
 
-
 // cập nhật voucher
 const updateVoucher = async (req, res) => {
   const { id } = req.params;
-  const { ma_voucher, gia_tri, bat_dau, ket_thuc,so_luong,phan_tram, mo_ta,don_hang_toi_thieu } = req.body;
+  const {
+    ma_voucher,
+    gia_tri,
+    bat_dau,
+    ket_thuc,
+    so_luong,
+    phan_tram,
+    mo_ta,
+    don_hang_toi_thieu,
+  } = req.body;
 
   try {
     const voucherToUpdate = await voucher.findOne({ where: { _id: id } });
-    
+
     if (!voucherToUpdate) {
       return res.status(404).json({ error: "Không tìm thấy voucher" });
     }
@@ -140,21 +163,23 @@ const updateVoucher = async (req, res) => {
     voucherToUpdate.so_luong = so_luong || voucherToUpdate.so_luong;
     voucherToUpdate.phan_tram = phan_tram || voucherToUpdate.phan_tram;
     voucherToUpdate.mo_ta = mo_ta || voucherToUpdate.mo_ta;
-    voucherToUpdate.don_hang_toi_thieu = don_hang_toi_thieu || voucherToUpdate.don_hang_toi_thieu;
+    voucherToUpdate.don_hang_toi_thieu =
+      don_hang_toi_thieu || voucherToUpdate.don_hang_toi_thieu;
 
     await voucherToUpdate.save();
 
-    res.status(200).json({ message: "Cập nhật thành công", voucher: voucherToUpdate });
+    res
+      .status(200)
+      .json({ message: "Cập nhật thành công", voucher: voucherToUpdate });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-
 // xóa voucher
 // Hàm xử lý việc xóa danh mục
 const deleteVouCher = async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
   try {
     const voucherToDelete = await voucher.findOne({ where: { _id: id } });
     if (!voucherToDelete) {
@@ -165,23 +190,41 @@ const deleteVouCher = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-}; 
-
+};
 
 ////////////////////////////////////
 //lấy tất cả vocher bên người dùng
 const getvoucher = async (req, res) => {
   try {
     const vouchers = await voucher.findAll();
-    res.status(200).json({vouchers});
+    res.status(200).json({ vouchers });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
 
-}
-
-
-
+//ẩn voucher và hiện voucher
+const getVoucherByStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const voucherFound = await voucher.findOne({ where: { _id: id } });
+    if (!voucherFound) {
+      return res.status(404).json({ message: "Không tìm thấy voucher" });
+    }
+    const updatedVoucher = await voucherFound.update({
+      trang_thai: !voucherFound.trang_thai,
+    });
+    res
+      .status(200)
+      .json({
+        message: "Cập nhật trạng thái voucher thành công",
+        voucher: updatedVoucher,
+      });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Lỗi server" });
+  }
+};
 
 module.exports = {
   addVoucher,
@@ -190,5 +233,6 @@ module.exports = {
   updateVoucher,
   deleteVouCher,
   getVoucherById,
-  getvoucher
+  getvoucher,
+  getVoucherByStatus,
 };
