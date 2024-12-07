@@ -5,7 +5,9 @@ import Slider from "react-slick";
 import classNames from "classnames/bind";
 import Banner from "../banner/page";
 import Link from "next/link";
-import VoucherModal  from "../dieukien/page";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import VoucherModal from "../dieukien/page";
 const cx = classNames.bind(styles);
 
 export default function Main() {
@@ -16,6 +18,7 @@ export default function Main() {
   const [firstSlider, setFirstSlider] = useState(null);
   const [secondSlider, setSecondSlider] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedVoucherId, setSelectedVoucherId] = useState(null);
   const firstSettings = {
     arrows: false,
     dots: false,
@@ -227,10 +230,39 @@ export default function Main() {
         : prev
     );
   };
+  const handleCopy = (voucherCode) => {
+    navigator.clipboard
+      .writeText(voucherCode)
+      .then(() => {
+        toast.success(`Mã ${voucherCode} đã được sao chép thành công!`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      })
+      .catch(() => {
+        toast.error("Không thể sao chép mã. Vui lòng thử lại.", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      });
+  };
 
   return (
     <>
       <Banner />
+      <ToastContainer />
       <section>
         <div className={styles.productContainer}>
           <p className={styles.featuredTitle}>ƯU ĐÃI</p> <br /> <br />
@@ -245,9 +277,31 @@ export default function Main() {
                   {vouchers.mo_ta}₫
                 </p>
                 <div className={styles.actions}>
-                  <button className={styles.copyBtn}>Copy</button>
-                  <a onClick={() => setModalOpen(true)} className={styles.conditions}>Điều kiện</a>
-          <VoucherModal isOpen={isModalOpen} onRequestClose={() => setModalOpen(false)} />
+                  {vouchers.so_luong > 0 ? (
+                    <button
+                      className={styles.copyBtn}
+                      onClick={() => handleCopy(vouchers.ma_voucher)}
+                    >
+                      Copy
+                    </button>
+                  ) : (
+                    <button className={`${styles.copyBtn} ${styles.disabled} `}>Hết Voucher</button>
+                  )}
+
+                  <a
+                    onClick={() => {
+                      setSelectedVoucherId(vouchers._id);
+                      setModalOpen(true);
+                    }}
+                    className={styles.conditions}
+                  >
+                    Điều kiện
+                  </a>
+                  <VoucherModal
+                    isOpen={isModalOpen}
+                    onRequestClose={() => setModalOpen(false)}
+                    voucherId={selectedVoucherId}
+                  />
                 </div>
               </div>
             ))}

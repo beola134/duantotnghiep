@@ -49,11 +49,11 @@
     color: black;
     border: 1px solid #ffd933;
   }
-  .copyButton:hover {
-    background-color: #ffd933;
+  .disabled{
+    cursor: not-allowed;
+    background:gray;
     color: white;
   }
-  
   .closeButton {
     flex: 1;
     padding: 15px;
