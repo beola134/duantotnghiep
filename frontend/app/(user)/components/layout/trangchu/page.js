@@ -285,7 +285,9 @@ export default function Main() {
                       Copy
                     </button>
                   ) : (
-                    <button className={`${styles.copyBtn} ${styles.disabled} `}>Hết Voucher</button>
+                    <button className={`${styles.copyBtn} ${styles.disabled} `}>
+                      Hết Voucher
+                    </button>
                   )}
 
                   <a
