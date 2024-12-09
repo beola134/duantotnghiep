@@ -297,7 +297,7 @@ export default function AdminStatistics() {
       <div className={cx("data")}>
         <div className={cx("content-data")}>
           <div className={cx("head")}>
-            <h3>Biểu đồ doanh thu 12 tháng</h3>
+            <h3>BIỂU ĐỒ DOANH THU 12 THÁNG</h3>
           </div>
           <div className={cx("chart")}>
             <div id="chart1">
@@ -307,7 +307,7 @@ export default function AdminStatistics() {
         </div>
         <div className={cx("content-data")}>
           <div className={cx("head")}>
-            <h3>Trạng Thái Đơn Hàng</h3>
+            <h3>TOP 5 SẢN PHẨM BÁN CHẠY</h3>
           </div>
           <div className={cx("chat-box")}>
             <div id="chart">
