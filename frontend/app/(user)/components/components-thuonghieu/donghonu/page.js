@@ -196,19 +196,20 @@ export default function Donghonu() {
                   </div>
                 )}
                 <div className={styles.clear}></div>
+
                 <div className={styles["products-cat"]}>
                   <div className={styles["block-products-filter"]}>
                     <div className={styles["block-product-filter"]}>
                       {/* Giới tính */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}>
-                        <div
-                          className={`${styles["field-name"]} ${styles.normal} ${styles.field}`}>
+                        <div 
+                        className={`${styles["field-name"]} ${styles.normal} ${styles.field}`}>
                           Giới tính
                         </div>
-                        <div
-                          className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]}`}>
-                          <span className={styles.close}>x</span>
+                        <div 
+                        className={`${styles["field-label"]} ${styles["filters-in-field"]} ${styles["filters-in-field-0-column"]}`}>
+                          <span className={styles.close} >x</span>
                           <div
                             className={`${styles["filters-in-field-inner"]} ${styles.cls}`}>
                             <Link
@@ -1949,6 +1950,7 @@ export default function Donghonu() {
                     </span>
                   </div>
                 </div>
+
                 <div className={styles.clear}></div>
 
                 {/* đánh giá start */}
