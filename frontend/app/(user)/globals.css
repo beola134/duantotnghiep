@@ -11,14 +11,13 @@
 body {
   font: 14px / 18px Helvetica, Arial, "DejaVu Sans", "Liberation Sans", Freesans,
     sans-serif;
+    width: 1536px;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0px auto;
 }
 
-.container {
-  width: 1170px;
-  max-width: 100%;
-  box-sizing: border-box;
-  margin: 0px auto;
-}
+
 a {
   color: #000;
   text-decoration: none;

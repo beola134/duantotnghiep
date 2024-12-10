@@ -65,7 +65,7 @@ function OtpModal({ isOpen, onRequestClose }) {
         timer: 1500,
       }).then(() => {
         onRequestClose();
-        window.location.href = "../components/components-login/login";
+        window.location.href = "/components/components-login/login";
       });
     } catch (error) {
       setError(error.message);
@@ -93,9 +93,14 @@ function OtpModal({ isOpen, onRequestClose }) {
 
   return (
     <div className={styles.overlay}>
-      <div className={styles.modal} onKeyDown={(e) => e.key === "Enter" && handleSubmit()}>
+      <div
+        className={styles.modal}
+        onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+      >
         <h3 className={styles.title}>Xác thực OTP</h3>
-        <p className={styles.description}>Vui lòng nhập mã OTP vừa gửi tới gmail</p>
+        <p className={styles.description}>
+          Vui lòng nhập mã OTP vừa gửi tới gmail
+        </p>
         <div className={styles.otpContainer} onPaste={handlePaste}>
           {otp.map((digit, index) => (
             <input
@@ -116,14 +121,19 @@ function OtpModal({ isOpen, onRequestClose }) {
         </div>
         <div className={styles.timerContainer}>
           <span>
-            Mã sẽ hết hạn: {Math.floor(timeLeft / 60)}:{("0" + (timeLeft % 60)).slice(-2)}
+            Mã sẽ hết hạn: {Math.floor(timeLeft / 60)}:
+            {("0" + (timeLeft % 60)).slice(-2)}
           </span>
         </div>
         <div className={styles.buttonContainer}>
           <button className={styles.cancelButton} onClick={onRequestClose}>
             Hủy Bỏ
           </button>
-          <button className={styles.confirmButton} onClick={handleSubmit} disabled={isLoading}>
+          <button
+            className={styles.confirmButton}
+            onClick={handleSubmit}
+            disabled={isLoading}
+          >
             {isLoading ? "Đang xử lý..." : "Xác Nhận"}
           </button>
         </div>

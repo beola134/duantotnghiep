@@ -114,45 +114,36 @@ export default function DonghoDoi() {
   const sanPhamHienThi = sapXepSanPham(products);
   return (
     <>
-      <div className={styles["container-header"]}>
-        <div id="main-container" className={styles.mt20}>
+      
+        <div id="main-container">
           <div className={styles["main-column"]}>
             <div className={styles["center-1col"]}>
-              <div className={styles.clear}></div>
-              <div className={styles.clear}></div>
-              <div className={styles.container}>
-                <div className={styles.clear}></div>
-                <div className={styles["all-summary"]}>
-                  <div
-                    className={styles["summary-content-filter"]}
-                    style={{ description: true }}
-                  >
-                    <p>
-                      Đến với thế giới <strong>đồng hồ nam, nữ</strong> của
-                      Wristly, bạn sẽ được sở hữu hàng nghìn sản phẩm chất
-                      lượng, thiết kế bắt mắt đến từ các thương hiệu&nbsp;
-                      <em>
-                        <strong>
-                          <Link href="#" target="_blank">
-                            đồng hồ&nbsp;Thụy Sỹ
-                          </Link>
-                        </strong>
-                      </em>
-                      , Nhật Bản, Pháp, Mỹ…danh tiếng trên thế giới. Mọi sản
-                      phẩm đều đảm bảo&nbsp;
-                      <strong>100% hàng chính hãng</strong> kèm theo{" "}
-                      <strong>chế độ bảo hành chính hãng</strong> đặc biệt với
-                      mức giá hợp lý sẽ đem đến cho bạn phụ kiện hoàn hảo nhất;
-                      khẳng định đẳng cấp, phong cách riêng của bản thân
+              <div className="clear-both"></div>
+              <div className="clear-both"></div>
+              <div className="w-[1170px] max-w-full box-border mx-auto container">
+                <div className="clear-both"></div>
+                <div className="relative">
+                  <div className="mt-6 mb-5" style={{ description: true }}>
+                    <p className=" text-sm italic leading-6 md:px-2 sm:px-2">
+                      Tình yêu luôn là thứ cảm xúc đặc biệt hơn bao giờ hết. Đó
+                      là sự gắn kết hai trái tim nếm trải mọi cung bậc cảm xúc:
+                      đau khổ, buồn, vui, hạnh phúc để có một cái kết viên mãn.
+                      Đồng hành trên chặng đường yêu không thể thiếu đi đồng hồ
+                      đôi - vật chứng tình yêu vừa thiết thực vừa ý nghĩa. <strong> Đồng
+                      hồ đôi (đồng hồ cặp)</strong> với đầy đủ kiểu dáng từ đồng hồ cặp
+                      thiết kế mỏng nhẹ, thanh lịch, sang trọng hoặc cá tính,
+                      thời trang…sẽ đáp ứng mọi sở thích của đôi tình nhân.
                     </p>
                   </div>
 
-                  <div className={styles["view-more"]}>Xem thêm</div>
+                  <div className="hidden absolute left-1/2 bottom-0 translate-x-[-50%] translate-y-1/2 px-2 py-0.5 bg-red-600/80 text-white text-xs cursor-pointer">
+                    Xem thêm
+                  </div>
                 </div>
                 {selectedFilter.length > 0 && (
-                  <div className={styles.choosedfilter}>
+                  <div className="mb-5">
                     {selectedFilter.map((filter, index) => (
-                      <Link
+                      <Link className="bg-[#e88f38] text-[#fff] mr-0.5 mb-0.5 pt-[3px] pl-[9px] pb-[3px] pr-6 inline-block relative text-xs  relative bg-orange-500 text-white mr-0.5 mb-0.5 px-6 pr-2 py-0.5 inline-block text-xs after:content-['X'] after:absolute after:top-[3px] after:right-[2px] after:w-[15px] after:h-[13px] after:text-white after:z-[1] after:text-xs"
                         key={index}
                         rel="nofollow"
                         href="#"
@@ -163,23 +154,23 @@ export default function DonghoDoi() {
                     ))}
                     <Link
                       rel="nofollow"
-                      className={styles.reset}
+                      className="bg-[#ec0202] text-[#fff] mr-0.5 mb-0.5 pt-[3px] pl-[9px] pb-[3px] pr-6 inline-block relative text-xs  relative bg-orange-500 text-white mr-0.5 mb-0.5 px-6 pr-2 py-0.5 inline-block text-xs after:content-['X'] after:absolute after:top-[3px] after:right-[2px] after:w-[15px] after:h-[13px] after:text-white after:z-[1] after:text-xs"
                       href="#"
                       onClick={xoaTatCaBoLoc}
                     >
-                      Xoá hết
+                      Xóa hết
                     </Link>
                   </div>
                 )}
-                <div className={styles.clear}></div>
-                <div className={styles["products-cat"]}>
-                  <div className={styles["block-products-filter"]}>
-                    <div className={styles["block-product-filter"]}>
+                <div className="clear-both"></div>
+                
+                  <div className="border-t border-b border-gray-300 mt-4 mb-4">
+                    <div className="flex">
                       <div
-                        className={`${styles["field-area"]} ${styles["field-item"]}`}
+                        className="flex-1 float-left relative mr-2.5 pr-2.5 pt-3 pb-2.5"
                       >
                         <div
-                          className={`${styles["field-name"]} ${styles.normal} ${styles.field}`}
+                          className="field-name cursor-pointer font-normal uppercase text-xs transition duration-300"
                         >
                           Giới tính
                         </div>
@@ -1820,8 +1811,7 @@ export default function DonghoDoi() {
                         </div>
                       </div>
                     </div>
-                  </div>
-
+                  </div> 
                   <div className={styles["field-title"]}>
                     <div className={styles["title-name"]}>
                       <div className={styles["cat-title"]}>
@@ -1947,15 +1937,12 @@ export default function DonghoDoi() {
                                 </div>
                                 <div className={styles.clear}></div>
                               </div>
-
-                              <div className={styles.clear}></div>
                             </div>
                           );
                         })}
                       </div>
                     </div>
                   </section>
-
                   <div className={styles.pagination}>
                     <span
                       title="First page"
@@ -2013,43 +2000,8 @@ export default function DonghoDoi() {
                       ››
                     </span>
                   </div>
-                </div>
+                
                 <div className={styles.clear}></div>
-
-                <div className={styles.evaluateCat}>
-                  <div className={`${styles.ratingArea} ${styles.cls}`}>
-                    <span id="ratings">
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_1"
-                        value="1"
-                      ></i>
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_2"
-                        value="2"
-                      ></i>
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_3"
-                        value="3"
-                      ></i>
-                      <i
-                        className={` ${styles.starOff}`}
-                        id="rate_4"
-                        value="4"
-                      ></i>
-                      <i
-                        className={` ${styles.starOff}`}
-                        id="rate_5"
-                        value="5"
-                      ></i>
-                    </span>
-                    <span className={styles.ratingNote}>
-                      Nhấn vào đây để đánh giá
-                    </span>
-                  </div>
-                </div>
 
                 <div className={styles.clear}></div>
                 <div
@@ -2061,7 +2013,7 @@ export default function DonghoDoi() {
             <div className={styles.clear}></div>
           </div>
         </div>
-      </div>
+      
     </>
   );
 }
