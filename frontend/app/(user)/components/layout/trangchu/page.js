@@ -715,7 +715,7 @@ export default function Main() {
         <div className={styles.title}>
           <p className={styles.titleIndex}>THƯƠNG HIỆU NỔI BẬT</p>
           <p>
-            <Link href="/components/thuonghieu">Xem tất cả &raquo;</Link>
+            <Link href="/components/components-thuonghieu/thuonghieu">Xem tất cả &raquo;</Link>
           </p>
         </div>
         <div className={styles.owlItem}>
@@ -724,7 +724,7 @@ export default function Main() {
               <div key={item._id}>
                 <div className={styles.item}>
                   <Link
-                    href={`/components/chitietdanhmuc/${item.thuong_hieu}`}
+                    href={`/components/components-thuonghieu/chitietthuonghieu/${item.thuong_hieu}`}
                     title={item.thuong_hieu}
                   >
                     <img
@@ -801,7 +801,7 @@ export default function Main() {
             </h3>
 
             <p className={styles.xtc}>
-              <Link href="/components/thuonghieu">Xem tất cả</Link>
+              <Link href="/components/components-thuonghieu/thuonghieu">Xem tất cả</Link>
             </p>
 
             <p className={styles.textBrand}>

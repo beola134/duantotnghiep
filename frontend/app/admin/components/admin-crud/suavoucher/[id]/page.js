@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./suavoucher.module.css";
 import Swal from "sweetalert2";
 import { useRouter, useParams } from "next/navigation";
-import { jwtDecode } from "jwt-decode";
 
 export default function SuaVoucher() {
   const [maVouchers, setmaVouchers] = useState("");
@@ -12,12 +11,12 @@ export default function SuaVoucher() {
   const [ngayBD, setngayBD] = useState("");
   const [ngayKT, setngayKT] = useState("");
   const [mota, setmota] = useState("");
+  const [mota2, setmota2] = useState("");
   const [soluong, setsoluong] = useState("");
   const [phantram, setphantram] = useState("");
   const [don_hang_toi_thieu, setdon_hang_toi_thieu] = useState("");
   const router = useRouter();
   const { id } = useParams();
-  const [showInterface, setShowInterface] = useState(false);
 
   const convertToVietnamTime = (dateString) => {
     const date = new Date(dateString);
@@ -45,6 +44,7 @@ export default function SuaVoucher() {
           setngayBD(convertFromVietnamTime(data.bat_dau));
           setngayKT(convertFromVietnamTime(data.ket_thuc));
           setmota(data.mo_ta);
+          setmota2(data.mota2);
           setdon_hang_toi_thieu(data.don_hang_toi_thieu);
         } else {
           Swal.fire("Error", "Không tìm thấy voucher!", "error");
@@ -60,7 +60,15 @@ export default function SuaVoucher() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!maVouchers || !soluong || !ngayBD || !ngayKT || (!phantram && !giatri)) {      Swal.fire({
+    if (
+      !maVouchers ||
+      !soluong ||
+      !ngayBD ||
+      !ngayKT ||
+      !mota2 ||
+      (!phantram && !giatri)
+    ) {
+      Swal.fire({
         icon: "warning",
         title: "Thiếu thông tin",
         text: "Vui lòng nhập đầy đủ thông tin!",
@@ -86,6 +94,7 @@ export default function SuaVoucher() {
       bat_dau: convertToVietnamTime(ngayBD),
       ket_thuc: convertToVietnamTime(ngayKT),
       mo_ta: mota,
+      mota2: mota2,
       don_hang_toi_thieu: don_hang_toi_thieu,
     };
 
@@ -195,14 +204,23 @@ export default function SuaVoucher() {
                 />
               </div>
               <div className={styles.formGroup}>
-              <label htmlFor="description">Đơn hàng tối thiểu</label>
-              <input
-                id="don_hang_toi_thieu"
-                name="don_hang_toi_thieu"
-                value={don_hang_toi_thieu}
-                onChange={(e) => setdon_hang_toi_thieu(e.target.value)}
-              />
-            </div>
+                <label htmlFor="description">Đơn hàng tối thiểu</label>
+                <input
+                  id="don_hang_toi_thieu"
+                  name="don_hang_toi_thieu"
+                  value={don_hang_toi_thieu}
+                  onChange={(e) => setdon_hang_toi_thieu(e.target.value)}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="description">Tiêu đề</label>
+                <input
+                  id="tieu_de"
+                  name="tieu_de"
+                  value={mota2}
+                  onChange={(e) => setmota2(e.target.value)}
+                />
+              </div>
               <div className={styles.formGroup}>
                 <label htmlFor="description">Mô tả voucher</label>
                 <textarea
@@ -221,7 +239,9 @@ export default function SuaVoucher() {
               <button
                 type="button"
                 className="btn btn-outline-secondary"
-                onClick={() => router.push("/admin/components/quanlyadmin/voucher")}>
+                onClick={() =>
+                  router.push("/admin/components/quanlyadmin/voucher")
+                }>
                 Hủy bỏ
               </button>
             </div>

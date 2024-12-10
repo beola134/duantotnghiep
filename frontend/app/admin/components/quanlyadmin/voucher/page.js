@@ -7,7 +7,8 @@ import ExcelJS from "exceljs";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import RobotoRegular from "./Roboto-Regular.base64";
-import { jwtDecode } from "jwt-decode";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function VoucherPage() {
   const [vouchers, setVouchers] = useState([]);
@@ -18,7 +19,6 @@ export default function VoucherPage() {
   const [totalPage, setTotalPage] = useState(1);
   const [totalVouchers, setTotalVouchers] = useState(0);
   const itemsPerPage = 5;
-  const [showInterface, setShowInterface] = useState(false);
 
   const debounce = (func, delay) => {
     let timeoutId;
@@ -28,10 +28,6 @@ export default function VoucherPage() {
         func(...args);
       }, delay);
     };
-  };
-
-  const printData = () => {
-    window.print();
   };
 
   // Hàm xuất dữ liệu ra Excel
@@ -51,7 +47,9 @@ export default function VoucherPage() {
           let totalPages = 1;
           const getAllVouchers = [];
           while (currentPage <= totalPages) {
-            const response = await fetch(`http://localhost:5000/voucher/getAllVouchers?page=${currentPage}`);
+            const response = await fetch(
+              `http://localhost:5000/voucher/getAllVouchers?page=${currentPage}`
+            );
             const data = await response.json();
             getAllVouchers.push(...data.vouchers);
             totalPages = data.totalPages;
@@ -68,7 +66,11 @@ export default function VoucherPage() {
             { header: "Ngày bắt đầu", key: "bat_dau", width: 25 },
             { header: "Ngày kết thúc", key: "ket_thuc", width: 25 },
             { header: "Ghi chú", key: "mo_ta", width: 40 },
-            { header: "Đơn hàng tối thiểu", key: "don_hang_toi_thieu", width: 25 },
+            {
+              header: "Đơn hàng tối thiểu",
+              key: "don_hang_toi_thieu",
+              width: 25,
+            },
           ];
           worksheet.getRow(1).eachCell((cell) => {
             cell.font = { bold: true, color: { argb: "FFFFFF" } };
@@ -153,9 +155,13 @@ export default function VoucherPage() {
 
       // Fetch all pages
       while (currentPage <= totalPages) {
-        const response = await fetch(`http://localhost:5000/voucher/getAllVouchers?page=${currentPage}`);
+        const response = await fetch(
+          `http://localhost:5000/voucher/getAllVouchers?page=${currentPage}`
+        );
         if (!response.ok) {
-          throw new Error(`Failed to fetch page ${currentPage}: ${response.statusText}`);
+          throw new Error(
+            `Failed to fetch page ${currentPage}: ${response.statusText}`
+          );
         }
         const data = await response.json();
         allVouchers.push(...data.vouchers);
@@ -171,7 +177,16 @@ export default function VoucherPage() {
       // Generate PDF table
       doc.autoTable({
         head: [
-          ["ID Voucher", "Mã Voucher", "Giá trị", "Phần trăm", "Số lượng", "Ngày bắt đầu", "Ngày kết thúc", "Ghi chú"],
+          [
+            "ID Voucher",
+            "Mã Voucher",
+            "Giá trị",
+            "Phần trăm",
+            "Số lượng",
+            "Ngày bắt đầu",
+            "Ngày kết thúc",
+            "Ghi chú",
+          ],
         ],
         body: sortedVouchers.map((item) => [
           item._id,
@@ -230,6 +245,30 @@ export default function VoucherPage() {
         icon: "error",
         confirmButtonText: "OK",
       });
+    }
+  };
+
+  const handleToggleComment = async (id, trang_thai) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/voucher/getVoucherByStatus/${id}`,
+        {
+          method: "PUT",
+        }
+      );
+      const data = await response.json();
+
+      if (data.message) {
+        setVouchers((prevVoucher) =>
+          prevVoucher.map((voucher) =>
+            voucher._id === id
+              ? { ...voucher, trang_thai: !trang_thai }
+              : voucher
+          )
+        );
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -303,9 +342,12 @@ export default function VoucherPage() {
       cancelButtonText: "Hủy",
     });
     try {
-      const response = await fetch(`http://localhost:5000/voucher/deleteVoucher/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://localhost:5000/voucher/deleteVoucher/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
         setVouchers(vouchers.filter((voucher) => voucher._id !== id));
@@ -349,12 +391,14 @@ export default function VoucherPage() {
         <div className={styles.bg}>
           <div className={styles.container}>
             <div className={styles.actions}>
-              <Link href="/admin/components/admin-crud/themvoucher" className={styles.sp}>
+              <Link
+                href="/admin/components/admin-crud/themvoucher"
+                className={styles.sp}>
                 <i className="fas fa-plus"></i> Tạo mới voucher
               </Link>
               <div className={styles.buttonGroup}>
                 &nbsp;
-                <button className={styles.sp3} onClick={printData}>
+                <button className={styles.sp3}>
                   <i className="fas fa-print"></i> In dữ liệu
                 </button>
                 &nbsp;
@@ -389,16 +433,30 @@ export default function VoucherPage() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-                <th style={{ width: "10%", textAlign: "center" }}>Id Voucher</th>
-                <th style={{ width: "12%", textAlign: "center" }}>Mã Voucher</th>
-                <th style={{ width: "12%", textAlign: "center" }}>Giá trị</th>
-                <th style={{ width: "12%", textAlign: "center" }}>Phần trăm</th>
-                <th style={{ width: "12%", textAlign: "center" }}>Số Lượng</th>
-                <th style={{ width: "12%", textAlign: "center" }}>Ngày bắt đầu</th>
-                <th style={{ width: "10%", textAlign: "center" }}>Ngày kết thúc</th>
+                <th style={{ width: "10%", textAlign: "center" }}>
+                  Id Voucher
+                </th>
+                <th style={{ width: "10%", textAlign: "center" }}>
+                  Mã Voucher
+                </th>
+                <th style={{ width: "10%", textAlign: "center" }}>Giá trị</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Phần trăm</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Số Lượng</th>
+                <th style={{ width: "12%", textAlign: "center" }}>
+                  Ngày bắt đầu
+                </th>
+                <th style={{ width: "10%", textAlign: "center" }}>
+                  Ngày kết thúc
+                </th>
                 <th style={{ width: "10%", textAlign: "center" }}>Mô tả</th>
-                <th style={{ width: "10%", textAlign: "center" }}>Đơn hàng tối thiểu</th>
-                <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Tiêu đề</th>
+                <th style={{ width: "10%", textAlign: "center" }}>
+                  Đơn hàng tối thiểu
+                </th>
+                <th style={{ width: "10%", textAlign: "center" }}>
+                  Trạng thái
+                </th>
+                <th style={{ width: "15%", textAlign: "center" }}>Chức năng</th>
               </tr>
             </thead>
             <tbody>
@@ -410,17 +468,30 @@ export default function VoucherPage() {
                       textAlign: "center",
                       color: "red",
                       fontWeight: "bold",
-                    }}
-                  >
+                    }}>
                     Không có voucher
                   </td>
                 </tr>
               ) : (
                 vouchers.map((voucher) => {
-                  const { _id, ma_voucher, gia_tri, phan_tram, so_luong, bat_dau, ket_thuc, mo_ta ,don_hang_toi_thieu} = voucher;
+                  const {
+                    _id,
+                    ma_voucher,
+                    gia_tri,
+                    phan_tram,
+                    so_luong,
+                    bat_dau,
+                    ket_thuc,
+                    mo_ta,
+                    don_hang_toi_thieu,
+                    trang_thai,
+                    mota2,
+                  } = voucher;
 
                   return (
-                    <tr key={_id}>
+                    <tr
+                      key={_id}
+                      className={!trang_thai ? styles.hiddenRow : ""}>
                       <td>{_id}</td>
                       <td style={{ textAlign: "center" }}>{ma_voucher}</td>
                       <td style={{ textAlign: "center" }}>{gia_tri}</td>
@@ -429,16 +500,29 @@ export default function VoucherPage() {
                       <td style={{ textAlign: "center" }}>{bat_dau}</td>
                       <td style={{ textAlign: "center" }}>{ket_thuc}</td>
                       <td style={{ textAlign: "center" }}>{mo_ta}</td>
-                      <td style={{ textAlign: "center" }}>{don_hang_toi_thieu}</td>
+                      <td style={{ textAlign: "center" }}>{mota2}</td>
+                      <td style={{ textAlign: "center" }}>
+                        {don_hang_toi_thieu}
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        <button
+                          onClick={() => handleToggleComment(_id, trang_thai)}
+                          className={`${styles.btn2} ${styles.edit}`}>
+                          <FontAwesomeIcon
+                            icon={trang_thai ? faEye : faEyeSlash}
+                          />
+                        </button>
+                      </td>
                       <td style={{ textAlign: "center" }}>
                         <Link
                           href={`/admin/components/admin-crud/suavoucher/${_id}`}
-                          className={`${styles.btn} ${styles.edit}`}
-                        >
+                          className={`${styles.btn} ${styles.edit}`}>
                           ✏️
                         </Link>
                         &nbsp;
-                        <button className={`${styles.btn} ${styles.delete}`} onClick={() => deleteVoucher(_id)}>
+                        <button
+                          className={`${styles.btn} ${styles.delete}`}
+                          onClick={() => deleteVoucher(_id)}>
                           🗑️
                         </button>
                         &nbsp;
@@ -452,25 +536,35 @@ export default function VoucherPage() {
 
           <div className={styles.pagination}>
             <span>
-              Hiện {startVoucherIndex} đến {endVoucherIndex} của {totalVouchers} sản phẩm
+              Hiện {startVoucherIndex} đến {endVoucherIndex} của {totalVouchers}{" "}
+              sản phẩm
             </span>
             <div className={styles.paginationControls}>
               <button
-                className={`${styles.paginationButton} ${currentPage === 1 ? styles.disabled : styles["other-page"]}`}
-                onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
+                className={`${styles.paginationButton} ${
+                  currentPage === 1 ? styles.disabled : styles["other-page"]
+                }`}
+                onClick={() =>
+                  currentPage > 1 && handlePageChange(currentPage - 1)
+                }
+                disabled={currentPage === 1}>
                 ‹
               </button>
-              <button className={styles.paginationButton}>{`Trang ${currentPage} / ${totalPage}`}</button>
+              <button
+                className={
+                  styles.paginationButton
+                }>{`Trang ${currentPage} / ${totalPage}`}</button>
 
               <button
                 className={`${styles.paginationButton} ${
-                  currentPage === totalPage ? styles.disabled : styles["other-page"]
+                  currentPage === totalPage
+                    ? styles.disabled
+                    : styles["other-page"]
                 }`}
-                onClick={() => currentPage < totalPage && handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPage}
-              >
+                onClick={() =>
+                  currentPage < totalPage && handlePageChange(currentPage + 1)
+                }
+                disabled={currentPage === totalPage}>
                 ›
               </button>
             </div>

@@ -95,8 +95,7 @@ function OtpModal({ isOpen, onRequestClose }) {
     <div className={styles.overlay}>
       <div
         className={styles.modal}
-        onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-      >
+        onKeyDown={(e) => e.key === "Enter" && handleSubmit()}>
         <h3 className={styles.title}>Xác thực OTP</h3>
         <p className={styles.description}>
           Vui lòng nhập mã OTP vừa gửi tới gmail
@@ -132,8 +131,7 @@ function OtpModal({ isOpen, onRequestClose }) {
           <button
             className={styles.confirmButton}
             onClick={handleSubmit}
-            disabled={isLoading}
-          >
+            disabled={isLoading}>
             {isLoading ? "Đang xử lý..." : "Xác Nhận"}
           </button>
         </div>

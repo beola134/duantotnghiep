@@ -16,7 +16,7 @@ const User = sequelize.define('User', {
     },
     mat_khau: {
         type: DataTypes.STRING(255),
-        allowNull: false
+        allowNull: true
     },
     ho_ten: {
         type: DataTypes.STRING(255),

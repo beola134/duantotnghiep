@@ -187,7 +187,17 @@
   cursor: pointer;
 }
 .btn.edit {
-  background-color: #ffc107;
+  background-color:  #ffc107;
+  text-decoration: none;
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btn2.edit {
+  background-color:  #999;
+  text-decoration: none;
   color: #fff;
   padding: 5px 10px;
   border: none;
@@ -221,4 +231,7 @@
 
 .paginationButton:hover {
   background-color: #f0f0f0;
+}
+.hiddenRow {
+  opacity: 0.5;
 }

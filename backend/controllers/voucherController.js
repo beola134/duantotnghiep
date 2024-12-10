@@ -14,6 +14,8 @@ const addVoucher = async (req, res) => {
     ket_thuc,
     mo_ta,
     don_hang_toi_thieu,
+    mota2,
+    trang_thai
   } = req.body;
 
   try {
@@ -26,6 +28,8 @@ const addVoucher = async (req, res) => {
       ket_thuc,
       mo_ta,
       don_hang_toi_thieu,
+      mota2,
+      trang_thai
     });
 
     res.status(201).json(newVoucher);
@@ -146,6 +150,8 @@ const updateVoucher = async (req, res) => {
     so_luong,
     phan_tram,
     mo_ta,
+    mota2,
+    trang_thai,
     don_hang_toi_thieu,
   } = req.body;
 
@@ -165,6 +171,8 @@ const updateVoucher = async (req, res) => {
     voucherToUpdate.mo_ta = mo_ta || voucherToUpdate.mo_ta;
     voucherToUpdate.don_hang_toi_thieu =
       don_hang_toi_thieu || voucherToUpdate.don_hang_toi_thieu;
+    voucherToUpdate.trang_thai = trang_thai || voucherToUpdate.trang_thai;
+    voucherToUpdate.mota2 = mota2 || voucherToUpdate.mota
 
     await voucherToUpdate.save();
 

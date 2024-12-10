@@ -26,6 +26,26 @@ const User = ({ params }) => {
     xac_nhan_mat_khau: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      const savedTab = localStorage.getItem("activeTab");
+      if (savedTab) {
+        setActiveTab(savedTab);
+      }
+    }
+  }, [mounted]);
+
+  useEffect(() => {
+    if (mounted) {
+      localStorage.setItem("activeTab", activeTab);
+    }
+  }, [activeTab, mounted]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -60,12 +80,6 @@ const User = ({ params }) => {
     }
   }, [activeTab, id]);
 
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-    if (tab === "orderShow") {
-      fetchOrderShow();
-    }
-  };
   const fetchShowLichsu = async () => {
     try {
       const res = await fetch(`http://localhost:5000/donhang/history/${id}`);
@@ -98,6 +112,19 @@ const User = ({ params }) => {
     } catch (error) {
       console.error("Lỗi khi lấy lịch sử đơn hàng:", error);
       setOrderShow([]);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === "orderShow") {
+      fetchOrderShow();
+    }
+  }, [activeTab, id]);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    if (tab === "orderShow") {
+      fetchOrderShow();
     }
   };
 
@@ -310,16 +337,14 @@ const User = ({ params }) => {
           <p>
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => handleTabClick("profile")}
-            >
+              onClick={() => handleTabClick("profile")}>
               Hồ Sơ
             </span>
           </p>
           <p>
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => handleTabClick("ShowLichsu")}
-            >
+              onClick={() => handleTabClick("ShowLichsu")}>
               Lịch sử mua hàng
             </span>
           </p>
@@ -327,16 +352,14 @@ const User = ({ params }) => {
           <p>
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => handleTabClick("orderShow")}
-            >
+              onClick={() => handleTabClick("orderShow")}>
               Trạng thái đơn hàng
             </span>
           </p>
           <p>
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => handleTabClick("changePassword")}
-            >
+              onClick={() => handleTabClick("changePassword")}>
               Đổi mật khẩu
             </span>
           </p>
@@ -357,8 +380,7 @@ const User = ({ params }) => {
                 color: "black",
                 marginBottom: "15px",
                 textAlign: "center",
-              }}
-            >
+              }}>
               Hồ Sơ Người Dùng
             </p>
             <form>
@@ -433,8 +455,7 @@ const User = ({ params }) => {
                     <button
                       type="submit"
                       onClick={handleSave}
-                      className="save-button"
-                    >
+                      className="save-button">
                       Cập nhật
                     </button>
                   </div>
@@ -444,8 +465,7 @@ const User = ({ params }) => {
                   <button
                     type="button"
                     onClick={() => setIsEditing(true)}
-                    className="edit-button"
-                  >
+                    className="edit-button">
                     Chỉnh sửa
                   </button>
                 </div>
@@ -524,8 +544,7 @@ const User = ({ params }) => {
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
-                      }}
-                    >
+                      }}>
                       <p>Mã Đơn Hàng: {order._id}</p>
                       <span className={styles.trh}>{order.trang_thai}</span>
                     </div>
@@ -572,8 +591,7 @@ const User = ({ params }) => {
                         style={{
                           margin: "0px 5px",
                           color: "black",
-                        }}
-                      >
+                        }}>
                         <strong>{order.phi_ship}₫</strong>
                       </span>{" "}
                     </p>
@@ -585,8 +603,7 @@ const User = ({ params }) => {
                             fontSize: "20px",
                             margin: "0px 5px",
                             color: "red",
-                          }}
-                        >
+                          }}>
                           <strong>
                             {order.tong_tien.toLocaleString("vi-VN")}₫
                           </strong>
@@ -597,8 +614,7 @@ const User = ({ params }) => {
                           className="btn btn-danger"
                           onClick={() =>
                             huyDonHang(order._id, "Đơn hàng đã hủy")
-                          }
-                        >
+                          }>
                           Hủy đơn hàng
                         </button>
                       )}
@@ -619,8 +635,7 @@ const User = ({ params }) => {
                 color: "black",
                 marginBottom: "15px",
                 textAlign: "center",
-              }}
-            >
+              }}>
               Đổi Mật Khẩu
             </p>
             <form onSubmit={handleSubmitPasswordChange}>

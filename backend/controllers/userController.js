@@ -231,7 +231,7 @@ exports.register = async (req, res) => {
     const hashPassword = await bcrypt.hash(mat_khau, salt);
     // Tạo mã OTP ngẫu nhiên
     const otp = crypto.randomInt(100000, 999999);
-    // Tạo thời gian hết hạn cho mã OTP 10 phút
+    // Tạo thời gian hết hạn cho mã OTP (3 phút)
     const otpExpires = Date.now() + 3 * 60 * 1000; // 
     const user = await Users.create({
       ten_dang_nhap,
@@ -253,30 +253,31 @@ exports.register = async (req, res) => {
     });
 
     const mailOptions = {
-      from: "nguyentantai612004@gmail.com",
+      from: "watchwristly@gmail.com",
       to: email,
       subject: "Mã OTP xác thực tài khoản",
-      text: `Mã OTP của bạn là: ${otp}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+          <div style="text-align: center; padding: 20px 0; background-color: #000;">
+               <h1 style="color: white;">ĐỒNG HỒ WRISTLY</h1>
+          </div>
+          <div style="padding: 20px; text-align: center; background-color: #f9f9f9;">
+            <h2>Mã đăng ký của bạn</h2>
+            <p style="font-size: 2em; font-weight: bold; margin: 20px 0;">${otp}</p>
+            <p style="color: #555;">Mã này sẽ hết hạn trong 3 phút</p>
+          </div>
+          <div style="font-size: 0.875em; text-align: center; padding: 20px; color: #888;">
+            <p>© WRISTLY </p>
+            <p>Công viên phần mềm quang trung</p>
+          </div>
+        </div>
+      `,
     };
-
     await transporter.sendMail(mailOptions);
     res.status(200).json({
       message: "Đăng ký tài khoản thành công. Vui lòng kiểm tra email để nhận mã OTP.",
     });
-    //    // Thiết lập thời gian xóa tài khoản nếu OTP không xác thực trong 10 phút
-    // setTimeout(async () => {
-    //   try {
-    //     const user = await Users.findOne({ where: { email } });
-    //     // Kiểm tra nếu người dùng tồn tại và mã OTP đã hết hạn
-    //     if (user && user.otpExpires < Date.now()) {
-    //       await Users.destroy({ where: { email } }); // Xóa tài khoản
-    //       console.log(`Tài khoản với email ${email} đã bị xóa vì không xác thực OTP trong thời gian quy định.`);
-    //     }
-    //   } catch (error) {
-    //     console.error("Lỗi khi xóa tài khoản:", error.message);
-    //   }
-    // }, 3 * 60 * 1000); // Thời gian chờ là 3 phút
-    
+
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -498,12 +499,26 @@ exports.sendOTPquenmk = async (req, res) => {
       },
     });
     const mailOptions = {
-      from: 'nguyentantai612004@gmail.com', 
+      from: "watchwristly@gmail.com",
       to: email,
       subject: "Mã OTP xác thực tài khoản",
-      text: `Mã OTP của bạn là: ${otp}. Mã OTP sẽ hết hạn trong  5 phút.`,
+      html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+          <div style="text-align: center; padding: 20px 0; background-color: #000;">
+               <h1 style="color: white;">ĐỒNG HỒ WRISTLY</h1>
+          </div>
+          <div style="padding: 20px; text-align: center; background-color: #f9f9f9;">
+            <h2>Mã đăng ký của bạn</h2>
+            <p style="font-size: 2em; font-weight: bold; margin: 20px 0;">${otp}</p>
+            <p style="color: #555;">Mã này sẽ hết hạn trong 3 phút</p>
+          </div>
+          <div style="font-size: 0.875em; text-align: center; padding: 20px; color: #888;">
+            <p>© WRISTLY </p>
+            <p>Công viên phần mềm quang trung</p>
+          </div>
+        </div>
+      `,
     };
-
     // Gửi email
     await transporter.sendMail(mailOptions);
     // Phản hồi thành công
