@@ -117,7 +117,7 @@ export default function Login() {
     } catch (error) {
       Swal.fire({
         title: "Đăng nhập thất bại",
-        text: error.message || "Vui lòng thử lại.",
+        text: "Tài khoản của bạn đã tồn tại.",
         icon: "error",
         showConfirmButton: true,
       });

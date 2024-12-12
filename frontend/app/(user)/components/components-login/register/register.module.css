@@ -217,3 +217,14 @@
     width: 90%;
   }
 }
+.otpContainer {
+  position: relative;
+}
+
+.sendOtpButton {
+  position: absolute;
+  right: 10px;
+  top: 63%;
+  transform: translateY(-50%);
+  font-size: 13px;
+}
