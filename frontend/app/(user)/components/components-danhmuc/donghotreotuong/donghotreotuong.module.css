@@ -16,14 +16,7 @@
     display: block;
     clear: both;
   }
-  .banner-cat-manuf {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 400px;
-    position: relative;
-    margin-bottom: 20px;
-  }
+  
   /* ẩn */
   .hiden {
     display: none;
@@ -31,11 +24,11 @@
   .filters-in-field {
     display: none;
     position: absolute;
-    width: 400px;
+    width: 200px;
     z-index: 10000;
     top: 38px;
     padding-top: 4px;
-    left: 0px;
+    left: 0;
   }
   .filters-in-field .close {
     position: absolute;
@@ -94,9 +87,7 @@
   .description {
     line-height: 24px;
   }
-  .description a {
-    color: #3a70f1;
-  }
+  
   .summary-content-filter p {
     font-size: 14px;
     font-style: italic;
@@ -202,13 +193,14 @@
 
   .field-title .order-select {
     position: absolute;
-    top: 8px;
+    top: 40px;
     right: 12px;
     border: none;
     padding: 8px 0px 8px 0px;
     color: #5d5d5d;
     background: none;
     cursor: pointer;
+    max-width:180px;
   }
 
   /* product-danh mục nam */

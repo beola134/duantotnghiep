@@ -1,9 +1,10 @@
 "use client";
 import styles from "./donghotreotuong.module.css";
-import classNames from "classnames/bind";
+
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Loading from "../../loading/page";
+import classNames from "classnames/bind";
 const cx = classNames.bind(styles);
 
 export default function DongHoTreoTuong() {
@@ -135,15 +136,51 @@ export default function DongHoTreoTuong() {
         <div id="main-container" className={cx("mt20")}>
           <div className={cx("main-column")}>
             <div className={cx("center-1col")}>
-              <div className={cx("banner-cat-manuf")}>
-                <img src="/image/banner/banner-donghotreotuong.jpg" alt="" />
-              </div>
+              
               <div className={cx("clear")} />
               {/* container */}
-              <div className={cx("container")}>
+              <div className={cx("lg:max-w-[1170px] max-w-[80%] mx-auto overflow-hidden")}>
                 <div className={cx("clear")} />
                 <div className={cx("all-summary")}>
+                  
                   <div className={cx("summary-content-filter", "description")}>
+                    <div className={cx("banner-cat-manuf")}>
+                
+                        <div
+                          className={cx(
+                            
+                            "flex",
+                            "items-center uppercase "
+                          )}
+                        >
+                          <span className={cx( "text-sm")}>
+                            <Link
+                              href="/"
+                              className={cx(
+                                
+                                " text-gray-800",
+                                "hover:text-[#796752]"
+                              )}
+                            >
+                              Trang chủ
+                            </Link>
+                          </span>
+                          <span className={cx("separator", "mx-3", "text-stone-400")}>
+                            {" "}
+                            &gt;{" "}
+                          </span>
+                          
+                          <span className={cx( "text-sm", "text-red-500")}>
+                            <Link
+                              href="/components/components-danhmuc/donghotreotuong"
+                              className={cx("link", "text-red-500")}
+                            >
+                              
+                              Đồng hồ treo tường
+                            </Link>
+                          </span>
+                        </div>
+                    </div>
                     <p>
                       <Link href="#">
                         <em>
@@ -154,7 +191,7 @@ export default function DongHoTreoTuong() {
                       vời, biến mỗi không gian sống trở nên ấm ấp, sinh động,
                       tươi vui hoặc theo bất kỳ phong cách nào mà bạn muốn. Dù
                       bạn có là người kỹ tính luôn yêu cầu mọi thứ phải cầu toàn
-                      đi chăng nữa thì thế giới phong phú của
+                      đi chăng nữa thì thế giới phong phú của&nbsp; 
                       <em>
                         <strong>
                           <Link href="#">
@@ -199,7 +236,7 @@ export default function DongHoTreoTuong() {
                 <div className={cx("clear")} />
                 <div className={cx("products-cat")}>
                   <div className={cx("block-products-filter")}>
-                    <div className={cx("block-product-filter", "cls")}>
+                    <div className={cx("block-product-filter", "cls","flex flex-wrap")}>
                       <div className={cx("field-area", "field-item")}>
                         <div
                           className={cx(
@@ -314,7 +351,7 @@ export default function DongHoTreoTuong() {
                           )}
                         >
                           <span className={cx("close")}>x</span>
-                          <div className={cx("filters-in-field-inner", "cls")}>
+                          <div className={cx("filters-in-field-inner", "cls","lg:ml-0 md:ml-0 ml-[-100px]")}>
                             <div className={cx("cls", "item")}>
                               <Link
                                 rel="nofollow"
@@ -380,7 +417,7 @@ export default function DongHoTreoTuong() {
                           )}
                         >
                           <span className={cx("close")}>x</span>
-                          <div className={cx("filters-in-field-inner", "cls")}>
+                          <div className={cx("filters-in-field-inner", "cls","lg:ml-0 md:ml-0 ml-[-100px]")}>
                             <div className={cx("cls", "item")}>
                               <Link
                                 rel="nofollow"
@@ -447,7 +484,7 @@ export default function DongHoTreoTuong() {
                           )}
                         >
                           <span className={cx("close")}>x</span>
-                          <div className={cx("filters-in-field-inner", "cls")}>
+                          <div className={cx("filters-in-field-inner", "cls" ,"lg:ml-0 md:ml-0 ml-[-100px]")}  >
                             <div className={cx("cls", "item")}>
                               <Link
                                 rel="nofollow"
@@ -525,7 +562,7 @@ export default function DongHoTreoTuong() {
                           )}
                         >
                           <span className={cx("close")}>x</span>
-                          <div className={cx("filters-in-field-inner", "cls")}>
+                          <div className={cx("filters-in-field-inner", "cls")}  >
                             <div className={cx("cls", "item")}>
                               <Link
                                 rel="nofollow"
@@ -615,7 +652,7 @@ export default function DongHoTreoTuong() {
                       </div>
                     </div>
                     <select
-                      className={cx("order-select")}
+                      className={cx("order-select","max-w-[180px] rtl right-2 ")}
                       name="order-select"
                       onChange={handleSortChange}
                     >
@@ -629,61 +666,101 @@ export default function DongHoTreoTuong() {
                   </div>
 
                   <div className={cx("clear")} />
-
-                  <section className={cx("products-cat-frame")}>
-                    <div className={cx("products-cat-frame-inner")}>
-                      <div className={cx("product-grid", "cls")}>
-                        {displayedProducts.map((item) => (
-                          <div className={cx("item")}>
-                            <Link
-                              href={`/components/product-detail/${item._id}`}
-                            >
-                              <div className={cx("frame-inner")}>
-                                <figure className={cx("product-image")}>
-                                  <img
-                                    src={`http://localhost:5000/images/${item.hinh_anh}`}
-                                    alt={item.ten_san_pham} //son
-                                    width={300}
-                                    height={363}
-                                    style={{
-                                      display: "inline-block",
-                                      opacity: 1,
-                                    }}
-                                  />
-                                </figure>
-                                <h3>
-                                  <Link
-                                    href="#"
-                                    className={cx("name")}
-                                    title={item.ten_san_pham}
-                                  >
-                                    <span className={cx("cat-name")}>
-                                      {item.ten_san_pham}
-                                    </span>
-                                    {item.ma_san_pham}
-                                  </Link>
-                                </h3>
-                                <span className={cx("loai-may")}>
-                                  {item.loai}{" "}
-                                </span>
-                                <span className={cx("row-lm")}>|</span>
-                                <span className={cx("duong-kinh")}>
-                                  {item.duong_kinh}
-                                </span>
-                                <div className={cx("price-arae")}>
-                                  <div className={cx("price-current")}>
-                                    {formatCurrency(item.gia_san_pham)}
-                                  </div>
-                                </div>
-                                <div className={cx("clear")} />
-                              </div>
-                              <div className={cx("clear")} />
-                            </Link>
-                          </div>
-                        ))}
+                  <div
+                    className={cx(
+                      "grid lg:grid-cols-5 md:grid-cols-3 grid-cols-2 max-w-[1170px] mx-auto gap-y-[30px]"
+                    )}
+                  >
+                    {displayedProducts.map((item) => (
+                      <div key={item._id} className={cx("text-center relative")}>
+                        {item.gia_giam > 0 && (<div
+                          className={cx(
+                            "absolute top-[-15px] left-[10px] bg-[#ed1c24] text-white rounded-full text-[13px] w-[44px] h-[44px] box-border z-[9] tracking-[-0.7px] pt-[13px]"
+                          )}
+                        >
+                          -{" "}
+                          {roundDiscount(
+                            Math.round(
+                              ((item.gia_san_pham - item.gia_giam) /
+                                item.gia_san_pham) *
+                                100
+                            )
+                          )}
+                          %
+                        </div>)}
+                        <Link href={`/components/product-detail/${item._id}`}>
+                          <img
+                            src={`http://localhost:5000/images/${item.hinh_anh}`}
+                            alt={item.ten_san_pham}
+                            className={cx(
+                              "relative transition-transform duration-500 ease-in-out z-[1] mx-auto"
+                            )}
+                          />
+                        </Link>
+                        <p
+                          className={cx(
+                            "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
+                          )}
+                        >
+                          <h3 className={cx("text-gray-500 text-[14px]")}>
+                            {item.ten_san_pham}
+                          </h3>
+                        </p>
+                        <br />
+                        <b
+                          className={cx(
+                            "text-black font-semibold text-[17px] mb-2"
+                          )}
+                        >
+                          {item.ma_san_pham}
+                        </b>
+                        <p
+                          className={cx(
+                            "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
+                          )}
+                        >
+                          <small
+                            className={cx(
+                              "text-[12px] uppercase text-gray-500 mb-1 inline-block"
+                            )}
+                          >
+                            {item.loai} | {item.duong_kinh}
+                          </small>
+                        </p>
+                        <p
+                          className={cx(
+                            "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
+                          )}
+                        >
+                          {item.gia_giam > 0 ? (
+                            <>
+                              <small
+                                className={cx(
+                                  "text-[12px] uppercase text-gray-500 mb-1 inline-block"
+                                )}
+                                style={{
+                                  textDecoration: "line-through",
+                                  color: "#B1B1B1",
+                                  fontSize: "15px",
+                                }}
+                              >
+                                Giá: {formatCurrency(item.gia_san_pham)}
+                              </small>
+                              <br />
+                              <span className={cx("text-red-600 font-bold text-[16px]")}>
+                                Giá KM: {formatCurrency(item.gia_giam)}
+                              </span>
+                            </>
+                          ) : (
+                            <span className={cx("text-red-600 font-bold text-[16px]")}>
+                              Giá KM: {formatCurrency(item.gia_san_pham)}
+                            </span>
+                          )}
+                        </p>
                       </div>
-                    </div>
-                  </section>
+                    ))}
+                  </div>
+                    
 
                   {/* phân trang*/}
                   <div className={cx("pagination")}>
@@ -748,41 +825,8 @@ export default function DongHoTreoTuong() {
                   <div className={styles.clear}></div>
                 </div>
                 <div className={cx("clear")} />
-                {/* đánh giá  */}
+                
                 <div className={cx("evaluate-cat")}>
-                  <div className={cx("rating-area", "cls")}>
-                    <span id="ratings" className={cx("cls")}>
-                      <i
-                        className={cx("icon_v1", "star_on")}
-                        id="rate_1"
-                        value={1}
-                      />
-                      <i
-                        className={cx("icon_v1", "star_on")}
-                        id="rate_2"
-                        value={2}
-                      />
-                      <i
-                        className={cx("icon_v1", "star_on")}
-                        id="rate_3"
-                        value={3}
-                      />
-                      <i
-                        className={cx("icon_v1", "star_off")}
-                        id="rate_4"
-                        value={4}
-                      />
-                      <i
-                        className={cx("icon_v1", "star_off")}
-                        id="rate_5"
-                        value={5}
-                      />
-                    </span>
-                    <span className={cx("rating-note")}>
-                      Nhấn vào đây để đánh giá
-                    </span>
-                  </div>
-
                   {/* mô tả */}
                   <div
                     className={cx(

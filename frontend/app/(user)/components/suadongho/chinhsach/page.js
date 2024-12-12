@@ -1,20 +1,66 @@
 import styles from "./chinhsach.module.css";
 import Link from "next/link";
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 export default function chinhsach() {
   return (
     <nav className={styles.nav}>
       <div classNameName={styles.container} style={{ display: "flex" }}>
         <div className={styles.content}>
+          <div
+            className={cx(
+              
+              "flex",
+              "items-center uppercase mb-5 mt-5"
+            )}
+          >
+            <span className={cx( "text-sm")}>
+              <Link
+                href="/"
+                className={cx(
+                  
+                  " text-gray-800",
+                  "hover:text-[#796752]"
+                )}
+              >
+                Trang chủ
+              </Link>
+            </span>
+            <span className={cx("separator", "mx-3", "text-stone-400")}>
+              {" "}
+              &gt;{" "}
+            </span>
+            
+            
+            <span className={cx( "text-sm", "text-red-500")}>
+              <Link
+                href="/components/suadongho"
+                className={cx(" text-gray-800",
+                  "hover:text-[#796752]")}
+              >
+                
+                sửa đồng hồ
+              </Link>
+            </span>
+            <span className={cx("separator", "mx-3", "text-stone-400")}>
+              {" "}
+              &gt;{" "}
+            </span>
+            
+            
+            <span className={cx( "text-sm", "text-red-500")}>
+              <Link
+                href="/components/suadongho/chinhsach"
+                className={cx("link", "text-red-500")}
+              >
+                
+                Chính sách bảo hành
+              </Link>
+            </span>
+          </div>
           <p className={styles.h1}>CHÍNH SÁCH BẢO HÀNH</p>
           <div className={styles.holld}>
-            <div className={styles.star}>
-              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
-              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
-              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
-              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
-              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
-            </div>
-            <p className={styles.p}>07/12/2024</p>
+           
           </div>
           <br />
           <p className={styles.cs}>
