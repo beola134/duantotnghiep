@@ -1,4 +1,4 @@
-.contactSimpleFt {
+/* .contactSimpleFt {
   background: #796752;
   padding: 30px 0;
   margin-top: 40px;
@@ -8,7 +8,8 @@
   max-width: 100%;
   box-sizing: border-box;
   margin: 0px auto;
-}
+} */
+
 .blockContactSimple {
   display: flex;
   flex-wrap: wrap;
@@ -103,10 +104,12 @@
   left: 34px;
 }
 
-.clear {
+/* .clear {
   clear: both;
-}
+} */
+
 /*footer-fb  */
+
 footer .footerFacebook {
   margin-top: 40px;
 }
@@ -189,8 +192,10 @@ footer .footerFacebook .fanpageFb {
   transition: all 0.2s ease-in 0;
 }
 
+
+
 /*footer-bottom */
-footer .footerBottom {
+/* footer .footerBottom {
   background: #796752;
   padding: 24px 0px 150px;
   color: #f3f3f3;
@@ -230,7 +235,7 @@ footer .footerBottom .footerBottom2 .bctCopyright .copyring {
 }
 footer .footerBottom .footerBottom2 .blockTagsFt {
   text-align: right;
-}
+} */
 .blockTagsDefault a {
   color: #f3f3f3;
   font-size: 13px;
