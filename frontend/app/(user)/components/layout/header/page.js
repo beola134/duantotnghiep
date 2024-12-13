@@ -657,6 +657,31 @@ export default function Header() {
               </div>
             </Link>
           </div>
+          <div className="menu-icon fixed top-[20px] right-[20px] w-[30px] h-[30px] lg:hidden block  text-center">
+            <Link href="/components/components-giaodich/giohang">
+              <div
+                className={cx(
+                  "cart",
+                  "flex  items-center justify-center w-[30px] h-[30px] rounded-full relative"
+                )}
+              >
+                <FontAwesomeIcon
+                  icon={faShoppingCart}
+                  style={{ color: "#ffffff" }}
+                />
+
+                <span
+                  className={cx(
+                    "cart-count",
+                    "absolute text-white  w-[20px] h-[20px] top-[-5px] right-[-7px] border border-white rounded-full flex items-center justify-center"
+                  )}
+                >
+                  {cartCount}
+                </span>
+              </div>
+            </Link>
+          </div>
+
           <div className="menu-icon fixed top-[20px] left-[10px] w-[30px] h-[30px] lg:hidden block  text-center">
             <img
               src="/image/item/icons/bars.png"
@@ -664,7 +689,7 @@ export default function Header() {
             />
           </div>
           {menuOpen && (
-            <div className="mobile-menu absolute top-[80px] uppercase left-0 w-[60%] bg-[#796752] py-4 z-50">
+            <div className="mobile-menu absolute top-[70px] uppercase left-0 w-[70%]  bg-[#796752] py-4 z-50">
               <ul className="flex flex-col ml-5 leading-[1.5] space-y-2 mr-5">
                 <li>
                   <div
@@ -680,95 +705,94 @@ export default function Header() {
                       placeholder="Bạn muốn tìm ..."
                       className={cx(
                         "input",
-                        "border-none bg-transparent text-red outline-none  py-2 text-md"
+                        "border-none bg-transparent w-[80%] text-red outline-none  py-2 text-md"
                       )}
                     />
                     <button
                       type="button"
                       className={cx(
                         "button",
-                        "border-none bg-transparent text-white ml-auto cursor-pointer"
+                        "border-none bg-transparent w-[10%] text-white ml-auto cursor-pointer"
                       )}
                       onClick={handleSearch}
                       disabled={!inputData}
                     >
-                      <i className="fas fa-search" style={{ color: "white" }}></i>
+                      <i
+                        className="fas fa-search"
+                        style={{ color: "white" }}
+                      ></i>
                     </button>
                   </div>
                 </li>
-                <li className="border border-gray-600 hover:bg-[#FFE59A] h-12 flex items-center">
-                  <Link
-                    className="text-white hover:text-[#FF0000]   hover:border-[#FFE59A] flex-1 px-3"
-                    href="/"
-                  >
+                <li className="border border-gray-600  h-12 flex items-center">
+                  <Link className="text-white  flex-1 px-3" href="/">
                     Trang chủ
                   </Link>
                 </li>
-                <li className="border border-gray-600 hover:bg-[#FFE59A]  h-12 flex items-center">
+                <li className="border border-gray-600   h-12 flex items-center">
                   <Link
-                    className="text-white hover:text-[#FF0000]  hover:border-[#FFE59A] flex-1 px-3"
+                    className="text-white    flex-1 px-3"
                     href="/components/components-thuonghieu/thuonghieu"
                   >
                     Thương hiệu
                   </Link>
                 </li>
-                <li className="border border-gray-600 hover:bg-[#FFE59A] h-12 flex items-center">
+                <li className="border border-gray-600  h-12 flex items-center">
                   <Link
-                    className="text-white hover:text-[#FF0000]  hover:border-[#FFE59A] flex-1 px-3"
+                    className="text-white    flex-1 px-3"
                     href="/components/components-thuonghieu/donghonam"
                   >
                     Đồng hồ nam
                   </Link>
                 </li>
-                <li className="border border-gray-600 hover:bg-[#FFE59A] h-12 flex items-center">
+                <li className="border border-gray-600  h-12 flex items-center">
                   <Link
-                    className="text-white hover:text-[#FF0000]  hover:border-[#FFE59A] flex-1 px-3"
+                    className="text-white    flex-1 px-3"
                     href="/components/components-thuonghieu/donghonu"
                   >
                     Đồng hồ nữ
                   </Link>
                 </li>
-                <li className="border border-gray-600 hover:bg-[#FFE59A] h-12 flex items-center">
+                <li className="border border-gray-600  h-12 flex items-center">
                   <Link
-                    className="text-white hover:text-[#FF0000]  hover:border-[#FFE59A] flex-1 px-3"
+                    className="text-white    flex-1 px-3"
                     href="/components/components-thuonghieu/donghodoi"
                   >
                     Đồng hồ đôi
                   </Link>
                 </li>
-                <li className="border border-gray-600 hover:bg-[#FFE59A] h-12 flex items-center">
+                <li className="border border-gray-600  h-12 flex items-center">
                   <Link
-                    className="text-white hover:text-[#FF0000] border-gray-600 hover:bg-[#FFE59A] hover:border-[#FFE59A] flex-1 px-3"
+                    className="text-white  border-gray-600   flex-1 px-3"
                     href="/components/components-danhmuc/donghotreotuong"
                   >
                     Đồng hồ treo tường
                   </Link>
                 </li>
-                <li className="border border-gray-600 hover:bg-[#FFE59A] h-12 flex items-center">
+                <li className="border border-gray-600  h-12 flex items-center">
                   <Link
-                    className="text-white hover:text-[#FF0000]  hover:border-[#FFE59A] flex-1 px-3"
+                    className="text-white    flex-1 px-3"
                     href="/components/components-danhmuc/daydongho"
                   >
                     Dây đồng hồ
                   </Link>
                 </li>
-                <li className="border border-gray-600 hover:bg-[#FFE59A] h-12 flex items-center">
+                <li className="border border-gray-600  h-12 flex items-center">
                   <Link
-                    className="text-white hover:text-[#FF0000]  hover:border-[#FFE59A] flex-1 px-3"
+                    className="text-white    flex-1 px-3"
                     href="/components/components-danhmuc/sanphamkhac"
                   >
                     Sản phẩm khác
                   </Link>
                 </li>
-                <li className="border border-gray-600 hover:bg-[#FFE59A] h-12 flex items-center">
+                <li className="border border-gray-600  h-12 flex items-center">
                   <Link
-                    className="text-white hover:text-[#FF0000]  hover:border-[#FFE59A] flex-1 px-3"
+                    className="text-white    flex-1 px-3"
                     href="/components/suadongho"
                   >
                     Sửa đồng hồ
                   </Link>
                 </li>
-                
               </ul>
             </div>
           )}

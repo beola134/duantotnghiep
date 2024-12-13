@@ -150,10 +150,10 @@ export default function DongHoTreoTuong() {
                           className={cx(
                             
                             "flex",
-                            "items-center uppercase "
+                            "items-center uppercase  md:text-[16px] text-[10px]"
                           )}
                         >
-                          <span className={cx( "text-sm")}>
+                          <span className={cx( "")}>
                             <Link
                               href="/"
                               className={cx(
@@ -170,7 +170,7 @@ export default function DongHoTreoTuong() {
                             &gt;{" "}
                           </span>
                           
-                          <span className={cx( "text-sm", "text-red-500")}>
+                          <span className={cx( "", "text-red-500")}>
                             <Link
                               href="/components/components-danhmuc/donghotreotuong"
                               className={cx("link", "text-red-500")}
@@ -484,7 +484,7 @@ export default function DongHoTreoTuong() {
                           )}
                         >
                           <span className={cx("close")}>x</span>
-                          <div className={cx("filters-in-field-inner", "cls" ,"lg:ml-0 md:ml-0 ml-[-100px]")}  >
+                          <div className={cx("filters-in-field-inner", "cls" ,"lg:ml-0 md:ml-0 ")} >
                             <div className={cx("cls", "item")}>
                               <Link
                                 rel="nofollow"
@@ -644,7 +644,7 @@ export default function DongHoTreoTuong() {
                     <div className={cx("title-name")}>
                       <div className={cx("cat-title")}>
                         <div className={cx("cat-title-main")} id="cat-dong-ho">
-                          <div className={cx("title-icon")}>
+                          <div className={cx("text-[20px]  ")}>
                             <h1>Đồng hồ treo tường</h1>
                           </div>
                         </div>
@@ -652,7 +652,7 @@ export default function DongHoTreoTuong() {
                       </div>
                     </div>
                     <select
-                      className={cx("order-select","max-w-[180px] rtl right-2 ")}
+                      className={cx("order-select","max-w-[180px] lg:mt-[-40px] right-2 ")}
                       name="order-select"
                       onChange={handleSortChange}
                     >
@@ -763,7 +763,7 @@ export default function DongHoTreoTuong() {
                     
 
                   {/* phân trang*/}
-                  <div className={cx("pagination")}>
+                  <div className={cx("pagination lg:flex hidden")}>
                     {/* Prev trang đầu */}
                     <span
                       title="First page"
@@ -814,6 +814,73 @@ export default function DongHoTreoTuong() {
                         disabled: currentPage === totalPages,
                         "other-page": currentPage < totalPages,
                       })}
+                      onClick={() =>
+                        currentPage < totalPages && handlePageChange(totalPages)
+                      }
+                    >
+                      ››
+                    </span>
+                  </div>
+                  
+                  <div className="lg:hidden flex justify-center items-center my-5 flex-wrap">
+                    
+                    <span
+                      title="First page"
+                      className={classNames(
+                        "inline-block px-4 py-2 mx-1 border rounded text-sm",
+                        currentPage === 1
+                          ? "cursor-not-allowed text-gray-500 border-gray-200"
+                          : "cursor-pointer text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
+                      )}
+                      onClick={() => currentPage > 1 && handlePageChange(1)}
+                    >
+                      ‹‹
+                    </span>
+
+                    {/* Previous page */}
+                    <span
+                      className={classNames(
+                        "inline-block px-4 py-2 mx-1 border rounded text-sm",
+                        currentPage === 1
+                          ? "cursor-not-allowed text-gray-500 border-gray-200"
+                          : "cursor-pointer text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
+                      )}
+                      onClick={() =>
+                        currentPage > 1 && handlePageChange(currentPage - 1)
+                      }
+                    >
+                      ‹
+                    </span>
+
+                    {/* Current page */}
+                    <span className="inline-block px-4 py-2 mx-1 border border-gray-400   rounded text-sm  text-black  ">
+                      {`Trang ${currentPage} / ${totalPages || 1}`}
+                    </span>
+
+                    {/* Next page */}
+                    <span
+                      className={classNames(
+                        "inline-block px-4 py-2 mx-1 border rounded text-sm",
+                        currentPage === totalPages
+                          ? "cursor-not-allowed text-gray-500 border-gray-200"
+                          : "cursor-pointer text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
+                      )}
+                      onClick={() =>
+                        currentPage < totalPages &&
+                        handlePageChange(currentPage + 1)
+                      }
+                    >
+                      ›
+                    </span>
+
+                    {/* Last page */}
+                    <span
+                      className={classNames(
+                        "inline-block px-4 py-2 mx-1 border rounded text-sm",
+                        currentPage === totalPages
+                          ? "cursor-not-allowed text-gray-500 border-gray-200"
+                          : "cursor-pointer text-gray-700 border-gray-300 hover:bg-gray-100 hover:border-gray-400"
+                      )}
                       onClick={() =>
                         currentPage < totalPages && handlePageChange(totalPages)
                       }

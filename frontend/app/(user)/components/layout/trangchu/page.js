@@ -739,6 +739,7 @@ export default function Main() {
                       )}
                       %
                     </div>)}
+                    <div className={cx("relative")}>
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img
                         src={`http://localhost:5000/images/${item.hinh_anh}`}
@@ -748,6 +749,14 @@ export default function Main() {
                         )}
                       />
                     </Link>
+                    <div
+                      className={cx(
+                        "absolute lg:right-[10px] right-0 bottom-0 mr-[0px] text-white bg-red-500 px-[10px] py-[2px] rounded-[2px] z-[2]"
+                      )}
+                    >
+                      New
+                    </div>
+                    </div>
                     <p
                       className={cx(
                         "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
@@ -807,13 +816,7 @@ export default function Main() {
                         Giá KM: {formatCurrency(item.gia_giam)}
                       </span>
                     </p>
-                    <div
-                      className={cx(
-                        "absolute right-[18px] top-[260px] mr-[0px] text-white bg-red-500 px-[10px] py-[2px] rounded-[2px] z-[2]"
-                      )}
-                    >
-                      New
-                    </div>
+                    
                   </div>
                 ))}
                 <div
