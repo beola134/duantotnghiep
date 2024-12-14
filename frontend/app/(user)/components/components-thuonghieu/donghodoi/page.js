@@ -114,36 +114,45 @@ export default function DonghoDoi() {
   const sanPhamHienThi = sapXepSanPham(products);
   return (
     <>
-      
-        <div id="main-container">
+      <div className={styles["container-header"]}>
+        <div id="main-container" className={styles.mt20}>
           <div className={styles["main-column"]}>
             <div className={styles["center-1col"]}>
-              <div className="clear-both"></div>
-              <div className="clear-both"></div>
-              <div className="w-[1170px] max-w-full box-border mx-auto container">
-                <div className="clear-both"></div>
+              <div className={styles.clear}></div>
+              <div className={styles.clear}></div>
+              <div className="container">
+                <div className={styles.clear}></div>
                 <div className="relative">
-                  <div className="mt-6 mb-5" style={{ description: true }}>
-                    <p className=" text-sm italic leading-6 md:px-2 sm:px-2">
-                      Tình yêu luôn là thứ cảm xúc đặc biệt hơn bao giờ hết. Đó
-                      là sự gắn kết hai trái tim nếm trải mọi cung bậc cảm xúc:
-                      đau khổ, buồn, vui, hạnh phúc để có một cái kết viên mãn.
-                      Đồng hành trên chặng đường yêu không thể thiếu đi đồng hồ
-                      đôi - vật chứng tình yêu vừa thiết thực vừa ý nghĩa. <strong> Đồng
-                      hồ đôi (đồng hồ cặp)</strong> với đầy đủ kiểu dáng từ đồng hồ cặp
-                      thiết kế mỏng nhẹ, thanh lịch, sang trọng hoặc cá tính,
-                      thời trang…sẽ đáp ứng mọi sở thích của đôi tình nhân.
+                  <div
+                    className="mt-[25px] mb-[20px]"
+                    style={{ description: true }}
+                  >
+                    <p className="text-[14px] italic leading-[24px]">
+                      Đến với thế giới <strong>đồng hồ nam, nữ</strong> của
+                      Wristly, bạn sẽ được sở hữu hàng nghìn sản phẩm chất
+                      lượng, thiết kế bắt mắt đến từ các thương hiệu&nbsp;
+                      <em>
+                        <strong>
+                          <Link href="#" target="_blank">
+                            đồng hồ&nbsp;Thụy Sỹ
+                          </Link>
+                        </strong>
+                      </em>
+                      , Nhật Bản, Pháp, Mỹ…danh tiếng trên thế giới. Mọi sản
+                      phẩm đều đảm bảo&nbsp;
+                      <strong>100% hàng chính hãng</strong> kèm theo{" "}
+                      <strong>chế độ bảo hành chính hãng</strong> đặc biệt với
+                      mức giá hợp lý sẽ đem đến cho bạn phụ kiện hoàn hảo nhất;
+                      khẳng định đẳng cấp, phong cách riêng của bản thân
                     </p>
                   </div>
 
-                  <div className="hidden absolute left-1/2 bottom-0 translate-x-[-50%] translate-y-1/2 px-2 py-0.5 bg-red-600/80 text-white text-xs cursor-pointer">
-                    Xem thêm
-                  </div>
+                  <div className="hidden absolute left-1/2 bottom-0 translate-x-[-50%] translate-y-[50%] px-2 py-[1px] bg-red-600/80 text-white text-[12px] cursor-pointer">Xem thêm</div>
                 </div>
-                {selectedFilter.length > 0 && (
-                  <div className="mb-5">
+                {/* {selectedFilter.length > 0 && (
+                  <div className={styles.choosedfilter}>
                     {selectedFilter.map((filter, index) => (
-                      <Link className="bg-[#e88f38] text-[#fff] mr-0.5 mb-0.5 pt-[3px] pl-[9px] pb-[3px] pr-6 inline-block relative text-xs  relative bg-orange-500 text-white mr-0.5 mb-0.5 px-6 pr-2 py-0.5 inline-block text-xs after:content-['X'] after:absolute after:top-[3px] after:right-[2px] after:w-[15px] after:h-[13px] after:text-white after:z-[1] after:text-xs"
+                      <Link
                         key={index}
                         rel="nofollow"
                         href="#"
@@ -154,23 +163,23 @@ export default function DonghoDoi() {
                     ))}
                     <Link
                       rel="nofollow"
-                      className="bg-[#ec0202] text-[#fff] mr-0.5 mb-0.5 pt-[3px] pl-[9px] pb-[3px] pr-6 inline-block relative text-xs  relative bg-orange-500 text-white mr-0.5 mb-0.5 px-6 pr-2 py-0.5 inline-block text-xs after:content-['X'] after:absolute after:top-[3px] after:right-[2px] after:w-[15px] after:h-[13px] after:text-white after:z-[1] after:text-xs"
+                      className={styles.reset}
                       href="#"
                       onClick={xoaTatCaBoLoc}
                     >
-                      Xóa hết
+                      Xoá hết
                     </Link>
                   </div>
-                )}
-                <div className="clear-both"></div>
-                
-                  <div className="border-t border-b border-gray-300 mt-4 mb-4">
-                    <div className="flex">
+                )} */}
+                <div className={styles.clear}></div>
+                <div className={styles["products-cat"]}>
+                  {/* <div className={styles["block-products-filter"]}>
+                    <div className={styles["block-product-filter"]}>
                       <div
-                        className="flex-1 float-left relative mr-2.5 pr-2.5 pt-3 pb-2.5"
+                        className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
                         <div
-                          className="field-name cursor-pointer font-normal uppercase text-xs transition duration-300"
+                          className={`${styles["field-name"]} ${styles.normal} ${styles.field}`}
                         >
                           Giới tính
                         </div>
@@ -1189,7 +1198,6 @@ export default function DonghoDoi() {
                         </div>
                       </div>
 
-                      {/*Chất liệu vỏ */}
                       <div
                         className={`${styles["field-area"]} ${styles["field-item"]}`}
                       >
@@ -1804,8 +1812,9 @@ export default function DonghoDoi() {
                         </div>
                       </div>
                     </div>
-                  </div> 
-                  <div className={styles["field-title"]}>
+                  </div> */}
+
+                  {/* <div className={styles["field-title"]}>
                     <div className={styles["title-name"]}>
                       <div className={styles["cat-title"]}>
                         <div
@@ -1837,105 +1846,99 @@ export default function DonghoDoi() {
                       <option value="hot">Sản phẩm hot</option>
                     </select>
                     <div className={styles.clear}></div>
-                  </div>
+                  </div> */}
 
                   <div className={styles.clear}></div>
 
-                  <section className={styles["products-cat-frame"]}>
-                    <div className={styles["products-cat-frame-inner"]}>
-                      <div className={styles["product-grid"]}>
-                        {/* item-1 */}
-                        {sanPhamHienThi.map((product) => {
-                          const {
-                            _id,
-                            ten,
-                            ten_san_pham,
-                            ma_san_pham,
-                            gia_san_pham,
-                            gia_giam,
-                            hinh_anh,
-                            loai,
-                            duong_kinh,
-                          } = product;
-                          const roundDiscount = (discountPercentage) => {
-                            const discountLevels = [10, 15, 20, 25, 30, 40, 50];
-                            return discountLevels.reduce((prev, curr) =>
-                              Math.abs(curr - discountPercentage) <
-                              Math.abs(prev - discountPercentage)
-                                ? curr
-                                : prev
-                            );
-                          };
-                          return (
-                            <div key={_id} className={styles.item}>
-                              <div className={styles["frame-inner"]}>
-                                <figure className={styles["product-image"]}>
-                                  <Link
-                                    href={`/components/product-detail/${_id}`}
-                                  >
-                                    <img
-                                      src={`http://localhost:5000/images/${hinh_anh}`}
-                                      alt={ten}
-                                      width="300"
-                                      height="363"
-                                      style={{
-                                        display: "inline-block",
-                                        opacity: "1",
-                                      }}
-                                    />
-                                  </Link>
-                                </figure>
-                                <h3>
-                                  <Link
-                                    className={styles.name}
-                                    href="#"
-                                    title={ten}
-                                  >
-                                    <span className={styles["cat-name"]}>
-                                      {ten_san_pham}
-                                    </span>
-                                    {ma_san_pham}
-                                  </Link>
-                                </h3>
-                                <span className={styles["loai-may"]}>
-                                  {loai}
-                                </span>
-                                <span className={styles["row-lm"]}>|</span>
-                                <span className={styles["duong-kinh"]}>
-                                  {duong_kinh}
-                                </span>
-                                <div className={styles["price-area"]}>
-                                  <div className={styles["price-old"]}>
-                                    Giá:{" "}
-                                    <span>
-                                      {gia_san_pham.toLocaleString("vi-VN")}₫
-                                    </span>
-                                  </div>
-                                  <div className={styles["price-current"]}>
-                                    Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
-                                  </div>
-                                </div>
-                                <div className={styles.discount}>
-                                  <span>
-                                    -
-                                    {roundDiscount(
-                                      Math.round(
-                                        ((gia_san_pham - gia_giam) /
-                                          gia_san_pham) *
-                                          100
-                                      )
-                                    )}
-                                    %
-                                  </span>
-                                </div>
-                                <div className={styles.clear}></div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </section>
+                 
+                  <div className={`${styles['product-grid']} grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-3`}>
+  {sanPhamHienThi.map((product) => {
+    const {
+      _id,
+      ten,
+      ten_san_pham,
+      ma_san_pham,
+      gia_san_pham,
+      gia_giam,
+      hinh_anh,
+      loai,
+      duong_kinh,
+    } = product;
+    const roundDiscount = (discountPercentage) => {
+      const discountLevels = [10, 15, 20, 25, 30, 40, 50];
+      return discountLevels.reduce((prev, curr) =>
+        Math.abs(curr - discountPercentage) < Math.abs(prev - discountPercentage)
+          ? curr
+          : prev
+      );
+    };
+    return (
+      <div
+        key={_id}
+        className="border-box relative overflow-hidden text-center mb-10"
+      >
+        <div className="relative">
+          <figure className="relative mb-4 min-h-[230px]">
+            <Link href={`/components/product-detail/${_id}`}>
+              <img
+                className="max-h-[290px]"
+                src={`http://localhost:5000/images/${hinh_anh}`}
+                alt={ten}
+                width="300"
+                height="363"
+                style={{
+                  display: "inline-block",
+                  opacity: "1",
+                }}
+              />
+            </Link>
+          </figure>
+          <h3>
+            <Link
+              className="text-[17px] font-semibold mb-2"
+              href="#"
+              title={ten}
+            >
+              <span className="text-gray-500 block text-[14px] mt-1.5 mb-2 font-normal leading-relaxed">
+                {ten_san_pham}
+              </span>
+              {ma_san_pham}
+            </Link>
+          </h3>
+          <span className="inline-block text-[12px] uppercase text-gray-500 mb-1.5">
+            {loai}
+          </span>
+          <span className="px-1.5 text-gray-500 text-[13px]">|</span>
+          <span className="inline-block text-[12px] uppercase text-gray-500 mb-1.5">
+            {duong_kinh}
+          </span>
+
+          <div className="text-[15px] text-gray-400 mb-2 line-through">
+            Giá:{" "}
+            <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
+          </div>
+          <div className="text-[18px] text-red-600 font-semibold">
+            Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
+          </div>
+
+          <div className="absolute top-0 left-1.25 bg-red-600 text-white text-sm w-11 h-11 leading-[2.875rem] box-border rounded-full">
+            <span>
+              -
+              {roundDiscount(
+                Math.round(
+                  ((gia_san_pham - gia_giam) / gia_san_pham) * 100
+                )
+              )}
+              %
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  })}
+</div>
+
+
                   <div className={styles.pagination}>
                     <span
                       title="First page"
@@ -1993,8 +1996,43 @@ export default function DonghoDoi() {
                       ››
                     </span>
                   </div>
-                
+                </div>
                 <div className={styles.clear}></div>
+
+                <div className={styles.evaluateCat}>
+                  <div className={`${styles.ratingArea} ${styles.cls}`}>
+                    <span id="ratings">
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_1"
+                        value="1"
+                      ></i>
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_2"
+                        value="2"
+                      ></i>
+                      <i
+                        className={` ${styles.starOn}`}
+                        id="rate_3"
+                        value="3"
+                      ></i>
+                      <i
+                        className={` ${styles.starOff}`}
+                        id="rate_4"
+                        value="4"
+                      ></i>
+                      <i
+                        className={` ${styles.starOff}`}
+                        id="rate_5"
+                        value="5"
+                      ></i>
+                    </span>
+                    <span className={styles.ratingNote}>
+                      Nhấn vào đây để đánh giá
+                    </span>
+                  </div>
+                </div>
 
                 <div className={styles.clear}></div>
                 <div
@@ -2006,7 +2044,7 @@ export default function DonghoDoi() {
             <div className={styles.clear}></div>
           </div>
         </div>
-      
+      </div>
     </>
   );
 }

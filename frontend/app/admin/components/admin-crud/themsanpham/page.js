@@ -25,16 +25,19 @@ export default function ThemSanPham() {
     phong_cach: "",
     kieu_dang: "",
     thuong_hieu: "",
+    danh_muc: "",
     size_day: "",
     mau_day: "",
     do_dai_day: "",
     id_thuong_hieu: "",
+    id_danh_muc: "",
     mo_ta: "",
     hinh_anh: null,
   });
 
   const [errors, setErrors] = useState({});
   const [cates, setCategories] = useState([]);
+  const [danhmuc, setDanhMuc] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   useEffect(() => {
     const fetchCategories = async () => {
@@ -53,6 +56,24 @@ export default function ThemSanPham() {
       }
     };
     fetchCategories();
+  }, []);
+  useEffect(() => {
+    const fetchDanhMuc = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/cate/getAllCateadmin"
+        );
+        const data = await response.json();
+        setDanhMuc(data.cates);
+        if (data.cates.length === 0) {
+          setErrorMessage("Không tìm thấy danh mục nào.");
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setErrorMessage("Đã xảy ra lỗi khi lấy danh mục.");
+      }
+    };
+    fetchDanhMuc();
   }, []);
 
   const handleChange = (e) => {
@@ -85,7 +106,6 @@ export default function ThemSanPham() {
       so_luong,
       id_thuong_hieu,
       hinh_anh,
-      xuat_xu,
       mo_ta,
     } = formData;
 
@@ -96,11 +116,9 @@ export default function ThemSanPham() {
     }
     if (!ma_san_pham) newErrors.ma_san_pham = "Vui lòng nhập mã sản phẩm.";
     if (!so_luong) newErrors.so_luong = "Vui lòng nhập số lượng.";
-    if (!id_thuong_hieu) newErrors.id_thuong_hieu = "Vui lòng chọn danh mục.";
+    if (!id_thuong_hieu) newErrors.id_thuong_hieu = "Vui lòng chọn thương hiệu.";
     if (!hinh_anh) newErrors.hinh_anh = "Vui lòng chọn hình ảnh sản phẩm.";
-    if (!xuat_xu) newErrors.xuat_xu = "Vui lòng nhập xuất xứ sản phẩm.";
     if (!mo_ta) newErrors.mo_ta = "Vui lòng nhập mô tả sản phẩm.";
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -227,14 +245,14 @@ export default function ThemSanPham() {
 
               {/* Dropdown danh mục */}
               <div className={styles.formGroup}>
-                <label htmlFor="id_thuong_hieu">Danh mục</label>
+                <label htmlFor="id_thuong_hieu">Thương hiệu</label>
                 <select
                   id="id_thuong_hieu"
                   name="id_thuong_hieu"
                   value={formData.id_thuong_hieu}
                   onChange={handleChange}
                 >
-                  <option value="">Chọn danh mục</option>
+                  <option value="">Chọn thương hiệu</option>
                   {cates.map((category) => (
                     <option key={category._id} value={category._id}>
                       {category.thuong_hieu}
@@ -243,6 +261,25 @@ export default function ThemSanPham() {
                 </select>
                 {errors.id_thuong_hieu && (
                   <span className="text-danger">{errors.id_thuong_hieu}</span>
+                )}
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="id_danh_muc">Danh Mục</label>
+                <select
+                  id="id_danh_muc"
+                  name="id_danh_muc"
+                  value={formData.id_danh_muc}
+                  onChange={handleChange}
+                >
+                  <option value="">Chọn danh mục</option>
+                  {danhmuc.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.ten_danh_muc}
+                    </option>
+                  ))}
+                </select>
+                {errors.id_danh_muc && (
+                  <span className="text-danger">{errors.id_danh_muc}</span>
                 )}
               </div>
               <div className={styles.formGroup}>
@@ -391,16 +428,6 @@ export default function ThemSanPham() {
                   id="kieu_dang"
                   name="kieu_dang"
                   value={formData.kieu_dang}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="thuong_hieu">Thương hiệu</label>
-                <input
-                  type="text"
-                  id="thuong_hieu"
-                  name="thuong_hieu"
-                  value={formData.thuong_hieu}
                   onChange={handleChange}
                 />
               </div>

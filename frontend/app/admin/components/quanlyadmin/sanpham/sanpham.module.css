@@ -1,3 +1,4 @@
+
 #content {
   position: relative;
   width: calc(100% - 260px);
@@ -47,19 +48,7 @@
   text-decoration: none;
 }
 
-.sp2 {
-  background-color: #ffc107;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 12px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.sp3 {
+.sp1 {
   background-color: #17a2b8;
   /* Light blue */
   color: #fff;
@@ -72,22 +61,8 @@
   margin-bottom: 20px;
 }
 
-.sp4 {
-  background-color: #007bff;
-  /* Light primary blue */
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 12px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.sp5 {
+.sp2 {
   background-color: #28a745;
-  /* Dark green */
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -98,9 +73,8 @@
   margin-bottom: 20px;
 }
 
-.sp6 {
+.sp3 {
   background-color: #dc3545;
-  /* Light red */
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -111,18 +85,6 @@
   margin-bottom: 20px;
 }
 
-.sp7 {
-  background-color: #6c757d;
-  /* Light grey */
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 12px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
 .tableContainer {
   overflow-x: auto;
 }
@@ -136,7 +98,7 @@
 
 .search {
   display: flex;
-  align-items: center; /* Aligns input and button vertically */
+  align-items: center; 
 }
 
 .search input[type="text"] {
@@ -144,8 +106,8 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
-  margin-right: 5px; /* Adds space between the input and button */
-  flex: 1; /* Allows input to grow and take up available space */
+  margin-right: 5px; 
+  flex: 1; 
 }
 
 .search input[type="text"]:focus {
@@ -155,22 +117,22 @@
 }
 
 .search button {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: white;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  padding: 0.5rem 1rem; 
+  border: none; 
+  border-radius: 4px; 
+  background-color: #007bff; 
+  color: white; 
+  font-size: 1rem; 
+  cursor: pointer; 
+  transition: background-color 0.3s; 
 }
 
 .search button:hover {
-  background-color: #0056b3;
+  background-color: #0056b3; 
 }
 
 .search label {
-  margin-right: 5px;
+  margin-right: 5px; 
 }
 
 .productTable {
@@ -220,7 +182,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 30px 0 30px 0;
+  margin: 20px;
 }
 
 .paginationControls {
@@ -244,3 +206,38 @@
 .paginationButton:hover {
   background-color: #f0f0f0;
 }
+.status-available {
+  border: 2px solid green;
+  color: green;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.status-out {
+  border: 2px solid gray;
+  color: gray;
+  padding: 5px;
+  border-radius: 5px;
+}
+.statusButton {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 6px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: default;
+}
+
+.green {
+  color: white;
+  background-color: rgb(4, 175, 4);
+}
+
+.red {
+  color: white;
+  background-color: red;
+}
+
