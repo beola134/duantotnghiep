@@ -426,7 +426,7 @@ export default function Header() {
   const [user, setUser] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
-   const toggleMenu = () => {
+  const toggleMenu = () => {
     setMenuOpen(!menuOpen); // Thay đổi trạng thái menu respon
   };
 
@@ -455,7 +455,11 @@ export default function Header() {
     }
   };
   const handleSearch = (event) => {
-    if ((event.type === "click" || event.key === "Enter") && inputData && isMounted) {
+    if (
+      (event.type === "click" || event.key === "Enter") &&
+      inputData &&
+      isMounted
+    ) {
       router.push(`/components/layout/search?query=${inputData}`);
       setInputData("");
     }
@@ -464,7 +468,9 @@ export default function Header() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
+        const response = await fetch(
+          "http://localhost:5000/thuonghieu/allthuonghieu"
+        );
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -502,7 +508,10 @@ export default function Header() {
       }
     }
   }, [dispatch]);
-  const cartCount = cartItems.reduce((count, item) => count + Number(item.so_luong), 0);
+  const cartCount = cartItems.reduce(
+    (count, item) => count + Number(item.so_luong),
+    0
+  );
 
   if (loading) {
     return <Loading />;
@@ -801,11 +810,7 @@ export default function Header() {
 
       <nav class={cx("navbar", " lg:block  hidden")}>
         <ul class={cx("nav-list")}>
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "HOME",
-            })}
-          >
+          <li className={cx("nav-list-li")}>
             <Link
               href="/"
               className={cx("nav-list-home")}
@@ -814,11 +819,7 @@ export default function Header() {
               <i className={cx("nav-list-li-i", "fas", "fa-home")}></i>
             </Link>
           </li>
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "THƯƠNG HIỆU",
-            })}
-          >
+          <li className={cx("nav-list-li")}>
             <Link
               href={"/components/components-thuonghieu/thuonghieu"}
               className={cx("nav-list-li-a")}
@@ -843,11 +844,7 @@ export default function Header() {
               ))}
             </ul>
           </li>
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "ĐỒNG HỒ NAM",
-            })}
-          >
+          <li className={cx("nav-list-li")}>
             <Link
               href="/components/components-thuonghieu/donghonam"
               className={cx("nav-list-li-a")}
@@ -958,11 +955,7 @@ export default function Header() {
           </li>
 
           {/*Đồng hồ nữ */}
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "ĐỒNG HỒ NỮ",
-            })}
-          >
+          <li className={cx("nav-list-li")}>
             <Link
               href="/components/components-thuonghieu/donghonu"
               className={cx("nav-list-li-a")}
@@ -1064,11 +1057,7 @@ export default function Header() {
           </li>
 
           {/*Đồng hồ đôi*/}
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "ĐỒNG HỒ ĐÔI",
-            })}
-          >
+          <li className={cx("nav-list-li")}>
             <Link
               href="/components/components-thuonghieu/donghodoi"
               className={cx("nav-list-li-a")}
@@ -1170,11 +1159,7 @@ export default function Header() {
           </li>
 
           {/*Đồng hồ treo tường*/}
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "ĐỒNG HỒ TREO TƯỜNG",
-            })}
-          >
+          <li className={cx("nav-list-li")}>
             <Link
               href="/components/components-danhmuc/donghotreotuong"
               className={cx("nav-list-li-a")}
@@ -1240,11 +1225,7 @@ export default function Header() {
             </ul>
           </li>
 
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "DÂY ĐỒNG HỒ",
-            })}
-          >
+          <li className={cx("nav-list-li")}>
             <Link
               href="/components/components-danhmuc/daydongho"
               className={cx("nav-list-li-a")}
@@ -1253,11 +1234,7 @@ export default function Header() {
               DÂY ĐỒNG HỒ
             </Link>
           </li>
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "SẢN PHẨM KHÁC",
-            })}
-          >
+          <li className={cx("nav-list-li")}>
             <Link
               href="/components/components-danhmuc/sanphamkhac"
               className={cx("nav-list-li-a")}
@@ -1324,11 +1301,7 @@ export default function Header() {
               </li>
             </ul>
           </li>
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "SỬA ĐỒNG HỒ",
-            })}
-          >
+          <li className={cx("nav-list-li")}>
             <Link
               href="/components/suadongho"
               className={cx("nav-list-li-a")}

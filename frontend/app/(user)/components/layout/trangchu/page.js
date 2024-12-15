@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from "react";
 import styles from "./trangchu.module.css";
 import Slider from "react-slick";
-
+import VoucherModal from "../dieukien/page";
 import Banner from "../banner/page";
 import Link from "next/link";
 import classNames from "classnames/bind";
+import { toast,ToastContainer } from 'react-toastify';
 const cx = classNames.bind(styles);
 
 export default function Main() {
@@ -15,7 +16,8 @@ export default function Main() {
   };
   const [firstSlider, setFirstSlider] = useState(null);
   const [secondSlider, setSecondSlider] = useState(null);
-
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedVoucherId, setSelectedVoucherId] = useState(null);
   const firstSettings = {
     arrows: false,
     dots: false,
@@ -209,7 +211,15 @@ export default function Main() {
 
     fetchData();
   }, []);
-
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("http://localhost:5000/voucher/getvoucher");
+      const data = await response.json();
+      setVouchers(data.vouchers);
+    };
+    fetchData();
+  }, []);
+  const [vouchers, setVouchers] = useState([]);
   // tính % sản phẩm
   const roundDiscount = (discountPercentage) => {
     const discountLevels = [10, 15, 20, 25, 30, 40, 50];
@@ -219,12 +229,90 @@ export default function Main() {
         : prev
     );
   };
-
+  const handleCopy = (voucherCode) => {
+    navigator.clipboard
+      .writeText(voucherCode)
+      .then(() => {
+        toast.success(`Mã ${voucherCode} đã được sao chép thành công!`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      })
+      .catch(() => {
+        toast.error("Không thể sao chép mã. Vui lòng thử lại.", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      });
+  };
   return (
     <>
       <Banner />
+       <ToastContainer />
       <section className={cx("max-w-[1170px")}>
         <div className={cx("w-[80%] lg:w-[1170px] mx-auto mt-[40px] mb-[5px]")}>
+        <p className="text-center text-2xl md:text-3xl">ƯU ĐÃI</p> <br />{" "}
+          <br />
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {vouchers.map((voucher) => (
+              <div
+                key={voucher._id}
+                className="bg-white border border-gray-300 rounded-lg p-2 shadow-md text-center"
+              >
+                <h4 className="text-[16px] text-red-600 font-semibold p-2">
+                  VOUCHER
+                </h4>
+                <p className="text-sm text-gray-600 p-2">
+                  Nhập mã{" "}
+                  <span className={styles.code}>{voucher.ma_voucher}</span>
+                  <br />
+                  <span className={styles.textClamp}>{voucher.mo_ta}₫</span>
+                  
+                </p>
+                <div className="flex justify-between items-center mt-4">
+                  {voucher.so_luong > 0 ? (
+                    <button
+                      className={styles.copyBtn}
+                      onClick={() => handleCopy(voucher.ma_voucher)}
+                    >
+                      Copy
+                    </button>
+                  ) : (
+                    <button className={`${styles.copyBtn} ${styles.disabled} `}>
+                      Hết Voucher
+                    </button>
+                  )}
+                  <a
+                    onClick={() => {
+                      setSelectedVoucherId(voucher._id);
+                      setModalOpen(true);
+                    }}
+                    className={styles.conditions}
+                  >
+                    Điều kiện
+                  </a>
+                </div>
+                <VoucherModal
+                  isOpen={isModalOpen}
+                  onRequestClose={() => setModalOpen(false)}
+                  voucherId={selectedVoucherId}
+                />
+              </div>
+            ))}
+          </div>
+          <br /> <br /> <br />
           <p
             className={cx(
               "text-center text-[16px] sm:text-[18px] md:text-[22px] lg:text-[30px] max-w-[1170px]"
@@ -240,8 +328,8 @@ export default function Main() {
             <p
               className={
                 activeTab === "tab1"
-                  ? "text-[#796752] relative cursor-pointer pt-[30px] pb-[10px] text-[6px] md:text-[10px]  mx-[5px] border-b-2 border-[#796752]"
-                  : "text-[#777777] relative cursor-pointer pt-[30px] pb-[10px] text-[6px] md:text-[10px] mx-[5px]   transition-all duration-300 ease-in"
+                  ? "text-[#796752] relative cursor-pointer pt-[30px] pb-[10px] text-[10px] md:text-[14px]  mx-[5px] border-b-2 border-[#796752]"
+                  : "text-[#777777] relative cursor-pointer pt-[30px] pb-[10px] text-[10px] md:text-[14px] mx-[5px]   transition-all duration-300 ease-in"
               }
               onClick={() => handleTabClick("tab1")}
             >
@@ -269,7 +357,7 @@ export default function Main() {
             >
               ĐỒNG HỒ ĐÔI
             </p>
-            <span className={cx("mb-[-60px] absolute border-t border-gray-500 lg:block hidden lg:w-full w-[80%] opacity-50 mx-auto max-w-[1170px]")}/>
+            <span className={cx("mb-[-60px] absolute border-t border-gray-300 lg:block hidden lg:w-full w-[80%] opacity-50 mx-auto max-w-[1170px]")}/>
           </div>
           
           <div>
@@ -683,8 +771,8 @@ export default function Main() {
             <p
               className={
                 activeTab === "tab1"
-                  ? "text-[#796752] relative cursor-pointer pt-[30px] pb-[10px] text-[6px] md:text-[10px]  mx-[5px] border-b-2 border-[#796752]"
-                  : "text-[#777777] relative cursor-pointer pt-[30px] pb-[10px] text-[6px] md:text-[10px] mx-[5px]   transition-all duration-300 ease-in"
+                  ? "text-[#796752] relative cursor-pointer pt-[30px] pb-[10px] text-[10px] md:text-[14px]  mx-[5px] border-b-2 border-[#796752]"
+                  : "text-[#777777] relative cursor-pointer pt-[30px] pb-[10px] text-[10px] md:text-[14px] mx-[5px]   transition-all duration-300 ease-in"
               }
               onClick={() => handleTabClick("tab1")}
             >
@@ -712,7 +800,7 @@ export default function Main() {
             >
               ĐỒNG HỒ ĐÔI
             </p>
-            <span className={cx("mb-[-60px] absolute border-t border-gray-500 lg:block hidden lg:w-full w-[80%] opacity-50 mx-auto max-w-[1170px]")}/>
+            <span className={cx("mb-[-60px] absolute border-t border-gray-300 lg:block hidden lg:w-full w-[80%] opacity-50 mx-auto max-w-[1170px]")}/>
           </div>
           
           <div>
