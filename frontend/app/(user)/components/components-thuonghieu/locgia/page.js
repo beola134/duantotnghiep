@@ -2006,7 +2006,7 @@ export default function DonghoNam() {
                           id="cat-dong-ho"
                         >
                           <div className={styles["title-icon"]}>
-                            <h1>
+                            <h1 className="text-xl">
                               {" "}
                               {categoryName === "Đồng hồ nam"
                                 ? categoryName

@@ -554,7 +554,7 @@ export default function Header() {
           <div
             className={cx(
               "search-bar",
-              "mt-[-40px] col-span-2 lg:flex  hidden justify-end  items-center bg-gray-800 rounded-full py-1 px-5 max-h-[30px] mr-[-70px]"
+              "mt-[-40px] col-span-2 lg:flex  hidden justify-end  items-center bg-[#ffffff24] rounded-full py-1 px-5 max-h-[30px] mr-[-70px]"
             )}
           >
             <input
@@ -589,7 +589,7 @@ export default function Header() {
           >
             <div className={cx("phone", "flex items-center")}>
               <img
-                className={cx("phone-img", "w-[80px] ml-[-130px]")}
+                className={cx("phone-img", "w-[100px] ml-[-130px]")}
                 src="/image/item/icons/icon_call.png"
                 alt="Phone"
               />
@@ -828,7 +828,7 @@ export default function Header() {
               THƯƠNG HIỆU
             </Link>
             <ul className={cx("dropdown-menu")}>
-              {category.map((item) => (
+              {category.filter((item) => item.thuong_hieu !== "RHYTHM").map((item) => (
                 <li className={cx("dropdown-menu-li")} key={item.thuong_hieu}>
                   <Link
                     href={`/components/components-thuonghieu/chitietthuonghieu/${item.thuong_hieu}`}

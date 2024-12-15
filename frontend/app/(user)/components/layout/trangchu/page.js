@@ -1245,7 +1245,7 @@ export default function Main() {
         </div>
         <div className={cx("owlItem", "relative ")}>
           <Slider ref={setFirstSlider} {...firstSettings}>
-            {category.map((item) => (
+            {category.filter((item) => item.thuong_hieu !== "RHYTHM").map((item) => (
               <div key={item._id} className={cx("lg:p-[2%] md:p-[2%] p-[1px]")}>
                 <div className={cx("w-[100%]")}>
                   <Link
@@ -1516,7 +1516,7 @@ export default function Main() {
             <div className={cx("section-brand  w-[70%] ml-auto h-auto")}>
               <div className={cx("item-slide1 overflow-hidden ")}>
                 <Slider ref={setSecondSlider} {...secondSettings}>
-                  {category.map((item) => (
+                  {category.filter((item) => item.thuong_hieu !== "RHYTHM").map((item) => (
                     <div className={cx("item ")} key={item._id}>
                       <img
                         alt={item.thuong_hieu}

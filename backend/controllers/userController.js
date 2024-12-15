@@ -335,6 +335,12 @@ exports.changePassword = async (req, res) => {
         message: "Mật khẩu không hợp lệ",
       });
     }
+    const isSamePassword = await bcrypt.compare(mat_khau_moi, user.mat_khau);
+    if (isSamePassword) {
+      return res.status(400).json({
+        message: "Mật khẩu mới không được trùng với mật khẩu cũ",
+      });
+    }
     // Kiểm tra mật khẩu mới và xác nhận mật khẩu mới
     if (mat_khau_moi !== xac_nhan_mat_khau) {
       return res.status(400).json({

@@ -41,6 +41,8 @@ router.get("/getTotalRevenueByMonth", ThongkeController.getDoanhThuDonHangTheoTh
 //thống kê sản phẩm bán chạy nhất theo biễu đồ cột
 //http://localhost:5000/thongke/getTopProducts
 router.get("/getTopProducts", ThongkeController.getSanPhamBanChayNhat);
-
+//getDoanhThuDonHangTheoThoiGian
+//http://localhost:5000/thongke/getTotalRevenueByTime
+router.get("/getTotalRevenueByTime", ThongkeController.getDoanhThuDonHangTheoThoiGian);
 module.exports = router;
 

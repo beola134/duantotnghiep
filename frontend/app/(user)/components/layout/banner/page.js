@@ -206,14 +206,14 @@ export default function Banner() {
             )}
           >
             <Slider {...settings}>
-              {thuongHieu.map((item, index) => (
+              {thuongHieu.filter((item) => item.thuong_hieu !== "RHYTHM").map((item, index) => (
                 <Link
                   href={`/components/components-thuonghieu/chitietthuonghieu/${item.thuong_hieu}`}
                 >
                   <div
                     className={cx(
                       "item",
-                      "p-[5%] flex justify-center items-center m-h-[80px]"
+                      "p-[5%] flex justify-center items-center m-h-[60px]"
                     )}
                     key={item._id}
                   >
@@ -222,8 +222,8 @@ export default function Banner() {
                       alt={item.thuong_hieu}
                       style={{
                         objectFit: "cover",
-                        width: "100%",
-                        height: "100%",
+                        width: "70%",
+                        height: "70%",
                       }}
                     />
                   </div>

@@ -81,6 +81,7 @@ export default function Thuonghieu() {
           </button>
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
             {cates
+              .filter((item) => item.thuong_hieu !== "RHYTHM")
               .slice(currentIndex, currentIndex + itemsPerPage)
               .map((item) => {
                 const { _id, hinh_anh2 } = item;
@@ -109,7 +110,7 @@ export default function Thuonghieu() {
       <h3 className="ml-3"> TẤT CẢ THƯƠNG HIỆU</h3>
       <br />
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        {cates.map((item) => {
+        {cates.filter((item) => item.thuong_hieu !== "RHYTHM").map((item) => {
           const { _id, hinh_anh2 } = item;
           return (
             <div className="flex flex-col" key={_id}>
