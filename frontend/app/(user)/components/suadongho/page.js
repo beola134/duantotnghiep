@@ -1,20 +1,51 @@
 import styles from "./suadongho.module.css";
 import Link from "next/link";
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 export default function suadongho() {
   return (
     <nav className={styles.nav}>
       <div classNameName={styles.container} style={{ display: "flex" }}>
+        
         <div className={styles.content}>
+          <div
+                          className={cx(
+                            
+                            "flex",
+                            "items-center uppercase mb-5 mt-5"
+                          )}
+                        >
+                          <span className={cx( "text-sm")}>
+                            <Link
+                              href="/"
+                              className={cx(
+                                
+                                " text-gray-800",
+                                "hover:text-[#796752]"
+                              )}
+                            >
+                              Trang chủ
+                            </Link>
+                          </span>
+                          <span className={cx("separator", "mx-3", "text-stone-400")}>
+                            {" "}
+                            &gt;{" "}
+                          </span>
+                          
+                          
+                          <span className={cx( "text-sm", "text-red-500")}>
+                            <Link
+                              href="/components/suadongho"
+                              className={cx("link", "text-red-500")}
+                            >
+                              
+                              sửa đồng hồ
+                            </Link>
+                          </span>
+                        </div>
           <p className={styles.h1}>DỊCH VỤ SỬA CHỮA ĐỒNG HỒ</p>
           <div className={styles.holld}>
-            <div className={styles.star}>
-              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
-              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
-              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
-              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
-              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
-            </div>
-            <p className={styles.p}>12/10/2024</p>
+          
           </div>
           <br />
           <nav className={styles.toc}>

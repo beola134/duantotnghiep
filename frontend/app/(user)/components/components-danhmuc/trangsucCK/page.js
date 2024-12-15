@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
-import styles from "../donghonu/donghonu.module.css";
+import styles from "../../components-thuonghieu/donghonu/donghonu.module.css";
 import { useEffect, useState } from "react";
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 
 export default function TrangsucCK() {
   const [products, setProducts] = useState([]);
@@ -70,6 +72,41 @@ export default function TrangsucCK() {
               <div className={styles.container}>
                 <div className={styles.clear}></div>
                 <div className={styles["products-cat"]}>
+                  <div
+                          className={cx(
+                            
+                            "flex",
+                            "items-center uppercase mb-5 mt-5"
+                          )}
+                        >
+                          <span className={cx( "text-sm")}>
+                            <Link
+                              href="/"
+                              className={cx(
+                                
+                                " text-gray-800",
+                                "hover:text-[#796752]"
+                              )}
+                            >
+                              Trang chủ
+                            </Link>
+                          </span>
+                          <span className={cx("separator", "mx-3", "text-stone-400")}>
+                            {" "}
+                            &gt;{" "}
+                          </span>
+                          
+                          
+                          <span className={cx( "text-sm", "text-red-500")}>
+                            <Link
+                              href="/components/components-danhmuc/trangsucCK"
+                              className={cx("link", "text-red-500")}
+                            >
+                              Trang sức CALVIN KLEIN
+                              
+                            </Link>
+                          </span>
+                        </div>
                   <div className={styles["field-title"]}>
                     <div className={styles["title-name"]}>
                       <div className={styles["cat-title"]}>

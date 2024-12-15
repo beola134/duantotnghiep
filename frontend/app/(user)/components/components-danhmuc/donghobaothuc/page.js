@@ -4,6 +4,8 @@ import styles from "../../components-thuonghieu/donghonu/donghonu.module.css";
 import { useEffect, useState } from "react";
 import Loading from "../../loading/page";
 
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 export default function TrangsucCK() {
   const [products, setProducts] = useState([]);
   const [categoryName, setCategoryName] = useState(""); // Tiêu đề danh mục
@@ -132,10 +134,47 @@ export default function TrangsucCK() {
               <div className={styles.container}>
                 <div className={styles.clear}></div>
                 <div className={styles["products-cat"]}>
+                  <div
+                          className={cx(
+                            
+                            "flex",
+                            "items-center uppercase mb-5 mt-5 "
+                          )}
+                        >
+                          <span className={cx( "text-sm")}>
+                            <Link
+                              href="/"
+                              className={cx(
+                                
+                                " text-gray-800",
+                                "hover:text-[#796752]"
+                              )}
+                            >
+                              Trang chủ
+                            </Link>
+                          </span>
+                          <span className={cx("separator", "mx-3", "text-stone-400")}>
+                            {" "}
+                            &gt;{" "}
+                          </span>
+                          
+                          
+                          <span className={cx( "text-sm", "text-red-500")}>
+                            <Link
+                              href="/components/components-danhmuc/donghobaothuc"
+                              className={cx("link", "text-red-500")}
+                            >
+                              
+                              đồng hồ báo thức
+                            </Link>
+                          </span>
+                        </div>
                   <div className={styles["block-products-filter"]}>
                     <div className={styles["block-product-filter"]}>
+                      
                       {/* Thương hiệu  */}
                       <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                        
                         <div
                           className={`${styles["field-name"]} ${styles.normal} ${styles.field} ${styles["field-opened"]}`}
                         >

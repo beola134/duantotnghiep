@@ -50,15 +50,31 @@ export default function TaiKhoan() {
 
   //cập nhật quyền người dùng
   const handleRoleChange = async (id, newRole) => {
-    try {
+  try {
+    const roleName = newRole === 2 ? "Khách hàng" : "Quản trị viên";
+    const result = await Swal.fire({
+      title: "Xác nhận thay đổi",
+      text: `Bạn có chắc muốn thay đổi chức vụ thành "${roleName}"?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Đồng ý",
+      cancelButtonText: "Hủy",
+    });
+
+    if (result.isConfirmed) {
       const response = await fetch(`http://localhost:5000/users/update/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quyen: newRole }),
       });
+
       if (!response.ok) throw new Error("Lỗi khi cập nhật chức vụ");
 
-      setUser((prevUsers) => prevUsers.map((user) => (user._id === id ? { ...user, quyen: newRole } : user)));
+      setUser((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === id ? { ...user, quyen: newRole } : user
+        )
+      );
 
       Swal.fire({
         title: "Thành công",
@@ -66,15 +82,17 @@ export default function TaiKhoan() {
         icon: "success",
         confirmButtonText: "OK",
       });
-    } catch (error) {
-      Swal.fire({
-        title: "Lỗi",
-        text: error.message,
-        icon: "error",
-        confirmButtonText: "OK",
-      });
     }
-  };
+  } catch (error) {
+    Swal.fire({
+      title: "Lỗi",
+      text: error.message,
+      icon: "error",
+      confirmButtonText: "OK",
+    });
+  }
+};
+
 
   //phân trang
   useEffect(() => {
