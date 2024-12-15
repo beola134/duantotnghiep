@@ -241,7 +241,7 @@ export default function Detail({ params }) {
   // thêm bình luận sản phẩm theo id người dùng và id sản phẩm
   // kiểm tra người dùng đã mua sản phẩm chưa mới được bình luận sản phẩm
   const addComment = async () => {
-    if (user) {
+    if (!user) {
       if (commentText && star) {
         try {
           const response = await fetch(`http://localhost:5000/comment/add`, {
@@ -284,7 +284,14 @@ export default function Detail({ params }) {
       } else {
         Swal.fire({
           icon: "warning",
-          title: "Vui lòng nhập bình luận và chọn sao",
+          title: "Vui lòng đăng nhập để bình luận",
+        }).then(() => {
+          if (typeof window !== "undefined" && params?.id) {
+            const currentUrl = encodeURIComponent(`/components/product-detail/${params.id}`);
+            window.location.href = `/components/components-login/login?redirect=${currentUrl}`;
+          } else {
+            window.location.href = `/components/components-login/login`;
+          }
         });
       }
     } else {
