@@ -349,6 +349,19 @@ export default function Detail({ params }) {
     }
   };
 
+  // lấy giá trị số lượng sản phẩm
+  const handleInputChange = (e) => {
+    let value = e.target.value;
+
+    // Chỉ cho phép số và chuỗi rỗng
+    if (/^\d*$/.test(value)) {
+      // Giới hạn tối đa 2 chữ số
+      if (value.length <= 2) {
+        setSo_luong(value === "" ? "" : parseInt(value, 10));
+      }
+    }
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -658,14 +671,16 @@ export default function Detail({ params }) {
                         type="button"
                         className="border-none bg-none p-2 cursor-pointer text-[20px] mx-[50px]"
                         onClick={handleDecrease}
+                        onChange={handleInputChange}
                       >
                         -
                       </button>
-                      <input min="1" type="number" id="number" value={so_luong} readOnly />
+                      <input min="1" type="number" id="number" value={so_luong} onChange={handleInputChange} />
                       <button
                         type="button"
                         className="border-none bg-none p-2 cursor-pointer text-[20px] mx-[50px]"
                         onClick={handleIncrease}
+                        onChange={handleInputChange}
                       >
                         +
                       </button>
@@ -673,7 +688,7 @@ export default function Detail({ params }) {
 
                     <button
                       type="submit"
-                      className={`${styles.submit} border-none uppercase no-underline font-[arial] text-[14px] rounded-[5px] text-white text-center py-[12px] w-full mb-[15px] transition-all duration-200 backface-hidden inline-block relative cursor-pointer`}
+                      className={`${styles.submit} bg-[#796752] border-none uppercase no-underline font-[arial] text-[14px] rounded-[5px] text-white text-center py-[12px] w-full mb-[15px] transition-all duration-200 backface-hidden inline-block relative cursor-pointer`}
                     >
                       Thêm vào giỏ hàng
                     </button>

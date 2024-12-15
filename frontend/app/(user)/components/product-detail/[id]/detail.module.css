@@ -312,7 +312,7 @@
   cursor: pointer;
 } */
 
-.btnBuy .submit:nth-child(2) {
+/* .btnBuy .submit:nth-child(2) {
   background: #288ad6;
 }
 .btnBuy .submit:nth-child(3) {
@@ -320,7 +320,7 @@
 }
 .btnBuy .submit:nth-child(3):hover {
   background: #796752;
-}
+} */
 
 /* .frameRight .noteHotline {
   position: relative;

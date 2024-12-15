@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
           <link rel="icon" href="/image/item/logo.png" />
         </head>
         <body>
-          {/* <Header /> */}
+          <Header />
           {children}
           <Footer />
         </body>
