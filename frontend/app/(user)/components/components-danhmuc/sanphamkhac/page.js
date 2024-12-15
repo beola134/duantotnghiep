@@ -6,7 +6,7 @@ const cx = classNames.bind(styles);
 export default function Sanphamkhac() {
   return (
     <>
-      <div className={styles.container}>
+      <div className="container">
         <div className={styles["container"]}>
           <div id="main-container" className={styles["mt20"]}>
             <div className={styles["main-column"]}>
@@ -50,12 +50,23 @@ export default function Sanphamkhac() {
                   <h1 className={styles["title-page-menu"]}>
                     <span>Sản phẩm khác</span>
                   </h1>
-                  <div className={styles["all-menu-other"]}>
-                    <div className={styles["item"]}>
-                      <h3 className={styles["name"]}>
-                        <Link href={"/components/components-thuonghieu/donghothuysi"}>ĐỒNG HỒ THỤY SĨ</Link>
+                  <div
+                    className={`${styles["all-menu-other"]} flex flex-wrap phone-sm:grid phone-sm: grid-cols-2`}>
+                    <div
+                      className={`${styles["item"]}lg:w-calc phone-sm:p-[10px]  mx-4 mb-8  md:mx-auto`}>
+                      <h3
+                        className={`${styles["name"]} text-[18px] phone-sm:text-[14px] sm:text-[14px] md:text-[16px]`}>
+                        <Link
+                          className="w-auto "
+                          href={
+                            "/components/components-thuonghieu/donghothuysi"
+                          }>
+                          ĐỒNG HỒ THỤY SĨ
+                        </Link>
                       </h3>
-                      <Link href={"/components/components-thuonghieu/donghothuysi"} title="ĐỒNG HỒ THỤY SĨ">
+                      <Link
+                        href={"/components/components-thuonghieu/donghothuysi"}
+                        title="ĐỒNG HỒ THỤY SĨ">
                         <img
                           className={styles.lazy}
                           alt="ĐỒNG HỒ THỤY SĨ"
@@ -67,11 +78,20 @@ export default function Sanphamkhac() {
                         />
                       </Link>
                     </div>
-                    <div className={styles["item"]}>
-                      <h3 className={styles["name"]}>
-                        <Link href={"/components/components-thuonghieu/donghonhatban"}>ĐỒNG HỒ NHẬT BẢN</Link>
+                    <div
+                      className={`${styles["item"]}lg:w-calc phone-sm:p-[10px] mx-4 mb-8   md:mx-auto`}>
+                      <h3
+                        className={`${styles["name"]} text-[18px] phone-sm:text-[14px] sm:text-[14px] md:text-[16px]`}>
+                        <Link
+                          href={
+                            "/components/components-thuonghieu/donghonhatban"
+                          }>
+                          ĐỒNG HỒ NHẬT BẢN
+                        </Link>
                       </h3>
-                      <Link href={"/components/components-thuonghieu/donghonhatban"} title="ĐỒNG HỒ NHẬT BẢN">
+                      <Link
+                        href={"/components/components-thuonghieu/donghonhatban"}
+                        title="ĐỒNG HỒ NHẬT BẢN">
                         <img
                           className={styles.lazy}
                           alt="ĐỒNG HỒ NHẬT BẢN"
@@ -83,11 +103,18 @@ export default function Sanphamkhac() {
                         />
                       </Link>
                     </div>
-                    <div className={styles["item"]}>
-                      <h3 className={styles["name"]}>
-                        <Link href={"/components/components-danhmuc/trangsucDW"}>TRANG SỨC DW</Link>
+                    <div
+                      className={`${styles["item"]}lg:w-calc phone-sm:p-[10px] mx-4 mb-8   md:mx-auto`}>
+                      <h3
+                        className={`${styles["name"]} text-[18px] phone-sm:text-[14px] sm:text-[14px] md:text-[16px]`}>
+                        <Link
+                          href={"/components/components-danhmuc/trangsucDW"}>
+                          TRANG SỨC DW
+                        </Link>
                       </h3>
-                      <Link href={"/components/components-danhmuc/trangsucDW"} title="TRANG SỨC DW">
+                      <Link
+                        href={"/components/components-danhmuc/trangsucDW"}
+                        title="TRANG SỨC DW">
                         <img
                           className={styles.lazy}
                           alt="TRANG SỨC DW"
@@ -99,11 +126,17 @@ export default function Sanphamkhac() {
                         />
                       </Link>
                     </div>
-                    <div className={styles["item"]}>
-                      <h3 className={styles["name"]}>
-                        <Link href={"/components/components-danhmuc/daydongho"}>DÂY ĐEO ĐỒNG HỒ</Link>
+                    <div
+                      className={`${styles["item"]}lg:w-calc phone-sm:p-[10px] mx-4 mb-8   md:mx-auto`}>
+                      <h3
+                        className={`${styles["name"]} text-[18px] phone-sm:text-[14px] sm:text-[14px] md:text-[16px]`}>
+                        <Link href={"/components/components-danhmuc/daydongho"}>
+                          DÂY ĐEO ĐỒNG HỒ
+                        </Link>
                       </h3>
-                      <Link href={"/components/components-danhmuc/daydongho"} title="DÂY ĐEO ĐỒNG HỒ">
+                      <Link
+                        href={"/components/components-danhmuc/daydongho"}
+                        title="DÂY ĐEO ĐỒNG HỒ">
                         <img
                           className={styles.lazy}
                           alt="DÂY ĐEO ĐỒNG HỒ"
@@ -115,11 +148,18 @@ export default function Sanphamkhac() {
                         />
                       </Link>
                     </div>
-                    <div className={styles["item"]}>
-                      <h3 className={styles["name"]}>
-                        <Link href={"/components/components-danhmuc/donghodeban"}>ĐỒNG HỒ ĐỂ BÀN</Link>
+                    <div
+                      className={`${styles["item"]}lg:w-calc phone-sm:p-[10px] mx-4 mb-8   md:mx-auto`}>
+                      <h3
+                        className={`${styles["name"]} text-[18px] phone-sm:text-[14px] sm:text-[14px] md:text-[16px]`}>
+                        <Link
+                          href={"/components/components-danhmuc/donghodeban"}>
+                          ĐỒNG HỒ ĐỂ BÀN
+                        </Link>
                       </h3>
-                      <Link href={"/components/components-danhmuc/donghodeban"} title="ĐỒNG HỒ ĐỂ BÀN">
+                      <Link
+                        href={"/components/components-danhmuc/donghodeban"}
+                        title="ĐỒNG HỒ ĐỂ BÀN">
                         <img
                           className={styles.lazy}
                           alt="ĐỒNG HỒ ĐỂ BÀN"
@@ -131,11 +171,18 @@ export default function Sanphamkhac() {
                         />
                       </Link>
                     </div>
-                    <div className={styles["item"]}>
-                      <h3 className={styles["name"]}>
-                        <Link href={"/components/components-danhmuc/donghobaothuc"}>ĐỒNG HỒ BÁO THỨC</Link>
+                    <div
+                      className={`${styles["item"]}lg:w-calc phone-sm:p-[10px] mx-4 mb-8   md:mx-auto`}>
+                      <h3
+                        className={`${styles["name"]} text-[18px] phone-sm:text-[14px] sm:text-[14px] md:text-[16px]`}>
+                        <Link
+                          href={"/components/components-danhmuc/donghobaothuc"}>
+                          ĐỒNG HỒ BÁO THỨC
+                        </Link>
                       </h3>
-                      <Link href={"/components/components-danhmuc/donghobaothuc"} title="ĐỒNG HỒ BÁO THỨC">
+                      <Link
+                        href={"/components/components-danhmuc/donghobaothuc"}
+                        title="ĐỒNG HỒ BÁO THỨC">
                         <img
                           className={styles.lazy}
                           alt="ĐỒNG HỒ BÁO THỨC"
@@ -147,11 +194,18 @@ export default function Sanphamkhac() {
                         />
                       </Link>
                     </div>
-                    <div className={styles["item"]}>
-                      <h3 className={styles["name"]}>
-                        <Link href={"/components/components-danhmuc/trangsucCK"}>TRANG SỨC CALVIN KLEIN</Link>
+                    <div
+                      className={`${styles["item"]}lg:w-calc phone-sm:p-[10px] mx-4 mb-8   md:mx-auto`}>
+                      <h3
+                        className={`${styles["name"]} text-[18px] phone-sm:text-[14px] sm:text-[14px] md:text-[16px]`}>
+                        <Link
+                          href={"/components/components-danhmuc/trangsucCK"}>
+                          TRANG SỨC CALVIN KLEIN
+                        </Link>
                       </h3>
-                      <Link href={"/components/components-danhmuc/trangsucCK"} title="TRANG SỨC CALVIN KLEIN">
+                      <Link
+                        href={"/components/components-danhmuc/trangsucCK"}
+                        title="TRANG SỨC CALVIN KLEIN">
                         <img
                           className={styles.lazy}
                           alt="TRANG SỨC CALVIN KLEIN"

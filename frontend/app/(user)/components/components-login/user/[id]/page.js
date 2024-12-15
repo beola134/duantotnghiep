@@ -316,8 +316,9 @@ const User = ({ params }) => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.sidebar}>
+    <div
+      className={`${styles.container} lg:flex lg:justify-around phone-sm:mx-auto sm:mx-auto md:mx-auto text-[16px]`}>
+      <div className={`${styles.sidebar} lg:w-[200px] `}>
         <div className={styles.profilePicture}>
           <img
             src={
@@ -330,7 +331,7 @@ const User = ({ params }) => {
             style={{ display: "inline-block", opacity: "1" }}
           />
         </div>
-        <h3>
+        <h3 className="text-center">
           <strong>Tài Khoản Của Tôi</strong>
         </h3>
         <div className={styles.Menu}>
@@ -371,12 +372,13 @@ const User = ({ params }) => {
           </p>
         </div>
       </div>
-      <div className={styles.profileContent}>
+      <div
+        className={`${styles.profileContent} ml-[30px] phone-sm:ml-0 sm:ml-0 tablet:ml-0 phone-lg:ml-0 `}>
         {activeTab === "profile" && (
-          <div>
+          <div className=" phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%]">
             <p
+              className="lg:text-[22px] phone-sm:text-[15px] sm:text-[15px] md:text-[16px]"
               style={{
-                fontSize: "22px",
                 color: "black",
                 marginBottom: "15px",
                 textAlign: "center",
@@ -474,161 +476,220 @@ const User = ({ params }) => {
           </div>
         )}
         {activeTab === "ShowLichsu" && (
-          <div className={styles.ShowLichsu}>
-            <h2>Lịch sử mua hàng</h2>
-            {ShowLichsu.length > 0 ? (
-              <ul>
-                {ShowLichsu.map((order) => (
-                  <li key={order._id}>
-                    <div className={styles.orderHeader}>
-                      <p>Mã Đơn Hàng: {order._id}</p>
-                      <span className={styles.trh}>{order.trang_thai}</span>
-                    </div>
-
-                    <p>
-                      Thời gian đặt hàng:{" "}
-                      {new Date(order.thoi_gian_tao).toLocaleString("vi-VN", {
-                        timeZone: "Asia/Ho_Chi_Minh",
-                      })}
-                    </p>
-
-                    {order.chiTietDonHangs.map((detail) => (
-                      <div key={detail._id} className={styles.productCard}>
-                        <img
-                          src={`http://localhost:5000/images/${detail.product.hinh_anh}`}
-                          alt={detail.product.ten}
-                          className={styles.productImage}
-                        />
-                        <div className={styles.productInfo}>
-                          <br></br>
-                          <p className={styles.productName}>
-                            {detail.product.ten}
-                          </p>
-                          <br></br>
-                          <p>
-                            Số lượng: <strong>{detail.so_luong}</strong>
-                          </p>
-                          <p style={{ float: "right" }}>
-                            Giá:{" "}
-                            <strong>
-                              {detail.product.gia_giam.toLocaleString("vi-VN")}₫
-                            </strong>
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-
-                    <div className={styles.orderSummary}>
-                      <p>Tổng Giá Trị:</p>
-                      <span className={styles.summaryValue}>
-                        {order.tong_tien.toLocaleString("vi-VN")}₫
+          <div
+            className={`${styles.ShowLichsu}  phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%] phone-sm:mt-[5%] tablet:mt-[5%] phone-lg:mt-[5%]`}>
+            <div className=" text-[12px]  lg:text-[16px]">
+              <h2 className="lg:text-[22px] phone-sm:text-[15px] sm:text-[15px] md:text-[16px]">Lịch sử mua hàng</h2>
+              {ShowLichsu.length > 0 ? (
+                <ul>
+                  {ShowLichsu.map((order) => (
+                    <li key={order._id}>
+                      <span
+                        className={`${styles.trh} text-red-500 text-[12px] lg:text-[16px] lg:hidden tablet:hidden phone-lg:hidden mb-10px`}>
+                        {order.trang_thai}
                       </span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>Bạn chưa có đơn hàng.</p>
-            )}
+                      <div className={`${styles.orderHeader}`}>
+                        <p className="text-[12px] lg:text-[16px]">
+                          Mã Đơn Hàng: {order._id}
+                        </p>
+                        <span
+                          className={`${styles.trh} text-[12px] lg:text-[16px] phone-sm:hidden`}>
+                          {order.trang_thai}
+                        </span>
+                      </div>
+
+                      <p className=" text-[12px]  lg:text-[16px]">
+                        Thời gian đặt hàng:{" "}
+                        {new Date(order.thoi_gian_tao).toLocaleString("vi-VN", {
+                          timeZone: "Asia/Ho_Chi_Minh",
+                        })}
+                      </p>
+
+                      {order.chiTietDonHangs.map((detail) => (
+                        <div key={detail._id} className={styles.productCard}>
+                          <img
+                            src={`http://localhost:5000/images/${detail.product.hinh_anh}`}
+                            alt={detail.product.ten}
+                            className={`${styles.productImage} phone-sm:w-[50px]`}
+                          />
+                          <div className={`${styles.productInfo}  text-[12px]  lg:text-[16px]`}>
+                            <br></br>
+                            <p className={`${styles.productName}  text-[12px]  lg:text-[16px]`}>
+                              {detail.product.ten}
+                            </p>
+                            <br></br>
+                            <div className="flex justify-between phone-sm:block">
+                              <p>
+                                Số lượng: <strong>{detail.so_luong}</strong>
+                              </p>
+                              <p>
+                                Giá:{" "}
+                                <strong>
+                                  {detail.product.gia_giam.toLocaleString(
+                                    "vi-VN"
+                                  )}
+                                  ₫
+                                </strong>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+                      <div className={styles.orderSummary}>
+                        <p>Tổng Giá Trị:</p>
+                        <span className={styles.summaryValue}>
+                          {order.tong_tien.toLocaleString("vi-VN")}₫
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Bạn chưa có đơn hàng.</p>
+              )}
+            </div>
           </div>
         )}
 
         {activeTab === "orderShow" && (
-          <div className={styles.orderShow}>
-            <h2>Trạng thái đơn hàng</h2>
-            {orderShow.length > 0 ? (
-              <ul>
-                {orderShow.map((order) => (
-                  <li key={order.id}>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}>
-                      <p>Mã Đơn Hàng: {order._id}</p>
-                      <span className={styles.trh}>{order.trang_thai}</span>
-                    </div>
+          <div
+            className={`${styles.orderShow} phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%] phone-sm:mt-[5%]  tablet:mt-[5%] phone-lg:mt-[5%]`}>
+            <div className="  text-[12px]  lg:text-[16px]">
+              <h2 className="lg:text-[22px] phone-sm:text-[15px] sm:text-[15px] md:text-[16px]">Trạng thái đơn hàng</h2>
+              {orderShow.length > 0 ? (
+                <ul>
+                  {orderShow.map((order) => (
+                    <li key={order.id}>
+                      <span
+                        className={`${styles.trh} text-red-500 text-[12px] lg:text-[16px] lg:hidden tablet:hidden phone-lg:hidden mb-10px`}>
+                        {order.trang_thai}
+                      </span>
+                      <div className={`${styles.orderHeader}`}>
+                        <p className="text-[12px] lg:text-[16px]">
+                          Mã Đơn Hàng: {order._id}
+                        </p>
+                        <span
+                          className={`${styles.trh} text-[12px] lg:text-[16px] phone-sm:hidden`}>
+                          {order.trang_thai}
+                        </span>
+                      </div>
 
-                    <p>
-                      Thời gian đặt hàng:{" "}
-                      {new Date(order.thoi_gian_tao).toLocaleString("vi-VN", {
-                        timeZone: "Asia/Ho_Chi_Minh",
-                      })}
-                    </p>
-                    <p>Địa chỉ: {order.dia_chi}</p>
-                    <table className={styles.orderTable}>
-                      <thead>
-                        <tr>
-                          <th>Tên Sản Phẩm</th>
-                          <th> Hình Ảnh</th>
-                          <th>Số Lượng</th>
-                          <th>Giá</th>
-                        </tr>
-                      </thead>
-                      <tbody>
+                      <p className=" text-[12px]  lg:text-[16px]">
+                        Thời gian đặt hàng:{" "}
+                        {new Date(order.thoi_gian_tao).toLocaleString("vi-VN", {
+                          timeZone: "Asia/Ho_Chi_Minh",
+                        })}
+                      </p>
+                      <p className=" text-[12px]  lg:text-[16px]">
+                        Địa chỉ: {order.dia_chi}
+                      </p>
+                      <div className="hidden lg:block phone-lg:block ">
+                        <table className={styles.orderTable}>
+                          <thead>
+                            <tr>
+                              <th>Tên Sản Phẩm</th>
+                              <th> Hình Ảnh</th>
+                              <th>Số Lượng</th>
+                              <th>Giá</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {order.chiTietDonHangs.map((detail) => (
+                              <tr key={detail._id}>
+                                <td className="w-[45%]">{detail.product.ten}</td>
+                                <td className="w-[20%]">
+                                  <img
+                                    src={`http://localhost:5000/images/${detail.product.hinh_anh}`}
+                                    alt={detail.gia_giam}
+                                    style={{marginLeft:"10%", width: "50px", height: "auto" }}
+                                  />
+                                </td>
+                                <td className="w-[15%]">{detail.so_luong}</td>
+                                <td>
+                                  {detail.product.gia_giam.toLocaleString(
+                                    "vi-VN"
+                                  )}
+                                  ₫
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="block phone-lg:hidden lg:hidden">
+                        {/* Hiển thị theo hàng dọc trên màn hình nhỏ */}
                         {order.chiTietDonHangs.map((detail) => (
-                          <tr key={detail._id}>
-                            <td>{detail.product.ten}</td>
-                            <td>
+                          <div
+                            key={detail._id}
+                            className="border border-gray-300 p-4 mb-4 rounded-lg shadow-sm">
+                            <p className="font-semibold">
+                              Tên Sản Phẩm: {detail.product.ten}
+                            </p>
+                            <div className="flex items-center justify-start mt-2">
+                              <span className="mr-4">Hình Ảnh:</span>
                               <img
                                 src={`http://localhost:5000/images/${detail.product.hinh_anh}`}
                                 alt={detail.gia_giam}
-                                style={{ width: "50px", height: "auto" }}
+                                className="w-16 h-auto"
                               />
-                            </td>
-                            <td>{detail.so_luong}</td>
-                            <td>
+                            </div>
+                            <p className="mt-2">
+                              <strong>Số Lượng:</strong> {detail.so_luong}
+                            </p>
+                            <p className="mt-2">
+                              <strong>Giá:</strong>{" "}
                               {detail.product.gia_giam.toLocaleString("vi-VN")}₫
-                            </td>
-                          </tr>
+                            </p>
+                          </div>
                         ))}
-                      </tbody>
-                    </table>
-
-                    <p>
-                      Phí Ship:
-                      <span
-                        style={{
-                          margin: "0px 5px",
-                          color: "black",
-                        }}>
-                        <strong>{order.phi_ship}₫</strong>
-                      </span>{" "}
-                    </p>
-                    <div className={styles.cancel}>
-                      <p>
-                        Tổng Thanh Toán:
+                      </div>
+                      <p className=" text-[12px]  lg:text-[16px]">
+                        Phí Ship:
                         <span
                           style={{
-                            fontSize: "20px",
                             margin: "0px 5px",
-                            color: "red",
+                            color: "black",
                           }}>
-                          <strong>
-                            {order.tong_tien.toLocaleString("vi-VN")}₫
-                          </strong>
-                        </span>
+                          <strong>{order.phi_ship}</strong>
+                        </span>{" "}
                       </p>
-                      {order.trang_thai === "Chờ xác nhận" && (
-                        <button
-                          className="btn btn-danger"
-                          onClick={() =>
-                            huyDonHang(order._id, "Đơn hàng đã hủy")
-                          }>
-                          Hủy đơn hàng
-                        </button>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>Bạn chưa có đơn hàng.</p>
-            )}
+                      <div
+                        className={`${styles.cancel} text-[12px]  lg:text-[16px] flex justify-between phone-sm:block`}>
+                        <p>
+                          Tổng Thanh Toán:
+                          <span
+                            style={{
+                              fontSize: "20px",
+                              margin: "0px 5px",
+                              color: "red",
+                            }}>
+                            <strong>
+                              {order.tong_tien.toLocaleString("vi-VN")}₫
+                            </strong>
+                          </span>
+                        </p>
+                        {order.trang_thai === "Chờ xác nhận" && (
+                          <button
+                            className="btn btn-danger phone-sm:ml-[50%]"
+                            onClick={() =>
+                              huyDonHang(order._id, "Đơn hàng đã hủy")
+                            }>
+                            Hủy đơn hàng
+                          </button>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Bạn chưa có đơn hàng.</p>
+              )}
+            </div>
           </div>
         )}
         {activeTab === "changePassword" && (
-          <div>
+          <div className="phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%] phone-sm:my-[5%] sm:mt-[5%] tablet:mt-[5%] phone-lg:mt-[5%]">
             <p
               style={{
                 fontSize: "22px",

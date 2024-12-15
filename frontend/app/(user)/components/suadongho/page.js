@@ -1,82 +1,90 @@
-import styles from "./suadongho.module.css";
 import Link from "next/link";
-import classNames from "classnames/bind";
-const cx = classNames.bind(styles);
 export default function suadongho() {
   return (
-    <nav className={styles.nav}>
-      <div classNameName={styles.container} style={{ display: "flex" }}>
-        
-        <div className={styles.content}>
-          <div
-                          className={cx(
-                            
-                            "flex",
-                            "items-center uppercase mb-5 mt-5"
-                          )}
-                        >
-                          <span className={cx( "text-sm")}>
-                            <Link
-                              href="/"
-                              className={cx(
-                                
-                                " text-gray-800",
-                                "hover:text-[#796752]"
-                              )}
-                            >
-                              Trang chủ
-                            </Link>
-                          </span>
-                          <span className={cx("separator", "mx-3", "text-stone-400")}>
-                            {" "}
-                            &gt;{" "}
-                          </span>
-                          
-                          
-                          <span className={cx( "text-sm", "text-red-500")}>
-                            <Link
-                              href="/components/suadongho"
-                              className={cx("link", "text-red-500")}
-                            >
-                              
-                              sửa đồng hồ
-                            </Link>
-                          </span>
-                        </div>
-          <p className={styles.h1}>DỊCH VỤ SỬA CHỮA ĐỒNG HỒ</p>
-          <div className={styles.holld}>
-          
+    <nav className="lg:max-w-[1170px] md:max-w-[738px] sm:max-w-[357px] lg:ml-[10%] lg:mr-[10%] text-[14px] lg:text-[18px]">
+      <div className="lg:flex w-full h-screen">
+        <div className="lg:w-3/4 p-1 w-[90%] mr-[5%] ml-[5%]">
+          <p className="text-center text-[18px] lg:text-2xl ml-5 mt-5">
+            DỊCH VỤ SỬA CHỮA ĐỒNG HỒ
+          </p>
+          <div className="flex w-auto border-b border-[#ddd]">
+            <div className="flex mr-[5px]">
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+            </div>
+            <p className="mt-[-0.25px] ml-3.75">12/10/2024</p>
           </div>
           <br />
-          <nav className={styles.toc}>
-            <h3>NỘI DUNG BÀI VIẾT</h3>
-            <ul>
-              <li>
-                <a href="#section1">1. THAY PIN</a>
+          <nav className="mt-7.5 mb-[30px] border border-[#ddd] p-5 relative">
+            <h3 className="absolute mt-[-8.75px] left-1/2 transform -translate-x-1/2 bg-white px-2.5">
+              NỘI DUNG BÀI VIẾT
+            </h3>
+            <ul className="list-none mt-5">
+              <li className="mb-2.5">
+                <a
+                  href="#section1"
+                  className="no-underline text-[#55554d] hover:underline">
+                  1. THAY PIN
+                </a>
               </li>
-              <li>
-                <a href="#section2">2. THAY DÂY ĐỒNG HỒ</a>
+              <li className="mb-2.5">
+                <a
+                  href="#section2"
+                  className="no-underline text-[#55554d] hover:underline">
+                  2. THAY DÂY ĐỒNG HỒ
+                </a>
               </li>
-              <li>
-                <a href="#section3">3. LAU DẦU</a>
+              <li className="mb-2.5">
+                <a
+                  href="#section3"
+                  className="no-underline text-[#55554d] hover:underline">
+                  3. LAU DẦU
+                </a>
               </li>
-              <li>
-                <a href="#section4">4. XỬ LÝ ĐỒNG HỒ BỊ VÀO NƯỚC</a>
+              <li className="mb-2.5">
+                <a
+                  href="#section4"
+                  className="no-underline text-[#55554d] hover:underline">
+                  4. XỬ LÝ ĐỒNG HỒ BỊ VÀO NƯỚC
+                </a>
               </li>
-              <li>
-                <a href="#section5">5. THAY KÍNH</a>
+              <li className="mb-2.5">
+                <a
+                  href="#section5"
+                  className="no-underline text-[#55554d] hover:underline">
+                  5. THAY KÍNH
+                </a>
               </li>
-              <li>
-                <a href="#section6">6. ĐÁNH BÓNG DÂY, VỎ, KÍNH</a>
+              <li className="mb-2.5">
+                <a
+                  href="#section6"
+                  className="no-underline text-[#55554d] hover:underline">
+                  6. ĐÁNH BÓNG DÂY, VỎ, KÍNH
+                </a>
               </li>
-              <li>
-                <a href="#section7">7. CĂN CHỈNH ĐỘ SAI SỐ ĐỒNG HỒ CƠ</a>
+              <li className="mb-2.5">
+                <a
+                  href="#section7"
+                  className="no-underline text-[#55554d] hover:underline">
+                  7. CĂN CHỈNH ĐỘ SAI SỐ ĐỒNG HỒ CƠ
+                </a>
               </li>
-              <li>
-                <a href="#section8">8.QUY TRÌNH BẢO HÀNH</a>
+              <li className="mb-2.5">
+                <a
+                  href="#section8"
+                  className="no-underline text-[#55554d] hover:underline">
+                  8.QUY TRÌNH BẢO HÀNH
+                </a>
               </li>
-              <li>
-                <a href="#section9">9. ĐỊA CHỈ</a>
+              <li className="mb-2.5">
+                <a
+                  href="#section9"
+                  className="no-underline text-[#55554d] hover:underline">
+                  9. ĐỊA CHỈ
+                </a>
               </li>
             </ul>
           </nav>
@@ -87,8 +95,8 @@ export default function suadongho() {
             width="901px"
           />
           <section id="section1">
-            <p className={styles.h3}>1. THAY PIN</p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-[#333] mt-[10px]">1. THAY PIN</p>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Vì sao cần chú ý đến pin của đồng hồ? Mặc dù hiện nay pin đồng hồ
               được chế tạo tốt nhưng khi pin đã hết để quá lâu trong đồng hồ, nó
               có thể bị gỉ và gây hư hại cho những bộ phận khác của đồng hồ. Để
@@ -101,7 +109,7 @@ export default function suadongho() {
               srcset=""
               width="901px"
             />
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Trung tâm bảo hành Wristly hỗ trợ thay pin Nhật và pin Thụy Sĩ mới
               cho khách hàng đúng theo tiêu chuẩn chính hãng và với mức giá tùy
               theo các sản phẩm. Đặc biệt, với những khách hàng đã mua đồng hồ
@@ -111,8 +119,8 @@ export default function suadongho() {
           </section>
 
           <section id="section2">
-            <p className={styles.h3}>2. THAY DÂY ĐỒNG HỒ</p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-[#333] mt-[10px]">2. THAY DÂY ĐỒNG HỒ</p>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Nhằm phục vụ những phong cách thời trang đa dạng cũng như sở thích
               của tối đa khách hành, Wristly Watch hỗ trợ dịch vụ thay thế dây
               đồng hồ từ dây da sang dây kim loại, từ dây kim loại sang dây da,
@@ -130,8 +138,8 @@ export default function suadongho() {
           </section>
 
           <section id="section3">
-            <p className={styles.h3}>3. LAU DẦU</p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-[#333] mt-[10px]">3. LAU DẦU</p>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Trong các mẫu đồng hồ cơ, ngoài việc vệ sinh đồng hồ thì lau dầu
               cũng là một trong những công việc quan trọng để giữ cho đồng hồ có
               tuổi thọ lâu dài và hoạt động chính xác, trơn tru hơn. Dù là việc
@@ -148,8 +156,10 @@ export default function suadongho() {
           </section>
 
           <section id="section4">
-            <p className={styles.h3}>4. XỬ LÝ ĐỒNG HỒ BỊ VÀO NƯỚC</p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-[#333] mt-[10px]">
+              4. XỬ LÝ ĐỒNG HỒ BỊ VÀO NƯỚC
+            </p>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Có thể nói rằng vấn đề đồng hồ vào nước luôn là vần đề mà rất
               nhiều người quan tâm. Mọi đồng hồ (bao gồm cả đồng hồ chính hãng)
               đều có nguy cơ bị vào nước nếu như khách hàng không chú ý trong
@@ -161,8 +171,8 @@ export default function suadongho() {
             </p>
           </section>
           <section id="section5">
-            <p className={styles.h3}>5. THAY KÍNH</p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-[#333] mt-[10px]">5. THAY KÍNH</p>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Nhiệm vụ chính của kính đồng hồ chính là bảo vệ cho mặt số và giúp
               cho người dùng có cái nhìn dễ dàng nhất khi theo dõi thời gian.
               Tuy nhiên, những rắc rối gặp phải khi mặt kính bị nứt vỡ cũng có
@@ -173,9 +183,11 @@ export default function suadongho() {
             </p>
           </section>
           <section id="section6">
-            <p className={styles.h3}>6. ĐÁNH BÓNG DÂY, VỎ, KÍNH</p>
+            <p className="mb-2.5 text-[#333] mt-[10px]">
+              6. ĐÁNH BÓNG DÂY, VỎ, KÍNH
+            </p>
 
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Sau một thời gian dài sử dụng, phần dây kim loại, vỏ và mặt đồng
               hồ dù chất lượng tốt đến đâu cũng đều có thể sẽ bị trầy xước. Đây
               là kết quả của sự hao mòn cơ học. Nhằm cung cấp một quy trình hoàn
@@ -185,9 +197,11 @@ export default function suadongho() {
             </p>
           </section>
           <section id="section7">
-            <p className={styles.h3}>7. CĂN CHỈNH ĐỘ SAI SỐ ĐỒNG HỒ CƠ</p>
+            <p className="mb-2.5 text-[#333] mt-[10px]">
+              7. CĂN CHỈNH ĐỘ SAI SỐ ĐỒNG HỒ CƠ
+            </p>
 
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Đồng hồ cơ với những chi tiết máy móc phức tạp và độ tinh xảo cao
               luôn nhận được sự ưu ái của những người yêu thích đồng hồ. Mỗi một
               cỗ máy đồng hồ cơ đều có một mức sai số nhất định, được nhà sản
@@ -198,19 +212,19 @@ export default function suadongho() {
             </p>
           </section>
           <section id="section8">
-            <p className={styles.h3}>8.QUY TRÌNH BẢO HÀNH</p>
+            <p className="mb-2.5 text-[#333] mt-[10px]">8.QUY TRÌNH BẢO HÀNH</p>
 
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Những sản phẩm đồng hồ bảo hành mà quý khách mang đến Trung tâm
               bảo hành Wristly sẽ được thao tác qua các bước sau đây:
             </p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Bước 1:Nhận dạng nguồn gốc của thương hiệu trên đồng hồ. Chúng tôi
               chỉ nhận bảo hành, sửa chữa các sản phẩm đồng hồ chính hãng (do
               thương hiệu cung cấp có đầy đủ giấy tờ hoặc mua tại Đồng hồ
               Wristly)
             </p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Bước 2: Kiểm tra chi tiết tình trạng đồng hồ Nhận dạng các yếu tố
               bên ngoài đồng hồ như: dây đeo, vỏ đồng hồ, mặt số và kim. Còn đối
               với các linh kiện bên trong, bộ phận kỹ thuật sẽ tiếp nhận và kiểm
@@ -218,7 +232,7 @@ export default function suadongho() {
               khách về tình trạng đồng hồ và các biện pháp xử lí cần thiết nếu
               có vấn đề phát sinh.
             </p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Bước 3: Viết biên nhận Trung tâm bảo hành Wristly sẽ ghi lại chi
               tiết Tên thương hiệu, mã số, số máy của đồng hồ, đặc điểm nhận
               dạng cơ bản bên ngoài, tình trạng máy và các công việc cần thực
@@ -227,32 +241,32 @@ export default function suadongho() {
               đồng hồ và kỹ thuật cần thời gian để kiểm tra cân chỉnh độ chính
               xác của đồng hồ trước khi giao cho khách hàng.
             </p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Bước 4: Vệ sinh dây vỏ bên ngoài, sau đó làm khô
             </p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Bước 5: Tháo rời các bộ phận Bộ phận kỹ thuật tiến hành tháo rời
               các bộ phận bên ngoài đồng hồ.
             </p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Bước 6: Tháo kim và mặt số để trong hộp riêng biệt. Và tháo rời
               các linh kiện trong máy đồng hồ.
             </p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Bước 7: Các linh kiện của máy đồng hồ sẽ được vệ sinh bằng dung
               dịch đặc biệt để loại bỏ hoàn toàn dầu cũ, sau đó lau dầu mới để
               hỗ trợ khả năng hoạt động của bộ máy và lắp đặt cỗ máy hoàn chỉnh
               như ban đầu
             </p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Bước 8: Kiểm tra tất cả các hệ thống gioăng cao su, kính, niềng,
               ti nút ống, nắp đáy, các nút bấm (nếu có), … trên đồng hồ
             </p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Bước 9: Lắp kim và mặt số, đóng nắp đáy phía dưới Bước 10: Kiểm
               tra độ chịu nước và sai số của đồng hồ
             </p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Bước 10: Hoàn thành kiểm tra tổng thể đồng hồ trước khi giao trả
               lại cho khách hàng Ngoài ra, với mỗi một vấn đề khác nhau mà khách
               hàng gặp phải, chúng tôi cũng đưa ra những quy trình phù hợp để hỗ
@@ -260,20 +274,24 @@ export default function suadongho() {
             </p>
           </section>
           <section id="section9">
-            <p className={styles.h3}>9. ĐỊA CHỈ</p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-[#333] mt-[10px]">9. ĐỊA CHỈ</p>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Liên hệ với chúng tôi qua số điện thoại hoặc email để được hỗ trợ
               tốt nhất.
             </p>
           </section>
         </div>
 
-        <div className={styles.sidebar}>
-          <ul>
-            <li>
+        <div className="w-1/4 p-2.5 mr-[5%] ml-[5%]">
+          <ul className="mt-[50px] list-none">
+            <li className="w-[200px] py-2.5 border-b border-[#ddd] cursor-pointer hover:bg-[#f0f0f0]">
               <Link href={"/components/suadongho/gioithieu"}>GIỚI THIỆU</Link>
             </li>
-            <li>CHÍNH SÁCH BẢO HÀNH</li>
+            <li className="w-[200px] py-2.5 border-b border-[#ddd] cursor-pointer hover:bg-[#f0f0f0]">
+              <Link href={"/components/suadongho/chinhsach"}>
+                CHÍNH SÁCH BẢO HÀNH
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

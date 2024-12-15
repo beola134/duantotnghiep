@@ -1,69 +1,24 @@
-import styles from "./chinhsach.module.css";
 import Link from "next/link";
-import classNames from "classnames/bind";
-const cx = classNames.bind(styles);
 export default function chinhsach() {
   return (
-    <nav className={styles.nav}>
-      <div classNameName={styles.container} style={{ display: "flex" }}>
-        <div className={styles.content}>
-          <div
-            className={cx(
-              
-              "flex",
-              "items-center uppercase mb-5 mt-5"
-            )}
-          >
-            <span className={cx( "text-sm")}>
-              <Link
-                href="/"
-                className={cx(
-                  
-                  " text-gray-800",
-                  "hover:text-[#796752]"
-                )}
-              >
-                Trang chủ
-              </Link>
-            </span>
-            <span className={cx("separator", "mx-3", "text-stone-400")}>
-              {" "}
-              &gt;{" "}
-            </span>
-            
-            
-            <span className={cx( "text-sm", "text-red-500")}>
-              <Link
-                href="/components/suadongho"
-                className={cx(" text-gray-800",
-                  "hover:text-[#796752]")}
-              >
-                
-                sửa đồng hồ
-              </Link>
-            </span>
-            <span className={cx("separator", "mx-3", "text-stone-400")}>
-              {" "}
-              &gt;{" "}
-            </span>
-            
-            
-            <span className={cx( "text-sm", "text-red-500")}>
-              <Link
-                href="/components/suadongho/chinhsach"
-                className={cx("link", "text-red-500")}
-              >
-                
-                Chính sách bảo hành
-              </Link>
-            </span>
-          </div>
-          <p className={styles.h1}>CHÍNH SÁCH BẢO HÀNH</p>
-          <div className={styles.holld}>
-           
+    <nav className="lg:max-w-[1170px] md:max-w-[738px] sm:max-w-[357px] lg:ml-[10%] lg:mr-[10%] text-[14px] lg:text-[18px]">
+      <div className="lg:flex w-full h-screen">
+        <div className="lg:w-3/4 p-1 w-[90%] mr-[5%] ml-[5%]">
+          <p className="text-center text-[18px] lg:text-2xl ml-5 mt-5">
+            CHÍNH SÁCH BẢO HÀNH
+          </p>
+          <div className="flex w-auto border-b border-[#ddd]">
+            <div className="flex mr-[5px]">
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+              <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+            </div>
+            <p className="mt-[-0.25px] ml-3.75">12/10/2024</p>
           </div>
           <br />
-          <p className={styles.cs}>
+          <p className="mb-[10px] ">
             <strong>
               Theo chính sách bảo hành của các hãng đồng hồ, tất cả các đồng hồ
               chính hãng bán ra đều kèm theo 01 thẻ/ sổ/ giấy bảo hành chính
@@ -73,16 +28,22 @@ export default function chinhsach() {
               không cấp lại dưới bất kỳ hình thức nào.
             </strong>
           </p>
-          <nav className={styles.toc}>
-            <h3>NỘI DUNG BÀI VIẾT</h3>
-            <ul>
-              <li>
-                <a href="#section1">
+          <nav className="mt-[30px]mb-[30px] border border-[#ddd] p-5 relative">
+            <h3 className="absolute mt-[-8.75px] left-1/2 transform -translate-x-1/2 bg-white px-2.5">
+              NỘI DUNG BÀI VIẾT
+            </h3>
+            <ul className="list-none mt-5">
+              <li className="mb-2.5">
+                <a
+                  href="#section1"
+                  className="no-underline text-[#55554d] hover:underline">
                   I. BẢO HÀNH CHÍNH HÃNG (BẢO HÀNH QUỐC TẾ)
                 </a>
               </li>
-              <li>
-                <a href="#section2">
+              <li className="mb-2.5">
+                <a
+                  href="#section2"
+                  className="no-underline text-[#55554d] hover:underline">
                   II. CHÍNH SÁCH BẢO HÀNH RIÊNG CỦA ĐỒNG HỒ WRISTLY
                 </a>
               </li>
@@ -94,7 +55,7 @@ export default function chinhsach() {
             srcset=""
             width="901px"
           />
-          <p className={styles.p}>
+          <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
             Theo chính sách bảo hành của các hãng đồng hồ, tất cả các đồng hồ
             chính hãng bán ra đều kèm theo 01 thẻ/ sổ/ giấy bảo hành chính hãng
             (Quốc tế) có giá trị bảo hành theo thời gian qui định của từng hãng
@@ -104,10 +65,10 @@ export default function chinhsach() {
             thức nào
           </p>
           <section id="section1">
-            <p className={styles.h3}>
+            <p className="mb-2.5 text-[#333] mt-[10px]">
               I. BẢO HÀNH CHÍNH HÃNG (BẢO HÀNH QUỐC TẾ)
             </p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Bảo hành Chính hãng (hầu hết là Bảo hành quốc tế) là chế độ Bảo
               hành do nhà sản xuất (hãng đồng hồ) cung cấp cho tất cả sản phẩm
               do chính họ sản xuất (sản phẩm chính hãng). Khi Quý khách mua đồng
@@ -181,7 +142,7 @@ export default function chinhsach() {
           </section>
 
           <section id="section2">
-            <p className={styles.h3}>
+            <p className="mb-2.5 text-[#333] mt-[10px]">
               II. CHÍNH SÁCH BẢO HÀNH RIÊNG CỦA ĐỒNG HỒ WRISTLY
             </p>
             <img
@@ -190,7 +151,7 @@ export default function chinhsach() {
               srcset=""
               width="901px"
             />
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Bắt đầu từ ngày 01/09/2018, khi mua đồng hồ tại WRISTLY (trừ đồng
               hồ treo tường, đồng hồ để bàn), Quý khách còn nhận được các chính
               sách bảo hành khác, cụ thể như sau:
@@ -212,7 +173,7 @@ export default function chinhsach() {
             </p>
             <strong>Lưu ý:</strong>
             <br />
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               <strong>
                 - Chế độ bảo hành mở rộng này đi kèm giấy bảo hành do Đồng hồ
                 WRISTLY cấp khi Quý khách mua hàng. Quý khách vui lòng bảo quản
@@ -231,12 +192,16 @@ export default function chinhsach() {
           </section>
         </div>
 
-        <div className={styles.sidebar}>
-          <ul>
-            <li>
+        <div className="w-1/4 p-2.5 mr-[5%] ml-[5%]">
+          <ul className="mt-[50px] list-none">
+            <li className="w-[200px] py-2.5 border-b border-[#ddd] cursor-pointer hover:bg-[#f0f0f0]">
               <Link href={"/components/suadongho/gioithieu"}>GIỚI THIỆU</Link>
             </li>
-            <li>CHÍNH SÁCH BẢO HÀNH</li>
+            <li className="w-[200px] py-2.5 border-b border-[#ddd] cursor-pointer hover:bg-[#f0f0f0]">
+              <Link href={"/components/suadongho/chinhsach"}>
+                CHÍNH SÁCH BẢO HÀNH
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

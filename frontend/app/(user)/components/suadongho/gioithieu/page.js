@@ -1,69 +1,22 @@
-import styles from "./gioithieu.module.css";
 import Link from "next/link";
-import classNames from "classnames/bind";
-const cx = classNames.bind(styles);
 export default function gioithieu() {
   return (
     <>
-      <nav className={styles.nav}>
-        <div classNameName={styles.container} style={{ display: "flex" }}>
-          <div className={styles.content}>
-            <div
-            className={cx(
-              
-              "flex",
-              "items-center uppercase mb-5 mt-5"
-            )}
-          >
-            <span className={cx( "text-sm")}>
-              <Link
-                href="/"
-                className={cx(
-                  
-                  " text-gray-800",
-                  "hover:text-[#796752]"
-                )}
-              >
-                Trang chủ
-              </Link>
-            </span>
-            <span className={cx("separator", "mx-3", "text-stone-400")}>
-              {" "}
-              &gt;{" "}
-            </span>
-            
-            
-            <span className={cx( "text-sm", "text-red-500")}>
-              <Link
-                href="/components/suadongho"
-                className={cx(" text-gray-800",
-                  "hover:text-[#796752]")}
-              >
-                
-                sửa đồng hồ
-              </Link>
-            </span>
-            <span className={cx("separator", "mx-3", "text-stone-400")}>
-              {" "}
-              &gt;{" "}
-            </span>
-            
-            
-            <span className={cx( "text-sm", "text-red-500")}>
-              <Link
-                href="/components/suadongho/gioithieu"
-                className={cx("link", "text-red-500")}
-              >
-                
-                Giới thiệu
-              </Link>
-            </span>
-          </div>
-            <p className={styles.h1}>
+      <nav className="lg:max-w-[1170px] md:max-w-[738px] sm:max-w-[357px] lg:ml-[10%] lg:mr-[10%] text-[14px] lg:text-[18px]">
+        <div className="lg:flex w-full h-screen">
+          <div className="lg:w-3/4 p-1 w-[90%] mr-[5%] ml-[5%]">
+            <p className="text-center text-[18px] lg:text-2xl ml-5 mt-5 mb-[20px]">
               WRISTLY - TRUYỀN CẢM HỨNG CHO NIỀM ĐAM MÊ ĐỒNG HỒ
             </p>
-            <div className={styles.holld}>
-             
+            <div className="flex w-auto border-b border-[#ddd]">
+              <div className="flex mr-[5px]">
+                <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+                <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+                <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+                <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+                <i className="fa-solid fa-star" style={{ color: "orange" }}></i>
+              </div>
+              <p className="mt-[-0.25px] ml-3.75">12/10/2024</p>
             </div>
             <br />
             <img
@@ -73,7 +26,7 @@ export default function gioithieu() {
               style={{ marginTop: "50px" }}
               width="901px"
             />
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Vươn đến sự hoàn hảo trong suốt quá trình thành lập và phát triển
               thương hiệu đồng hồ WRISTLY, giờ đây, chúng tôi tự hào sở hữu hệ
               thống website phân phối và bán lẻ đồng hồ chính hãng hàng đầu tại
@@ -85,8 +38,10 @@ export default function gioithieu() {
               hồ, nhằm mang lại trải nghiệm mua sắm sang trọng và đa dạng, phù
               hợp với mọi mức giá và đối tượng khách hàng.
             </p>
-            <p className={styles.abcd}>LỊCH SỬ CỦA CHÚNG TÔI</p>
-            <p className={styles.p}>
+            <p className="text-center text-blue-700 text-2xl">
+              LỊCH SỬ CỦA CHÚNG TÔI
+            </p>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Đồng hồ WRISTLY có tiền thân là một cửa hàng sửa chữa và kinh
               doanh đồng hồ từ những năm 20 của thế kỷ 21. Việc gắn bó với đồng
               hồ bắt nguồn từ niềm đam mê được nuôi dưỡng theo thời gian và được
@@ -99,10 +54,10 @@ export default function gioithieu() {
               ra.
             </p>
 
-            <p className={styles.abcd}>
+            <p className="text-center text-blue-700 text-2xl">
               CHIA SẺ NIỀM ĐAM MÊ VỀ THẾ GIỚI ĐỒNG HỒ
             </p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Đồng hồ WRISTLY mong muốn chia sẻ niềm đam mê đối với thế giới
               đồng hồ và sự chăm sóc chu đáo mà chúng tôi dành cho mỗi khách
               hàng của mình. Việc tìm hiểu thị trường và đặc biệt là các xu
@@ -133,15 +88,19 @@ export default function gioithieu() {
               thể tiếp cận nhanh chóng với BST đồng hồ mới cũng như những dịch
               vụ của chúng tôi.
             </p>
-            <p className={styles.abcd}>CAM KẾT CỦA CHÚNG TÔI </p>
-            <p className={styles.p}>
+            <p className="text-center text-blue-700 text-2xl">
+              CAM KẾT CỦA CHÚNG TÔI{" "}
+            </p>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Từ thời điểm bạn đến cửa hàng cho đến các dịch vụ sau bán hàng,
               đồng hồ WRISTLY cam kết sẽ là người bạn đồng hành giúp khách hàng
               có được sự an tâm tuyệt đối từ sản phẩm chất lượng đích thực cho
               đến sự tiếp đón nồng nhiệt!
             </p>
-            <p className={styles.edd}>- Nhà bán lẻ được chứng nhận</p>
-            <p className={styles.p}>
+            <p className="text-left text-red-600 text-lg mb-2 underline">
+              - Nhà bán lẻ được chứng nhận
+            </p>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Với danh sách các thương hiệu quốc tế uy tín và đa dạng, Đồng hồ
               WRISTLY tự hào là nhà phân phối được ủy quyền chính thức của các
               thương hiệu đồng hồ hàng đầu thế giới của Thụy Sĩ :
@@ -168,10 +127,10 @@ export default function gioithieu() {
               cho phép khách hàng đánh giá cao trải nghiệm mua sắm đồng hồ đồng
               thời được hưởng lợi từ dịch vụ chuyên nghiệp và xuất sắc.
             </p>
-            <p className={styles.edd}>
+            <p className="text-left text-red-600 text-lg mb-2 underline">
               - Chất lượng của những chiếc đồng hồ được bán ra
             </p>
-            <p className={styles.p}>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Sở hữu hệ thống cửa hàng bán lẻ chất lượng cao, Đồng hồ WRISTLY
               chỉ bán sản phẩm chính hãng của những thương hiệu uy tín đến từ
               Thụy Sĩ và Nhật Bản.
@@ -187,8 +146,10 @@ export default function gioithieu() {
               Bản vẫn tiếp tục đổi mới bằng những tiến bộ công nghệ, độ chính
               xác và độ bền.
             </p>
-            <p className={styles.edd}>- Sản phẩm đảm bảo</p>
-            <p className={styles.p}>
+            <p className="text-left text-red-600 text-lg mb-2 underline">
+              - Sản phẩm đảm bảo
+            </p>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Tất cả các sản phẩm hiện có trong hệ thống cửa hàng của chúng tôi
               đều được bảo hành chính hãng từ 1 đến 3 năm tùy theo mặt hàng và
               điều kiện riêng của thương hiệu. Bên cạnh đó bạn còn nhận được gói
@@ -203,8 +164,10 @@ export default function gioithieu() {
               được đào tạo để thực hiện công việc sửa chữa trên đồng hồ như thay
               pin, lau dầu, thay dây, căn chỉnh đồng hồ cơ…
             </p>
-            <p className={styles.edd}>- Chuyên nghiệp và tư vấn tận tình</p>
-            <p className={styles.p}>
+            <p className="text-left text-red-600 text-lg mb-2 underline">
+              - Chuyên nghiệp và tư vấn tận tình
+            </p>
+            <p className="mb-2.5 text-justify leading-relaxed hyphens-auto">
               Đối với khách hàng, một sự lựa chọn đồng hồ hoàn hảo không chỉ
               phục vụ chức năng vật lý mà còn cho phép người dùng thể hiện sở
               thích và phong cách cá nhân của mình. Vì vậy tại các cửa hàng của
@@ -215,17 +178,17 @@ export default function gioithieu() {
               thiện, chu đáo, sẵn sàng giải đáp mọi thắc mắc của bạn về thế giới
               đồng hồ cũng như tư vấn giúp bạn lựa chọn sản phẩm ưng ý nhất.
             </p>
-            <p className={styles.abcd1}>
+            <p className="text-center text-red-600 text-2xl underline">
               Thời gian của bạn – Niềm đam mê của chúng tôi
             </p>
           </div>
 
-          <div className={styles.sidebar}>
-            <ul>
-              <li>
+          <div className="w-1/4 p-2.5 mr-[5%] ml-[5%]">
+            <ul className="mt-[50px] list-none">
+              <li className="w-[200px] py-2.5 border-b border-[#ddd] cursor-pointer hover:bg-[#f0f0f0]">
                 <Link href={"/components/suadongho/gioithieu"}>GIỚI THIỆU</Link>
               </li>
-              <li>
+              <li className="w-[200px] py-2.5 border-b border-[#ddd] cursor-pointer hover:bg-[#f0f0f0]">
                 <Link href={"/components/suadongho/chinhsach"}>
                   CHÍNH SÁCH BẢO HÀNH
                 </Link>
