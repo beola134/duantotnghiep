@@ -11,8 +11,6 @@ import { jwtDecode } from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
-import classNames from "classnames/bind";
-const cx = classNames.bind(styles);
 
 export default function Detail({ params }) {
   const [user, setUser] = useState(null);
@@ -202,6 +200,26 @@ export default function Detail({ params }) {
     speed: 500,
     slidesToShow: 5,
     slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024, // Kích thước màn hình md
+        settings: {
+          slidesToShow: 3, // Hiển thị 3 sản phẩm
+        },
+      },
+      {
+        breakpoint: 640, // Kích thước màn hình sm
+        settings: {
+          slidesToShow: 2, // Hiển thị 2 sản phẩm
+        },
+      },
+      {
+        breakpoint: 480, // Kích thước màn hình nhỏ hơn
+        settings: {
+          slidesToShow: 2, // Hiển thị 1 sản phẩm
+        },
+      },
+    ],
   };
 
   // lấy thông tin người dùng
@@ -223,7 +241,7 @@ export default function Detail({ params }) {
   // thêm bình luận sản phẩm theo id người dùng và id sản phẩm
   // kiểm tra người dùng đã mua sản phẩm chưa mới được bình luận sản phẩm
   const addComment = async () => {
-    if (user) {
+    if (!user) {
       if (commentText && star) {
         try {
           const response = await fetch(`http://localhost:5000/comment/add`, {
@@ -266,7 +284,14 @@ export default function Detail({ params }) {
       } else {
         Swal.fire({
           icon: "warning",
-          title: "Vui lòng nhập bình luận và chọn sao",
+          title: "Vui lòng đăng nhập để bình luận",
+        }).then(() => {
+          if (typeof window !== "undefined" && params?.id) {
+            const currentUrl = encodeURIComponent(`/components/product-detail/${params.id}`);
+            window.location.href = `/components/components-login/login?redirect=${currentUrl}`;
+          } else {
+            window.location.href = `/components/components-login/login`;
+          }
         });
       }
     } else {
@@ -297,6 +322,7 @@ export default function Detail({ params }) {
     };
     getAllComment();
   }, [params.id, currentPage]);
+
   // hàm chuyển trang
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -323,6 +349,19 @@ export default function Detail({ params }) {
     }
   };
 
+  // lấy giá trị số lượng sản phẩm
+  const handleInputChange = (e) => {
+    let value = e.target.value;
+
+    // Chỉ cho phép số và chuỗi rỗng
+    if (/^\d*$/.test(value)) {
+      // Giới hạn tối đa 2 chữ số
+      if (value.length <= 2) {
+        setSo_luong(value === "" ? "" : parseInt(value, 10));
+      }
+    }
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -331,23 +370,11 @@ export default function Detail({ params }) {
   }
   return (
     <>
-      {/* FrameLeft */}
-      <div className={`${styles.topProductDetail} ${styles.container}  ${styles.cls}`}>
-        <div className={cx('breadcrumb', 'flex', 'items-center uppercase mb-5 mt-10')}>
-              <span className={cx('item', 'text-sm')}>
-                <Link href="/" className={cx('link', 'text-gray-800', 'hover:text-[#796752]')}>Trang chủ</Link>
-              </span>
-              
-              <span className={cx('separator',  'mx-3', 'text-stone-400')}> &gt; </span>
-              <span className={cx('item', 'text-sm', 'text-red-500')}>
-                <Link href={`/components/product-detail/${product._id}`} className={cx('link', 'text-red-500')}>{" "}
-                    Chi tiết {product.ten_san_pham} </Link>
-              </span>
-            </div>
-        <div className={styles.frameLeft}>
-          
+      <div className="mb-[30px] container px-4 flex flex-wrap">
+        {/* FrameLeft */}
+        <div className="w-full sm:w-1/2 lg:w-[34%] mb-6 relative">
           {product.gia_giam > 0 && (
-            <div className={styles.discountPro}>
+            <div className="absolute right-2 top-2 bg-[#f9141e] text-white w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] text-[12px] sm:text-[13px] text-center z-[2] rounded-full box-border pt-[10px] sm:pt-[15px] leading-[18px] sm:leading-[20px]">
               -
               <span id="discount-pro">
                 {roundDiscount(Math.round(((product.gia_san_pham - product.gia_giam) / product.gia_san_pham) * 100))}
@@ -355,14 +382,8 @@ export default function Detail({ params }) {
               <span>%</span>
             </div>
           )}
-          <div
-            style={{
-              position: "relative",
-              left: "0px",
-              textAlign: "center",
-              marginBottom: "20px",
-            }}
-          >
+
+          <div className="relative left-0 text-center mb-5">
             <img
               className={`${styles.imgResponsive} ${styles.bkProductImage}`}
               src={`http://localhost:5000/images/${product.hinh_anh}`}
@@ -371,91 +392,102 @@ export default function Detail({ params }) {
               height="481"
             />
           </div>
-          <div className={styles.thumbs}>
-            <div className={styles.listItem}>
-              {/* <div className={styles.item} style={{ maxWidth: "calc(100% / 5 -10px)" }}>
-                <img src="/image/item/picture1.jpg" alt="" />
-                <span>Ảnh thực tế</span>
-              </div> */}
 
-              <div className={styles.item} style={{ maxWidth: "calc(100% / 5 -10px)" }}>
-                <button
-                  style={{
-                    border: "none",
-                    background: "none",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => handleScroll("prodetails-tab1")}
-                >
-                  <img src="/image/item/picture3.jpg" alt="" />
+          <div className="text-center">
+            <div className="inline-block -mx-1.5">
+              <div
+                className="float-left mx-1.5 box-border text-center cursor-pointer inline-block max-w-[57px]"
+                style={{ maxWidth: "calc(100% / 5 -10px)" }}
+              >
+                <button className="border-none bg-none" onClick={() => handleScroll("prodetails-tab1")}>
+                  <img
+                    style={{
+                      borderRadius: "10px",
+                      background: "#fff",
+                      border: "1px solid #ddddddba",
+                      transition: "all 0.2s",
+                    }}
+                    src="/image/item/picture3.jpg"
+                    alt=""
+                  />
                 </button>
-                <span>Thông tin sản phẩm</span>
+                <span className="text-[11px] text-[#5a5555] inline-block mt-1.5 leading-[14px]">
+                  Thông tin sản phẩm
+                </span>
               </div>
-              <div className={styles.item} style={{ maxWidth: "calc(100% / 5 -10px)" }}>
-                <button
-                  style={{
-                    border: "none",
-                    background: "none",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => handleScroll("tab-2")}
-                >
-                  <img src="/image/item/picture5.jpg" alt="" />
+
+              <div
+                className="float-left mx-1.5 box-border text-center cursor-pointer inline-block max-w-[57px]"
+                style={{ maxWidth: "calc(100% / 5 -10px)" }}
+              >
+                <button className="border-none bg-none" onClick={() => handleScroll("prodetails-tab2")}>
+                  <img
+                    style={{
+                      borderRadius: "10px",
+                      background: "#fff",
+                      border: "1px solid #ddddddba",
+                      transition: "all 0.2s",
+                    }}
+                    src="/image/item/picture5.jpg"
+                    alt=""
+                  />
                 </button>
-                <span>Hướng dẫn chọn size</span>
+                <span className="text-[11px] text-[#5a5555] inline-block mt-1.5 leading-[14px]">
+                  Hướng dẫn chọn size
+                </span>
               </div>
             </div>
           </div>
         </div>
+
         {/* frame center */}
-        <div className={styles.frameCenter}>
+        <div className="w-full sm:w-1/2 lg:w-[42%] py-0 px-1 box-border">
           <div className={`${styles.nameTable} ${styles.mt20}`}>
-            <div className={styles.logoManufactory}>
+            <div className="text-center mb-[10px]">
               <img
                 className={styles.imageGiftCat}
                 src={`http://localhost:5000/images/${cate.hinh_anh}`}
                 alt={cate.thuong_hieu}
               />
             </div>
-            <div className={styles.productName}>
-              <h1 className={styles.bkProductName}>{product.ten}</h1>
+            <div className="relative">
+              <h1 className="text-[20px] leading-[33px] uppercase w-[calc(100%-72px)]">{product.ten}</h1>
             </div>
-            {/* <div className={`${styles.codeManu} ${styles.mt10} ${styles.cf}`}>
-              <span className={styles.rateHead}>
-                {[...Array(5)].map((_, index) => (
-                  <span key={index} className={`${styles.starOn} ${styles.star}`}>
-                    <i className="fa-solid fa-star"></i>
-                  </span>
-                ))}
-                <span className={styles.hide}>5</span>
-                <Link className={styles.rateCount} href="" title="Đánh giá sản phẩm này">
-                  (<span>1</span> đánh giá)
-                </Link>
-              </span>
-            </div> */}
             <span className={styles.codeProduct}>Mã sản phẩm: {product.ma_san_pham}</span>
-            <ul className={styles.infoMainFilter}>
+            <ul className="leading-[30px] normal-case mb-3">
               <li className={styles.cf}>
-                <div className={`${styles.liLeft} ${styles.fl}`}>Loại máy</div>
-                <span className={styles.fl}>:</span>
-                <div className={`${styles.liRight} ${styles.fl}`}>{product.loai_may}</div>
+                <div className={`${styles.liLeft} float-left`}>Loại máy</div>
+                <span className="float-left">:</span>
+                <div className={`${styles.liRight} float-left`}>{product.loai_may}</div>
               </li>
               <li className={styles.cf}>
-                <div className={`${styles.liLeft} ${styles.fl}`}>Đường kính</div>
-                <span className={styles.fl}>:</span>
-                <div className={`${styles.liRight} ${styles.fl}`}>{product.duong_kinh}</div>
+                <div className={`${styles.liLeft} float-left`}>Đường kính</div>
+                <span className="float-left">:</span>
+                <div className={`${styles.liRight} float-left`}>{product.duong_kinh}</div>
               </li>
               {product.so_luong > 0 ? (
-                <li className={`${styles.statusProduct} ${styles.statusProduct11}`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 -3.5 170 170">
+                <li className="text-uppercase font-bold relative pl-6 text-[#4caf50]">
+                  <svg
+                    className="fill-[#4caf50] w-5 h-5 absolute left-0 top-[5px]"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="40px"
+                    height="40px"
+                    viewBox="0 -3.5 170 170"
+                  >
                     <path d="M142.196 30.4125C142.586 30.0637 142.897 29.6356 143.109 29.1567C143.32 28.6778 143.427 28.1592 143.422 27.6357C143.417 27.1122 143.3 26.5959 143.079 26.1213C142.858 25.6467 142.538 25.2248 142.141 24.8838C141.722 24.5249 141.307 24.1678 140.895 23.8127C137.751 21.1093 134.5 18.3102 131.1 15.9225C105.123 -2.36044 78.1316 -2.4633 50.8803 7.23287C26.2068 16.0055 10.3619 33.5563 3.77909 59.3882C-3.56415 88.249 2.86618 113.71 22.9048 135.073C23.4261 135.625 23.9582 136.177 24.4895 136.704C35.2539 147.469 48.6614 154.115 59.2847 158.739C63.8445 160.731 87.2404 163.149 93.5707 162.206C131.19 156.588 155.946 135.37 164.569 99.8725C166.215 92.9194 167.035 85.7962 167.011 78.6508C166.974 71.1466 165.712 63.6988 163.275 56.6012C163.097 56.0703 162.805 55.5851 162.418 55.1805C162.031 54.7759 161.56 54.4618 161.037 54.2606C160.515 54.0595 159.954 53.9764 159.396 54.0171C158.838 54.0579 158.295 54.2216 157.808 54.4965L157.706 54.5547C156.931 54.9984 156.336 55.7005 156.027 56.5381C155.717 57.3757 155.712 58.2954 156.012 59.1364C158.212 65.2371 159.334 71.674 159.327 78.1592C159.251 85.9394 158.198 93.6792 156.192 101.197C150.248 122.8 136.038 138.545 112.75 149.315C89.0741 160.65 55.1215 149.19 46.0879 143.226C36.1031 136.4 27.3663 127.908 20.2596 118.121C9.11418 102.34 6.61369 79.6587 12.6028 58.9229C15.4055 49.3489 20.3036 40.5185 26.9421 33.0722C33.5806 25.6259 41.793 19.7503 50.9838 15.8714C74.8941 5.93474 98.8852 4.18192 122.285 19.0635C125.422 21.061 133.422 27.3424 137.465 30.5501C138.143 31.0882 138.99 31.3691 139.855 31.3432C140.721 31.3172 141.549 30.986 142.194 30.4082L142.196 30.4125Z"></path>
                     <path d="M74.6287 104.313C76.2312 102.79 77.1115 102.019 77.9173 101.177C103.753 74.1855 132.047 49.8851 160.508 25.7727C161.584 24.8619 162.685 23.7 163.958 23.3737C165.493 22.9815 167.996 23.4326 168.682 24.2661C169.133 24.8821 169.418 25.6035 169.509 26.3612C169.601 27.1189 169.496 27.8875 169.206 28.5932C168.537 30.3474 166.907 31.8498 165.429 33.1629C156.607 41.0019 147.538 48.5708 138.872 56.5716C120.756 73.3024 102.756 90.1576 84.8704 107.137C77.0334 114.561 74.0173 114.862 66.8059 106.929C62.0589 101.705 47.7328 84.0973 43.3455 78.5495C42.7256 77.6872 42.1735 76.7781 41.6941 75.8305C40.7045 74.0756 40.0576 72.1419 42.0246 70.7814C44.2158 69.2662 45.7707 70.8473 47.0696 72.4937C48.384 74.1607 49.5048 75.9916 50.9121 77.5713C55.2811 82.4737 69.908 99.1421 74.6287 104.313Z"></path>
                   </svg>
                   Sẵn hàng
                 </li>
               ) : (
-                <li style={{ color: "red" }} className={`${styles.statusProduct} ${styles.statusProduct11}`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 -3.5 170 170">
+                <li className="text-uppercase font-bold relative pl-6 text-[#ef0000]">
+                  <svg
+                    className="fill-[#ef0000] w-5 h-5 absolute left-0 top-[5px]"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="40px"
+                    height="40px"
+                    viewBox="0 -3.5 170 170"
+                  >
                     <path
                       fill="currentColor"
                       d="M142.196 30.4125C142.586 30.0637 142.897 29.6356 143.109 29.1567C143.32 28.6778 143.427 28.1592 143.422 27.6357C143.417 27.1122 143.3 26.5959 143.079 26.1213C142.858 25.6467 142.538 25.2248 142.141 24.8838C141.722 24.5249 141.307 24.1678 140.895 23.8127C137.751 21.1093 134.5 18.3102 131.1 15.9225C105.123 -2.36044 78.1316 -2.4633 50.8803 7.23287C26.2068 16.0055 10.3619 33.5563 3.77909 59.3882C-3.56415 88.249 2.86618 113.71 22.9048 135.073C23.4261 135.625 23.9582 136.177 24.4895 136.704C35.2539 147.469 48.6614 154.115 59.2847 158.739C63.8445 160.731 87.2404 163.149 93.5707 162.206C131.19 156.588 155.946 135.37 164.569 99.8725C166.215 92.9194 167.035 85.7962 167.011 78.6508C166.974 71.1466 165.712 63.6988 163.275 56.6012C163.097 56.0703 162.805 55.5851 162.418 55.1805C162.031 54.7759 161.56 54.4618 161.037 54.2606C160.515 54.0595 159.954 53.9764 159.396 54.0171C158.838 54.0579 158.295 54.2216 157.808 54.4965L157.706 54.5547C156.931 54.9984 156.336 55.7005 156.027 56.5381C155.717 57.3757 155.712 58.2954 156.012 59.1364C158.212 65.2371 159.334 71.674 159.327 78.1592C159.251 85.9394 158.198 93.6792 156.192 101.197C150.248 122.8 136.038 138.545 112.75 149.315C89.0741 160.65 55.1215 149.19 46.0879 143.226C36.1031 136.4 27.3663 127.908 20.2596 118.121C9.11418 102.34 6.61369 79.6587 12.6028 58.9229C15.4055 49.3489 20.3036 40.5185 26.9421 33.0722C33.5806 25.6259 41.793 19.7503 50.9838 15.8714C74.8941 5.93474 98.8852 4.18192 122.285 19.0635C125.422 21.061 133.422 27.3424 137.465 30.5501C138.143 31.0882 138.99 31.3691 139.855 31.3432C140.721 31.3172 141.549 30.986 142.194 30.4082L142.196 30.4125Z"
@@ -469,7 +501,7 @@ export default function Detail({ params }) {
                 </li>
               )}
             </ul>
-            <div className={styles.boxGift}>
+            <div className={`${styles.boxGift} md:w-[100%]`}>
               <div className={styles.titleGift}>Khuyến mãi</div>
               <div className={styles.gift}>
                 <p>
@@ -513,9 +545,8 @@ export default function Detail({ params }) {
                     </Link>
                     <span style={{ color: "#3498db" }}>, </span>
                     <Link href={`/components/components-thuonghieu/chitietthuonghieu/Edox`}>
-                      <span style={{ color: "#3498db" }}>Edox</span>
+                      <span style={{ color: "#3498db" }}>Edox.</span>
                     </Link>
-                    <span style={{ color: "#3498db" }}>,&nbsp;</span>
                   </strong>
                 </p>
 
@@ -558,7 +589,8 @@ export default function Detail({ params }) {
                     <span style={{ color: "#3498db" }}>, </span>
                     <Link href={`/components/components-thuonghieu/chitietthuonghieu/Seiko`}>
                       <span style={{ color: "#3498db" }}>Seiko,</span>
-                    </Link>&nbsp;
+                    </Link>
+                    &nbsp;
                     <Link href={`/components/components-thuonghieu/chitietthuonghieu/TISSOT`}>
                       <span style={{ color: "#3498db" }}>Đồng hồ Tissot</span>
                     </Link>
@@ -577,7 +609,7 @@ export default function Detail({ params }) {
                       <span style={{ color: "#3498db" }}>Fossil</span>
                     </Link>
                   </strong>
-                  <span>,</span>&nbsp;  
+                  <span>,</span>&nbsp;
                   <strong>
                     <Link href={`/components/components-thuonghieu/chitietthuonghieu/MichaelKors`}>
                       <span style={{ color: "#3498db" }}>&nbsp;Đồng hồ nữ Michael Kors</span>
@@ -592,69 +624,87 @@ export default function Detail({ params }) {
                 </p>
               </div>
             </div>
-            <div className={styles.clear}></div>
+            <div className="clear-both"></div>
           </div>
         </div>
-        {/* frame right */}
 
-        <div className={styles.frameRight}>
-          <div className={styles.boxPriceRight}>
-            <div className={styles.boxPriceRightTop}>
+        {/* frame right */}
+        <div className={`${styles.frameRight} w-full sm:w-[100%] md:w-[100%] lg:w-[22%] lg:ml-5 mb-[25px]`}>
+          <div className="bg-[#f1f1f1cc] mb-5 py-[25px]">
+            <div className="px-[15px] ">
               {product.gia_giam > 0 ? (
                 <>
-                  <div className={styles.priceOld}>
+                  <div className="line-through mb-[6px] text-sm uppercase font-bold text-[#4c4c4c]">
                     <span>Giá</span>
-                    <span className={styles.priceOld}> {product.gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                    <span className="line-through mb-[6px] text-sm uppercase font-bold text-[#4c4c4c]">
+                      {product.gia_san_pham.toLocaleString("vi-VN")}₫
+                    </span>
                   </div>
-                  <div className={styles.priceCurrent}>
-                    <div className={styles.titlePriceCurrent}>Giá KM:</div>
-                    <div className={styles.numberPriceCurrent}>
+                  <div className="text-lg text-[#e10c00] font-semibold">
+                    <div className=" text-sm uppercase font-bold text-[#4c4c4c]">Giá KM:</div>
+                    <div className="font-bold text-[#f30404] text-[25px]">
                       <input type="hidden" value="1" className={styles.bkProductQty} />
                       <span className={styles.bkProductPrice}>{product.gia_giam.toLocaleString("vi-VN")}₫</span>
                     </div>
-                    <div className={styles.noteVat}>(Giá trên đã bao gồm VAT)</div>
+                    <div className="text-[#5d5d5d] text-[13px] mb-5">(Giá trên đã bao gồm VAT)</div>
                   </div>
                 </>
               ) : (
-                <div className={styles.priceCurrent}>
-                  <div className={styles.titlePriceCurrent}>Giá:</div>
-                  <div className={styles.numberPriceCurrent}>
+                <div className="text-lg text-[#e10c00] font-semibold">
+                  <div className="mb-[6px] text-sm uppercase font-bold text-[#4c4c4c]">Giá:</div>
+                  <div className="font-bold text-[#f30404] text-[25px]">
                     <input type="hidden" value="1" className={styles.bkProductQty} />
                     <span className={styles.bkProductPrice}>{product.gia_san_pham.toLocaleString("vi-VN")}₫</span>
                   </div>
-                  <div className={styles.noteVat}>(Giá trên đã bao gồm VAT)</div>
+                  <div className="text-[#5d5d5d] text-[13px] mb-5">(Giá trên đã bao gồm VAT)</div>
                 </div>
               )}
-              <div className={styles.clear}></div>
+              <div className="clear-both"></div>
               <div className={styles.boxPriceRightBot}>
-                <div className={`${styles.btnBuy} ${styles.buyRow} ${styles.cls}`}>
+                <div className={`${styles.btnBuy}`}>
                   {/*tăng giảm số lượng*/}
                   <form onSubmit={handleAddToCart}>
-                    <div className={styles.numberInput}>
-                      <button type="button" className={styles.button} onClick={handleDecrease}>
+                    <div
+                      className={`${styles.numberInput} flex justify-center items-center border border-[#ccc] mb-2 px-4 `}
+                    >
+                      <button
+                        type="button"
+                        className="border-none bg-none p-2 cursor-pointer text-[20px] mx-[50px]"
+                        onClick={handleDecrease}
+                        onChange={handleInputChange}
+                      >
                         -
                       </button>
-                      <input className={styles.input} min="1" type="number" id="number" value={so_luong} readOnly />
-                      <button type="button" className={styles.button} onClick={handleIncrease}>
+                      <input min="1" type="number" id="number" value={so_luong} onChange={handleInputChange} />
+                      <button
+                        type="button"
+                        className="border-none bg-none p-2 cursor-pointer text-[20px] mx-[50px]"
+                        onClick={handleIncrease}
+                        onChange={handleInputChange}
+                      >
                         +
                       </button>
                     </div>
 
-                    <button type="submit" className={`${styles.btBuySp} ${styles.buySp} ${styles.submit}`}>
+                    <button
+                      type="submit"
+                      className={`${styles.submit} bg-[#796752] border-none uppercase no-underline font-[arial] text-[14px] rounded-[5px] text-white text-center py-[12px] w-full mb-[15px] transition-all duration-200 backface-hidden inline-block relative cursor-pointer`}
+                    >
                       Thêm vào giỏ hàng
                     </button>
 
-                    <button
+                    {/* <button
                       style={{ marginBottom: "20px" }}
                       type="button"
-                      className={`${styles.btBuySp} ${styles.buySp} ${styles.submit}`}
+                      className={`${styles.submit} border-none uppercase no-underline font-[arial] text-[14px] rounded-[5px] text-white text-center py-[12px] w-full mb-[10px] transition-all duration-200 backface-hidden inline-block relative cursor-pointer`}
                     >
                       Tư vấn miễn phí
-                    </button>
+                    </button> */}
                   </form>
                 </div>
-                <div className={styles.noteHotline}>
+                <div className="relative pl-9">
                   <svg
+                    className="w-[30px] h-[30px] absolute left-0 top-[5px] fill-black"
                     width="30px"
                     height="30px"
                     fill="#fff"
@@ -686,8 +736,8 @@ export default function Detail({ params }) {
                     </g>
                   </svg>
                   <div>Hoặc mua hàng qua điện thoại</div>
-                  <Link title="hotline mua hàng" href="#" className={styles.phoneCall}>
-                    024.3991.8668
+                  <Link title="hotline mua hàng" href="#" className="text-[16px] font-semibold block">
+                    084.5487.339
                   </Link>
                 </div>
               </div>
@@ -695,17 +745,16 @@ export default function Detail({ params }) {
           </div>
         </div>
       </div>
+
       {/*  end top-product-detail */}
-      <div className={styles.clear}></div>
-      <div className={`${styles.productPos0} ${styles.container}`}>
-        <div
-          className={`${styles.blockStrengths} ${styles.strengths0} ${styles.blocksStrengths} ${styles.blocks0} block`}
-        >
-          <div className={`${styles.strengthsRectangle4Block} ${styles.cls}`}>
-            <div className={`${styles.item}`}>
+      <div className="clear-both"></div>
+      <div className="container">
+        <div className={`${styles.blockStrengths}`}>
+          <div className={`${styles.strengthsRectangle4Block} flex flex-wrap `}>
+            <div className={`${styles.item} relative  w-1/4 lg:w-1/4 w-[50%] sm:w-[50%] md:w-[50%]`}>
               <div className={styles.itemInner}>
-                <div className={styles.item1}>
-                  <div className={styles.isvg}>
+                <div className={`${styles.item1} relative`}>
+                  <div className={`${styles.isvg} relative`}>
                     <Link href="#" title="100% hàng chính hãng">
                       <svg
                         x="0px"
@@ -734,10 +783,10 @@ export default function Detail({ params }) {
             </div>
             <div className={styles.itemBreak}></div>
             {/* <!--  --> */}
-            <div className={`${styles.item} ${styles.item2}`}>
+            <div className={`${styles.item} relative w-1/4 lg:w-1/4  w-[50%] sm:w-[50%] md:w-[50%]`}>
               <div className={styles.itemInner}>
-                <div className={styles.item1}>
-                  <div className={styles.isvg}>
+                <div className={`${styles.item1} relative`}>
+                  <div className={`${styles.isvg} relative`}>
                     <Link href="#" title="Miễn phí vận chuyển">
                       <svg x="0px" y="0px" viewBox="0 0 512 512" style={{ enableBackground: " new 0 0 512 512" }}>
                         <g>
@@ -783,10 +832,10 @@ export default function Detail({ params }) {
             </div>
             <div className={styles.itemBreak}></div>
             {/* <!--  --> */}
-            <div className={`${styles.item} ${styles.item3}`}>
+            <div className={`${styles.item} relative w-1/4 lg:w-1/4  w-[50%] sm:w-[50%] md:w-[50%]`}>
               <div className={styles.itemInner}>
-                <div className={styles.item1}>
-                  <div className={styles.isvg}>
+                <div className={`${styles.item1} relative`}>
+                  <div className={`${styles.isvg} relative`}>
                     <Link href="#" title="Bảo hành 5 năm">
                       <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="-65 0 511 511.99875" width="40px">
                         <path d="m60.5 207c0 5.523438-4.476562 10-10 10s-10-4.476562-10-10 4.476562-10 10-10 10 4.476562 10 10zm0 0"></path>
@@ -806,10 +855,10 @@ export default function Detail({ params }) {
             </div>
             <div className={styles.itemBreak}></div>
             {/* <!--  --> */}
-            <div className={`${styles.item} ${styles.item4}`}>
+            <div className={`${styles.item} relative w-1/4 lg:w-1/4  w-[50%] sm:w-[50%] md:w-[50%]`}>
               <div className={styles.itemInner}>
-                <div className={styles.item1}>
-                  <div className={styles.isvg}>
+                <div className={`${styles.item1} relative`}>
+                  <div className={`${styles.isvg} relative`}>
                     <Link href="#" title="Đổi hàng trong 7 ngày">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -865,54 +914,60 @@ export default function Detail({ params }) {
         </div>
       </div>
 
-      <div className={styles.clear}></div>
+      <div className="clear-both"></div>
 
       {/*   bottom-product-detail */}
-      <div className={`${styles.bottomDetail} ${styles.container}`}>
-        <div className={styles.bottomDetail1}>
-          <div className={styles.productTab}>
-            <ul className={styles.productTabsUl}>
+      <div className=" container lg:flex justify-between ">
+        <div className="w-full lg:pr-5 lg:w-[calc(73%-50px)] md:float-left mt-[30px]">
+          <div className="mb-[30px] ">
+            <ul className=" flex justify-between ">
               <li
-                className={`${styles.scrollNavItem} ${styles.fl} ${
-                  selectedTab === "Mô tả chi tiết" ? styles.active : ""
+                className={` relative w-[calc(100%/3)] pr-2 border-b-[3px] border-[#ebebeb]  ${
+                  selectedTab === "Mô tả chi tiết"
+                    ? "before:content-[''] before:absolute before:bottom-0 before:left-0 before:w-full before:h-[3px] before:bg-[#796752]"
+                    : ""
                 }`}
               >
                 <Link
-                  className={styles.scrollNavLink}
+                  className="text-black block p-[20px_0px_15px] text-center uppercase"
                   href="#"
                   onClick={(event) => handleTabClick("Mô tả chi tiết", event)}
                 >
-                  <span>Mô tả chi tiết</span>
+                  <span className="text-[14px] sm:text-[14px] md:text-[14px] lg:text-[18px]">Mô tả chi tiết</span>
                 </Link>
               </li>
               <li
-                className={`${styles.scrollNavItem} ${styles.fl} ${
-                  selectedTab === "Chế độ bảo hành" ? styles.active : ""
+                className={`relative w-[calc(100%/3)] pr-2 border-b-[3px] border-[#ebebeb]${
+                  selectedTab === "Chế độ bảo hành"
+                    ? "before:content-[''] before:absolute before:bottom-0 before:left-0 before:w-full before:h-[3px] before:bg-[#796752]"
+                    : ""
                 }`}
               >
                 <Link
-                  className={styles.scrollNavLink}
+                  className="text-black block p-[20px_0px_15px] text-center uppercase"
                   href="#"
                   onClick={(event) => handleTabClick("Chế độ bảo hành", event)}
                 >
-                  <span>Chế độ bảo hành</span>
+                  <span className="text-[14px] sm:text-[14px] md:text-[14px] lg:text-[18px]">Chế độ bảo hành</span>
                 </Link>
               </li>
               <li
-                className={`${styles.scrollNavItem} ${styles.fl} ${
-                  selectedTab === "Hướng dẫn sử dụng" ? styles.active : ""
+                className={`relative w-[calc(100%/3)] pr-2 border-b-[3px] border-[#ebebeb]${
+                  selectedTab === "Hướng dẫn sử dụng"
+                    ? "before:content-[''] before:absolute before:bottom-0 before:left-0 before:w-full before:h-[3px] before:bg-[#796752]"
+                    : ""
                 }`}
               >
                 <Link
-                  className={styles.scrollNavLink}
+                  className="text-black block p-[20px_0px_15px] text-center uppercase"
                   href="#"
                   onClick={(event) => handleTabClick("Hướng dẫn sử dụng", event)}
                 >
-                  <span>Hướng dẫn sử dụng</span>
+                  <span className="text-[14px] sm:text-[14px] md:text-[14px] lg:text-[18px]">Hướng dẫn sử dụng</span>
                 </Link>
               </li>
             </ul>
-            <div className={styles.clearfix}></div>
+            <div className="clear-both"></div>
           </div>
           {/* detail-product  */}
           {/* mô tả chi tiết  */}
@@ -921,7 +976,7 @@ export default function Detail({ params }) {
               id="prodetails-tab1"
               className={`${styles.prodetailsTab} ${selectedTab === "Mô tả chi tiết" ? "" : styles.hide}`}
             >
-              <div className={styles.topInfoDetail}>
+              <div className={`${styles.topInfoDetail} md:ml-2`}>
                 <div className={styles.titleDetailChar}>Thông tin sản phẩm</div>
                 <div className={`${styles.tableCondensed} ${styles.compareTable}`}>
                   <table className={styles.table} border="0" cellPadding="0" width="100%">
@@ -947,7 +1002,7 @@ export default function Detail({ params }) {
                         { label: "Màu dây:", value: product.mau_day },
                         { label: "Độ dài dây:", value: product.do_dai_day },
                         { label: "Bảo hành chính hãng:", value: "2 năm quốc tế" },
-                        { label: "Bảo hành Wristly:", value: "5 năm (đã bao gồm bảo hành quốc tế)" },
+                        { label: "Bảo hành Wristly:", value: "5 năm (bao gồm bảo hành quốc tế)" },
                       ]
                         .filter((item) => item.value)
                         .map((item, index) => (
@@ -2771,41 +2826,41 @@ export default function Detail({ params }) {
           </div>
         </div>
 
-        <div className={styles.bottomDetailR}>
-          <div className={styles.titleBox}>Chứng nhận chính hãng</div>
-          <div className={styles.contentBox}>
+        <div className="lg:mx-0 lg:float-right lg:w-auto md:w-full sm:w-full md:float-left mt-[30px] mb-[50px] ">
+          <div className="bg-[#796752] md: text-white p-[20px_10px_17px] text-[18px] uppercase text-center">
+            Chứng nhận chính hãng
+          </div>
+          <div className="p-[40px] bg-[#f1f1f1cc] text-center">
             <img
-              className={styles.lazy}
+              className=" lg:w-[200px] lg:h-[300px] md:w-[335px] md:h-[470px] sm:w-[335px] sm:h-[470px] "
               alt="Chứng nhận chính hãng"
-              width="335"
-              height="470"
               src="https://donghoduyanh.com/images/certification/large/tissot-author5_1576645138.jpg"
               srcSet="https://donghoduyanh.com/images/certification/large/tissot-author5_1576645138.jpg.webp"
             />
           </div>
         </div>
       </div>
-      <div className={styles.clear}></div>
+      <div className="clear-both"></div>
 
       {/* mô tả chi tiết */}
-      <div class={styles.clear}></div>
-      {/* mô tả chi tiết */}
+      <div class="clear-both"></div>
 
       {/* sản phẩm liên quan */}
-      <div
-        className={`${styles.relatedProducts} ${styles.favourite} ${styles.mt20} ${styles.textCenter} ${styles.container}`}
-      >
-        <div className={`${styles.blockTitle} ${styles.blockTitleBg}`}>
-          <span>Sản phẩm liên quan</span>
+      <div className={`${styles.relatedProducts} container`}>
+        <div className="mb-0 text-center leading-[25px]">
+          <span className="text-[22px] uppercase bg-[#796752] text-white py-[10px] px-[34px] pb-[8px]">
+            Sản phẩm liên quan
+          </span>
         </div>
-        <div className={`${styles.productsBlocksWrapper} ${styles.block} ${styles.slideshowHot} ${styles.cls}`}>
+        <div className={`${styles.productsBlocksWrapper}`}>
           <div
-            className={`${styles.slideshowHotList} ${styles.productsBlocksSlideshowHot} ${styles.owlCarousel} ${styles.owlTheme} ${styles.owlResponsive1170} ${styles.owlLoaded}`}
+            className={` ${styles.productsBlocksSlideshowHot} relative clear-both bg-white mb-5 h-[470[px] overflow-hidden ${styles.owlCarousel}  `}
             id="products-blocks-slideshow-hot-1"
           >
-            <div className={styles.owlStageOuter}>
-              <div className={styles.owlStage}>
+            <div className={`${styles.owlStageOuter} relative`}>
+              <div className={`${styles.owlStage} relative`}>
                 {/* item1 */}
+
                 <Slider ref={sliderRef} {...settings}>
                   {related.map((item) => {
                     const { _id, ten, ten_san_pham, ma_san_pham, loai, duong_kinh, hinh_anh, gia_san_pham, gia_giam } =
@@ -2813,13 +2868,13 @@ export default function Detail({ params }) {
 
                     return (
                       <div
-                        className={`${styles.owlItem} ${styles.active}`}
+                        className={`relative ${styles.active}`}
                         style={{ width: "226px", marginRight: "10px" }}
                         key={_id}
                       >
                         <div className={styles.item}>
                           <div className={styles.frameInner}>
-                            <figure className={styles.productImage}>
+                            <figure className="relative">
                               <Link href={`/components/product-detail/${_id}`} title={ten}>
                                 <img
                                   className={`${styles.owlLazy} ${styles.afterLazy}`}
@@ -2856,13 +2911,9 @@ export default function Detail({ params }) {
                               </span>
                             </div>
 
-                            {/* <div className={`${styles.itemSs} item-ss-20789`}>
-                              <span className={styles.iconSs}></span>
-                              <span className={styles.txtSs}>So sánh</span>
-                            </div> */}
                             <br />
                             <br />
-                            <div className={styles.clear}></div>
+                            <div className="clear-both"></div>
                           </div>
                         </div>
                       </div>
@@ -2888,150 +2939,150 @@ export default function Detail({ params }) {
       </div>
 
       {/* Đánh giá bình luận */}
-      <div className={`${styles.bottomDetail} ${styles.container}`}>
-        <div id="prodetail-tab30" className={styles.prodetailsTabCm}>
-          <div className={styles.tabContentRight}>
-            <div className={styles.commentsWebsite}>
-              <div className={styles.fullScreenMobile}></div>
-              <div className={`${styles.tabTitle} ${styles.cls}`}>
-                <div className={styles.catTitleMain} id="tab-title-label">
-                  <div className={styles.titleIcon}>
-                    <i className="icon-v1"></i>
-                  </div>
-                  <span>Đánh giá - Bình luận</span>
-                </div>
-              </div>
-              <div className={styles.comments}>
-                <div className={styles.tabLabel}>
-                  <span>
-                    Có <strong>0</strong> bình luận, đánh giá
-                  </span>
-                  <strong> về {product.ten}</strong>
-                </div>
-                {/* <!--  --> */}
+      <div className="container mx-auto px-4 py-4">
+        <div className="pb-1 text-[23px] relative">
+          <span>Đánh giá - Bình luận</span>
+        </div>
 
-                <div id="-info-comment" className={styles.cls}></div>
-                {/* <!--  --> */}
-                <form
-                  name="comment-add-form"
-                  id="comment-add-form"
-                  className={`${styles.formComment} ${styles.cls}`}
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    addComment();
-                  }}
-                >
-                  <label className={styles.labelForm}>Nhận xét và đánh giá</label>
-                  <div className={styles.ratingArea}>
-                    <span id="ratings" className={styles.cls}>
-                      {[1, 2, 3, 4, 5].map((value) => (
-                        <i
-                          key={value}
-                          className={`${styles.iconV1} ${value <= star ? styles.starOn : styles.starOff}`}
-                          onClick={() => setStar(value)}
-                          value={value}
-                        ></i>
-                      ))}
-                    </span>
-                    <span className={styles.ratingNote}>Nhấn vào đây để đánh giá</span>
-                  </div>
-                  <div className={styles.textarea}>
-                    <textarea
-                      name="content"
-                      id="cmt-content"
-                      placeholder="Viết bình luận của bạn..."
-                      value={commentText}
-                      onChange={(e) => setCommentText(e.target.value)}
-                    ></textarea>
-                  </div>
-
-                  <input type="submit" className={styles.btnCommentMb} value="Gửi bình luận" />
-
-                  {/* show bình luận  */}
-                  <div className={`${styles.commentSection} ${styles.container}`}>
-                    {Array.isArray(comments) && comments.length > 0 ? (
-                      <>
-                        {comments.map((comment, index) => (
-                          <div key={index} className={styles.comment}>
-                            <div className={styles.profile}>
-                              <img
-                                src={`http://localhost:5000/images/${comment.user?.hinh_anh}`}
-                                alt="Profile Picture"
-                              />
-                            </div>
-                            <div className={styles.content}>
-                              <div className={styles.header}>
-                                <span className={styles.name}>{comment.user?.ten_dang_nhap || "Ẩn danh"}</span>
-                                <span className={styles.date}>
-                                  {new Intl.DateTimeFormat("vi-VN", {
-                                    year: "numeric",
-                                    month: "2-digit",
-                                    day: "2-digit",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    second: "2-digit",
-                                  }).format(new Date(comment.ngay_binh_luan))}
-                                </span>
-                                <div className={styles.rating}>
-                                  {Array.from({ length: 5 }, (_, i) => (
-                                    <FontAwesomeIcon
-                                      key={i}
-                                      icon={i < comment.sao ? solidStar : regularStar}
-                                      className={styles.star}
-                                    />
-                                  ))}
-                                </div>
-                              </div>
-                              <p className={styles.text}>{comment.noi_dung}</p>
-                            </div>
-                          </div>
-                        ))}
-
-                        {/* Phân trang chỉ hiển thị khi có bình luận */}
-                        <div className={styles.pagination}>
-                          {/* Prev trang đầu */}
-                          <span
-                            title="First page"
-                            className={currentPage === 1 ? styles.disabled : styles["other-page"]}
-                            onClick={() => currentPage > 1 && handlePageChange(1)}
-                          >
-                            ‹‹
-                          </span>
-                          {/* Prev 1 trang */}
-                          <span
-                            className={currentPage === 1 ? styles.disabled : styles["other-page"]}
-                            onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                          >
-                            ‹
-                          </span>
-                          {/* Trang hiện tại */}
-                          <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1}`}</span>
-                          {/* Next 1 trang */}
-                          <span
-                            className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
-                            onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
-                          >
-                            ›
-                          </span>
-                          {/* Next tới trang cuối */}
-                          <span
-                            className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
-                            onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
-                          >
-                            ››
-                          </span>
-                        </div>
-                      </>
-                    ) : (
-                      <p style={{ color: "#999" }}>
-                        Mời bạn nhận xét về sản phẩm, hãy bình luận có văn hoá để tránh bị khoá tài khoản.
-                      </p>
-                    )}
-                  </div>
-                </form>
-              </div>
-            </div>
+        <div className="comments">
+          <div className="mb-[15px] mt-[11px]">
+            <span>
+              Có <strong>{comments.length}</strong> bình luận, đánh giá
+            </span>
+            <strong> về {product.ten}</strong>
           </div>
+          <form
+            name="comment-add-form"
+            id="comment-add-form"
+            className="formComment"
+            onSubmit={(e) => {
+              e.preventDefault();
+              addComment();
+            }}
+          >
+            <label className="labelForm block font-semibold text-sm mb-4">Nhận xét và đánh giá</label>
+
+            <div className={styles.ratingArea}>
+              <span id="ratings" className="cursor-pointer">
+                {[1, 2, 3, 4, 5].map((value) => (
+                  <i
+                    key={value}
+                    className={`${styles.iconV1} ${value <= star ? styles.starOn : styles.starOff}`}
+                    onClick={() => setStar(value)}
+                    value={value}
+                  ></i>
+                ))}
+              </span>
+              <span className={styles.ratingNote}>Nhấn vào đây để đánh giá</span>
+            </div>
+
+            <div className="textarea mb-4">
+              <textarea
+                name="content"
+                id="cmt-content"
+                placeholder="Viết bình luận của bạn..."
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                className="w-full p-4 border border-gray-300 rounded-md min-h-[123px] resize-none text-sm text-gray-700"
+              ></textarea>
+            </div>
+
+            <input
+              type="submit"
+              className="bg-[#796752] text-white px-6 py-2 rounded transition duration-300 hover:bg-[#5a4a3d] cursor-pointer"
+              value="Gửi bình luận"
+            />
+
+            <div className="mt-6 bg-white p-4 border-2 border-gray-200 rounded-lg">
+              {Array.isArray(comments) && comments.length > 0 ? (
+                <>
+                  {comments.map((comment, index) => (
+                    <div key={index} className="comment flex items-start py-4 border-b border-gray-200 mb-6">
+                      <div className="profile mr-4">
+                        <img
+                          src={`http://localhost:5000/images/${comment.user?.hinh_anh}`}
+                          alt="Profile Picture"
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <div className=" flex items-center text-sm text-gray-600 mb-2">
+                          <span className="name font-bold">{comment.user?.ten_dang_nhap || "Ẩn danh"}</span>
+                          <span className="date ml-4 text-gray-400">
+                            {new Intl.DateTimeFormat("vi-VN", {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              second: "2-digit",
+                            }).format(new Date(comment.ngay_binh_luan))}
+                          </span>
+                          <div className="rating flex ml-2 mb-[5px]">
+                            {Array.from({ length: 5 }, (_, i) => (
+                              <FontAwesomeIcon
+                                key={i}
+                                icon={i < comment.sao ? solidStar : regularStar}
+                                className="star text-yellow-400 text-sm ml-1"
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-700 mt-6 bg-white p-4 border-[1px] border-gray-200 rounded-lg">
+                          {comment.noi_dung}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+
+                  <div className="pagination flex justify-center items-center mt-6">
+                    <span
+                      title="First page"
+                      className={`cursor-pointer px-4 py-2 border rounded-md ${
+                        currentPage === 1 ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
+                      }`}
+                      onClick={() => currentPage > 1 && handlePageChange(1)}
+                    >
+                      ‹‹
+                    </span>
+
+                    <span
+                      className={`cursor-pointer px-4 py-2 border rounded-md ${
+                        currentPage === 1 ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
+                      }`}
+                      onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                    >
+                      ‹
+                    </span>
+
+                    <span className="currentPage px-4 py-2">{`Trang ${currentPage} / ${totalPages || 1}`}</span>
+
+                    <span
+                      className={`cursor-pointer px-4 py-2 border rounded-md ${
+                        currentPage === totalPages ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
+                      }`}
+                      onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                    >
+                      ›
+                    </span>
+
+                    <span
+                      className={`cursor-pointer px-4 py-2 border rounded-md ${
+                        currentPage === totalPages ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
+                      }`}
+                      onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
+                    >
+                      ››
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <p className="text-gray-500 text-sm">
+                  Mời bạn nhận xét về sản phẩm, hãy bình luận có văn hoá để tránh bị khoá tài khoản.
+                </p>
+              )}
+            </div>
+          </form>
         </div>
       </div>
     </>

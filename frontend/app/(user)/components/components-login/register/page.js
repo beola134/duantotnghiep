@@ -29,9 +29,7 @@ const schema = Yup.object().shape({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Mật khẩu không khớp")
     .required("Vui lòng xác nhận mật khẩu"),
-    otp: Yup.string()
-    .length(6, "OTP phải có 6 chữ số")
-    .required("Vui lòng nhập OTP"),
+  otp: Yup.string().length(6, "OTP phải có 6 chữ số").required("Vui lòng nhập OTP"),
 
   // image: Yup.mixed()
   //   .required("Vui lòng chọn file hình ảnh")
@@ -77,7 +75,6 @@ export default function Register() {
             mat_khau: values.password,
             xac_nhan_mat_khau: values.confirmPassword,
             otp: values.otp,
-            
           }),
         });
 
@@ -103,7 +100,6 @@ export default function Register() {
     },
   });
 
-  
   const handleLoginSuccess = async (credentialResponse) => {
     const token = credentialResponse.credential;
     try {
@@ -177,7 +173,7 @@ export default function Register() {
           title: "Gửi OTP thành công",
           text: "Mã OTP đã được gửi đến email của bạn.",
         });
-     // 3 minutes in seconds
+        // 3 minutes in seconds
       } else {
         formik.setFieldError("email", data.message || "Vui lòng thử lại.");
       }
@@ -270,9 +266,7 @@ export default function Register() {
           <div className={styles.otpContainer}>
             <input
               type="text"
-              className={`${styles.input} ${
-                formik.errors.otp && formik.touched.otp ? styles.inputError : ""
-              }`}
+              className={`${styles.input} ${formik.errors.otp && formik.touched.otp ? styles.inputError : ""}`}
               id="otp"
               name="otp"
               maxLength={6}
@@ -281,22 +275,18 @@ export default function Register() {
               placeholder="OTP"
               disabled={!isOtpSent}
             />
-          <button
-            type="button"
-            className={styles.sendOtpButton}
-            onClick={handleSendOtp}
-            disabled={loading || isOtpSent}
-          >
-            {isOtpSent
-              ? `OTP đã gửi (${formatTime(timeLeft)})`
-              : "Gửi OTP"}
-          </button>
-        </div>
-        {formik.errors.otp && formik.touched.otp && (
-          <p className={styles.error}>{formik.errors.otp}</p>
-        )}
+            <button
+              type="button"
+              className={styles.sendOtpButton}
+              onClick={handleSendOtp}
+              disabled={loading || isOtpSent}
+            >
+              {isOtpSent ? `OTP đã gửi (${formatTime(timeLeft)})` : "Gửi OTP"}
+            </button>
+          </div>
+          {formik.errors.otp && formik.touched.otp && <p className={styles.error}>{formik.errors.otp}</p>}
 
-        {formik.errors.general && <p className={styles.error}>{formik.errors.general}</p>}
+          {formik.errors.general && <p className={styles.error}>{formik.errors.general}</p>}
 
           {/* <input
             type="file"
@@ -310,11 +300,11 @@ export default function Register() {
           {formik.errors.image && <p className={styles.error}>{formik.errors.image}</p>} */}
 
           <input
-          type="submit"
-          className={styles.loginButton}
-          value={formik.isSubmitting ? "Đang đăng ký..." : "Đăng ký"}
-          disabled={formik.isSubmitting}
-        />
+            type="submit"
+            className={styles.loginButton}
+            value={formik.isSubmitting ? "Đang đăng ký..." : "Đăng ký"}
+            disabled={formik.isSubmitting}
+          />
         </form>
         {!isModalOpen && (
           <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>

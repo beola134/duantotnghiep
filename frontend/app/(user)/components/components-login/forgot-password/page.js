@@ -126,7 +126,7 @@ export default function ForgotPassword() {
 
   return (
     <div className={styles.mainContainer}>
-      <div className={styles.container}>
+      <div className={`${styles.container}`}>
         <div className={styles.heading}>Quên mật khẩu</div>
         <form onSubmit={formik.handleSubmit} className={styles.form}>
           <input

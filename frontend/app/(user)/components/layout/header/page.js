@@ -417,7 +417,6 @@ const locttCL = [
 export default function Header() {
   const cx = classNames.bind(styles);
   const [category, setCategory] = useState([]);
-  const [selectedMenu, setSelectedMenu] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [inputData, setInputData] = useState("");
@@ -477,18 +476,6 @@ export default function Header() {
       }
     };
     fetchData();
-  }, []);
-
-  const handleMenuClick = (menu) => {
-    setSelectedMenu(menu);
-    localStorage.setItem("selectedMenu", menu);
-  };
-
-  useEffect(() => {
-    const savedMenu = localStorage.getItem("selectedMenu");
-    if (savedMenu) {
-      setSelectedMenu(savedMenu);
-    }
   }, []);
 
   const dispatch = useDispatch();
@@ -801,6 +788,7 @@ export default function Header() {
 
       <nav class={cx("navbar", " lg:block  hidden")}>
         <ul class={cx("nav-list")}>
+
           <li
             className={cx("nav-list-li", {
               active: selectedMenu === "HOME",
@@ -814,16 +802,8 @@ export default function Header() {
               <i className={cx("nav-list-li-i", "fas", "fa-home")}></i>
             </Link>
           </li>
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "THƯƠNG HIỆU",
-            })}
-          >
-            <Link
-              href={"/components/components-thuonghieu/thuonghieu"}
-              className={cx("nav-list-li-a")}
-              onClick={() => handleMenuClick("THƯƠNG HIỆU")}
-            >
+          <li className={cx("nav-list-li")}>
+            <Link href={"/components/components-thuonghieu/thuonghieu"} className={cx("nav-list-li-a")}>
               THƯƠNG HIỆU
             </Link>
             <ul className={cx("dropdown-menu")}>
@@ -843,16 +823,8 @@ export default function Header() {
               ))}
             </ul>
           </li>
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "ĐỒNG HỒ NAM",
-            })}
-          >
-            <Link
-              href="/components/components-thuonghieu/donghonam"
-              className={cx("nav-list-li-a")}
-              onClick={() => handleMenuClick("ĐỒNG HỒ NAM")}
-            >
+          <li className={cx("nav-list-li")}>
+            <Link href="/components/components-thuonghieu/donghonam" className={cx("nav-list-li-a")}>
               ĐỒNG HỒ NAM
             </Link>
             <ul className={cx("dropdown-menu-dhn")}>
@@ -958,16 +930,8 @@ export default function Header() {
           </li>
 
           {/*Đồng hồ nữ */}
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "ĐỒNG HỒ NỮ",
-            })}
-          >
-            <Link
-              href="/components/components-thuonghieu/donghonu"
-              className={cx("nav-list-li-a")}
-              onClick={() => handleMenuClick("ĐỒNG HỒ NỮ")}
-            >
+          <li className={cx("nav-list-li")}>
+            <Link href="/components/components-thuonghieu/donghonu" className={cx("nav-list-li-a")}>
               ĐỒNG HỒ NỮ
             </Link>
             <ul className={cx("dropdown-menu-dhnu")}>
@@ -1064,16 +1028,8 @@ export default function Header() {
           </li>
 
           {/*Đồng hồ đôi*/}
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "ĐỒNG HỒ ĐÔI",
-            })}
-          >
-            <Link
-              href="/components/components-thuonghieu/donghodoi"
-              className={cx("nav-list-li-a")}
-              onClick={() => handleMenuClick("ĐỒNG HỒ ĐÔI")}
-            >
+          <li className={cx("nav-list-li")}>
+            <Link href="/components/components-thuonghieu/donghodoi" className={cx("nav-list-li-a")}>
               ĐỒNG HỒ ĐÔI
             </Link>
             <ul className={cx("dropdown-menu-dhd")}>
@@ -1170,16 +1126,8 @@ export default function Header() {
           </li>
 
           {/*Đồng hồ treo tường*/}
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "ĐỒNG HỒ TREO TƯỜNG",
-            })}
-          >
-            <Link
-              href="/components/components-danhmuc/donghotreotuong"
-              className={cx("nav-list-li-a")}
-              onClick={() => handleMenuClick("ĐỒNG HỒ TREO TƯỜNG")}
-            >
+          <li className={cx("nav-list-li")}>
+            <Link href="/components/components-danhmuc/donghotreotuong" className={cx("nav-list-li-a")}>
               ĐỒNG HỒ TREO TƯỜNG
             </Link>
             <ul className={cx("dropdown-menu-dhtt")}>
@@ -1240,29 +1188,13 @@ export default function Header() {
             </ul>
           </li>
 
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "DÂY ĐỒNG HỒ",
-            })}
-          >
-            <Link
-              href="/components/components-danhmuc/daydongho"
-              className={cx("nav-list-li-a")}
-              onClick={() => handleMenuClick("DÂY ĐỒNG HỒ")}
-            >
+          <li className={cx("nav-list-li")}>
+            <Link href="/components/components-danhmuc/daydongho" className={cx("nav-list-li-a")}>
               DÂY ĐỒNG HỒ
             </Link>
           </li>
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "SẢN PHẨM KHÁC",
-            })}
-          >
-            <Link
-              href="/components/components-danhmuc/sanphamkhac"
-              className={cx("nav-list-li-a")}
-              onClick={() => handleMenuClick("SẢN PHẨM KHÁC")}
-            >
+          <li className={cx("nav-list-li")}>
+            <Link href="/components/components-danhmuc/sanphamkhac" className={cx("nav-list-li-a")}>
               SẢN PHẨM KHÁC
             </Link>
             <ul className={cx("dropdown-menu-doc")}>
@@ -1324,16 +1256,8 @@ export default function Header() {
               </li>
             </ul>
           </li>
-          <li
-            className={cx("nav-list-li", {
-              active: selectedMenu === "SỬA ĐỒNG HỒ",
-            })}
-          >
-            <Link
-              href="/components/suadongho"
-              className={cx("nav-list-li-a")}
-              onClick={() => handleMenuClick("SỬA ĐỒNG HỒ")}
-            >
+          <li className={cx("nav-list-li")}>
+            <Link href="/components/suadongho" className={cx("nav-list-li-a")}>
               SỬA ĐỒNG HỒ
             </Link>
           </li>
