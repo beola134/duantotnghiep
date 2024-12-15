@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./daydongho.module.css";
 import Loading from "../../loading/page";
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 export default function Daydongho() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -118,6 +120,42 @@ export default function Daydongho() {
                     className={`${styles["summary-content-filter"]} ${styles.description}`}
                   >
                     <div className={styles["banner-cat-manuf"]}>
+                      <div
+                          className={cx(
+                            
+                            "flex",
+                            "items-center uppercase mb-5 "
+                          )}
+                        >
+                          <span className={cx( "text-sm")}>
+                            <Link
+                              href="/"
+                              className={cx(
+                                
+                                " text-gray-800",
+                                "hover:text-[#796752]"
+                              )}
+                            >
+                              Trang chủ
+                            </Link>
+                          </span>
+                          <span className={cx("separator", "mx-3", "text-stone-400")}>
+                            {" "}
+                            &gt;{" "}
+                          </span>
+                          
+                          
+                          <span className={cx( "text-sm", "text-red-500")}>
+                            <Link
+                              href="/components/components-danhmuc/daydongho"
+                              className={cx("link", "text-red-500")}
+                            >
+                              
+                              Dây đồng hồ
+                            </Link>
+                          </span>
+                        </div>
+                    
                       <img src="/image/item/banner-daydongho.jpg" alt="" />
                     </div>
                   </div>

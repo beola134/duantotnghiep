@@ -3,6 +3,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./thuonghieu.module.css";
 import Loading from "../../loading/page";
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
+
 export default function Thuonghieu() {
   const [cates, setCates] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,8 +49,19 @@ export default function Thuonghieu() {
   return (
     <>
       <div className={styles.container}>
+        <div className={cx('breadcrumb', 'flex', 'items-center uppercase mb-5 mt-10')}>
+                      <span className={cx('item', 'text-sm')}>
+                        <Link href="/" className={cx('link', 'text-gray-800', 'hover:text-[#796752]')}>Trang chủ</Link>
+                      </span>
+                      <span className={cx('separator',  'mx-3', 'text-stone-400')}> &gt; </span>
+                      
+                      <span className={cx('item', 'text-sm', 'text-red-500')}>
+                        <Link href="/components/components-thuonghieu/thuonghieu" className={cx('link', 'text-red-500')}>{" "}
+                              Thương hiệu</Link>
+                      </span>
+                    </div>
         <br />
-        <h3>THƯƠNG HIỆU NỔI BẬT</h3>
+        <h3>THƯƠNG HIỆU</h3>
         <br />
         <div className={styles.slider}>
           <button onClick={prevSlide} className={styles.arrowLeft}>

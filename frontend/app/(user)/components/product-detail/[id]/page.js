@@ -11,6 +11,8 @@ import { jwtDecode } from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 
 export default function Detail({ params }) {
   const [user, setUser] = useState(null);
@@ -331,7 +333,19 @@ export default function Detail({ params }) {
     <>
       {/* FrameLeft */}
       <div className={`${styles.topProductDetail} ${styles.container}  ${styles.cls}`}>
+        <div className={cx('breadcrumb', 'flex', 'items-center uppercase mb-5 mt-10')}>
+              <span className={cx('item', 'text-sm')}>
+                <Link href="/" className={cx('link', 'text-gray-800', 'hover:text-[#796752]')}>Trang chủ</Link>
+              </span>
+              
+              <span className={cx('separator',  'mx-3', 'text-stone-400')}> &gt; </span>
+              <span className={cx('item', 'text-sm', 'text-red-500')}>
+                <Link href={`/components/product-detail/${product._id}`} className={cx('link', 'text-red-500')}>{" "}
+                    Chi tiết {product.ten_san_pham} </Link>
+              </span>
+            </div>
         <div className={styles.frameLeft}>
+          
           {product.gia_giam > 0 && (
             <div className={styles.discountPro}>
               -

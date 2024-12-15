@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./chitietdanhmuc.module.css";
 import Loading from "../../../loading/page";
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 
 export default function DanhMuc({ params }) {
   const { id: thuong_hieu } = params;
@@ -148,6 +150,22 @@ export default function DanhMuc({ params }) {
                 <div className={styles.clear}></div>
                 <div className={styles["all-summary"]}>
                   <div className={styles["summary-content-filter"]} style={{ description: true }}>
+                    <div className={cx('breadcrumb', 'flex', 'items-center uppercase mb-5')}>
+                      <span className={cx('item', 'text-sm')}>
+                        <Link href="/" className={cx('link', 'text-gray-800', 'hover:text-[#796752]')}>Trang chủ</Link>
+                      </span>
+                      <span className={cx('separator',  'mx-3', 'text-stone-400')}> &gt; </span>
+                      <span className={cx('item', 'text-sm')}>
+                        <Link href="/components/donghoall" className={cx('link', 'text-gray-800', 'hover:text-[#796752]')}>Đồng hồ</Link>
+                      </span>
+                      <span className={cx('separator',  'mx-3', 'text-stone-400')}> &gt; </span>
+                      <span className={cx('item', 'text-sm', 'text-red-500')}>
+                        <Link href="/components/components-thuonghieu/donghonam" className={cx('link', 'text-red-500')}>{" "}
+                             Đồng hồ {categoryName === "Đồng hồ "
+                                ? categoryName
+                                : `${categoryName}`}</Link>
+                      </span>
+                    </div>
                     <p>
                       Đến với thế giới <strong>đồng hồ nam, nữ</strong> của Wristly, bạn sẽ được sở hữu hàng nghìn sản
                       phẩm chất lượng, thiết kế bắt mắt đến từ các thương hiệu &nbsp;
@@ -1580,18 +1598,7 @@ export default function DanhMuc({ params }) {
                 </div>
                 <div className={styles.clear}></div>
 
-                <div className={styles.evaluateCat}>
-                  <div className={`${styles.ratingArea} ${styles.cls}`}>
-                    <span id="ratings">
-                      <i className={` ${styles.starOn}`} id="rate_1" value="1"></i>
-                      <i className={` ${styles.starOn}`} id="rate_2" value="2"></i>
-                      <i className={` ${styles.starOn}`} id="rate_3" value="3"></i>
-                      <i className={` ${styles.starOff}`} id="rate_4" value="4"></i>
-                      <i className={` ${styles.starOff}`} id="rate_5" value="5"></i>
-                    </span>
-                    <span className={styles.ratingNote}>Nhấn vào đây để đánh giá</span>
-                  </div>
-                </div>
+                
                 <div className={styles.clear}></div>
                 <div className={`${styles.aq_relates} ${styles.content_li}`}></div>
               </div>
