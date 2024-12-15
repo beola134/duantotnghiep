@@ -1894,14 +1894,14 @@ export default function Donghonu() {
                       {/*Kiểu dáng */}
                       <div className={`${styles["field-item"]} `}>
                         <div
-                          className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
-                          onClick={toggleDropdown}>
+                        className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
+                        onClick={toggleDropdown}>
                           Kiểu dáng
                         </div>{" "}
                         {isDropdownVisible && (
                           <div
                             id="kieu-dang"
-                            className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px]  `}>
+                            className={`${styles["field-label"]} ${styles["filters-in-field"]} w-full phone-sm:w-full sm:w-full phone-sm:text-[12px] sm:text-[14px]`}>
                             <span
                               className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
                               onClick={toggleDropdown}>
@@ -1909,7 +1909,7 @@ export default function Donghonu() {
                             </span>
 
                             <div
-                              className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px] border-t-0 border-r border-b border-l"} ${
+                      className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px]  w-40 border-t-0 border-r border-b border-l"} ${
                                 styles.descript
                               } ${styles.cls}`}>
                               {/* item1 */}
