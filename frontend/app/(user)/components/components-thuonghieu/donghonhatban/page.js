@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "../donghonu/donghonu.module.css";
 import Loading from "../../loading/page";
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 
 export default function Donghonu() {
   // State quản lý dữ liệu và trạng thái chung
@@ -154,6 +156,19 @@ export default function Donghonu() {
                   <div
                     className={styles["summary-content-filter"]}
                     style={{ description: true }}>
+                     <div className={cx('breadcrumb', 'flex', 'items-center uppercase mb-5')}>
+                      <span className={cx('item', 'text-sm')}>
+                        <a href="/" className={cx('link', 'text-gray-800', 'hover:text-[#796752]')}>Trang chủ</a>
+                      </span>
+                      
+                      <span className={cx('separator',  'mx-3', 'text-stone-400')}> &gt; </span>
+                      <span className={cx('item', 'text-sm', 'text-red-500')}>
+                        <a href="/components/components-thuonghieu/donghonhatban" className={cx('link', 'text-red-500')}>{" "}
+                              {categoryName === "Đồng hồ nam"
+                                ? categoryName
+                                : `${categoryName}`}</a>
+                      </span>
+                    </div>
                     <p>
                       Bước lên chuyến tàu thời gian{" "}
                       <strong>đồng hồ Nhật Bản</strong>, Duy Anh Watch sẽ dẫn
@@ -1770,7 +1785,7 @@ export default function Donghonu() {
                           className={styles["cat-title-main"]}
                           id="cat-dong-ho">
                           <div className={styles["title-icon"]}>
-                            <h1>Đồng hồ</h1>
+                            <h1>{categoryName}</h1>
                           </div>
                         </div>
                         <div className={styles.clear}></div>
@@ -1947,37 +1962,7 @@ export default function Donghonu() {
                 </div>
                 <div className={styles.clear}></div>
 
-                {/* đánh giá start */}
-                <div className={styles.evaluateCat}>
-                  <div className={`${styles.ratingArea} ${styles.cls}`}>
-                    <span id="ratings">
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_1"
-                        value="1"></i>
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_2"
-                        value="2"></i>
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_3"
-                        value="3"></i>
-                      <i
-                        className={` ${styles.starOff}`}
-                        id="rate_4"
-                        value="4"></i>
-                      <i
-                        className={` ${styles.starOff}`}
-                        id="rate_5"
-                        value="5"></i>
-                    </span>
-                    <span className={styles.ratingNote}>
-                      Nhấn vào đây để đánh giá
-                    </span>
-                  </div>
-                </div>
-
+                
                 {/* mô tả*/}
                 <div
                   className={`${styles.summaryContentCat} ${styles.description} ${styles.heightAuto}`}>

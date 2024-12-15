@@ -1,5 +1,8 @@
 import Link from "next/link";
 import styles from "../sanphamkhac/sanphamkhac.module.css";
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
+
 export default function Sanphamkhac() {
   return (
     <>
@@ -9,6 +12,41 @@ export default function Sanphamkhac() {
             <div className={styles["main-column"]}>
               <div className={styles["center-1col"]}>
                 <div className={styles["menu-home"]}>
+                  <div
+                          className={cx(
+                            
+                            "flex",
+                            "items-center uppercase mb-5 mt-5"
+                          )}
+                        >
+                          <span className={cx( "text-sm")}>
+                            <Link
+                              href="/"
+                              className={cx(
+                                
+                                " text-gray-800",
+                                "hover:text-[#796752]"
+                              )}
+                            >
+                              Trang chủ
+                            </Link>
+                          </span>
+                          <span className={cx("separator", "mx-3", "text-stone-400")}>
+                            {" "}
+                            &gt;{" "}
+                          </span>
+                          
+                          
+                          <span className={cx( "text-sm", "text-red-500")}>
+                            <Link
+                              href="/components/components-danhmuc/sanphamkhac"
+                              className={cx("link", "text-red-500")}
+                            >
+                              SẢn phẩm khác
+                              
+                            </Link>
+                          </span>
+                        </div>
                   <h1 className={styles["title-page-menu"]}>
                     <span>Sản phẩm khác</span>
                   </h1>

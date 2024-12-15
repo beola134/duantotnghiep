@@ -365,8 +365,7 @@ export default function DonHang() {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              id,
-              trang_thai: newStatus,
+              trang_thai: newStatus
             }),
           });
 
@@ -378,8 +377,10 @@ export default function DonHang() {
           const responseData = await response.json();
 
           // Cập nhật trạng thái trong danh sách hiển thị
-          setDonhang((prevDonhang) =>
-            prevDonhang.map((don) => (don.id === id ? { ...don, trang_thai: newStatus } : don))
+          setDonhang((prevDonhangs) =>
+            prevDonhangs.map((don) =>
+              don._id === id ? { ...don, trang_thai: newStatus } : don
+            )
           );
 
           // Hiển thị thông báo thành công
@@ -508,7 +509,7 @@ export default function DonHang() {
                               {statusOptions
                                 .filter((status, index) => {
                                   const currentIndex = statusOptions.indexOf(item.trang_thai);
-                                  return index >= currentIndex; // Chỉ hiển thị các trạng thái phía sau (bao gồm trạng thái hiện tại)
+                                  return index >= currentIndex; 
                                 })
                                 .map((status) => (
                                   <option

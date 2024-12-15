@@ -1,4 +1,4 @@
-
+/* 
 
 .section-banner {
   background-image: url("/image/item/background_banner.jpg"); 
@@ -9,21 +9,19 @@
   color: #ffffff;
   height: 200px; 
   position: relative; 
-  margin-top: -75px;
+  margin-top: -5px;
   margin-bottom: -20px; 
-}
+} */
 
 
 .typewriter .typewriter1 {
   padding: 10px 10px;
   font-weight: bold;
   display: inline-block;
-  font-size: 22px;
   overflow: hidden;
   white-space: nowrap;
   animation: typing 4s steps(40, end) 3s infinite, blink-caret 0.75s step-end 4;
   color: #fdfdfd;
-  margin-top: 40px;
 }
 
 
@@ -49,8 +47,26 @@
     border-color: rgb(255, 255, 255);
   }
 }
+.icon-image1 {
+  background-size: cover;
+  animation: zoomReverse 4s infinite; 
+}
+
+@keyframes zoomReverse {
+  0% {
+    transform: scale(1) rotateY(0deg); 
+  }
+  50% {
+    transform: scale(1.5) rotateY(180deg); 
+  }
+  100% {
+    transform: scale(1) rotateY(360deg); 
+  }
+}
 
 
+
+/* 
 .icon-section {
   position: relative;
   top: -60px; 
@@ -100,22 +116,6 @@
 }
 
 
-.icon-image1 {
-  background-size: cover;
-  animation: zoomReverse 4s infinite; 
-}
-
-@keyframes zoomReverse {
-  0% {
-    transform: scale(1) rotateY(0deg); 
-  }
-  50% {
-    transform: scale(1.5) rotateY(180deg); 
-  }
-  100% {
-    transform: scale(1) rotateY(360deg); 
-  }
-}
 
 .section-img {
   display: flex;
@@ -166,4 +166,4 @@
   height: auto; 
   padding: 10px;
   border: none;
-}
+} */
