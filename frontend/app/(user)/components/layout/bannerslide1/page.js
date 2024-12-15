@@ -37,7 +37,7 @@ export default function BannerSlide1() {
       return () => clearInterval(interval);
     }, [slider]); 
   return (
-    <div className={cx("slider-collection")}>
+    <div className={cx("slider-collection max-w-full overflow-hidden ")}>
       <Slider {...settings}>
         {cates.map((cate, index) => (
           <div className={cx("item")} key={index}>

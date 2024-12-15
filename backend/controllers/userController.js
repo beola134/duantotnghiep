@@ -6,6 +6,8 @@ const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const { Op } = require("sequelize"); // Import Op từ Sequelize
 require("dotenv").config();
+const otpStore = require('./otpStore.js'); // Import the OTP store
+const { error } = require("console");
 
 
 // API lấy thông tin người dùng theo id
@@ -208,113 +210,113 @@ exports.login = async (req, res) => {
   }
 };
 // Đăng ký tài khoản
-exports.register = async (req, res) => {
-  try {
-    const { ten_dang_nhap, mat_khau, nhap_lai_mat_khau, email } = req.body;
-    const hinh_anh = "219986.png";
-    const quyen = req.body.quyen || "2";
-    // Kiểm tra mật khẩu và nhập lại mật khẩu có khớp không
-    if (mat_khau !== nhap_lai_mat_khau) {
-      return res.status(400).json({
-        message: "Mật khẩu và nhập lại mật khẩu không khớp",
-      });
-    }
-    // Kiểm tra email đã tồn tại
-    const emailExist = await Users.findOne({ where: { email } });
-    if (emailExist) {
-      return res.status(400).json({
-        message: "Email đã tồn tại",
-      });
-    }
-    // Tạo mật khẩu bảo mật
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(mat_khau, salt);
-    // Tạo mã OTP ngẫu nhiên
-    const otp = crypto.randomInt(100000, 999999);
-    // Tạo thời gian hết hạn cho mã OTP (3 phút)
-    const otpExpires = Date.now() + 3 * 60 * 1000; // 
-    const user = await Users.create({
-      ten_dang_nhap,
-      mat_khau: hashPassword,
-      email,
-      hinh_anh,
-      quyen,
-      otp,
-      otpExpires,
-    });
+// exports.register = async (req, res) => {
+//   try {
+//     const { ten_dang_nhap, mat_khau, nhap_lai_mat_khau, email } = req.body;
+//     const hinh_anh = "219986.png";
+//     const quyen = req.body.quyen || "2";
+//     // Kiểm tra mật khẩu và nhập lại mật khẩu có khớp không
+//     if (mat_khau !== nhap_lai_mat_khau) {
+//       return res.status(400).json({
+//         message: "Mật khẩu và nhập lại mật khẩu không khớp",
+//       });
+//     }
+//     // Kiểm tra email đã tồn tại
+//     const emailExist = await Users.findOne({ where: { email } });
+//     if (emailExist) {
+//       return res.status(400).json({
+//         message: "Email đã tồn tại",
+//       });
+//     }
+//     // Tạo mật khẩu bảo mật
+//     const salt = await bcrypt.genSalt(10);
+//     const hashPassword = await bcrypt.hash(mat_khau, salt);
+//     // Tạo mã OTP ngẫu nhiên
+//     const otp = crypto.randomInt(100000, 999999);
+//     // Tạo thời gian hết hạn cho mã OTP (3 phút)
+//     const otpExpires = Date.now() + 3 * 60 * 1000; // 
+//     const user = await Users.create({
+//       ten_dang_nhap,
+//       mat_khau: hashPassword,
+//       email,
+//       hinh_anh,
+//       quyen,
+//       otp,
+//       otpExpires,
+//     });
 
-    // Cấu hình gửi email OTP
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "watchwristly@gmail.com",
-        pass: "nebb uwva xdvb rvih",
-      },
-    });
+//     // Cấu hình gửi email OTP
+//     const transporter = nodemailer.createTransport({
+//       service: "gmail",
+//       auth: {
+//         user: "watchwristly@gmail.com",
+//         pass: "nebb uwva xdvb rvih",
+//       },
+//     });
 
-    const mailOptions = {
-      from: "watchwristly@gmail.com",
-      to: email,
-      subject: "Mã OTP xác thực tài khoản",
-      html: `
-        <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
-          <div style="text-align: center; padding: 20px 0; background-color: #000;">
-               <h1 style="color: white;">ĐỒNG HỒ WRISTLY</h1>
-          </div>
-          <div style="padding: 20px; text-align: center; background-color: #f9f9f9;">
-            <h2>Mã đăng ký của bạn</h2>
-            <p style="font-size: 2em; font-weight: bold; margin: 20px 0;">${otp}</p>
-            <p style="color: #555;">Mã này sẽ hết hạn trong 3 phút</p>
-          </div>
-          <div style="font-size: 0.875em; text-align: center; padding: 20px; color: #888;">
-            <p>© WRISTLY </p>
-            <p>Công viên phần mềm quang trung</p>
-          </div>
-        </div>
-      `,
-    };
-    await transporter.sendMail(mailOptions);
-    res.status(200).json({
-      message: "Đăng ký tài khoản thành công. Vui lòng kiểm tra email để nhận mã OTP.",
-    });
+//     const mailOptions = {
+//       from: "watchwristly@gmail.com",
+//       to: email,
+//       subject: "Mã OTP xác thực tài khoản",
+//       html: `
+//         <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+//           <div style="text-align: center; padding: 20px 0; background-color: #000;">
+//                <h1 style="color: white;">ĐỒNG HỒ WRISTLY</h1>
+//           </div>
+//           <div style="padding: 20px; text-align: center; background-color: #f9f9f9;">
+//             <h2>Mã đăng ký của bạn</h2>
+//             <p style="font-size: 2em; font-weight: bold; margin: 20px 0;">${otp}</p>
+//             <p style="color: #555;">Mã này sẽ hết hạn trong 3 phút</p>
+//           </div>
+//           <div style="font-size: 0.875em; text-align: center; padding: 20px; color: #888;">
+//             <p>© WRISTLY </p>
+//             <p>Công viên phần mềm quang trung</p>
+//           </div>
+//         </div>
+//       `,
+//     };
+//     await transporter.sendMail(mailOptions);
+//     res.status(200).json({
+//       message: "Đăng ký tài khoản thành công. Vui lòng kiểm tra email để nhận mã OTP.",
+//     });
 
-  } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
-  }
-};
+//   } catch (error) {
+//     res.status(500).json({
+//       message: error.message,
+//     });
+//   }
+// };
 
-//kiểm tra mã otp và xác thực tài khoản
-exports.verifyOtp = async (req, res) => {
-  try {
-    const { otp } = req.body;
-    // Tìm người dùng với mã OTP
-    const user = await Users.findOne({ where: { otp } });
-    if (!user) {
-      return res.status(400).json({
-        message: "Mã OTP không đúng",
-      });
-    }
-    // Kiểm tra thời gian hết hạn của OTP
-    if (user.otpExpires < Date.now()) {
-      return res.status(400).json({
-        message: "Mã OTP đã hết hạn",
-      });
-    }
-    // Xác thực thành công, xóa mã OTP sau khi xác thực
-    user.otp = null;
-    user.otpExpires = '0000-00-00 00:00:00';
-    await user.save();
-    res.status(200).json({
-      message: "Xác thực OTP thành công",
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
-  }
-};
+// //kiểm tra mã otp và xác thực tài khoản
+// exports.verifyOtp = async (req, res) => {
+//   try {
+//     const { otp } = req.body;
+//     // Tìm người dùng với mã OTP
+//     const user = await Users.findOne({ where: { otp } });
+//     if (!user) {
+//       return res.status(400).json({
+//         message: "Mã OTP không đúng",
+//       });
+//     }
+//     // Kiểm tra thời gian hết hạn của OTP
+//     if (user.otpExpires < Date.now()) {
+//       return res.status(400).json({
+//         message: "Mã OTP đã hết hạn",
+//       });
+//     }
+//     // Xác thực thành công, xóa mã OTP sau khi xác thực
+//     user.otp = null;
+//     user.otpExpires = '0000-00-00 00:00:00';
+//     await user.save();
+//     res.status(200).json({
+//       message: "Xác thực OTP thành công",
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       message: error.message,
+//     });
+//   }
+// };
 // API đổi mật khẩu theo email và mat_khau
 exports.changePassword = async (req, res) => {
   try {
@@ -562,6 +564,13 @@ exports.resetPasswordByOTP = async (req, res) => {
         message: "Mật khẩu xác nhận không khớp",
       });
     }
+    //kiểm tra mật khẩu mới khác mật khẩu hiện tại
+    const isSamePassword = await bcrypt.compare(mat_khau_moi, user.mat_khau);
+    if (isSamePassword) {
+      return res.status(400).json({
+        message: "Mật khẩu mới phải khác mật khẩu hiện tại",
+      });
+    }
     // Mã hóa mật khẩu mới trước khi lưu vào cơ sở dữ liệu
     const hashedPassword = await bcrypt.hash(mat_khau_moi, 10);
     // Cập nhật mật khẩu mới cho người dùng
@@ -569,7 +578,6 @@ exports.resetPasswordByOTP = async (req, res) => {
     user.otp = null; // Xóa OTP sau khi xác thực thành công
     user.otpExpires = '0000-00-00 00:00:00';
     await user.save();
-
     // Phản hồi thành công
     res.status(200).json({
       message: "Mật khẩu đã được cập nhật thành công",
@@ -578,6 +586,147 @@ exports.resetPasswordByOTP = async (req, res) => {
     console.error(error);
     res.status(500).json({
       message: "Đã xảy ra lỗi khi đặt lại mật khẩu",
+      error: error.message,
+    });
+  }
+};
+
+
+
+// Đăng ký tài khoản bằng email và gửi mã OTP về email xác thực tài khoản trước khi lưu vào database
+exports.register = async (req, res) => {
+  try {
+    const { ten_dang_nhap, mat_khau, xac_nhan_mat_khau, email, otp } = req.body;
+    const hinh_anh = "219986.png";
+    const quyen = req.body.quyen || "2";
+
+    // Kiểm tra mật khẩu và nhập lại mật khẩu có khớp không
+    if (mat_khau !== xac_nhan_mat_khau) {
+      return res.status(400).json({
+        message: "Mật khẩu và nhập lại mật khẩu không khớp",
+      });
+    }
+
+    // Kiểm tra email đã tồn tại
+    const emailExist = await Users.findOne({ where: { email } });
+    if (emailExist) {
+      return res.status(400).json({
+        message: "Email đã tồn tại",
+      });
+    }
+
+    // Kiểm tra OTP
+    const storedOtpData = otpStore.get(email);
+    if (!storedOtpData) {
+      return res.status(400).json({
+        message: "OTP không hợp lệ hoặc đã hết hạn.",
+      });
+    }
+
+    if (storedOtpData.otp !== otp) {
+      return res.status(400).json({
+        message: "OTP không chính xác.",
+      });
+    }
+
+    if (Date.now() > storedOtpData.otpExpires) {
+      otpStore.delete(email);
+      return res.status(400).json({
+        message: "OTP đã hết hạn.",
+      });
+    }
+
+    // OTP hợp lệ, xóa OTP khỏi store
+    otpStore.delete(email);
+
+    // Tạo mật khẩu bảo mật
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(mat_khau, salt);
+
+    // Tạo người dùng mới
+    const newUser = await Users.create({
+      ten_dang_nhap,
+      mat_khau: hashPassword,
+      email,
+      hinh_anh,
+      quyen,
+    });
+
+    await newUser.save();
+    res.status(200).json({
+      message: "Đăng ký tài khoản thành công",
+      data: newUser,
+    });
+      } catch (error) {    
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+// API gửi mã OTP về email
+exports.sendOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Kiểm tra email đã tồn tại trong cơ sở dữ liệu
+    const user = await Users.findOne({ where: { email } });
+    if (user) {
+      return res.status(400).json({
+        message: "Email đã tồn tại, không thể gửi OTP.",
+      });
+    }
+
+    // Tạo mã OTP ngẫu nhiên
+    const otp = crypto.randomInt(100000, 999999).toString(); // Tạo OTP 6 chữ số
+
+    // Tạo thời gian hết hạn cho mã OTP (3 phút)
+    const otpExpires = Date.now() + 3 * 60 * 1000;
+
+    // Lưu OTP vào OTP store
+    otpStore.set(email, { otp, otpExpires });
+
+    // Cấu hình gửi email OTP
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "watchwristly@gmail.com",
+        pass: "nebb uwva xdvb rvih",
+      },
+    });
+
+    const mailOptions = {
+      from: "watchwristly@gmail.com",
+      to: email,
+      subject: "Mã OTP xác thực tài khoản",
+      html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #333;">
+          <div style="text-align: center; padding: 20px 0; background-color: #000;">
+            <h1 style="color: white;">ĐỒNG HỒ WRISTLY</h1>
+          </div>
+          <div style="padding: 20px; text-align: center; background-color: #f9f9f9;">
+            <h2>Mã đăng ký của bạn</h2>
+            <p style="font-size: 2em; font-weight: bold; margin: 20px 0;">${otp}</p>
+            <p style="color: #555;">Mã này sẽ hết hạn trong 3 phút</p>
+          </div>
+          <div style="font-size: 0.875em; text-align: center; padding: 20px; color: #888;">
+            <p>© WRISTLY </p>
+            <p>Công viên phần mềm quang trung</p>
+          </div>
+        </div>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    // Phản hồi thành công
+    res.status(200).json({
+      message: "Mã OTP đã được gửi đến email của bạn.",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Đã xảy ra lỗi khi gửi OTP",
       error: error.message,
     });
   }

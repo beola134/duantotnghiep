@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./daydongho.module.css";
 import Loading from "../../loading/page";
+import classNames from "classnames/bind";
+const cx = classNames.bind(styles);
 export default function Daydongho() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -118,6 +120,42 @@ export default function Daydongho() {
                     className={`${styles["summary-content-filter"]} ${styles.description}`}
                   >
                     <div className={styles["banner-cat-manuf"]}>
+                      <div
+                          className={cx(
+                            
+                            "flex",
+                            "items-center uppercase mb-5 "
+                          )}
+                        >
+                          <span className={cx( "text-sm")}>
+                            <Link
+                              href="/"
+                              className={cx(
+                                
+                                " text-gray-800",
+                                "hover:text-[#796752]"
+                              )}
+                            >
+                              Trang chủ
+                            </Link>
+                          </span>
+                          <span className={cx("separator", "mx-3", "text-stone-400")}>
+                            {" "}
+                            &gt;{" "}
+                          </span>
+                          
+                          
+                          <span className={cx( "text-sm", "text-red-500")}>
+                            <Link
+                              href="/components/components-danhmuc/daydongho"
+                              className={cx("link", "text-red-500")}
+                            >
+                              
+                              Dây đồng hồ
+                            </Link>
+                          </span>
+                        </div>
+                    
                       <img src="/image/item/banner-daydongho.jpg" alt="" />
                     </div>
                   </div>
@@ -548,92 +586,103 @@ export default function Daydongho() {
                       </div>
                     </div>
                   </div>
-                  <div className={styles["field-title"]}>
-                    <div className={styles["title-name"]}>
-                      <div className={styles["cat-title"]}>
-                        <div
-                          className={styles["cat-title-main"]}
-                          id="cat-dong-ho"
-                        >
-                          <div className={styles["title-icon"]}>
-                            <h1>Dây đồng hồ</h1>
-                          </div>
-                        </div>
-                        <div className={styles.clear}></div>
-                      </div>
-                    </div>
+                  <div className="relative text-center bg-[#f3f3f3] text-[11px] uppercase pt-[14px] px-[0px] pb-[12px] mb-[33px] ">
+            {/*field-title*/}
+            <div className={styles["title-name"]}>
+              {/*title-name*/}
+              <h1 className=" text-[20px]">
+               Dây đồng hồ
+              </h1>
+              <div className={styles.clear}></div>
+            </div>
 
-                    <select
-                      className={styles["order-select"]}
-                      name="order-select"
-                      onChange={capNhatSapXep}
-                    >
-                      <option value="">Sắp xếp theo</option>
-                      <option value="asc">Giá từ thấp tới cao</option>
-                      <option value="desc">Giá từ cao tới thấp</option>
-                      <option value="newest">Mới nhất</option>
-                      <option value="hot">Sản phẩm hot</option>
-                    </select>
-                    <div className={styles.clear}></div>
-                  </div>
+            <select
+              className="absolute lg:top-2 lg:right-3 top-[100%] right-[0px] sm:border sm:border-[#e6e6e6] lg:border-none  sm:bg-[#f3f3f3] py-[8px] text-[#5d5d5d] cursor-pointer"
+              name="order-select"
+              onChange={capNhatSapXep}>
+              {/*order-select*/}
+              <option value="">Sắp xếp theo</option>
+              <option value="asc">Giá từ thấp tới cao</option>
+              <option value="desc">Giá từ cao tới thấp</option>
+              <option value="newest">Mới nhất</option>
+            </select>
+            <div className={styles.clear}></div>
+          </div>
 
                   <div className={styles.clear}></div>
 
-                  <div className={styles["products-cat"]}>
-                    <section className={styles["products-cat-frame"]}>
-                      <div className={styles["products-cat-frame-inner"]}>
-                        <div className={styles["product-grid"]}>
-                          {sanPhamHienThi.map((product) => {
-                            const {
-                              _id,
-                              ten,
-                              ten_san_pham,
-                              ma_san_pham,
-                              gia_san_pham,
-                              hinh_anh,
-                            } = product;
-                            return (
-                              <div key={_id} className={styles.item}>
-                                <div className={styles["frame-inner"]}>
-                                  <figure className={styles["product-image"]}>
-                                    <Link
-                                      href={`/components/product-detail/${_id}`}
-                                    >
-                                      <img
-                                        src={`http://localhost:5000/images/${hinh_anh}`}
-                                        alt={ten}
-                                        width="300"
-                                        height="363"
-                                      />
-                                    </Link>
-                                  </figure>
-                                  <h3>
-                                    <Link
-                                      href="#"
-                                      className={styles.name}
-                                      title={ten}
-                                    >
-                                      <span className={styles["cat-name"]}>
-                                        {ten_san_pham}
-                                      </span>
-                                      {ma_san_pham}
-                                    </Link>
-                                  </h3>
-                                  <div className={styles["price-area"]}>
-                                    <div className={styles["price-current"]}>
-                                      <span>
-                                        {gia_san_pham.toLocaleString("vi-VN")}₫
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
+                  <section>
+            <div>
+              {/* show sản phẩm */}
+              <div
+                className={`${styles["product-grid"]} grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-3`}>
+                {sanPhamHienThi.map((product) => {
+                  const {
+                    _id,
+                    ten,
+                    ten_san_pham,
+                    ma_san_pham,
+                    gia_san_pham,
+                    hinh_anh,
+                  } = product;
+                  const roundDiscount = (discountPercentage) => {
+                    const discountLevels = [10, 15, 20, 25, 30, 40, 50];
+                    return discountLevels.reduce((prev, curr) =>
+                      Math.abs(curr - discountPercentage) <
+                      Math.abs(prev - discountPercentage)
+                        ? curr
+                        : prev
+                    );
+                  };
+                  return (
+                    <div
+                      key={_id}
+                      className="border-box relative overflow-hidden text-center mb-10">
+                      <div className="relative">
+                        <figure className="relative mb-4 min-h-[230px]">
+                          <Link href={`/components/product-detail/${_id}`}>
+                            <img
+                              className="max-h-[290px]"
+                              src={`http://localhost:5000/images/${hinh_anh}`}
+                              alt={ten}
+                              width="300"
+                              height="363"
+                              style={{
+                                display: "inline-block",
+                                opacity: "1",
+                              }}
+                            />
+                          </Link>
+                        </figure>
+                        <h3>
+                          <Link
+                            className="text-[17px] font-semibold mb-2"
+                            href="#"
+                            title={ten}>
+                            <span className="text-gray-500 block text-[14px] mt-1.5 mb-2 font-normal leading-relaxed">
+                              {ten_san_pham}
+                            </span>
+                            {ma_san_pham}
+                          </Link>
+                        </h3>
+              
+                        <div className={styles["price-area"]}>
+                        
+                          <div className="text-[18px] text-red-600 font-semibold">
+                            Giá KM: {gia_san_pham.toLocaleString("vi-VN")} ₫
+                          </div>
                         </div>
+                       
+                        <div className={styles.clear}></div>
                       </div>
-                    </section>
-                  </div>
+                      {/* end .frame-inner */}
+                      <div className={styles.clear}></div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
                   <div className={styles.pagination}>
                     <span
                       title="First page"
@@ -690,40 +739,6 @@ export default function Daydongho() {
                   </div>
                 </div>
                 <div className={styles.clear}></div>
-                <div className={styles.evaluateCat}>
-                  <div className={`${styles.ratingArea} ${styles.cls}`}>
-                    <span id="ratings">
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_1"
-                        value="1"
-                      ></i>
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_2"
-                        value="2"
-                      ></i>
-                      <i
-                        className={` ${styles.starOn}`}
-                        id="rate_3"
-                        value="3"
-                      ></i>
-                      <i
-                        className={` ${styles.starOff}`}
-                        id="rate_4"
-                        value="4"
-                      ></i>
-                      <i
-                        className={` ${styles.starOff}`}
-                        id="rate_5"
-                        value="5"
-                      ></i>
-                    </span>
-                    <span className={styles.ratingNote}>
-                      Nhấn vào đây để đánh giá
-                    </span>
-                  </div>
-                </div>
                 <div className={styles.clear}></div>
                 <div
                   className={`${styles.aq_relates} ${styles.content_li}`}
