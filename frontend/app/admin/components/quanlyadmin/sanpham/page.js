@@ -357,7 +357,7 @@ export default function SanPham() {
         try {
           const response = await fetch(`http://localhost:5000/product/xoasp/${id}`, { method: "DELETE" });
           if (!response.ok) {
-            throw new Error("Lỗi khi xóa sản phẩm");
+            throw new Error("Không thể xóa sản phẩm kiểm tra lại số lượng");
           }
           setProducts((prevProducts) => prevProducts.filter((product) => product._id !== id));
   

@@ -721,7 +721,7 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 16px;
-  width: 280px;
+  width: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
@@ -739,7 +739,6 @@
 
 .code {
   font-weight: bold;
-  color: #ff9800;
 }
 
 .actions {
@@ -750,7 +749,7 @@
 }
 
 .copyBtn {
-  background-color: #ff9800;
+  background-color: #796752;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -776,4 +775,13 @@
 .conditions:hover {
   text-decoration: none;
 
+}
+
+.textClamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* Số dòng muốn giới hạn */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal; /* Cho phép xuống dòng */
 }

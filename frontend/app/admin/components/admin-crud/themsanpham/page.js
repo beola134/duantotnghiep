@@ -4,6 +4,7 @@ import styles from "./themsanpham.module.css";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+
 export default function ThemSanPham() {
   const [formData, setFormData] = useState({
     ten_san_pham: "",
@@ -36,35 +37,37 @@ export default function ThemSanPham() {
   });
 
   const [errors, setErrors] = useState({});
-  const [cates, setCategories] = useState([]);
-  const [danhmuc, setDanhMuc] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchBrands = async () => {
       try {
         const response = await fetch(
           "http://localhost:5000/thuonghieu/allthuonghieu"
         );
         const data = await response.json();
-        setCategories(data.th);
+        setBrands(data.th);
         if (data.th.length === 0) {
-          setErrorMessage("Không tìm thấy danh mục nào.");
+          setErrorMessage("Không tìm thấy thương hiệu nào.");
         }
       } catch (error) {
-        console.error("Error fetching categories:", error);
-        setErrorMessage("Đã xảy ra lỗi khi lấy danh mục.");
+        console.error("Error fetching brands:", error);
+        setErrorMessage("Đã xảy ra lỗi khi lấy thương hiệu.");
       }
     };
-    fetchCategories();
+    fetchBrands();
   }, []);
+
   useEffect(() => {
-    const fetchDanhMuc = async () => {
+    const fetchCategoriesData = async () => {
       try {
         const response = await fetch(
           "http://localhost:5000/cate/getAllCateadmin"
         );
         const data = await response.json();
-        setDanhMuc(data.cates);
+        setCategories(data.cates);
         if (data.cates.length === 0) {
           setErrorMessage("Không tìm thấy danh mục nào.");
         }
@@ -73,7 +76,7 @@ export default function ThemSanPham() {
         setErrorMessage("Đã xảy ra lỗi khi lấy danh mục.");
       }
     };
-    fetchDanhMuc();
+    fetchCategoriesData();
   }, []);
 
   const handleChange = (e) => {
@@ -168,8 +171,9 @@ export default function ThemSanPham() {
         text: "Sản phẩm đã được thêm thành công!",
         icon: "success",
         confirmButtonText: "OK",
-      });
-      window.location.href = "/admin/components/quanlyadmin/sanpham";
+      }).then(() => {
+        window.location.href = "/admin/components/quanlyadmin/sanpham";
+      })
     } catch (error) {
       console.error("Error adding product:", error.message);
       Swal.fire({
@@ -243,7 +247,7 @@ export default function ThemSanPham() {
                 />
               </div>
 
-              {/* Dropdown danh mục */}
+              {/* Dropdown Thương hiệu (Brand) */}
               <div className={styles.formGroup}>
                 <label htmlFor="id_thuong_hieu">Thương hiệu</label>
                 <select
@@ -253,9 +257,9 @@ export default function ThemSanPham() {
                   onChange={handleChange}
                 >
                   <option value="">Chọn thương hiệu</option>
-                  {cates.map((category) => (
-                    <option key={category._id} value={category._id}>
-                      {category.thuong_hieu}
+                  {brands.map((brand) => (
+                    <option key={brand._id} value={brand._id}>
+                      {brand.thuong_hieu}
                     </option>
                   ))}
                 </select>
@@ -263,6 +267,8 @@ export default function ThemSanPham() {
                   <span className="text-danger">{errors.id_thuong_hieu}</span>
                 )}
               </div>
+
+              {/* Dropdown Danh Mục (Category) */}
               <div className={styles.formGroup}>
                 <label htmlFor="id_danh_muc">Danh Mục</label>
                 <select
@@ -272,16 +278,14 @@ export default function ThemSanPham() {
                   onChange={handleChange}
                 >
                   <option value="">Chọn danh mục</option>
-                  {danhmuc.map((category) => (
+                  {categories.map((category) => (
                     <option key={category._id} value={category._id}>
                       {category.ten_danh_muc}
                     </option>
                   ))}
                 </select>
-                {errors.id_danh_muc && (
-                  <span className="text-danger">{errors.id_danh_muc}</span>
-                )}
               </div>
+
               <div className={styles.formGroup}>
                 <label htmlFor="ma_san_pham">Mã sản phẩm</label>
                 <input
@@ -314,7 +318,7 @@ export default function ThemSanPham() {
                   value={formData.xuat_xu}
                   onChange={handleChange}
                 />
-                {errors.so_luong && (
+                {errors.xuat_xu && (
                   <span className="text-danger">{errors.xuat_xu}</span>
                 )}
               </div>
@@ -481,7 +485,7 @@ export default function ThemSanPham() {
                   value={formData.mo_ta}
                   onChange={handleChange}
                 />
-                {errors.hinh_anh && (
+                {errors.mo_ta && (
                   <span className="text-danger">{errors.mo_ta}</span>
                 )}
               </div>
@@ -492,7 +496,10 @@ export default function ThemSanPham() {
                 Thêm
               </button>
               <Link href="/admin/components/quanlyadmin/sanpham">
-                <button type="button" className="btn btn-outline-secondary w-100">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary w-100"
+                >
                   Hủy bỏ
                 </button>
               </Link>

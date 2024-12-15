@@ -265,22 +265,29 @@ export default function Main() {
       <ToastContainer />
       <section>
         <div className={styles.productContainer}>
-          <p className={styles.featuredTitle}>ƯU ĐÃI</p> <br /> <br />
-          <div className={styles.voucherList}>
-            {vouchers.map((vouchers) => (
-              <div key={vouchers._id} className={styles.voucherCard}>
-                <h4>VOUCHER</h4>
-                <p>
-                  Nhập mã&nbsp;
-                  <span className={styles.code}>{vouchers.ma_voucher}</span>
+          <p className="text-center text-2xl md:text-3xl">ƯU ĐÃI</p> <br />{" "}
+          <br />
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {vouchers.map((voucher) => (
+              <div
+                key={voucher._id}
+                className="bg-white border border-gray-300 rounded-lg p-2 shadow-md text-center"
+              >
+                <h4 className="text-[16px] text-red-600 font-semibold p-2">
+                  VOUCHER
+                </h4>
+                <p className="text-sm text-gray-600 p-2">
+                  Nhập mã{" "}
+                  <span className={styles.code}>{voucher.ma_voucher}</span>
                   <br />
-                  {vouchers.mo_ta}₫
+                  <span className={styles.textClamp}>{voucher.mo_ta}₫</span>
+                  
                 </p>
-                <div className={styles.actions}>
-                  {vouchers.so_luong > 0 ? (
+                <div className="flex justify-between items-center mt-4">
+                  {voucher.so_luong > 0 ? (
                     <button
                       className={styles.copyBtn}
-                      onClick={() => handleCopy(vouchers.ma_voucher)}
+                      onClick={() => handleCopy(voucher.ma_voucher)}
                     >
                       Copy
                     </button>
@@ -289,22 +296,21 @@ export default function Main() {
                       Hết Voucher
                     </button>
                   )}
-
                   <a
                     onClick={() => {
-                      setSelectedVoucherId(vouchers._id);
+                      setSelectedVoucherId(voucher._id);
                       setModalOpen(true);
                     }}
                     className={styles.conditions}
                   >
                     Điều kiện
                   </a>
-                  <VoucherModal
-                    isOpen={isModalOpen}
-                    onRequestClose={() => setModalOpen(false)}
-                    voucherId={selectedVoucherId}
-                  />
                 </div>
+                <VoucherModal
+                  isOpen={isModalOpen}
+                  onRequestClose={() => setModalOpen(false)}
+                  voucherId={selectedVoucherId}
+                />
               </div>
             ))}
           </div>
@@ -715,7 +721,9 @@ export default function Main() {
         <div className={styles.title}>
           <p className={styles.titleIndex}>THƯƠNG HIỆU NỔI BẬT</p>
           <p>
-            <Link href="/components/components-thuonghieu/thuonghieu">Xem tất cả &raquo;</Link>
+            <Link href="/components/components-thuonghieu/thuonghieu">
+              Xem tất cả &raquo;
+            </Link>
           </p>
         </div>
         <div className={styles.owlItem}>
@@ -801,7 +809,9 @@ export default function Main() {
             </h3>
 
             <p className={styles.xtc}>
-              <Link href="/components/components-thuonghieu/thuonghieu">Xem tất cả</Link>
+              <Link href="/components/components-thuonghieu/thuonghieu">
+                Xem tất cả
+              </Link>
             </p>
 
             <p className={styles.textBrand}>
