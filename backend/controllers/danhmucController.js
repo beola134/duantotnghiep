@@ -143,3 +143,12 @@ exports.getSanPhamKhac = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+// danh muc
+exports.getAllCateadmin = async (req, res) => {
+  try {
+    const cates = await Cate.findAll({});
+    res.json({ cates });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

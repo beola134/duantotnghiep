@@ -4,6 +4,7 @@ import styles from "./themsanpham.module.css";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+
 export default function ThemSanPham() {
   const [formData, setFormData] = useState({
     ten_san_pham: "",
@@ -25,26 +26,49 @@ export default function ThemSanPham() {
     phong_cach: "",
     kieu_dang: "",
     thuong_hieu: "",
+    danh_muc: "",
     size_day: "",
     mau_day: "",
     do_dai_day: "",
     id_thuong_hieu: "",
+    id_danh_muc: "",
     mo_ta: "",
     hinh_anh: null,
   });
 
   const [errors, setErrors] = useState({});
-  const [cates, setCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchBrands = async () => {
       try {
         const response = await fetch(
           "http://localhost:5000/thuonghieu/allthuonghieu"
         );
         const data = await response.json();
-        setCategories(data.th);
+        setBrands(data.th);
         if (data.th.length === 0) {
+          setErrorMessage("Không tìm thấy thương hiệu nào.");
+        }
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+        setErrorMessage("Đã xảy ra lỗi khi lấy thương hiệu.");
+      }
+    };
+    fetchBrands();
+  }, []);
+
+  useEffect(() => {
+    const fetchCategoriesData = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/cate/getAllCateadmin"
+        );
+        const data = await response.json();
+        setCategories(data.cates);
+        if (data.cates.length === 0) {
           setErrorMessage("Không tìm thấy danh mục nào.");
         }
       } catch (error) {
@@ -52,7 +76,7 @@ export default function ThemSanPham() {
         setErrorMessage("Đã xảy ra lỗi khi lấy danh mục.");
       }
     };
-    fetchCategories();
+    fetchCategoriesData();
   }, []);
 
   const handleChange = (e) => {
@@ -85,7 +109,6 @@ export default function ThemSanPham() {
       so_luong,
       id_thuong_hieu,
       hinh_anh,
-      xuat_xu,
       mo_ta,
     } = formData;
 
@@ -96,11 +119,9 @@ export default function ThemSanPham() {
     }
     if (!ma_san_pham) newErrors.ma_san_pham = "Vui lòng nhập mã sản phẩm.";
     if (!so_luong) newErrors.so_luong = "Vui lòng nhập số lượng.";
-    if (!id_thuong_hieu) newErrors.id_thuong_hieu = "Vui lòng chọn danh mục.";
+    if (!id_thuong_hieu) newErrors.id_thuong_hieu = "Vui lòng chọn thương hiệu.";
     if (!hinh_anh) newErrors.hinh_anh = "Vui lòng chọn hình ảnh sản phẩm.";
-    if (!xuat_xu) newErrors.xuat_xu = "Vui lòng nhập xuất xứ sản phẩm.";
     if (!mo_ta) newErrors.mo_ta = "Vui lòng nhập mô tả sản phẩm.";
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -150,8 +171,9 @@ export default function ThemSanPham() {
         text: "Sản phẩm đã được thêm thành công!",
         icon: "success",
         confirmButtonText: "OK",
-      });
-      window.location.href = "/admin/components/quanlyadmin/sanpham";
+      }).then(() => {
+        window.location.href = "/admin/components/quanlyadmin/sanpham";
+      })
     } catch (error) {
       console.error("Error adding product:", error.message);
       Swal.fire({
@@ -225,19 +247,19 @@ export default function ThemSanPham() {
                 />
               </div>
 
-              {/* Dropdown danh mục */}
+              {/* Dropdown Thương hiệu (Brand) */}
               <div className={styles.formGroup}>
-                <label htmlFor="id_thuong_hieu">Danh mục</label>
+                <label htmlFor="id_thuong_hieu">Thương hiệu</label>
                 <select
                   id="id_thuong_hieu"
                   name="id_thuong_hieu"
                   value={formData.id_thuong_hieu}
                   onChange={handleChange}
                 >
-                  <option value="">Chọn danh mục</option>
-                  {cates.map((category) => (
-                    <option key={category._id} value={category._id}>
-                      {category.thuong_hieu}
+                  <option value="">Chọn thương hiệu</option>
+                  {brands.map((brand) => (
+                    <option key={brand._id} value={brand._id}>
+                      {brand.thuong_hieu}
                     </option>
                   ))}
                 </select>
@@ -245,6 +267,25 @@ export default function ThemSanPham() {
                   <span className="text-danger">{errors.id_thuong_hieu}</span>
                 )}
               </div>
+
+              {/* Dropdown Danh Mục (Category) */}
+              <div className={styles.formGroup}>
+                <label htmlFor="id_danh_muc">Danh Mục</label>
+                <select
+                  id="id_danh_muc"
+                  name="id_danh_muc"
+                  value={formData.id_danh_muc}
+                  onChange={handleChange}
+                >
+                  <option value="">Chọn danh mục</option>
+                  {categories.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.ten_danh_muc}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className={styles.formGroup}>
                 <label htmlFor="ma_san_pham">Mã sản phẩm</label>
                 <input
@@ -277,7 +318,7 @@ export default function ThemSanPham() {
                   value={formData.xuat_xu}
                   onChange={handleChange}
                 />
-                {errors.so_luong && (
+                {errors.xuat_xu && (
                   <span className="text-danger">{errors.xuat_xu}</span>
                 )}
               </div>
@@ -395,16 +436,6 @@ export default function ThemSanPham() {
                 />
               </div>
               <div className={styles.formGroup}>
-                <label htmlFor="thuong_hieu">Thương hiệu</label>
-                <input
-                  type="text"
-                  id="thuong_hieu"
-                  name="thuong_hieu"
-                  value={formData.thuong_hieu}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className={styles.formGroup}>
                 <label htmlFor="size_day">Size dây</label>
                 <input
                   type="text"
@@ -454,7 +485,7 @@ export default function ThemSanPham() {
                   value={formData.mo_ta}
                   onChange={handleChange}
                 />
-                {errors.hinh_anh && (
+                {errors.mo_ta && (
                   <span className="text-danger">{errors.mo_ta}</span>
                 )}
               </div>
@@ -465,7 +496,10 @@ export default function ThemSanPham() {
                 Thêm
               </button>
               <Link href="/admin/components/quanlyadmin/sanpham">
-                <button type="button" className="btn btn-outline-secondary w-100">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary w-100"
+                >
                   Hủy bỏ
                 </button>
               </Link>

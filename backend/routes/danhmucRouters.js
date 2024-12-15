@@ -30,4 +30,8 @@ router.get('/danhmuc', danhmucController.getdanhmuc);
 //getSanPhamKhac
 //http://localhost:5000/cate/getSanPhamKhac
 router.get('/getSanPhamKhac', danhmucController.getSanPhamKhac);
+
+//danhmucadmin
+//http://localhost:5000/cate/getAllCateadmin
+router.get('/getAllCateadmin', danhmucController.getAllCateadmin);
 module.exports = router;

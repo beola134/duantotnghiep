@@ -474,6 +474,7 @@ exports.getProducts = async (req, res) => {
           "ma_san_pham",
           "so_luong",
           "gia_san_pham",
+          "gia_giam",
         ],
       });
 
