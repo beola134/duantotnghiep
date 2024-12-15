@@ -586,8 +586,8 @@ export default function Header() {
             {user ? (
               <div
                 className={cx(
-                  "user",
-                  "flex items-center justify-center w-[30px] h-[30px] border border-white rounded-full relative"
+                  
+                  "flex items-center justify-center max-w-[30px] border border-white rounded-full relative"
                 )}
               >
                 <Link href={`/components/components-login/user/${user.user._id}`} onClick={handleIconClick}>
@@ -603,7 +603,7 @@ export default function Header() {
                       display: "inline-block",
                       width: "160px",
                       height: "29px",
-                      marginTop: "5px",
+                     
                       borderRadius: "50%",
                       objectFit: "cover",
                     }}
@@ -637,9 +637,48 @@ export default function Header() {
               </div>
             </Link>
           </div>
-          <div className="menu-icon fixed top-[20px] right-[20px] w-[30px] h-[30px] lg:hidden block  text-center">
+          <div className="menu-icon fixed top-[20px] right-[20px]  lg:hidden flex  text-center">
+            {user ? (
+              <div
+                className={cx(
+                  "user",
+                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full relative"
+                )}
+              >
+                <Link href={`/components/components-login/user/${user.user._id}`} onClick={handleIconClick}>
+                  <img
+                    src={
+                      user.user.hinh_anh.startsWith("http")
+                        ? user.user.hinh_anh
+                        : `http://localhost:5000/images/${user.user.hinh_anh}`
+                    }
+                    width="200"
+                    height="100"
+                    style={{
+                      display: "inline-block",
+                      width: "160px",
+                      height: "29px",
+                      
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </Link>
+              </div>
+            ) : (
+              <div
+                className={cx(
+                  "user",
+                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full relative"
+                )}
+              >
+                <Link href="/components/components-login/login" onClick={handleIconClick}>
+                  <FontAwesomeIcon icon={faUser} style={{ color: "#ffffff" }} />
+                </Link>
+              </div>
+            )}
             <Link href="/components/components-giaodich/giohang" onClick={handleIconClick}>
-              <div className={cx("cart", "flex  items-center justify-center w-[30px] h-[30px] rounded-full relative")}>
+              <div className={cx("cart", "flex  items-center justify-center  w-[30px] h-[30px] rounded-full relative")}>
                 <FontAwesomeIcon icon={faShoppingCart} style={{ color: "#ffffff" }} />
 
                 <span
