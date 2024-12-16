@@ -64,11 +64,10 @@ const getVoucherByCode = async (req, res) => {
     }
     // Kiểm tra giá trị đơn hàng tối thiểu và tối đa (nếu cần)
     const donHangToiThieu = voucherFound.don_hang_toi_thieu;
-    const donHangToiDa = donHangToiThieu + 1000000;
-    if (orderTotal < donHangToiThieu || orderTotal > donHangToiDa) {
+    if (donHangToiThieu && orderTotal < donHangToiThieu) {
       return res.status(404).json({
-        error: `Giá trị đơn hàng của bạn là ${orderTotal}, cần nằm trong khoảng từ ${donHangToiThieu} đến ${donHangToiDa} để sử dụng voucher.`,
-      });
+          error: `Đơn hàng phải có giá trị tối thiểu là: ${donHangToiThieu}`,
+        });
     }
 
     res.status(200).json(voucherFound);

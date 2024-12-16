@@ -3,7 +3,7 @@ import Link from "next/link";
 import styles from "../../components-thuonghieu/donghonu/donghonu.module.css";
 import { useEffect, useState } from "react";
 import Loading from "../../loading/page";
-
+import cx from "classnames";
 export default function TrangsucCK() {
   const [products, setProducts] = useState([]);
   const [categoryName, setCategoryName] = useState(""); // Tiêu đề danh mục
@@ -144,6 +144,35 @@ export default function TrangsucCK() {
             <div className={styles["center-1col"]}>
               <div className={styles.clear}></div>
               <div className="container">
+              <div
+              className={cx(
+                "flex",
+                "items-center uppercase  md:text-[16px] text-[10px] mb-5 mt-6"
+              )}
+            >
+              <span className={cx("")}>
+                <Link
+                  href="/"
+                  className={cx(" text-gray-800", "hover:text-[#796752]")}
+                >
+                  Trang chủ
+                </Link>
+              </span>  
+              <span className={cx("separator", "mx-3", "text-stone-400")}>
+                {" "}
+                &gt;{" "}
+              </span>
+        
+              <span className={cx("", "text-red-500")}>
+                <Link
+                  href="/components/components-thuonghieu/donghonam"
+                  className={cx("link", "text-red-500")}
+                >
+                  {" "}
+                  ĐỒNG HỒ ĐỂ BÀN
+                </Link>
+              </span>
+            </div>
                 <div className={styles.clear}></div>
                 <div className="relative">
                   {" "}
@@ -426,23 +455,40 @@ export default function TrangsucCK() {
                                       {ma_san_pham}
                                     </Link>
                                   </h3>
-                                  <span className="inline-block text-[12px] uppercase text-gray-500 mb-1.5">
-                                    {loai}
-                                  </span>
-                                  <span className="px-1.5 text-gray-500 text-[13px]">
-                                    |
-                                  </span>
+                                  
                                   <span className="inline-block text-[12px] uppercase text-gray-500 mb-1.5">
                                     {duong_kinh}
                                   </span>
                                   <div className={styles["price-area"]}>
+                                  {gia_giam > 0 ? (
+                                    <>
+                                      <div className="text-[15px] text-gray-400 mb-2 line-through">
+                                        Giá:{" "}
+                                        <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                                      </div>
+                                      <div className="text-[18px] text-red-600 font-semibold">
+                                        Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
+                                      </div>
+                                    </>
+                                  ) : (
                                     <div className="text-[18px] text-red-600 font-semibold">
-                                      Giá:{" "}
-                                      <span>
-                                        {gia_san_pham.toLocaleString("vi-VN")}₫
-                                      </span>
+                                      Giá: {gia_san_pham.toLocaleString("vi-VN")}₫
                                     </div>
+                                  )}
+                                </div>
+                                {gia_giam > 0 && (
+                                  <div className="absolute top-0 left-1.25 bg-red-600 text-white text-sm w-11 h-11 leading-[2.875rem] box-border rounded-full">
+                                    <span>
+                                      -
+                                      {roundDiscount(
+                                        Math.round(
+                                          ((gia_san_pham - gia_giam) / gia_san_pham) * 100
+                                        )
+                                      )}
+                                      %
+                                    </span>
                                   </div>
+                                )}
 
                                   <div className={styles.clear}></div>
                                 </div>

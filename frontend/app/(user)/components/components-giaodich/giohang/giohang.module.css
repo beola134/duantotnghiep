@@ -80,7 +80,7 @@
 #thtt {
   padding: 10px;
   width: 250px;
-  background-color: #000000;
+  background-color: #796752;
   color: white;
   border: none;
   border-radius: 10px;
@@ -89,7 +89,7 @@
 }
 
 #thtt:hover {
-  background-color: #0056b3;
+  background-color: #97846e;
 }
 .content {
   width: 70%;

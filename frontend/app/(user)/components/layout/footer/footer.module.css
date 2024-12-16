@@ -1,4 +1,4 @@
-.contactSimpleFt {
+/* .contactSimpleFt {
   background: #796752;
   padding: 30px 0;
   margin-top: 40px;
@@ -8,25 +8,26 @@
   max-width: 100%;
   box-sizing: border-box;
   margin: 0px auto;
-}
-.blockContactSimple {
+} */
+
+/* .blockContactSimple {
   display: flex;
   flex-wrap: wrap;
-}
+} */
 
-.blockContactSimple .item:nth-child(1) {
+/* .blockContactSimple .item:nth-child(1) {
   width: 34%;
-}
+} */
 
-.blockContactSimple .item {
+/* .blockContactSimple .item {
   position: relative;
   padding-left: 78px;
   box-sizing: border-box;
   width: 30%;
   text-align: left;
-}
+} */
 
-.blockContactSimple .item .icon {
+/* .blockContactSimple .item .icon {
   position: absolute;
   left: 0;
   top: 50%;
@@ -38,26 +39,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
+} */
 
-.blockContactSimple .item .icon i {
+/* .blockContactSimple .item .icon i {
   color: #fff;
   font-size: 20px;
-}
+} */
 
-.blockContactSimple .item .title {
+/* .blockContactSimple .item .title {
   text-transform: uppercase;
   font-size: 15px;
   color: #fff;
   margin-bottom: 5px;
-}
+} */
 
-.blockContactSimple .item .content {
+/* .blockContactSimple .item .content {
   font-size: 15px;
   color: #fff;
-}
+} */
 
-.blockContactSimple .item:nth-child(2) {
+/* .blockContactSimple .item:nth-child(2) {
   width: 40%;
   padding-left: 110px;
 }
@@ -101,26 +102,29 @@
 
 .blockContactSimple .item:nth-child(3) .icon {
   left: 34px;
-}
+} */
 
-.clear {
+/* .clear {
   clear: both;
-}
+} */
+
 /*footer-fb  */
-footer .footerFacebook {
+
+/* footer .footerFacebook {
   margin-top: 40px;
-}
-footer .footerFacebook .bottommenuFt {
+} */
+
+/* footer .footerFacebook .bottommenuFt {
   width: calc(100% - 300px);
   float: left;
-}
-ul.menuBottom li.level0 {
+} */
+/* ul.menuBottom li.level0 {
   float: left;
   width: 33.333%;
   padding-right: 10px;
   box-sizing: border-box;
-}
-ul.menuBottom li.level0 span.clickMobile {
+} */
+/* ul.menuBottom li.level0 span.clickMobile {
   background: transparent url(/image/item/icon-click.png) no-repeat scroll center;
   position: absolute;
   cursor: pointer;
@@ -128,37 +132,38 @@ ul.menuBottom li.level0 span.clickMobile {
   right: 0px;
   top: 0px;
   display: none;
-}
-ul.menuBottom li.level0 > a {
+} */
+/* ul.menuBottom li.level0 > a {
   margin-bottom: 17px;
   display: block;
   text-transform: uppercase;
   font-size: 16px;
   font-weight: bold;
   color: #796752;
-}
+} */
 
-ul.menuBottom li.level0 ul {
+/* ul.menuBottom li.level0 ul {
   margin-top: 4px;
-}
+} */
+
 ul.menuBottom li.level0 ul li {
   margin-bottom: 5px;
 }
 
-ul.menuBottom li.level0 ul li a {
+/* ul.menuBottom li.level0 ul li a {
   font-size: 15px;
   line-height: 26px;
   color: #796752;
-}
-footer .footerFacebook .fanpageFb {
+} */
+/* footer .footerFacebook .fanpageFb {
   width: 300px;
   float: right;
   min-height: 223px;
-}
-.blockShare {
+} */
+/* .blockShare {
   margin-top: 10px;
-}
-.blockShare .titleSocial {
+} */
+/* .blockShare .titleSocial {
   display: inline-block;
   float: left;
   font-weight: bold;
@@ -167,13 +172,13 @@ footer .footerFacebook .fanpageFb {
   font-size: 16px;
   margin-top: 8px;
   margin-right: 20px;
-}
-.blockShare .socialFt {
+} */
+/* .blockShare .socialFt {
   float: left;
   position: relative;
-}
+} */
 .blockShare .socialFt a {
-  margin-right: 5px;
+  /* margin-right: 5px;
   display: inline-block;
   width: 33px;
   height: 33px;
@@ -182,7 +187,7 @@ footer .footerFacebook .fanpageFb {
   padding: 7px;
   box-sizing: border-box;
   color: #fff;
-  text-align: center;
+  text-align: center; */
   -moz-transition: all 0.2s ease-in 0;
   -webkit-transition: all 0.2s ease-in;
   -webkit-transition-delay: 0;
@@ -190,7 +195,7 @@ footer .footerFacebook .fanpageFb {
 }
 
 /*footer-bottom */
-footer .footerBottom {
+/* footer .footerBottom {
   background: #796752;
   padding: 24px 0px 150px;
   color: #f3f3f3;
@@ -230,7 +235,7 @@ footer .footerBottom .footerBottom2 .bctCopyright .copyring {
 }
 footer .footerBottom .footerBottom2 .blockTagsFt {
   text-align: right;
-}
+} */
 .blockTagsDefault a {
   color: #f3f3f3;
   font-size: 13px;

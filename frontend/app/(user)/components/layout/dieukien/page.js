@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import styles from "./dieukien.module.css";
 import { toast, ToastContainer } from "react-toastify";
@@ -64,37 +65,41 @@ function VoucherModal({ isOpen, onRequestClose, voucherId }) {
   return (
     <>
       <ToastContainer />
-      <div className={styles.overlay}>
-        <div className={styles.modal}>
-          <h3 className={styles.title}>VOUCHER</h3>
-          <div className={styles.content}>
-            <p>
-              <strong>Mã khuyến mãi:</strong> {voucher?.ma_voucher}
-            </p>
-            <p>
-              <strong>Điều kiện:</strong> {voucher?.mo_ta}
-            </p>
-          </div>
-          <div className={styles.buttonContainer}>
-          {voucher.so_luong > 0 ? (
-                    <button
-                      className={styles.copyButton}
-                      onClick={() => handleCopy(voucher.ma_voucher)}
-                    >
-                      Copy
-                    </button>
-                  ) : (
-                    <button className={`${styles.copyButton} ${styles.disabled} `}>Hết Voucher</button>
-                  )}
-            <button
-              className={styles.closeButton}
-              onClick={onRequestClose}
-            >
-              Đóng
-            </button>
-          </div>
-        </div>
-      </div>
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div className="bg-white p-5 rounded-lg text-center w-full max-w-lg shadow-lg 
+    lg:max-w-lg md:max-w-md sm:max-w-sm sm:px-4">
+    <h3 className="text-xl font-bold mb-2">VOUCHER</h3>
+    <div className="text-base mb-5 leading-6">
+      <p>
+        <strong>Mã khuyến mãi:</strong> {voucher?.ma_voucher}
+      </p>
+      <p>
+        <strong>Điều kiện:</strong> {voucher?.mo_ta}
+      </p>
+    </div>
+    <div className="flex justify-between gap-3">
+      {voucher.so_luong > 0 ? (
+        <button
+          className="flex-1 py-3 bg-white border text-black rounded-full cursor-pointer"
+          onClick={() => handleCopy(voucher.ma_voucher)}
+        >
+          Copy
+        </button>
+      ) : (
+        <button className="flex-1 py-3 bg-gray-400 text-white rounded-full cursor-not-allowed">
+          Hết Voucher
+        </button>
+      )}
+      <button
+        className="flex-1 py-3 bg-[#796752] text-white rounded-full"
+        onClick={onRequestClose}
+      >
+        Đóng
+      </button>
+    </div>
+  </div>
+</div>
+
     </>
   );
 }

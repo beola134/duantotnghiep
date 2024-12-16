@@ -424,6 +424,11 @@ export default function Header() {
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
   const [user, setUser] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen); // Thay đổi trạng thái menu respon
+  };
 
   useEffect(() => {
     setIsMounted(true);
@@ -474,9 +479,19 @@ export default function Header() {
     fetchData();
   }, []);
 
+  // gạch chân menu đang chọn
   const handleMenuClick = (menu) => {
     setSelectedMenu(menu);
     localStorage.setItem("selectedMenu", menu);
+  };
+
+  const handleLogoClick = () => {
+    setSelectedMenu("HOME");
+    localStorage.setItem("selectedMenu", "HOME");
+  };
+
+  const handleIconClick = () => {
+    setSelectedMenu(null);
   };
 
   useEffect(() => {
@@ -486,6 +501,7 @@ export default function Header() {
     }
   }, []);
 
+  // lưu giỏ hàng vào local storage
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
 
@@ -508,30 +524,59 @@ export default function Header() {
 
   return (
     <>
-      <header className={cx("header")}>
-        <div className={cx("top-bar")}>
-          <div className={cx("logo")}>
-            <Link href="/">
-              <img className={cx("img")} src="/image/item/icons/logo.png" alt="Wristly" />
+      <header className={cx("header", "bg-black text-white text-sm py-2 max-h-[80px]")}>
+        <div className={cx("top-bar", "max-w-[1170px] grid grid-cols-12 items-center mx-auto gap-4")}>
+          <div
+            className={cx(
+              "logo",
+              "flex lg:col-span-5 lg:justify-self-start col-span-12 justify-self-center flex-col items-center text-center"
+            )}
+          >
+            <Link href="/" >
+              <img
+                className={cx("img", "mt-[-55px] w-[250px] h-[170px] ml-[-40px]")}
+                src="/image/item/icons/logo.png"
+                alt="Wristly"
+              />
             </Link>
           </div>
-          <div className={cx("search-bar")}>
+          <div
+            className={cx(
+              "search-bar",
+              "mt-[-40px] col-span-2 lg:flex  hidden justify-end  items-center bg-[#ffffff24] rounded-full py-1 px-5 max-h-[30px] mr-[-70px]"
+            )}
+          >
             <input
               value={inputData}
               onChange={(event) => setInputData(event.target.value)}
               type="text"
               onKeyDown={handleSearch}
               placeholder="Bạn muốn tìm ..."
-              className={cx("input")}
+              className={cx("input", "border-none bg-transparent text-white outline-none w-[300px] py-2 text-sm")}
             />
-            <button type="button" className={cx("button")} onClick={handleSearch} disabled={!inputData}>
+            <button
+              type="button"
+              className={cx("button", "border-none bg-transparent text-white cursor-pointer")}
+              onClick={handleSearch}
+              disabled={!inputData}
+            >
               <i className="fas fa-search" style={{ color: "white" }}></i>
             </button>
           </div>
-          <div className={cx("contact-info")}>
-            <div className={cx("phone")}>
-              <img className={cx("phone-img")} src="/image/item/icons/icon_call.png" alt="Phone" />
-              <span className={cx("phone-span")}>
+          <div className={cx("col-span-1")}></div>
+          <div
+            className={cx(
+              "contact-info",
+              "lg:flex hidden col-span-4 justify-self-end items-center max-w-[40%] gap-6 mt-[-50px]"
+            )}
+          >
+            <div className={cx("phone", "flex items-center")}>
+              <img
+                className={cx("phone-img", "w-[100px] ml-[-130px]")}
+                src="/image/item/icons/icon_call.png"
+                alt="Phone"
+              />
+              <span className={cx("phone-span", "text-left text-xs leading-[1.2]")}>
                 GỌI NGAY
                 <br />
                 084.5487.339
@@ -539,8 +584,13 @@ export default function Header() {
             </div>
 
             {user ? (
-              <div className={cx("user")}>
-                <Link href={`/components/components-login/user/${user.user._id}`}>
+              <div
+                className={cx(
+                  
+                  "flex items-center justify-center max-w-[30px] border border-white rounded-full relative"
+                )}
+              >
+                <Link href={`/components/components-login/user/${user.user._id}`} onClick={handleIconClick}>
                   <img
                     src={
                       user.user.hinh_anh.startsWith("http")
@@ -553,7 +603,7 @@ export default function Header() {
                       display: "inline-block",
                       width: "160px",
                       height: "29px",
-                      marginTop: "5px",
+                     
                       borderRadius: "50%",
                       objectFit: "cover",
                     }}
@@ -561,24 +611,169 @@ export default function Header() {
                 </Link>
               </div>
             ) : (
-              <div className={cx("user")}>
-                <Link href="/components/components-login/login">
+              <div
+                className={cx(
+                  "user",
+                  "flex items-center justify-center w-[30px] h-[30px] border border-white rounded-full relative"
+                )}
+              >
+                <Link href="/components/components-login/login" onClick={handleIconClick}>
                   <FontAwesomeIcon icon={faUser} style={{ color: "#ffffff" }} />
                 </Link>
               </div>
             )}
-            <Link href="/components/components-giaodich/giohang">
-              <div className={cx("cart")}>
+            <Link href="/components/components-giaodich/giohang" onClick={handleIconClick}>
+              <div className={cx("cart", "flex items-center justify-center w-[30px] h-[30px] rounded-full relative")}>
                 <FontAwesomeIcon icon={faShoppingCart} style={{ color: "#ffffff" }} />
 
-                <span className={cx("cart-count")}>{cartCount}</span>
+                <span
+                  className={cx(
+                    "cart-count",
+                    "absolute text-white  w-[20px] h-[20px] top-[-5px] right-[-7px] border border-white rounded-full flex items-center justify-center"
+                  )}
+                >
+                  {cartCount}
+                </span>
               </div>
             </Link>
           </div>
+          <div className="menu-icon fixed top-[20px] right-[20px]  lg:hidden flex  text-center">
+            {user ? (
+              <div
+                className={cx(
+                  "user",
+                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full relative"
+                )}
+              >
+                <Link href={`/components/components-login/user/${user.user._id}`} onClick={handleIconClick}>
+                  <img
+                    src={
+                      user.user.hinh_anh.startsWith("http")
+                        ? user.user.hinh_anh
+                        : `http://localhost:5000/images/${user.user.hinh_anh}`
+                    }
+                    width="200"
+                    height="100"
+                    style={{
+                      display: "inline-block",
+                      width: "160px",
+                      height: "29px",
+                      
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </Link>
+              </div>
+            ) : (
+              <div
+                className={cx(
+                  "user",
+                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full relative"
+                )}
+              >
+                <Link href="/components/components-login/login" onClick={handleIconClick}>
+                  <FontAwesomeIcon icon={faUser} style={{ color: "#ffffff" }} />
+                </Link>
+              </div>
+            )}
+            <Link href="/components/components-giaodich/giohang" onClick={handleIconClick}>
+              <div className={cx("cart", "flex  items-center justify-center  w-[30px] h-[30px] rounded-full relative")}>
+                <FontAwesomeIcon icon={faShoppingCart} style={{ color: "#ffffff" }} />
+
+                <span
+                  className={cx(
+                    "cart-count",
+                    "absolute text-white  w-[20px] h-[20px] top-[-5px] right-[-7px] border border-white rounded-full flex items-center justify-center"
+                  )}
+                >
+                  {cartCount}
+                </span>
+              </div>
+            </Link>
+          </div>
+
+          <div className="menu-icon fixed top-[20px] left-[10px] w-[30px] h-[30px] lg:hidden block  text-center">
+            <img src="/image/item/icons/bars.png" onClick={() => setMenuOpen(!menuOpen)} />
+          </div>
+          {menuOpen && (
+            <div className="mobile-menu absolute top-[70px] uppercase left-0 w-[70%]  bg-[#796752] py-4 z-50">
+              <ul className="flex flex-col ml-5 leading-[1.5] space-y-2 mr-5">
+                <li>
+                  <div className={cx(" mb-5 border border-white  h-12 flex items-center  rounded-full py-1 px-5 ")}>
+                    <input
+                      value={inputData}
+                      onChange={(event) => setInputData(event.target.value)}
+                      type="text"
+                      onKeyDown={handleSearch}
+                      placeholder="Bạn muốn tìm ..."
+                      className={cx("input", "border-none bg-transparent w-[80%] text-red outline-none  py-2 text-md")}
+                    />
+                    <button
+                      type="button"
+                      className={cx("button", "border-none bg-transparent w-[10%] text-white ml-auto cursor-pointer")}
+                      onClick={handleSearch}
+                      disabled={!inputData}
+                    >
+                      <i className="fas fa-search" style={{ color: "white" }}></i>
+                    </button>
+                  </div>
+                </li>
+                <li className="border border-gray-600  h-12 flex items-center">
+                  <Link className="text-white  flex-1 px-3" href="/">
+                    Trang chủ
+                  </Link>
+                </li>
+                <li className="border border-gray-600   h-12 flex items-center">
+                  <Link className="text-white    flex-1 px-3" href="/components/components-thuonghieu/thuonghieu">
+                    Thương hiệu
+                  </Link>
+                </li>
+                <li className="border border-gray-600  h-12 flex items-center">
+                  <Link className="text-white    flex-1 px-3" href="/components/components-thuonghieu/donghonam">
+                    Đồng hồ nam
+                  </Link>
+                </li>
+                <li className="border border-gray-600  h-12 flex items-center">
+                  <Link className="text-white    flex-1 px-3" href="/components/components-thuonghieu/donghonu">
+                    Đồng hồ nữ
+                  </Link>
+                </li>
+                <li className="border border-gray-600  h-12 flex items-center">
+                  <Link className="text-white    flex-1 px-3" href="/components/components-thuonghieu/donghodoi">
+                    Đồng hồ đôi
+                  </Link>
+                </li>
+                <li className="border border-gray-600  h-12 flex items-center">
+                  <Link
+                    className="text-white  border-gray-600   flex-1 px-3"
+                    href="/components/components-danhmuc/donghotreotuong"
+                  >
+                    Đồng hồ treo tường
+                  </Link>
+                </li>
+                <li className="border border-gray-600  h-12 flex items-center">
+                  <Link className="text-white    flex-1 px-3" href="/components/components-danhmuc/daydongho">
+                    Dây đồng hồ
+                  </Link>
+                </li>
+                <li className="border border-gray-600  h-12 flex items-center">
+                  <Link className="text-white    flex-1 px-3" href="/components/components-danhmuc/sanphamkhac">
+                    Sản phẩm khác
+                  </Link>
+                </li>
+                <li className="border border-gray-600  h-12 flex items-center">
+                  <Link className="text-white    flex-1 px-3" href="/components/suadongho">
+                    Sửa đồng hồ
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
       </header>
 
-      <nav class={cx("navbar")}>
+      <nav class={cx("navbar", " lg:block  hidden")}>
         <ul class={cx("nav-list")}>
           <li
             className={cx("nav-list-li", {
@@ -603,7 +798,7 @@ export default function Header() {
               THƯƠNG HIỆU
             </Link>
             <ul className={cx("dropdown-menu")}>
-              {category.map((item) => (
+              {category .filter((item) => item.thuong_hieu !== "RHYTHM") .map((item) => (
                 <li className={cx("dropdown-menu-li")} key={item.thuong_hieu}>
                   <Link
                     href={`/components/components-thuonghieu/chitietthuonghieu/${item.thuong_hieu}`}

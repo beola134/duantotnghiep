@@ -143,16 +143,6 @@ export default function Menu() {
                   Quản lý danh mục
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/admin/components/quanlyadmin/quanlikho"
-                  className={isActive("/components/quanlyadmin/quanlikho") ? styles.active : ""}
-                  onClick={() => handleLinkClick("/components/quanlyadmin/quanlikho")}
-                >
-                <i className={`bx bxs-box ${styles.icon}`}></i>
-                  Quản lý kho
-                </Link>
-              </li>
               <li className={styles.divider} data-text="Bình luận">
                 Bình luận
               </li>

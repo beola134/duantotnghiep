@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "../donghonu/donghonu.module.css";
 import Loading from "../../loading/page";
-
+import cx from "classnames";
 export default function Donghonu() {
   const [products, setProducts] = useState([]);
   const [categoryName, setCategoryName] = useState(""); // Tiêu đề danh mục
@@ -12,7 +12,7 @@ export default function Donghonu() {
   const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
   const [totalPages, setTotalPages] = useState(1); // Tổng số trang
   const [isExpanded, setIsExpanded] = useState(false); // Trạng thái mô tả
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false); //dropdown menumenu
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -154,6 +154,35 @@ export default function Donghonu() {
   return (
     <>
       <div className="container">
+      <div
+      className={cx(
+        "flex",
+        "items-center uppercase  md:text-[16px] text-[10px] mb-5 mt-6"
+      )}
+    >
+      <span className={cx("")}>
+        <Link
+          href="/"
+          className={cx(" text-gray-800", "hover:text-[#796752]")}
+        >
+          Trang chủ
+        </Link>
+      </span>  
+      <span className={cx("separator", "mx-3", "text-stone-400")}>
+        {" "}
+        &gt;{" "}
+      </span>
+
+      <span className={cx("", "text-red-500")}>
+        <Link
+          href="/components/components-thuonghieu/donghonam"
+          className={cx("link", "text-red-500")}
+        >
+          {" "}
+          ĐỒNG HỒ NỮ
+        </Link>
+      </span>
+    </div>
         {/*container*/}
         <div className={styles.clear}></div>
         {/* mô tả đồng hồ nữ */}
@@ -1801,14 +1830,14 @@ export default function Donghonu() {
               {/*Kiểu dáng */}
               <div className={`${styles["field-item"]} `}>
                 <div
-                  className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
+                className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
                   onClick={toggleDropdown}>
                   Kiểu dáng
                 </div>{" "}
                 {isDropdownVisible && (
                   <div
                     id="kieu-dang"
-                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px]  `}>
+                    className={`${styles["field-label"]} ${styles["filters-in-field"]} w-full phone-sm:w-full sm:w-full phone-sm:text-[12px] sm:text-[14px]`}>
                     <span
                       className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
                       onClick={toggleDropdown}>
@@ -1816,7 +1845,7 @@ export default function Donghonu() {
                     </span>
 
                     <div
-                      className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px] border-t-0 border-r border-b border-l"} ${
+                      className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px]  w-40 border-t-0 border-r border-b border-l"} ${
                         styles.descript
                       } ${styles.cls}`}>
                       {/* item1 */}
@@ -1996,7 +2025,8 @@ export default function Donghonu() {
                   return (
                     <div
                       key={_id}
-                      className="border-box relative overflow-hidden text-center mb-10">
+                      className="border-box relative overflow-hidden text-center mb-10"
+                    >
                       <div className="relative">
                         <figure className="relative mb-4 min-h-[230px]">
                           <Link href={`/components/product-detail/${_id}`}>
@@ -2017,7 +2047,8 @@ export default function Donghonu() {
                           <Link
                             className="text-[17px] font-semibold mb-2"
                             href="#"
-                            title={ten}>
+                            title={ten}
+                          >
                             <span className="text-gray-500 block text-[14px] mt-1.5 mb-2 font-normal leading-relaxed">
                               {ten_san_pham}
                             </span>
@@ -2034,25 +2065,38 @@ export default function Donghonu() {
                           {duong_kinh}
                         </span>
                         <div className={styles["price-area"]}>
-                          <div className="text-[15px] text-gray-400 mb-2 line-through">
-                            Giá:{" "}
-                            <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
-                          </div>
-                          <div className="text-[18px] text-red-600 font-semibold">
-                            Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
-                          </div>
+                          {gia_giam > 0 ? (
+                            <>
+                              <div className="text-[15px] text-gray-400 mb-2 line-through">
+                                Giá:{" "}
+                                <span>
+                                  {gia_san_pham.toLocaleString("vi-VN")}₫
+                                </span>
+                              </div>
+                              <div className="text-[18px] text-red-600 font-semibold">
+                                Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-[18px] text-red-600 font-semibold">
+                              Giá: {gia_san_pham.toLocaleString("vi-VN")}₫
+                            </div>
+                          )}
                         </div>
-                        <div className="absolute top-0 left-1.25 bg-red-600 text-white text-sm w-11 h-11 leading-[2.875rem] box-border rounded-full">
-                          <span>
-                            -
-                            {roundDiscount(
-                              Math.round(
-                                ((gia_san_pham - gia_giam) / gia_san_pham) * 100
-                              )
-                            )}
-                            %
-                          </span>
-                        </div>
+                        {gia_giam > 0 && (
+                          <div className="absolute top-0 left-1.25 bg-red-600 text-white text-sm w-11 h-11 leading-[2.875rem] box-border rounded-full">
+                            <span>
+                              -
+                              {roundDiscount(
+                                Math.round(
+                                  ((gia_san_pham - gia_giam) / gia_san_pham) *
+                                    100
+                                )
+                              )}
+                              %
+                            </span>
+                          </div>
+                        )}
                         <div className={styles.clear}></div>
                       </div>
                       {/* end .frame-inner */}

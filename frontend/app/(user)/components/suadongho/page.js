@@ -1,9 +1,39 @@
 import Link from "next/link";
+
 export default function suadongho() {
   return (
     <nav className="lg:max-w-[1170px] md:max-w-[738px] sm:max-w-[357px] lg:ml-[10%] lg:mr-[10%] text-[14px] lg:text-[18px]">
-      <div className="lg:flex w-full h-screen">
+      <div className="lg:flex w-full  h-full">
         <div className="lg:w-3/4 p-1 w-[90%] mr-[5%] ml-[5%]">
+        <div
+        className={(
+          "flex",
+          "items-center uppercase  md:text-[16px] text-[10px] mb-5 mt-6"
+        )}
+      >
+        <span className={("")}>
+          <Link
+            href="/"
+            className={(" text-gray-800", "hover:text-[#796752]")}
+          >
+            Trang chủ
+          </Link>
+        </span>  
+        <span className={("separator", "mx-3", "text-stone-400")}>
+          {" "}
+          &gt;{" "}
+        </span>
+  
+        <span className={("", "text-red-500")}>
+          <Link
+            href="/components/components-thuonghieu/donghonam"
+            className={("link", "text-red-500")}
+          >
+            {" "}
+            SỬA ĐỒNG HỒ
+          </Link>
+        </span>
+      </div>
           <p className="text-center text-[18px] lg:text-2xl ml-5 mt-5">
             DỊCH VỤ SỬA CHỮA ĐỒNG HỒ
           </p>

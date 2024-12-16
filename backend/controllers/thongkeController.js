@@ -10,11 +10,10 @@ const DonHang = require("../models/donhang");
 const { Op } = require('sequelize');
 const sequelize = require('../config/database');
 
-// Get newest users created today
 exports.getNewUsersToday = async (req, res) => {
   try {
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Start of day
+    today.setHours(0, 0, 0, 0); 
 
     const usersToday = await Users.findAll({
       where: {
@@ -222,6 +221,118 @@ exports.getSanPhamBanChayNhat = async (req, res) => {
   }
 }
 
+
+exports.getDoanhThuDonHangTheoThoiGian = async (req, res) => {
+  const { period } = req.query; // 'day', 'month', or 'year'
+
+  if (!['day', 'month', 'year'].includes(period)) {
+    return res.status(400).json({ error: 'Invalid period parameter. Must be day, month, or year.' });
+  }
+
+  try {
+    let attributes = [];
+    let group = [];
+
+    switch (period) {
+      case 'day':
+        attributes = [
+          [sequelize.fn("day", sequelize.col("thoi_gian_tao")), "day"],
+          [sequelize.fn("sum", sequelize.col("tong_tien")), "total"],
+        ];
+        group = [sequelize.fn("day", sequelize.col("thoi_gian_tao"))];
+        break;
+      case 'month':
+        attributes = [
+          [sequelize.fn("month", sequelize.col("thoi_gian_tao")), "month"],
+          [sequelize.fn("sum", sequelize.col("tong_tien")), "total"],
+        ];
+        group = [sequelize.fn("month", sequelize.col("thoi_gian_tao"))];
+        break;
+      case 'year':
+        attributes = [
+          [sequelize.fn("year", sequelize.col("thoi_gian_tao")), "year"],
+          [sequelize.fn("sum", sequelize.col("tong_tien")), "total"],
+        ];
+        group = [sequelize.fn("year", sequelize.col("thoi_gian_tao"))];
+        break;
+      default:
+        // This case is already handled above
+        break;
+    }
+
+    const doanhThuDonHangTheo = await DonHang.findAll({
+      attributes,
+      where: {
+        trang_thai: "Giao hàng thành công",
+      },
+      group,
+    });
+
+    let result = [];
+
+    switch (period) {
+      case 'day':
+        // Initialize days 1-31
+        const doanhThuNgay = new Array(31).fill(0);
+        doanhThuDonHangTheo.forEach(item => {
+          const day = item.get("day") - 1;
+          const totalRevenue = parseFloat(item.get("total")) || 0;
+          if (day >= 0 && day < 31) {
+            doanhThuNgay[day] = totalRevenue;
+          }
+        });
+        result = doanhThuNgay.map((totalRevenue, index) => ({
+          day: index + 1,
+          totalRevenue,
+        }));
+        break;
+      case 'month':
+        // Initialize months 1-12
+        const doanhThuThang = new Array(12).fill(0);
+        doanhThuDonHangTheo.forEach(item => {
+          const month = item.get("month") - 1;
+          const totalRevenue = parseFloat(item.get("total")) || 0;
+          if (month >= 0 && month < 12) {
+            doanhThuThang[month] = totalRevenue;
+          }
+        });
+        result = doanhThuThang.map((totalRevenue, index) => ({
+          month: index + 1,
+          totalRevenue,
+        }));
+        break;
+      case 'year':
+        // Determine the range of years from the data
+        const years = doanhThuDonHangTheo.map(item => item.get("year"));
+        const minYear = Math.min(...years);
+        const maxYear = Math.max(...years);
+        const numberOfYears = maxYear - minYear + 1;
+        const doanhThuNam = Array.from({ length: numberOfYears }, (_, i) => ({
+          year: minYear + i,
+          totalRevenue: 0,
+        }));
+
+        doanhThuDonHangTheo.forEach(item => {
+          const year = item.get("year");
+          const totalRevenue = parseFloat(item.get("total")) || 0;
+          const index = year - minYear;
+          if (index >= 0 && index < doanhThuNam.length) {
+            doanhThuNam[index].totalRevenue = totalRevenue;
+          }
+        });
+
+        result = doanhThuNam;
+        break;
+      default:
+        result = [];
+    }
+
+    res.json({ doanhThuDonHangTheo: result });
+  } catch (error) {
+    console.log("Error: ", error);
+    res.status(500).json({ error: error.message });
+  }
+};
 
 
 

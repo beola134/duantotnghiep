@@ -67,18 +67,14 @@ export default function ThanhToan() {
   // Tính tổng tiền
   const calculateTotal = (items) => {
     const total = items.reduce(
-      (sum, item) =>
-        sum +
-        item.so_luong * (item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham),
+      (sum, item) => sum + item.so_luong * (item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham),
       0
     );
     setTotalAmount(total);
   };
   const amount = Math.round(
     totalAmount -
-      (discountType === "phan_tram"
-        ? (totalAmount * discountValue) / 100
-        : discountValue) +
+      (discountType === "phan_tram" ? (totalAmount * discountValue) / 100 : discountValue) +
       (totalAmount < 1000000 ? 30000 : 0)
   );
 
@@ -142,12 +138,12 @@ export default function ThanhToan() {
         },
         body: JSON.stringify({ ma_voucher: discountCode, orderTotal: totalAmount }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Mã giảm giá không hợp lệ");
       }
-  
+
       const data = await response.json();
       if (data.gia_tri) {
         setDiscountValue(data.gia_tri);
@@ -156,9 +152,9 @@ export default function ThanhToan() {
         setDiscountValue(data.phan_tram);
         setDiscountType("phan_tram");
       }
-      
-      calculateTotal(cartItems); 
-      setIsDiscountApplied(true); 
+
+      calculateTotal(cartItems);
+      setIsDiscountApplied(true);
       toast.success("Mã giảm giá áp dụng thành công!");
     } catch (error) {
       Swal.fire({
@@ -173,9 +169,7 @@ export default function ThanhToan() {
   // Kiểm tra xem sản phẩm còn hàng không
   const ktra = async () => {
     for (const items of cartItems) {
-      const reponse = await fetch(
-        `http://localhost:5000/product/check/${items._id}?quantity=${items.so_luong}`
-      );
+      const reponse = await fetch(`http://localhost:5000/product/check/${items._id}?quantity=${items.so_luong}`);
       if (!reponse.ok) {
         Swal.fire({
           title: "Không đủ hàng",
@@ -226,7 +220,7 @@ export default function ThanhToan() {
       .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-
+  
     if (!token) {
       // Nếu không có token, yêu cầu người dùng đăng nhập
       Swal.fire({
@@ -234,24 +228,23 @@ export default function ThanhToan() {
         title: "Cảnh báo",
         text: "Vui lòng đăng nhập để tiếp tục thanh toán",
       }).then(() => {
-        window.location.href =
-          "/components/components-login/login?redirect=thanhtoan";
+        window.location.href = "/components/components-login/login?redirect=thanhtoan";
       });
       return;
     }
-
+  
     // Kiểm tra tính hợp lệ của các trường thông tin
     const isValid = validateFields();
     if (!isValid) return;
-
+  
     // Kiểm tra xem người dùng đã đăng nhập chưa
     const isLoggedIn = await userLogin();
     if (!isLoggedIn) return;
-
+  
     // Kiểm tra xem sản phẩm còn hàng không
     const isStockAvailable = await ktra();
     if (!isStockAvailable) return;
-
+  
     const orderDetails = {
       dia_chi: user.dia_chi,
       id_nguoi_dung: user._id,
@@ -268,87 +261,97 @@ export default function ThanhToan() {
         dien_thoai: user.dien_thoai,
       },
     };
-    //in ra thông tin đơn hàng
+    // In ra thông tin đơn hàng
     console.log(orderDetails);
-
-    // Xử lý thanh toán qua ZaloPay
-    if (selectedPaymentMethod === "3") {
-      try {
-        const paymentResponse = await axios.post(
-          "http://localhost:5000/pttt/zalo",
-          {
-            amount: amount,
-            orderDetails,
-            headers: {
-              "Content-Type": "application/json",
-            },
+  
+    // Xác nhận đặt hàng trước khi tiếp tục
+    Swal.fire({
+      title: "Bạn có muốn đặt hàng không?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        // Xử lý thanh toán qua ZaloPay
+        if (selectedPaymentMethod === "3") {
+          try {
+            const paymentResponse = await axios.post("http://localhost:5000/pttt/zalo", {
+              amount: amount,
+              orderDetails,
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+  
+            if (paymentResponse.data.return_code === 1) {
+              window.location.href = paymentResponse.data.order_url; // Chuyển hướng đến ZaloPay
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Lỗi",
+                text: "Thanh toán qua ZaloPay không thành công",
+              });
+            }
+          } catch (error) {
+            console.error("Error during payment:", error.message || error);
+            if (error.response) {
+              console.error("Response Data:", error.response.data);
+              console.error("Response Status:", error.response.status);
+            }
+            Swal.fire({
+              icon: "error",
+              title: "Lỗi",
+              text: "Lỗi trong quá trình thanh toán",
+            });
           }
-        );
-
-        if (paymentResponse.data.return_code === 1) {
-          window.location.href = paymentResponse.data.order_url; // Chuyển hướng đến ZaloPay
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "Lỗi",
-            text: "Thanh toán qua ZaloPay không thành công",
-          });
+          // Xử lý thanh toán qua các phương thức khác
+          try {
+            const response = await fetch("http://localhost:5000/donhang/donhang", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(orderDetails),
+            });
+  
+            if (!response.ok) {
+              throw new Error("Lỗi tạo đơn hàng");
+            }
+  
+            const data = await response.json();
+            console.log(data);
+  
+            Swal.fire({
+              icon: "success",
+              title: "Thành công",
+              text: data.message,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = "/"; // Điều hướng về trang chủ sau khi thành công
+              }
+            });
+  
+            // Xóa giỏ hàng sau khi tạo đơn thành công
+            localStorage.setItem("cartItems", JSON.stringify([]));
+            setCartItems([]);
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              title: "Lỗi",
+              text: "Lỗi tạo đơn hàng",
+            });
+          }
         }
-      } catch (error) {
-        console.error("Error during payment:", error.message || error);
-        if (error.response) {
-          console.error("Response Data:", error.response.data);
-          console.error("Response Status:", error.response.status);
-        }
-        Swal.fire({
-          icon: "error",
-          title: "Lỗi",
-          text: "Lỗi trong quá trình thanh toán",
-        });
       }
-    } else {
-      // Xử lý thanh toán qua các phương thức khác
-      try {
-        const response = await fetch("http://localhost:5000/donhang/donhang", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(orderDetails),
-        });
-
-        if (!response.ok) {
-          throw new Error("Lỗi tạo đơn hàng");
-        }
-
-        const data = await response.json();
-        console.log(data);
-
-        Swal.fire({
-          icon: "success",
-          title: "Thành công",
-          text: data.message,
-        }).then(() => {
-          window.location.href = "/"; // Điều hướng về trang chủ sau khi thành công
-        });
-
-        // Xóa giỏ hàng sau khi tạo đơn thành công
-        localStorage.setItem("cartItems", JSON.stringify([]));
-        setCartItems([]);
-      } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Lỗi",
-          text: "Lỗi tạo đơn hàng",
-        });
-      }
-    }
+    });
   };
 
   return (
     <>
-      <div className={styles.container}>
-        <div className={styles.checkoutContainer}>
+      <div className="container">
+        <div className={`${styles.checkoutContainer} flex flex-wrap justify-between`}>
           <ToastContainer
             position="top-right"
             autoClose={5000}
@@ -359,20 +362,15 @@ export default function ThanhToan() {
             draggable
             pauseOnHover
           />
-          <div className={styles.checkoutLeft}>
+          <div className={`${styles.checkoutLeft} flex-[2] w-full lg:w-[70%] sm:w-full md:w-full `}>
             <div className={`${styles.box} ${styles.customerInfo}`}>
               <p className={styles.productTitle}>Thông tin khách hàng</p>
-              <div className={styles.inputGroup}>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={user.email}
-                  readOnly
-                />
+              <div className={`${styles.inputGroup} flex justify-between`}>
+                <input type="email" placeholder="Email" value={user.email} readOnly />
                 <input
                   type="text"
                   placeholder="Điện thoại"
-                  value={user.dien_thoai || ""} // Tránh giá trị undefined
+                  value={user.dien_thoai || ""}
                   onChange={(e) => {
                     setIsEditing(true);
                     setUser((prevUser) => ({
@@ -388,6 +386,7 @@ export default function ThanhToan() {
             <div className={`${styles.box} ${styles.shippingPaymentInfo}`}>
               <p className={styles.productTitle}>Địa chỉ giao hàng</p>
               <input
+                className="block"
                 type="text"
                 placeholder="Họ và tên"
                 value={user.ho_ten || ""}
@@ -402,6 +401,7 @@ export default function ThanhToan() {
               />
 
               <input
+                className="block"
                 type="text"
                 placeholder="Địa chỉ"
                 value={user.dia_chi}
@@ -416,30 +416,30 @@ export default function ThanhToan() {
               />
 
               <textarea
-                className={styles.textarea}
+                className={`${styles.textarea} block`}
                 placeholder="Ghi chú"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
               ></textarea>
 
               {/* phương thức thanh toán  */}
-              <div className={styles.paymentMethods}>
+              <div className={`${styles.paymentMethods}`}>
                 <p className={styles.productTitle}>Phương thức thanh toán</p>
                 <select
                   as="select"
                   name="phuong_thuc_thanh_toan"
-                  className={styles.paymentSelect}
+                  className={`${styles.paymentSelect} w-full `}
                   value={selectedPaymentMethod || ""}
                   onChange={(e) => setSelectedPaymentMethod(e.target.value)}
                 >
-                  <option value="" className={styles.paymentOption} disabled>
+                  <option value="" className={`${styles.paymentOption} flex items-center `} disabled>
                     Chọn phương thức thanh toán
                   </option>
-                  <option value={1} className={styles.paymentOption}>
+                  <option value={1} className={`${styles.paymentOption} flex items-center`}>
                     Thanh toán khi nhận hàng
                   </option>
 
-                  <option value={3} className={styles.paymentOption}>
+                  <option value={3} className={`${styles.paymentOption} flex items-center`}>
                     Thanh toán bằng ZaloPay
                   </option>
                 </select>
@@ -448,143 +448,99 @@ export default function ThanhToan() {
 
             {/* product */}
             {cartItems.map((item, index) => (
-              <div
-                className={`${styles.box} ${styles.productCard}`}
-                key={item._id}
-              >
-                <div className={styles.productInfo}>
+              <div className={`${styles.box} ${styles.productCard} flex flex-wrap items-center `} key={item._id}>
+                <div className="flex w-full md:w-auto">
                   <div className={styles.productLeft}>
                     <p className={styles.productTitle}>Sản phẩm</p>
-                    <div className={styles.productImage}>
-                      <img
-                        src={`http://localhost:5000/images/${item.hinh_anh}`}
-                        alt={item.ten_san_pham}
-                      />
+                    <div className="w-20 h-auto">
+                      <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
                     </div>
                   </div>
 
-                  <div
-                    style={{ margin: "20px" }}
-                    className={styles.productDetails}
-                  >
-                    <p className={styles.productName}>
-                      Tên sản phẩm: {item.ten_san_pham}
-                    </p>
+                  <div className="flex flex-col justify-between w-full md:w-auto mt-3">
+                    <p className={styles.productName}>Tên sản phẩm: {item.ten_san_pham}</p>
                     <p className={styles.productModel}>Loại máy: {item.loai}</p>
-                    <p className={styles.productCode}>
-                      Mã sản phẩm: {item.ma_san_pham}
-                    </p>
-                    <p className={styles.productSize}>
-                      Đường kính: {item.duong_kinh}
-                    </p>
+                    <p className={styles.productCode}>Mã sản phẩm: {item.ma_san_pham}</p>
+                    <p className={styles.productSize}>Đường kính: {item.duong_kinh}</p>
                   </div>
                 </div>
-                <div className={styles.productActions}>
-                  <div className={styles.quantityPrice}>
-                    <div className={styles.quantity}>
-                      <button
-                        onClick={() => handleDecrease(index)}
-                        className={styles.quantityBtn}
-                      >
+                <div className="flex flex-col items-end w-full md:w-auto">
+                  <div className="flex items-center justify-end mb-2.5 ml-5">
+                    <div className="flex items-center mr-5">
+                      <button onClick={() => handleDecrease(index)} className={styles.quantityBtn}>
                         -
                       </button>
-                      <input
-                        type="text"
-                        value={item.so_luong}
-                        readOnly
-                        className={styles.quantityInput}
-                      />
-                      <button
-                        onClick={() => handleIncrease(index)}
-                        className={styles.quantityBtn}
-                      >
+                      <input type="text" value={item.so_luong} readOnly className={styles.quantityInput} />
+                      <button onClick={() => handleIncrease(index)} className={styles.quantityBtn}>
                         +
                       </button>
                     </div>
                     <p className={styles.productPrice}>
-                      {(item.gia_giam > 0
-                        ? item.gia_giam
-                        : item.gia_san_pham
-                      ).toLocaleString("vi-VN")}
-                      ₫
+                      {(item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham).toLocaleString("vi-VN")}₫
                     </p>
+                    <button onClick={() => handleDelete(index)} className={`${styles.deleteBtn} ml-2 mb-2`}>
+                      🗑️
+                    </button>
                   </div>
-                  <button
-                    onClick={() => handleDelete(index)}
-                    className={styles.deleteBtn}
-                  >
-                    🗑️
-                  </button>
                 </div>
               </div>
             ))}
           </div>
-
           {/* tổng thanh toán */}
-          <aside className={styles.cartSummary}>
-            <div className={styles.discountCode}>
+          <div className={`${styles.cartSummary} w-full lg:w-[30%] sm:w-full md:w-full`}>
+            <div className={`${styles.discountCode} `}>
               <input
+                className="w-[70%] sm:w-full md:w-[87%] lg:w-[203px]"
                 type="text"
                 placeholder="Nhập mã..."
                 value={discountCode}
                 onChange={(e) => setDiscountCode(e.target.value)}
               />
-              <button onClick={applyDiscount} disabled={isDiscountApplied}>
+              <button onClick={applyDiscount} disabled={isDiscountApplied} className="float-end">
                 Áp dụng
               </button>
               <hr />
             </div>
             <div className={styles.orderSummary}>
-              <p>
+              <p className="flex justify-between">
                 Tổng tiền hàng:
                 <span className={styles.price}>
                   {cartItems
                     .reduce(
-                      (sum, item) =>
-                        sum +
-                        item.so_luong *
-                          (item.gia_giam > 0
-                            ? item.gia_giam
-                            : item.gia_san_pham),
+                      (sum, item) => sum + item.so_luong * (item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham),
                       0
                     )
                     .toLocaleString("vi-VN")}
                   ₫
                 </span>
               </p>
-              <p>
+              <p className="flex justify-between">
                 Ưu đãi:
                 <span className={styles.price}>
-                  {discountType === "phan_tram"
-                    ? `-${discountValue}%`
-                    : `-${discountValue.toLocaleString("vi-VN")}₫`}
+                  {discountType === "phan_tram" ? `-${discountValue}%` : `-${discountValue.toLocaleString("vi-VN")}₫`}
                 </span>
               </p>
 
-              <p>
+              <p className="flex justify-between">
                 Phí vận chuyển:
-                <span className={styles.price}>
-                  {totalAmount > 1000000 ? "Miễn phí" : "30.000₫"}
-                </span>
+                <span className={styles.price}>{totalAmount > 1000000 ? "Miễn phí" : "30.000₫"}</span>
               </p>
-              <p className={styles.totalAmount}>
+              <p className={`${styles.totalAmount} flex justify-between`}>
                 Tổng thanh toán:
                 <span className={styles.price}>
                   {(
                     totalAmount -
-                    (discountType === "phan_tram"
-                      ? (totalAmount * discountValue) / 100
-                      : discountValue) +
+                    (discountType === "phan_tram" ? (totalAmount * discountValue) / 100 : discountValue) +
                     (totalAmount < 1000000 ? 30000 : 0)
                   ).toLocaleString("vi-VN")}
                   ₫
                 </span>
               </p>
             </div>
-            <button className={styles.checkoutButton} onClick={handleClick}>
+            <button className={`${styles.checkoutButton} w-full`} onClick={handleClick}>
               Tiến hành thanh toán
             </button>
-          </aside>
+          </div>
         </div>
       </div>
     </>

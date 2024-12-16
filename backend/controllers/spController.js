@@ -119,6 +119,7 @@ exports.getAllProducts = async (req, res) => {
           id_danh_muc: danhmucId,
         } = req.body;
         const hinh_anh = req.file ? req.file.originalname : "";
+        const sanitizedDanhMucId = danhmucId|| null;
         // Kiểm tra danh mục
         if (!thuonghieuId || !(await ThuongHieu.findOne({ where: { _id: thuonghieuId } }))) {
           return res.status(400).json({ error: "ID thương hiệu không hợp lệ" });
@@ -153,7 +154,7 @@ exports.getAllProducts = async (req, res) => {
           mau_day,
           do_dai_day,
           id_thuong_hieu: thuonghieuId,
-          id_danh_muc: danhmucId,
+          id_danh_muc: sanitizedDanhMucId,
 
         });
         res.json({ product });
@@ -169,6 +170,9 @@ exports.getAllProducts = async (req, res) => {
       const product = await Product.findOne({ where: { _id: req.params.id } });
       if (!product) {
         return res.status(404).json({ error: "Không tìm thấy sản phẩm" });
+      }
+      if (product.so_luong > 0) {
+        return res.status(400).json({ error: "Sản phẩm còn hàng, không thể xóa" });
       }
       await product.destroy();
       res.json({ message: "Xóa sản phẩm thành công" });
@@ -215,8 +219,10 @@ exports.getAllProducts = async (req, res) => {
           mau_day,
           do_dai_day,
           id_thuong_hieu: thuonghieuId,
+          id_danh_muc: danhmucId,
         } = req.body;
         const hinh_anh = req.file ? req.file.originalname : product.hinh_anh;
+        const sanitizedDanhMucId = danhmucId|| null;
         // Kiểm tra thương hiệu
         if (!thuonghieuId || !(await ThuongHieu.findOne({ where: { _id: thuonghieuId } }))) {
           return res.status(400).json({ error: "ID thương hiệu không hợp lệ" });
@@ -248,6 +254,7 @@ exports.getAllProducts = async (req, res) => {
           mau_day,
           do_dai_day,
           id_thuong_hieu: thuonghieuId,
+          id_danh_muc: sanitizedDanhMucId,
         });
         res.json({ product });
       });

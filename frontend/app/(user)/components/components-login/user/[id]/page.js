@@ -4,9 +4,11 @@ import styles from "../user.module.css";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
-
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
+import { useRouter } from "next/navigation"; 
 const User = ({ params }) => {
   const { id } = params;
+  const router = useRouter(); 
   const [userData, setUserData] = useState({
     ten_dang_nhap: "",
     ho_ten: "",
@@ -27,7 +29,11 @@ const User = ({ params }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [mounted, setMounted] = useState(false);
-
+  const [showPassword, setShowPassword] = useState({
+    mat_khau: false,
+    mat_khau_moi: false,
+    xac_nhan_mat_khau: false,
+  });
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -137,47 +143,58 @@ const User = ({ params }) => {
     setAvatarFile(e.target.files[0]);
   };
 
-  const handleSave = async () => {
-    const formData = new FormData();
-    formData.append("ten_dang_nhap", userData.ten_dang_nhap);
-    formData.append("ho_ten", userData.ho_ten);
-    formData.append("email", userData.email);
-    formData.append("dia_chi", userData.dia_chi);
-    formData.append("dien_thoai", userData.dien_thoai);
-    if (avatarFile) {
-      formData.append("hinh_anh", avatarFile);
-    }
-    try {
-      const res = await fetch(`http://localhost:5000/users/update/${id}`, {
-        method: "PUT",
-        body: formData,
-      });
+  const handleSave = async (event) => {
+    event.preventDefault();
+    const result = await Swal.fire({
+      title: "Bạn có chắc chắn muốn cập nhật thông tin?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+    });
 
-      if (res.ok) {
+    if (result.isConfirmed) {
+      const formData = new FormData();
+      formData.append("ten_dang_nhap", userData.ten_dang_nhap);
+      formData.append("ho_ten", userData.ho_ten);
+      formData.append("email", userData.email);
+      formData.append("dia_chi", userData.dia_chi);
+      formData.append("dien_thoai", userData.dien_thoai);
+      if (avatarFile) {
+        formData.append("hinh_anh", avatarFile);
+      }
+      try {
+        const res = await fetch(`http://localhost:5000/users/update/${id}`, {
+          method: "PUT",
+          body: formData,
+        });
+
+        if (res.ok) {
+          Swal.fire({
+            title: "Thành công",
+            text: "Cập nhật thông tin thành công",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+          setIsEditing(false);
+          setAvatarFile(null);
+        } else {
+          Swal.fire({
+            title: "Thất bại",
+            text: "Cập nhật thông tin thất bại",
+            icon: "error",
+            confirmButtonText: "Thử lại",
+          });
+        }
+      } catch (error) {
+        console.error("Error updating user data:", error);
         Swal.fire({
-          title: "Thành công",
-          text: "Cập nhật thông tin thành công",
-          icon: "success",
+          title: "Lỗi",
+          text: "Có lỗi xảy ra, vui lòng thử lại.",
+          icon: "error",
           confirmButtonText: "OK",
         });
-        setIsEditing(false);
-        setAvatarFile(null);
-      } else {
-        Swal.fire({
-          title: "Thất bại",
-          text: "Cập nhật thông tin thất bại",
-          icon: "error",
-          confirmButtonText: "Thử lại",
-        });
       }
-    } catch (error) {
-      console.error("Error updating user data:", error);
-      Swal.fire({
-        title: "Lỗi",
-        text: "Có lỗi xảy ra, vui lòng thử lại.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
     }
   };
 
@@ -186,68 +203,93 @@ const User = ({ params }) => {
     setPasswordData({ ...passwordData, [name]: value });
   };
 
-  const handleSubmitPasswordChange = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  // ...existing code...
+const handleSubmitPasswordChange = async (e) => {
+  e.preventDefault();
 
-    const { mat_khau, mat_khau_moi, xac_nhan_mat_khau } = passwordData;
+  Swal.fire({
+    title: "Bạn có muốn cập nhật?",
+    text: "Bạn có chắc muốn thay đổi mật khẩu?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes",
+    cancelButtonText: "No",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      setIsSubmitting(true);
 
-    if (mat_khau_moi !== xac_nhan_mat_khau) {
-      Swal.fire({
-        title: "Lỗi",
-        text: "Mật khẩu mới và xác nhận mật khẩu không khớp",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
-      setIsSubmitting(false);
-      return;
-    }
-    try {
-      const res = await fetch(`http://localhost:5000/users/changepassword`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: userData.email,
-          mat_khau,
-          mat_khau_moi,
-          xac_nhan_mat_khau,
-        }),
-      });
-      const data = await res.json();
+      const { mat_khau, mat_khau_moi, xac_nhan_mat_khau } = passwordData;
 
-      if (res.ok) {
+      if (mat_khau_moi !== xac_nhan_mat_khau) {
         Swal.fire({
-          title: "Thành công",
-          text: data.message,
-          icon: "success",
-          confirmButtonText: "OK",
-        }).then(() => {
-          localStorage.setItem("activeTab", "changePassword");
-
-          window.location.reload();
-        });
-      } else {
-        Swal.fire({
-          title: "Thất bại",
-          text: data.message,
+          title: "Lỗi",
+          text: "Mật khẩu mới và xác nhận mật khẩu không khớp",
           icon: "error",
-          confirmButtonText: "Thử lại",
+          confirmButtonText: "OK",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+      try {
+        const res = await fetch(
+          `http://localhost:5000/users/changepassword`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: userData.email,
+              mat_khau,
+              mat_khau_moi,
+              xac_nhan_mat_khau,
+            }),
+          }
+        );
+        const data = await res.json();
+
+        if (res.ok) {
+          Swal.fire({
+            title: "Thành công",
+            text: data.message,
+            icon: "success",
+            confirmButtonText: "OK",
+          }).then(() => {
+            localStorage.setItem("activeTab", "changePassword");
+            window.location.reload();
+          });
+        } else if (data.message === "Mật khẩu không hợp lệ") {
+          Swal.fire({
+            title: "Lỗi",
+            text: "Mật khẩu cũ không hợp lệ",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        } else {
+          Swal.fire({
+            title: "Thất bại",
+            text: data.message,
+            icon: "error",
+            confirmButtonText: "Thử lại",
+          });
+        }
+      } catch (error) {
+        console.error("Error changing password:", error);
+        Swal.fire({
+          title: "Lỗi",
+          text: "Có lỗi xảy ra, vui lòng thử lại.",
+          icon: "error",
+          confirmButtonText: "OK",
         });
       }
-    } catch (error) {
-      console.error("Error changing password:", error);
-      Swal.fire({
-        title: "Lỗi",
-        text: "Có lỗi xảy ra, vui lòng thử lại.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
-    }
 
-    setIsSubmitting(false);
-  };
+      setIsSubmitting(false);
+    } else {
+      setIsSubmitting(false);
+    }
+  });
+};
+// ...existing code...
   {
     /*useEffect(() => {
     const savedTab = localStorage.getItem("activeTab");
@@ -314,10 +356,13 @@ const User = ({ params }) => {
       }
     });
   };
-
+  const togglePasswordVisibility = (field) => {
+    setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
   return (
     <div
-      className={`${styles.container} lg:flex lg:justify-around phone-sm:mx-auto sm:mx-auto md:mx-auto text-[16px]`}>
+      className={`${styles.container} lg:flex lg:justify-around phone-sm:mx-auto sm:mx-auto md:mx-auto text-[16px]`}
+    >
       <div className={`${styles.sidebar} lg:w-[200px] `}>
         <div className={styles.profilePicture}>
           <img
@@ -338,14 +383,16 @@ const User = ({ params }) => {
           <p>
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => handleTabClick("profile")}>
+              onClick={() => handleTabClick("profile")}
+            >
               Hồ Sơ
             </span>
           </p>
           <p>
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => handleTabClick("ShowLichsu")}>
+              onClick={() => handleTabClick("ShowLichsu")}
+            >
               Lịch sử mua hàng
             </span>
           </p>
@@ -353,14 +400,16 @@ const User = ({ params }) => {
           <p>
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => handleTabClick("orderShow")}>
+              onClick={() => handleTabClick("orderShow")}
+            >
               Trạng thái đơn hàng
             </span>
           </p>
           <p>
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => handleTabClick("changePassword")}>
+              onClick={() => handleTabClick("changePassword")}
+            >
               Đổi mật khẩu
             </span>
           </p>
@@ -373,7 +422,8 @@ const User = ({ params }) => {
         </div>
       </div>
       <div
-        className={`${styles.profileContent} ml-[30px] phone-sm:ml-0 sm:ml-0 tablet:ml-0 phone-lg:ml-0 `}>
+        className={`${styles.profileContent} ml-[30px] phone-sm:ml-0 sm:ml-0 tablet:ml-0 phone-lg:ml-0 `}
+      >
         {activeTab === "profile" && (
           <div className=" phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%]">
             <p
@@ -382,7 +432,8 @@ const User = ({ params }) => {
                 color: "black",
                 marginBottom: "15px",
                 textAlign: "center",
-              }}>
+              }}
+            >
               Hồ Sơ Người Dùng
             </p>
             <form>
@@ -457,7 +508,8 @@ const User = ({ params }) => {
                     <button
                       type="submit"
                       onClick={handleSave}
-                      className="save-button">
+                      className="save-button"
+                    >
                       Cập nhật
                     </button>
                   </div>
@@ -467,7 +519,8 @@ const User = ({ params }) => {
                   <button
                     type="button"
                     onClick={() => setIsEditing(true)}
-                    className="edit-button">
+                    className="edit-button"
+                  >
                     Chỉnh sửa
                   </button>
                 </div>
@@ -477,15 +530,19 @@ const User = ({ params }) => {
         )}
         {activeTab === "ShowLichsu" && (
           <div
-            className={`${styles.ShowLichsu}  phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%] phone-sm:mt-[5%] tablet:mt-[5%] phone-lg:mt-[5%]`}>
-            <div className=" text-[12px]  lg:text-[16px]">
-              <h2 className="lg:text-[22px] phone-sm:text-[15px] sm:text-[15px] md:text-[16px]">Lịch sử mua hàng</h2>
+            className={`${styles.ShowLichsu} phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%] phone-sm:mt-[5%] tablet:mt-[5%] phone-lg:mt-[5%]`}
+          >
+            <div className="text-[12px] lg:text-[16px]">
+              <h2 className="lg:text-[22px] phone-sm:text-[15px] sm:text-[15px] md:text-[16px]">
+                Lịch sử mua hàng
+              </h2>
               {ShowLichsu.length > 0 ? (
                 <ul>
                   {ShowLichsu.map((order) => (
                     <li key={order._id}>
                       <span
-                        className={`${styles.trh} text-red-500 text-[12px] lg:text-[16px] lg:hidden tablet:hidden phone-lg:hidden mb-10px`}>
+                        className={`${styles.trh} text-red-500 text-[12px] lg:text-[16px] lg:hidden tablet:hidden phone-lg:hidden mb-10px`}
+                      >
                         {order.trang_thai}
                       </span>
                       <div className={`${styles.orderHeader}`}>
@@ -493,18 +550,19 @@ const User = ({ params }) => {
                           Mã Đơn Hàng: {order._id}
                         </p>
                         <span
-                          className={`${styles.trh} text-[12px] lg:text-[16px] phone-sm:hidden`}>
+                          className={`${styles.trh} text-[12px] lg:text-[16px] phone-sm:hidden`}
+                        >
                           {order.trang_thai}
                         </span>
                       </div>
-
-                      <p className=" text-[12px]  lg:text-[16px]">
+        
+                      <p className="text-[12px] lg:text-[16px]">
                         Thời gian đặt hàng:{" "}
                         {new Date(order.thoi_gian_tao).toLocaleString("vi-VN", {
                           timeZone: "Asia/Ho_Chi_Minh",
                         })}
                       </p>
-
+        
                       {order.chiTietDonHangs.map((detail) => (
                         <div key={detail._id} className={styles.productCard}>
                           <img
@@ -512,12 +570,12 @@ const User = ({ params }) => {
                             alt={detail.product.ten}
                             className={`${styles.productImage} phone-sm:w-[50px]`}
                           />
-                          <div className={`${styles.productInfo}  text-[12px]  lg:text-[16px]`}>
-                            <br></br>
-                            <p className={`${styles.productName}  text-[12px]  lg:text-[16px]`}>
+                          <div className={`${styles.productInfo} text-[12px] lg:text-[16px]`}>
+                            <br />
+                            <p className={`${styles.productName} text-[12px] lg:text-[16px]`}>
                               {detail.product.ten}
                             </p>
-                            <br></br>
+                            <br />
                             <div className="flex justify-between phone-sm:block">
                               <p>
                                 Số lượng: <strong>{detail.so_luong}</strong>
@@ -525,22 +583,37 @@ const User = ({ params }) => {
                               <p>
                                 Giá:{" "}
                                 <strong>
-                                  {detail.product.gia_giam.toLocaleString(
-                                    "vi-VN"
-                                  )}
-                                  ₫
+                                  {detail.product.gia_giam.toLocaleString("vi-VN")}₫
                                 </strong>
                               </p>
                             </div>
                           </div>
                         </div>
                       ))}
-
-                      <div className={styles.orderSummary}>
-                        <p>Tổng Giá Trị:</p>
-                        <span className={styles.summaryValue}>
-                          {order.tong_tien.toLocaleString("vi-VN")}₫
-                        </span>
+        
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center">
+                          <p className="mr-2">Tổng Giá Trị:</p>
+                          <span className="font-bold">
+                            {order.tong_tien.toLocaleString("vi-VN")}₫
+                          </span>
+                        </div>
+                        {order.trang_thai === "Giao hàng thành công" && (
+                          <div className="flex space-x-2">
+                            <Link
+                              href={`/components/product-detail/${order.chiTietDonHangs[0]?.product._id}?scrollTo=comments`}
+                              className="bg-blue-500 text-white px-1 py-0.5 sm:px-2 sm:py-1 rounded hover:bg-blue-600 transition-colors text-xs sm:text-sm"
+                            >
+                              Đánh giá
+                            </Link>
+                            <Link
+                              href={`/components/product-detail/${order.chiTietDonHangs[0]?.product._id}`}
+                              className="bg-blue-500 text-white px-1 py-0.5 sm:px-2 sm:py-1 rounded hover:bg-blue-600 transition-colors text-xs sm:text-sm"
+                            >
+                              Mua Lại
+                            </Link>
+                          </div>
+                        )}
                       </div>
                     </li>
                   ))}
@@ -554,15 +627,19 @@ const User = ({ params }) => {
 
         {activeTab === "orderShow" && (
           <div
-            className={`${styles.orderShow} phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%] phone-sm:mt-[5%]  tablet:mt-[5%] phone-lg:mt-[5%]`}>
+            className={`${styles.orderShow} phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%] phone-sm:mt-[5%]  tablet:mt-[5%] phone-lg:mt-[5%]`}
+          >
             <div className="  text-[12px]  lg:text-[16px]">
-              <h2 className="lg:text-[22px] phone-sm:text-[15px] sm:text-[15px] md:text-[16px]">Trạng thái đơn hàng</h2>
+              <h2 className="lg:text-[22px] phone-sm:text-[15px] sm:text-[15px] md:text-[16px]">
+                Trạng thái đơn hàng
+              </h2>
               {orderShow.length > 0 ? (
                 <ul>
                   {orderShow.map((order) => (
                     <li key={order.id}>
                       <span
-                        className={`${styles.trh} text-red-500 text-[12px] lg:text-[16px] lg:hidden tablet:hidden phone-lg:hidden mb-10px`}>
+                        className={`${styles.trh} text-red-500 text-[12px] lg:text-[16px] lg:hidden tablet:hidden phone-lg:hidden mb-10px`}
+                      >
                         {order.trang_thai}
                       </span>
                       <div className={`${styles.orderHeader}`}>
@@ -570,7 +647,8 @@ const User = ({ params }) => {
                           Mã Đơn Hàng: {order._id}
                         </p>
                         <span
-                          className={`${styles.trh} text-[12px] lg:text-[16px] phone-sm:hidden`}>
+                          className={`${styles.trh} text-[12px] lg:text-[16px] phone-sm:hidden`}
+                        >
                           {order.trang_thai}
                         </span>
                       </div>
@@ -597,12 +675,18 @@ const User = ({ params }) => {
                           <tbody>
                             {order.chiTietDonHangs.map((detail) => (
                               <tr key={detail._id}>
-                                <td className="w-[45%]">{detail.product.ten}</td>
+                                <td className="w-[45%]">
+                                  {detail.product.ten}
+                                </td>
                                 <td className="w-[20%]">
                                   <img
                                     src={`http://localhost:5000/images/${detail.product.hinh_anh}`}
                                     alt={detail.gia_giam}
-                                    style={{marginLeft:"10%", width: "50px", height: "auto" }}
+                                    style={{
+                                      marginLeft: "10%",
+                                      width: "50px",
+                                      height: "auto",
+                                    }}
                                   />
                                 </td>
                                 <td className="w-[15%]">{detail.so_luong}</td>
@@ -622,7 +706,8 @@ const User = ({ params }) => {
                         {order.chiTietDonHangs.map((detail) => (
                           <div
                             key={detail._id}
-                            className="border border-gray-300 p-4 mb-4 rounded-lg shadow-sm">
+                            className="border border-gray-300 p-4 mb-4 rounded-lg shadow-sm"
+                          >
                             <p className="font-semibold">
                               Tên Sản Phẩm: {detail.product.ten}
                             </p>
@@ -650,12 +735,14 @@ const User = ({ params }) => {
                           style={{
                             margin: "0px 5px",
                             color: "black",
-                          }}>
+                          }}
+                        >
                           <strong>{order.phi_ship}</strong>
                         </span>{" "}
                       </p>
                       <div
-                        className={`${styles.cancel} text-[12px]  lg:text-[16px] flex justify-between phone-sm:block`}>
+                        className={`${styles.cancel} text-[12px]  lg:text-[16px] flex justify-between phone-sm:block`}
+                      >
                         <p>
                           Tổng Thanh Toán:
                           <span
@@ -663,7 +750,8 @@ const User = ({ params }) => {
                               fontSize: "20px",
                               margin: "0px 5px",
                               color: "red",
-                            }}>
+                            }}
+                          >
                             <strong>
                               {order.tong_tien.toLocaleString("vi-VN")}₫
                             </strong>
@@ -674,7 +762,8 @@ const User = ({ params }) => {
                             className="btn btn-danger phone-sm:ml-[50%]"
                             onClick={() =>
                               huyDonHang(order._id, "Đơn hàng đã hủy")
-                            }>
+                            }
+                          >
                             Hủy đơn hàng
                           </button>
                         )}
@@ -696,44 +785,78 @@ const User = ({ params }) => {
                 color: "black",
                 marginBottom: "15px",
                 textAlign: "center",
-              }}>
+              }}
+            >
               Đổi Mật Khẩu
             </p>
             <form onSubmit={handleSubmitPasswordChange}>
               <div className={styles.formGroup}>
                 <label htmlFor="mat_khau">Mật khẩu cũ:</label>
-                <input
-                  type="password"
-                  id="mat_khau"
-                  name="mat_khau"
-                  value={passwordData.mat_khau}
-                  onChange={handlePasswordChange}
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword.mat_khau ? "text" : "password"}
+                    id="mat_khau"
+                    name="mat_khau"
+                    value={passwordData.mat_khau}
+                    onChange={handlePasswordChange}
+                    required
+                    className="pr-8"
+                  />
+                  <span
+                    onClick={() => togglePasswordVisibility("mat_khau")}
+                    className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 cursor-pointer"
+                  >
+                    {showPassword.mat_khau ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                </div>
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="mat_khau_moi">Mật khẩu mới:</label>
-                <input
-                  type="password"
-                  id="mat_khau_moi"
-                  name="mat_khau_moi"
-                  value={passwordData.mat_khau_moi}
-                  onChange={handlePasswordChange}
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword.mat_khau_moi ? "text" : "password"}
+                    id="mat_khau_moi"
+                    name="mat_khau_moi"
+                    value={passwordData.mat_khau_moi}
+                    onChange={handlePasswordChange}
+                    required
+                    className="pr-8"
+                  />
+                  <span
+                    onClick={() => togglePasswordVisibility("mat_khau_moi")}
+                    className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 cursor-pointer"
+                  >
+                    {showPassword.mat_khau_moi ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                </div>
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="xac_nhan_mat_khau">
                   Xác nhận mật khẩu mới:
                 </label>
-                <input
-                  type="password"
-                  id="xac_nhan_mat_khau"
-                  name="xac_nhan_mat_khau"
-                  value={passwordData.xac_nhan_mat_khau}
-                  onChange={handlePasswordChange}
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={
+                      showPassword.xac_nhan_mat_khau ? "text" : "password"
+                    }
+                    id="xac_nhan_mat_khau"
+                    name="xac_nhan_mat_khau"
+                    value={passwordData.xac_nhan_mat_khau}
+                    onChange={handlePasswordChange}
+                    required
+                    className="pr-8"
+                  />
+                  <span
+                    onClick={() => togglePasswordVisibility("xac_nhan_mat_khau")}
+                    className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 cursor-pointer"
+                  >
+                    {showPassword.xac_nhan_mat_khau ? (
+                      <FaEyeSlash />
+                    ) : (
+                      <FaEye />
+                    )}
+                  </span>
+                </div>
               </div>
 
               <div className={styles.pro}>

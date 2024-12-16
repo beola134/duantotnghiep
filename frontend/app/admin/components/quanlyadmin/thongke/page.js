@@ -9,25 +9,26 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 
 export default function AdminStatistics() {
-  const [doanhthuthang, setdoanhthuthang ]= useState([]);
+  const [doanhthuTheoThoiGian, setDoanhthuTheoThoiGian] = useState([]);
+  const [period, setPeriod] = useState('month'); // Added state for period
   const [spbanchay, setspbanchay]= useState([]);
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchRevenue = async () => {
       try {
-        const response = await fetch('http://localhost:5000/thongke/getTotalRevenueByMonth');
+        const response = await fetch(`http://localhost:5000/thongke/getTotalRevenueByTime?period=${period}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setdoanhthuthang(data.doanhThuDonHangTheo); 
+        setDoanhthuTheoThoiGian(data.doanhThuDonHangTheo); 
         setLoading(false); 
       } catch (error) {
         setError(error.message); 
         setLoading(false);
       }
     };
-    fetchData();
-  }, []); 
+    fetchRevenue();
+  }, [period]);  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -46,39 +47,61 @@ export default function AdminStatistics() {
     fetchData();
   }, []); 
 
-   const labels = doanhthuthang.map(item => item.month); 
-  const data = doanhthuthang.map(item => item.totalRevenue); 
   const labels2 = spbanchay.map(product => product.ten_san_pham);
   const data2 = spbanchay.map(product => parseInt(product.total));
 
-  const chartData = {
-    labels: labels,
+
+  const labelsDoanhThu = doanhthuTheoThoiGian.map(item => {
+    switch (period) {
+      case 'day':
+        return `Ngày ${item.day}`;
+      case 'month':
+        return `Tháng ${item.month}`;
+      case 'year':
+        return `Năm ${item.year}`;
+      default:
+        return '';
+    }
+  });
+  const dataDoanhThu = doanhthuTheoThoiGian.map(item => item.totalRevenue);
+
+  const chartDataDoanhThu = {
+    labels: labelsDoanhThu,
     datasets: [
       {
-        label: 'Doanh thu tháng',
-        data: data,
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        label: `Doanh thu ${period}`,
+        data: dataDoanhThu,
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        borderColor: 'rgba(153, 102, 255, 1)',
         borderWidth: 2,
       },
     ],
+  };
+  
+  const chartOptions2 = {
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1,
+          precision: 0
+        }
+      }
+    }
   };
   const chartData2 = {
-    labels: labels2,
-    datasets: [
-      {
-        label: 'Số lượng bán ra',
-        data: data2,
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 2,
-      },
-    ],
-  };
-  
-
-  
-
+  labels: labels2,
+  datasets: [
+    {
+      label: 'Top 5 Sản Phẩm Bán Chạy',
+      data: data2,
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 2,
+    },
+  ],
+};
+// ...existing code...
 
 
   //fect dữ liệu
@@ -297,11 +320,20 @@ export default function AdminStatistics() {
       <div className={cx("data")}>
         <div className={cx("content-data")}>
           <div className={cx("head")}>
-            <h3>BIỂU ĐỒ DOANH THU 12 THÁNG</h3>
+            <h3>BIỂU ĐỒ DOANH THU THEO THỜI GIAN</h3>
+            <select 
+            value={period} 
+            onChange={(e) => setPeriod(e.target.value)}
+            className={cx("select-period")}
+          >
+            <option value="day">Theo Ngày</option>
+            <option value="month">Theo Tháng</option>
+            <option value="year">Theo Năm</option>
+          </select>
           </div>
           <div className={cx("chart")}>
             <div id="chart1">
-              <Bar data={chartData} />
+            <Bar data={chartDataDoanhThu} />
             </div>
           </div>
         </div>
@@ -311,7 +343,7 @@ export default function AdminStatistics() {
           </div>
           <div className={cx("chat-box")}>
             <div id="chart">
-              <Bar data={chartData2} />
+              <Bar data={chartData2} options={chartOptions2} />
             </div>
           </div>
         </div>

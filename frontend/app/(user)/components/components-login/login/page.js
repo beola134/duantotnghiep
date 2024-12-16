@@ -55,7 +55,7 @@ export default function Login() {
         localStorage.setItem("avatar", avatar);
 
         const payload = jwtDecode(token);
-        const welcomeMessage = payload.quyen === 1 ? "Chào mừng quản trị viên" : "Chào mừng người dùng";
+        const welcomeMessage = payload.quyen === 1 ? "Chào mừng quản trị viên" : "Chào mừng bạn đến với Website!";
 
         Swal.fire({
           title: "Đăng nhập thành công",
@@ -66,18 +66,17 @@ export default function Login() {
           if (typeof window !== "undefined") {
             const queryParam = new URLSearchParams(window.location.search);
             const redirect = queryParam.get("redirect");
-            if (redirect === "thanhtoan") {
-              window.location.href = "/components/components-giaodich/thanhtoan";
-            } else if (redirect === "/") {
-              window.location.href = "/";
-            } else if (payload.quyen === 2) {
-              window.location.href = "http://localhost:3001/";
-            } else {
+            if (payload.quyen === 1) {
               window.location.href = "/admin";
+            } else if (redirect && redirect.startsWith("/")) {
+              window.location.href = redirect;
+            } else if (redirect === "thanhtoan") {
+              window.location.href = "/components/components-giaodich/thanhtoan";
+            } else {
+              window.location.href = "/";
             }
           }
         });
-        
       } catch (error) {
         setSubmitting(false);
         Swal.fire({
@@ -117,7 +116,7 @@ export default function Login() {
     } catch (error) {
       Swal.fire({
         title: "Đăng nhập thất bại",
-        text: error.message || "Vui lòng thử lại.",
+        text: "Tài khoản của bạn đã tồn tại.",
         icon: "error",
         showConfirmButton: true,
       });
@@ -139,13 +138,13 @@ export default function Login() {
   };
 
   return (
-    <div className={styles.mainContainer}>
-      <div className={styles.container}>
-        <div className={styles.heading}>Đăng nhập</div>
+    <div className={`${styles.mainContainer} flex justify-center items-center h-screen opacity-0 `}>
+      <div className={`${styles.container} max-w-[350px] w-[350px] h-auto px-[25px] py-[25px]`}>
+        <div className="text-center font-semibold text-[30px] sm:text-30px text-[#333] mb-5">Đăng nhập</div>
         <form onSubmit={formik.handleSubmit} className={styles.form}>
           <input
             type="email"
-            className={`${styles.input} ${formik.errors.email ? styles.inputError : ""}`}
+            className={`${styles.input} w-full px-5 py-[15px] ${formik.errors.email ? styles.inputError : ""}`}
             id="email"
             name="email"
             onChange={formik.handleChange}
@@ -154,38 +153,42 @@ export default function Login() {
           />
           {formik.errors.email && <p className={styles.error}>{formik.errors.email}</p>}
 
-          <div className={styles.passwordWrapper}>
+          <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
-              className={`${styles.input} ${formik.errors.password ? styles.inputError : ""}`}
+              className={`${styles.input} w-full px-5 py-[15px]  ${formik.errors.password ? styles.inputError : ""}`}
               id="password"
               name="password"
               onChange={formik.handleChange}
               value={formik.values.password}
               placeholder="Mật khẩu"
             />
-            <div className={styles.togglePasswordIcon} onClick={togglePasswordVisibility}>
+            <div className={`${styles.togglePasswordIcon} absolute`} onClick={togglePasswordVisibility}>
               {showPassword ? <FaEye /> : <FaEyeSlash />}
             </div>
           </div>
           {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
 
-          <span className={styles.forgotPassword}>
+          <span className={`${styles.forgotPassword} block`}>
             <Link href="./forgot-password">Quên mật khẩu</Link>
           </span>
 
-          <input type="submit" className={styles.loginButton} value="Sign In" />
+          <input
+            type="submit"
+            className={`${styles.loginButton} block w-full py-[15px] my-5 mx-auto`}
+            value="Đăng nhập"
+          />
         </form>
 
         <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
-          <div className={styles.socialAccountContainer}>
-            <span className={styles.title}>Đăng nhập với</span>
+          <div className={`${styles.socialAccountContainer} flex flex-col items-center mt-[25px]`}>
+            <span className={`${styles.title} block`}>Đăng nhập với</span>
 
             <GoogleLogin
               onSuccess={handleLoginSuccess}
               onFailure={handleLoginFailure}
               render={(renderProps) => (
-                <div className={styles.socialAccounts}>
+                <div className={`${styles.socialAccounts} w-10 h-10`}>
                   <button
                     className={styles.socialButton}
                     onClick={renderProps.onClick}
@@ -197,7 +200,7 @@ export default function Login() {
           </div>
         </GoogleOAuthProvider>
 
-        <div className={styles.signUpNow}>
+        <div className={`${styles.signUpNow} block`}>
           <span className={styles.dontHaveAnAccount}>
             Bạn chưa có tài khoản? &nbsp;
             <Link href="/components/components-login/register" id="gotoSignup">

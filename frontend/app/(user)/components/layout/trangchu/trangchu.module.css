@@ -1,13 +1,7 @@
-.container {
-  width: 1170px;
-  max-width: 100%;
-  box-sizing: border-box;
-  margin: 0px auto;
-}
+/* 
 .productContainer {
   width: 1170px;
   max-width: 100%;
-
   margin: 5px auto;
   margin-top: 40px;
 }
@@ -62,7 +56,7 @@
   height: 2px;
   background-color: #796752;
 }
-.active1::before {
+.aaa::before {
   content: "";
   position: absolute;
   bottom: 0px;
@@ -70,9 +64,16 @@
   height: 0.5px;
   border-bottom: rgb(169, 98, 50, 0.2) 0.5px solid;
   margin-left: -3333px;
-}
+} */
 
-.dongHoNam {
+
+/*product*/
+
+
+
+
+
+/* .dongHoNam {
   max-width: 1170px;
   display: grid;
   grid-template-columns: repeat(5, 20%);
@@ -230,9 +231,9 @@
   height: 22px;
   padding: 2px;
   margin-bottom: 10px;
-}
+} */
 
-.slideSection {
+/* .slideSection {
   padding: 20px;
   width: 1170px;
   margin: auto;
@@ -289,15 +290,9 @@
 .prevButton:hover,
 .nextButton:hover {
   background-color: #777;
-}
+} */
 
-.container-news {
-  width: 1170px;
-  margin: 20px auto;
-  display: block;
-  justify-content: space-between;
-  max-height: 850px;
-}
+
 .section-news {
   display: flex;
   gap: 20px;
@@ -315,9 +310,9 @@
 }
 
 .news-section {
-  max-height: 700px; /* Giới hạn chiều cao */
-  overflow-y: auto; /* Thêm thanh cuộn dọc khi nội dung vượt quá chiều cao */
-  scrollbar-width: thin; /* (Tùy chọn) Tùy chỉnh thanh cuộn cho Firefox */
+  max-height: 700px;
+  overflow-y: auto; 
+  scrollbar-width: thin; 
   scrollbar-color: #888 #f1f1f1;
 }
 
@@ -373,20 +368,7 @@
   object-fit: cover;
 }
 
-.news-section::-webkit-scrollbar {
-  width: 12px;
-}
 
-.news-section::-webkit-scrollbar-thumb {
-  background: #777777;
-  border-radius: 10px;
-  border: solid white 1px;
-}
-
-.news-section::-webkit-scrollbar-track {
-  background: #f0f0f0;
-  border-radius: 10px;
-}
 
 .news-item:last-child {
   border-bottom: none;
@@ -465,7 +447,12 @@
 
 .related-video p {
   font-size: 12px;
-  color: red;
+  color: white;
+  margin-top: -15px;
+  text-algin:center;
+}
+.related-video p:hover{
+  color:red;
 }
 .video-title {
   display: flex;
@@ -491,23 +478,38 @@
   padding: 10px 10px;
   font-size: 13px;
   display: flex;
-
   align-items: center;
   z-index: 999;
   background-color: #777777 0.5;
   width: 575px;
   margin-right: -160px;
 }
-.title-videos {
-  padding: 0px 3px;
-  height: 28px;
-  font-size: 12px;
-  text-align: left;
-  font-weight: normal;
-  line-height: 14px;
+.title-video:hover{
+  color:red;
 }
 
-.ttContainer {
+
+
+
+.titleVs::before,
+.titleVs::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 200px;
+  height: 2px;
+  background: rgb(96, 96, 96);
+}
+
+.titleVs::before {
+  margin-left: -220px;
+}
+
+.titleVs::after {
+  margin-left: 20px;
+}
+
+/* .ttContainer {
   text-align: center;
   margin: 50px auto;
   max-width: 1170px;
@@ -624,9 +626,9 @@
   100% {
     transform: translateX(0);
   }
-}
+}*/
 
-.certificateSection {
+/* .certificateSection {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -708,6 +710,99 @@
   width: 130px;
   padding: 5px 10px;
   height: 70px;
+} */
+
+.strengthsRectangle4Block {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  padding-top: 18px;
+  padding-bottom: 5px;
+  background: #f1f1f1cc;
+  margin-top: 15px;
+}
+.strengthsRectangle4Block .item {
+  display: grid;
+  cursor: pointer;
+  border-top: 0px;
+  border-left: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  transition: 0.5s;
+  color: #777;
+  position: relative;
+  float: left;
+  padding: 0px 10px 0px 0px;
+}
+.strengthsRectangle4Block .item .itemInner {
+  transition: 0.5s;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  width: 100%;
+}
+.strengthsRectangle4Block .item .item1 {
+  vertical-align: middle;
+  display: block;
+  box-sizing: border-box;
+  color: #fff;
+  text-align: center;
+  float: left;
+  width: 65px;
+  position: relative;
+  margin-right: 5px;
+}
+.strengthsRectangle4Block .item .item1 .isvg {
+  box-sizing: border-box;
+  float: left;
+  width: 75px;
+  height: 60px;
+  border-radius: 50%;
+  position: relative;
+  padding: 12px;
+}
+.strengthsRectangle4Block .item .item1 svg {
+  fill: #796752;
+  width: 35px;
+  height: 35px;
+  transition: 0.5s;
+}
+.strengthsRectangle4Block .item1 .isvg svg {
+  animation: 4s ease-in-out 0s normal none infinite running fade-bg2;
+}
+@keyframes fade-bg2 {
+  0% {
+    transform: translate(0);
+  }
+  25% {
+    transform: translate(0, -6px);
+  }
+  37% {
+    transform: translate(0, 6px);
+  }
+  50% {
+    transform: translate(0, -6px);
+  }
+  60% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+.strengthsRectangle4Block .item .itemR {
+  vertical-align: middle;
+  text-align: left;
+  display: table-cell;
+  line-height: 20px;
+  box-sizing: border-box;
+  transition: 0.3s ease-in-out all;
+  width: calc(100% - 80px);
+  margin-left: 5px;
+  height: 60px;
+}
+.strengthsRectangle4Block .item .itemR a {
+  font-size: 14px;
+  text-transform: uppercase;
 }
 /* voucher */
 .voucherList {
@@ -721,7 +816,7 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 16px;
-  width: 280px;
+  width: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
@@ -739,7 +834,6 @@
 
 .code {
   font-weight: bold;
-  color: #ff9800;
 }
 
 .actions {
@@ -750,7 +844,7 @@
 }
 
 .copyBtn {
-  background-color: #ff9800;
+  background-color: #796752;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -776,4 +870,13 @@
 .conditions:hover {
   text-decoration: none;
 
+}
+
+.textClamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* Số dòng muốn giới hạn */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal; /* Cho phép xuống dòng */
 }
