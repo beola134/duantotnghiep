@@ -463,7 +463,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "pt-[10px] bg-[#796752]  w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "pt-[10px] bg-[#9c8e78]  w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonam">
@@ -480,7 +480,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "p-[5px] bg-[#796752]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "p-[5px] bg-[#9c8e78]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonam">
@@ -593,7 +593,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "pt-[10px] bg-[#796752] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "pt-[10px] bg-[#9c8e78] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonu">
@@ -610,7 +610,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "p-[5px] bg-[#796752]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "p-[5px] bg-[#9c8e78]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonu">
@@ -722,7 +722,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "pt-[10px] bg-[#796752] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "pt-[10px] bg-[#9c8e78] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghodoi">
@@ -739,7 +739,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "p-[5px] bg-[#796752]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "p-[5px] bg-[#9c8e78]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghodoi">
@@ -914,7 +914,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "pt-[10px] bg-[#796752] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "pt-[10px] bg-[#9c8e78] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Nam">
@@ -931,7 +931,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "p-[5px] bg-[#796752]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "p-[5px] bg-[#9c8e78]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Nam">
@@ -1050,7 +1050,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "pt-[10px] bg-[#796752] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "pt-[10px] bg-[#9c8e78] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Nữ">
@@ -1067,7 +1067,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "p-[5px] bg-[#796752]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "p-[5px] bg-[#9c8e78]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Nữ">
@@ -1186,7 +1186,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "pt-[10px] bg-[#796752] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "pt-[10px] bg-[#9c8e78] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Đồng Hồ Đôi">
@@ -1203,7 +1203,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "pt-[10px] bg-[#796752]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "pt-[10px] bg-[#9c8e78]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                      <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Đồng Hồ Đôi">
