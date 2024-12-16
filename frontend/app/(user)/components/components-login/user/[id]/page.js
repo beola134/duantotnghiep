@@ -5,9 +5,10 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
-
+import { useRouter } from "next/navigation"; 
 const User = ({ params }) => {
   const { id } = params;
+  const router = useRouter(); 
   const [userData, setUserData] = useState({
     ten_dang_nhap: "",
     ho_ten: "",
@@ -529,9 +530,9 @@ const handleSubmitPasswordChange = async (e) => {
         )}
         {activeTab === "ShowLichsu" && (
           <div
-            className={`${styles.ShowLichsu}  phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%] phone-sm:mt-[5%] tablet:mt-[5%] phone-lg:mt-[5%]`}
+            className={`${styles.ShowLichsu} phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%] phone-sm:mt-[5%] tablet:mt-[5%] phone-lg:mt-[5%]`}
           >
-            <div className=" text-[12px]  lg:text-[16px]">
+            <div className="text-[12px] lg:text-[16px]">
               <h2 className="lg:text-[22px] phone-sm:text-[15px] sm:text-[15px] md:text-[16px]">
                 Lịch sử mua hàng
               </h2>
@@ -554,14 +555,14 @@ const handleSubmitPasswordChange = async (e) => {
                           {order.trang_thai}
                         </span>
                       </div>
-
-                      <p className=" text-[12px]  lg:text-[16px]">
+        
+                      <p className="text-[12px] lg:text-[16px]">
                         Thời gian đặt hàng:{" "}
                         {new Date(order.thoi_gian_tao).toLocaleString("vi-VN", {
                           timeZone: "Asia/Ho_Chi_Minh",
                         })}
                       </p>
-
+        
                       {order.chiTietDonHangs.map((detail) => (
                         <div key={detail._id} className={styles.productCard}>
                           <img
@@ -569,16 +570,12 @@ const handleSubmitPasswordChange = async (e) => {
                             alt={detail.product.ten}
                             className={`${styles.productImage} phone-sm:w-[50px]`}
                           />
-                          <div
-                            className={`${styles.productInfo}  text-[12px]  lg:text-[16px]`}
-                          >
-                            <br></br>
-                            <p
-                              className={`${styles.productName}  text-[12px]  lg:text-[16px]`}
-                            >
+                          <div className={`${styles.productInfo} text-[12px] lg:text-[16px]`}>
+                            <br />
+                            <p className={`${styles.productName} text-[12px] lg:text-[16px]`}>
                               {detail.product.ten}
                             </p>
-                            <br></br>
+                            <br />
                             <div className="flex justify-between phone-sm:block">
                               <p>
                                 Số lượng: <strong>{detail.so_luong}</strong>
@@ -586,22 +583,37 @@ const handleSubmitPasswordChange = async (e) => {
                               <p>
                                 Giá:{" "}
                                 <strong>
-                                  {detail.product.gia_giam.toLocaleString(
-                                    "vi-VN"
-                                  )}
-                                  ₫
+                                  {detail.product.gia_giam.toLocaleString("vi-VN")}₫
                                 </strong>
                               </p>
                             </div>
                           </div>
                         </div>
                       ))}
-
-                      <div className={styles.orderSummary}>
-                        <p>Tổng Giá Trị:</p>
-                        <span className={styles.summaryValue}>
-                          {order.tong_tien.toLocaleString("vi-VN")}₫
-                        </span>
+        
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center">
+                          <p className="mr-2">Tổng Giá Trị:</p>
+                          <span className="font-bold">
+                            {order.tong_tien.toLocaleString("vi-VN")}₫
+                          </span>
+                        </div>
+                        {order.trang_thai === "Giao hàng thành công" && (
+                          <div className="flex space-x-2">
+                            <Link
+                              href={`/components/product-detail/${order.chiTietDonHangs[0]?.product._id}?scrollTo=comments`}
+                              className="bg-blue-500 text-white px-1 py-0.5 sm:px-2 sm:py-1 rounded hover:bg-blue-600 transition-colors text-xs sm:text-sm"
+                            >
+                              Đánh giá
+                            </Link>
+                            <Link
+                              href={`/components/product-detail/${order.chiTietDonHangs[0]?.product._id}`}
+                              className="bg-blue-500 text-white px-1 py-0.5 sm:px-2 sm:py-1 rounded hover:bg-blue-600 transition-colors text-xs sm:text-sm"
+                            >
+                              Mua Lại
+                            </Link>
+                          </div>
+                        )}
                       </div>
                     </li>
                   ))}

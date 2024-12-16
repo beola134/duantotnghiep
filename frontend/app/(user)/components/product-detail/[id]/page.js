@@ -11,6 +11,7 @@ import { jwtDecode } from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
+import { useSearchParams } from "next/navigation"; // Correct import
 
 export default function Detail({ params }) {
   const [user, setUser] = useState(null);
@@ -28,6 +29,7 @@ export default function Detail({ params }) {
   const [error, setError] = useState(null);
   const sliderRef = useRef(null);
   const [so_luong, setSo_luong] = useState(1);
+  const searchParams = useSearchParams();
 
   const dispatch = useDispatch();
 
@@ -37,6 +39,23 @@ export default function Detail({ params }) {
   const currentCartItem = product ? cart.find((cartItem) => cartItem._id === product._id) : null;
 
   const [maxQuantity, setMaxQuantity] = useState(0);
+
+  const handleScroll = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  //cuộn trang bình luận
+  useEffect(() => {
+    if (searchParams.get("scrollTo") === "comments" && !loading && !error) {
+      // Delay to ensure elements are rendered
+      setTimeout(() => {
+        handleScroll("comments");
+      }, 100);
+    }
+  }, [searchParams, loading, error]);
 
   useEffect(() => {
     if (product && product._id) {
@@ -340,14 +359,6 @@ export default function Detail({ params }) {
     setActiveTab(tabId);
   };
 
-  // cuộn tab
-
-  const handleScroll = (id) => {
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   // lấy giá trị số lượng sản phẩm
   const handleInputChange = (e) => {
@@ -2939,7 +2950,7 @@ export default function Detail({ params }) {
       </div>
 
       {/* Đánh giá bình luận */}
-      <div className="container mx-auto px-4 py-4">
+      <div id="comments" className="container mx-auto px-4 py-4">
         <div className="pb-1 text-[23px] relative">
           <span>Đánh giá - Bình luận</span>
         </div>
