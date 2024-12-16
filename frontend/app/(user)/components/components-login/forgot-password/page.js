@@ -1,5 +1,5 @@
 "use client";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import styles from "./forgot-password.module.css";
 import Link from "next/link";
 import Loading from "../../loading/page";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const schema = Yup.object().shape({
   email: Yup.string()
@@ -36,6 +37,8 @@ export default function ForgotPassword() {
   //thoi gian cho gui lai otp
   const [timer, setTimer] = useState(0);
   const [canResend, setCanResend] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [ConfirmShowPassword, setConfirmShowPassword] = useState(false);
   useEffect(() => {
     let interval = null;
     if (timer > 0) {
@@ -79,9 +82,9 @@ export default function ForgotPassword() {
             setFieldError("email", errorData.message);
           } else if (errorData.message.includes("Mã OTP không chính xác")) {
             setFieldError("otp", errorData.message);
-          }else if (errorData.message.includes("Mật khẩu mới phải khác mật khẩu cũ")) {
+          } else if (errorData.message.includes("Mật khẩu mới phải khác mật khẩu cũ")) {
             setFieldError("password", errorData.message);
-          }else if (errorData.message.includes("Mật khẩu xác nhận không khớp")) {
+          } else if (errorData.message.includes("Mật khẩu xác nhận không khớp")) {
             setFieldError("confirmPassword", errorData.message);
           } else {
             setStatus(errorData.message || "Có lỗi xảy ra, vui lòng thử lại sau");
@@ -154,6 +157,16 @@ export default function ForgotPassword() {
     return <Loading />;
   }
 
+  // Hàm để đổi trạng thái ẩn/hiện mật khẩu
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmShowPassword(!ConfirmShowPassword);
+
+  }
+
   return (
     <div className={styles.mainContainer}>
       <div className={`${styles.container}`}>
@@ -186,36 +199,44 @@ export default function ForgotPassword() {
               onClick={handleSendOtp}
               style={{ cursor: loading || isOtpSent ? "not-allowed" : "pointer", color: isOtpSent ? "grey" : "blue" }}
             >
-            {canResend
-              ? isOtpSent
-                ? "Gửi lại OTP"
-                : "Gửi OTP"
-              : `Gửi lại sau ${formatTime(timer)}`}  
-                        </p>
+              {canResend ? (isOtpSent ? "Gửi lại OTP" : "Gửi OTP") : `Gửi lại sau ${formatTime(timer)}`}
+            </p>
           </div>
           {formik.errors.otp && <p className={styles.error}>{formik.errors.otp}</p>}
 
-          <input
-            type="password"
-            className={`${styles.input} ${formik.errors.password ? styles.inputError : ""}`}
-            id="password"
-            name="password"
-            onChange={formik.handleChange}
-            value={formik.values.password}
-            placeholder="Mật khẩu mới"
-            disabled={!isOtpSent}
-          />
+          <div className={styles.passwordWrapper}>
+            <input
+              type={showPassword ? "text" : "password"}
+              className={`${styles.input} ${formik.errors.password ? styles.inputError : ""}`}
+              id="password"
+              name="password"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              placeholder="Mật khẩu mới"
+              disabled={!isOtpSent}
+            />
+            <div className={`${styles.togglePasswordIcon} absolute`} onClick={togglePasswordVisibility}>
+              {showPassword ? <FaEye /> : <FaEyeSlash />}
+            </div>
+          </div>
           {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
-          <input
-            type="password"
-            className={`${styles.input} ${formik.errors.confirmPassword ? styles.inputError : ""}`}
-            id="confirmPassword"
-            name="confirmPassword"
-            onChange={formik.handleChange}
-            value={formik.values.confirmPassword}
-            placeholder="Nhập lại mật khẩu mới"
-            disabled={!isOtpSent}
-          />
+
+          <div className={styles.passwordWrapper}>
+            <input
+              type={showPassword ? "text" : "password"}
+              className={`${styles.input} ${formik.errors.confirmPassword ? styles.inputError : ""}`}
+              id="confirmPassword"
+              name="confirmPassword"
+              onChange={formik.handleChange}
+              value={formik.values.confirmPassword}
+              placeholder="Nhập lại mật khẩu mới"
+              disabled={!isOtpSent}
+            />
+            <div className={`${styles.togglePasswordIcon} absolute`} onClick={toggleConfirmPasswordVisibility}>
+              {ConfirmShowPassword ? <FaEye /> : <FaEyeSlash />}
+            </div>
+          </div>
+
           {formik.errors.confirmPassword && <p className={styles.error}>{formik.errors.confirmPassword}</p>}
           <button type="submit" className={styles.loginButton} disabled={!isOtpSent || loading}>
             {loading ? "Đang xử lý..." : "Đổi mật khẩu"}

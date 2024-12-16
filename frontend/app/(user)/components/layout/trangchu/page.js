@@ -844,7 +844,7 @@ export default function Main() {
                     </Link>
                     <div
                       className={cx(
-                        "absolute lg:right-[10px] right-0 bottom-0 mr-[0px] text-white bg-red-500 px-[10px] py-[2px] rounded-[2px] z-[2]"
+                        "absolute lg:right-[10px] right-0 bottom-0 mr-[0px] text-white bg-red-500 px-[10px] py-[2px] rounded-[2px] z-[2] mb-2"
                       )}
                     >
                       New
@@ -1047,7 +1047,7 @@ export default function Main() {
                     
                     <div
                       className={cx(
-                        "absolute right-[18px] top-[260px] mr-[0px] text-white bg-red-500 px-[10px] py-[2px] rounded-[2px] z-[2]"
+                        "absolute mb-2 right-[18px] top-[260px] mr-[0px] text-white bg-red-500 px-[10px] py-[2px] rounded-[2px] z-[2]"
                       )}
                     >
                       New
@@ -1185,7 +1185,7 @@ export default function Main() {
                     
                     <div
                       className={cx(
-                        "absolute right-[18px] top-[260px] mr-[0px] text-white bg-red-500 px-[10px] py-[2px] rounded-[2px] z-[2]"
+                        "absolute mb-2 right-[18px] top-[260px] mr-[0px] text-white bg-red-500 px-[10px] py-[2px] rounded-[2px] z-[2]"
                       )}
                     >
                       New

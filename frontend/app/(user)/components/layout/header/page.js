@@ -532,7 +532,7 @@ export default function Header() {
               "flex lg:col-span-5 lg:justify-self-start col-span-12 justify-self-center flex-col items-center text-center"
             )}
           >
-            <Link href="/" >
+            <Link href="/" onClick={handleLogoClick}>
               <img
                 className={cx("img", "mt-[-55px] w-[250px] h-[170px] ml-[-40px]")}
                 src="/image/item/icons/logo.png"
@@ -586,7 +586,6 @@ export default function Header() {
             {user ? (
               <div
                 className={cx(
-                  
                   "flex items-center justify-center max-w-[30px] border border-white rounded-full relative"
                 )}
               >
@@ -603,7 +602,7 @@ export default function Header() {
                       display: "inline-block",
                       width: "160px",
                       height: "29px",
-                     
+
                       borderRadius: "50%",
                       objectFit: "cover",
                     }}
@@ -658,7 +657,7 @@ export default function Header() {
                       display: "inline-block",
                       width: "160px",
                       height: "29px",
-                      
+
                       borderRadius: "50%",
                       objectFit: "cover",
                     }}
@@ -798,20 +797,22 @@ export default function Header() {
               THƯƠNG HIỆU
             </Link>
             <ul className={cx("dropdown-menu")}>
-              {category .filter((item) => item.thuong_hieu !== "RHYTHM") .map((item) => (
-                <li className={cx("dropdown-menu-li")} key={item.thuong_hieu}>
-                  <Link
-                    href={`/components/components-thuonghieu/chitietthuonghieu/${item.thuong_hieu}`}
-                    style={{ color: "white" }}
-                  >
-                    <img
-                      className={cx("dropdown-menu-img")}
-                      src={`http://localhost:5000/images/${item.hinh_anh}`}
-                      alt=""
-                    />
-                  </Link>
-                </li>
-              ))}
+              {category
+                .filter((item) => item.thuong_hieu !== "RHYTHM")
+                .map((item) => (
+                  <li className={cx("dropdown-menu-li")} key={item.thuong_hieu}>
+                    <Link
+                      href={`/components/components-thuonghieu/chitietthuonghieu/${item.thuong_hieu}`}
+                      style={{ color: "white" }}
+                    >
+                      <img
+                        className={cx("dropdown-menu-img")}
+                        src={`http://localhost:5000/images/${item.hinh_anh}`}
+                        alt=""
+                      />
+                    </Link>
+                  </li>
+                ))}
             </ul>
           </li>
           <li
