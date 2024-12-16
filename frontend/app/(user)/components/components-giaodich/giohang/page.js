@@ -29,7 +29,7 @@ const CartPage = () => {
   const total = useMemo(
     () =>
       cartItems.reduce(
-        (total, item1) => total + item1.gia_giam * item1.so_luong,
+        (total, item1) => total + (item1.gia_giam > 0 ? item1.gia_giam : item1.gia_san_pham) * item1.so_luong,
         0
       ),
     [cartItems]

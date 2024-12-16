@@ -798,7 +798,7 @@ export default function Header() {
               THƯƠNG HIỆU
             </Link>
             <ul className={cx("dropdown-menu")}>
-              {category.map((item) => (
+              {category .filter((item) => item.thuong_hieu !== "RHYTHM") .map((item) => (
                 <li className={cx("dropdown-menu-li")} key={item.thuong_hieu}>
                   <Link
                     href={`/components/components-thuonghieu/chitietthuonghieu/${item.thuong_hieu}`}

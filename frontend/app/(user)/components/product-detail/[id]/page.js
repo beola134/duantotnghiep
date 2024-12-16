@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 import { useSearchParams } from "next/navigation"; // Correct import
-
+import cx from "classnames";
 export default function Detail({ params }) {
   const [user, setUser] = useState(null);
   const [product, setProducts] = useState(null);
@@ -380,10 +380,41 @@ export default function Detail({ params }) {
     return <p>Error:{error}</p>;
   }
   return (
-    <>
+    <>  
+   
       <div className="mb-[30px] container px-4 flex flex-wrap">
+      
         {/* FrameLeft */}
         <div className="w-full sm:w-1/2 lg:w-[34%] mb-6 relative">
+        <div
+          className={cx(
+            "flex",
+            "items-center uppercase  md:text-[16px] text-[10px] mb-5 mt-6"
+          )}
+        >
+          <span className={cx("")}>
+            <Link
+              href="/"
+              className={cx(" text-gray-800", "hover:text-[#796752]")}
+            >
+              Trang chủ
+            </Link>
+          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>
+            {" "}
+            &gt;{" "}
+          </span>
+
+          <span className={cx("", "text-red-500")}>
+            <Link
+              href="/components/components-thuonghieu/donghonam"
+              className={cx("link", "text-red-500")}
+            >
+              {" "}
+              ĐỒNG HỒ ĐÔI
+            </Link>
+          </span>
+        </div>
           {product.gia_giam > 0 && (
             <div className="absolute right-2 top-2 bg-[#f9141e] text-white w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] text-[12px] sm:text-[13px] text-center z-[2] rounded-full box-border pt-[10px] sm:pt-[15px] leading-[18px] sm:leading-[20px]">
               -
@@ -452,7 +483,7 @@ export default function Detail({ params }) {
         </div>
 
         {/* frame center */}
-        <div className="w-full sm:w-1/2 lg:w-[42%] py-0 px-1 box-border">
+        <div className="w-full sm:w-1/2 lg:w-[42%] py-0 px-1 box-border mt-5">
           <div className={`${styles.nameTable} ${styles.mt20}`}>
             <div className="text-center mb-[10px]">
               <img
@@ -640,7 +671,7 @@ export default function Detail({ params }) {
         </div>
 
         {/* frame right */}
-        <div className={`${styles.frameRight} w-full sm:w-[100%] md:w-[100%] lg:w-[22%] lg:ml-5 mb-[25px]`}>
+        <div className={`${styles.frameRight} w-full sm:w-[100%] md:w-[100%] lg:w-[22%] lg:ml-5 mb-[25px] mt-5`}>
           <div className="bg-[#f1f1f1cc] mb-5 py-[25px]">
             <div className="px-[15px] ">
               {product.gia_giam > 0 ? (
@@ -2910,17 +2941,24 @@ export default function Detail({ params }) {
                             <span className={styles.duongKinh}>{duong_kinh}</span>
 
                             <div className={styles.priceArae}>
+                            {gia_giam > 0 ? (
+                              <>
                               <div className={styles.priceOld}>
                                 Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
                               </div>
                               <div className={styles.priceCurrent}>Giá KM: {gia_giam.toLocaleString("vi-VN")}₫</div>
+                              </>
+                            ) : (
+                              <div className={styles.priceCurrent}>Giá: {gia_san_pham.toLocaleString("vi-VN")}₫</div>
+                            )}
                             </div>
-
+                            {gia_giam > 0 && (
                             <div className={styles.discount}>
                               <span>
                                 -{roundDiscount(Math.round(((gia_san_pham - gia_giam) / gia_san_pham) * 100))}%
                               </span>
                             </div>
+                            )}
 
                             <br />
                             <br />

@@ -370,21 +370,21 @@ export default function Main() {
               >
                 {productsNam.map((item) => (
                   <div key={item._id} className={cx("text-center relative")}>
-                    {item.gia_giam > 0 && (<div
-                      className={cx(
-                        "absolute top-[-15px] left-[10px] bg-[#ed1c24] text-white rounded-full text-[13px] w-[44px] h-[44px] box-border z-[9] tracking-[-0.7px] pt-[13px]"
-                      )}
-                    >
-                      -{" "}
-                      {roundDiscount(
-                        Math.round(
-                          ((item.gia_san_pham - item.gia_giam) /
-                            item.gia_san_pham) *
-                            100
-                        )
-                      )}
-                      %
-                    </div>)}
+                  {item.gia_giam > 0 && (<div
+                    className={cx(
+                      "absolute top-[-15px] left-[10px] bg-[#ed1c24] text-white rounded-full text-[13px] w-[44px] h-[44px] box-border z-[9] tracking-[-0.7px] pt-[13px]"
+                    )}
+                  >
+                    -{" "}
+                    {roundDiscount(
+                      Math.round(
+                        ((item.gia_san_pham - item.gia_giam) /
+                          item.gia_san_pham) *
+                          100
+                      )
+                    )}
+                    %
+                  </div>)}
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img
                         src={`http://localhost:5000/images/${item.hinh_anh}`}
@@ -560,30 +560,33 @@ export default function Main() {
                         "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
                       )}
                     >
-                      <small
-                        className={cx(
-                          "text-[12px] uppercase text-gray-500 mb-1 inline-block"
-                        )}
-                        style={{
-                          textDecoration: "line-through",
-                          color: "#B1B1B1",
-                          fontSize: "15px",
-                        }}
-                      >
-                        Giá: {formatCurrency(item.gia_san_pham)}
-                      </small>
-                    </p>
-                    <p
-                      className={cx(
-                        "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
-                      )}
-                    >
-                      <span
-                        className={cx("text-red-600 font-bold text-[16px]")}
-                      >
-                        Giá KM: {formatCurrency(item.gia_giam)}
+                    {item.gia_giam > 0 ? (
+                      <>
+                        <small
+                          className={cx(
+                            "text-[12px] uppercase text-gray-500 mb-1 inline-block"
+                          )}
+                          style={{
+                            textDecoration: "line-through",
+                            color: "#B1B1B1",
+                            fontSize: "15px",
+                          }}
+                        >
+                          Giá: {formatCurrency(item.gia_san_pham)}
+                        </small>
+                        <br />
+                        <span className={cx("text-red-600 font-bold text-[16px]")}>
+                          Giá KM: {formatCurrency(item.gia_giam)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className={cx("text-red-600 font-bold text-[16px]")}>
+                        Giá KM: {formatCurrency(item.gia_san_pham)}
                       </span>
+                    )}
+                     
                     </p>
+                    
                   </div>
                 ))}
                 <div
@@ -689,29 +692,31 @@ export default function Main() {
                         "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
                       )}
                     >
-                      <small
-                        className={cx(
-                          "text-[12px] uppercase text-gray-500 mb-1 inline-block"
-                        )}
-                        style={{
-                          textDecoration: "line-through",
-                          color: "#B1B1B1",
-                          fontSize: "15px",
-                        }}
-                      >
-                        Giá: {formatCurrency(item.gia_san_pham)}
-                      </small>
-                    </p>
-                    <p
-                      className={cx(
-                        "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
-                      )}
-                    >
-                      <span
-                        className={cx("text-red-600 font-bold text-[16px]")}
-                      >
-                        Giá KM: {formatCurrency(item.gia_giam)}
+                    {item.gia_giam > 0 ? (
+                      <>
+                        <small
+                          className={cx(
+                            "text-[12px] uppercase text-gray-500 mb-1 inline-block"
+                          )}
+                          style={{
+                            textDecoration: "line-through",
+                            color: "#B1B1B1",
+                            fontSize: "15px",
+                          }}
+                        >
+                          Giá: {formatCurrency(item.gia_san_pham)}
+                        </small>
+                        <br />
+                        <span className={cx("text-red-600 font-bold text-[16px]")}>
+                          Giá KM: {formatCurrency(item.gia_giam)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className={cx("text-red-600 font-bold text-[16px]")}>
+                        Giá KM: {formatCurrency(item.gia_san_pham)}
                       </span>
+                    )}
+                     
                     </p>
                   </div>
                 ))}
@@ -880,30 +885,33 @@ export default function Main() {
                         "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
                       )}
                     >
-                      <small
-                        className={cx(
-                          "text-[12px] uppercase text-gray-500 mb-1 inline-block"
-                        )}
-                        style={{
-                          textDecoration: "line-through",
-                          color: "#B1B1B1",
-                          fontSize: "15px",
-                        }}
-                      >
-                        Giá: {formatCurrency(item.gia_san_pham)}
-                      </small>
-                    </p>
-                    <p
-                      className={cx(
-                        "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
-                      )}
-                    >
-                      <span
-                        className={cx("text-red-600 font-bold text-[16px]")}
-                      >
-                        Giá KM: {formatCurrency(item.gia_giam)}
+                    {item.gia_giam > 0 ? (
+                      <>
+                        <small
+                          className={cx(
+                            "text-[12px] uppercase text-gray-500 mb-1 inline-block"
+                          )}
+                          style={{
+                            textDecoration: "line-through",
+                            color: "#B1B1B1",
+                            fontSize: "15px",
+                          }}
+                        >
+                          Giá: {formatCurrency(item.gia_san_pham)}
+                        </small>
+                        <br />
+                        <span className={cx("text-red-600 font-bold text-[16px]")}>
+                          Giá KM: {formatCurrency(item.gia_giam)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className={cx("text-red-600 font-bold text-[16px]")}>
+                        Giá KM: {formatCurrency(item.gia_san_pham)}
                       </span>
+                    )}
+                     
                     </p>
+                   
                     
                   </div>
                 ))}
@@ -1010,30 +1018,33 @@ export default function Main() {
                         "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
                       )}
                     >
-                      <small
-                        className={cx(
-                          "text-[12px] uppercase text-gray-500 mb-1 inline-block"
-                        )}
-                        style={{
-                          textDecoration: "line-through",
-                          color: "#B1B1B1",
-                          fontSize: "15px",
-                        }}
-                      >
-                        Giá: {formatCurrency(item.gia_san_pham)}
-                      </small>
-                    </p>
-                    <p
-                      className={cx(
-                        "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
-                      )}
-                    >
-                      <span
-                        className={cx("text-red-600 font-bold text-[16px]")}
-                      >
-                        Giá KM: {formatCurrency(item.gia_giam)}
+                    {item.gia_giam > 0 ? (
+                      <>
+                        <small
+                          className={cx(
+                            "text-[12px] uppercase text-gray-500 mb-1 inline-block"
+                          )}
+                          style={{
+                            textDecoration: "line-through",
+                            color: "#B1B1B1",
+                            fontSize: "15px",
+                          }}
+                        >
+                          Giá: {formatCurrency(item.gia_san_pham)}
+                        </small>
+                        <br />
+                        <span className={cx("text-red-600 font-bold text-[16px]")}>
+                          Giá KM: {formatCurrency(item.gia_giam)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className={cx("text-red-600 font-bold text-[16px]")}>
+                        Giá KM: {formatCurrency(item.gia_san_pham)}
                       </span>
+                    )}
+                     
                     </p>
+                    
                     <div
                       className={cx(
                         "absolute right-[18px] top-[260px] mr-[0px] text-white bg-red-500 px-[10px] py-[2px] rounded-[2px] z-[2]"
@@ -1146,30 +1157,32 @@ export default function Main() {
                         "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
                       )}
                     >
-                      <small
-                        className={cx(
-                          "text-[12px] uppercase text-gray-500 mb-1 inline-block"
-                        )}
-                        style={{
-                          textDecoration: "line-through",
-                          color: "#B1B1B1",
-                          fontSize: "15px",
-                        }}
-                      >
-                        Giá: {formatCurrency(item.gia_san_pham)}
-                      </small>
-                    </p>
-                    <p
-                      className={cx(
-                        "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
-                      )}
-                    >
-                      <span
-                        className={cx("text-red-600 font-bold text-[16px]")}
-                      >
-                        Giá KM: {formatCurrency(item.gia_giam)}
+                    {item.gia_giam > 0 ? (
+                      <>
+                        <small
+                          className={cx(
+                            "text-[12px] uppercase text-gray-500 mb-1 inline-block"
+                          )}
+                          style={{
+                            textDecoration: "line-through",
+                            color: "#B1B1B1",
+                            fontSize: "15px",
+                          }}
+                        >
+                          Giá: {formatCurrency(item.gia_san_pham)}
+                        </small>
+                        <br />
+                        <span className={cx("text-red-600 font-bold text-[16px]")}>
+                          Giá KM: {formatCurrency(item.gia_giam)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className={cx("text-red-600 font-bold text-[16px]")}>
+                        Giá KM: {formatCurrency(item.gia_san_pham)}
                       </span>
+                    )}
                     </p>
+                    
                     <div
                       className={cx(
                         "absolute right-[18px] top-[260px] mr-[0px] text-white bg-red-500 px-[10px] py-[2px] rounded-[2px] z-[2]"

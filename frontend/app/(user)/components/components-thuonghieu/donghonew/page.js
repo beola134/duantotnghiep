@@ -40,7 +40,12 @@ export default function DonghoNam() {
   const toggleDescription = () => {
     setIsExpanded(!isExpanded);
   };
-
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount);
+  };
   useEffect(() => {
     const query = searchParams.get("query");
     if (query) {
@@ -151,10 +156,16 @@ export default function DonghoNam() {
   const handleClearFilters = () => {
     setSelectedFilter([]);
     setFilter({
-      gioi_tinh: "Nam",
+      gioi_tinh: filter.gioi_tinh,
     });
     setCurrentPage(1);
-    setCategoryName("Đồng hồ nam");
+    setCategoryName(
+      filter.gioi_tinh === "Nam"
+        ? "Đồng hồ nam mới"
+        : filter.gioi_tinh === "Nữ"
+        ? "Đồng hồ nữ mới"
+        : "Đồng hồ đôi mới"
+    );
     fetchProducts();
   };
 
@@ -2309,7 +2320,7 @@ export default function DonghoNam() {
                           id="cat-dong-ho"
                         >
                           <div className={styles["title-icon"]}>
-                            <h1>
+                            <h1 className="text-[20px]">
                               {" "}
                               {categoryName === "Đồng hồ nam"
                                 ? categoryName
@@ -2324,7 +2335,7 @@ export default function DonghoNam() {
                     <select
                       className={cx(
                         "order-select",
-                        "max-w-[180px] lg:mt-[-40px] right-2 "
+                        "max-w-[180px] lg:mt-[-32px] right-2 "
                       )}
                       name="order-select"
                       onChange={handleSortChange}
@@ -2333,7 +2344,6 @@ export default function DonghoNam() {
                       <option value="asc">Giá từ thấp tới cao</option>
                       <option value="desc">Giá từ cao tới thấp</option>
                       <option value="newest">Mới nhất</option>
-                      <option value="hot">Sản phẩm hot</option>
                     </select>
                     <div className={cx("clear")} />
                   </div>
@@ -2478,69 +2488,8 @@ export default function DonghoNam() {
                       })}
                       <div className={styles.clear}></div>
                     </div>
-                  
-
-                  {/* phân trang*/}
-                  <div className={cx("pagination lg:flex hidden")}>
-                    {/* Prev trang đầu */}
-                    <span
-                      title="First page"
-                      className={cx({
-                        disabled: currentPage === 1,
-                        "other-page": currentPage > 1,
-                      })}
-                      onClick={() => currentPage > 1 && handlePageChange(1)}
-                    >
-                      ‹‹
-                    </span>
-
-                    {/* Prev 1 trang */}
-                    <span
-                      className={cx({
-                        disabled: currentPage === 1,
-                        "other-page": currentPage > 1,
-                      })}
-                      onClick={() =>
-                        currentPage > 1 && handlePageChange(currentPage - 1)
-                      }
-                    >
-                      ‹
-                    </span>
-
-                    {/* Trang hiện tại */}
-                    <span className={cx("currentPage")}>
-                      {`Trang ${currentPage} / ${totalPages || 1}`}
-                    </span>
-
-                    {/* Next 1 trang */}
-                    <span
-                      className={cx({
-                        disabled: currentPage === totalPages,
-                        "other-page": currentPage < totalPages,
-                      })}
-                      onClick={() =>
-                        currentPage < totalPages &&
-                        handlePageChange(currentPage + 1)
-                      }
-                    >
-                      ›
-                    </span>
-
-                    {/* Next tới trang cuối */}
-                    <span
-                      className={cx({
-                        disabled: currentPage === totalPages,
-                        "other-page": currentPage < totalPages,
-                      })}
-                      onClick={() =>
-                        currentPage < totalPages && handlePageChange(totalPages)
-                      }
-                    >
-                      ››
-                    </span>
-                  </div>
-                  
-                  <div className="lg:hidden flex justify-center items-center my-5 flex-wrap">
+      
+                  <div className=" flex justify-center items-center my-5 flex-wrap">
                     
                     <span
                       title="First page"

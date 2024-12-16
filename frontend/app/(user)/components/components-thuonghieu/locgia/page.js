@@ -40,6 +40,12 @@ export default function DonghoNam() {
   const toggleDescription = () => {
     setIsExpanded(!isExpanded);
   };
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount);
+  };
   useEffect(() => {
     const query = searchParams.get("query");
     if (query) {
@@ -2459,7 +2465,7 @@ export default function DonghoNam() {
                                     "text-red-600 font-bold text-[16px]"
                                   )}
                                 >
-                                  Giá KM: {formatCurrency(gia_san_pham)}
+                                  Giá: {formatCurrency(gia_san_pham)}
                                 </span>
                               )}
                             </p>

@@ -624,6 +624,7 @@ export default function Daydongho() {
                     ma_san_pham,
                     gia_san_pham,
                     hinh_anh,
+                    gia_giam
                   } = product;
                   const roundDiscount = (discountPercentage) => {
                     const discountLevels = [10, 15, 20, 25, 30, 40, 50];
@@ -637,7 +638,8 @@ export default function Daydongho() {
                   return (
                     <div
                       key={_id}
-                      className="border-box relative overflow-hidden text-center mb-10">
+                      className="border-box relative overflow-hidden text-center mb-10"
+                    >
                       <div className="relative">
                         <figure className="relative mb-4 min-h-[230px]">
                           <Link href={`/components/product-detail/${_id}`}>
@@ -658,21 +660,51 @@ export default function Daydongho() {
                           <Link
                             className="text-[17px] font-semibold mb-2"
                             href="#"
-                            title={ten}>
+                            title={ten}
+                          >
                             <span className="text-gray-500 block text-[14px] mt-1.5 mb-2 font-normal leading-relaxed">
                               {ten_san_pham}
                             </span>
                             {ma_san_pham}
                           </Link>
                         </h3>
-              
+
                         <div className={styles["price-area"]}>
-                        
-                          <div className="text-[18px] text-red-600 font-semibold">
-                            Giá KM: {gia_san_pham.toLocaleString("vi-VN")} ₫
-                          </div>
+                          {gia_giam > 0 && (
+                            <div className="absolute top-0 left-1.25 bg-red-600 text-white text-sm w-11 h-11 leading-[2.875rem] box-border rounded-full">
+                              <span>
+                                -
+                                {roundDiscount(
+                                  Math.round(
+                                    ((gia_san_pham - gia_giam) / gia_san_pham) *
+                                      100
+                                  )
+                                )}
+                                %
+                              </span>
+                            </div>
+                          )}
                         </div>
-                       
+                        <div className={styles["price-area"]}>
+                          {gia_giam > 0 ? (
+                            <>
+                              <div className="text-[15px] text-gray-400 mb-2 line-through">
+                                Giá:{" "}
+                                <span>
+                                  {gia_san_pham.toLocaleString("vi-VN")}₫
+                                </span>
+                              </div>
+                              <div className="text-[18px] text-red-600 font-semibold">
+                                Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-[18px] text-red-600 font-semibold">
+                              Giá: {gia_san_pham.toLocaleString("vi-VN")}₫
+                            </div>
+                          )}
+                        </div>
+
                         <div className={styles.clear}></div>
                       </div>
                       {/* end .frame-inner */}

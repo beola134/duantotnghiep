@@ -29,7 +29,14 @@ export default function DongHoTreoTuong() {
   const toggleDescription = () => {
     setIsExpanded(!isExpanded);
   };
-
+  const roundDiscount = (discountPercentage) => {
+    const discountLevels = [10, 15, 20, 25, 30, 40, 50];
+    return discountLevels.reduce((prev, curr) =>
+      Math.abs(curr - discountPercentage) < Math.abs(prev - discountPercentage)
+        ? curr
+        : prev
+    );
+  };
   const fetchProducts = async () => {
     setLoading(true);
     try {

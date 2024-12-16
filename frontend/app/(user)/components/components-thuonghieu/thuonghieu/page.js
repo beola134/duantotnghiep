@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./thuonghieu.module.css";
 import Loading from "../../loading/page";
+import cx from "classnames";
 
 export default function Thuonghieu() {
   const [cates, setCates] = useState([]);
@@ -71,9 +72,37 @@ export default function Thuonghieu() {
 
   return (
     <>
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 ">
+        <div
+          className={cx(
+            "flex",
+            "items-center uppercase  md:text-[16px] text-[10px] mb-5 mt-6"
+          )}
+        >
+          <span className={cx("")}>
+            <Link
+              href="/"
+              className={cx(" text-gray-800", "hover:text-[#796752]")}
+            >
+              Trang chủ
+            </Link>
+          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>
+            {" "}
+            &gt;{" "}
+          </span>
+
+          <span className={cx("", "text-red-500")}>
+            <Link
+              href="/components/components-thuonghieu/donghonam"
+              className={cx("link", "text-red-500")}
+            >
+              THƯƠNG HIỆU
+            </Link>
+          </span>
+        </div>
         <br />
-        <h3>THƯƠNG HIỆU</h3>
+        <h3 className="text-[20px]">THƯƠNG HIỆU</h3>
         <br />
         <div className="relative">
           <button onClick={prevSlide} className={`${styles.arrowLeft}`}>
@@ -104,29 +133,31 @@ export default function Thuonghieu() {
             ›
           </button>
         </div>
-    
 
-      <br />
-      <h3 className="ml-3"> TẤT CẢ THƯƠNG HIỆU</h3>
-      <br />
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        {cates.filter((item) => item.thuong_hieu !== "RHYTHM").map((item) => {
-          const { _id, hinh_anh2 } = item;
-          return (
-            <div className="flex flex-col" key={_id}>
-              <Link
-                href={`/components/components-thuonghieu/chitietthuonghieu/${item.thuong_hieu}`}
-              >
-                <img className="w-full h-250px lg:h-[275px] sm:h-[250px] md:h-[250px] object-cover"
-                  src={`http://localhost:5000/images/${hinh_anh2}`}
-                  alt={`Hình ảnh thương hiệu ${item.thuong_hieu}`}
-                />
-              </Link>
-            </div>
-          );
-        })}
-      </div>
+        <br />
+        <h3 className="ml-3 text-[20px]"> TẤT CẢ THƯƠNG HIỆU</h3>
+        <br />
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          {cates
+            .filter((item) => item.thuong_hieu !== "RHYTHM")
+            .map((item) => {
+              const { _id, hinh_anh2 } = item;
+              return (
+                <div className="flex flex-col" key={_id}>
+                  <Link
+                    href={`/components/components-thuonghieu/chitietthuonghieu/${item.thuong_hieu}`}
+                  >
+                    <img
+                      className="w-full h-250px lg:h-[275px] sm:h-[250px] md:h-[250px] object-cover"
+                      src={`http://localhost:5000/images/${hinh_anh2}`}
+                      alt={`Hình ảnh thương hiệu ${item.thuong_hieu}`}
+                    />
+                  </Link>
+                </div>
+              );
+            })}
         </div>
+      </div>
     </>
   );
 }

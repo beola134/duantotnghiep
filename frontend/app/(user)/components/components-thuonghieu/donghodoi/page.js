@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./donghodoi.module.css";
 import Loading from "../../loading/page";
-
+import cx from "classnames";
 export default function DonghoDoi() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -126,7 +126,36 @@ export default function DonghoDoi() {
   const sanPhamHienThi = sapXepSanPham(products);
   return (
     <>
-     <div className="container">
+      <div className="container">
+        <div
+          className={cx(
+            "flex",
+            "items-center uppercase  md:text-[16px] text-[10px] mb-5 mt-6"
+          )}
+        >
+          <span className={cx("")}>
+            <Link
+              href="/"
+              className={cx(" text-gray-800", "hover:text-[#796752]")}
+            >
+              Trang chủ
+            </Link>
+          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>
+            {" "}
+            &gt;{" "}
+          </span>
+
+          <span className={cx("", "text-red-500")}>
+            <Link
+              href="/components/components-thuonghieu/donghonam"
+              className={cx("link", "text-red-500")}
+            >
+              {" "}
+              ĐỒNG HỒ ĐÔI
+            </Link>
+          </span>
+        </div>
         {/*container*/}
         <div className={styles.clear}></div>
         {/* mô tả đồng hồ nữ */}
@@ -138,17 +167,25 @@ export default function DonghoDoi() {
             style={{
               height: isExpanded ? "auto" : "75px",
               overflow: isExpanded ? "visible" : "hidden",
-            }}>
+            }}
+          >
             {" "}
             {/*summary-content-filter*/}
             <p className="sm:text-[16px] text-[14px] italic leading-[24px] mb-[10px]">
-            Tình yêu luôn là thứ cảm xúc đặc biệt hơn bao giờ hết. Đó là sự gắn kết hai trái tim nếm trải mọi cung bậc cảm xúc: đau khổ, buồn, vui, hạnh phúc để có một cái kết viên mãn. Đồng hành trên chặng đường yêu không thể thiếu đi đồng hồ đôi - vật chứng tình yêu vừa thiết thực vừa ý nghĩa. Đồng hồ đôi (đồng hồ cặp) với đầy đủ kiểu dáng từ đồng hồ cặp thiết kế mỏng nhẹ, thanh lịch, sang trọng hoặc cá tính, thời trang…sẽ đáp ứng mọi sở thích của đôi tình nhân.
+              Tình yêu luôn là thứ cảm xúc đặc biệt hơn bao giờ hết. Đó là sự
+              gắn kết hai trái tim nếm trải mọi cung bậc cảm xúc: đau khổ, buồn,
+              vui, hạnh phúc để có một cái kết viên mãn. Đồng hành trên chặng
+              đường yêu không thể thiếu đi đồng hồ đôi - vật chứng tình yêu vừa
+              thiết thực vừa ý nghĩa. Đồng hồ đôi (đồng hồ cặp) với đầy đủ kiểu
+              dáng từ đồng hồ cặp thiết kế mỏng nhẹ, thanh lịch, sang trọng hoặc
+              cá tính, thời trang…sẽ đáp ứng mọi sở thích của đôi tình nhân.
             </p>
             <br />
           </div>
           <div
             className={`${styles.viewMore} sm:block sm:h-auto lg:hidden `}
-            onClick={toggleDescription}>
+            onClick={toggleDescription}
+          >
             <span onClick={toggleDescription}>
               {isExpanded ? "Thu gọn" : "Xem thêm"}
             </span>
@@ -166,7 +203,8 @@ export default function DonghoDoi() {
                 key={index}
                 rel="nofollow"
                 href="#"
-                onClick={() => xoaBoLoc(filter)}>
+                onClick={() => xoaBoLoc(filter)}
+              >
                 {filter.split("=")[1]} {/*Hiển thị các bộ lọc đã chọn*/}
               </Link>
             ))}
@@ -174,7 +212,8 @@ export default function DonghoDoi() {
               className="bg-[red] text-white mr-[2px] mb-[2px] inline-block relative text-xs pt-[3px] pr-[24px] pb-[3px] pl-[9px]  after:content-['X'] after:absolute after:top-[3px] after:right-[2px] after:w-[15px] after:h-[13px] after:text-white after:z-10 after:text-[12px]"
               rel="nofollow"
               href="#"
-              onClick={xoaTatCaBoLoc}>
+              onClick={xoaTatCaBoLoc}
+            >
               Xoá hết
             </Link>
             {/*reset*/}
@@ -188,46 +227,54 @@ export default function DonghoDoi() {
               {/*block-product-filter*/}
               {/* Giới tính */}
               <div
-                className={`${styles["field-item"]} ${"phone-sm:ml-[5px]"} `}>
+                className={`${styles["field-item"]} ${"phone-sm:ml-[5px]"} `}
+              >
                 {/*field-item*/}
                 <div
                   className="cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"
-                  onClick={toggleDropdown}>
+                  onClick={toggleDropdown}
+                >
                   Giới tính
                 </div>{" "}
                 {/*field-name*/}
                 {isDropdownVisible && (
                   <div
-                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[400px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] `}>
+                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[400px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] `}
+                  >
                     <span
                       className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}>
+                      onClick={toggleDropdown}
+                    >
                       x
                     </span>
                     {/*close*/}
                     <div
                       className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px] border-t-0 border-r border-b border-l"} ${
                         styles.descript
-                      } ${styles.cls}`}>
+                      } ${styles.cls}`}
+                    >
                       {" "}
                       {/*filters-in-field-inner*/}
                       {/*cls*/}
                       <Link
                         rel="nofollow"
                         href="/components/components-thuonghieu/donghonam"
-                        title="Đồng hồ nam">
+                        title="Đồng hồ nam"
+                      >
                         <span>Đồng hồ nam</span>
                       </Link>
                       <Link
                         rel="nofollow"
                         href="/components/components-thuonghieu/donghonu"
-                        title="Đồng hồ nữ">
+                        title="Đồng hồ nữ"
+                      >
                         <span>Đồng hồ nữ</span>
                       </Link>
                       <Link
                         rel="nofollow"
                         href="/components/components-thuonghieu/donghodoi"
-                        title="Đồng hồ đôi">
+                        title="Đồng hồ đôi"
+                      >
                         <span>Đồng hồ đôi</span>
                       </Link>
                     </div>
@@ -238,25 +285,29 @@ export default function DonghoDoi() {
               <div className={`${styles["field-item"]}   `}>
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"}`}
-                  onClick={toggleDropdown}>
+                  onClick={toggleDropdown}
+                >
                   Thương hiệu
                 </div>
                 {isDropdownVisible && (
                   <div
                     id="brand"
-                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[600px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[11px] sm:text-[14px] ${styles["filters-in-field-3-column"]}`}>
+                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[600px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[11px] sm:text-[14px] ${styles["filters-in-field-3-column"]}`}
+                  >
                     {/**/}
                     {/*filters-in-field-3-column*/}
                     {/*filter-brand*/}
                     <span
                       className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}>
+                      onClick={toggleDropdown}
+                    >
                       x
                     </span>
                     <div
                       className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px] border-t-0 border-r border-b border-l"} ${
                         styles.descript
-                      } ${styles.cls}`}>
+                      } ${styles.cls}`}
+                    >
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
                         <Link
@@ -265,7 +316,8 @@ export default function DonghoDoi() {
                           title="LONGINES"
                           onClick={() =>
                             capNhatBoLoc("thuong_hieu", "LONGINES")
-                          }>
+                          }
+                        >
                           LONGINES
                         </Link>
                       </div>
@@ -275,9 +327,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="TISSOT"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "TISSOT")
-                          }>
+                          onClick={() => capNhatBoLoc("thuong_hieu", "TISSOT")}
+                        >
                           TISSOT
                         </Link>
                       </div>
@@ -287,9 +338,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="MIDO"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "MIDO")
-                          }>
+                          onClick={() => capNhatBoLoc("thuong_hieu", "MIDO")}
+                        >
                           MIDO
                         </Link>
                       </div>
@@ -299,9 +349,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="CERTINA"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "CERTINA")
-                          }>
+                          onClick={() => capNhatBoLoc("thuong_hieu", "CERTINA")}
+                        >
                           CERTINA
                         </Link>
                       </div>
@@ -313,7 +362,8 @@ export default function DonghoDoi() {
                           title="HAMILTON"
                           onClick={() =>
                             capNhatBoLoc("thuong_hieu", "HAMILTON")
-                          }>
+                          }
+                        >
                           HAMILTON
                         </Link>
                       </div>
@@ -323,9 +373,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="TITONI"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "TITONI")
-                          }>
+                          onClick={() => capNhatBoLoc("thuong_hieu", "TITONI")}
+                        >
                           TITONI
                         </Link>
                       </div>
@@ -336,11 +385,9 @@ export default function DonghoDoi() {
                           href="#"
                           title="FREDERIQUECONSTANT"
                           onClick={() =>
-                            capNhatBoLoc(
-                              "thuong_hieu",
-                              "FREDERIQUECONSTANT"
-                            )
-                          }>
+                            capNhatBoLoc("thuong_hieu", "FREDERIQUECONSTANT")
+                          }
+                        >
                           FREDERIQUE CONSTANT
                         </Link>
                       </div>
@@ -352,7 +399,8 @@ export default function DonghoDoi() {
                           title="CALVINKLEIN"
                           onClick={() =>
                             capNhatBoLoc("thuong_hieu", "CALVINKLEIN")
-                          }>
+                          }
+                        >
                           CALVIN KLEIN
                         </Link>
                       </div>
@@ -362,9 +410,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="EDOX"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "EDOX")
-                          }>
+                          onClick={() => capNhatBoLoc("thuong_hieu", "EDOX")}
+                        >
                           EDOX
                         </Link>
                       </div>
@@ -376,7 +423,8 @@ export default function DonghoDoi() {
                           title="CLAUDEBERNARD"
                           onClick={() =>
                             capNhatBoLoc("thuong_hieu", "CLAUDEBERNARD")
-                          }>
+                          }
+                        >
                           CLAUDE BERNARD
                         </Link>
                       </div>
@@ -386,9 +434,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="SEIKO"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "SEIKO")
-                          }>
+                          onClick={() => capNhatBoLoc("thuong_hieu", "SEIKO")}
+                        >
                           SEIKO
                         </Link>
                       </div>
@@ -398,9 +445,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="CITIZEN"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "CITIZEN")
-                          }>
+                          onClick={() => capNhatBoLoc("thuong_hieu", "CITIZEN")}
+                        >
                           CITIZEN
                         </Link>
                       </div>
@@ -410,9 +456,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="ORIENT"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "ORIENT")
-                          }>
+                          onClick={() => capNhatBoLoc("thuong_hieu", "ORIENT")}
+                        >
                           ORIENT
                         </Link>
                       </div>
@@ -422,9 +467,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="CASIO"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "CASIO")
-                          }>
+                          onClick={() => capNhatBoLoc("thuong_hieu", "CASIO")}
+                        >
                           CASIO
                         </Link>
                       </div>
@@ -436,7 +480,8 @@ export default function DonghoDoi() {
                           title="OLYMPIANUS"
                           onClick={() =>
                             capNhatBoLoc("thuong_hieu", "OLYMPIANUS")
-                          }>
+                          }
+                        >
                           OLYM PIANUS
                         </Link>
                       </div>
@@ -447,11 +492,9 @@ export default function DonghoDoi() {
                           href="#"
                           title="DANIELWELLINGTON"
                           onClick={() =>
-                            capNhatBoLoc(
-                              "thuong_hieu",
-                              "DANIELWELLINGTON"
-                            )
-                          }>
+                            capNhatBoLoc("thuong_hieu", "DANIELWELLINGTON")
+                          }
+                        >
                           DANIEL WELLINGTON
                         </Link>
                       </div>
@@ -461,9 +504,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="FOSSIL"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "FOSSIL")
-                          }>
+                          onClick={() => capNhatBoLoc("thuong_hieu", "FOSSIL")}
+                        >
                           FOSSIL
                         </Link>
                       </div>
@@ -473,9 +515,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="SKAGEN"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "SKAGEN")
-                          }>
+                          onClick={() => capNhatBoLoc("thuong_hieu", "SKAGEN")}
+                        >
                           SKAGEN
                         </Link>
                       </div>
@@ -487,7 +528,8 @@ export default function DonghoDoi() {
                           title="MICHAELKORS"
                           onClick={() =>
                             capNhatBoLoc("thuong_hieu", "MICHAELKORS")
-                          }>
+                          }
+                        >
                           MICHAEL KORS
                         </Link>
                       </div>
@@ -498,27 +540,32 @@ export default function DonghoDoi() {
 
               {/* Mức giá */}
               <div
-                className={`${styles["field-item"]} ${"phone-sm:ml-[5px]"}  `}>
+                className={`${styles["field-item"]} ${"phone-sm:ml-[5px]"}  `}
+              >
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
-                  onClick={toggleDropdown}>
+                  onClick={toggleDropdown}
+                >
                   Mức giá
                 </div>
                 {isDropdownVisible && (
                   <div
                     id="price"
-                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px]  `}>
+                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px]  `}
+                  >
                     {/*filters-in-field-1-column*/}
                     {/*filter-4-price*/}
                     <span
                       className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}>
+                      onClick={toggleDropdown}
+                    >
                       x
                     </span>
                     <div
                       className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px] border-t-0 border-r border-b border-l"} ${
                         styles.descript
-                      } ${styles.cls}`}>
+                      } ${styles.cls}`}
+                    >
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
                         <Link
@@ -527,7 +574,8 @@ export default function DonghoDoi() {
                           title="Dưới 2 triệu"
                           onClick={() =>
                             capNhatBoLoc("muc_gia", "Dưới 2 triệu")
-                          }>
+                          }
+                        >
                           Dưới 2 triệu
                         </Link>
                       </div>
@@ -538,11 +586,9 @@ export default function DonghoDoi() {
                           href="#"
                           title="Từ 2 triệu đến 5 triệu"
                           onClick={() =>
-                            capNhatBoLoc(
-                              "muc_gia",
-                              "Từ 2 triệu đến 5 triệu"
-                            )
-                          }>
+                            capNhatBoLoc("muc_gia", "Từ 2 triệu đến 5 triệu")
+                          }
+                        >
                           Từ 2 triệu đến 5 triệu
                         </Link>
                       </div>
@@ -553,11 +599,9 @@ export default function DonghoDoi() {
                           href="#"
                           title="Từ 5 triệu đến 10 triệu"
                           onClick={() =>
-                            capNhatBoLoc(
-                              "muc_gia",
-                              "Từ 5 triệu đến 10 triệu"
-                            )
-                          }>
+                            capNhatBoLoc("muc_gia", "Từ 5 triệu đến 10 triệu")
+                          }
+                        >
                           Từ 5 triệu đến 10 triệu
                         </Link>
                       </div>
@@ -568,11 +612,9 @@ export default function DonghoDoi() {
                           href="#"
                           title="Từ 10 triệu đến 20 triệu"
                           onClick={() =>
-                            capNhatBoLoc(
-                              "muc_gia",
-                              "Từ 10 triệu đến 20 triệu"
-                            )
-                          }>
+                            capNhatBoLoc("muc_gia", "Từ 10 triệu đến 20 triệu")
+                          }
+                        >
                           Từ 10 triệu đến 20 triệu
                         </Link>
                       </div>
@@ -583,11 +625,9 @@ export default function DonghoDoi() {
                           href="#"
                           title="Từ 20 triệu đến 30 triệu"
                           onClick={() =>
-                            capNhatBoLoc(
-                              "muc_gia",
-                              "Từ 20 triệu đến 30 triệu"
-                            )
-                          }>
+                            capNhatBoLoc("muc_gia", "Từ 20 triệu đến 30 triệu")
+                          }
+                        >
                           Từ 20 triệu đến 30 triệu
                         </Link>
                       </div>
@@ -598,11 +638,9 @@ export default function DonghoDoi() {
                           href="#"
                           title="Từ 30 triệu đến 50 triệu"
                           onClick={() =>
-                            capNhatBoLoc(
-                              "muc_gia",
-                              "Từ 30 triệu đến 50 triệu"
-                            )
-                          }>
+                            capNhatBoLoc("muc_gia", "Từ 30 triệu đến 50 triệu")
+                          }
+                        >
                           Từ 30 triệu đến 50 triệu
                         </Link>
                       </div>
@@ -613,11 +651,9 @@ export default function DonghoDoi() {
                           href="#"
                           title="Từ 50 triệu đến 100 triệu"
                           onClick={() =>
-                            capNhatBoLoc(
-                              "muc_gia",
-                              "Từ 50 triệu đến 100 triệu"
-                            )
-                          }>
+                            capNhatBoLoc("muc_gia", "Từ 50 triệu đến 100 triệu")
+                          }
+                        >
                           Từ 50 triệu đến 100 triệu
                         </Link>
                       </div>
@@ -629,7 +665,8 @@ export default function DonghoDoi() {
                           title="Trên 100 triệu"
                           onClick={() =>
                             capNhatBoLoc("muc_gia", "Trên 100 triệu")
-                          }>
+                          }
+                        >
                           Trên 100 triệu
                         </Link>
                       </div>
@@ -642,30 +679,33 @@ export default function DonghoDoi() {
               <div className={`${styles["field-item"]}  `}>
                 <div
                   className="cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"
-                  onClick={toggleDropdown}>
+                  onClick={toggleDropdown}
+                >
                   Khuyến mại
                 </div>
                 {isDropdownVisible && (
                   <div
                     id="discount"
-                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px]`}>
+                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px]`}
+                  >
                     <span
                       className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}>
+                      onClick={toggleDropdown}
+                    >
                       x
                     </span>
                     <div
                       className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px] border-t-0 border-r border-b border-l"} ${
                         styles.descript
-                      } ${styles.cls}`}>
+                      } ${styles.cls}`}
+                    >
                       <div className={`${styles.cls} ${styles.item}`}>
                         <Link
                           rel="nofollow"
                           href="#"
                           title="Giảm 10%"
-                          onClick={() =>
-                            capNhatBoLoc("khuyenmai", "Giảm 10%")
-                          }>
+                          onClick={() => capNhatBoLoc("khuyenmai", "Giảm 10%")}
+                        >
                           Giảm 10%
                         </Link>
                       </div>
@@ -674,9 +714,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Giảm 15%"
-                          onClick={() =>
-                            capNhatBoLoc("khuyenmai", "Giảm 15%")
-                          }>
+                          onClick={() => capNhatBoLoc("khuyenmai", "Giảm 15%")}
+                        >
                           Giảm 15%
                         </Link>
                       </div>
@@ -685,9 +724,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Giảm 20%"
-                          onClick={() =>
-                            capNhatBoLoc("khuyenmai", "Giảm 20%")
-                          }>
+                          onClick={() => capNhatBoLoc("khuyenmai", "Giảm 20%")}
+                        >
                           Giảm 20%
                         </Link>
                       </div>
@@ -696,9 +734,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Giảm 25%"
-                          onClick={() =>
-                            capNhatBoLoc("khuyenmai", "Giảm 25%")
-                          }>
+                          onClick={() => capNhatBoLoc("khuyenmai", "Giảm 25%")}
+                        >
                           Giảm 25%
                         </Link>
                       </div>
@@ -707,9 +744,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Giảm 30%"
-                          onClick={() =>
-                            capNhatBoLoc("khuyenmai", "Giảm 30%")
-                          }>
+                          onClick={() => capNhatBoLoc("khuyenmai", "Giảm 30%")}
+                        >
                           Giảm 30%
                         </Link>
                       </div>
@@ -718,9 +754,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Giảm 40%"
-                          onClick={() =>
-                            capNhatBoLoc("khuyenmai", "Giảm 40%")
-                          }>
+                          onClick={() => capNhatBoLoc("khuyenmai", "Giảm 40%")}
+                        >
                           Giảm 40%
                         </Link>
                       </div>
@@ -729,9 +764,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Giảm 50%"
-                          onClick={() =>
-                            capNhatBoLoc("khuyenmai", "Giảm 50%")
-                          }>
+                          onClick={() => capNhatBoLoc("khuyenmai", "Giảm 50%")}
+                        >
                           Giảm 50%
                         </Link>
                       </div>
@@ -744,29 +778,34 @@ export default function DonghoDoi() {
               <div
                 className={`${styles["field-area"]} ${
                   styles["field-item"]
-                } ${"phone-sm:ml-[5px]"}`}>
+                } ${"phone-sm:ml-[5px]"}`}
+              >
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} ${
                     styles.normal
                   } ${styles.field} ${styles["field-opened"]}`}
                   data-id="id-field-loai-may"
-                  onClick={toggleDropdown}>
+                  onClick={toggleDropdown}
+                >
                   Loại máy
                 </div>{" "}
                 {isDropdownVisible && (
                   <div
                     id="loai-may"
-                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px]`}>
+                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px]`}
+                  >
                     <span
                       className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}>
+                      onClick={toggleDropdown}
+                    >
                       x
                     </span>
 
                     <div
                       className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px] border-t-0 border-r border-b border-l"} ${
                         styles.descript
-                      } ${styles.cls}`}>
+                      } ${styles.cls}`}
+                    >
                       <div className={`${styles.cls} ${styles.item}`}>
                         <Link
                           rel="nofollow"
@@ -777,7 +816,8 @@ export default function DonghoDoi() {
                               "loai_may",
                               "Automatic (Máy cơ tự động)"
                             )
-                          }>
+                          }
+                        >
                           Automatic (Máy cơ tự động)
                         </Link>
                       </div>
@@ -791,7 +831,8 @@ export default function DonghoDoi() {
                               "loai_may",
                               "Quartz (Máy pin - điện tử)"
                             )
-                          }>
+                          }
+                        >
                           Quartz (Máy pin - điện tử)
                         </Link>
                       </div>
@@ -805,7 +846,8 @@ export default function DonghoDoi() {
                               "loai_may",
                               "Eco-Drive (Năng lượng ánh sáng)"
                             )
-                          }>
+                          }
+                        >
                           Eco-Drive (Năng lượng ánh sáng)
                         </Link>
                       </div>
@@ -819,7 +861,8 @@ export default function DonghoDoi() {
                               "loai_may",
                               "Quartz Chronograph (Máy pin bấm giờ thể thao)"
                             )
-                          }>
+                          }
+                        >
                           Quartz Chronograph (Máy pin bấm giờ thể thao)
                         </Link>
                       </div>
@@ -833,7 +876,8 @@ export default function DonghoDoi() {
                               "loai_may",
                               "Automatic Chronometer (Máy cơ tự động chuẩn COSC)"
                             )
-                          }>
+                          }
+                        >
                           Automatic Chronometer (Máy cơ tự động chuẩn COSC)
                         </Link>
                       </div>
@@ -847,7 +891,8 @@ export default function DonghoDoi() {
                               "loai_may",
                               "Quartz Chronometer (Máy pin chuẩn COSC)"
                             )
-                          }>
+                          }
+                        >
                           Quartz Chronometer (Máy pin chuẩn COSC)
                         </Link>
                       </div>
@@ -858,11 +903,13 @@ export default function DonghoDoi() {
                             "loai_may",
                             "Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)"
                           )
-                        }>
+                        }
+                      >
                         <Link
                           rel="nofollow"
                           href="#"
-                          title="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)">
+                          title="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)"
+                        >
                           Automatic Chronograph (Máy cơ tự động bấm giờ thể
                           thao)
                         </Link>
@@ -877,7 +924,8 @@ export default function DonghoDoi() {
                               "loai_may",
                               "Quartz Solar (Năng lượng ánh sáng)"
                             )
-                          }>
+                          }
+                        >
                           Quartz Solar (Năng lượng ánh sáng)
                         </Link>
                       </div>
@@ -891,7 +939,8 @@ export default function DonghoDoi() {
                               "loai_may",
                               "Đồng hồ cơ lên giây cót bằng tay ( Manual winding )"
                             )
-                          }>
+                          }
+                        >
                           Đồng hồ cơ lên giây cót bằng tay ( Manual winding )
                         </Link>
                       </div>
@@ -902,29 +951,34 @@ export default function DonghoDoi() {
 
               {/*Đường kính */}
               <div
-                className={`${styles["field-area"]} ${styles["field-item"]}`}>
+                className={`${styles["field-area"]} ${styles["field-item"]}`}
+              >
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} ${
                     styles.normal
                   } ${styles.field} ${styles["field-opened"]}`}
                   data-id="id-field-duong-kinh"
-                  onClick={toggleDropdown}>
+                  onClick={toggleDropdown}
+                >
                   Đường kính
                 </div>
                 {isDropdownVisible && (
                   <div
                     id="duong-kinh"
-                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filter-4-duong-kinh"]}`}>
+                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filter-4-duong-kinh"]}`}
+                  >
                     <span
                       className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}>
+                      onClick={toggleDropdown}
+                    >
                       x
                     </span>
 
                     <div
                       className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px] border-t-0 border-r border-b border-l"} ${
                         styles.descript
-                      } ${styles.cls}`}>
+                      } ${styles.cls}`}
+                    >
                       <div className={`${styles.cls} ${styles.item}`}>
                         <Link
                           rel="nofollow"
@@ -932,7 +986,8 @@ export default function DonghoDoi() {
                           title="Dưới 25mm"
                           onClick={() =>
                             capNhatBoLoc("duong_kinh", "Dưới 25mm")
-                          }>
+                          }
+                        >
                           Dưới 25mm
                         </Link>
                       </div>
@@ -943,7 +998,8 @@ export default function DonghoDoi() {
                           title="25mm đến 30mm"
                           onClick={() =>
                             capNhatBoLoc("duong_kinh", "25mm đến 30mm")
-                          }>
+                          }
+                        >
                           25mm đến 30mm
                         </Link>
                       </div>
@@ -954,7 +1010,8 @@ export default function DonghoDoi() {
                           title="30mm đến 35mm"
                           onClick={() =>
                             capNhatBoLoc("duong_kinh", "30mm đến 35mm")
-                          }>
+                          }
+                        >
                           30mm đến 35mm
                         </Link>
                       </div>
@@ -965,7 +1022,8 @@ export default function DonghoDoi() {
                           title="35mm đến 38mm"
                           onClick={() =>
                             capNhatBoLoc("duong_kinh", "35mm đến 38mm")
-                          }>
+                          }
+                        >
                           35mm đến 38mm
                         </Link>
                       </div>
@@ -976,7 +1034,8 @@ export default function DonghoDoi() {
                           title="38mm đến 40mm"
                           onClick={() =>
                             capNhatBoLoc("duong_kinh", "38mm đến 40mm")
-                          }>
+                          }
+                        >
                           38mm đến 40mm
                         </Link>
                       </div>
@@ -987,7 +1046,8 @@ export default function DonghoDoi() {
                           title="40mm đến 42mm"
                           onClick={() =>
                             capNhatBoLoc("duong_kinh", "40mm đến 42mm")
-                          }>
+                          }
+                        >
                           40mm đến 42mm
                         </Link>
                       </div>
@@ -998,7 +1058,8 @@ export default function DonghoDoi() {
                           title="42mm đến 45mm"
                           onClick={() =>
                             capNhatBoLoc("duong_kinh", "42mm đến 45mm")
-                          }>
+                          }
+                        >
                           42mm đến 45mm
                         </Link>
                       </div>
@@ -1009,7 +1070,8 @@ export default function DonghoDoi() {
                           title="Từ 45mm trở lên"
                           onClick={() =>
                             capNhatBoLoc("duong_kinh", "Từ 45mm trở lên")
-                          }>
+                          }
+                        >
                           Từ 45mm trở lên
                         </Link>
                       </div>
@@ -1020,26 +1082,31 @@ export default function DonghoDoi() {
 
               {/*Chất liệu dây  */}
               <div
-                className={`${styles["field-area"]} ${styles["field-item"]}  `}>
+                className={`${styles["field-area"]} ${styles["field-item"]}  `}
+              >
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"}`}
-                  onClick={toggleDropdown}>
+                  onClick={toggleDropdown}
+                >
                   Chất liệu đây
                 </div>{" "}
                 {isDropdownVisible && (
                   <div
                     id="duong-kinh"
-                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[500px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filters-in-field-2-column"]} `}>
+                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[500px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filters-in-field-2-column"]} `}
+                  >
                     <span
                       className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}>
+                      onClick={toggleDropdown}
+                    >
                       x
                     </span>
 
                     <div
                       className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px] border-t-0 border-r border-b border-l"} ${
                         styles.descript
-                      } ${styles.cls}`}>
+                      } ${styles.cls}`}
+                    >
                       {/*item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
                         <Link
@@ -1048,7 +1115,8 @@ export default function DonghoDoi() {
                           title="Dây da"
                           onClick={() =>
                             capNhatBoLoc("chat_lieu_day", "Dây da")
-                          }>
+                          }
+                        >
                           Dây da
                         </Link>
                       </div>
@@ -1059,11 +1127,9 @@ export default function DonghoDoi() {
                           href="#"
                           title="Thép không gỉ 316L"
                           onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_day",
-                              "Thép không gỉ 316L"
-                            )
-                          }>
+                            capNhatBoLoc("chat_lieu_day", "Thép không gỉ 316L")
+                          }
+                        >
                           Thép không gỉ 316L
                         </Link>
                       </div>
@@ -1078,7 +1144,8 @@ export default function DonghoDoi() {
                               "chat_lieu_day",
                               "Thép không gỉ 316L mạ vàng công nghệ PVD"
                             )
-                          }>
+                          }
+                        >
                           Thép không gỉ 316L mạ vàng công nghệ PVD
                         </Link>
                       </div>
@@ -1093,7 +1160,8 @@ export default function DonghoDoi() {
                               "chat_lieu_day",
                               "Thép không gỉ 316L dạng lưới"
                             )
-                          }>
+                          }
+                        >
                           Thép không gỉ 316L dạng lưới
                         </Link>
                       </div>
@@ -1108,7 +1176,8 @@ export default function DonghoDoi() {
                               "chat_lieu_day",
                               " Thép không gỉ 316L dạng lắc"
                             )
-                          }>
+                          }
+                        >
                           Thép không gỉ 316L dạng lắc
                         </Link>
                       </div>
@@ -1120,7 +1189,8 @@ export default function DonghoDoi() {
                           title="Dây vải"
                           onClick={() =>
                             capNhatBoLoc("chat_lieu_day", " Dây vải")
-                          }>
+                          }
+                        >
                           Dây vải
                         </Link>
                       </div>
@@ -1135,7 +1205,8 @@ export default function DonghoDoi() {
                               "chat_lieu_day",
                               " Thép không gỉ 316L/ Vàng 18K"
                             )
-                          }>
+                          }
+                        >
                           Thép không gỉ 316L/ Vàng 18K
                         </Link>
                       </div>
@@ -1150,7 +1221,8 @@ export default function DonghoDoi() {
                               "chat_lieu_day",
                               " Thép không gỉ 316L/ Ceramic"
                             )
-                          }>
+                          }
+                        >
                           Thép không gỉ 316L/ Ceramic
                         </Link>
                       </div>
@@ -1165,7 +1237,8 @@ export default function DonghoDoi() {
                               "chat_lieu_day",
                               "Thép không gỉ mạ công nghệ PVD"
                             )
-                          }>
+                          }
+                        >
                           Thép không gỉ mạ công nghệ PVD
                         </Link>
                       </div>
@@ -1177,7 +1250,8 @@ export default function DonghoDoi() {
                           title="Dây cao su"
                           onClick={() =>
                             capNhatBoLoc("chat_lieu_day", " Dây cao su")
-                          }>
+                          }
+                        >
                           Dây cao su
                         </Link>
                       </div>
@@ -1189,7 +1263,8 @@ export default function DonghoDoi() {
                           title="Dây dù"
                           onClick={() =>
                             capNhatBoLoc("chat_lieu_day", "  Dây dù")
-                          }>
+                          }
+                        >
                           Dây dù
                         </Link>
                       </div>
@@ -1201,7 +1276,8 @@ export default function DonghoDoi() {
                           title="Titanium"
                           onClick={() =>
                             capNhatBoLoc("chat_lieu_day", " Titanium")
-                          }>
+                          }
+                        >
                           Titanium
                         </Link>
                       </div>
@@ -1216,7 +1292,8 @@ export default function DonghoDoi() {
                               "chat_lieu_day",
                               "itanium mạ vàng công nghệ PVD"
                             )
-                          }>
+                          }
+                        >
                           Titanium mạ vàng công nghệ PVD
                         </Link>
                       </div>
@@ -1228,7 +1305,8 @@ export default function DonghoDoi() {
                           title="Nhựa"
                           onClick={() =>
                             capNhatBoLoc("chat_lieu_day", "  Nhựa")
-                          }>
+                          }
+                        >
                           Nhựa
                         </Link>
                       </div>
@@ -1241,22 +1319,26 @@ export default function DonghoDoi() {
               <div className={`${styles["field-item"]} `}>
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300 "} `}
-                  onClick={toggleDropdown}>
+                  onClick={toggleDropdown}
+                >
                   Chất liệu vỏ
                 </div>{" "}
                 {isDropdownVisible && (
                   <div
                     id="chat-lieu-vo"
-                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[500px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filters-in-field-2-column"]}`}>
+                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[500px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filters-in-field-2-column"]}`}
+                  >
                     <span
                       className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}>
+                      onClick={toggleDropdown}
+                    >
                       x
                     </span>
                     <div
                       className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px] border-t-0 border-r border-b border-l"} ${
                         styles.descript
-                      } ${styles.cls}`}>
+                      } ${styles.cls}`}
+                    >
                       {/*item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
                         <Link
@@ -1264,11 +1346,9 @@ export default function DonghoDoi() {
                           href="#"
                           title="Thép không gỉ 316L"
                           onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_vo",
-                              "Thép không gỉ 316L"
-                            )
-                          }>
+                            capNhatBoLoc("chat_lieu_vo", "Thép không gỉ 316L")
+                          }
+                        >
                           Thép không gỉ 316L
                         </Link>
                       </div>
@@ -1283,7 +1363,8 @@ export default function DonghoDoi() {
                               "chat_lieu_vo",
                               "Thép không gỉ mạ vàng công nghệ PVD"
                             )
-                          }>
+                          }
+                        >
                           Thép không gỉ mạ vàng công nghệ PVD
                         </Link>
                       </div>
@@ -1295,7 +1376,8 @@ export default function DonghoDoi() {
                           title="Vàng 18K"
                           onClick={() =>
                             capNhatBoLoc("chat_lieu_vo", "Vàng 18K")
-                          }>
+                          }
+                        >
                           Vàng 18K
                         </Link>
                       </div>
@@ -1310,7 +1392,8 @@ export default function DonghoDoi() {
                               "chat_lieu_vo",
                               "Thép không gỉ 316L/ Vàng 18K"
                             )
-                          }>
+                          }
+                        >
                           Thép không gỉ 316L/ Vàng 18K
                         </Link>
                       </div>
@@ -1322,7 +1405,8 @@ export default function DonghoDoi() {
                           title="Titanium"
                           onClick={() =>
                             capNhatBoLoc("chat_lieu_vo", "Titanium")
-                          }>
+                          }
+                        >
                           Titanium
                         </Link>
                       </div>
@@ -1337,7 +1421,8 @@ export default function DonghoDoi() {
                               "chat_lieu_vo",
                               "Titanium mạ công nghệ PVD"
                             )
-                          }>
+                          }
+                        >
                           Titanium mạ công nghệ PVD
                         </Link>
                       </div>
@@ -1349,7 +1434,8 @@ export default function DonghoDoi() {
                           title="Ceramic"
                           onClick={() =>
                             capNhatBoLoc("chat_lieu_vo", "Ceramic")
-                          }>
+                          }
+                        >
                           Ceramic
                         </Link>
                       </div>
@@ -1364,7 +1450,8 @@ export default function DonghoDoi() {
                               "chat_lieu_vo",
                               "Thép không gỉ 316L/ Ceramic"
                             )
-                          }>
+                          }
+                        >
                           Thép không gỉ 316L/ Ceramic
                         </Link>
                       </div>
@@ -1379,7 +1466,8 @@ export default function DonghoDoi() {
                               "chat_lieu_vo",
                               "Thép không gỉ mạ công nghệ PVD"
                             )
-                          }>
+                          }
+                        >
                           Thép không gỉ mạ công nghệ PVD
                         </Link>
                       </div>
@@ -1389,9 +1477,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Nhựa"
-                          onClick={() =>
-                            capNhatBoLoc("chat_lieu_vo", "Nhựa")
-                          }>
+                          onClick={() => capNhatBoLoc("chat_lieu_vo", "Nhựa")}
+                        >
                           Nhựa
                         </Link>
                       </div>
@@ -1402,11 +1489,9 @@ export default function DonghoDoi() {
                           href="#"
                           title="Titanium/ Vàng 18K"
                           onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_vo",
-                              "Titanium/ Vàng 18K"
-                            )
-                          }>
+                            capNhatBoLoc("chat_lieu_vo", "Titanium/ Vàng 18K")
+                          }
+                        >
                           Titanium/ Vàng 18K
                         </Link>
                       </div>
@@ -1419,36 +1504,40 @@ export default function DonghoDoi() {
               <div
                 className={`${
                   styles["field-item"]
-                } ${"phone-sm:ml-[5px]"}${" "} `}>
+                } ${"phone-sm:ml-[5px]"}${" "} `}
+              >
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
                   data-id="id-field-mat-kinh"
-                  onClick={toggleDropdown}>
+                  onClick={toggleDropdown}
+                >
                   Mặt kính
                 </div>{" "}
                 {isDropdownVisible && (
                   <div
                     id="mat-kinh"
-                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] `}>
+                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] `}
+                  >
                     <span
                       className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}>
+                      onClick={toggleDropdown}
+                    >
                       x
                     </span>
 
                     <div
                       className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px] border-t-0 border-r border-b border-l"} ${
                         styles.descript
-                      } ${styles.cls}`}>
+                      } ${styles.cls}`}
+                    >
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
                         <Link
                           rel="nofollow"
                           href="#"
                           title="Sapphire"
-                          onClick={() =>
-                            capNhatBoLoc("mat_kinh", "Sapphire")
-                          }>
+                          onClick={() => capNhatBoLoc("mat_kinh", "Sapphire")}
+                        >
                           Sapphire
                         </Link>
                       </div>
@@ -1460,7 +1549,8 @@ export default function DonghoDoi() {
                           title="Mặt kính cứng"
                           onClick={() =>
                             capNhatBoLoc("mat_kinh", "Mặt kính cứng")
-                          }>
+                          }
+                        >
                           Mặt kính cứng
                         </Link>
                       </div>
@@ -1472,7 +1562,8 @@ export default function DonghoDoi() {
                           title="Hardlex Crystal"
                           onClick={() =>
                             capNhatBoLoc("mat_kinh", "Hardlex Crystal")
-                          }>
+                          }
+                        >
                           Hardlex Crystal
                         </Link>
                       </div>
@@ -1482,9 +1573,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Mica"
-                          onClick={() =>
-                            capNhatBoLoc("mat_kinh", "Mica")
-                          }>
+                          onClick={() => capNhatBoLoc("mat_kinh", "Mica")}
+                        >
                           Mica
                         </Link>
                       </div>
@@ -1494,9 +1584,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Kinh Nhựa"
-                          onClick={() =>
-                            capNhatBoLoc("mat_kinh", "Kinh Nhựa")
-                          }>
+                          onClick={() => capNhatBoLoc("mat_kinh", "Kinh Nhựa")}
+                        >
                           Kinh Nhựa
                         </Link>
                       </div>
@@ -1509,32 +1598,35 @@ export default function DonghoDoi() {
               <div className={`${styles["field-item"]}  `}>
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
-                  onClick={toggleDropdown}>
+                  onClick={toggleDropdown}
+                >
                   Màu mặt
                 </div>
                 {isDropdownVisible && (
                   <div
                     id="mau-mat"
-                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[500px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filters-in-field-2-column"]}`}>
+                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[500px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filters-in-field-2-column"]}`}
+                  >
                     <span
                       className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}>
+                      onClick={toggleDropdown}
+                    >
                       x
                     </span>
 
                     <div
                       className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px] border-t-0 border-r border-b border-l"} ${
                         styles.descript
-                      } ${styles.cls}`}>
+                      } ${styles.cls}`}
+                    >
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
                         <Link
                           rel="nofollow"
                           href="#"
                           title="Trắng"
-                          onClick={() =>
-                            capNhatBoLoc("mau_mat", "Trắng")
-                          }>
+                          onClick={() => capNhatBoLoc("mau_mat", "Trắng")}
+                        >
                           Trắng
                         </Link>
                       </div>
@@ -1544,7 +1636,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Hồng"
-                          onClick={() => capNhatBoLoc("mau_mat", "Hồng")}>
+                          onClick={() => capNhatBoLoc("mau_mat", "Hồng")}
+                        >
                           Hồng
                         </Link>
                       </div>
@@ -1554,7 +1647,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Xám"
-                          onClick={() => capNhatBoLoc("mau_mat", "Xám")}>
+                          onClick={() => capNhatBoLoc("mau_mat", "Xám")}
+                        >
                           Xám
                         </Link>
                       </div>
@@ -1564,7 +1658,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Đen"
-                          onClick={() => capNhatBoLoc("mau_mat", "Đen")}>
+                          onClick={() => capNhatBoLoc("mau_mat", "Đen")}
+                        >
                           Đen
                         </Link>
                       </div>
@@ -1574,9 +1669,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Xanh lam"
-                          onClick={() =>
-                            capNhatBoLoc("mau_mat", "Xanh lam")
-                          }>
+                          onClick={() => capNhatBoLoc("mau_mat", "Xanh lam")}
+                        >
                           Xanh lam
                         </Link>
                       </div>
@@ -1586,7 +1680,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Vàng"
-                          onClick={() => capNhatBoLoc("mau_mat", "Vàng")}>
+                          onClick={() => capNhatBoLoc("mau_mat", "Vàng")}
+                        >
                           Vàng
                         </Link>
                       </div>
@@ -1596,9 +1691,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Khảm trai"
-                          onClick={() =>
-                            capNhatBoLoc("mau_mat", "Khảm trai")
-                          }>
+                          onClick={() => capNhatBoLoc("mau_mat", "Khảm trai")}
+                        >
                           Khảm trai
                         </Link>
                       </div>
@@ -1608,7 +1702,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Đỏ"
-                          onClick={() => capNhatBoLoc("mau_mat", "Đỏ")}>
+                          onClick={() => capNhatBoLoc("mau_mat", "Đỏ")}
+                        >
                           Đỏ
                         </Link>
                       </div>
@@ -1618,9 +1713,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Da Cam"
-                          onClick={() =>
-                            capNhatBoLoc("mau_mat", "Da Cam")
-                          }>
+                          onClick={() => capNhatBoLoc("mau_mat", "Da Cam")}
+                        >
                           Da Cam
                         </Link>
                       </div>
@@ -1630,9 +1724,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Xanh Lá"
-                          onClick={() =>
-                            capNhatBoLoc("mau_mat", "Xanh Lá")
-                          }>
+                          onClick={() => capNhatBoLoc("mau_mat", "Xanh Lá")}
+                        >
                           Xanh Lá
                         </Link>
                       </div>
@@ -1642,7 +1735,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Nâu"
-                          onClick={() => capNhatBoLoc("mau_mat", "Nâu")}>
+                          onClick={() => capNhatBoLoc("mau_mat", "Nâu")}
+                        >
                           Nâu
                         </Link>
                       </div>
@@ -1655,27 +1749,32 @@ export default function DonghoDoi() {
               <div
                 className={`${
                   styles["field-item"]
-                } ${"phone-sm:ml-[5px]"}${" "} `}>
+                } ${"phone-sm:ml-[5px]"}${" "} `}
+              >
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
                   data-id="id-field-phong-cach"
-                  onClick={toggleDropdown}>
+                  onClick={toggleDropdown}
+                >
                   Phong cách
                 </div>{" "}
                 {isDropdownVisible && (
                   <div
                     id="phong-cach"
-                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px]`}>
+                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px]`}
+                  >
                     <span
                       className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}>
+                      onClick={toggleDropdown}
+                    >
                       x
                     </span>
 
                     <div
                       className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px] border-t-0 border-r border-b border-l"} ${
                         styles.descript
-                      } ${styles.cls}`}>
+                      } ${styles.cls}`}
+                    >
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
                         <Link
@@ -1684,7 +1783,8 @@ export default function DonghoDoi() {
                           title="Sang trọng"
                           onClick={() =>
                             capNhatBoLoc("phong_cach", "Sang trọng")
-                          }>
+                          }
+                        >
                           Sang trọng
                         </Link>
                       </div>
@@ -1694,9 +1794,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Thể thao"
-                          onClick={() =>
-                            capNhatBoLoc("phong_cach", "Thể thao")
-                          }>
+                          onClick={() => capNhatBoLoc("phong_cach", "Thể thao")}
+                        >
                           Thể thao
                         </Link>
                       </div>
@@ -1707,11 +1806,9 @@ export default function DonghoDoi() {
                           href="#"
                           title="Thể thao sang trọng"
                           onClick={() =>
-                            capNhatBoLoc(
-                              "phong_cach",
-                              "Thể thao sang trọng"
-                            )
-                          }>
+                            capNhatBoLoc("phong_cach", "Thể thao sang trọng")
+                          }
+                        >
                           Thể thao sang trọng
                         </Link>
                       </div>
@@ -1721,9 +1818,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Quân đội"
-                          onClick={() =>
-                            capNhatBoLoc("phong_cach", "Quân đội")
-                          }>
+                          onClick={() => capNhatBoLoc("phong_cach", "Quân đội")}
+                        >
                           Quân đội
                         </Link>
                       </div>
@@ -1735,7 +1831,8 @@ export default function DonghoDoi() {
                           title="Thời trang"
                           onClick={() =>
                             capNhatBoLoc("phong_cach", "Thời trang")
-                          }>
+                          }
+                        >
                           Thời trang
                         </Link>
                       </div>
@@ -1745,9 +1842,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Hiện đại"
-                          onClick={() =>
-                            capNhatBoLoc("phong_cach", "Hiện đại")
-                          }>
+                          onClick={() => capNhatBoLoc("phong_cach", "Hiện đại")}
+                        >
                           Hiện đại
                         </Link>
                       </div>
@@ -1759,33 +1855,36 @@ export default function DonghoDoi() {
               {/*Kiểu dáng */}
               <div className={`${styles["field-item"]} `}>
                 <div
-                className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
-                  onClick={toggleDropdown}>
+                  className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
+                  onClick={toggleDropdown}
+                >
                   Kiểu dáng
                 </div>{" "}
                 {isDropdownVisible && (
                   <div
                     id="kieu-dang"
-                    className={`${styles["field-label"]} ${styles["filters-in-field"]} w-full phone-sm:w-full sm:w-full phone-sm:text-[12px] sm:text-[14px]`}>
+                    className={`${styles["field-label"]} ${styles["filters-in-field"]} w-full phone-sm:w-full sm:w-full phone-sm:text-[12px] sm:text-[14px]`}
+                  >
                     <span
                       className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}>
+                      onClick={toggleDropdown}
+                    >
                       x
                     </span>
 
                     <div
                       className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px]  w-40 border-t-0 border-r border-b border-l"} ${
                         styles.descript
-                      } ${styles.cls}`}>
+                      } ${styles.cls}`}
+                    >
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
                         <Link
                           rel="nofollow"
                           href="#"
                           title="Mặt vuông"
-                          onClick={() =>
-                            capNhatBoLoc("kieu_dang", "Mặt vuông")
-                          }>
+                          onClick={() => capNhatBoLoc("kieu_dang", "Mặt vuông")}
+                        >
                           Mặt vuông
                         </Link>
                       </div>
@@ -1795,9 +1894,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Mặt tròn"
-                          onClick={() =>
-                            capNhatBoLoc("kieu_dang", "Mặt tròn")
-                          }>
+                          onClick={() => capNhatBoLoc("kieu_dang", "Mặt tròn")}
+                        >
                           Mặt tròn
                         </Link>
                       </div>
@@ -1809,7 +1907,8 @@ export default function DonghoDoi() {
                           title="Mặt chữ nhật"
                           onClick={() =>
                             capNhatBoLoc("kieu_dang", "Mặt chữ nhật")
-                          }>
+                          }
+                        >
                           Mặt chữ nhật
                         </Link>
                       </div>
@@ -1819,9 +1918,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Mặt Oval"
-                          onClick={() =>
-                            capNhatBoLoc("kieu_dang", "Mặt Oval")
-                          }>
+                          onClick={() => capNhatBoLoc("kieu_dang", "Mặt Oval")}
+                        >
                           Mặt Oval
                         </Link>
                       </div>
@@ -1831,9 +1929,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Khác"
-                          onClick={() =>
-                            capNhatBoLoc("kieu_dang", "Khác")
-                          }>
+                          onClick={() => capNhatBoLoc("kieu_dang", "Khác")}
+                        >
                           Khác
                         </Link>
                       </div>
@@ -1846,36 +1943,40 @@ export default function DonghoDoi() {
               <div
                 className={`${styles["field-area"]} ${
                   styles["field-item"]
-                } ${" "}`}>
+                } ${" "}`}
+              >
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} ${
                     styles.normal
                   } ${styles.field} ${styles["field-opened"]}`}
                   data-id="id-field-xuat-xu-thuong-hieu"
-                  onClick={toggleDropdown}>
+                  onClick={toggleDropdown}
+                >
                   Xuất xứ thương hiệu
                 </div>
                 {isDropdownVisible && (
                   <div
                     id="xuat-xu-thuong-hieu"
-                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filter-4-xuat-xu-thuong-hieu"]}`}>
+                    className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filter-4-xuat-xu-thuong-hieu"]}`}
+                  >
                     <span
                       className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}>
+                      onClick={toggleDropdown}
+                    >
                       x
                     </span>
                     <div
                       className={`${"relative bg-white border-1 border-[#e7e7e7] p-[10px] border-t-0 border-r border-b border-l"} ${
                         styles.cls
-                      }`}>
+                      }`}
+                    >
                       <div className={`${styles.cls} ${styles.item}`}>
                         <Link
                           rel="nofollow"
                           href="#"
                           title="Nhật Bản"
-                          onClick={() =>
-                            capNhatBoLoc("xuat_xu", "Nhật Bản")
-                          }>
+                          onClick={() => capNhatBoLoc("xuat_xu", "Nhật Bản")}
+                        >
                           Nhật Bản
                         </Link>
                       </div>
@@ -1884,9 +1985,8 @@ export default function DonghoDoi() {
                           rel="nofollow"
                           href="#"
                           title="Thụy Sỹ"
-                          onClick={() =>
-                            capNhatBoLoc("xuat_xu", "Thụy Sỹ")
-                          }>
+                          onClick={() => capNhatBoLoc("xuat_xu", "Thụy Sỹ")}
+                        >
                           Thụy Sỹ
                         </Link>
                       </div>
@@ -1913,7 +2013,8 @@ export default function DonghoDoi() {
             <select
               className="absolute lg:top-2 lg:right-3 top-[100%] right-[0px] sm:border sm:border-[#e6e6e6] lg:border-none  sm:bg-[#f3f3f3] py-[8px] text-[#5d5d5d] cursor-pointer"
               name="order-select"
-              onChange={capNhatSapXep}>
+              onChange={capNhatSapXep}
+            >
               {/*order-select*/}
               <option value="">Sắp xếp theo</option>
               <option value="asc">Giá từ thấp tới cao</option>
@@ -1930,7 +2031,8 @@ export default function DonghoDoi() {
             <div>
               {/* show sản phẩm */}
               <div
-                className={`${styles["product-grid"]} grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-3`}>
+                className={`${styles["product-grid"]} grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-3`}
+              >
                 {sanPhamHienThi.map((product) => {
                   const {
                     _id,
@@ -1955,7 +2057,8 @@ export default function DonghoDoi() {
                   return (
                     <div
                       key={_id}
-                      className="border-box relative overflow-hidden text-center mb-10">
+                      className="border-box relative overflow-hidden text-center mb-10"
+                    >
                       <div className="relative">
                         <figure className="relative mb-4 min-h-[230px]">
                           <Link href={`/components/product-detail/${_id}`}>
@@ -1976,7 +2079,8 @@ export default function DonghoDoi() {
                           <Link
                             className="text-[17px] font-semibold mb-2"
                             href="#"
-                            title={ten}>
+                            title={ten}
+                          >
                             <span className="text-gray-500 block text-[14px] mt-1.5 mb-2 font-normal leading-relaxed">
                               {ten_san_pham}
                             </span>
@@ -1993,25 +2097,38 @@ export default function DonghoDoi() {
                           {duong_kinh}
                         </span>
                         <div className={styles["price-area"]}>
-                          <div className="text-[15px] text-gray-400 mb-2 line-through">
-                            Giá:{" "}
-                            <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
-                          </div>
-                          <div className="text-[18px] text-red-600 font-semibold">
-                            Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
-                          </div>
+                          {gia_giam > 0 ? (
+                            <>
+                              <div className="text-[15px] text-gray-400 mb-2 line-through">
+                                Giá:{" "}
+                                <span>
+                                  {gia_san_pham.toLocaleString("vi-VN")}₫
+                                </span>
+                              </div>
+                              <div className="text-[18px] text-red-600 font-semibold">
+                                Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-[18px] text-red-600 font-semibold">
+                              Giá: {gia_san_pham.toLocaleString("vi-VN")}₫
+                            </div>
+                          )}
                         </div>
-                        <div className="absolute top-0 left-1.25 bg-red-600 text-white text-sm w-11 h-11 leading-[2.875rem] box-border rounded-full">
-                          <span>
-                            -
-                            {roundDiscount(
-                              Math.round(
-                                ((gia_san_pham - gia_giam) / gia_san_pham) * 100
-                              )
-                            )}
-                            %
-                          </span>
-                        </div>
+                        {gia_giam > 0 && (
+                          <div className="absolute top-0 left-1.25 bg-red-600 text-white text-sm w-11 h-11 leading-[2.875rem] box-border rounded-full">
+                            <span>
+                              -
+                              {roundDiscount(
+                                Math.round(
+                                  ((gia_san_pham - gia_giam) / gia_san_pham) *
+                                    100
+                                )
+                              )}
+                              %
+                            </span>
+                          </div>
+                        )}
                         <div className={styles.clear}></div>
                       </div>
                       {/* end .frame-inner */}
@@ -2031,7 +2148,8 @@ export default function DonghoDoi() {
               className={
                 currentPage === 1 ? styles.disabled : styles["other-page"]
               }
-              onClick={() => currentPage > 1 && thayDoiTrang(1)}>
+              onClick={() => currentPage > 1 && thayDoiTrang(1)}
+            >
               ‹‹
             </span>
             {/* Prev 1 trang */}
@@ -2039,9 +2157,8 @@ export default function DonghoDoi() {
               className={
                 currentPage === 1 ? styles.disabled : styles["other-page"]
               }
-              onClick={() =>
-                currentPage > 1 && thayDoiTrang(currentPage - 1)
-              }>
+              onClick={() => currentPage > 1 && thayDoiTrang(currentPage - 1)}
+            >
               ‹
             </span>
             {/* Trang hiện tại */}
@@ -2057,7 +2174,8 @@ export default function DonghoDoi() {
               }
               onClick={() =>
                 currentPage < totalPages && thayDoiTrang(currentPage + 1)
-              }>
+              }
+            >
               ›
             </span>
             {/* Next tới trang cuối */}
@@ -2069,7 +2187,8 @@ export default function DonghoDoi() {
               }
               onClick={() =>
                 currentPage < totalPages && thayDoiTrang(totalPages)
-              }>
+              }
+            >
               ››
             </span>
           </div>

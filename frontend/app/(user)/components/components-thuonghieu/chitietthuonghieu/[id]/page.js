@@ -151,12 +151,56 @@ const toggleDropdown = () => {
   return (
     <>
       <div className="container">
-      
+        <div
+          className={cx(
+            "flex",
+            "items-center uppercase  md:text-[16px] text-[10px] mb-5 mt-6"
+          )}
+        >
+          <span className={cx("")}>
+            <Link
+              href="/"
+              className={cx(" text-gray-800", "hover:text-[#796752]")}
+            >
+              Trang chủ
+            </Link>
+          </span>
+
+          <span className={cx("separator", "mx-3", "text-stone-400")}>
+          {" "}
+          &gt;{" "}
+        </span>
+
+          <span className={cx("")}>
+          <Link
+            href="/components/components-thuonghieu/thuonghieu"
+            className={cx(" text-gray-800", "hover:text-[#796752]")}
+          >
+            THƯƠNG HIỆU
+          </Link>
+        </span>    
+          <span className={cx("separator", "mx-3", "text-stone-400")}>
+            {" "}
+            &gt;{" "}
+          </span>
+
+          <span className={cx("", "text-red-500")}>
+            <Link
+              href="/components/components-thuonghieu/donghonam"
+              className={cx("link", "text-red-500")}
+            >
+              {" "}
+              {categoryName === "Đồng hồ nam"
+                ? categoryName
+                : `${categoryName}`}
+            </Link>
+          </span>
+        </div>
+
         {/*container*/}
         <div className={styles.clear}></div>
         {/* mô tả đồng hồ nữ */}
         <div className="relative">
-        
           {" "}
           {/*all-summary*/}
           <div
@@ -2103,25 +2147,39 @@ const toggleDropdown = () => {
                           {duong_kinh}
                         </span>
                         <div className={styles["price-area"]}>
-                          <div className="text-[15px] text-gray-400 mb-2 line-through">
-                            Giá:{" "}
-                            <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
-                          </div>
-                          <div className="text-[18px] text-red-600 font-semibold">
-                            Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
-                          </div>
+                          {gia_giam > 0 ? (
+                            <>
+                              <div className="text-[15px] text-gray-400 mb-2 line-through">
+                                Giá:{" "}
+                                <span>
+                                  {gia_san_pham.toLocaleString("vi-VN")}₫
+                                </span>
+                              </div>
+                              <div className="text-[18px] text-red-600 font-semibold">
+                                Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-[18px] text-red-600 font-semibold">
+                              Giá: {gia_san_pham.toLocaleString("vi-VN")}₫
+                            </div>
+                          )}
                         </div>
-                        <div className="absolute top-0 left-1.25 bg-red-600 text-white text-sm w-11 h-11 leading-[2.875rem] box-border rounded-full">
-                          <span>
-                            -
-                            {roundDiscount(
-                              Math.round(
-                                ((gia_san_pham - gia_giam) / gia_san_pham) * 100
-                              )
-                            )}
-                            %
-                          </span>
-                        </div>
+                        {gia_giam > 0 && (
+                          <div className="absolute top-0 left-1.25 bg-red-600 text-white text-sm w-11 h-11 leading-[2.875rem] box-border rounded-full">
+                            <span>
+                              -
+                              {roundDiscount(
+                                Math.round(
+                                  ((gia_san_pham - gia_giam) / gia_san_pham) *
+                                    100
+                                )
+                              )}
+                              %
+                            </span>
+                          </div>
+                        )}
+
                         <div className={styles.clear}></div>
                       </div>
                       {/* end .frame-inner */}
