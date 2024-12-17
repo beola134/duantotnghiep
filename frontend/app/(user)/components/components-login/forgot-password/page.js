@@ -63,7 +63,7 @@ export default function ForgotPassword() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch("http://localhost:5000/users/resetPasswordByOTP", {
+        const res = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/users/resetPasswordByOTP", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -115,7 +115,7 @@ export default function ForgotPassword() {
     }
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/users/sendOTPquenmk", {
+      const res = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/users/sendOTPquenmk", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

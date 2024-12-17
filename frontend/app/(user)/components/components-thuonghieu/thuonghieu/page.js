@@ -17,7 +17,7 @@ export default function Thuonghieu() {
     const fetchCates = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/thuonghieu/allthuonghieu"
+          "https://wristlybackend-e89d41f05169.herokuapp.com/thuonghieu/allthuonghieu"
         );
         const data = await res.json();
         setCates(data.th);
@@ -72,7 +72,7 @@ export default function Thuonghieu() {
 
   return (
     <>
-      <div className="container mx-auto px-4 ">
+      <div className="container mx-auto  ">
         <div
           className={cx(
             "flex",
@@ -121,7 +121,7 @@ export default function Thuonghieu() {
                     >
                       <img
                         className="w-full h-250px lg:h-[275px] sm:h-[250px] md:h-[250px] object-cover"
-                        src={`http://localhost:5000/images/${hinh_anh2}`}
+                        src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${hinh_anh2}`}
                         alt={`Hình ảnh thương hiệu ${item.thuong_hieu}`}
                       />
                     </Link>
@@ -135,7 +135,7 @@ export default function Thuonghieu() {
         </div>
 
         <br />
-        <h3 className="ml-3 text-[20px]"> TẤT CẢ THƯƠNG HIỆU</h3>
+        <h3 className=" text-[20px]"> TẤT CẢ THƯƠNG HIỆU</h3>
         <br />
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {cates
@@ -149,7 +149,7 @@ export default function Thuonghieu() {
                   >
                     <img
                       className="w-full h-250px lg:h-[275px] sm:h-[250px] md:h-[250px] object-cover"
-                      src={`http://localhost:5000/images/${hinh_anh2}`}
+                      src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${hinh_anh2}`}
                       alt={`Hình ảnh thương hiệu ${item.thuong_hieu}`}
                     />
                   </Link>

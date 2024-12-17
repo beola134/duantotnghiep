@@ -37,7 +37,7 @@ export default function DongHoTreoTuong() {
     try {
       const queryParams = new URLSearchParams({ ...filter, page: currentPage });
       const response = await fetch(
-        `http://localhost:5000/product/filterTreoTuong/5307799c-55ae-4bfd-83d4-3ed6e219ff5f?${queryParams}`
+        `https://wristlybackend-e89d41f05169.herokuapp.com/product/filterTreoTuong/5307799c-55ae-4bfd-83d4-3ed6e219ff5f?${queryParams}`
       );
       if (!response.ok) {
         throw new Error("Lỗi không thể tải dữ liệu");
@@ -569,7 +569,7 @@ export default function DongHoTreoTuong() {
                         )}
                         <Link href={`/components/product-detail/${item._id}`}>
                           <img
-                            src={`http://localhost:5000/images/${item.hinh_anh}`}
+                            src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${item.hinh_anh}`}
                             alt={item.ten_san_pham}
                             className={cx("relative transition-transform duration-500 ease-in-out z-[1] mx-auto")}
                           />
@@ -625,57 +625,9 @@ export default function DongHoTreoTuong() {
                   </div>
 
                   {/* phân trang*/}
-                  <div className={cx("pagination lg:flex hidden")}>
-                    {/* Prev trang đầu */}
-                    <span
-                      title="First page"
-                      className={cx({
-                        disabled: currentPage === 1,
-                        "other-page": currentPage > 1,
-                      })}
-                      onClick={() => currentPage > 1 && handlePageChange(1)}
-                    >
-                      ‹‹
-                    </span>
+                 
 
-                    {/* Prev 1 trang */}
-                    <span
-                      className={cx({
-                        disabled: currentPage === 1,
-                        "other-page": currentPage > 1,
-                      })}
-                      onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                    >
-                      ‹
-                    </span>
-
-                    {/* Trang hiện tại */}
-                    <span className={cx("currentPage")}>{`Trang ${currentPage} / ${totalPages || 1}`}</span>
-
-                    {/* Next 1 trang */}
-                    <span
-                      className={cx({
-                        disabled: currentPage === totalPages,
-                        "other-page": currentPage < totalPages,
-                      })}
-                      onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
-                    >
-                      ›
-                    </span>
-
-                    {/* Next tới trang cuối */}
-                    <span
-                      className={cx({
-                        disabled: currentPage === totalPages,
-                        "other-page": currentPage < totalPages,
-                      })}
-                      onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
-                    >
-                      ››
-                    </span>
-                  </div>
-
-                  <div className="lg:hidden flex justify-center items-center my-5 flex-wrap">
+                  <div className="flex justify-center items-center my-5 flex-wrap">
                     <span
                       title="First page"
                       className={classNames(

@@ -32,7 +32,7 @@ const CartPage = () => {
   );
 
   const ktra = async (items, newQuantity) => {
-    const reponse = await fetch(`http://localhost:5000/product/check/${items._id}?quantity=${newQuantity}`);
+    const reponse = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/check/${items._id}?quantity=${newQuantity}`);
     const data = await reponse.json();
     if (!reponse.ok) {
       Swal.fire({
@@ -90,7 +90,7 @@ const CartPage = () => {
               </div>
             ) : (
               <div>
-                <h2>Giỏ hàng</h2>
+                <h2 className="text-[14px] lg:text-[20px]">Giỏ hàng</h2>
                 <br />
                 <div className="phone-sm:hidden">
                   <table className={`${styles.carttable} `}>
@@ -108,7 +108,7 @@ const CartPage = () => {
                       {cartItems.map((item) => (
                         <tr key={item._id}>
                           <td>
-                            <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt="" width="100px" />
+                            <img src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${item.hinh_anh}`} alt="" width="100px" />
                           </td>
                           <td>{item.ten_san_pham}</td>
                           <td>
@@ -208,7 +208,7 @@ const CartPage = () => {
                     <div key={item._id} className="flex flex-col border rounded-lg p-4 mb-4">
                       <div className="flex items-center">
                         <img
-                          src={`http://localhost:5000/images/${item.hinh_anh}`}
+                          src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${item.hinh_anh}`}
                           alt=""
                           width="100px"
                           className="mr-4"

@@ -43,15 +43,15 @@ export default function SuaSanPham({ params }) {
     const fetchProductAndData = async () => {
       try {
         // Fetch Thương Hiệu (Brands)
-        const brandResponse = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
+        const brandResponse = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/thuonghieu/allthuonghieu");
         const brandData = await brandResponse.json();
         setThuongHieu(brandData.th);
         // Fetch Danh Mục (Categories)
-        const cateResponse = await fetch("http://localhost:5000/cate/getAllCateadmin");
+        const cateResponse = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/cate/getAllCateadmin");
         const cateData = await cateResponse.json();
         setCates(cateData.cates);
         // Fetch Product Details
-        const productResponse = await fetch(`http://localhost:5000/product/chitietsp/${id}`);
+        const productResponse = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/chitietsp/${id}`);
         const productData = await productResponse.json();
         setFormData({ ...productData.product, hinh_anh: null });
       } catch (error) {
@@ -104,7 +104,7 @@ export default function SuaSanPham({ params }) {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/product/capnhatsp/${id}`,
+        `https://wristlybackend-e89d41f05169.herokuapp.com/product/capnhatsp/${id}`,
         {
           method: "PUT",
           body: data,

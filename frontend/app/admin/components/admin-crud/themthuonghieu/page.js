@@ -60,7 +60,7 @@ export default function ThemThuongHieu() {
     formData.append("mo_ta", description);
 
     try {
-        const response = await fetch("http://localhost:5000/thuonghieu/addThuongHieu", {
+        const response = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/thuonghieu/addThuongHieu", {
             method: "POST",
             body: formData,
         });

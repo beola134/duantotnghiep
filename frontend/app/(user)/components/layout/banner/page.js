@@ -34,7 +34,7 @@ export default function Banner() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        "http://localhost:5000/thuonghieu/allthuonghieu"
+        "https://wristlybackend-e89d41f05169.herokuapp.com/thuonghieu/allthuonghieu"
       );
       const data = await response.json();
       setThuonghieu(data.th);
@@ -218,7 +218,7 @@ export default function Banner() {
                     key={item._id}
                   >
                     <img
-                      src={`http://localhost:5000/images/${item.hinh_anh}`}
+                      src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${item.hinh_anh}`}
                       alt={item.thuong_hieu}
                       style={{
                         objectFit: "cover",

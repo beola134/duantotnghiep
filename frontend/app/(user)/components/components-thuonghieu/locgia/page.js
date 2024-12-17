@@ -65,7 +65,7 @@ export default function DonghoNam() {
       const fetchData = async () => {
         setLoading(true);
         try {
-          const response = await fetch(`http://localhost:5000/product/filtersanphamdongho?${query}`, {
+          const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/filtersanphamdongho?${query}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -100,7 +100,7 @@ export default function DonghoNam() {
     setLoading(true);
     try {
       const queryParams = new URLSearchParams({ ...filter, page: currentPage });
-      const response = await fetch(`http://localhost:5000/product/filtersanphamdongho?${queryParams}`);
+      const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/filtersanphamdongho?${queryParams}`);
       if (!response.ok) {
         throw new Error("Lỗi không thể tải dữ liệu");
       }
@@ -1920,7 +1920,7 @@ export default function DonghoNam() {
                           <div className={cx("relative")}>
                             <Link href={`/components/product-detail/${_id}`}>
                               <img
-                                src={`http://localhost:5000/images/${hinh_anh}`}
+                                src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${hinh_anh}`}
                                 alt={ten_san_pham}
                                 className={cx("relative transition-transform duration-500 ease-in-out z-[1] mx-auto")}
                               />
@@ -1988,58 +1988,9 @@ export default function DonghoNam() {
                     <div className={styles.clear}></div>
                   </div>
 
-                  {/* phân trang*/}
-                  <div className={cx("pagination lg:flex hidden")}>
-                    {/* Prev trang đầu */}
-                    <span
-                      title="First page"
-                      className={cx({
-                        disabled: currentPage === 1,
-                        "other-page": currentPage > 1,
-                      })}
-                      onClick={() => currentPage > 1 && handlePageChange(1)}
-                    >
-                      ‹‹
-                    </span>
+               
 
-                    {/* Prev 1 trang */}
-                    <span
-                      className={cx({
-                        disabled: currentPage === 1,
-                        "other-page": currentPage > 1,
-                      })}
-                      onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                    >
-                      ‹
-                    </span>
-
-                    {/* Trang hiện tại */}
-                    <span className={cx("currentPage")}>{`Trang ${currentPage} / ${totalPages || 1}`}</span>
-
-                    {/* Next 1 trang */}
-                    <span
-                      className={cx({
-                        disabled: currentPage === totalPages,
-                        "other-page": currentPage < totalPages,
-                      })}
-                      onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
-                    >
-                      ›
-                    </span>
-
-                    {/* Next tới trang cuối */}
-                    <span
-                      className={cx({
-                        disabled: currentPage === totalPages,
-                        "other-page": currentPage < totalPages,
-                      })}
-                      onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
-                    >
-                      ››
-                    </span>
-                  </div>
-
-                  <div className="lg:hidden flex justify-center items-center my-5 flex-wrap">
+                  <div className=" flex justify-center items-center my-5 flex-wrap">
                     <span
                       title="First page"
                       className={classNames(

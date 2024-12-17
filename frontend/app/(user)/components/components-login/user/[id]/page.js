@@ -56,7 +56,7 @@ const User = ({ params }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/users/${id}`);
+        const res = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/users/${id}`);
         const data = await res.json();
         setUserData(data.user);
       } catch (error) {
@@ -70,7 +70,7 @@ const User = ({ params }) => {
     if (activeTab === "orderShow") {
       const fetchOrderShow = async () => {
         try {
-          const res = await fetch(`http://localhost:5000/donhang/show/${id}`);
+          const res = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/donhang/show/${id}`);
           const data = await res.json();
           if (data.orders && Array.isArray(data.orders)) {
             setOrderShow(data.orders);
@@ -88,7 +88,7 @@ const User = ({ params }) => {
 
   const fetchShowLichsu = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/donhang/history/${id}`);
+      const res = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/donhang/history/${id}`);
       const data = await res.json();
       if (data.donHangs && Array.isArray(data.donHangs)) {
         setShowLichsu(data.donHangs);
@@ -108,7 +108,7 @@ const User = ({ params }) => {
   }, [activeTab, id]);
   const fetchOrderShow = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/donhang/show/${id}`);
+      const res = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/donhang/show/${id}`);
       const data = await res.json();
       if (data.orders && Array.isArray(data.orders)) {
         setOrderShow(data.orders);
@@ -164,7 +164,7 @@ const User = ({ params }) => {
         formData.append("hinh_anh", avatarFile);
       }
       try {
-        const res = await fetch(`http://localhost:5000/users/update/${id}`, {
+        const res = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/users/update/${id}`, {
           method: "PUT",
           body: formData,
         });
@@ -232,7 +232,7 @@ const handleSubmitPasswordChange = async (e) => {
       }
       try {
         const res = await fetch(
-          `http://localhost:5000/users/changepassword`,
+          `https://wristlybackend-e89d41f05169.herokuapp.com/users/changepassword`,
           {
             method: "PUT",
             headers: {
@@ -324,7 +324,7 @@ const handleSubmitPasswordChange = async (e) => {
       if (result.isConfirmed) {
         try {
           const response = await fetch(
-            `http://localhost:5000/donhang/update/${id}`,
+            `https://wristlybackend-e89d41f05169.herokuapp.com/donhang/update/${id}`,
             {
               method: "PUT",
               headers: {
@@ -369,7 +369,7 @@ const handleSubmitPasswordChange = async (e) => {
             src={
               userData.hinh_anh.startsWith("http")
                 ? userData.hinh_anh
-                : `http://localhost:5000/images/${userData.hinh_anh}`
+                : `https://wristlybackend-e89d41f05169.herokuapp.com/images/${userData.hinh_anh}`
             }
             width="300"
             height="363"
@@ -566,7 +566,7 @@ const handleSubmitPasswordChange = async (e) => {
                       {order.chiTietDonHangs.map((detail) => (
                         <div key={detail._id} className={styles.productCard}>
                           <img
-                            src={`http://localhost:5000/images/${detail.product.hinh_anh}`}
+                            src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${detail.product.hinh_anh}`}
                             alt={detail.product.ten}
                             className={`${styles.productImage} phone-sm:w-[50px]`}
                           />
@@ -680,7 +680,7 @@ const handleSubmitPasswordChange = async (e) => {
                                 </td>
                                 <td className="w-[20%]">
                                   <img
-                                    src={`http://localhost:5000/images/${detail.product.hinh_anh}`}
+                                    src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${detail.product.hinh_anh}`}
                                     alt={detail.gia_giam}
                                     style={{
                                       marginLeft: "10%",
@@ -714,7 +714,7 @@ const handleSubmitPasswordChange = async (e) => {
                             <div className="flex items-center justify-start mt-2">
                               <span className="mr-4">Hình Ảnh:</span>
                               <img
-                                src={`http://localhost:5000/images/${detail.product.hinh_anh}`}
+                                src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${detail.product.hinh_anh}`}
                                 alt={detail.gia_giam}
                                 className="w-16 h-auto"
                               />

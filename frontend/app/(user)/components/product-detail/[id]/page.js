@@ -61,7 +61,7 @@ export default function Detail({ params }) {
     if (product && product._id) {
       const fetchProductQuantity = async () => {
         try {
-          const response = await fetch(`http://localhost:5000/product/check/${product._id}?quantity=${so_luong}`);
+          const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/check/${product._id}?quantity=${so_luong}`);
           if (!response.ok) {
             const errorData = await response.json();
             throw new Error(`Error fetching product quantity: ${JSON.stringify(errorData)}`);
@@ -138,7 +138,7 @@ export default function Detail({ params }) {
       }
 
       // Check product quantity from server
-      const response = await fetch(`http://localhost:5000/product/check/${product._id}?quantity=${so_luong}`);
+      const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/check/${product._id}?quantity=${so_luong}`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -171,7 +171,7 @@ export default function Detail({ params }) {
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/product/chitietsp/${params.id}`);
+        const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/chitietsp/${params.id}`);
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -192,7 +192,7 @@ export default function Detail({ params }) {
   useEffect(() => {
     const fetchRelated = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/product/related/${params.id}`);
+        const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/related/${params.id}`);
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -263,7 +263,7 @@ export default function Detail({ params }) {
     if (!user) {
       if (commentText && star) {
         try {
-          const response = await fetch(`http://localhost:5000/comment/add`, {
+          const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/comment/add`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -325,7 +325,7 @@ export default function Detail({ params }) {
     const getAllComment = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:5000/comment/getAll/${params.id}?page=${currentPage}`);
+        const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/comment/getAll/${params.id}?page=${currentPage}`);
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -419,7 +419,7 @@ export default function Detail({ params }) {
           <div className="relative left-0 text-center mb-5">
             <img
               className={`${styles.imgResponsive} ${styles.bkProductImage}`}
-              src={`http://localhost:5000/images/${product.hinh_anh}`}
+              src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${product.hinh_anh}`}
               alt={product.ten}
               width="398"
               height="481"
@@ -479,7 +479,7 @@ export default function Detail({ params }) {
             <div className="text-center mb-[10px]">
               <img
                 className={styles.imageGiftCat}
-                src={`http://localhost:5000/images/${cate.hinh_anh}`}
+                src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${cate.hinh_anh}`}
                 alt={cate.thuong_hieu}
               />
             </div>
@@ -2915,7 +2915,7 @@ export default function Detail({ params }) {
                                   width="300"
                                   height="363"
                                   style={{ display: "block", opacity: 1 }}
-                                  src={`http://localhost:5000/images/${hinh_anh}`}
+                                  src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${hinh_anh}`}
                                 />
                               </Link>
                             </figure>
@@ -3040,7 +3040,7 @@ export default function Detail({ params }) {
                     <div key={index} className="comment flex items-start py-4 border-b border-gray-200 mb-6">
                       <div className="profile mr-4">
                         <img
-                          src={`http://localhost:5000/images/${comment.user?.hinh_anh}`}
+                          src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${comment.user?.hinh_anh}`}
                           alt="Profile Picture"
                           className="w-12 h-12 rounded-full object-cover"
                         />

@@ -65,7 +65,7 @@ export default function Register() {
         return;
       }
       try {
-        const res = await fetch("http://localhost:5000/users/register", {
+        const res = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/users/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -90,7 +90,7 @@ export default function Register() {
             title: "Đăng ký thành công",
             text: "Đăng ký thành công, vui lòng đăng nhập để tiếp tục.",
           }).then(() => {
-            window.location.href = "http://localhost:3001/components/components-login/login";
+            window.location.href = "/components/components-login/login";
           });
         }
       } catch (error) {
@@ -104,7 +104,7 @@ export default function Register() {
   const handleLoginSuccess = async (credentialResponse) => {
     const token = credentialResponse.credential;
     try {
-      const response = await fetch("http://localhost:5000/users/auth/google", {
+      const response = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/users/auth/google", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -153,7 +153,7 @@ export default function Register() {
 
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/users/sendOTP", {
+      const res = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/users/sendOTP", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
