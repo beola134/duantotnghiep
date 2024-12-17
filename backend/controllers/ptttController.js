@@ -47,6 +47,7 @@ exports.callback = async (req, res) => {
       const order = await DonHang.findOne({ where: { app_trans_id: appTransId } });
       if (order) {
         // Cập nhật trạng thái đơn hàng
+        order.trang_thai = "Đã xác nhận";
         order.trang_thai_thanh_toan = "Đã thanh toán";
         order.thanh_toan = true;
         await order.save();
@@ -101,10 +102,12 @@ exports.zaloPay = async (req, res) => {
           id_don_hang: order._id,
           id_san_pham: ct.id_san_pham,
         });
+        product.so_luong -= ct.so_luong;
+        await product.save();
       }
     });
     const embed_data = {
-      redirecturl: "http://localhost:3001",
+      redirecturl: "http://localhost:3000",
     };
 
     const paymentData = {
@@ -117,7 +120,7 @@ exports.zaloPay = async (req, res) => {
       amount: amount,
       description: `Payment for order #${transID}`,
       bank_code: "",
-      callback_url: "https://97cc-171-243-48-82.ngrok-free.app/pttt/callback",
+      callback_url: "https://wristlybackend-e89d41f05169.herokuapp.com/pttt/callback",
     };
 
     const data = `${config.app_id}|${paymentData.app_trans_id}|${paymentData.app_user}|${paymentData.amount}|${paymentData.app_time}|${paymentData.embed_data}|${paymentData.item}`;

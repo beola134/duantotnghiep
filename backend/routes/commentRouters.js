@@ -16,5 +16,8 @@ router.get("/getAll/:id_san_pham", commentController.getAllComment);
 //http://localhost:5000/comment/changeStatus/:id
 router.put("/changeStatus/:id", commentController.toggleComment);
 
+//api trả lời bình luận bên phía admin
+//http://localhost:5000/comment/reply/:id
+router.post("/reply/:id", commentController.replyComment);
 
 module.exports = router;

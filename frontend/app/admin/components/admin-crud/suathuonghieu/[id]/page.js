@@ -18,7 +18,7 @@ export default function SuaThuongHieu() {
     useEffect(() => {
     const fetchCategory = async () => {
         try {
-            const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/thuonghieu/allthuonghieu/${id}`);
+            const response = await fetch(`http://localhost:5000/thuonghieu/allthuonghieu/${id}`);
             if (response.ok) {
                 const data = await response.json();
                 setProductName(data.th.thuong_hieu);
@@ -45,7 +45,7 @@ export default function SuaThuongHieu() {
         formData.append("mo_ta", description);
 
         try {
-            const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/thuonghieu/updatethuonghieu/${id}`, {
+            const response = await fetch(`http://localhost:5000/thuonghieu/updatethuonghieu/${id}`, {
                 method: "PUT",
                 body: formData,
             });

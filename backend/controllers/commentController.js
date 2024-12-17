@@ -85,32 +85,12 @@ exports.addComment = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "Không tìm thấy người dùng" });
     }
-
-    // Kiểm tra xem người dùng đã mua sản phẩm chưa
-    const orderDetail = await ChiTietDonHang.findOne({
-      where: { id_san_pham },
-      include: [
-        {
-          model: DonHang,
-          as: "DonHang",
-          where: {
-            id_nguoi_dung,
-            trang_thai:"Giao hàng thành công",        
-           },
-        },
-      ],
-    });
-
-    if (!orderDetail) {
-      return res.status(400).json({ message: "Người dùng chưa mua sản phẩm" });
-    }
-
     // Tạo bình luận
     const comment = await CMT.create({
       noi_dung,
-      sao,
       id_nguoi_dung,
       id_san_pham,
+      ngay_binh_luan: new Date(),
     });
 
     res.status(201).json({
@@ -118,9 +98,9 @@ exports.addComment = async (req, res) => {
       comment: {
         id: comment._id,
         noi_dung: comment.noi_dung,
-        sao: comment.sao,
         id_nguoi_dung: comment.id_nguoi_dung,
         id_san_pham: comment.id_san_pham,
+        ngay_binh_luan: comment.ngay_binh_luan,
       },
     });
   } catch (error) {
@@ -201,3 +181,25 @@ exports.toggleComment = async (req, res) => {
   }
 };
 
+//api trả lời bình luận bên phía admin bắt buộc phải đăng nhập
+exports.replyComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { tra_loi_binh_luan } = req.body;
+    const comment = await CMT.findOne({ where: { _id: id } });
+    if (!comment) {
+      return res.status(404).json({ message: "Không tìm thấy bình luận" });
+    }
+    const updatedComment = await comment.update({ tra_loi_binh_luan,
+      ngay_tra_loi: new Date()
+     });
+    console.log(updatedComment);
+    res.status(200).json({
+      message: "Trả lời bình luận thành công",
+      comment: updatedComment,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Lỗi server" });
+  }
+};

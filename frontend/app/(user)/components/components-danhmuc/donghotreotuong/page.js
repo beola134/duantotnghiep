@@ -37,7 +37,7 @@ export default function DongHoTreoTuong() {
     try {
       const queryParams = new URLSearchParams({ ...filter, page: currentPage });
       const response = await fetch(
-        `https://wristlybackend-e89d41f05169.herokuapp.com/product/filterTreoTuong/5307799c-55ae-4bfd-83d4-3ed6e219ff5f?${queryParams}`
+        `http://localhost:5000/filterTreoTuong/5307799c-55ae-4bfd-83d4-3ed6e219ff5f?${queryParams}`
       );
       if (!response.ok) {
         throw new Error("Lỗi không thể tải dữ liệu");
@@ -569,7 +569,7 @@ export default function DongHoTreoTuong() {
                         )}
                         <Link href={`/components/product-detail/${item._id}`}>
                           <img
-                            src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${item.hinh_anh}`}
+                            src={`http://localhost:5000/images/${item.hinh_anh}`}
                             alt={item.ten_san_pham}
                             className={cx("relative transition-transform duration-500 ease-in-out z-[1] mx-auto")}
                           />

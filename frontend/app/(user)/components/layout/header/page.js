@@ -444,7 +444,7 @@ export default function Header() {
 
   const fetchUserDetails = async (userId) => {
     try {
-      const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/users/${userId}`);
+      const response = await fetch(`http://localhost:5000/users/${userId}`);
       if (!response.ok) {
         throw new Error("Failed to fetch user details");
       }
@@ -464,7 +464,7 @@ export default function Header() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/thuonghieu/allthuonghieu");
+        const response = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -594,7 +594,7 @@ export default function Header() {
                     src={
                       user.user.hinh_anh.startsWith("http")
                         ? user.user.hinh_anh
-                        : `https://wristlybackend-e89d41f05169.herokuapp.com/images/${user.user.hinh_anh}`
+                        : `http://localhost:5000/images/${user.user.hinh_anh}`
                     }
                     width="200"
                     height="100"
@@ -648,7 +648,7 @@ export default function Header() {
                     src={
                       user.user.hinh_anh.startsWith("http")
                         ? user.user.hinh_anh
-                        : `https://wristlybackend-e89d41f05169.herokuapp.com/images/${user.user.hinh_anh}`
+                        : `http://localhost:5000/images/${user.user.hinh_anh}`
                     }
                     width="200"
                     height="100"
@@ -806,7 +806,7 @@ export default function Header() {
                     >
                       <img
                         className={cx("dropdown-menu-img")}
-                        src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${item.hinh_anh}`}
+                        src={`http://localhost:5000/images/${item.hinh_anh}`}
                         alt=""
                       />
                     </Link>

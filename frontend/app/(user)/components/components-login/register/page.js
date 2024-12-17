@@ -66,7 +66,7 @@ export default function Register() {
         return;
       }
       try {
-        const res = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/users/register", {
+        const res = await fetch("http://localhost:5000/users/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export default function Register() {
   const handleLoginSuccess = async (credentialResponse) => {
     const token = credentialResponse.credential;
     try {
-      const response = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/users/auth/google", {
+      const response = await fetch("http://localhost:5000/users/auth/google", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -154,7 +154,7 @@ export default function Register() {
 
     try {
       setLoading(true);
-      const res = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/users/sendOTP", {
+      const res = await fetch("http://localhost:5000/users/sendOTP", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

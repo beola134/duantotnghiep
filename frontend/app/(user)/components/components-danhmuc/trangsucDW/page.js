@@ -36,7 +36,7 @@ export default function TrangsucDW() {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "https://wristlybackend-e89d41f05169.herokuapp.com/product/getProductByCate/08bcf894-7d6b-4488-8639-701306321e22"
+          "http://localhost:5000/getProductByCate/08bcf894-7d6b-4488-8639-701306321e22"
         );
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
@@ -159,7 +159,7 @@ export default function TrangsucDW() {
                                     >
                                       <img
                                         className="max-h-[290px]"
-                                        src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${hinh_anh}`}
+                                        src={`http://localhost:5000/images/${hinh_anh}`}
                                         alt={ten}
                                         width="300"
                                         height="363"
