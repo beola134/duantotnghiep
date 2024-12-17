@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./suadanhmuc.module.css";
 import Swal from "sweetalert2";
 import { useRouter, useParams } from "next/navigation";
-import { jwtDecode } from "jwt-decode";
 
 export default function SuaDanhmuc() {
   const router = useRouter();
