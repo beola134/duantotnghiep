@@ -1509,7 +1509,7 @@ export default function Main() {
               <Link href="/components/components-thuonghieu/thuonghieu">
                 Xem tất cả
               </Link>
-              <span class="block absolute top-[50px]  w-full h-[0.5px] bg-gray-600"></span>
+              <span className="block absolute top-[50px]  w-full h-[0.5px] bg-gray-600"></span>
             </p>
 
             <p

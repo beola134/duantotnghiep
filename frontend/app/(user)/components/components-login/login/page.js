@@ -8,6 +8,7 @@ import Link from "next/link";
 import styles from "./login.module.css";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import cx from "classnames";
 
 // Định nghĩa schema với yup
 const schema = yup.object().shape({
@@ -138,77 +139,96 @@ export default function Login() {
   };
 
   return (
-    <div className={`${styles.mainContainer} flex justify-center items-center h-screen opacity-0 `}>
-      <div className={`${styles.container} max-w-[350px] w-[350px] h-auto px-[25px] py-[25px]`}>
-        <div className="text-center font-semibold text-[30px] sm:text-30px text-[#333] mb-5">Đăng nhập</div>
-        <form onSubmit={formik.handleSubmit} className={styles.form}>
-          <input
-            type="email"
-            className={`${styles.input} w-full px-5 py-[15px] ${formik.errors.email ? styles.inputError : ""}`}
-            id="email"
-            name="email"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-            placeholder="Email"
-          />
-          {formik.errors.email && <p className={styles.error}>{formik.errors.email}</p>}
-
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              className={`${styles.input} w-full px-5 py-[15px]  ${formik.errors.password ? styles.inputError : ""}`}
-              id="password"
-              name="password"
-              onChange={formik.handleChange}
-              value={formik.values.password}
-              placeholder="Mật khẩu"
-            />
-            <div className={`${styles.togglePasswordIcon} absolute`} onClick={togglePasswordVisibility}>
-              {showPassword ? <FaEye /> : <FaEyeSlash />}
-            </div>
-          </div>
-          {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
-
-          <span className={`${styles.forgotPassword} block`}>
-            <Link href="./forgot-password">Quên mật khẩu</Link>
+    <>
+      <div className="container py-5">
+        <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5")}>
+          <span className={cx("")}>
+            <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
+              Trang chủ
+            </Link>
           </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
 
-          <input
-            type="submit"
-            className={`${styles.loginButton} block w-full py-[15px] my-5 mx-auto`}
-            value="Đăng nhập"
-          />
-        </form>
-
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
-          <div className={`${styles.socialAccountContainer} flex flex-col items-center mt-[25px]`}>
-            <span className={`${styles.title} block`}>Đăng nhập với</span>
-
-            <GoogleLogin
-              onSuccess={handleLoginSuccess}
-              onFailure={handleLoginFailure}
-              render={(renderProps) => (
-                <div className={`${styles.socialAccounts} w-10 h-10`}>
-                  <button
-                    className={styles.socialButton}
-                    onClick={renderProps.onClick}
-                    disabled={renderProps.disabled}
-                  ></button>
-                </div>
-              )}
-            />
-          </div>
-        </GoogleOAuthProvider>
-
-        <div className={`${styles.signUpNow} block`}>
-          <span className={styles.dontHaveAnAccount}>
-            Bạn chưa có tài khoản? &nbsp;
-            <Link href="/components/components-login/register" id="gotoSignup">
-              Đăng ký ngay
+          <span className={cx("")}>
+            <Link href="/components/components-login/login" className={cx("link", "text-red-500")}>
+              Đăng nhập
             </Link>
           </span>
         </div>
       </div>
-    </div>
+
+      <div className={`${styles.mainContainer} flex justify-center items-center h-screen opacity-0 `}>
+        <div className={`${styles.container} max-w-[350px] w-[350px] h-auto px-[25px] py-[25px]`}>
+          <div className="text-center font-semibold text-[30px] sm:text-30px text-[#333] mb-5">Đăng nhập</div>
+          <form onSubmit={formik.handleSubmit} className={styles.form}>
+            <input
+              type="email"
+              className={`${styles.input} w-full px-5 py-[15px] ${formik.errors.email ? styles.inputError : ""}`}
+              id="email"
+              name="email"
+              onChange={formik.handleChange}
+              value={formik.values.email}
+              placeholder="Email"
+            />
+            {formik.errors.email && <p className={styles.error}>{formik.errors.email}</p>}
+
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                className={`${styles.input} w-full px-5 py-[15px]  ${formik.errors.password ? styles.inputError : ""}`}
+                id="password"
+                name="password"
+                onChange={formik.handleChange}
+                value={formik.values.password}
+                placeholder="Mật khẩu"
+              />
+              <div className={`${styles.togglePasswordIcon} absolute`} onClick={togglePasswordVisibility}>
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
+              </div>
+            </div>
+            {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
+
+            <span className={`${styles.forgotPassword} block`}>
+              <Link href="./forgot-password">Quên mật khẩu</Link>
+            </span>
+
+            <input
+              type="submit"
+              className={`${styles.loginButton} block w-full py-[15px] my-5 mx-auto`}
+              value="Đăng nhập"
+            />
+          </form>
+
+          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+            <div className={`${styles.socialAccountContainer} flex flex-col items-center mt-[25px]`}>
+              <span className={`${styles.title} block`}>Đăng nhập với</span>
+
+              <GoogleLogin
+                onSuccess={handleLoginSuccess}
+                onFailure={handleLoginFailure}
+                render={(renderProps) => (
+                  <div className={`${styles.socialAccounts} w-10 h-10`}>
+                    <button
+                      className={styles.socialButton}
+                      onClick={renderProps.onClick}
+                      disabled={renderProps.disabled}
+                    ></button>
+                  </div>
+                )}
+              />
+            </div>
+          </GoogleOAuthProvider>
+
+          <div className={`${styles.signUpNow} block`}>
+            <span className={styles.dontHaveAnAccount}>
+              Bạn chưa có tài khoản? &nbsp;
+              <Link href="/components/components-login/register" id="gotoSignup">
+                Đăng ký ngay
+              </Link>
+            </span>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

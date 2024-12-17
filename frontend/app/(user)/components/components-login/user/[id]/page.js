@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
 import { useRouter } from "next/navigation"; 
+import cx from "classnames";
 const User = ({ params }) => {
   const { id } = params;
   const router = useRouter(); 
@@ -360,6 +361,24 @@ const handleSubmitPasswordChange = async (e) => {
     setShowPassword((prev) => ({ ...prev, [field]: !prev[field] }));
   };
   return (
+    <>
+    <div className="container py-5">
+      <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5")}>
+        <span className={cx("")}>
+          <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
+            Trang chủ
+          </Link>
+        </span>
+        <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
+
+        <span className={cx("")}>
+          <Link href="/components/components-login/user" className={cx("link", "text-red-500")}>
+            Hồ sơ người dùng
+          </Link>
+        </span>
+      </div>
+    </div>
+
     <div
       className={`${styles.container} lg:flex lg:justify-around phone-sm:mx-auto sm:mx-auto md:mx-auto text-[16px]`}
     >
@@ -869,6 +888,7 @@ const handleSubmitPasswordChange = async (e) => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

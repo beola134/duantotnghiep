@@ -8,6 +8,7 @@ import styles from "./forgot-password.module.css";
 import Link from "next/link";
 import Loading from "../../loading/page";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import cx from "classnames";
 
 const schema = Yup.object().shape({
   email: Yup.string()
@@ -164,93 +165,111 @@ export default function ForgotPassword() {
 
   const toggleConfirmPasswordVisibility = () => {
     setConfirmShowPassword(!ConfirmShowPassword);
-
-  }
+  };
 
   return (
-    <div className={styles.mainContainer}>
-      <div className={`${styles.container}`}>
-        <div className={styles.heading}>Quên mật khẩu</div>
-        <form onSubmit={formik.handleSubmit} className={styles.form}>
-          <input
-            type="email"
-            className={`${styles.input} ${formik.errors.email ? styles.inputError : ""}`}
-            id="email"
-            name="email"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-            placeholder="Email"
-          />
-          {error && <p className={styles.error}>{error}</p>}
-          <div className={styles.inputWrapper}>
-            <input
-              type="text"
-              className={`${styles.input} ${formik.errors.otp ? styles.inputError : ""}`}
-              id="otp"
-              name="otp"
-              onChange={formik.handleChange}
-              value={formik.values.otp}
-              placeholder="OTP"
-              disabled={!isOtpSent}
-              maxLength={6}
-            />
-            <p
-              className={styles.GetOTP}
-              onClick={handleSendOtp}
-              style={{ cursor: loading || isOtpSent ? "not-allowed" : "pointer", color: isOtpSent ? "grey" : "blue" }}
-            >
-              {canResend ? (isOtpSent ? "Gửi lại OTP" : "Gửi OTP") : `Gửi lại sau ${formatTime(timer)}`}
-            </p>
-          </div>
-          {formik.errors.otp && <p className={styles.error}>{formik.errors.otp}</p>}
+    <>
+      <div className="container py-5">
+        <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5")}>
+          <span className={cx("")}>
+            <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
+              Trang chủ
+            </Link>
+          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
 
-          <div className={styles.passwordWrapper}>
-            <input
-              type={showPassword ? "text" : "password"}
-              className={`${styles.input} ${formik.errors.password ? styles.inputError : ""}`}
-              id="password"
-              name="password"
-              onChange={formik.handleChange}
-              value={formik.values.password}
-              placeholder="Mật khẩu mới"
-              disabled={!isOtpSent}
-            />
-            <div className={`${styles.togglePasswordIcon} absolute`} onClick={togglePasswordVisibility}>
-              {showPassword ? <FaEye /> : <FaEyeSlash />}
-            </div>
-          </div>
-          {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
-
-          <div className={styles.passwordWrapper}>
-            <input
-              type={showPassword ? "text" : "password"}
-              className={`${styles.input} ${formik.errors.confirmPassword ? styles.inputError : ""}`}
-              id="confirmPassword"
-              name="confirmPassword"
-              onChange={formik.handleChange}
-              value={formik.values.confirmPassword}
-              placeholder="Nhập lại mật khẩu mới"
-              disabled={!isOtpSent}
-            />
-            <div className={`${styles.togglePasswordIcon} absolute`} onClick={toggleConfirmPasswordVisibility}>
-              {ConfirmShowPassword ? <FaEye /> : <FaEyeSlash />}
-            </div>
-          </div>
-
-          {formik.errors.confirmPassword && <p className={styles.error}>{formik.errors.confirmPassword}</p>}
-          <button type="submit" className={styles.loginButton} disabled={!isOtpSent || loading}>
-            {loading ? "Đang xử lý..." : "Đổi mật khẩu"}
-          </button>
-        </form>
-        <div className={styles.signUpNow}>
-          <span className={styles.dontHaveAnAccount}>
-            Đã có tài khoản? &nbsp;
-            <Link href="/components/components-login/login" id="gotoSignup">
-              Đăng nhập ngay
+          <span className={cx("")}>
+            <Link href="/components/components-login/forgot-password" className={cx("link", "text-red-500")}>
+              Quên mật khẩu
             </Link>
           </span>
         </div>
       </div>
-    </div>
+
+      <div className={styles.mainContainer}>
+        <div className={`${styles.container}`}>
+          <div className={styles.heading}>Quên mật khẩu</div>
+          <form onSubmit={formik.handleSubmit} className={styles.form}>
+            <input
+              type="email"
+              className={`${styles.input} ${formik.errors.email ? styles.inputError : ""}`}
+              id="email"
+              name="email"
+              onChange={formik.handleChange}
+              value={formik.values.email}
+              placeholder="Email"
+            />
+            {error && <p className={styles.error}>{error}</p>}
+            <div className={styles.inputWrapper}>
+              <input
+                type="text"
+                className={`${styles.input} ${formik.errors.otp ? styles.inputError : ""}`}
+                id="otp"
+                name="otp"
+                onChange={formik.handleChange}
+                value={formik.values.otp}
+                placeholder="OTP"
+                disabled={!isOtpSent}
+                maxLength={6}
+              />
+              <p
+                className={styles.GetOTP}
+                onClick={handleSendOtp}
+                style={{ cursor: loading || isOtpSent ? "not-allowed" : "pointer", color: isOtpSent ? "grey" : "blue" }}
+              >
+                {canResend ? (isOtpSent ? "Gửi lại OTP" : "Gửi OTP") : `Gửi lại sau ${formatTime(timer)}`}
+              </p>
+            </div>
+            {formik.errors.otp && <p className={styles.error}>{formik.errors.otp}</p>}
+
+            <div className={styles.passwordWrapper}>
+              <input
+                type={showPassword ? "text" : "password"}
+                className={`${styles.input} ${formik.errors.password ? styles.inputError : ""}`}
+                id="password"
+                name="password"
+                onChange={formik.handleChange}
+                value={formik.values.password}
+                placeholder="Mật khẩu mới"
+                disabled={!isOtpSent}
+              />
+              <div className={`${styles.togglePasswordIcon} absolute`} onClick={togglePasswordVisibility}>
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
+              </div>
+            </div>
+            {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
+
+            <div className={styles.passwordWrapper}>
+              <input
+                type={showPassword ? "text" : "password"}
+                className={`${styles.input} ${formik.errors.confirmPassword ? styles.inputError : ""}`}
+                id="confirmPassword"
+                name="confirmPassword"
+                onChange={formik.handleChange}
+                value={formik.values.confirmPassword}
+                placeholder="Nhập lại mật khẩu mới"
+                disabled={!isOtpSent}
+              />
+              <div className={`${styles.togglePasswordIcon} absolute`} onClick={toggleConfirmPasswordVisibility}>
+                {ConfirmShowPassword ? <FaEye /> : <FaEyeSlash />}
+              </div>
+            </div>
+
+            {formik.errors.confirmPassword && <p className={styles.error}>{formik.errors.confirmPassword}</p>}
+            <button type="submit" className={styles.loginButton} disabled={!isOtpSent || loading}>
+              {loading ? "Đang xử lý..." : "Đổi mật khẩu"}
+            </button>
+          </form>
+          <div className={styles.signUpNow}>
+            <span className={styles.dontHaveAnAccount}>
+              Đã có tài khoản? &nbsp;
+              <Link href="/components/components-login/login" id="gotoSignup">
+                Đăng nhập ngay
+              </Link>
+            </span>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
