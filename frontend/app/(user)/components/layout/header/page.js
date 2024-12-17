@@ -524,7 +524,7 @@ export default function Header() {
 
   return (
     <>
-      <header className={cx("header", "bg-black text-white text-sm py-2 max-h-[80px]")}>
+      <header className={cx("header", "bg-black text-white text-sm py-2 max-h-[80px] overflow-hidden")}>
         <div className={cx("top-bar", "max-w-[1170px] grid grid-cols-12 items-center mx-auto gap-4")}>
           <div
             className={cx(
@@ -532,7 +532,7 @@ export default function Header() {
               "flex lg:col-span-5 lg:justify-self-start col-span-12 justify-self-center flex-col items-center text-center"
             )}
           >
-            <Link href="/" onClick={handleLogoClick}>
+            <Link href="/">
               <img
                 className={cx("img", "mt-[-55px] w-[250px] h-[170px] ml-[-40px]")}
                 src="/image/item/icons/logo.png"
@@ -543,7 +543,7 @@ export default function Header() {
           <div
             className={cx(
               "search-bar",
-              "mt-[-40px] col-span-2 lg:flex  hidden justify-end  items-center bg-[#ffffff24] rounded-full py-1 px-5 max-h-[30px] mr-[-70px]"
+              "mt-[-40px] col-span-2 lg:flex  relative hidden justify-end  items-center bg-[#ffffff24] rounded-full py-1 px-5 max-h-[30px] mr-[-70px]"
             )}
           >
             <input
@@ -636,12 +636,11 @@ export default function Header() {
               </div>
             </Link>
           </div>
-          <div className="menu-icon fixed top-[20px] right-[20px]  lg:hidden flex  text-center">
+          <div className="menu-icon absolute top-[20px] right-[20px]  lg:hidden flex overflow-hidden  text-center">
             {user ? (
               <div
                 className={cx(
-                  "user",
-                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full relative"
+                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full"
                 )}
               >
                 <Link href={`/components/components-login/user/${user.user._id}`} onClick={handleIconClick}>
@@ -668,7 +667,7 @@ export default function Header() {
               <div
                 className={cx(
                   "user",
-                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full relative"
+                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full "
                 )}
               >
                 <Link href="/components/components-login/login" onClick={handleIconClick}>
