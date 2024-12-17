@@ -29,7 +29,7 @@ const CartPage = () => {
   const total = useMemo(
     () =>
       cartItems.reduce(
-        (total, item1) => total + item1.gia_giam * item1.so_luong,
+        (total, item1) => total + (item1.gia_giam > 0 ? item1.gia_giam : item1.gia_san_pham) * item1.so_luong,
         0
       ),
     [cartItems]
@@ -73,9 +73,9 @@ const CartPage = () => {
         <div className={styles.container}>
           <div className={`{styles.content} phone-sm:mt-[15px]`}>
             {cartItems.length === 0 ? (
-              <div>
+              <div >
                 <img
-                  className="lg:ml-[220px] phone-sm:ml-[0px] sm:ml-0 md:ml-[0px]"
+                  className=""
                   src="/image/item/cart-empty(1)"
                   alt="Giỏ hàng trống"
                   style={{
@@ -375,7 +375,7 @@ const CartPage = () => {
                 </div>
                 <Link href="">
                   <button
-                  className="mt-10 ml-[200%] phone-sm:ml-[10px] sm:ml-[10px] md:ml-[10px]"
+                  className="mt-10 ml-[200%] phone-sm:ml-[10px] sm:ml-[10px] md:ml-[500px] "
                     type="button"
                     id={styles.thtt}
                     onClick={handleCheckout}>

@@ -55,7 +55,7 @@ export default function Login() {
         localStorage.setItem("avatar", avatar);
 
         const payload = jwtDecode(token);
-        const welcomeMessage = payload.quyen === 1 ? "Chào mừng quản trị viên" : "Chào mừng người dùng";
+        const welcomeMessage = payload.quyen === 1 ? "Chào mừng quản trị viên" : "Chào mừng bạn đến với Website!";
 
         Swal.fire({
           title: "Đăng nhập thành công",

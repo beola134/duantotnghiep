@@ -171,7 +171,7 @@ exports.login = async (req, res) => {
         await user.save();
       }
       await user.save();
-      return res.status(400).json({ message: "Mật khẩu không hợp lệ" });
+      return res.status(400).json({ message: "Mật khẩu không đúng" });
     }
     // Đặt lại số lần thử đăng nhập khi đăng nhập thành công
     user.login_attempts = 0;
@@ -335,6 +335,12 @@ exports.changePassword = async (req, res) => {
         message: "Mật khẩu không hợp lệ",
       });
     }
+    const isSamePassword = await bcrypt.compare(mat_khau_moi, user.mat_khau);
+    if (isSamePassword) {
+      return res.status(400).json({
+        message: "Mật khẩu mới không được trùng với mật khẩu cũ",
+      });
+    }
     // Kiểm tra mật khẩu mới và xác nhận mật khẩu mới
     if (mat_khau_moi !== xac_nhan_mat_khau) {
       return res.status(400).json({
@@ -486,8 +492,8 @@ exports.sendOTPquenmk = async (req, res) => {
     }
     // Tạo mã OTP ngẫu nhiên
     const otp = crypto.randomInt(100000, 999999); // Tạo OTP 6 chữ số
-    // Tạo thời gian hết hạn cho mã OTP (5 phút)
-    const otpExpires = Date.now() + 5 * 60 * 1000;
+    // Tạo thời gian hết hạn cho mã OTP (3 phút)
+    const otpExpires = Date.now() + 3 * 60 * 1000;
     // Lưu mã OTP vào cơ sở dữ liệu
     user.otp = otp;
     user.otpExpires = otpExpires;
@@ -568,7 +574,7 @@ exports.resetPasswordByOTP = async (req, res) => {
     const isSamePassword = await bcrypt.compare(mat_khau_moi, user.mat_khau);
     if (isSamePassword) {
       return res.status(400).json({
-        message: "Mật khẩu mới phải khác mật khẩu hiện tại",
+        message: "Mật khẩu mới phải khác mật khẩu cũ",
       });
     }
     // Mã hóa mật khẩu mới trước khi lưu vào cơ sở dữ liệu
@@ -582,6 +588,8 @@ exports.resetPasswordByOTP = async (req, res) => {
     res.status(200).json({
       message: "Mật khẩu đã được cập nhật thành công",
     });
+    console.log(error);
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({

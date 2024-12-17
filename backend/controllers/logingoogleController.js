@@ -37,11 +37,6 @@ const googleLogin = async (req, res) => {
         const { email, name, given_name, sub, picture } = payload;
         let account = await Users.findOne({ where: { email } });
 
-        if (account && !account.googleId) {
-            // Nếu tài khoản tồn tại nhưng chưa liên kết với Google, ngăn tạo tài khoản mới
-            throw new Error('Tài khoản đã tồn tại');
-        }
-
         if (account && account.googleId === sub) {
             // Nếu tài khoản đã liên kết với Google, thực hiện đăng nhập
             const tokenJwt = jwt.sign(

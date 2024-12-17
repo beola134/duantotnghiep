@@ -370,21 +370,21 @@ export default function Main() {
               >
                 {productsNam.map((item) => (
                   <div key={item._id} className={cx("text-center relative")}>
-                    {item.gia_giam > 0 && (<div
-                      className={cx(
-                        "absolute top-[-15px] left-[10px] bg-[#ed1c24] text-white rounded-full text-[13px] w-[44px] h-[44px] box-border z-[9] tracking-[-0.7px] pt-[13px]"
-                      )}
-                    >
-                      -{" "}
-                      {roundDiscount(
-                        Math.round(
-                          ((item.gia_san_pham - item.gia_giam) /
-                            item.gia_san_pham) *
-                            100
-                        )
-                      )}
-                      %
-                    </div>)}
+                  {item.gia_giam > 0 && (<div
+                    className={cx(
+                      "absolute top-[-15px] left-[10px] bg-[#ed1c24] text-white rounded-full text-[13px] w-[44px] h-[44px] box-border z-[9] tracking-[-0.7px] pt-[13px]"
+                    )}
+                  >
+                    -{" "}
+                    {roundDiscount(
+                      Math.round(
+                        ((item.gia_san_pham - item.gia_giam) /
+                          item.gia_san_pham) *
+                          100
+                      )
+                    )}
+                    %
+                  </div>)}
                     <Link href={`/components/product-detail/${item._id}`}>
                       <img
                         src={`http://localhost:5000/images/${item.hinh_anh}`}
@@ -463,7 +463,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "pt-[10px] bg-[#796752]  w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "pt-[10px] bg-[#9c8e78]  w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonam">
@@ -480,7 +480,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "p-[5px] bg-[#796752]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "p-[5px] bg-[#9c8e78]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonam">
@@ -560,30 +560,33 @@ export default function Main() {
                         "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
                       )}
                     >
-                      <small
-                        className={cx(
-                          "text-[12px] uppercase text-gray-500 mb-1 inline-block"
-                        )}
-                        style={{
-                          textDecoration: "line-through",
-                          color: "#B1B1B1",
-                          fontSize: "15px",
-                        }}
-                      >
-                        Giá: {formatCurrency(item.gia_san_pham)}
-                      </small>
-                    </p>
-                    <p
-                      className={cx(
-                        "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
-                      )}
-                    >
-                      <span
-                        className={cx("text-red-600 font-bold text-[16px]")}
-                      >
-                        Giá KM: {formatCurrency(item.gia_giam)}
+                    {item.gia_giam > 0 ? (
+                      <>
+                        <small
+                          className={cx(
+                            "text-[12px] uppercase text-gray-500 mb-1 inline-block"
+                          )}
+                          style={{
+                            textDecoration: "line-through",
+                            color: "#B1B1B1",
+                            fontSize: "15px",
+                          }}
+                        >
+                          Giá: {formatCurrency(item.gia_san_pham)}
+                        </small>
+                        <br />
+                        <span className={cx("text-red-600 font-bold text-[16px]")}>
+                          Giá KM: {formatCurrency(item.gia_giam)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className={cx("text-red-600 font-bold text-[16px]")}>
+                        Giá KM: {formatCurrency(item.gia_san_pham)}
                       </span>
+                    )}
+                     
                     </p>
+                    
                   </div>
                 ))}
                 <div
@@ -593,7 +596,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "pt-[10px] bg-[#796752] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "pt-[10px] bg-[#9c8e78] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonu">
@@ -610,7 +613,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "p-[5px] bg-[#796752]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "p-[5px] bg-[#9c8e78]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonu">
@@ -689,29 +692,31 @@ export default function Main() {
                         "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
                       )}
                     >
-                      <small
-                        className={cx(
-                          "text-[12px] uppercase text-gray-500 mb-1 inline-block"
-                        )}
-                        style={{
-                          textDecoration: "line-through",
-                          color: "#B1B1B1",
-                          fontSize: "15px",
-                        }}
-                      >
-                        Giá: {formatCurrency(item.gia_san_pham)}
-                      </small>
-                    </p>
-                    <p
-                      className={cx(
-                        "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
-                      )}
-                    >
-                      <span
-                        className={cx("text-red-600 font-bold text-[16px]")}
-                      >
-                        Giá KM: {formatCurrency(item.gia_giam)}
+                    {item.gia_giam > 0 ? (
+                      <>
+                        <small
+                          className={cx(
+                            "text-[12px] uppercase text-gray-500 mb-1 inline-block"
+                          )}
+                          style={{
+                            textDecoration: "line-through",
+                            color: "#B1B1B1",
+                            fontSize: "15px",
+                          }}
+                        >
+                          Giá: {formatCurrency(item.gia_san_pham)}
+                        </small>
+                        <br />
+                        <span className={cx("text-red-600 font-bold text-[16px]")}>
+                          Giá KM: {formatCurrency(item.gia_giam)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className={cx("text-red-600 font-bold text-[16px]")}>
+                        Giá KM: {formatCurrency(item.gia_san_pham)}
                       </span>
+                    )}
+                     
                     </p>
                   </div>
                 ))}
@@ -722,7 +727,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "pt-[10px] bg-[#796752] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "pt-[10px] bg-[#9c8e78] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghodoi">
@@ -739,7 +744,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "p-[5px] bg-[#796752]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "p-[5px] bg-[#9c8e78]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghodoi">
@@ -880,30 +885,33 @@ export default function Main() {
                         "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
                       )}
                     >
-                      <small
-                        className={cx(
-                          "text-[12px] uppercase text-gray-500 mb-1 inline-block"
-                        )}
-                        style={{
-                          textDecoration: "line-through",
-                          color: "#B1B1B1",
-                          fontSize: "15px",
-                        }}
-                      >
-                        Giá: {formatCurrency(item.gia_san_pham)}
-                      </small>
-                    </p>
-                    <p
-                      className={cx(
-                        "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
-                      )}
-                    >
-                      <span
-                        className={cx("text-red-600 font-bold text-[16px]")}
-                      >
-                        Giá KM: {formatCurrency(item.gia_giam)}
+                    {item.gia_giam > 0 ? (
+                      <>
+                        <small
+                          className={cx(
+                            "text-[12px] uppercase text-gray-500 mb-1 inline-block"
+                          )}
+                          style={{
+                            textDecoration: "line-through",
+                            color: "#B1B1B1",
+                            fontSize: "15px",
+                          }}
+                        >
+                          Giá: {formatCurrency(item.gia_san_pham)}
+                        </small>
+                        <br />
+                        <span className={cx("text-red-600 font-bold text-[16px]")}>
+                          Giá KM: {formatCurrency(item.gia_giam)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className={cx("text-red-600 font-bold text-[16px]")}>
+                        Giá KM: {formatCurrency(item.gia_san_pham)}
                       </span>
+                    )}
+                     
                     </p>
+                   
                     
                   </div>
                 ))}
@@ -914,7 +922,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "pt-[10px] bg-[#796752] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "pt-[10px] bg-[#9c8e78] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Nam">
@@ -931,7 +939,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "p-[5px] bg-[#796752]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "p-[5px] bg-[#9c8e78]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Nam">
@@ -1010,30 +1018,33 @@ export default function Main() {
                         "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
                       )}
                     >
-                      <small
-                        className={cx(
-                          "text-[12px] uppercase text-gray-500 mb-1 inline-block"
-                        )}
-                        style={{
-                          textDecoration: "line-through",
-                          color: "#B1B1B1",
-                          fontSize: "15px",
-                        }}
-                      >
-                        Giá: {formatCurrency(item.gia_san_pham)}
-                      </small>
-                    </p>
-                    <p
-                      className={cx(
-                        "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
-                      )}
-                    >
-                      <span
-                        className={cx("text-red-600 font-bold text-[16px]")}
-                      >
-                        Giá KM: {formatCurrency(item.gia_giam)}
+                    {item.gia_giam > 0 ? (
+                      <>
+                        <small
+                          className={cx(
+                            "text-[12px] uppercase text-gray-500 mb-1 inline-block"
+                          )}
+                          style={{
+                            textDecoration: "line-through",
+                            color: "#B1B1B1",
+                            fontSize: "15px",
+                          }}
+                        >
+                          Giá: {formatCurrency(item.gia_san_pham)}
+                        </small>
+                        <br />
+                        <span className={cx("text-red-600 font-bold text-[16px]")}>
+                          Giá KM: {formatCurrency(item.gia_giam)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className={cx("text-red-600 font-bold text-[16px]")}>
+                        Giá KM: {formatCurrency(item.gia_san_pham)}
                       </span>
+                    )}
+                     
                     </p>
+                    
                     <div
                       className={cx(
                         "absolute right-[18px] top-[260px] mr-[0px] text-white bg-red-500 px-[10px] py-[2px] rounded-[2px] z-[2]"
@@ -1050,7 +1061,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "pt-[10px] bg-[#796752] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "pt-[10px] bg-[#9c8e78] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Nữ">
@@ -1067,7 +1078,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "p-[5px] bg-[#796752]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "p-[5px] bg-[#9c8e78]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Nữ">
@@ -1146,30 +1157,32 @@ export default function Main() {
                         "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
                       )}
                     >
-                      <small
-                        className={cx(
-                          "text-[12px] uppercase text-gray-500 mb-1 inline-block"
-                        )}
-                        style={{
-                          textDecoration: "line-through",
-                          color: "#B1B1B1",
-                          fontSize: "15px",
-                        }}
-                      >
-                        Giá: {formatCurrency(item.gia_san_pham)}
-                      </small>
-                    </p>
-                    <p
-                      className={cx(
-                        "text-black no-underline transition-colors duration-300 text-center text-[14px] leading-[25px]"
-                      )}
-                    >
-                      <span
-                        className={cx("text-red-600 font-bold text-[16px]")}
-                      >
-                        Giá KM: {formatCurrency(item.gia_giam)}
+                    {item.gia_giam > 0 ? (
+                      <>
+                        <small
+                          className={cx(
+                            "text-[12px] uppercase text-gray-500 mb-1 inline-block"
+                          )}
+                          style={{
+                            textDecoration: "line-through",
+                            color: "#B1B1B1",
+                            fontSize: "15px",
+                          }}
+                        >
+                          Giá: {formatCurrency(item.gia_san_pham)}
+                        </small>
+                        <br />
+                        <span className={cx("text-red-600 font-bold text-[16px]")}>
+                          Giá KM: {formatCurrency(item.gia_giam)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className={cx("text-red-600 font-bold text-[16px]")}>
+                        Giá KM: {formatCurrency(item.gia_san_pham)}
                       </span>
+                    )}
                     </p>
+                    
                     <div
                       className={cx(
                         "absolute right-[18px] top-[260px] mr-[0px] text-white bg-red-500 px-[10px] py-[2px] rounded-[2px] z-[2]"
@@ -1186,7 +1199,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "pt-[10px] bg-[#796752] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "pt-[10px] bg-[#9c8e78] w-[600px] h-[35px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                     <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Đồng Hồ Đôi">
@@ -1203,7 +1216,7 @@ export default function Main() {
                 >
                   <p
                     className={cx(
-                      "pt-[10px] bg-[#796752]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
+                      "pt-[10px] bg-[#9c8e78]  w-[60%] md:text-[18px]  h-[auto] sm:text-[14px] border border-[#777777] rounded-[20px] absolute text-center z-[999] flex justify-center hover:bg-[#946d49]"
                     )}
                   >
                      <Link href="/components/components-thuonghieu/donghonew?query=gioi_tinh=Đồng Hồ Đôi">
@@ -1245,7 +1258,7 @@ export default function Main() {
         </div>
         <div className={cx("owlItem", "relative ")}>
           <Slider ref={setFirstSlider} {...firstSettings}>
-            {category.map((item) => (
+            {category.filter((item) => item.thuong_hieu !== "RHYTHM").map((item) => (
               <div key={item._id} className={cx("lg:p-[2%] md:p-[2%] p-[1px]")}>
                 <div className={cx("w-[100%]")}>
                   <Link
@@ -1516,7 +1529,7 @@ export default function Main() {
             <div className={cx("section-brand  w-[70%] ml-auto h-auto")}>
               <div className={cx("item-slide1 overflow-hidden ")}>
                 <Slider ref={setSecondSlider} {...secondSettings}>
-                  {category.map((item) => (
+                  {category.filter((item) => item.thuong_hieu !== "RHYTHM").map((item) => (
                     <div className={cx("item ")} key={item._id}>
                       <img
                         alt={item.thuong_hieu}

@@ -220,7 +220,7 @@ export default function ThanhToan() {
       .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-
+  
     if (!token) {
       // Nếu không có token, yêu cầu người dùng đăng nhập
       Swal.fire({
@@ -232,19 +232,19 @@ export default function ThanhToan() {
       });
       return;
     }
-
+  
     // Kiểm tra tính hợp lệ của các trường thông tin
     const isValid = validateFields();
     if (!isValid) return;
-
+  
     // Kiểm tra xem người dùng đã đăng nhập chưa
     const isLoggedIn = await userLogin();
     if (!isLoggedIn) return;
-
+  
     // Kiểm tra xem sản phẩm còn hàng không
     const isStockAvailable = await ktra();
     if (!isStockAvailable) return;
-
+  
     const orderDetails = {
       dia_chi: user.dia_chi,
       id_nguoi_dung: user._id,
@@ -261,78 +261,91 @@ export default function ThanhToan() {
         dien_thoai: user.dien_thoai,
       },
     };
-    //in ra thông tin đơn hàng
+    // In ra thông tin đơn hàng
     console.log(orderDetails);
-
-    // Xử lý thanh toán qua ZaloPay
-    if (selectedPaymentMethod === "3") {
-      try {
-        const paymentResponse = await axios.post("http://localhost:5000/pttt/zalo", {
-          amount: amount,
-          orderDetails,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (paymentResponse.data.return_code === 1) {
-          window.location.href = paymentResponse.data.order_url; // Chuyển hướng đến ZaloPay
+  
+    // Xác nhận đặt hàng trước khi tiếp tục
+    Swal.fire({
+      title: "Bạn có muốn đặt hàng không?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        // Xử lý thanh toán qua ZaloPay
+        if (selectedPaymentMethod === "3") {
+          try {
+            const paymentResponse = await axios.post("http://localhost:5000/pttt/zalo", {
+              amount: amount,
+              orderDetails,
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+  
+            if (paymentResponse.data.return_code === 1) {
+              window.location.href = paymentResponse.data.order_url; // Chuyển hướng đến ZaloPay
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Lỗi",
+                text: "Thanh toán qua ZaloPay không thành công",
+              });
+            }
+          } catch (error) {
+            console.error("Error during payment:", error.message || error);
+            if (error.response) {
+              console.error("Response Data:", error.response.data);
+              console.error("Response Status:", error.response.status);
+            }
+            Swal.fire({
+              icon: "error",
+              title: "Lỗi",
+              text: "Lỗi trong quá trình thanh toán",
+            });
+          }
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "Lỗi",
-            text: "Thanh toán qua ZaloPay không thành công",
-          });
+          // Xử lý thanh toán qua các phương thức khác
+          try {
+            const response = await fetch("http://localhost:5000/donhang/donhang", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(orderDetails),
+            });
+  
+            if (!response.ok) {
+              throw new Error("Lỗi tạo đơn hàng");
+            }
+  
+            const data = await response.json();
+            console.log(data);
+  
+            Swal.fire({
+              icon: "success",
+              title: "Thành công",
+              text: data.message,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = "/"; // Điều hướng về trang chủ sau khi thành công
+              }
+            });
+  
+            // Xóa giỏ hàng sau khi tạo đơn thành công
+            localStorage.setItem("cartItems", JSON.stringify([]));
+            setCartItems([]);
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              title: "Lỗi",
+              text: "Lỗi tạo đơn hàng",
+            });
+          }
         }
-      } catch (error) {
-        console.error("Error during payment:", error.message || error);
-        if (error.response) {
-          console.error("Response Data:", error.response.data);
-          console.error("Response Status:", error.response.status);
-        }
-        Swal.fire({
-          icon: "error",
-          title: "Lỗi",
-          text: "Lỗi trong quá trình thanh toán",
-        });
       }
-    } else {
-      // Xử lý thanh toán qua các phương thức khác
-      try {
-        const response = await fetch("http://localhost:5000/donhang/donhang", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(orderDetails),
-        });
-
-        if (!response.ok) {
-          throw new Error("Lỗi tạo đơn hàng");
-        }
-
-        const data = await response.json();
-        console.log(data);
-
-        Swal.fire({
-          icon: "success",
-          title: "Thành công",
-          text: data.message,
-        }).then(() => {
-          window.location.href = "/"; // Điều hướng về trang chủ sau khi thành công
-        });
-
-        // Xóa giỏ hàng sau khi tạo đơn thành công
-        localStorage.setItem("cartItems", JSON.stringify([]));
-        setCartItems([]);
-      } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Lỗi",
-          text: "Lỗi tạo đơn hàng",
-        });
-      }
-    }
+    });
   };
 
   return (

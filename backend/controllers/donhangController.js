@@ -298,6 +298,7 @@ const getDonHangByUserId = async (req, res) => {
           attributes: ["ten_phuong_thuc"],
         },
       ],
+      order: [["thoi_gian_tao", "DESC"]],
     });
 
     if (donHangs.length === 0) {

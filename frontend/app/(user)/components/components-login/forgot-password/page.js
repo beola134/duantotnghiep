@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -33,7 +33,21 @@ export default function ForgotPassword() {
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  //thoi gian cho gui lai otp
+  const [timer, setTimer] = useState(0);
+  const [canResend, setCanResend] = useState(true);
+  useEffect(() => {
+    let interval = null;
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (timer === 0 && !canResend) {
+      setCanResend(true);
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [timer, canResend]);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -44,6 +58,7 @@ export default function ForgotPassword() {
     validationSchema: schema,
     onSubmit: async (values, { setFieldError }) => {
       setLoading(true);
+      setError(null);
       try {
         const res = await fetch("http://localhost:5000/users/resetPasswordByOTP", {
           method: "POST",
@@ -64,10 +79,12 @@ export default function ForgotPassword() {
             setFieldError("email", errorData.message);
           } else if (errorData.message.includes("Mã OTP không chính xác")) {
             setFieldError("otp", errorData.message);
-          } else if (errorData.message.includes("Mật khẩu mới không trùng mật khẩu cũ")) {
+          }else if (errorData.message.includes("Mật khẩu mới phải khác mật khẩu cũ")) {
             setFieldError("password", errorData.message);
+          }else if (errorData.message.includes("Mật khẩu xác nhận không khớp")) {
+            setFieldError("confirmPassword", errorData.message);
           } else {
-            setFieldError("general", errorData.message);
+            setStatus(errorData.message || "Có lỗi xảy ra, vui lòng thử lại sau");
           }
           throw new Error(errorData.message || "Có lỗi xảy ra, vui lòng thử lại sau");
         }
@@ -88,6 +105,11 @@ export default function ForgotPassword() {
 
   // gửi mã otp
   const handleSendOtp = async () => {
+    const errors = await formik.validateForm();
+    if (errors.email) {
+      setError(errors.email);
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch("http://localhost:5000/users/sendOTPquenmk", {
@@ -112,6 +134,8 @@ export default function ForgotPassword() {
         text: "Vui lòng kiểm tra email của bạn để nhận OTP",
       });
       setIsOtpSent(true);
+      setTimer(180);
+      setCanResend(false);
       setError(null);
     } catch (error) {
       setError(error.message);
@@ -119,7 +143,13 @@ export default function ForgotPassword() {
       setLoading(false);
     }
   };
-
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = (seconds % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+  };
   if (loading) {
     return <Loading />;
   }
@@ -138,7 +168,6 @@ export default function ForgotPassword() {
             value={formik.values.email}
             placeholder="Email"
           />
-          {formik.errors.email && <p className={styles.error}>{formik.errors.email}</p>}
           {error && <p className={styles.error}>{error}</p>}
           <div className={styles.inputWrapper}>
             <input
@@ -150,14 +179,19 @@ export default function ForgotPassword() {
               value={formik.values.otp}
               placeholder="OTP"
               disabled={!isOtpSent}
+              maxLength={6}
             />
             <p
               className={styles.GetOTP}
               onClick={handleSendOtp}
               style={{ cursor: loading || isOtpSent ? "not-allowed" : "pointer", color: isOtpSent ? "grey" : "blue" }}
             >
-              {isOtpSent ? "OTP đã gửi" : "Gửi OTP"}
-            </p>
+            {canResend
+              ? isOtpSent
+                ? "Gửi lại OTP"
+                : "Gửi OTP"
+              : `Gửi lại sau ${formatTime(timer)}`}  
+                        </p>
           </div>
           {formik.errors.otp && <p className={styles.error}>{formik.errors.otp}</p>}
 
@@ -172,7 +206,6 @@ export default function ForgotPassword() {
             disabled={!isOtpSent}
           />
           {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
-          {formik.errors.general && <p className={styles.error}>{formik.errors.general}</p>}
           <input
             type="password"
             className={`${styles.input} ${formik.errors.confirmPassword ? styles.inputError : ""}`}
@@ -184,9 +217,6 @@ export default function ForgotPassword() {
             disabled={!isOtpSent}
           />
           {formik.errors.confirmPassword && <p className={styles.error}>{formik.errors.confirmPassword}</p>}
-
-          {formik.errors.general && <p className={styles.error}>{formik.errors.general}</p>}
-
           <button type="submit" className={styles.loginButton} disabled={!isOtpSent || loading}>
             {loading ? "Đang xử lý..." : "Đổi mật khẩu"}
           </button>
