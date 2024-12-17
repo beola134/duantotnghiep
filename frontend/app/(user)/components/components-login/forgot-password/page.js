@@ -64,12 +64,13 @@ export default function ForgotPassword() {
             setFieldError("email", errorData.message);
           } else if (errorData.message.includes("Mã OTP không chính xác")) {
             setFieldError("otp", errorData.message);
+          } else if (errorData.message.includes("Mật khẩu mới không trùng mật khẩu cũ")) {
+            setFieldError("password", errorData.message);
           } else {
             setFieldError("general", errorData.message);
           }
           throw new Error(errorData.message || "Có lỗi xảy ra, vui lòng thử lại sau");
         }
-
         Swal.fire({
           icon: "success",
           title: "Đổi mật khẩu thành công",
@@ -125,7 +126,7 @@ export default function ForgotPassword() {
 
   return (
     <div className={styles.mainContainer}>
-      <div className={styles.container}>
+      <div className={`${styles.container}`}>
         <div className={styles.heading}>Quên mật khẩu</div>
         <form onSubmit={formik.handleSubmit} className={styles.form}>
           <input
@@ -138,7 +139,7 @@ export default function ForgotPassword() {
             placeholder="Email"
           />
           {formik.errors.email && <p className={styles.error}>{formik.errors.email}</p>}
-
+          {error && <p className={styles.error}>{error}</p>}
           <div className={styles.inputWrapper}>
             <input
               type="text"
@@ -171,7 +172,7 @@ export default function ForgotPassword() {
             disabled={!isOtpSent}
           />
           {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
-
+          {formik.errors.general && <p className={styles.error}>{formik.errors.general}</p>}
           <input
             type="password"
             className={`${styles.input} ${formik.errors.confirmPassword ? styles.inputError : ""}`}
@@ -190,7 +191,6 @@ export default function ForgotPassword() {
             {loading ? "Đang xử lý..." : "Đổi mật khẩu"}
           </button>
         </form>
-        {error && <p className={styles.error}>{error}</p>}
         <div className={styles.signUpNow}>
           <span className={styles.dontHaveAnAccount}>
             Đã có tài khoản? &nbsp;

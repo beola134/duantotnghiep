@@ -1,27 +1,27 @@
-.container {
+/* .container {
   width: 1170px;
   max-width: 100%;
   box-sizing: border-box;
   margin: 0px auto;
-}
+} */
+
 .checkoutContainer {
-  display: flex;
-  justify-content: space-between;
-  max-width: 1200px;
+  /* display: flex;
+  justify-content: space-between; */
   margin: 20px auto;
   box-sizing: border-box;
 }
 
 .checkoutLeft {
-  flex: 2;
+  /* flex: 2; */
   margin-right: 20px;
-  width: 70%;
+  /* width: 70%; */
   padding: 20px;
   border-radius: 8px;
 }
 
 .cartSummary {
-  width: 30%;
+  /* width: 30%; */
   padding: 30px;
   border-radius: 5px;
   height: 350px;
@@ -42,8 +42,8 @@
 }
 
 .inputGroup {
-  display: flex;
-  justify-content: space-between;
+  /* display: flex;
+  justify-content: space-between; */
   gap: 20px;
 }
 
@@ -57,7 +57,7 @@
 
 .shippingPaymentInfo input,
 .shippingPaymentInfo textarea {
-  display: block;
+  /* display: block; */
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
@@ -76,7 +76,6 @@
 }
 
 .paymentSelect {
-  width: 100%;
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -86,8 +85,8 @@
 }
 
 .paymentOption {
-  display: flex;
-  align-items: center;
+  /* display: flex;
+  align-items: center; */
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -101,31 +100,31 @@
 
 /* thông tin sản phẩm */
 .productCard {
-  max-width: 800px;
+  /* max-width: 800px; */
   padding: 20px;
-  display: flex;
+  /* display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: center; */
 }
 
-.productInfo {
+/* .productInfo {
   display: flex;
-}
+} */
 
 .productLeft {
   margin-right: 20px;
 }
 
-.productImage img {
+/* .productImage img {
   width: 80px;
   height: auto;
-}
+} */
 
-.productDetails {
+/* .productDetails {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
+} */
 
 .productName {
   font-weight: bold;
@@ -140,24 +139,24 @@
   font-size: 14px;
 }
 
-.productActions {
+/* .productActions {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-}
+} */
 
-.quantityPrice {
+/* .quantityPrice {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   margin-bottom: 10px;
-}
+} */
 
-.quantity {
+/* .quantity {
   display: flex;
   align-items: center;
   margin-right: 20px;
-}
+} */
 
 .quantityBtn {
   background-color: #fff;
@@ -202,7 +201,7 @@
 }
 
 .discountCode input {
-  width: 203px;
+  /* width: 203px; */
   padding: 10px;
   border: 1px solid #000;
   border-radius: 15px;
@@ -230,8 +229,8 @@
 
 .orderSummary p {
   margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
+  /* display: flex;
+  justify-content: space-between; */
   padding: 10px;
 }
 
@@ -245,7 +244,7 @@
 }
 
 .checkoutButton {
-  width: 100%;
+  /* width: 100%; */
   padding: 15px;
   background-color: black;
   color: white;

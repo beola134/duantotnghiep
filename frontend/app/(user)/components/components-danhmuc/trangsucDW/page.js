@@ -3,7 +3,7 @@ import Link from "next/link";
 import styles from "../../components-thuonghieu/donghonu/donghonu.module.css";
 import { useEffect, useState } from "react";
 
-export default function TrangsucCK() {
+export default function TrangsucDW() {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -62,22 +62,21 @@ export default function TrangsucCK() {
           <div className={styles["main-column"]}>
             <div className={styles["center-1col"]}>
               <div className={styles.clear}></div>
-              <div className={styles.container}>
+              <div className="container">
                 <div className={styles.clear}></div>
                 <div className={styles["products-cat"]}>
-                  <div className={styles["field-title"]}>
+                  <div className="relative text-center bg-[#f3f3f3] text-[11px] uppercase pt-[14px] px-[0px] pb-[12px] mb-[33px] ">
                     <div className={styles["title-name"]}>
                       <div className={styles["cat-title"]}>
-                        <h1>Trang sức DW</h1>
+                        <h1 className=" text-[20px]">Trang sức DW</h1>
                       </div>
                     </div>
 
                     <select
-                      className={styles["order-select"]}
+                      className="absolute lg:top-2 lg:right-3 top-[100%] right-[0px] sm:border sm:border-[#e6e6e6] lg:border-none  sm:bg-[#f3f3f3] py-[8px] text-[#5d5d5d] cursor-pointer"
                       name="order-select"
-                      onChange={handleSortChange}
-                      value={sortOption}
-                    >
+                      onChange={handleSortChange}>
+                      {/*order-select*/}
                       <option value="">Sắp xếp theo</option>
                       <option value="asc">Giá từ thấp tới cao</option>
                       <option value="desc">Giá từ cao tới thấp</option>
@@ -93,8 +92,8 @@ export default function TrangsucCK() {
                       ) : error ? (
                         <p>{error}</p>
                       ) : (
-                        <div className={styles["product-grid"]}>
-                          {/* item-1 */}
+                        <div
+                          className={`${styles["product-grid"]} grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-3`}>
                           {displayedProducts.map((product) => {
                             const {
                               _id,
@@ -108,17 +107,26 @@ export default function TrangsucCK() {
                               duong_kinh,
                             } = product;
                             const roundDiscount = (discountPercentage) => {
-                              const discountLevels = [10, 15, 20, 25, 30, 40, 50];
+                              const discountLevels = [
+                                10, 15, 20, 25, 30, 40, 50,
+                              ];
                               return discountLevels.reduce((prev, curr) =>
-                                Math.abs(curr - discountPercentage) < Math.abs(prev - discountPercentage) ? curr : prev
+                                Math.abs(curr - discountPercentage) <
+                                Math.abs(prev - discountPercentage)
+                                  ? curr
+                                  : prev
                               );
                             };
                             return (
-                              <div key={_id} className={styles.item}>
-                                <div className={styles["frame-inner"]}>
-                                  <figure className={styles["product-image"]}>
-                                    <Link href={`/components/product-detail/${_id}`}>
+                              <div
+                                key={_id}
+                                className="border-box relative overflow-hidden text-center mb-10">
+                                <div className="relative">
+                                  <figure className="relative mb-4 min-h-[230px]">
+                                    <Link
+                                      href={`/components/product-detail/${_id}`}>
                                       <img
+                                        className="max-h-[290px]"
                                         src={`http://localhost:5000/images/${hinh_anh}`}
                                         alt={ten}
                                         width="300"
@@ -131,17 +139,31 @@ export default function TrangsucCK() {
                                     </Link>
                                   </figure>
                                   <h3>
-                                    <Link className={styles.name} href="#" title={ten}>
-                                      <span className={styles["cat-name"]}>{ten_san_pham}</span>
+                                    <Link
+                                      className="text-[17px] font-semibold mb-2"
+                                      href="#"
+                                      title={ten}>
+                                      <span className="text-gray-500 block text-[14px] mt-1.5 mb-2 font-normal leading-relaxed">
+                                        {ten_san_pham}
+                                      </span>
                                       {ma_san_pham}
                                     </Link>
                                   </h3>
-                                  <span className={styles["loai-may"]}>{loai}</span>
-                                  <span className={styles["row-lm"]}>|</span>
-                                  <span className={styles["duong-kinh"]}>{duong_kinh}</span>
+                                  <span className="inline-block text-[12px] uppercase text-gray-500 mb-1.5">
+                                    {loai}
+                                  </span>
+                                  <span className="px-1.5 text-gray-500 text-[13px]">
+                                    |
+                                  </span>
+                                  <span className="inline-block text-[12px] uppercase text-gray-500 mb-1.5">
+                                    {duong_kinh}
+                                  </span>
                                   <div className={styles["price-area"]}>
-                                    <div className={styles["price-current"]}>
-                                      Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                                    <div className="text-[18px] text-red-600 font-semibold">
+                                      Giá:{" "}
+                                      <span>
+                                        {gia_san_pham.toLocaleString("vi-VN")}₫
+                                      </span>
                                     </div>
                                   </div>
 
@@ -161,28 +183,50 @@ export default function TrangsucCK() {
                   <div className={styles.pagination}>
                     <span
                       title="First page"
-                      className={currentPage === 1 ? styles.disabled : styles["other-page"]}
-                      onClick={() => currentPage > 1 && handlePageChange(1)}
-                    >
+                      className={
+                        currentPage === 1
+                          ? styles.disabled
+                          : styles["other-page"]
+                      }
+                      onClick={() => currentPage > 1 && handlePageChange(1)}>
                       ‹‹
                     </span>
                     <span
-                      className={currentPage === 1 ? styles.disabled : styles["other-page"]}
-                      onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                    >
+                      className={
+                        currentPage === 1
+                          ? styles.disabled
+                          : styles["other-page"]
+                      }
+                      onClick={() =>
+                        currentPage > 1 && handlePageChange(currentPage - 1)
+                      }>
                       ‹
                     </span>
-                    <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1}`}</span>
                     <span
-                      className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
-                      onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
-                    >
+                      className={styles.currentPage}>{`Trang ${currentPage} / ${
+                      totalPages || 1
+                    }`}</span>
+                    <span
+                      className={
+                        currentPage === totalPages
+                          ? styles.disabled
+                          : styles["other-page"]
+                      }
+                      onClick={() =>
+                        currentPage < totalPages &&
+                        handlePageChange(currentPage + 1)
+                      }>
                       ›
                     </span>
                     <span
-                      className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
-                      onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
-                    >
+                      className={
+                        currentPage === totalPages
+                          ? styles.disabled
+                          : styles["other-page"]
+                      }
+                      onClick={() =>
+                        currentPage < totalPages && handlePageChange(totalPages)
+                      }>
                       ››
                     </span>
                   </div>

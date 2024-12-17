@@ -105,7 +105,7 @@ export default function BannerSlide1() {
       return () => clearInterval(interval);
     }, [slider]); 
   return (
-    <div className={cx("slider-collection")}>
+    <div className={cx("slider-collection", "lg:block hidden")}>
       <div className={cx("pav-slide-content")}>
         <Slider {...settings} ref={(sliderRef) => setSlider(sliderRef)}>
           {cates.map((cate, index) => (

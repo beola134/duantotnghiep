@@ -94,7 +94,8 @@ exports.addComment = async (req, res) => {
           model: DonHang,
           as: "DonHang",
           where: {
-            id_nguoi_dung,         
+            id_nguoi_dung,
+            trang_thai:"Giao hàng thành công",        
            },
         },
       ],
@@ -124,9 +125,6 @@ exports.addComment = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Lỗi server", error: error.message });
-
-    
-    
   }
 };
 

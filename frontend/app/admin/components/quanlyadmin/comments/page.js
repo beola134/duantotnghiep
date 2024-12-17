@@ -9,7 +9,6 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import RobotoRegular from "./Roboto-Regular.base64";
 
-
 export default function CommentsPage() {
   const [comments, setComments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -92,7 +91,7 @@ export default function CommentsPage() {
           const workbook = new ExcelJS.Workbook();
           const worksheet = workbook.addWorksheet("Danh sách bình luận");
           worksheet.columns = [
-            { header: "ID bình luận", key: "_id", width: 35 },
+            { header: "STT", key: "stt", width: 5 },
             { header: "ID sản phẩm", key: "id_san_pham", width: 35 },
             { header: "Họ và tên", key: "ten_dang_nhap", width: 20 },
             { header: "Nội dung", key: "noi_dung", width: 20 },
@@ -110,9 +109,9 @@ export default function CommentsPage() {
             cell.alignment = { vertical: "middle", horizontal: "center" };
           });
           await Promise.all(
-            allComments.map(async (item) => {
+            allComments.map(async (item, index) => {
               worksheet.addRow({
-                _id: item._id,
+                stt: index + 1,
                 id_san_pham: item.id_san_pham,
                 ten_dang_nhap: item.user?.ten_dang_nhap || "Null",
                 noi_dung: item.noi_dung,
@@ -200,9 +199,9 @@ export default function CommentsPage() {
 
       // Tạo bảng dữ liệu
       doc.autoTable({
-        head: [["ID bình luận", "ID sản phẩm", "Họ và tên", "Nội dung", "Sao", "Ngày bình luận", "Trạng thái"]],
-        body: sortedComments.map((item) => [
-          item._id,
+        head: [["Stt", "ID sản phẩm", "Họ và tên", "Nội dung", "Sao", "Ngày bình luận", "Trạng thái"]],
+        body: sortedComments.map((item, index) => [
+          index + 1,
           item.id_san_pham,
           item.user?.ten_dang_nhap || "Null",
           item.noi_dung,
@@ -226,7 +225,7 @@ export default function CommentsPage() {
           fontStyle: "bold",
         },
         columnStyles: {
-          0: { halign: "center", cellWidth: 30 },
+          0: { halign: "center", cellWidth: 15 },
           1: { halign: "left", cellWidth: 30 },
           2: { halign: "left", cellWidth: 26 },
           3: { halign: "left", cellWidth: 25 },
@@ -323,7 +322,7 @@ export default function CommentsPage() {
               <table id="productTable" className={styles.productTable}>
                 <thead>
                   <tr>
-                    <th style={{ width: "15%", textAlign: "center" }}>Id bình luận</th>
+                    <th style={{ width: "5%", textAlign: "center" }}>Stt</th>
                     <th style={{ width: "10%", textAlign: "center" }}>Id sản phẩm</th>
                     <th style={{ width: "8%", textAlign: "center" }}>Họ và tên </th>
                     <th style={{ width: "12%", textAlign: "center" }}>Nội dung</th>
@@ -346,12 +345,12 @@ export default function CommentsPage() {
                       </td>
                     </tr>
                   ) : (
-                    comments.map((comment) => {
+                    comments.map((comment, index) => {
                       const { _id, noi_dung, sao, ngay_binh_luan, id_san_pham, trang_thai } = comment;
 
                       return (
                         <tr key={_id} className={!trang_thai ? styles.hiddenRow : ""}>
-                          <td>{_id}</td>
+                          <td style={{ textAlign: "center" }}>{index + 1}</td>
                           <td>{id_san_pham}</td>
                           <td style={{ textAlign: "center" }}>
                             <span className={`${styles.status} ${styles.inStock}`}>{comment.user?.ten_dang_nhap}</span>
