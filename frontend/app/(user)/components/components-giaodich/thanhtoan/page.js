@@ -290,7 +290,7 @@ export default function ThanhToan() {
 
     // Xác nhận đặt hàng trước khi tiếp tục
     Swal.fire({
-      title: "Bạn có muốn đặt hàng không?",
+      title: "Bạn có chắc chắn muốn đặt hàng không?",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes",
@@ -452,7 +452,7 @@ export default function ThanhToan() {
                 <select
                   as="select"
                   name="phuong_thuc_thanh_toan"
-                  className={`${styles.paymentSelect} w-full `}
+                  className={`${styles.paymentSelect} w-auto sm:text-[14px] `}
                   value={selectedPaymentMethod || ""}
                   onChange={(e) => setSelectedPaymentMethod(e.target.value)}
                 >
