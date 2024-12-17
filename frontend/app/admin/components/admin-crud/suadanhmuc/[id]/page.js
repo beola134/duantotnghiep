@@ -23,6 +23,7 @@ export default function SuaDanhmuc() {
         const response = await fetch(
           `http://localhost:5000/cate/allcate/${id}`
         );
+        3.
         if (response.ok) {
           const data = await response.json();
           setdanhmuc(data.cates);
