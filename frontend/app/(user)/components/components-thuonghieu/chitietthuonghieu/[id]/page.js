@@ -164,7 +164,7 @@ const toggleDropdown = () => {
             }}>
             {" "}
             {/*summary-content-filter*/}
-            <p>
+            <p className="sm:text-[16px] text-[14px] italic leading-[24px] mb-[10px]" >
               Đến với thế giới <strong>đồng hồ nam, nữ</strong> của Wristly, bạn sẽ được sở hữu hàng nghìn sản
               phẩm chất lượng, thiết kế bắt mắt đến từ các thương hiệu &nbsp;
               <em>
