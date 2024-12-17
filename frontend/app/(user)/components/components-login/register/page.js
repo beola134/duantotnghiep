@@ -44,6 +44,7 @@ const schema = Yup.object().shape({
 export default function Register() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [ConfirmShowPassword, setConfirmShowPassword] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -143,10 +144,6 @@ export default function Register() {
     });
   };
 
-  // Hàm để đổi trạng thái ẩn/hiện mật khẩu
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
   const handleSendOtp = async () => {
     if (loading || isOtpSent) return;
     if (!formik.values.email) {
@@ -205,6 +202,15 @@ export default function Register() {
     return `${min}:${sec < 10 ? "0" : ""}${sec}`;
   };
 
+  // Hàm để đổi trạng thái ẩn/hiện mật khẩu
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmShowPassword(!ConfirmShowPassword);
+  };
+
   return (
     <div className={styles.mainContainer}>
       <div className={styles.container}>
@@ -258,8 +264,8 @@ export default function Register() {
               value={formik.values.confirmPassword}
               placeholder="Nhâp lại mật khẩu"
             />
-            <div className={styles.togglePasswordIcon} onClick={togglePasswordVisibility}>
-              {showPassword ? <FaEye /> : <FaEyeSlash />}
+            <div className={`${styles.togglePasswordIcon} absolute`} onClick={toggleConfirmPasswordVisibility}>
+              {ConfirmShowPassword ? <FaEye /> : <FaEyeSlash />}
             </div>
           </div>
           {formik.errors.confirmPassword && <p className={styles.error}>{formik.errors.confirmPassword}</p>}

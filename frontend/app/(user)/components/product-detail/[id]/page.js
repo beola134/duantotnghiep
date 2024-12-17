@@ -359,7 +359,6 @@ export default function Detail({ params }) {
     setActiveTab(tabId);
   };
 
-
   // lấy giá trị số lượng sản phẩm
   const handleInputChange = (e) => {
     let value = e.target.value;
@@ -380,41 +379,33 @@ export default function Detail({ params }) {
     return <p>Error:{error}</p>;
   }
   return (
-    <>  
-   
-      <div className="mb-[30px] container px-4 flex flex-wrap">
-      
-        {/* FrameLeft */}
-        <div className="w-full sm:w-1/2 lg:w-[34%] mb-6 relative">
-        <div
-          className={cx(
-            "flex",
-            "items-center uppercase  md:text-[16px] text-[10px] mb-5 mt-6"
-          )}
-        >
+    <>
+      <div className="container py-5">
+        <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5")}>
           <span className={cx("")}>
-            <Link
-              href="/"
-              className={cx(" text-gray-800", "hover:text-[#796752]")}
-            >
+            <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
               Trang chủ
             </Link>
           </span>
-          <span className={cx("separator", "mx-3", "text-stone-400")}>
-            {" "}
-            &gt;{" "}
-          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
 
+          <span className={cx("")}>
+            <Link href={`/components/product-detail/${params.id}`} className={cx("link", "text-gray-800")}>
+              Chi tiết sản phẩm
+            </Link>
+          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
           <span className={cx("", "text-red-500")}>
-            <Link
-              href="/components/components-thuonghieu/donghonam"
-              className={cx("link", "text-red-500")}
-            >
-              {" "}
-              ĐỒNG HỒ ĐÔI
+            <Link href={`/components/product-detail/${params.id}`} className={cx("link", "text-red-500")}>
+              {product.ten_san_pham}
             </Link>
           </span>
         </div>
+      </div>
+
+      <div className="mb-[30px] container px-4 flex flex-wrap">
+        {/* FrameLeft */}
+        <div className="w-full sm:w-1/2 lg:w-[34%] mb-6 relative mt-5">
           {product.gia_giam > 0 && (
             <div className="absolute right-2 top-2 bg-[#f9141e] text-white w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] text-[12px] sm:text-[13px] text-center z-[2] rounded-full box-border pt-[10px] sm:pt-[15px] leading-[18px] sm:leading-[20px]">
               -
@@ -2941,23 +2932,23 @@ export default function Detail({ params }) {
                             <span className={styles.duongKinh}>{duong_kinh}</span>
 
                             <div className={styles.priceArae}>
-                            {gia_giam > 0 ? (
-                              <>
-                              <div className={styles.priceOld}>
-                                Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
-                              </div>
-                              <div className={styles.priceCurrent}>Giá KM: {gia_giam.toLocaleString("vi-VN")}₫</div>
-                              </>
-                            ) : (
-                              <div className={styles.priceCurrent}>Giá: {gia_san_pham.toLocaleString("vi-VN")}₫</div>
-                            )}
+                              {gia_giam > 0 ? (
+                                <>
+                                  <div className={styles.priceOld}>
+                                    Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                                  </div>
+                                  <div className={styles.priceCurrent}>Giá KM: {gia_giam.toLocaleString("vi-VN")}₫</div>
+                                </>
+                              ) : (
+                                <div className={styles.priceCurrent}>Giá: {gia_san_pham.toLocaleString("vi-VN")}₫</div>
+                              )}
                             </div>
                             {gia_giam > 0 && (
-                            <div className={styles.discount}>
-                              <span>
-                                -{roundDiscount(Math.round(((gia_san_pham - gia_giam) / gia_san_pham) * 100))}%
-                              </span>
-                            </div>
+                              <div className={styles.discount}>
+                                <span>
+                                  -{roundDiscount(Math.round(((gia_san_pham - gia_giam) / gia_san_pham) * 100))}%
+                                </span>
+                              </div>
                             )}
 
                             <br />
