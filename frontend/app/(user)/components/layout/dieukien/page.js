@@ -80,7 +80,7 @@ function VoucherModal({ isOpen, onRequestClose, voucherId }) {
     <div className="flex justify-between gap-3">
       {voucher.so_luong > 0 ? (
         <button
-          className="flex-1 py-3 bg-white border text-black rounded-full cursor-pointer"
+          className="flex-1 py-3  bg-[#796752] border text-white rounded-full cursor-pointer"
           onClick={() => handleCopy(voucher.ma_voucher)}
         >
           Copy
@@ -91,7 +91,7 @@ function VoucherModal({ isOpen, onRequestClose, voucherId }) {
         </button>
       )}
       <button
-        className="flex-1 py-3 bg-[#796752] text-white rounded-full"
+        className="flex-1 py-3  bg-white text-black rounded-full border"
         onClick={onRequestClose}
       >
         Đóng
