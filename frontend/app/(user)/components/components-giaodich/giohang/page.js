@@ -8,6 +8,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { removeFromCart, updateCartItemQuantity, setCartItems } from "../redux/slices/cartSilce";
 import Link from "next/link";
 import Swal from "sweetalert2";
+import cx from "classnames";
 
 const CartPage = () => {
   const cartItems = useSelector((state) => state.cart?.items) || [];
@@ -63,6 +64,24 @@ const CartPage = () => {
 
   return (
     <>
+      
+    <div className="container py-5">
+      <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5")}>
+        <span className={cx("")}>
+          <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
+            Trang chủ
+          </Link>
+        </span>
+        <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
+
+        <span className={cx("")}>
+          <Link href="/components/components-giaodich/giohang" className={cx("link", "text-red-500")}>
+           Giỏ hàng
+          </Link>
+        </span>
+      </div>
+    </div>
+
       <nav className={styles.nav}>
         <div className={styles.container}>
           <div className={`{styles.content} phone-sm:mt-[15px]`}>

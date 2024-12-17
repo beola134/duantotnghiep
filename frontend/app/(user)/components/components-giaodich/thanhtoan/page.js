@@ -8,6 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import cx from "classnames";
+import Link from "next/link";
 
 export default function ThanhToan() {
   const [user, setUser] = useState({
@@ -376,6 +378,23 @@ export default function ThanhToan() {
 
   return (
     <>
+      <div className="container py-5">
+        <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5")}>
+          <span className={cx("")}>
+            <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
+              Trang chủ
+            </Link>
+          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
+
+          <span className={cx("")}>
+            <Link href="/components/components-giaodich/thanhtoan" className={cx("link", "text-red-500")}>
+             Thanh toán
+            </Link>
+          </span>
+        </div>
+      </div>
+
       <div className="container">
         <div className={`${styles.checkoutContainer} flex flex-wrap justify-between`}>
           <ToastContainer
@@ -454,7 +473,7 @@ export default function ThanhToan() {
                 <select
                   as="select"
                   name="phuong_thuc_thanh_toan"
-                  className={`${styles.paymentSelect} w-auto sm:text-[14px] `}
+                  className={`${styles.paymentSelect} w-auto lg:w-full sm:text-[14px] `}
                   value={selectedPaymentMethod || ""}
                   onChange={(e) => setSelectedPaymentMethod(e.target.value)}
                 >
