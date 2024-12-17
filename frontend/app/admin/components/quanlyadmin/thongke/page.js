@@ -15,7 +15,7 @@ export default function AdminStatistics() {
   useEffect(() => {
     const fetchRevenue = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/thongke/getTotalRevenueByTime?period=${period}`);
+        const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/thongke/getTotalRevenueByTime?period=${period}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -32,7 +32,7 @@ export default function AdminStatistics() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/thongke/getTopProducts');
+        const response = await fetch('https://wristlybackend-e89d41f05169.herokuapp.com/thongke/getTopProducts');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -119,7 +119,7 @@ export default function AdminStatistics() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/thongke/getAllOrdersWithUserDetails');
+        const response = await fetch('https://wristlybackend-e89d41f05169.herokuapp.com/thongke/getAllOrdersWithUserDetails');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -139,7 +139,7 @@ export default function AdminStatistics() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/thongke/getNewUsersToday');
+        const response = await fetch('https://wristlybackend-e89d41f05169.herokuapp.com/thongke/getNewUsersToday');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -158,7 +158,7 @@ export default function AdminStatistics() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/thongke/getTotalProducts');
+        const response = await fetch('https://wristlybackend-e89d41f05169.herokuapp.com/thongke/getTotalProducts');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -176,7 +176,7 @@ export default function AdminStatistics() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/thongke/getTotalProductsCount"
+          "https://wristlybackend-e89d41f05169.herokuapp.com/thongke/getTotalProductsCount"
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -194,7 +194,7 @@ export default function AdminStatistics() {
    useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/thongke/getTotalThuonghieu');
+        const response = await fetch('https://wristlybackend-e89d41f05169.herokuapp.com/thongke/getTotalThuonghieu');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -211,7 +211,7 @@ export default function AdminStatistics() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/thongke/getTotalUsers');
+        const response = await fetch('https://wristlybackend-e89d41f05169.herokuapp.com/thongke/getTotalUsers');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -228,7 +228,7 @@ export default function AdminStatistics() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/thongke/getTotalDonHang');
+        const response = await fetch('https://wristlybackend-e89d41f05169.herokuapp.com/thongke/getTotalDonHang');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -245,7 +245,7 @@ export default function AdminStatistics() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/thongke/getTotalRevenue');
+        const response = await fetch('https://wristlybackend-e89d41f05169.herokuapp.com/thongke/getTotalRevenue');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -406,7 +406,7 @@ export default function AdminStatistics() {
                       <td>
                         <div className={cx("user-info")}>
                           <img
-                            src={`http://localhost:5000/images/${item.user.hinh_anh}`}
+                            src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${item.user.hinh_anh}`}
                             alt="User Image"
                           />
                           <span>{item.user.ho_ten}</span>

@@ -40,7 +40,7 @@ export default function DonghoNam() {
     setLoading(true);
     try {
       const queryParams = new URLSearchParams({ ...filter, page: currentPage });
-      const response = await fetch(`http://localhost:5000/product/filtersanphamdongho?${queryParams}`);
+      const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/filtersanphamdongho?${queryParams}`);
       if (!response.ok) {
         throw new Error("Lỗi không thể tải dữ liệu");
       }
@@ -150,32 +150,18 @@ export default function DonghoNam() {
   return (
     <>
       <div className="container">
-      <div
-          className={cx(
-            "flex",
-            "items-center uppercase  md:text-[16px] text-[10px] mb-5 mt-6"
-          )}
-        >
+        <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5 mt-6")}>
           <span className={cx("")}>
-            <Link
-              href="/"
-              className={cx(" text-gray-800", "hover:text-[#796752]")}
-            >
+            <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
               Trang chủ
             </Link>
-          </span>  
-          <span className={cx("separator", "mx-3", "text-stone-400")}>
-            {" "}
-            &gt;{" "}
           </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}> &gt; </span>
 
           <span className={cx("", "text-red-500")}>
-            <Link
-              href="/components/components-thuonghieu/donghonam"
-              className={cx("link", "text-red-500")}
-            >
+            <Link href="/components/components-thuonghieu/donghonam" className={cx("link", "text-red-500")}>
               {" "}
-              ĐỒNG HỒ NAM 
+              ĐỒNG HỒ NAM
             </Link>
           </span>
         </div>
@@ -1565,8 +1551,8 @@ export default function DonghoNam() {
               {/*Kiểu dáng */}
               <div className={`${styles["field-item"]} `}>
                 <div
-                className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
-                onClick={toggleDropdown}
+                  className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
+                  onClick={toggleDropdown}
                 >
                   Kiểu dáng
                 </div>{" "}
@@ -1730,16 +1716,13 @@ export default function DonghoNam() {
                 );
               };
               return (
-                <div
-                  key={_id}
-                  className="border-box relative overflow-hidden text-center mb-10"
-                >
+                <div key={_id} className="border-box relative overflow-hidden text-center mb-10">
                   <div className="relative">
                     <figure className="relative mb-4 min-h-[230px]">
                       <Link href={`/components/product-detail/${_id}`}>
                         <img
                           className="max-h-[290px]"
-                          src={`http://localhost:5000/images/${hinh_anh}`}
+                          src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${hinh_anh}`}
                           alt={ten}
                           width="300"
                           height="363"
@@ -1751,31 +1734,22 @@ export default function DonghoNam() {
                       </Link>
                     </figure>
                     <h3>
-                      <Link
-                        className="text-[17px] font-semibold mb-2"
-                        href="#"
-                        title={ten}
-                      >
+                      <Link className="text-[17px] font-semibold mb-2" href="#" title={ten}>
                         <span className="text-gray-500 block text-[14px] mt-1.5 mb-2 font-normal leading-relaxed">
                           {ten_san_pham}
                         </span>
                         {ma_san_pham}
                       </Link>
                     </h3>
-                    <span className="inline-block text-[12px] uppercase text-gray-500 mb-1.5">
-                      {loai}
-                    </span>
+                    <span className="inline-block text-[12px] uppercase text-gray-500 mb-1.5">{loai}</span>
                     <span className="px-1.5 text-gray-500 text-[13px]">|</span>
-                    <span className="inline-block text-[12px] uppercase text-gray-500 mb-1.5">
-                      {duong_kinh}
-                    </span>
+                    <span className="inline-block text-[12px] uppercase text-gray-500 mb-1.5">{duong_kinh}</span>
 
                     <div className={styles["price-area"]}>
                       {gia_giam > 0 ? (
                         <>
                           <div className="text-[15px] text-gray-400 mb-2 line-through">
-                            Giá:{" "}
-                            <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                            Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
                           </div>
                           <div className="text-[18px] text-red-600 font-semibold">
                             Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
@@ -1790,15 +1764,7 @@ export default function DonghoNam() {
 
                     {gia_giam > 0 && (
                       <div className="absolute top-0 left-1.25 bg-red-600 text-white text-sm w-11 h-11 leading-[2.875rem] box-border rounded-full">
-                        <span>
-                          -
-                          {roundDiscount(
-                            Math.round(
-                              ((gia_san_pham - gia_giam) / gia_san_pham) * 100
-                            )
-                          )}
-                          %
-                        </span>
+                        <span>-{roundDiscount(Math.round(((gia_san_pham - gia_giam) / gia_san_pham) * 100))}%</span>
                       </div>
                     )}
                   </div>

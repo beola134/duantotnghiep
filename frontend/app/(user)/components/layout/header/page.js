@@ -444,7 +444,7 @@ export default function Header() {
 
   const fetchUserDetails = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:5000/users/${userId}`);
+      const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/users/${userId}`);
       if (!response.ok) {
         throw new Error("Failed to fetch user details");
       }
@@ -464,7 +464,7 @@ export default function Header() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
+        const response = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/thuonghieu/allthuonghieu");
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -524,7 +524,7 @@ export default function Header() {
 
   return (
     <>
-      <header className={cx("header", "bg-black text-white text-sm py-2 max-h-[80px]")}>
+      <header className={cx("header", "bg-black text-white text-sm py-2 max-h-[80px] overflow-hidden")}>
         <div className={cx("top-bar", "max-w-[1170px] grid grid-cols-12 items-center mx-auto gap-4")}>
           <div
             className={cx(
@@ -532,7 +532,7 @@ export default function Header() {
               "flex lg:col-span-5 lg:justify-self-start col-span-12 justify-self-center flex-col items-center text-center"
             )}
           >
-            <Link href="/" >
+            <Link href="/" onClick={handleLogoClick}>
               <img
                 className={cx("img", "mt-[-55px] w-[250px] h-[170px] ml-[-40px]")}
                 src="/image/item/icons/logo.png"
@@ -543,7 +543,7 @@ export default function Header() {
           <div
             className={cx(
               "search-bar",
-              "mt-[-40px] col-span-2 lg:flex  hidden justify-end  items-center bg-[#ffffff24] rounded-full py-1 px-5 max-h-[30px] mr-[-70px]"
+              "mt-[-40px] col-span-2 lg:flex  relative hidden justify-end  items-center bg-[#ffffff24] rounded-full py-1 px-5 max-h-[30px] mr-[-70px]"
             )}
           >
             <input
@@ -586,7 +586,6 @@ export default function Header() {
             {user ? (
               <div
                 className={cx(
-                  
                   "flex items-center justify-center max-w-[30px] border border-white rounded-full relative"
                 )}
               >
@@ -595,7 +594,7 @@ export default function Header() {
                     src={
                       user.user.hinh_anh.startsWith("http")
                         ? user.user.hinh_anh
-                        : `http://localhost:5000/images/${user.user.hinh_anh}`
+                        : `https://wristlybackend-e89d41f05169.herokuapp.com/images/${user.user.hinh_anh}`
                     }
                     width="200"
                     height="100"
@@ -603,7 +602,7 @@ export default function Header() {
                       display: "inline-block",
                       width: "160px",
                       height: "29px",
-                     
+
                       borderRadius: "50%",
                       objectFit: "cover",
                     }}
@@ -637,12 +636,11 @@ export default function Header() {
               </div>
             </Link>
           </div>
-          <div className="menu-icon fixed top-[20px] right-[20px]  lg:hidden flex  text-center">
+          <div className="menu-icon absolute top-[20px] right-[20px]  lg:hidden flex overflow-hidden  text-center">
             {user ? (
               <div
                 className={cx(
-                  "user",
-                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full relative"
+                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full"
                 )}
               >
                 <Link href={`/components/components-login/user/${user.user._id}`} onClick={handleIconClick}>
@@ -650,7 +648,7 @@ export default function Header() {
                     src={
                       user.user.hinh_anh.startsWith("http")
                         ? user.user.hinh_anh
-                        : `http://localhost:5000/images/${user.user.hinh_anh}`
+                        : `https://wristlybackend-e89d41f05169.herokuapp.com/images/${user.user.hinh_anh}`
                     }
                     width="200"
                     height="100"
@@ -658,7 +656,7 @@ export default function Header() {
                       display: "inline-block",
                       width: "160px",
                       height: "29px",
-                      
+
                       borderRadius: "50%",
                       objectFit: "cover",
                     }}
@@ -669,7 +667,7 @@ export default function Header() {
               <div
                 className={cx(
                   "user",
-                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full relative"
+                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full "
                 )}
               >
                 <Link href="/components/components-login/login" onClick={handleIconClick}>
@@ -798,20 +796,22 @@ export default function Header() {
               THƯƠNG HIỆU
             </Link>
             <ul className={cx("dropdown-menu")}>
-              {category .filter((item) => item.thuong_hieu !== "RHYTHM") .map((item) => (
-                <li className={cx("dropdown-menu-li")} key={item.thuong_hieu}>
-                  <Link
-                    href={`/components/components-thuonghieu/chitietthuonghieu/${item.thuong_hieu}`}
-                    style={{ color: "white" }}
-                  >
-                    <img
-                      className={cx("dropdown-menu-img")}
-                      src={`http://localhost:5000/images/${item.hinh_anh}`}
-                      alt=""
-                    />
-                  </Link>
-                </li>
-              ))}
+              {category
+                .filter((item) => item.thuong_hieu !== "RHYTHM")
+                .map((item) => (
+                  <li className={cx("dropdown-menu-li")} key={item.thuong_hieu}>
+                    <Link
+                      href={`/components/components-thuonghieu/chitietthuonghieu/${item.thuong_hieu}`}
+                      style={{ color: "white" }}
+                    >
+                      <img
+                        className={cx("dropdown-menu-img")}
+                        src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${item.hinh_anh}`}
+                        alt=""
+                      />
+                    </Link>
+                  </li>
+                ))}
             </ul>
           </li>
           <li

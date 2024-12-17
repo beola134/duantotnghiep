@@ -44,6 +44,7 @@ const schema = Yup.object().shape({
 export default function Register() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [ConfirmShowPassword, setConfirmShowPassword] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -64,7 +65,7 @@ export default function Register() {
         return;
       }
       try {
-        const res = await fetch("http://localhost:5000/users/register", {
+        const res = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/users/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -89,7 +90,7 @@ export default function Register() {
             title: "Đăng ký thành công",
             text: "Đăng ký thành công, vui lòng đăng nhập để tiếp tục.",
           }).then(() => {
-            window.location.href = "http://localhost:3001/components/components-login/login";
+            window.location.href = "/components/components-login/login";
           });
         }
       } catch (error) {
@@ -103,7 +104,7 @@ export default function Register() {
   const handleLoginSuccess = async (credentialResponse) => {
     const token = credentialResponse.credential;
     try {
-      const response = await fetch("http://localhost:5000/users/auth/google", {
+      const response = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/users/auth/google", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -143,10 +144,6 @@ export default function Register() {
     });
   };
 
-  // Hàm để đổi trạng thái ẩn/hiện mật khẩu
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
   const handleSendOtp = async () => {
     if (loading || isOtpSent) return;
     if (!formik.values.email) {
@@ -156,7 +153,7 @@ export default function Register() {
 
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:5000/users/sendOTP", {
+      const res = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/users/sendOTP", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -203,6 +200,15 @@ export default function Register() {
     const min = Math.floor(seconds / 60);
     const sec = seconds % 60;
     return `${min}:${sec < 10 ? "0" : ""}${sec}`;
+  };
+
+  // Hàm để đổi trạng thái ẩn/hiện mật khẩu
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmShowPassword(!ConfirmShowPassword);
   };
 
   return (
@@ -258,8 +264,8 @@ export default function Register() {
               value={formik.values.confirmPassword}
               placeholder="Nhâp lại mật khẩu"
             />
-            <div className={styles.togglePasswordIcon} onClick={togglePasswordVisibility}>
-              {showPassword ? <FaEye /> : <FaEyeSlash />}
+            <div className={`${styles.togglePasswordIcon} absolute`} onClick={toggleConfirmPasswordVisibility}>
+              {ConfirmShowPassword ? <FaEye /> : <FaEyeSlash />}
             </div>
           </div>
           {formik.errors.confirmPassword && <p className={styles.error}>{formik.errors.confirmPassword}</p>}

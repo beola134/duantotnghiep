@@ -20,8 +20,9 @@ export default function SuaDanhmuc() {
     const fetchDanhmuc = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/cate/allcate/${id}`
+          `https://wristlybackend-e89d41f05169.herokuapp.com/cate/allcate/${id}`
         );
+        3.
         if (response.ok) {
           const data = await response.json();
           setdanhmuc(data.cates);
@@ -67,7 +68,7 @@ export default function SuaDanhmuc() {
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/cate/updatecate/${id}`, {
+      const res = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/cate/updatecate/${id}`, {
         method: "PUT",
         body: formData,
       });
@@ -137,7 +138,7 @@ export default function SuaDanhmuc() {
                     justifyContent: "space-between",
                   }}>
                   <img
-                    src={`http://localhost:5000/images/${danhmuc.hinh_anh}`}
+                    src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${danhmuc.hinh_anh}`}
                     style={{ width: "80px" }}
                   />
                   <input

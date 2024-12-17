@@ -61,7 +61,7 @@ export default function Detail({ params }) {
     if (product && product._id) {
       const fetchProductQuantity = async () => {
         try {
-          const response = await fetch(`http://localhost:5000/product/check/${product._id}?quantity=${so_luong}`);
+          const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/check/${product._id}?quantity=${so_luong}`);
           if (!response.ok) {
             const errorData = await response.json();
             throw new Error(`Error fetching product quantity: ${JSON.stringify(errorData)}`);
@@ -138,7 +138,7 @@ export default function Detail({ params }) {
       }
 
       // Check product quantity from server
-      const response = await fetch(`http://localhost:5000/product/check/${product._id}?quantity=${so_luong}`);
+      const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/check/${product._id}?quantity=${so_luong}`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -171,7 +171,7 @@ export default function Detail({ params }) {
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/product/chitietsp/${params.id}`);
+        const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/chitietsp/${params.id}`);
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -192,7 +192,7 @@ export default function Detail({ params }) {
   useEffect(() => {
     const fetchRelated = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/product/related/${params.id}`);
+        const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/related/${params.id}`);
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -263,7 +263,7 @@ export default function Detail({ params }) {
     if (!user) {
       if (commentText && star) {
         try {
-          const response = await fetch(`http://localhost:5000/comment/add`, {
+          const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/comment/add`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -325,7 +325,7 @@ export default function Detail({ params }) {
     const getAllComment = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:5000/comment/getAll/${params.id}?page=${currentPage}`);
+        const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/comment/getAll/${params.id}?page=${currentPage}`);
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -359,7 +359,6 @@ export default function Detail({ params }) {
     setActiveTab(tabId);
   };
 
-
   // lấy giá trị số lượng sản phẩm
   const handleInputChange = (e) => {
     let value = e.target.value;
@@ -380,41 +379,33 @@ export default function Detail({ params }) {
     return <p>Error:{error}</p>;
   }
   return (
-    <>  
-   
-      <div className="mb-[30px] container px-4 flex flex-wrap">
-      
-        {/* FrameLeft */}
-        <div className="w-full sm:w-1/2 lg:w-[34%] mb-6 relative">
-        <div
-          className={cx(
-            "flex",
-            "items-center uppercase  md:text-[16px] text-[10px] mb-5 mt-6"
-          )}
-        >
+    <>
+      <div className="container py-5">
+        <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5")}>
           <span className={cx("")}>
-            <Link
-              href="/"
-              className={cx(" text-gray-800", "hover:text-[#796752]")}
-            >
+            <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
               Trang chủ
             </Link>
           </span>
-          <span className={cx("separator", "mx-3", "text-stone-400")}>
-            {" "}
-            &gt;{" "}
-          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
 
+          <span className={cx("")}>
+            <Link href={`/components/product-detail/${params.id}`} className={cx("link", "text-gray-800")}>
+              Chi tiết sản phẩm
+            </Link>
+          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
           <span className={cx("", "text-red-500")}>
-            <Link
-              href="/components/components-thuonghieu/donghonam"
-              className={cx("link", "text-red-500")}
-            >
-              {" "}
-              ĐỒNG HỒ ĐÔI
+            <Link href={`/components/product-detail/${params.id}`} className={cx("link", "text-red-500")}>
+              {product.ten_san_pham}
             </Link>
           </span>
         </div>
+      </div>
+
+      <div className="mb-[30px] container px-4 flex flex-wrap">
+        {/* FrameLeft */}
+        <div className="w-full sm:w-1/2 lg:w-[34%] mb-6 relative mt-5">
           {product.gia_giam > 0 && (
             <div className="absolute right-2 top-2 bg-[#f9141e] text-white w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] text-[12px] sm:text-[13px] text-center z-[2] rounded-full box-border pt-[10px] sm:pt-[15px] leading-[18px] sm:leading-[20px]">
               -
@@ -428,7 +419,7 @@ export default function Detail({ params }) {
           <div className="relative left-0 text-center mb-5">
             <img
               className={`${styles.imgResponsive} ${styles.bkProductImage}`}
-              src={`http://localhost:5000/images/${product.hinh_anh}`}
+              src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${product.hinh_anh}`}
               alt={product.ten}
               width="398"
               height="481"
@@ -488,7 +479,7 @@ export default function Detail({ params }) {
             <div className="text-center mb-[10px]">
               <img
                 className={styles.imageGiftCat}
-                src={`http://localhost:5000/images/${cate.hinh_anh}`}
+                src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${cate.hinh_anh}`}
                 alt={cate.thuong_hieu}
               />
             </div>
@@ -2924,7 +2915,7 @@ export default function Detail({ params }) {
                                   width="300"
                                   height="363"
                                   style={{ display: "block", opacity: 1 }}
-                                  src={`http://localhost:5000/images/${hinh_anh}`}
+                                  src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${hinh_anh}`}
                                 />
                               </Link>
                             </figure>
@@ -2941,23 +2932,23 @@ export default function Detail({ params }) {
                             <span className={styles.duongKinh}>{duong_kinh}</span>
 
                             <div className={styles.priceArae}>
-                            {gia_giam > 0 ? (
-                              <>
-                              <div className={styles.priceOld}>
-                                Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
-                              </div>
-                              <div className={styles.priceCurrent}>Giá KM: {gia_giam.toLocaleString("vi-VN")}₫</div>
-                              </>
-                            ) : (
-                              <div className={styles.priceCurrent}>Giá: {gia_san_pham.toLocaleString("vi-VN")}₫</div>
-                            )}
+                              {gia_giam > 0 ? (
+                                <>
+                                  <div className={styles.priceOld}>
+                                    Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                                  </div>
+                                  <div className={styles.priceCurrent}>Giá KM: {gia_giam.toLocaleString("vi-VN")}₫</div>
+                                </>
+                              ) : (
+                                <div className={styles.priceCurrent}>Giá: {gia_san_pham.toLocaleString("vi-VN")}₫</div>
+                              )}
                             </div>
                             {gia_giam > 0 && (
-                            <div className={styles.discount}>
-                              <span>
-                                -{roundDiscount(Math.round(((gia_san_pham - gia_giam) / gia_san_pham) * 100))}%
-                              </span>
-                            </div>
+                              <div className={styles.discount}>
+                                <span>
+                                  -{roundDiscount(Math.round(((gia_san_pham - gia_giam) / gia_san_pham) * 100))}%
+                                </span>
+                              </div>
                             )}
 
                             <br />
@@ -3049,7 +3040,7 @@ export default function Detail({ params }) {
                     <div key={index} className="comment flex items-start py-4 border-b border-gray-200 mb-6">
                       <div className="profile mr-4">
                         <img
-                          src={`http://localhost:5000/images/${comment.user?.hinh_anh}`}
+                          src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${comment.user?.hinh_anh}`}
                           alt="Profile Picture"
                           className="w-12 h-12 rounded-full object-cover"
                         />

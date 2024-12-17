@@ -44,7 +44,7 @@ export default function Menu() {
   }, []);
   const fetchUserDetails = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:5000/users/${userId}`);
+      const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/users/${userId}`);
       if (!response.ok) {
         throw new Error("Failed to fetch user details");
       }
@@ -241,7 +241,7 @@ export default function Menu() {
                       src={
                         user.user.hinh_anh.startsWith("http")
                           ? user.user.hinh_anh
-                          : `http://localhost:5000/images/${user.user.hinh_anh}`
+                          : `https://wristlybackend-e89d41f05169.herokuapp.com/images/${user.user.hinh_anh}`
                       }
                       className={`${styles.roundedCircle}`}
                       width="40"

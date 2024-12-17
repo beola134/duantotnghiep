@@ -6,6 +6,8 @@ import Swal from "sweetalert2";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default function ThanhToan() {
   const [user, setUser] = useState({
@@ -42,7 +44,7 @@ export default function ThanhToan() {
   // Lấy thông tin người dùng từ server
   const fetchUserDetails = async (_id) => {
     try {
-      const response = await fetch(`http://localhost:5000/users/${_id}`);
+      const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/users/${_id}`);
       if (!response.ok) {
         throw new Error("Lỗi lấy thông tin người dùng");
       }
@@ -98,10 +100,32 @@ export default function ThanhToan() {
   };
   // Xóa sản phẩm khỏi giỏ hàng
   const handleDelete = (index) => {
-    const updatedCartItems = cartItems.filter((_, i) => i !== index);
-    setCartItems(updatedCartItems);
-    calculateTotal(updatedCartItems);
-    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+    Swal.fire({
+      title: "Bạn có chắc chắn muốn xóa sản phẩm này?",
+      text: "Thao tác này sẽ không thể hoàn tác!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Xoá",
+      cancelButtonText: "Huỷ",
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Thực hiện xóa sản phẩm
+        const updatedCartItems = cartItems.filter((_, i) => i !== index);
+        setCartItems(updatedCartItems);
+        calculateTotal(updatedCartItems);
+        localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+
+        // Hiển thị thông báo thành công
+        Swal.fire({
+          title: "Đã xóa!",
+          text: "Sản phẩm đã được xóa khỏi giỏ hàng.",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+        });
+      }
+    });
   };
 
   // Tạo đơn hàng và kiểm tra xem có đăng nhập không
@@ -131,7 +155,7 @@ export default function ThanhToan() {
       return;
     }
     try {
-      const response = await fetch(`http://localhost:5000/voucher/ma_voucher`, {
+      const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/voucher/ma_voucher`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -169,7 +193,7 @@ export default function ThanhToan() {
   // Kiểm tra xem sản phẩm còn hàng không
   const ktra = async () => {
     for (const items of cartItems) {
-      const reponse = await fetch(`http://localhost:5000/product/check/${items._id}?quantity=${items.so_luong}`);
+      const reponse = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/check/${items._id}?quantity=${items.so_luong}`);
       if (!reponse.ok) {
         Swal.fire({
           title: "Không đủ hàng",
@@ -220,7 +244,7 @@ export default function ThanhToan() {
       .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-  
+
     if (!token) {
       // Nếu không có token, yêu cầu người dùng đăng nhập
       Swal.fire({
@@ -232,19 +256,19 @@ export default function ThanhToan() {
       });
       return;
     }
-  
+
     // Kiểm tra tính hợp lệ của các trường thông tin
     const isValid = validateFields();
     if (!isValid) return;
-  
+
     // Kiểm tra xem người dùng đã đăng nhập chưa
     const isLoggedIn = await userLogin();
     if (!isLoggedIn) return;
-  
+
     // Kiểm tra xem sản phẩm còn hàng không
     const isStockAvailable = await ktra();
     if (!isStockAvailable) return;
-  
+
     const orderDetails = {
       dia_chi: user.dia_chi,
       id_nguoi_dung: user._id,
@@ -263,10 +287,10 @@ export default function ThanhToan() {
     };
     // In ra thông tin đơn hàng
     console.log(orderDetails);
-  
+
     // Xác nhận đặt hàng trước khi tiếp tục
     Swal.fire({
-      title: "Bạn có muốn đặt hàng không?",
+      title: "Bạn có chắc chắn muốn đặt hàng không?",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes",
@@ -276,15 +300,17 @@ export default function ThanhToan() {
         // Xử lý thanh toán qua ZaloPay
         if (selectedPaymentMethod === "3") {
           try {
-            const paymentResponse = await axios.post("http://localhost:5000/pttt/zalo", {
+            const paymentResponse = await axios.post("https://wristlybackend-e89d41f05169.herokuapp.com/pttt/zalo", {
               amount: amount,
               orderDetails,
               headers: {
                 "Content-Type": "application/json",
               },
             });
-  
+
             if (paymentResponse.data.return_code === 1) {
+              localStorage.setItem("cartItems", JSON.stringify([]));
+              setCartItems([]);
               window.location.href = paymentResponse.data.order_url; // Chuyển hướng đến ZaloPay
             } else {
               Swal.fire({
@@ -308,21 +334,21 @@ export default function ThanhToan() {
         } else {
           // Xử lý thanh toán qua các phương thức khác
           try {
-            const response = await fetch("http://localhost:5000/donhang/donhang", {
+            const response = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/donhang/donhang", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify(orderDetails),
             });
-  
+
             if (!response.ok) {
               throw new Error("Lỗi tạo đơn hàng");
             }
-  
+
             const data = await response.json();
             console.log(data);
-  
+
             Swal.fire({
               icon: "success",
               title: "Thành công",
@@ -332,7 +358,7 @@ export default function ThanhToan() {
                 window.location.href = "/"; // Điều hướng về trang chủ sau khi thành công
               }
             });
-  
+
             // Xóa giỏ hàng sau khi tạo đơn thành công
             localStorage.setItem("cartItems", JSON.stringify([]));
             setCartItems([]);
@@ -428,7 +454,7 @@ export default function ThanhToan() {
                 <select
                   as="select"
                   name="phuong_thuc_thanh_toan"
-                  className={`${styles.paymentSelect} w-full `}
+                  className={`${styles.paymentSelect} w-auto sm:text-[14px] `}
                   value={selectedPaymentMethod || ""}
                   onChange={(e) => setSelectedPaymentMethod(e.target.value)}
                 >
@@ -453,7 +479,7 @@ export default function ThanhToan() {
                   <div className={styles.productLeft}>
                     <p className={styles.productTitle}>Sản phẩm</p>
                     <div className="w-20 h-auto">
-                      <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
+                      <img src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${item.hinh_anh}`} alt={item.ten_san_pham} />
                     </div>
                   </div>
 
@@ -478,8 +504,15 @@ export default function ThanhToan() {
                     <p className={styles.productPrice}>
                       {(item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham).toLocaleString("vi-VN")}₫
                     </p>
-                    <button onClick={() => handleDelete(index)} className={`${styles.deleteBtn} ml-2 mb-2`}>
-                      🗑️
+                    <button onClick={() => handleDelete(index)} className={`${styles.deleteBtn} ml-5 mb-2`}>
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        style={{
+                          fontSize: "18px",
+                          border: "none",
+                          color: "red",
+                        }}
+                      />
                     </button>
                   </div>
                 </div>

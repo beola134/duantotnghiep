@@ -42,7 +42,7 @@ export default function ThemUser() {
     formData.append("hinh_anh", image);
 
     try {
-      const response = await fetch("http://localhost:5000/users/addUser", {
+      const response = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/users/addUser", {
         method: "POST",
         body: formData,
       });
