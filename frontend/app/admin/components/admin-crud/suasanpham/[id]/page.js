@@ -33,27 +33,30 @@ export default function SuaSanPham({ params }) {
     id_thuong_hieu: "",
     id_danh_muc: "",
     mo_ta: "",
-    hinh_anh: null,
+    hinh_anh: "",
   });
   const [thuongHieu, setThuongHieu] = useState([]);
   const [cates, setCates] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState("");
 
+  // Fetch dữ liệu sản phẩm, thương hiệu, danh mục
   useEffect(() => {
     const fetchProductAndData = async () => {
       try {
-        // Fetch Thương Hiệu (Brands)
-        const brandResponse = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/thuonghieu/allthuonghieu");
+        const brandResponse = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
         const brandData = await brandResponse.json();
         setThuongHieu(brandData.th);
-        // Fetch Danh Mục (Categories)
-        const cateResponse = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/cate/getAllCateadmin");
+
+        const cateResponse = await fetch("http://localhost:5000/cate/getAllCateadmin");
         const cateData = await cateResponse.json();
         setCates(cateData.cates);
-        // Fetch Product Details
-        const productResponse = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/chitietsp/${id}`);
+
+        const productResponse = await fetch(`http://localhost:5000/product/chitietsp/${id}`);
         const productData = await productResponse.json();
-        setFormData({ ...productData.product, hinh_anh: null });
+        setFormData({ ...productData.product });
+        setPreviewImage(`http://localhost:5000/images/${productData.product.hinh_anh}`);
       } catch (error) {
         setErrorMessage("Đã xảy ra lỗi khi tải dữ liệu.");
       }
@@ -61,6 +64,7 @@ export default function SuaSanPham({ params }) {
     fetchProductAndData();
   }, [id]);
 
+  // Xử lý thay đổi input
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -69,13 +73,22 @@ export default function SuaSanPham({ params }) {
     }));
   };
 
+  // Xử lý thay đổi file hình ảnh
   const handleFileChange = (e) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      hinh_anh: e.target.files[0],
-    }));
+    const file = e.target.files[0];
+    setImageFile(file);
+
+    // Tạo ảnh preview khi chọn file mới
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
+  // Xử lý submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -87,39 +100,26 @@ export default function SuaSanPham({ params }) {
     }
 
     const data = new FormData();
-
     Object.keys(formData).forEach((key) => {
-      if (key !== "hinh_anh" && key !== "id_danh_muc") {
-        data.append(key, formData[key]);
-      }
+      data.append(key, formData[key]);
     });
 
-    if (formData.hinh_anh) {
-      data.append("hinh_anh", formData.hinh_anh);
-    }
-
-    if (formData.id_danh_muc) {
-      data.append("id_danh_muc", formData.id_danh_muc);
+    if (imageFile) {
+      data.append("hinh_anh", imageFile);
     }
 
     try {
-      const response = await fetch(
-        `https://wristlybackend-e89d41f05169.herokuapp.com/product/capnhatsp/${id}`,
-        {
-          method: "PUT",
-          body: data,
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            Accept: "application/json",
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:5000/product/capnhatsp/${id}`, {
+        method: "PUT",
+        body: data,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-          errorData.error || "Cập nhật sản phẩm không thành công"
-        );
+        throw new Error(errorData.error || "Cập nhật sản phẩm không thành công");
       }
 
       await Swal.fire({
@@ -128,17 +128,9 @@ export default function SuaSanPham({ params }) {
         icon: "success",
         confirmButtonText: "OK",
       });
-
       window.location.href = "/admin/components/quanlyadmin/sanpham";
     } catch (error) {
       console.error("Lỗi khi cập nhật sản phẩm:", error.message);
-
-      await Swal.fire({
-        title: "Lỗi!",
-        text: "Đã xảy ra lỗi khi cập nhật sản phẩm: " + error.message,
-        icon: "error",
-        confirmButtonText: "OK",
-      });
       setErrorMessage("Đã xảy ra lỗi khi cập nhật sản phẩm: " + error.message);
     }
   };
@@ -155,6 +147,42 @@ export default function SuaSanPham({ params }) {
         <div className={styles.bg}>
           <form onSubmit={handleSubmit}>
             <div className={styles.container1}>
+            {/* Thương hiệu (Brand) Select */}
+            <div className={styles.formGroup}>
+                <label htmlFor="id_thuong_hieu">Thương hiệu *</label>
+                <select
+                  id="id_thuong_hieu"
+                  name="id_thuong_hieu"
+                  value={formData.id_thuong_hieu}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Chọn thương hiệu</option>
+                  {thuongHieu.map((brand) => (
+                    <option key={brand._id} value={brand._id}>
+                      {brand.thuong_hieu}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Danh mục (Category) Select */}
+              <div className={styles.formGroup}>
+                <label htmlFor="id_danh_muc">Danh mục</label>
+                <select
+                  id="id_danh_muc"
+                  name="id_danh_muc"
+                  value={formData.id_danh_muc || ""}
+                  onChange={handleChange}
+                >
+                  <option value="">Chọn danh mục (Không bắt buộc)</option>
+                  {cates.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.ten_danh_muc}
+                    </option>
+                  ))}
+                </select>
+              </div>
               {/* Tên sản phẩm */}
               <div className={styles.formGroup}>
                 <label htmlFor="ten_san_pham">Tên sản phẩm *</label>
@@ -205,42 +233,7 @@ export default function SuaSanPham({ params }) {
                 />
               </div>
 
-              {/* Thương hiệu (Brand) Select */}
-              <div className={styles.formGroup}>
-                <label htmlFor="id_thuong_hieu">Thương hiệu *</label>
-                <select
-                  id="id_thuong_hieu"
-                  name="id_thuong_hieu"
-                  value={formData.id_thuong_hieu}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Chọn thương hiệu</option>
-                  {thuongHieu.map((brand) => (
-                    <option key={brand._id} value={brand._id}>
-                      {brand.thuong_hieu}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Danh mục (Category) Select */}
-              <div className={styles.formGroup}>
-                <label htmlFor="id_danh_muc">Danh mục</label>
-                <select
-                  id="id_danh_muc"
-                  name="id_danh_muc"
-                  value={formData.id_danh_muc || ""}
-                  onChange={handleChange}
-                >
-                  <option value="">Chọn danh mục (Không bắt buộc)</option>
-                  {cates.map((category) => (
-                    <option key={category._id} value={category._id}>
-                      {category.ten_danh_muc}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              
 
               {/* Mã sản phẩm */}
               <div className={styles.formGroup}>
@@ -449,12 +442,20 @@ export default function SuaSanPham({ params }) {
               {/* Hình ảnh */}
               <div className={styles.formGroup}>
                 <label htmlFor="hinh_anh">Hình ảnh</label>
-                <input
-                  type="file"
-                  id="hinh_anh"
-                  name="hinh_anh"
-                  onChange={handleFileChange}
-                />
+                <div style={{ display: "flex", gap: "10px" }}>
+                  {previewImage && (
+                    <img
+                      src={previewImage}
+                      alt="Preview"
+                      style={{ width: "60px", height: "60px", objectFit: "cover" }}
+                    />
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                </div>
               </div>
 
               {/* Mô tả sản phẩm */}
