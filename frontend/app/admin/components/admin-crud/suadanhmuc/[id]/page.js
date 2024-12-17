@@ -23,6 +23,7 @@ export default function SuaDanhmuc() {
         const response = await fetch(
           `https://wristlybackend-e89d41f05169.herokuapp.com/cate/allcate/${id}`
         );
+        3.
         if (response.ok) {
           const data = await response.json();
           setdanhmuc(data.cates);

@@ -316,8 +316,8 @@ const CartPage = () => {
                 <hr />
                 <div className={styles.total}>
                   <div className={styles.tt}>
-                    <p>Tổng tiền hàng:</p>
-                    <p>
+                    <p >Tổng tiền hàng:</p>
+                    <p className="text-[16px] lg:text-[20px] text-red-500">
                       {total.toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",

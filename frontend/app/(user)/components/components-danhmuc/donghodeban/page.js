@@ -180,12 +180,12 @@ export default function TrangsucCK() {
                   <div
                     className="mt-[25px] mb-[20px] overflow-hidden relative view-more-content"
                     style={{
-                      height: isExpanded ? "auto" : "75px",
+                      height: isExpanded ? "auto" : "150px",
                       overflow: isExpanded ? "visible" : "hidden",
                     }}>
                     {" "}
                     {/*summary-content-filter*/}
-                    <p className="sm:text-[16px] text-[14px] italic leading-[24px] mb-[10px]">
+                    <p className="sm:text-[16px] text-[14px] italic leading-[24px] mb-[10px] mt-[10px]">
                       Bạn đang tìm kiếm một chiếc{" "}
                       <strong style={{ color: "#3498db" }}>
                         đồng hồ để bàn
