@@ -18,6 +18,11 @@ export default function DonghoNam() {
   const [error, setError] = useState(null);
   const searchParams = useSearchParams();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
 
   // Bộ lọc mặc định cho đồng hồ nam
   const [filter, setFilter] = useState({
@@ -189,47 +194,49 @@ export default function DonghoNam() {
         <div id="main-container" className={cx("mt20")}>
           <div className={cx("main-column")}>
             <div className={cx("center-1col")}>
-             
               <div className={cx("clear")} />
               {/* container */}
-              <div className={cx("lg:max-w-[1170px] max-w-[80%] mx-auto overflow-hidden")}>
+              <div
+                className={cx(
+                  "lg:max-w-[1170px] max-w-[80%] mx-auto overflow-hidden"
+                )}
+              >
                 <div className={cx("clear")} />
                 <div className={cx("all-summary")}>
                   <div className={cx("summary-content-filter", "description")}>
-                        <div
+                    <div
+                      className={cx(
+                        "flex",
+                        "items-center uppercase md:text-[16px] text-[10px]"
+                      )}
+                    >
+                      <span className={cx("")}>
+                        <Link
+                          href="/"
                           className={cx(
-                            
-                            "flex",
-                            "items-center uppercase md:text-[16px] text-[10px]"
+                            " text-gray-800",
+                            "hover:text-[#796752]"
                           )}
                         >
-                          <span className={cx( "")}>
-                            <Link
-                              href="/"
-                              className={cx(
-                                
-                                " text-gray-800",
-                                "hover:text-[#796752]"
-                              )}
-                            >
-                              Trang chủ
-                            </Link>
-                          </span>
-                          <span className={cx("separator", "mx-3", "text-stone-400")}>
-                            {" "}
-                            &gt;{" "}
-                          </span>
-                          
-                          <span className={cx( "", "text-red-500")}>
-                            <Link
-                              href="/components/components-danhmuc/donghotreotuong"
-                              className={cx("link", "text-red-500")}
-                            >
-                              
-                              Đồng hồ treo tường
-                            </Link>
-                          </span>
-                        </div>
+                          Trang chủ
+                        </Link>
+                      </span>
+                      <span
+                        className={cx("separator", "mx-3", "text-stone-400")}
+                      >
+                        {" "}
+                        &gt;{" "}
+                      </span>
+
+                      <span className={cx("", "text-red-500")}>
+                        <Link
+                          href="/components/components-danhmuc/donghotreotuong"
+                          className={cx("link", "text-red-500")}
+                        >
+                          Đồng hồ treo tường
+                        </Link>
+                      </span>
+                    </div>
                     <p>
                       <Link href="#">
                         <em>
@@ -284,408 +291,451 @@ export default function DonghoNam() {
                 )}
                 <div className={cx("clear")} />
                 <div className={cx("products-cat")}>
-                  <div className={cx("block-products-filter")}>
-                    <div className={cx("block-product-filter", "cls","flex flex-wrap")}>
-                      <div className={cx("field-area", "field-item")}>
+                  <div
+                    className={cx(
+                      "border-t border-[#e5e5e5] border-b mt-[15px] mb-[5px]"
+                    )}
+                  >
+                    <div
+                      className={cx(
+                        "phone-sm:grid phone-sm:grid-cols-2 phone-sm:gap-x-4    sm:grid sm:grid-cols-2  lg:flex lg:space-x-4"
+                      )}
+                    >
+                      <div
+                        className={`${styles["field-item"]} phone-sm:ml-[5px]`}
+                      >
                         <div
                           className={cx(
-                            "field-name",
-                            "normal",
-                            "field",
-                            "field-opened"
+                            "cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"
                           )}
                           data-id="id-field-loai"
+                          onClick={toggleMenu}
                         >
                           Loại
                         </div>
-                        <div
-                          id="loai"
-                          className={cx(
-                            "field-label",
-                            "filters-in-field",
-                            "filters-in-field-0-column",
-                            "filter-4-loai"
-                          )}
-                        >
-                          <span className={cx("close")}>x</span>
-                          <div className={cx("filters-in-field-inner", "cls")}>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Quả Lắc"
-                                onClick={() =>
-                                  handleFilterChange("phong_cach", "Quả Lắc")
-                                }
-                              >
-                                Quả Lắc
-                              </Link>
+
+                        {isOpen && (
+                          <div
+                            id="loai"
+                            className={cx(
+                              "field-label",
+                              "filters-in-field",
+                              "filters-in-field-0-column",
+                              "filter-4-loai"
+                            )}
+                          >
+                            <span className={cx("close")} onClick={toggleMenu}>
+                              x
+                            </span>
+                            <div
+                              className={cx("filters-in-field-inner", "cls")}
+                            >
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Quả Lắc"
+                                  onClick={() =>
+                                    handleFilterChange("phong_cach", "Quả Lắc")
+                                  }
+                                >
+                                  Quả Lắc
+                                </Link>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        )}
                       </div>
 
                       {/* item2 */}
                       <div className={cx("field-area", "field-item")}>
                         <div
                           className={cx(
-                            "field-name",
-                            "normal",
-                            "field",
-                            "field-opened"
+                            "cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"
                           )}
                           data-id="id-field-manufactory"
+                          onClick={toggleMenu}
                         >
                           Thương hiệu
                         </div>
-                        <div
-                          id="manufactory"
-                          className={cx(
-                            "field-label",
-                            "filters-in-field",
-                            "filters-in-field-0-column",
-                            "filter-4-manufactory"
-                          )}
-                        >
-                          <span className={cx("close")}>x</span>
-                          <div className={cx("filters-in-field-inner", "cls")}>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="SEIKO"
-                                onClick={() =>
-                                  handleFilterChange("thuong_hieu", "SEIKO")
-                                }
-                              >
-                                SEIKO
-                              </Link>
-                            </div>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="RHYTHM"
-                                onClick={() =>
-                                  handleFilterChange("thuong_hieu", "RHYTHM")
-                                }
-                              >
-                                RHYTHM
-                              </Link>
+                        {isOpen && (
+                          <div
+                            id="manufactory"
+                            className={cx(
+                              "field-label",
+                              "filters-in-field",
+                              "filters-in-field-0-column",
+                              "filter-4-manufactory"
+                            )}
+                          >
+                            <span className={cx("close")}>x</span>
+                            <div
+                              className={cx("filters-in-field-inner", "cls")}
+                            >
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="SEIKO"
+                                  onClick={() =>
+                                    handleFilterChange("thuong_hieu", "SEIKO")
+                                  }
+                                >
+                                  SEIKO
+                                </Link>
+                              </div>
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="RHYTHM"
+                                  onClick={() =>
+                                    handleFilterChange("thuong_hieu", "RHYTHM")
+                                  }
+                                >
+                                  RHYTHM
+                                </Link>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        )}
                       </div>
 
                       {/* item3 */}
                       <div className={cx("field-area", "field-item")}>
                         <div
                           className={cx(
-                            "field-name",
-                            "normal",
-                            "field",
-                            "field-opened"
+                            "cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"
                           )}
                           data-id="id-field-price"
+                          onClick={toggleMenu}
                         >
                           Mức giá
                         </div>
-                        <div
-                          id="price"
-                          className={cx(
-                            "field-label",
-                            "filters-in-field",
-                            "filters-in-field-0-column",
-                            "filter-4-price"
-                          )}
-                        >
-                          <span className={cx("close")}>x</span>
-                          <div className={cx("filters-in-field-inner", "cls","lg:ml-0 md:ml-0 ml-[-100px]")}>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Dưới 2 triệu"
-                                onClick={() =>
-                                  handleFilterChange("muc_gia", "Dưới 2 triệu")
-                                }
-                              >
-                                Dưới 2 triệu
-                              </Link>
-                            </div>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Từ 2 triệu đến 5 triệu"
-                                onClick={() =>
-                                  handleFilterChange(
-                                    "muc_gia",
-                                    "Từ 2 triệu đến 5 triệu"
-                                  )
-                                }
-                              >
-                                Từ 2 triệu đến 5 triệu
-                              </Link>
-                            </div>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Trên 5 triệu"
-                                onClick={() =>
-                                  handleFilterChange("muc_gia", "Trên 5 triệu")
-                                }
-                              >
-                                Trên 5 triệu
-                              </Link>
+                        {isOpen && (
+                          <div
+                            id="price"
+                            className={cx(
+                              "field-label",
+                              "filters-in-field",
+                              "filters-in-field-0-column",
+                              "filter-4-price"
+                            )}
+                          >
+                            <span className={cx("close")}>x</span>
+                            <div
+                              className={cx(
+                                "filters-in-field-inner",
+                                "cls",
+                                "lg:ml-0 md:ml-0 "
+                              )}
+                            >
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Dưới 2 triệu"
+                                  onClick={() =>
+                                    handleFilterChange(
+                                      "muc_gia",
+                                      "Dưới 2 triệu"
+                                    )
+                                  }
+                                >
+                                  Dưới 2 triệu
+                                </Link>
+                              </div>
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Từ 2 triệu đến 5 triệu"
+                                  onClick={() =>
+                                    handleFilterChange(
+                                      "muc_gia",
+                                      "Từ 2 triệu đến 5 triệu"
+                                    )
+                                  }
+                                >
+                                  Từ 2 triệu đến 5 triệu
+                                </Link>
+                              </div>
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Trên 5 triệu"
+                                  onClick={() =>
+                                    handleFilterChange(
+                                      "muc_gia",
+                                      "Trên 5 triệu"
+                                    )
+                                  }
+                                >
+                                  Trên 5 triệu
+                                </Link>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        )}
                       </div>
                       {/* item4 */}
                       <div className={cx("field-area", "field-item")}>
                         <div
                           className={cx(
-                            "field-name",
-                            "normal",
-                            "field",
-                            "field-opened"
+                            "cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"
                           )}
                           data-id="id-field-vo-may"
+                          onClick={toggleMenu}
                         >
                           Vỏ máy
                         </div>
-                        <div
-                          id="vo-may"
-                          className={cx(
-                            "field-label",
-                            "filters-in-field",
-                            "filters-in-field-0-column",
-                            "filter-4-vo-may"
-                          )}
-                        >
-                          <span className={cx("close")}>x</span>
-                          <div className={cx("filters-in-field-inner", "cls","lg:ml-0 md:ml-0 ml-[-100px]")}>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Thủy Tinh"
-                                onClick={() =>
-                                  handleFilterChange(
-                                    "chat_lieu_vo",
-                                    "Thủy Tinh"
-                                  )
-                                }
-                              >
-                                Thủy Tinh
-                              </Link>
-                            </div>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Nhựa"
-                                onClick={() =>
-                                  handleFilterChange("chat_lieu_vo", "Nhựa")
-                                }
-                              >
-                                Nhựa
-                              </Link>
-                            </div>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Gỗ"
-                                onClick={() =>
-                                  handleFilterChange("chat_lieu_vo", "Gỗ")
-                                }
-                              >
-                                Gỗ
-                              </Link>
+                        {isOpen && (
+                          <div
+                            id="vo-may"
+                            className={cx(
+                              "field-label",
+                              "filters-in-field",
+                              "filters-in-field-0-column",
+                              "filter-4-vo-may"
+                            )}
+                          >
+                            <span className={cx("close")}>x</span>
+                            <div
+                              className={cx(
+                                "filters-in-field-inner",
+                                "cls",
+                                "lg:ml-0 md:ml-0 ml-[-100px]"
+                              )}
+                            >
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Thủy Tinh"
+                                  onClick={() =>
+                                    handleFilterChange(
+                                      "chat_lieu_vo",
+                                      "Thủy Tinh"
+                                    )
+                                  }
+                                >
+                                  Thủy Tinh
+                                </Link>
+                              </div>
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Nhựa"
+                                  onClick={() =>
+                                    handleFilterChange("chat_lieu_vo", "Nhựa")
+                                  }
+                                >
+                                  Nhựa
+                                </Link>
+                              </div>
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Gỗ"
+                                  onClick={() =>
+                                    handleFilterChange("chat_lieu_vo", "Gỗ")
+                                  }
+                                >
+                                  Gỗ
+                                </Link>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        )}
                       </div>
 
                       {/* item5 */}
                       <div className={cx("field-area", "field-item")}>
                         <div
                           className={cx(
-                            "field-name",
-                            "normal",
-                            "field",
-                            "field-opened"
+                            "cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"
                           )}
                           data-id="id-field-kieu-dang"
+                          onClick={toggleMenu}
                         >
                           Kiểu dáng
                         </div>
-                        <div
-                          id="kieu-dang"
-                          className={cx(
-                            "field-label",
-                            "filters-in-field",
-                            "filters-in-field-0-column",
-                            "filter-4-kieu-dang"
-                          )}
-                        >
-                          <span className={cx("close")}>x</span>
-                          <div className={cx("filters-in-field-inner", "cls" ,"lg:ml-0 md:ml-0 ")} >
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Mặt vuông"
-                                onClick={() =>
-                                  handleFilterChange("kieu_dang", "Mặt vuông")
-                                }
-                              >
-                                Mặt vuông
-                              </Link>
-                            </div>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Mặt tròn"
-                                onClick={() =>
-                                  handleFilterChange("kieu_dang", "Mặt tròn")
-                                }
-                              >
-                                Mặt tròn
-                              </Link>
-                            </div>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Mặt chữ nhật"
-                                onClick={() =>
-                                  handleFilterChange(
-                                    "kieu_dang",
-                                    "Mặt chữ nhật"
-                                  )
-                                }
-                              >
-                                Mặt chữ nhật
-                              </Link>
-                            </div>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Mặt Oval"
-                                onClick={() =>
-                                  handleFilterChange("kieu_dang", "Mặt Oval")
-                                }
-                              >
-                                Mặt Oval
-                              </Link>
+                        {isOpen && (
+                          <div
+                            id="kieu-dang"
+                            className={cx(
+                              "field-label",
+                              "filters-in-field",
+                              "filters-in-field-0-column",
+                              "filter-4-kieu-dang"
+                            )}
+                          >
+                            <span className={cx("close")}>x</span>
+                            <div
+                              className={cx(
+                                "filters-in-field-inner",
+                                "cls",
+                                "lg:ml-0 md:ml-0 "
+                              )}
+                            >
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Mặt vuông"
+                                  onClick={() =>
+                                    handleFilterChange("kieu_dang", "Mặt vuông")
+                                  }
+                                >
+                                  Mặt vuông
+                                </Link>
+                              </div>
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Mặt tròn"
+                                  onClick={() =>
+                                    handleFilterChange("kieu_dang", "Mặt tròn")
+                                  }
+                                >
+                                  Mặt tròn
+                                </Link>
+                              </div>
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Mặt chữ nhật"
+                                  onClick={() =>
+                                    handleFilterChange(
+                                      "kieu_dang",
+                                      "Mặt chữ nhật"
+                                    )
+                                  }
+                                >
+                                  Mặt chữ nhật
+                                </Link>
+                              </div>
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Mặt Oval"
+                                  onClick={() =>
+                                    handleFilterChange("kieu_dang", "Mặt Oval")
+                                  }
+                                >
+                                  Mặt Oval
+                                </Link>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        )}
                       </div>
                       {/* item6 */}
                       <div className={cx("field-area", "field-item")}>
                         <div
                           className={cx(
-                            "field-name",
-                            "normal",
-                            "field",
-                            "field-opened"
+                            "cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"
                           )}
                           data-id="id-field-mau-mat"
+                          onClick={toggleMenu}
                         >
                           Màu mặt
                         </div>
-                        <div
-                          id="mau-mat"
-                          className={cx(
-                            "field-label",
-                            "filters-in-field",
-                            "filters-in-field-1-column",
-                            "filter-4-mau-mat"
-                          )}
-                        >
-                          <span className={cx("close")}>x</span>
-                          <div className={cx("filters-in-field-inner", "cls")}  >
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Trắng"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Trắng")
-                                }
-                              >
-                                Trắng
-                              </Link>
-                            </div>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Đen"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Đen")
-                                }
-                              >
-                                Đen
-                              </Link>
-                            </div>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Xanh lam"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Xanh lam")
-                                }
-                              >
-                                Xanh lam
-                              </Link>
-                            </div>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Vàng"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Vàng")
-                                }
-                              >
-                                Vàng
-                              </Link>
-                            </div>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Đỏ"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Đỏ")
-                                }
-                              >
-                                Đỏ
-                              </Link>
-                            </div>
-                            <div className={cx("cls", "item")}>
-                              <Link
-                                rel="nofollow"
-                                href="#"
-                                title="Nâu"
-                                onClick={() =>
-                                  handleFilterChange("mau_mat", "Nâu")
-                                }
-                              >
-                                Nâu
-                              </Link>
+                        {isOpen && (
+                          <div
+                            id="mau-mat"
+                            className={cx(
+                              "field-label",
+                              "filters-in-field",
+                              "filters-in-field-1-column",
+                              "filter-4-mau-mat"
+                            )}
+                          >
+                            <span className={cx("close")}>x</span>
+                            <div
+                              className={cx("filters-in-field-inner", "cls")}
+                            >
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Trắng"
+                                  onClick={() =>
+                                    handleFilterChange("mau_mat", "Trắng")
+                                  }
+                                >
+                                  Trắng
+                                </Link>
+                              </div>
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Đen"
+                                  onClick={() =>
+                                    handleFilterChange("mau_mat", "Đen")
+                                  }
+                                >
+                                  Đen
+                                </Link>
+                              </div>
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Xanh lam"
+                                  onClick={() =>
+                                    handleFilterChange("mau_mat", "Xanh lam")
+                                  }
+                                >
+                                  Xanh lam
+                                </Link>
+                              </div>
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Vàng"
+                                  onClick={() =>
+                                    handleFilterChange("mau_mat", "Vàng")
+                                  }
+                                >
+                                  Vàng
+                                </Link>
+                              </div>
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Đỏ"
+                                  onClick={() =>
+                                    handleFilterChange("mau_mat", "Đỏ")
+                                  }
+                                >
+                                  Đỏ
+                                </Link>
+                              </div>
+                              <div className={cx("cls", "item")}>
+                                <Link
+                                  rel="nofollow"
+                                  href="#"
+                                  title="Nâu"
+                                  onClick={() =>
+                                    handleFilterChange("mau_mat", "Nâu")
+                                  }
+                                >
+                                  Nâu
+                                </Link>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -701,7 +751,10 @@ export default function DonghoNam() {
                       </div>
                     </div>
                     <select
-                      className={cx("order-select","max-w-[180px] lg:mt-[-40px] right-2 ")}
+                      className={cx(
+                        "order-select",
+                        "max-w-[180px] lg:mt-0 mt-[40px] right-2 "
+                      )}
                       name="order-select"
                       onChange={handleSortChange}
                     >
@@ -721,22 +774,27 @@ export default function DonghoNam() {
                     )}
                   >
                     {displayedProducts.map((item) => (
-                      <div key={item._id} className={cx("text-center relative")}>
-                        {item.gia_giam > 0 && (<div
-                          className={cx(
-                            "absolute top-[-15px] left-[10px] bg-[#ed1c24] text-white rounded-full text-[13px] w-[44px] h-[44px] box-border z-[9] tracking-[-0.7px] pt-[13px]"
-                          )}
-                        >
-                          -{" "}
-                          {roundDiscount(
-                            Math.round(
-                              ((item.gia_san_pham - item.gia_giam) /
-                                item.gia_san_pham) *
-                                100
-                            )
-                          )}
-                          %
-                        </div>)}
+                      <div
+                        key={item._id}
+                        className={cx("text-center relative")}
+                      >
+                        {item.gia_giam > 0 && (
+                          <div
+                            className={cx(
+                              "absolute top-[-15px] left-[10px] bg-[#ed1c24] text-white rounded-full text-[13px] w-[44px] h-[44px] box-border z-[9] tracking-[-0.7px] pt-[13px]"
+                            )}
+                          >
+                            -{" "}
+                            {roundDiscount(
+                              Math.round(
+                                ((item.gia_san_pham - item.gia_giam) /
+                                  item.gia_san_pham) *
+                                  100
+                              )
+                            )}
+                            %
+                          </div>
+                        )}
                         <Link href={`/components/product-detail/${item._id}`}>
                           <img
                             src={`http://localhost:5000/images/${item.hinh_anh}`}
@@ -796,12 +854,20 @@ export default function DonghoNam() {
                                 Giá: {formatCurrency(item.gia_san_pham)}
                               </small>
                               <br />
-                              <span className={cx("text-red-600 font-bold text-[16px]")}>
+                              <span
+                                className={cx(
+                                  "text-red-600 font-bold text-[16px]"
+                                )}
+                              >
                                 Giá KM: {formatCurrency(item.gia_giam)}
                               </span>
                             </>
                           ) : (
-                            <span className={cx("text-red-600 font-bold text-[16px]")}>
+                            <span
+                              className={cx(
+                                "text-red-600 font-bold text-[16px]"
+                              )}
+                            >
                               Giá KM: {formatCurrency(item.gia_san_pham)}
                             </span>
                           )}
@@ -811,7 +877,7 @@ export default function DonghoNam() {
                   </div>
 
                   {/* phân trang*/}
-                  <div className={cx("pagination lg:flex hidden")}>
+                  <div className={cx("pagination", "lg:flex hidden")}>
                     {/* Prev trang đầu */}
                     <span
                       title="First page"
@@ -869,9 +935,8 @@ export default function DonghoNam() {
                       ››
                     </span>
                   </div>
-                  
+
                   <div className="lg:hidden flex justify-center items-center my-5 flex-wrap">
-                    
                     <span
                       title="First page"
                       className={classNames(
@@ -942,8 +1007,6 @@ export default function DonghoNam() {
                 <div className={cx("clear")} />
                 {/* đánh giá  */}
                 <div className={cx("evaluate-cat")}>
-                  
-
                   {/* mô tả */}
                   <div
                     className={cx(

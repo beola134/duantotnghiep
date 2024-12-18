@@ -779,7 +779,7 @@ export default function DongHoTreoTuong() {
                     
 
                   {/* phân trang*/}
-                  <div className={cx("pagination lg:flex hidden")}>
+                  <div className={cx("pagination", "lg:flex hidden")}>
                     {/* Prev trang đầu */}
                     <span
                       title="First page"
