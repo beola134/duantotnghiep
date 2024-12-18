@@ -18,7 +18,7 @@ export default function VoucherPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [totalVouchers, setTotalVouchers] = useState(0);
-  const itemsPerPage = 5;
+  const itemsPerPage = 3;
 
   const debounce = (func, delay) => {
     let timeoutId;
@@ -248,29 +248,7 @@ export default function VoucherPage() {
     }
   };
 
-  const handleToggleComment = async (id, trang_thai) => {
-    try {
-      const response = await fetch(
-        `http://localhost:5000/voucher/getVoucherByStatus/${id}`,
-        {
-          method: "PUT",
-        }
-      );
-      const data = await response.json();
 
-      if (data.message) {
-        setVouchers((prevVoucher) =>
-          prevVoucher.map((voucher) =>
-            voucher._id === id
-              ? { ...voucher, trang_thai: !trang_thai }
-              : voucher
-          )
-        );
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const convertToVietnamTime = (dateString) => {
     const date = new Date(dateString);
@@ -433,8 +411,8 @@ export default function VoucherPage() {
           <table id="productTable" className={styles.productTable}>
             <thead>
               <tr>
-                <th style={{ width: "10%", textAlign: "center" }}>
-                  Id Voucher
+                <th style={{ width: "5%", textAlign: "center" }}>
+                  STT
                 </th>
                 <th style={{ width: "10%", textAlign: "center" }}>
                   Mã Voucher
@@ -453,9 +431,6 @@ export default function VoucherPage() {
                 <th style={{ width: "10%", textAlign: "center" }}>
                   Đơn hàng tối thiểu
                 </th>
-                <th style={{ width: "10%", textAlign: "center" }}>
-                  Trạng thái
-                </th>
                 <th style={{ width: "15%", textAlign: "center" }}>Chức năng</th>
               </tr>
             </thead>
@@ -463,7 +438,7 @@ export default function VoucherPage() {
               {vouchers.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="9"
+                    colSpan="11"
                     style={{
                       textAlign: "center",
                       color: "red",
@@ -473,7 +448,7 @@ export default function VoucherPage() {
                   </td>
                 </tr>
               ) : (
-                vouchers.map((voucher) => {
+                vouchers.map((voucher,index) => {
                   const {
                     _id,
                     ma_voucher,
@@ -484,15 +459,14 @@ export default function VoucherPage() {
                     ket_thuc,
                     mo_ta,
                     don_hang_toi_thieu,
-                    trang_thai,
                     mota2,
                   } = voucher;
 
                   return (
                     <tr
                       key={_id}
-                      className={!trang_thai ? styles.hiddenRow : ""}>
-                      <td>{_id}</td>
+                      >
+                      <td>{index + 1}</td>
                       <td style={{ textAlign: "center" }}>{ma_voucher}</td>
                       <td style={{ textAlign: "center" }}>{gia_tri}</td>
                       <td style={{ textAlign: "center" }}>{phan_tram}%</td>
@@ -503,15 +477,6 @@ export default function VoucherPage() {
                       <td style={{ textAlign: "center" }}>{mota2}</td>
                       <td style={{ textAlign: "center" }}>
                         {don_hang_toi_thieu}
-                      </td>
-                      <td style={{ textAlign: "center" }}>
-                        <button
-                          onClick={() => handleToggleComment(_id, trang_thai)}
-                          className={`${styles.btn2} ${styles.edit}`}>
-                          <FontAwesomeIcon
-                            icon={trang_thai ? faEye : faEyeSlash}
-                          />
-                        </button>
                       </td>
                       <td style={{ textAlign: "center" }}>
                         <Link

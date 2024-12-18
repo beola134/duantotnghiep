@@ -46,12 +46,8 @@ const Voucher = sequelize.define('Voucher', {
     mota2: {
         type: DataTypes.STRING(255),  
         allowNull: true,
-    },
-    trang_thai: {
-        type: DataTypes.BOOLEAN,  
-        allowNull: false,
-        defaultValue: true
     }
+
 }, {
     tableName: 'voucher',  
     timestamps: false  
