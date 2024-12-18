@@ -10,7 +10,7 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import cx from "classnames";
 
-const CartPage = () => {
+const CartPage = ({ params }) => {
   const cartItems = useSelector((state) => state.cart?.items) || [];
   const dispatch = useDispatch();
 
@@ -64,23 +64,28 @@ const CartPage = () => {
 
   return (
     <>
-      
-    <div className="container py-5">
-      <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5")}>
-        <span className={cx("")}>
-          <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
-            Trang chủ
-          </Link>
-        </span>
-        <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
+      <div className="container py-5">
+        <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5")}>
+          <span className={cx("")}>
+            <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
+              Trang chủ
+            </Link>
+          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
+          <span className={cx("")}>
+            <Link href={``} className={cx("link", "text-gray-800")}>
+              Chi tiết sản phẩm
+            </Link>
+          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
 
-        <span className={cx("")}>
-          <Link href="/components/components-giaodich/giohang" className={cx("link", "text-red-500")}>
-           Giỏ hàng
-          </Link>
-        </span>
+          <span className={cx("")}>
+            <Link href="/components/components-giaodich/giohang" className={cx("link", "text-red-500")}>
+              Giỏ hàng
+            </Link>
+          </span>
+        </div>
       </div>
-    </div>
 
       <nav className={styles.nav}>
         <div className={styles.container}>
@@ -335,7 +340,7 @@ const CartPage = () => {
                 <hr />
                 <div className={styles.total}>
                   <div className={styles.tt}>
-                    <p >Tổng tiền hàng:</p>
+                    <p>Tổng tiền hàng:</p>
                     <p className="text-[16px] lg:text-[20px] text-red-500">
                       {total.toLocaleString("vi-VN", {
                         style: "currency",
@@ -363,3 +368,5 @@ const CartPage = () => {
   );
 };
 export default CartPage;
+
+
