@@ -26,7 +26,7 @@ export default function TrangsucCK() {
     try {
       const queryParams = new URLSearchParams({ ...filter, page: currentPage });
       const response = await fetch(
-        `http://localhost:5000/filterDeBan/e9dd7461-30f5-42f4-9f69-512df6bdd51c?${queryParams}`
+        `http://localhost:5000/product/filterDeBan/e9dd7461-30f5-42f4-9f69-512df6bdd51c?${queryParams}`
       );
       if (!response.ok) {
         throw new Error("Lỗi không thể tải dữ liệu");

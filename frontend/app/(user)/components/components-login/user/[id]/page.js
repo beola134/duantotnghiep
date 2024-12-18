@@ -5,13 +5,13 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import eye icons
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import cx from "classnames";
-import ReactPaginate from 'react-paginate'; // Import ReactPaginate
+import ReactPaginate from "react-paginate"; // Import ReactPaginate
 
 const User = ({ params }) => {
   const { id } = params;
-  const router = useRouter(); 
+  const router = useRouter();
   const [userData, setUserData] = useState({
     ten_dang_nhap: "",
     ho_ten: "",
@@ -132,6 +132,7 @@ const User = ({ params }) => {
 
   const handleSave = async (event) => {
     event.preventDefault();
+    if (!validate()) return;
     const result = await Swal.fire({
       title: "Bạn có chắc chắn muốn cập nhật thông tin?",
       icon: "warning",
@@ -162,10 +163,11 @@ const User = ({ params }) => {
             text: "Cập nhật thông tin thành công",
             icon: "success",
             confirmButtonText: "OK",
+          }).then(() => {
+            window.location.reload();
           });
           setIsEditing(false);
           setAvatarFile(null);
-          fetchUserData(); // Refresh user data
         } else {
           Swal.fire({
             title: "Thất bại",
@@ -185,6 +187,34 @@ const User = ({ params }) => {
       }
     }
   };
+  const validate = () => {
+    const emailRegex = /^[\w.%+-]+@gmail\.com$/;
+    const phoneRegex = /^0\d{9}$/; // Số điện thoại bắt đầu bằng 0 và đủ 10 chữ số.
+    let isValid = true;
+
+    if (!emailRegex.test(userData.email)) {
+      Swal.fire({
+        title: "Lỗi",
+        text: "Email phải có định dạng @gmail.com",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      isValid = false;
+    }
+
+    if (!phoneRegex.test(userData.dien_thoai)) {
+      Swal.fire({
+        title: "Lỗi",
+        text: "Số điện thoại phải có 10 số và bắt đầu bằng 0",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
@@ -277,14 +307,28 @@ const User = ({ params }) => {
     });
   };
 
+  {
+    /*Đăng xuất*/
+  }
   const handleLayout = () => {
-    Cookies.remove("token");
     Swal.fire({
-      title: "Đăng xuất thành công",
-      icon: "success",
-      confirmButtonText: "OK",
-    }).then(() => {
-      window.location.href = "/";
+      title: "Bạn có muốn đăng xuất?",
+      text: "Hành động này sẽ đưa bạn trở về trang chủ.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Đồng ý",
+      cancelButtonText: "Hủy",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Cookies.remove("token");
+        Swal.fire({
+          title: "Đăng xuất thành công",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(() => {
+          window.location.href = "/";
+        });
+      }
     });
   };
 
@@ -348,16 +392,26 @@ const User = ({ params }) => {
   return (
     <>
       <div className="container py-5">
-        <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5")}>
+        <div
+          className={cx(
+            "flex",
+            "items-center uppercase  md:text-[16px] text-[10px] mb-5"
+          )}>
           <span className={cx("")}>
-            <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
+            <Link
+              href="/"
+              className={cx(" text-gray-800", "hover:text-[#796752]")}>
               Trang chủ
             </Link>
           </span>
-          <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>
+            &gt;
+          </span>
 
           <span className={cx("")}>
-            <Link href="/components/components-login/user" className={cx("link", "text-red-500")}>
+            <Link
+              href="/components/components-login/user"
+              className={cx("link", "text-red-500")}>
               Hồ sơ người dùng
             </Link>
           </span>
@@ -365,8 +419,7 @@ const User = ({ params }) => {
       </div>
 
       <div
-        className={`${styles.container} lg:flex lg:justify-around phone-sm:mx-auto sm:mx-auto md:mx-auto text-[16px]`}
-      >
+        className={`${styles.container} lg:flex lg:justify-around phone-sm:mx-auto sm:mx-auto md:mx-auto text-[16px]`}>
         <div className={`${styles.sidebar} lg:w-[200px] `}>
           <div className={styles.profilePicture}>
             <img
@@ -387,16 +440,14 @@ const User = ({ params }) => {
             <p>
               <span
                 style={{ cursor: "pointer" }}
-                onClick={() => handleTabClick("profile")}
-              >
+                onClick={() => handleTabClick("profile")}>
                 Hồ Sơ
               </span>
             </p>
             <p>
               <span
                 style={{ cursor: "pointer" }}
-                onClick={() => handleTabClick("ShowLichsu")}
-              >
+                onClick={() => handleTabClick("ShowLichsu")}>
                 Lịch sử mua hàng
               </span>
             </p>
@@ -404,30 +455,27 @@ const User = ({ params }) => {
             <p>
               <span
                 style={{ cursor: "pointer" }}
-                onClick={() => handleTabClick("orderShow")}
-              >
+                onClick={() => handleTabClick("orderShow")}>
                 Trạng thái đơn hàng
               </span>
             </p>
             <p>
               <span
                 style={{ cursor: "pointer" }}
-                onClick={() => handleTabClick("changePassword")}
-              >
+                onClick={() => handleTabClick("changePassword")}>
                 Đổi mật khẩu
               </span>
             </p>
 
-            <p style={{ cursor: "pointer" }}>
-              <Link href={""} onClick={handleLayout}>
+            <p style={{background:"#796752",cursor: "pointer" }}>
+              <Link href={""} className="text-white" onClick={handleLayout}>
                 Đăng xuất
               </Link>
             </p>
           </div>
         </div>
         <div
-          className={`${styles.profileContent} ml-[30px] phone-sm:ml-0 sm:ml-0 tablet:ml-0 phone-lg:ml-0 `}
-        >
+          className={`${styles.profileContent} ml-[30px] phone-sm:ml-0 sm:ml-0 tablet:ml-0 phone-lg:ml-0 `}>
           {activeTab === "profile" && (
             <div className=" phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%]">
               <p
@@ -436,8 +484,7 @@ const User = ({ params }) => {
                   color: "black",
                   marginBottom: "15px",
                   textAlign: "center",
-                }}
-              >
+                }}>
                 Hồ Sơ Người Dùng
               </p>
               <form onSubmit={handleSave}>
@@ -472,7 +519,12 @@ const User = ({ params }) => {
                     value={userData.email}
                     onChange={handleChange}
                     disabled={!isEditing}
-                  />
+                  />{!/^[\w.%+-]+@gmail\.com$/.test(userData.email) &&
+                    isEditing && (
+                      <small style={{ color: "red" }}>
+                        Email phải có định dạng @gmail.com
+                      </small>
+                    )}
                 </div>
                 <div className={styles.formGroup}>
                   <label htmlFor="adress">Địa chỉ:</label>
@@ -494,7 +546,11 @@ const User = ({ params }) => {
                     value={userData.dien_thoai}
                     onChange={handleChange}
                     disabled={!isEditing}
-                  />
+                  />{!/^0\d{9}$/.test(userData.dien_thoai) && isEditing && (
+                    <small style={{ color: "red" }}>
+                      Số điện thoại phải có 10 số và bắt đầu bằng 0
+                    </small>
+                  )}
                 </div>
 
                 {isEditing ? (
@@ -509,10 +565,7 @@ const User = ({ params }) => {
                           onChange={handleFileChange}
                         />
                       </div>
-                      <button
-                        type="submit"
-                        className="save-button"
-                      >
+                      <button type="submit" className="save-button">
                         Cập nhật
                       </button>
                     </div>
@@ -522,8 +575,7 @@ const User = ({ params }) => {
                     <button
                       type="button"
                       onClick={() => setIsEditing(true)}
-                      className="edit-button"
-                    >
+                      className="edit-button">
                       Chỉnh sửa
                     </button>
                   </div>
@@ -533,8 +585,7 @@ const User = ({ params }) => {
           )}
           {activeTab === "ShowLichsu" && (
             <div
-              className={`${styles.ShowLichsu} phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%] phone-sm:mt-[5%] tablet:mt-[5%] phone-lg:mt-[5%]`}
-            >
+              className={`${styles.ShowLichsu} phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%] phone-sm:mt-[5%] tablet:mt-[5%] phone-lg:mt-[5%]`}>
               <div className="text-[12px] lg:text-[16px]">
                 <h2 className="lg:text-[22px] phone-sm:text-[15px] sm:text-[15px] md:text-[16px]">
                   Lịch sử mua hàng
@@ -545,8 +596,7 @@ const User = ({ params }) => {
                       {currentItems.map((order) => (
                         <li key={order._id}>
                           <span
-                            className={`${styles.trh} text-red-500 text-[12px] lg:text-[16px] lg:hidden tablet:hidden phone-lg:hidden mb-10px`}
-                          >
+                            className={`${styles.trh} text-red-500 text-[12px] lg:text-[16px] lg:hidden tablet:hidden phone-lg:hidden mb-10px`}>
                             {order.trang_thai}
                           </span>
                           <div className={`${styles.orderHeader}`}>
@@ -554,28 +604,34 @@ const User = ({ params }) => {
                               Mã Đơn Hàng: {order._id}
                             </p>
                             <span
-                              className={`${styles.trh} text-[12px] lg:text-[16px] phone-sm:hidden`}
-                            >
+                              className={`${styles.trh} text-[12px] lg:text-[16px] phone-sm:hidden`}>
                               {order.trang_thai}
                             </span>
                           </div>
 
                           <p className="text-[12px] lg:text-[16px]">
                             Thời gian đặt hàng:{" "}
-                            {new Date(order.thoi_gian_tao).toLocaleString("vi-VN", {
-                              timeZone: "Asia/Ho_Chi_Minh",
-                            })}
+                            {new Date(order.thoi_gian_tao).toLocaleString(
+                              "vi-VN",
+                              {
+                                timeZone: "Asia/Ho_Chi_Minh",
+                              }
+                            )}
                           </p>
 
                           {order.chiTietDonHangs.map((detail) => (
-                            <div key={detail._id} className={styles.productCard}>
+                            <div
+                              key={detail._id}
+                              className={styles.productCard}>
                               <img
                                 src={`http://localhost:5000/images/${detail.product.hinh_anh}`}
                                 alt={detail.product.ten}
                                 className={`${styles.productImage} phone-sm:w-[50px]`}
                               />
-                              <div className={`${styles.productInfo} text-[12px] lg:text-[16px]`}>
-                                <p className={`${styles.productName} text-[12px] lg:text-[16px]`}>
+                              <div
+                                className={`${styles.productInfo} text-[12px] lg:text-[16px]`}>
+                                <p
+                                  className={`${styles.productName} text-[12px] lg:text-[16px]`}>
                                   {detail.product.ten}
                                 </p>
                                 <div className="flex justify-between phone-sm:block">
@@ -585,7 +641,10 @@ const User = ({ params }) => {
                                   <p>
                                     Giá:{" "}
                                     <strong>
-                                      {detail.product.gia_giam.toLocaleString("vi-VN")}₫
+                                      {detail.product.gia_giam.toLocaleString(
+                                        "vi-VN"
+                                      )}
+                                      ₫
                                     </strong>
                                   </p>
                                 </div>
@@ -604,8 +663,7 @@ const User = ({ params }) => {
                               <div className="flex space-x-2">
                                 <Link
                                   href={`/components/product-detail/${order.chiTietDonHangs[0]?.product._id}`}
-                                  className="bg-blue-500 text-white px-1 py-0.5 sm:px-2 sm:py-1 rounded hover:bg-blue-600 transition-colors text-xs sm:text-sm"
-                                >
+                                  className="bg-blue-500 text-white px-1 py-0.5 sm:px-2 sm:py-1 rounded hover:bg-blue-600 transition-colors text-xs sm:text-sm">
                                   Mua Lại
                                 </Link>
                               </div>
@@ -622,7 +680,6 @@ const User = ({ params }) => {
                       containerClassName={styles.pagination}
                       previousLinkClassName={styles.pagination__link}
                       nextLinkClassName={styles.pagination__link}
-                     
                     />
                   </>
                 ) : (
@@ -634,8 +691,7 @@ const User = ({ params }) => {
 
           {activeTab === "orderShow" && (
             <div
-              className={`${styles.orderShow} phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%] phone-sm:mt-[5%]  tablet:mt-[5%] phone-lg:mt-[5%]`}
-            >
+              className={`${styles.orderShow} phone-sm:mx-[10%] sm:mx-[10%] tablet:mx-[10%] phone-lg:mx-[10%] phone-sm:mt-[5%]  tablet:mt-[5%] phone-lg:mt-[5%]`}>
               <div className="  text-[12px]  lg:text-[16px]">
                 <h2 className="lg:text-[22px] phone-sm:text-[15px] sm:text-[15px] md:text-[16px]">
                   Trạng thái đơn hàng
@@ -645,8 +701,7 @@ const User = ({ params }) => {
                     {orderShow.map((order) => (
                       <li key={order.id}>
                         <span
-                          className={`${styles.trh} text-red-500 text-[12px] lg:text-[16px] lg:hidden tablet:hidden phone-lg:hidden mb-10px`}
-                        >
+                          className={`${styles.trh} text-red-500 text-[12px] lg:text-[16px] lg:hidden tablet:hidden phone-lg:hidden mb-10px`}>
                           {order.trang_thai}
                         </span>
                         <div className={`${styles.orderHeader}`}>
@@ -654,17 +709,19 @@ const User = ({ params }) => {
                             Mã Đơn Hàng: {order._id}
                           </p>
                           <span
-                            className={`${styles.trh} text-[12px] lg:text-[16px] phone-sm:hidden`}
-                          >
+                            className={`${styles.trh} text-[12px] lg:text-[16px] phone-sm:hidden`}>
                             {order.trang_thai}
                           </span>
                         </div>
 
                         <p className=" text-[12px]  lg:text-[16px]">
                           Thời gian đặt hàng:{" "}
-                          {new Date(order.thoi_gian_tao).toLocaleString("vi-VN", {
-                            timeZone: "Asia/Ho_Chi_Minh",
-                          })}
+                          {new Date(order.thoi_gian_tao).toLocaleString(
+                            "vi-VN",
+                            {
+                              timeZone: "Asia/Ho_Chi_Minh",
+                            }
+                          )}
                         </p>
                         <p className=" text-[12px]  lg:text-[16px]">
                           Địa chỉ: {order.dia_chi}
@@ -713,8 +770,7 @@ const User = ({ params }) => {
                           {order.chiTietDonHangs.map((detail) => (
                             <div
                               key={detail._id}
-                              className="border border-gray-300 p-4 mb-4 rounded-lg shadow-sm"
-                            >
+                              className="border border-gray-300 p-4 mb-4 rounded-lg shadow-sm">
                               <p className="font-semibold">
                                 Tên Sản Phẩm: {detail.product.ten}
                               </p>
@@ -731,7 +787,10 @@ const User = ({ params }) => {
                               </p>
                               <p className="mt-2">
                                 <strong>Giá:</strong>{" "}
-                                {detail.product.gia_giam.toLocaleString("vi-VN")}₫
+                                {detail.product.gia_giam.toLocaleString(
+                                  "vi-VN"
+                                )}
+                                ₫
                               </p>
                             </div>
                           ))}
@@ -742,14 +801,12 @@ const User = ({ params }) => {
                             style={{
                               margin: "0px 5px",
                               color: "black",
-                            }}
-                          >
+                            }}>
                             <strong>{order.phi_ship}</strong>
                           </span>{" "}
                         </p>
                         <div
-                          className={`${styles.cancel} text-[12px]  lg:text-[16px] flex justify-between phone-sm:block`}
-                        >
+                          className={`${styles.cancel} text-[12px]  lg:text-[16px] flex justify-between phone-sm:block`}>
                           <p>
                             Tổng Thanh Toán:
                             <span
@@ -757,8 +814,7 @@ const User = ({ params }) => {
                                 fontSize: "20px",
                                 margin: "0px 5px",
                                 color: "red",
-                              }}
-                            >
+                              }}>
                               <strong>
                                 {order.tong_tien.toLocaleString("vi-VN")}₫
                               </strong>
@@ -767,10 +823,7 @@ const User = ({ params }) => {
                           {order.trang_thai === "Chờ xác nhận" && (
                             <button
                               className="btn btn-danger phone-sm:ml-[50%]"
-                              onClick={() =>
-                                huyDonHang(order._id)
-                              }
-                            >
+                              onClick={() => huyDonHang(order._id)}>
                               Hủy đơn hàng
                             </button>
                           )}
@@ -792,8 +845,7 @@ const User = ({ params }) => {
                   color: "black",
                   marginBottom: "15px",
                   textAlign: "center",
-                }}
-              >
+                }}>
                 Đổi Mật Khẩu
               </p>
               <form onSubmit={handleSubmitPasswordChange}>
@@ -811,8 +863,7 @@ const User = ({ params }) => {
                     />
                     <span
                       onClick={() => togglePasswordVisibility("mat_khau")}
-                      className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 cursor-pointer"
-                    >
+                      className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 cursor-pointer">
                       {showPassword.mat_khau ? <FaEyeSlash /> : <FaEye />}
                     </span>
                   </div>
@@ -831,8 +882,7 @@ const User = ({ params }) => {
                     />
                     <span
                       onClick={() => togglePasswordVisibility("mat_khau_moi")}
-                      className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 cursor-pointer"
-                    >
+                      className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 cursor-pointer">
                       {showPassword.mat_khau_moi ? <FaEyeSlash /> : <FaEye />}
                     </span>
                   </div>
@@ -854,9 +904,10 @@ const User = ({ params }) => {
                       className="pr-8"
                     />
                     <span
-                      onClick={() => togglePasswordVisibility("xac_nhan_mat_khau")}
-                      className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 cursor-pointer"
-                    >
+                      onClick={() =>
+                        togglePasswordVisibility("xac_nhan_mat_khau")
+                      }
+                      className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 cursor-pointer">
                       {showPassword.xac_nhan_mat_khau ? (
                         <FaEyeSlash />
                       ) : (
