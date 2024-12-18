@@ -93,12 +93,19 @@ export default function ThemSanPham() {
   };
 
   const handleFileChange = (e) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      hinh_anh: e.target.files[0],
-    }));
+    const file = e.target.files[0];
+    if (file) {
+      setFormData((prevData) => ({
+        ...prevData,
+        hinh_anh: file,
+      }));
+      // Xóa lỗi liên quan đến hình ảnh khi người dùng chọn file
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        hinh_anh: "",
+      }));
+    }
   };
-
   const validateForm = () => {
     const newErrors = {};
     const {
@@ -118,8 +125,11 @@ export default function ThemSanPham() {
       newErrors.gia_san_pham = "Vui lòng nhập giá sản phẩm hợp lệ.";
     }
     if (!ma_san_pham) newErrors.ma_san_pham = "Vui lòng nhập mã sản phẩm.";
-    if (!so_luong) newErrors.so_luong = "Vui lòng nhập số lượng.";
-    if (!id_thuong_hieu) newErrors.id_thuong_hieu = "Vui lòng chọn thương hiệu.";
+    if (!so_luong || isNaN(so_luong) || so_luong <= 0) {
+      newErrors.so_luong = "Vui lòng nhập số lượng hợp lệ.";
+    }
+    if (!id_thuong_hieu)
+      newErrors.id_thuong_hieu = "Vui lòng chọn thương hiệu.";
     if (!hinh_anh) newErrors.hinh_anh = "Vui lòng chọn hình ảnh sản phẩm.";
     if (!mo_ta) newErrors.mo_ta = "Vui lòng nhập mô tả sản phẩm.";
     setErrors(newErrors);
@@ -173,7 +183,7 @@ export default function ThemSanPham() {
         confirmButtonText: "OK",
       }).then(() => {
         window.location.href = "/admin/components/quanlyadmin/sanpham";
-      })
+      });
     } catch (error) {
       console.error("Error adding product:", error.message);
       Swal.fire({
@@ -197,44 +207,44 @@ export default function ThemSanPham() {
         <div className={styles.bg}>
           <form onSubmit={handleSubmit}>
             <div className={styles.container1}>
-            {/* Dropdown Thương hiệu (Brand) */}
-            <div className={styles.formGroup}>
-            <label htmlFor="id_thuong_hieu">Thương hiệu</label>
-            <select
-              id="id_thuong_hieu"
-              name="id_thuong_hieu"
-              value={formData.id_thuong_hieu}
-              onChange={handleChange}
-            >
-              <option value="">Chọn thương hiệu</option>
-              {brands.map((brand) => (
-                <option key={brand._id} value={brand._id}>
-                  {brand.thuong_hieu}
-                </option>
-              ))}
-            </select>
-            {errors.id_thuong_hieu && (
-              <span className="text-danger">{errors.id_thuong_hieu}</span>
-            )}
-          </div>
+              {/* Dropdown Thương hiệu (Brand) */}
+              <div className={styles.formGroup}>
+                <label htmlFor="id_thuong_hieu">Thương hiệu</label>
+                <select
+                  id="id_thuong_hieu"
+                  name="id_thuong_hieu"
+                  value={formData.id_thuong_hieu}
+                  onChange={handleChange}
+                >
+                  <option value="">Chọn thương hiệu</option>
+                  {brands.map((brand) => (
+                    <option key={brand._id} value={brand._id}>
+                      {brand.thuong_hieu}
+                    </option>
+                  ))}
+                </select>
+                {errors.id_thuong_hieu && (
+                  <span className="text-danger">{errors.id_thuong_hieu}</span>
+                )}
+              </div>
 
-          {/* Dropdown Danh Mục (Category) */}
-          <div className={styles.formGroup}>
-            <label htmlFor="id_danh_muc">Danh Mục</label>
-            <select
-              id="id_danh_muc"
-              name="id_danh_muc"
-              value={formData.id_danh_muc}
-              onChange={handleChange}
-            >
-              <option value="">Chọn danh mục</option>
-              {categories.map((category) => (
-                <option key={category._id} value={category._id}>
-                  {category.ten_danh_muc}
-                </option>
-              ))}
-            </select>
-          </div>
+              {/* Dropdown Danh Mục (Category) */}
+              <div className={styles.formGroup}>
+                <label htmlFor="id_danh_muc">Danh Mục</label>
+                <select
+                  id="id_danh_muc"
+                  name="id_danh_muc"
+                  value={formData.id_danh_muc}
+                  onChange={handleChange}
+                >
+                  <option value="">Chọn danh mục</option>
+                  {categories.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.ten_danh_muc}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <div className={styles.formGroup}>
                 <label htmlFor="ten_san_pham">Tên sản phẩm</label>
                 <input
@@ -285,8 +295,6 @@ export default function ThemSanPham() {
                 />
               </div>
 
-              
-
               <div className={styles.formGroup}>
                 <label htmlFor="ma_san_pham">Mã sản phẩm</label>
                 <input
@@ -298,6 +306,19 @@ export default function ThemSanPham() {
                 />
                 {errors.ma_san_pham && (
                   <span className="text-danger">{errors.ma_san_pham}</span>
+                )}
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="so_luong">Số lượng</label>
+                <input
+                  type="text"
+                  id="so_luong"
+                  name="so_luong"
+                  value={formData.so_luong}
+                  onChange={handleChange}
+                />
+                {errors.so_luong && (
+                  <span className="text-danger">{errors.so_luong}</span>
                 )}
               </div>
               <div className={styles.formGroup}>
@@ -319,9 +340,6 @@ export default function ThemSanPham() {
                   value={formData.xuat_xu}
                   onChange={handleChange}
                 />
-                {errors.xuat_xu && (
-                  <span className="text-danger">{errors.xuat_xu}</span>
-                )}
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="gioi_tinh">Giới tính</label>
@@ -333,19 +351,7 @@ export default function ThemSanPham() {
                   onChange={handleChange}
                 />
               </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="so_luong">Số lượng</label>
-                <input
-                  type="text"
-                  id="so_luong"
-                  name="so_luong"
-                  value={formData.so_luong}
-                  onChange={handleChange}
-                />
-                {errors.so_luong && (
-                  <span className="text-danger">{errors.so_luong}</span>
-                )}
-              </div>
+
               <div className={styles.formGroup}>
                 <label htmlFor="loai">Loại</label>
                 <input
