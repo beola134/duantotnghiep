@@ -8,8 +8,8 @@ import Link from "next/link";
 
 export default function SuaThuongHieu() {
     const [productName, setProductName] = useState("");
-    const [productImage, setProductImage] = useState(null);
-    const [productLogo, setProductLogo] = useState(null);
+    const [productImage, setProductImage] = useState("");
+    const [productLogo, setProductLogo] = useState("");
     const [description, setDescription] = useState("");
     const router = useRouter();
     const { id } = useParams();
@@ -23,6 +23,8 @@ export default function SuaThuongHieu() {
                 const data = await response.json();
                 setProductName(data.th.thuong_hieu);
                 setDescription(data.th.mo_ta);
+                setProductImage(data.th.hinh_anh2);
+                setProductLogo(data.th.hinh_anh);
                 
             } else {
                 Swal.fire("Error", "Không tìm thấy thương hiệu!", "error");
@@ -89,6 +91,7 @@ export default function SuaThuongHieu() {
                             </div>
                             <div className={styles.formGroup}>
                                 <label htmlFor="product-image">Ảnh thương hiệu</label>
+                                <img src={`http://localhost:5000/images/${productImage}`} alt={productName} style={{width: "70px",height:"70px"}}/>
                                 <input
                                     type="file"
                                     id="product-image"
@@ -98,6 +101,7 @@ export default function SuaThuongHieu() {
                             </div>
                             <div className={styles.formGroup}>
                                 <label htmlFor="product-logo">Ảnh thương hiệu 2 (logo)</label>
+                                <img src={`http://localhost:5000/images/${productLogo}`} style={{width: "70px",height:"70px"}} />
                                 <input
                                     type="file"
                                     id="product-logo"
