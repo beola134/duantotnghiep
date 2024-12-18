@@ -44,5 +44,9 @@ router.get("/getTopProducts", ThongkeController.getSanPhamBanChayNhat);
 //getDoanhThuDonHangTheoThoiGian
 //http://localhost:5000/thongke/getTotalRevenueByTime
 router.get("/getTotalRevenueByTime", ThongkeController.getDoanhThuDonHangTheoThoiGian);
+
+//thonng kê tong so luong nguoi_dung trong tuan
+//http://localhost:5000/thongke/getTotalUsersInWeek
+router.get("/getTotalUsersInWeek", ThongkeController.getNewUsersThisWeek);
 module.exports = router;
 

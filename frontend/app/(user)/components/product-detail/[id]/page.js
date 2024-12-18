@@ -3047,8 +3047,9 @@ export default function Detail({ params }) {
                       </p>
     
                       {/* Hiển thị câu trả lời nếu có */}
+                      
                       {comment.tra_loi_binh_luan && comment.tra_loi_binh_luan.trim() !== "" && (
-                        <div className="reply mt-4 bg-gray-100 p-4 border-[1px] border-gray-200 rounded-lg">
+                        <div className=" ml-9 reply mt-4 bg-gray-100 p-4 border-[1px] border-gray-200 rounded-lg">
                           <div className="flex items-center text-sm text-gray-600 mb-2">
                             <span className="name font-bold">{comment.traloi_user?.ten_dang_nhap}</span>
                             <span className="date ml-4 text-gray-400">

@@ -101,9 +101,6 @@ export default function AdminStatistics() {
     },
   ],
 };
-// ...existing code...
-
-
   //fect dữ liệu
   const [products, setProducts] = useState([]);
   const [productsCount, setProductsCount] = useState([]);
@@ -176,13 +173,13 @@ export default function AdminStatistics() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/thongke/getTotalProductsCount"
+          "http://localhost:5000/thongke/getTotalUsersInWeek"
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        setProductsCount(data.totalProductsCount);
+        setProductsCount(data.totalUsersInWeek);
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -281,7 +278,7 @@ export default function AdminStatistics() {
           <i className={cx("bx bx-cube", "bx")}></i>
           <span className={cx("text")}>
             <h3>{productsCount}</h3>
-            <p>Số Lượng Sản Phẩm</p>
+            <p>Người dùng trong tuần</p>
           </span>
         </li>
         <li>
@@ -304,7 +301,7 @@ export default function AdminStatistics() {
           <i className={cx("bx", "bx bxs-group")}></i>
           <span className={cx("text")}>
             <h3>{users}</h3>
-            <p>Người Dùng</p>
+            <p>Tổng người dùng</p>
           </span>
         </li>
         <li>
@@ -358,7 +355,7 @@ export default function AdminStatistics() {
                   <tr>
                     <th>ID</th>
                     <th>Tên khách hàng</th>
-                    <th>Email</th>
+                    <th className="text-center">Email</th>
                     <th>Số điện thoại</th>
                   </tr>
                 </thead>
