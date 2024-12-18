@@ -19,11 +19,16 @@ export default function DonghoNam() {
   const searchParams = useSearchParams();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+  const toggleDropdown = () => {
+      setIsDropdownVisible((prevState) => !prevState);
+    };
 
+ 
   // Bộ lọc mặc định cho đồng hồ nam
   const [filter, setFilter] = useState({
     muc_gia: "",
@@ -53,7 +58,7 @@ export default function DonghoNam() {
         setLoading(true);
         try {
           const response = await fetch(
-            `http://localhost:5000/filterTreoTuong/5307799c-55ae-4bfd-83d4-3ed6e219ff5f?${query}`,
+            `http://localhost:5000/product/filterTreoTuong/5307799c-55ae-4bfd-83d4-3ed6e219ff5f?${query}`,
             {
               method: "GET",
               headers: {
@@ -90,7 +95,7 @@ export default function DonghoNam() {
     try {
       const queryParams = new URLSearchParams({ ...filter, page: currentPage });
       const response = await fetch(
-         `http://localhost:5000/filterTreoTuong/5307799c-55ae-4bfd-83d4-3ed6e219ff5f?${queryParams}`
+         `http://localhost:5000/product/filterTreoTuong/5307799c-55ae-4bfd-83d4-3ed6e219ff5f?${queryParams}`
       );
       if (!response.ok) {
         throw new Error("Lỗi không thể tải dữ liệu");
@@ -203,11 +208,13 @@ export default function DonghoNam() {
               >
                 <div className={cx("clear")} />
                 <div className={cx("all-summary")}>
-                  <div className={cx("summary-content-filter", "description")}>
+                  <div className={cx("summary-content-filter ","mt-7 ",`overflow-hidden lg:overflow-visible ${
+                    isExpanded ? "h-auto" : "h-[75px]"
+                  } lg:h-auto`)}>
                     <div
                       className={cx(
                         "flex",
-                        "items-center uppercase md:text-[16px] text-[10px]"
+                        "items-center uppercase md:text-[16px] text-[10px] mb-4"
                       )}
                     >
                       <span className={cx("")}>
@@ -265,7 +272,9 @@ export default function DonghoNam() {
                       sắc...đều sẽ khiến bạn hài lòng.
                     </p>
                   </div>
-                  <div className={cx("view-more")}>Xem thêm</div>
+                  <div className={`${styles.viewMore} sm:block sm:h-auto lg:hidden `} onClick={toggleDescription}>
+                    <span onClick={toggleDescription}>{isExpanded ? "Thu gọn" : "Xem thêm"}</span>
+                  </div>
                 </div>
                 {selectedFilter.length > 0 && (
                   <div className={styles.choosedfilter}>
