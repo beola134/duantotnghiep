@@ -38,7 +38,7 @@ export default function TrangsucCK() {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "https://wristlybackend-e89d41f05169.herokuapp.com/product/getProductByCate/e21693ed-8073-4739-af67-70064aed8d60"
+          "http://localhost:5000/getProductByCate/e21693ed-8073-4739-af67-70064aed8d60"
         );
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
@@ -161,7 +161,7 @@ export default function TrangsucCK() {
                                       href={`/components/product-detail/${_id}`}
                                     >
                                       <img
-                                        src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${hinh_anh}`}
+                                        src={`http://localhost:5000/images/${hinh_anh}`}
                                         alt={ten}
                                         width="300"
                                         height="363"

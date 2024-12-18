@@ -17,7 +17,7 @@ const ho_so_admin = ({ params }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/users/${id}`);
+        const res = await fetch(`http://localhost:5000/users/${id}`);
         const data = await res.json();
         setUserData(data.user);
       } catch (error) {
@@ -37,6 +37,7 @@ const ho_so_admin = ({ params }) => {
   };
 
   const handleSave = async (e) => {
+    e.preventDefault();
     const formData = new FormData();
     formData.append("ten_dang_nhap", userData.ten_dang_nhap);
     formData.append("ho_ten", userData.ho_ten);
@@ -45,7 +46,7 @@ const ho_so_admin = ({ params }) => {
       formData.append("hinh_anh", avatarFile);
     }
     try {
-      const res = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/users/update/${id}`, {
+      const res = await fetch(`http://localhost:5000/users/update/${id}`, {
         method: "PUT",
         body: formData,
       });
@@ -56,7 +57,9 @@ const ho_so_admin = ({ params }) => {
           text: "Cập nhật thông tin thành công",
           icon: "success",
           confirmButtonText: "OK",
-        });
+        }).then(() => {
+          window.location.reload();
+        });      
         setIsEditing(false);
         setAvatarFile(null);
       } else {
@@ -96,7 +99,7 @@ const ho_so_admin = ({ params }) => {
               src={
                 userData.hinh_anh.startsWith("http")
                   ? userData.hinh_anh
-                  : `https://wristlybackend-e89d41f05169.herokuapp.com/images/${userData.hinh_anh}`
+                  : `http://localhost:5000/images/${userData.hinh_anh}`
               }
               width="300"
               height="363"

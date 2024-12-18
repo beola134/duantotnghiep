@@ -41,7 +41,7 @@ export default function DanhMuc({ params }) {
         page: currentPage,
       });
 
-      const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/filtersanphamdongho?${queryParams}`);
+      const response = await fetch(`http://localhost:5000/product/filtersanphamdongho?${queryParams}`);
       if (!response.ok) {
         throw new Error("Lỗi không thể tải dữ liệu");
       }
@@ -2113,7 +2113,7 @@ const toggleDropdown = () => {
                           <Link href={`/components/product-detail/${_id}`}>
                             <img
                               className="max-h-[290px]"
-                              src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${hinh_anh}`}
+                              src={`http://localhost:5000/images/${hinh_anh}`}
                               alt={ten}
                               width="300"
                               height="363"

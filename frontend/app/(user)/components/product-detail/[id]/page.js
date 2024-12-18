@@ -61,7 +61,7 @@ export default function Detail({ params }) {
     if (product && product._id) {
       const fetchProductQuantity = async () => {
         try {
-          const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/check/${product._id}?quantity=${so_luong}`);
+          const response = await fetch(`http://localhost:5000/product/check/${product._id}?quantity=${so_luong}`);
           if (!response.ok) {
             const errorData = await response.json();
             throw new Error(`Error fetching product quantity: ${JSON.stringify(errorData)}`);
@@ -138,7 +138,7 @@ export default function Detail({ params }) {
       }
 
       // Check product quantity from server
-      const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/check/${product._id}?quantity=${so_luong}`);
+      const response = await fetch(`http://localhost:5000/product/check/${product._id}?quantity=${so_luong}`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -171,7 +171,7 @@ export default function Detail({ params }) {
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/chitietsp/${params.id}`);
+        const response = await fetch(`http://localhost:5000/product/chitietsp/${params.id}`);
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -192,7 +192,7 @@ export default function Detail({ params }) {
   useEffect(() => {
     const fetchRelated = async () => {
       try {
-        const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/related/${params.id}`);
+        const response = await fetch(`http://localhost:5000/product/related/${params.id}`);
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -260,17 +260,16 @@ export default function Detail({ params }) {
   // thêm bình luận sản phẩm theo id người dùng và id sản phẩm
   // kiểm tra người dùng đã mua sản phẩm chưa mới được bình luận sản phẩm
   const addComment = async () => {
-    if (!user) {
-      if (commentText && star) {
+    if (user) {
+      if (commentText) {
         try {
-          const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/comment/add`, {
+          const response = await fetch(`http://localhost:5000/comment/add`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
               noi_dung: commentText,
-              sao: star,
               id_nguoi_dung: user._id,
               id_san_pham: params.id,
             }),
@@ -289,7 +288,6 @@ export default function Detail({ params }) {
           console.log(data.message);
 
           setCommentText("");
-          setStar(0);
           Swal.fire({
             icon: "success",
             title: "Bình luận thành công!",
@@ -303,20 +301,20 @@ export default function Detail({ params }) {
       } else {
         Swal.fire({
           icon: "warning",
-          title: "Vui lòng đăng nhập để bình luận",
-        }).then(() => {
-          if (typeof window !== "undefined" && params?.id) {
-            const currentUrl = encodeURIComponent(`/components/product-detail/${params.id}`);
-            window.location.href = `/components/components-login/login?redirect=${currentUrl}`;
-          } else {
-            window.location.href = `/components/components-login/login`;
-          }
+          title: "Vui lòng nhập bình luận!",
         });
       }
     } else {
       Swal.fire({
         icon: "warning",
         title: "Vui lòng đăng nhập để bình luận",
+      }).then(() => {
+        if (typeof window !== "undefined" && params?.id) {
+          const currentUrl = encodeURIComponent(`/components/product-detail/${params.id}`);
+          window.location.href = `/components/components-login/login?redirect=${currentUrl}`;
+        } else {
+          window.location.href = `/components/components-login/login`;
+        }
       });
     }
   };
@@ -325,7 +323,7 @@ export default function Detail({ params }) {
     const getAllComment = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/comment/getAll/${params.id}?page=${currentPage}`);
+        const response = await fetch(`http://localhost:5000/comment/getAll/${params.id}?page=${currentPage}`);
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");
         }
@@ -419,7 +417,7 @@ export default function Detail({ params }) {
           <div className="relative left-0 text-center mb-5">
             <img
               className={`${styles.imgResponsive} ${styles.bkProductImage}`}
-              src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${product.hinh_anh}`}
+              src={`http://localhost:5000/images/${product.hinh_anh}`}
               alt={product.ten}
               width="398"
               height="481"
@@ -479,7 +477,7 @@ export default function Detail({ params }) {
             <div className="text-center mb-[10px]">
               <img
                 className={styles.imageGiftCat}
-                src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${cate.hinh_anh}`}
+                src={`http://localhost:5000/images/${cate.hinh_anh}`}
                 alt={cate.thuong_hieu}
               />
             </div>
@@ -2915,7 +2913,7 @@ export default function Detail({ params }) {
                                   width="300"
                                   height="363"
                                   style={{ display: "block", opacity: 1 }}
-                                  src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${hinh_anh}`}
+                                  src={`http://localhost:5000/images/${hinh_anh}`}
                                 />
                               </Link>
                             </figure>
@@ -2980,151 +2978,154 @@ export default function Detail({ params }) {
 
       {/* Đánh giá bình luận */}
       <div id="comments" className="container mx-auto px-4 py-4">
-        <div className="pb-1 text-[23px] relative">
-          <span>Đánh giá - Bình luận</span>
-        </div>
-
-        <div className="comments">
-          <div className="mb-[15px] mt-[11px]">
-            <span>
-              Có <strong>{comments.length}</strong> bình luận, đánh giá
-            </span>
-            <strong> về {product.ten}</strong>
-          </div>
-          <form
-            name="comment-add-form"
-            id="comment-add-form"
-            className="formComment"
-            onSubmit={(e) => {
-              e.preventDefault();
-              addComment();
-            }}
-          >
-            <label className="labelForm block font-semibold text-sm mb-4">Nhận xét và đánh giá</label>
-
-            <div className={styles.ratingArea}>
-              <span id="ratings" className="cursor-pointer">
-                {[1, 2, 3, 4, 5].map((value) => (
-                  <i
-                    key={value}
-                    className={`${styles.iconV1} ${value <= star ? styles.starOn : styles.starOff}`}
-                    onClick={() => setStar(value)}
-                    value={value}
-                  ></i>
-                ))}
-              </span>
-              <span className={styles.ratingNote}>Nhấn vào đây để đánh giá</span>
-            </div>
-
-            <div className="textarea mb-4">
-              <textarea
-                name="content"
-                id="cmt-content"
-                placeholder="Viết bình luận của bạn..."
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                className="w-full p-4 border border-gray-300 rounded-md min-h-[123px] resize-none text-sm text-gray-700"
-              ></textarea>
-            </div>
-
-            <input
-              type="submit"
-              className="bg-[#796752] text-white px-6 py-2 rounded transition duration-300 hover:bg-[#5a4a3d] cursor-pointer"
-              value="Gửi bình luận"
-            />
-
-            <div className="mt-6 bg-white p-4 border-2 border-gray-200 rounded-lg">
-              {Array.isArray(comments) && comments.length > 0 ? (
-                <>
-                  {comments.map((comment, index) => (
-                    <div key={index} className="comment flex items-start py-4 border-b border-gray-200 mb-6">
-                      <div className="profile mr-4">
-                        <img
-                          src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${comment.user?.hinh_anh}`}
-                          alt="Profile Picture"
-                          className="w-12 h-12 rounded-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <div className=" flex items-center text-sm text-gray-600 mb-2">
-                          <span className="name font-bold">{comment.user?.ten_dang_nhap || "Ẩn danh"}</span>
-                          <span className="date ml-4 text-gray-400">
-                            {new Intl.DateTimeFormat("vi-VN", {
-                              year: "numeric",
-                              month: "2-digit",
-                              day: "2-digit",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              second: "2-digit",
-                            }).format(new Date(comment.ngay_binh_luan))}
-                          </span>
-                          <div className="rating flex ml-2 mb-[5px]">
-                            {Array.from({ length: 5 }, (_, i) => (
-                              <FontAwesomeIcon
-                                key={i}
-                                icon={i < comment.sao ? solidStar : regularStar}
-                                className="star text-yellow-400 text-sm ml-1"
-                              />
-                            ))}
-                          </div>
-                        </div>
-                        <p className="text-sm text-gray-700 mt-6 bg-white p-4 border-[1px] border-gray-200 rounded-lg">
-                          {comment.noi_dung}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-
-                  <div className="pagination flex justify-center items-center mt-6">
-                    <span
-                      title="First page"
-                      className={`cursor-pointer px-4 py-2 border rounded-md ${
-                        currentPage === 1 ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
-                      }`}
-                      onClick={() => currentPage > 1 && handlePageChange(1)}
-                    >
-                      ‹‹
-                    </span>
-
-                    <span
-                      className={`cursor-pointer px-4 py-2 border rounded-md ${
-                        currentPage === 1 ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
-                      }`}
-                      onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                    >
-                      ‹
-                    </span>
-
-                    <span className="currentPage px-4 py-2">{`Trang ${currentPage} / ${totalPages || 1}`}</span>
-
-                    <span
-                      className={`cursor-pointer px-4 py-2 border rounded-md ${
-                        currentPage === totalPages ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
-                      }`}
-                      onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
-                    >
-                      ›
-                    </span>
-
-                    <span
-                      className={`cursor-pointer px-4 py-2 border rounded-md ${
-                        currentPage === totalPages ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
-                      }`}
-                      onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
-                    >
-                      ››
-                    </span>
-                  </div>
-                </>
-              ) : (
-                <p className="text-gray-500 text-sm">
-                  Mời bạn nhận xét về sản phẩm, hãy bình luận có văn hoá để tránh bị khoá tài khoản.
-                </p>
-              )}
-            </div>
-          </form>
-        </div>
+      <div className="pb-1 text-[23px] relative">
+        <span>Đánh giá - Bình luận</span>
       </div>
+      <div className="comments">
+        <div className="mb-[15px] mt-[11px]">
+          <span>
+            Có <strong>{comments.length}</strong> bình luận, đánh giá
+          </span>
+          <strong> về {product.ten}</strong>
+        </div>
+        <form
+          name="comment-add-form"
+          id="comment-add-form"
+          className="formComment"
+          onSubmit={(e) => {
+            e.preventDefault();
+            addComment();
+          }}
+        >
+          <label className="labelForm block font-semibold text-sm mb-4">Nhận xét và đánh giá</label>
+    
+          <div className="textarea mb-4">
+            <textarea
+              name="content"
+              id="cmt-content"
+              placeholder="Viết bình luận của bạn..."
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              className="w-full p-4 border border-gray-300 rounded-md min-h-[123px] resize-none text-sm text-gray-700"
+            ></textarea>
+          </div>
+    
+          <input
+            type="submit"
+            className="bg-[#796752] text-white px-6 py-2 rounded transition duration-300 hover:bg-[#5a4a3d] cursor-pointer"
+            value="Gửi bình luận"
+          />
+    
+          <div className="mt-6 bg-white p-4 border-2 border-gray-200 rounded-lg">
+            {Array.isArray(comments) && comments.length > 0 ? (
+              <>
+                {comments.map((comment, index) => (
+                  <div key={index} className="comment flex items-start py-4 border-b border-gray-200 mb-6">
+                    <div className="profile mr-4">
+                      <img
+                        src={`http://localhost:5000/images/${comment.user?.hinh_anh}`}
+                        alt="Profile Picture"
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <div className=" flex items-center text-sm text-gray-600 mb-2">
+                        <span className="name font-bold">{comment.user?.ten_dang_nhap}</span>
+                        <span className="date ml-4 text-gray-400">
+                          {new Intl.DateTimeFormat("vi-VN", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                          }).format(new Date(comment.ngay_binh_luan))}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-700 mt-2 bg-white p-4 border-[1px] border-gray-200 rounded-lg">
+                        {comment.noi_dung}
+                      </p>
+    
+                      {/* Hiển thị câu trả lời nếu có */}
+                      {comment.tra_loi_binh_luan && comment.tra_loi_binh_luan.trim() !== "" && (
+                        <div className="reply mt-4 bg-gray-100 p-4 border-[1px] border-gray-200 rounded-lg">
+                          <div className="flex items-center text-sm text-gray-600 mb-2">
+                            <span className="name font-bold">{comment.traloi_user?.ten_dang_nhap}</span>
+                            <span className="date ml-4 text-gray-400">
+                              {comment.ngay_tra_loi && !isNaN(new Date(comment.ngay_tra_loi).getTime()) ? (
+                                new Intl.DateTimeFormat("vi-VN", {
+                                  year: "numeric",
+                                  month: "2-digit",
+                                  day: "2-digit",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  second: "2-digit",
+                                }).format(new Date(comment.ngay_tra_loi))
+                              ) : (
+                                "Ngày không hợp lệ"
+                              )}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-700">{comment.tra_loi_binh_luan}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+    
+                <div className="pagination flex justify-center items-center mt-6">
+                  <span
+                    title="First page"
+                    className={`cursor-pointer px-4 py-2 border rounded-md ${
+                      currentPage === 1 ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
+                    }`}
+                    onClick={() => currentPage > 1 && handlePageChange(1)}
+                  >
+                    ‹‹
+                  </span>
+    
+                  <span
+                    className={`cursor-pointer px-4 py-2 border rounded-md ${
+                      currentPage === 1 ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
+                    }`}
+                    onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                  >
+                    ‹
+                  </span>
+    
+                  <span className="currentPage px-4 py-2">{`Trang ${currentPage} / ${totalPages || 1}`}</span>
+    
+                  <span
+                    className={`cursor-pointer px-4 py-2 border rounded-md ${
+                      currentPage === totalPages ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
+                    }`}
+                    onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                  >
+                    ›
+                  </span>
+    
+                  <span
+                    className={`cursor-pointer px-4 py-2 border rounded-md ${
+                      currentPage === totalPages ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
+                    }`}
+                    onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
+                  >
+                    ››
+                  </span>
+                </div>
+              </>
+            ) : (
+              <p className="text-gray-500 text-sm">
+                Mời bạn nhận xét về sản phẩm, hãy bình luận có văn hoá để tránh bị khoá tài khoản.
+              </p>
+            )}
+          </div>
+        </form>
+      </div>
+    </div>
+    
+
+    
     </>
   );
 }

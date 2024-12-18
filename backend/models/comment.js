@@ -12,13 +12,18 @@ const BinhLuan = sequelize.define('BinhLuan', {
         type: DataTypes.TEXT,
         allowNull: false,   
     },
-    sao: {
-        type: DataTypes.INTEGER,
-        allowNull: false
+    tra_loi_binh_luan: {
+        type: DataTypes.TEXT,
+        allowNull: true
     },
     ngay_binh_luan: {
         type: Sequelize.DATE,
         allowNull: false,
+        defaultValue: Sequelize.NOW
+    },
+    ngay_tra_loi: {
+        type: Sequelize.DATE,
+        allowNull: true,
         defaultValue: Sequelize.NOW
     },
     trang_thai: {

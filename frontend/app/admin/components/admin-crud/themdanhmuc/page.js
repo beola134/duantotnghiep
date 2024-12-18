@@ -47,7 +47,7 @@ export default function ThemDanhmuc() {
     formData.append("mo_ta", mota);
 
     try {
-      const response = await fetch("https://wristlybackend-e89d41f05169.herokuapp.com/cate/addcate", {
+      const response = await fetch("http://localhost:5000/cate/addcate", {
         method: "POST",
         body: formData,
       });

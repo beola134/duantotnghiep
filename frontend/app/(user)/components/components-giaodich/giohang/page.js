@@ -33,7 +33,7 @@ const CartPage = () => {
   );
 
   const ktra = async (items, newQuantity) => {
-    const reponse = await fetch(`https://wristlybackend-e89d41f05169.herokuapp.com/product/check/${items._id}?quantity=${newQuantity}`);
+    const reponse = await fetch(`http://localhost:5000/product/check/${items._id}?quantity=${newQuantity}`);
     const data = await reponse.json();
     if (!reponse.ok) {
       Swal.fire({
@@ -127,7 +127,7 @@ const CartPage = () => {
                       {cartItems.map((item) => (
                         <tr key={item._id}>
                           <td>
-                            <img src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${item.hinh_anh}`} alt="" width="100px" />
+                            <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt="" width="100px" />
                           </td>
                           <td>{item.ten_san_pham}</td>
                           <td>
@@ -227,7 +227,7 @@ const CartPage = () => {
                     <div key={item._id} className="flex flex-col border rounded-lg p-4 mb-4">
                       <div className="flex items-center">
                         <img
-                          src={`https://wristlybackend-e89d41f05169.herokuapp.com/images/${item.hinh_anh}`}
+                          src={`http://localhost:5000/images/${item.hinh_anh}`}
                           alt=""
                           width="100px"
                           className="mr-4"
@@ -344,7 +344,7 @@ const CartPage = () => {
                     </p>
                   </div>
                 </div>
-                <Link href="">
+                <Link href="/components/components-giaodich/thanhtoan">
                   <button
                     className="mt-10 ml-[200%] phone-sm:ml-[10px] sm:ml-[10px] md:ml-[500px] "
                     type="button"

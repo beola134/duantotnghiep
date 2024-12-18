@@ -207,3 +207,64 @@
   padding: 5px 10px;
   cursor: pointer;
 }
+.replyContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.9); /* Màu nền trắng với độ trong suốt */
+  color: black;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 100%;
+  z-index: 1001; /* Đảm bảo ô trả lời nằm trên lớp phủ */
+}
+
+.replyOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Màn hình tối với độ trong suốt */
+  z-index: 1000; /* Đặt lớp phủ dưới ô trả lời */
+}
+
+.replyTextarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  background-color: white;
+  color: black;
+}
+
+.replySubmit {
+  background-color: #afd6ff;
+  color: rgb(0, 0, 0);
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.replyButton {
+  background-color: #d5ffdf;
+  color: rgb(0, 0, 0);
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.replyButton {
+  z-index: 10; /* Đảm bảo nút "Trả lời" ở trên các phần tử khác */
+}
+.repliedText{
+  color: #28a745;
+  font-weight: 600;
+}
