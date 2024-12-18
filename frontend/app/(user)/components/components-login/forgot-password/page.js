@@ -241,7 +241,7 @@ export default function ForgotPassword() {
 
             <div className={styles.passwordWrapper}>
               <input
-                type={showPassword ? "text" : "password"}
+                type={ConfirmShowPassword ? "text" : "password"}
                 className={`${styles.input} ${formik.errors.confirmPassword ? styles.inputError : ""}`}
                 id="confirmPassword"
                 name="confirmPassword"

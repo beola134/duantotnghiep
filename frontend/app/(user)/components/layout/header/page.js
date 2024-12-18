@@ -438,7 +438,9 @@ export default function Header() {
       ?.split("=")[1];
     if (token) {
       const decoded = jwtDecode(token);
-      fetchUserDetails(decoded._id);
+      if (decoded.quyen === 2) {
+        fetchUserDetails(decoded._id);
+      }
     }
   }, []);
 

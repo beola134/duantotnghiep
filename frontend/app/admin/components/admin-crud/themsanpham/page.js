@@ -125,7 +125,9 @@ export default function ThemSanPham() {
       newErrors.gia_san_pham = "Vui lòng nhập giá sản phẩm hợp lệ.";
     }
     if (!ma_san_pham) newErrors.ma_san_pham = "Vui lòng nhập mã sản phẩm.";
-    if (!so_luong) newErrors.so_luong = "Vui lòng nhập số lượng.";
+    if (!so_luong || isNaN(so_luong) || so_luong <= 0) {
+      newErrors.so_luong = "Vui lòng nhập số lượng hợp lệ.";
+    }
     if (!id_thuong_hieu)
       newErrors.id_thuong_hieu = "Vui lòng chọn thương hiệu.";
     if (!hinh_anh) newErrors.hinh_anh = "Vui lòng chọn hình ảnh sản phẩm.";
@@ -307,6 +309,19 @@ export default function ThemSanPham() {
                 )}
               </div>
               <div className={styles.formGroup}>
+                <label htmlFor="so_luong">Số lượng</label>
+                <input
+                  type="text"
+                  id="so_luong"
+                  name="so_luong"
+                  value={formData.so_luong}
+                  onChange={handleChange}
+                />
+                {errors.so_luong && (
+                  <span className="text-danger">{errors.so_luong}</span>
+                )}
+              </div>
+              <div className={styles.formGroup}>
                 <label htmlFor="do_chiu_nuoc">Độ chịu nước</label>
                 <input
                   type="text"
@@ -325,9 +340,6 @@ export default function ThemSanPham() {
                   value={formData.xuat_xu}
                   onChange={handleChange}
                 />
-                {errors.xuat_xu && (
-                  <span className="text-danger">{errors.xuat_xu}</span>
-                )}
               </div>
               <div className={styles.formGroup}>
                 <label htmlFor="gioi_tinh">Giới tính</label>
@@ -339,19 +351,7 @@ export default function ThemSanPham() {
                   onChange={handleChange}
                 />
               </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="so_luong">Số lượng</label>
-                <input
-                  type="text"
-                  id="so_luong"
-                  name="so_luong"
-                  value={formData.so_luong}
-                  onChange={handleChange}
-                />
-                {errors.so_luong && (
-                  <span className="text-danger">{errors.so_luong}</span>
-                )}
-              </div>
+
               <div className={styles.formGroup}>
                 <label htmlFor="loai">Loại</label>
                 <input
