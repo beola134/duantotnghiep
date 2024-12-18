@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import styles from "./register.module.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import cx from "classnames";
 
 const schema = Yup.object().shape({
   name: Yup.string()
@@ -44,6 +45,7 @@ const schema = Yup.object().shape({
 export default function Register() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [ConfirmShowPassword, setConfirmShowPassword] = useState(false);
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -89,7 +91,7 @@ export default function Register() {
             title: "Đăng ký thành công",
             text: "Đăng ký thành công, vui lòng đăng nhập để tiếp tục.",
           }).then(() => {
-            window.location.href = "http://localhost:3001/components/components-login/login";
+            window.location.href = "/components/components-login/login";
           });
         }
       } catch (error) {
@@ -143,10 +145,6 @@ export default function Register() {
     });
   };
 
-  // Hàm để đổi trạng thái ẩn/hiện mật khẩu
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
   const handleSendOtp = async () => {
     if (loading || isOtpSent) return;
     if (!formik.values.email) {
@@ -205,90 +203,117 @@ export default function Register() {
     return `${min}:${sec < 10 ? "0" : ""}${sec}`;
   };
 
+  // Hàm để đổi trạng thái ẩn/hiện mật khẩu
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmShowPassword(!ConfirmShowPassword);
+  };
+
   return (
-    <div className={styles.mainContainer}>
-      <div className={styles.container}>
-        <div className={styles.heading}>Đăng ký</div>
-        <form onSubmit={formik.handleSubmit} className={styles.form}>
-          <input
-            type="text"
-            className={`${styles.input} ${formik.errors.name ? styles.inputError : ""}`}
-            id="name"
-            name="name"
-            onChange={formik.handleChange}
-            value={formik.values.name}
-            placeholder="Tên đăng nhập"
-          />
-          {formik.errors.name && <p className={styles.error}>{formik.errors.name}</p>}
+    <>
+      <div className="container py-5">
+        <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5")}>
+          <span className={cx("")}>
+            <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
+              Trang chủ
+            </Link>
+          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
 
-          <input
-            type="email"
-            className={`${styles.input} ${formik.errors.email ? styles.inputError : ""}`}
-            id="email"
-            name="email"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-            placeholder="Email"
-          />
-          {formik.errors.email && <p className={styles.error}>{formik.errors.email}</p>}
+          <span className={cx("")}>
+            <Link href="/components/components-login/register" className={cx("link", "text-red-500")}>
+              Đăng ký
+            </Link>
+          </span>
+        </div>
+      </div>
 
-          <div className={styles.passwordWrapper}>
-            <input
-              type={showPassword ? "text" : "password"}
-              className={`${styles.input} ${formik.errors.password ? styles.inputError : ""}`}
-              id="password"
-              name="password"
-              onChange={formik.handleChange}
-              value={formik.values.password}
-              placeholder="Mật khẩu"
-            />
-            <div className={styles.togglePasswordIcon} onClick={togglePasswordVisibility}>
-              {showPassword ? <FaEye /> : <FaEyeSlash />}
-            </div>
-          </div>
-          {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
-
-          <div className={styles.passwordWrapper}>
-            <input
-              type={showPassword ? "text" : "password"}
-              className={`${styles.input} ${formik.errors.confirmPassword ? styles.inputError : ""}`}
-              id="confirmPassword"
-              name="confirmPassword"
-              onChange={formik.handleChange}
-              value={formik.values.confirmPassword}
-              placeholder="Nhâp lại mật khẩu"
-            />
-            <div className={styles.togglePasswordIcon} onClick={togglePasswordVisibility}>
-              {showPassword ? <FaEye /> : <FaEyeSlash />}
-            </div>
-          </div>
-          {formik.errors.confirmPassword && <p className={styles.error}>{formik.errors.confirmPassword}</p>}
-          <div className={styles.otpContainer}>
+      <div className={styles.mainContainer}>
+        <div className={styles.container}>
+          <div className={styles.heading}>Đăng ký</div>
+          <form onSubmit={formik.handleSubmit} className={styles.form}>
             <input
               type="text"
-              className={`${styles.input} ${formik.errors.otp && formik.touched.otp ? styles.inputError : ""}`}
-              id="otp"
-              name="otp"
-              maxLength={6}
+              className={`${styles.input} ${formik.errors.name ? styles.inputError : ""}`}
+              id="name"
+              name="name"
               onChange={formik.handleChange}
-              value={formik.values.otp}
-              placeholder="OTP"
-              disabled={!isOtpSent}
+              value={formik.values.name}
+              placeholder="Tên đăng nhập"
             />
-            <button
-              type="button"
-              className={styles.sendOtpButton}
-              onClick={handleSendOtp}
-              disabled={loading || isOtpSent}
-            >
-              {isOtpSent ? `OTP đã gửi (${formatTime(timeLeft)})` : "Gửi OTP"}
-            </button>
-          </div>
-          {formik.errors.otp && formik.touched.otp && <p className={styles.error}>{formik.errors.otp}</p>}
+            {formik.errors.name && <p className={styles.error}>{formik.errors.name}</p>}
 
-          {formik.errors.general && <p className={styles.error}>{formik.errors.general}</p>}
+            <input
+              type="email"
+              className={`${styles.input} ${formik.errors.email ? styles.inputError : ""}`}
+              id="email"
+              name="email"
+              onChange={formik.handleChange}
+              value={formik.values.email}
+              placeholder="Email"
+            />
+            {formik.errors.email && <p className={styles.error}>{formik.errors.email}</p>}
 
-          {/* <input
+            <div className={styles.passwordWrapper}>
+              <input
+                type={showPassword ? "text" : "password"}
+                className={`${styles.input} ${formik.errors.password ? styles.inputError : ""}`}
+                id="password"
+                name="password"
+                onChange={formik.handleChange}
+                value={formik.values.password}
+                placeholder="Mật khẩu"
+              />
+              <div className={styles.togglePasswordIcon} onClick={togglePasswordVisibility}>
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
+              </div>
+            </div>
+            {formik.errors.password && <p className={styles.error}>{formik.errors.password}</p>}
+
+            <div className={styles.passwordWrapper}>
+              <input
+                type={showPassword ? "text" : "password"}
+                className={`${styles.input} ${formik.errors.confirmPassword ? styles.inputError : ""}`}
+                id="confirmPassword"
+                name="confirmPassword"
+                onChange={formik.handleChange}
+                value={formik.values.confirmPassword}
+                placeholder="Nhâp lại mật khẩu"
+              />
+              <div className={`${styles.togglePasswordIcon} absolute`} onClick={toggleConfirmPasswordVisibility}>
+                {ConfirmShowPassword ? <FaEye /> : <FaEyeSlash />}
+              </div>
+            </div>
+            {formik.errors.confirmPassword && <p className={styles.error}>{formik.errors.confirmPassword}</p>}
+            <div className={styles.otpContainer}>
+              <input
+                type="text"
+                className={`${styles.input} ${formik.errors.otp && formik.touched.otp ? styles.inputError : ""}`}
+                id="otp"
+                name="otp"
+                maxLength={6}
+                onChange={formik.handleChange}
+                value={formik.values.otp}
+                placeholder="OTP"
+                disabled={!isOtpSent}
+              />
+              <button
+                type="button"
+                className={styles.sendOtpButton}
+                onClick={handleSendOtp}
+                disabled={loading || isOtpSent}
+              >
+                {isOtpSent ? `OTP đã gửi (${formatTime(timeLeft)})` : "Gửi OTP"}
+              </button>
+            </div>
+            {formik.errors.otp && formik.touched.otp && <p className={styles.error}>{formik.errors.otp}</p>}
+
+            {formik.errors.general && <p className={styles.error}>{formik.errors.general}</p>}
+
+            {/* <input
             type="file"
             className={`${styles.input} ${formik.errors.image ? styles.inputError : ""}`}
             id="image"
@@ -299,43 +324,44 @@ export default function Register() {
           />
           {formik.errors.image && <p className={styles.error}>{formik.errors.image}</p>} */}
 
-          <input
-            type="submit"
-            className={styles.loginButton}
-            value={formik.isSubmitting ? "Đang đăng ký..." : "Đăng ký"}
-            disabled={formik.isSubmitting}
-          />
-        </form>
-        {!isModalOpen && (
-          <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
-            <div className={styles.socialAccountContainer}>
-              <span className={styles.title}>Đăng nhập với</span>
+            <input
+              type="submit"
+              className={styles.loginButton}
+              value={formik.isSubmitting ? "Đang đăng ký..." : "Đăng ký"}
+              disabled={formik.isSubmitting}
+            />
+          </form>
+          {!isModalOpen && (
+            <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
+              <div className={styles.socialAccountContainer}>
+                <span className={styles.title}>Đăng nhập với</span>
 
-              <GoogleLogin
-                onSuccess={handleLoginSuccess}
-                onFailure={handleLoginFailure}
-                render={(renderProps) => (
-                  <div className={styles.socialAccounts}>
-                    <button
-                      className={styles.socialButton}
-                      onClick={renderProps.onClick}
-                      disabled={renderProps.disabled}
-                    ></button>
-                  </div>
-                )}
-              />
-            </div>
-          </GoogleOAuthProvider>
-        )}
-        <div className={styles.signUpNow}>
-          <span className={styles.dontHaveAnAccount}>
-            Đã có tài khoản? &nbsp;
-            <Link href="/components/components-login/login" id="gotoSignup">
-              Đăng nhập ngay
-            </Link>
-          </span>
+                <GoogleLogin
+                  onSuccess={handleLoginSuccess}
+                  onFailure={handleLoginFailure}
+                  render={(renderProps) => (
+                    <div className={styles.socialAccounts}>
+                      <button
+                        className={styles.socialButton}
+                        onClick={renderProps.onClick}
+                        disabled={renderProps.disabled}
+                      ></button>
+                    </div>
+                  )}
+                />
+              </div>
+            </GoogleOAuthProvider>
+          )}
+          <div className={styles.signUpNow}>
+            <span className={styles.dontHaveAnAccount}>
+              Đã có tài khoản? &nbsp;
+              <Link href="/components/components-login/login" id="gotoSignup">
+                Đăng nhập ngay
+              </Link>
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

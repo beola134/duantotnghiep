@@ -5,13 +5,10 @@ import { useSelector, useDispatch } from "react-redux";
 import styles from "./giohang.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import {
-  removeFromCart,
-  updateCartItemQuantity,
-  setCartItems,
-} from "../redux/slices/cartSilce";
+import { removeFromCart, updateCartItemQuantity, setCartItems } from "../redux/slices/cartSilce";
 import Link from "next/link";
 import Swal from "sweetalert2";
+import cx from "classnames";
 
 const CartPage = () => {
   const cartItems = useSelector((state) => state.cart?.items) || [];
@@ -36,9 +33,7 @@ const CartPage = () => {
   );
 
   const ktra = async (items, newQuantity) => {
-    const reponse = await fetch(
-      `http://localhost:5000/product/check/${items._id}?quantity=${newQuantity}`
-    );
+    const reponse = await fetch(`http://localhost:5000/product/check/${items._id}?quantity=${newQuantity}`);
     const data = await reponse.json();
     if (!reponse.ok) {
       Swal.fire({
@@ -69,11 +64,29 @@ const CartPage = () => {
 
   return (
     <>
+      
+    <div className="container py-5">
+      <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5")}>
+        <span className={cx("")}>
+          <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
+            Trang chủ
+          </Link>
+        </span>
+        <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
+
+        <span className={cx("")}>
+          <Link href="/components/components-giaodich/giohang" className={cx("link", "text-red-500")}>
+           Giỏ hàng
+          </Link>
+        </span>
+      </div>
+    </div>
+
       <nav className={styles.nav}>
         <div className={styles.container}>
           <div className={`{styles.content} phone-sm:mt-[15px]`}>
             {cartItems.length === 0 ? (
-              <div >
+              <div>
                 <img
                   className=""
                   src="/image/item/cart-empty(1)"
@@ -83,13 +96,9 @@ const CartPage = () => {
                   }}
                 />
                 <div className={`${styles.mh} lg:text-[22px] text-[14px]`}>
-                  <p className="mb-[5px] phone-sm:mb-[15px]">
-                    Giỏ hàng đang trống
-                  </p>
+                  <p className="mb-[5px] phone-sm:mb-[15px]">Giỏ hàng đang trống</p>
 
-                  <p
-                    className="phone-sm:hidden"
-                    style={{ fontSize: "14px", marginBottom: "5px" }}>
+                  <p className="phone-sm:hidden" style={{ fontSize: "14px", marginBottom: "5px" }}>
                     Về cửa hàng để lấp đầy giỏ
                   </p>
                   <Link href={"/"}>
@@ -100,7 +109,7 @@ const CartPage = () => {
               </div>
             ) : (
               <div>
-                <h2>Giỏ hàng</h2>
+                <h2 className="text-[14px] lg:text-[20px]">Giỏ hàng</h2>
                 <br />
                 <div className="phone-sm:hidden">
                   <table className={`${styles.carttable} `}>
@@ -118,11 +127,7 @@ const CartPage = () => {
                       {cartItems.map((item) => (
                         <tr key={item._id}>
                           <td>
-                            <img
-                              src={`http://localhost:5000/images/${item.hinh_anh}`}
-                              alt=""
-                              width="100px"
-                            />
+                            <img src={`http://localhost:5000/images/${item.hinh_anh}`} alt="" width="100px" />
                           </td>
                           <td>{item.ten_san_pham}</td>
                           <td>
@@ -131,10 +136,7 @@ const CartPage = () => {
                                 className={styles.decreasebtn}
                                 onClick={async () => {
                                   if (item.so_luong > 1) {
-                                    const isStockAvailable = await ktra(
-                                      item,
-                                      item.so_luong - 1
-                                    );
+                                    const isStockAvailable = await ktra(item, item.so_luong - 1);
                                     if (isStockAvailable) {
                                       dispatch(
                                         updateCartItemQuantity({
@@ -144,22 +146,15 @@ const CartPage = () => {
                                       );
                                     }
                                   }
-                                }}>
+                                }}
+                              >
                                 -
                               </button>
-                              <input
-                                min="1"
-                                value={item.so_luong}
-                                className={styles.quantity}
-                                readonly
-                              />
+                              <input min="1" value={item.so_luong} className={styles.quantity} readonly />
                               <button
                                 className={styles.increasebtn}
                                 onClick={async () => {
-                                  const isStockAvailable = await ktra(
-                                    item,
-                                    item.so_luong + 1
-                                  );
+                                  const isStockAvailable = await ktra(item, item.so_luong + 1);
                                   if (isStockAvailable) {
                                     dispatch(
                                       updateCartItemQuantity({
@@ -168,30 +163,27 @@ const CartPage = () => {
                                       })
                                     );
                                   }
-                                }}>
+                                }}
+                              >
                                 +
                               </button>
                             </div>
                           </td>
                           <td>
-                            {(item.gia_giam > 0
-                              ? item.gia_giam
-                              : item.gia_san_pham
-                            ).toLocaleString("vi-VN", {
+                            {(item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham).toLocaleString("vi-VN", {
                               style: "currency",
                               currency: "VND",
                             })}
                           </td>
 
                           <td>
-                            {(
-                              (item.gia_giam > 0
-                                ? item.gia_giam
-                                : item.gia_san_pham) * item.so_luong
-                            ).toLocaleString("vi-VN", {
-                              style: "currency",
-                              currency: "VND",
-                            })}
+                            {((item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham) * item.so_luong).toLocaleString(
+                              "vi-VN",
+                              {
+                                style: "currency",
+                                currency: "VND",
+                              }
+                            )}
                           </td>
                           <td name="delete">
                             <button
@@ -209,14 +201,11 @@ const CartPage = () => {
                                 }).then((result) => {
                                   if (result.isConfirmed) {
                                     dispatch(removeFromCart(item._id)); // Gọi action để xóa sản phẩm
-                                    Swal.fire(
-                                      "Đã xóa!",
-                                      "Sản phẩm đã được xóa khỏi giỏ hàng.",
-                                      "success"
-                                    );
+                                    Swal.fire("Đã xóa!", "Sản phẩm đã được xóa khỏi giỏ hàng.", "success");
                                   }
                                 })
-                              }>
+                              }
+                            >
                               <FontAwesomeIcon
                                 icon={faTrash}
                                 style={{
@@ -235,10 +224,8 @@ const CartPage = () => {
 
                 <div className="block lg:hidden">
                   {cartItems.map((item) => (
-                    <div
-                      key={item._id}
-                      className="flex flex-col border rounded-lg p-4 mb-4">
-                      <div  className="flex items-center">
+                    <div key={item._id} className="flex flex-col border rounded-lg p-4 mb-4">
+                      <div className="flex items-center">
                         <img
                           src={`http://localhost:5000/images/${item.hinh_anh}`}
                           alt=""
@@ -246,27 +233,23 @@ const CartPage = () => {
                           className="mr-4"
                         />
                         <div className="flex-1">
-                          <p  className="font-bold">{item.ten_san_pham}</p>
-                          <p  className="text-sm">
+                          <p className="font-bold">{item.ten_san_pham}</p>
+                          <p className="text-sm">
                             Giá:{" "}
-                            {(item.gia_giam > 0
-                              ? item.gia_giam
-                              : item.gia_san_pham
-                            ).toLocaleString("vi-VN", {
+                            {(item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham).toLocaleString("vi-VN", {
                               style: "currency",
                               currency: "VND",
                             })}
                           </p>
-                          <p  className="text-sm">
+                          <p className="text-sm">
                             Tổng:{" "}
-                            {(
-                              (item.gia_giam > 0
-                                ? item.gia_giam
-                                : item.gia_san_pham) * item.so_luong
-                            ).toLocaleString("vi-VN", {
-                              style: "currency",
-                              currency: "VND",
-                            })}
+                            {((item.gia_giam > 0 ? item.gia_giam : item.gia_san_pham) * item.so_luong).toLocaleString(
+                              "vi-VN",
+                              {
+                                style: "currency",
+                                currency: "VND",
+                              }
+                            )}
                           </p>
                         </div>
                       </div>
@@ -275,10 +258,7 @@ const CartPage = () => {
                           className={styles.decreasebtn}
                           onClick={async () => {
                             if (item.so_luong > 1) {
-                              const isStockAvailable = await ktra(
-                                item,
-                                item.so_luong - 1
-                              );
+                              const isStockAvailable = await ktra(item, item.so_luong - 1);
                               if (isStockAvailable) {
                                 dispatch(
                                   updateCartItemQuantity({
@@ -288,22 +268,15 @@ const CartPage = () => {
                                 );
                               }
                             }
-                          }}>
+                          }}
+                        >
                           -
                         </button>
-                        <input
-                          min="1"
-                          value={item.so_luong}
-                          className={styles.quantity}
-                          readonly
-                        />
+                        <input min="1" value={item.so_luong} className={styles.quantity} readonly />
                         <button
                           className={styles.increasebtn}
                           onClick={async () => {
-                            const isStockAvailable = await ktra(
-                              item,
-                              item.so_luong + 1
-                            );
+                            const isStockAvailable = await ktra(item, item.so_luong + 1);
                             if (isStockAvailable) {
                               dispatch(
                                 updateCartItemQuantity({
@@ -312,7 +285,8 @@ const CartPage = () => {
                                 })
                               );
                             }
-                          }}>
+                          }}
+                        >
                           +
                         </button>
                       </div>
@@ -335,14 +309,11 @@ const CartPage = () => {
                           }).then((result) => {
                             if (result.isConfirmed) {
                               dispatch(removeFromCart(item._id)); // Gọi action để xóa sản phẩm
-                              Swal.fire(
-                                "Đã xóa!",
-                                "Sản phẩm đã được xóa khỏi giỏ hàng.",
-                                "success"
-                              );
+                              Swal.fire("Đã xóa!", "Sản phẩm đã được xóa khỏi giỏ hàng.", "success");
                             }
                           })
-                        }>
+                        }
+                      >
                         <FontAwesomeIcon
                           icon={faTrash}
                           style={{
@@ -364,8 +335,8 @@ const CartPage = () => {
                 <hr />
                 <div className={styles.total}>
                   <div className={styles.tt}>
-                    <p>Tổng tiền hàng:</p>
-                    <p>
+                    <p >Tổng tiền hàng:</p>
+                    <p className="text-[16px] lg:text-[20px] text-red-500">
                       {total.toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",
@@ -373,12 +344,13 @@ const CartPage = () => {
                     </p>
                   </div>
                 </div>
-                <Link href="">
+                <Link href="/components/components-giaodich/thanhtoan">
                   <button
-                  className="mt-10 ml-[200%] phone-sm:ml-[10px] sm:ml-[10px] md:ml-[500px] "
+                    className="mt-10 ml-[200%] phone-sm:ml-[10px] sm:ml-[10px] md:ml-[500px] "
                     type="button"
                     id={styles.thtt}
-                    onClick={handleCheckout}>
+                    onClick={handleCheckout}
+                  >
                     Tiến hành thanh toán
                   </button>
                 </Link>

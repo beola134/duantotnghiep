@@ -6,7 +6,7 @@ import Loading from "../../loading/page";
 import cx from "classnames";
 export default function Donghonu() {
   const [products, setProducts] = useState([]);
-  const [categoryName, setCategoryName] = useState(""); // Tiêu đề danh mục
+  const [categoryName, setCategoryName] = useState("Đồng hồ nữ"); // Tiêu đề danh mục
   const [selectedFilter, setSelectedFilter] = useState([]); // Lưu trữ các bộ lọc đã chọn
   const [sortOption, setSortOption] = useState(""); // Tuỳ chọn sắp xếp (tăng/giảm dần)
   const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại

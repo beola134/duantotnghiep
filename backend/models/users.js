@@ -43,26 +43,6 @@ const User = sequelize.define('User', {
         allowNull: false,
         defaultValue: '2'
     },
-    googleId:{
-        type: DataTypes.STRING(255),
-        allowNull: true
-    },
-    otp: {
-        type: DataTypes.STRING(255),
-        allowNull: true
-    },
-    otpExpires: {
-        type: DataTypes.DATE,
-        allowNull: true
-    },
-    login_attempts: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-      },
-      lock_until: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

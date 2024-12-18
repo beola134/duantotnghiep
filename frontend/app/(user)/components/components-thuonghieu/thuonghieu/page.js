@@ -72,7 +72,7 @@ export default function Thuonghieu() {
 
   return (
     <>
-      <div className="container mx-auto px-4 ">
+      <div className="container mx-auto  ">
         <div
           className={cx(
             "flex",
@@ -135,7 +135,7 @@ export default function Thuonghieu() {
         </div>
 
         <br />
-        <h3 className="ml-3 text-[20px]"> TẤT CẢ THƯƠNG HIỆU</h3>
+        <h3 className=" text-[20px]"> TẤT CẢ THƯƠNG HIỆU</h3>
         <br />
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {cates

@@ -13,9 +13,9 @@ export default function ThemUser() {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [image, setImage] = useState(null);
+  const [role, setRole] = useState("admin");
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
-  const role = 1; // Fixed role for admin
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,7 +38,10 @@ export default function ThemUser() {
     formData.append("ho_ten", fullName);
     formData.append("dia_chi", address);
     formData.append("dien_thoai", phone);
-    formData.append("quyen", role);
+    
+    // Chuyển role thành số (1 cho admin, 2 cho khách hàng)
+    formData.append("quyen", role === "admin" ? 1 : 2); 
+    
     formData.append("hinh_anh", image);
 
     try {
@@ -51,15 +54,17 @@ export default function ThemUser() {
         Swal.fire({
           icon: "success",
           title: "Thành công",
-          text: "Thêm quản trị viên thành công!",
+          text: "Thêm người dùng thành công!",
         }).then(() => {
-          router.push("/components/taikhoan");
+          router.push("/admin/components/quanlyadmin/taikhoan");
         });
       } else {
+        // Lấy thông tin lỗi từ response nếu có
+        const errorData = await response.json();
         Swal.fire({
           icon: "error",
           title: "Lỗi",
-          text: "Có lỗi xảy ra!",
+          text: errorData.message || "Có lỗi xảy ra!",
         });
       }
     } catch (error) {
@@ -138,7 +143,7 @@ export default function ThemUser() {
                     onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
-                <div className={styles.formGroup}>
+                <div style={{width:"205%"}} className={styles.formGroup}>
                   <label htmlFor="image">Hình ảnh</label>
                   <input
                     type="file"
@@ -146,13 +151,28 @@ export default function ThemUser() {
                     onChange={(e) => setImage(e.target.files[0])}
                   />
                 </div>
+                <div  className={styles.formGroup}>
+                  <label htmlFor="role">Vai trò</label>
+                  <select
+                    id="role"
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                  >
+                    <option value="admin">Quản trị viên</option>
+                    <option value="customer">Khách hàng</option>
+                  </select>
+                </div>
                 {errorMessage && (
                   <div className="alert alert-danger">{errorMessage}</div>
                 )}
                 <button type="submit" className="btn btn-outline-primary">
                   Thêm
                 </button>
-                <button type="button" className="btn btn-outline-secondary">
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary"
+                  onClick={() => router.push("/admin/components/quanlyadmin/taikhoan")}
+                >
                   Hủy bỏ
                 </button>
               </div>

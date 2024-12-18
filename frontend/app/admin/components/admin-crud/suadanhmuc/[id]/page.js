@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./suadanhmuc.module.css";
 import Swal from "sweetalert2";
 import { useRouter, useParams } from "next/navigation";
-import { jwtDecode } from "jwt-decode";
 
 export default function SuaDanhmuc() {
   const router = useRouter();
@@ -23,6 +22,7 @@ export default function SuaDanhmuc() {
         const response = await fetch(
           `http://localhost:5000/cate/allcate/${id}`
         );
+        3.
         if (response.ok) {
           const data = await response.json();
           setdanhmuc(data.cates);

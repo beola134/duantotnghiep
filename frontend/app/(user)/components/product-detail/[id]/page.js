@@ -260,8 +260,8 @@ export default function Detail({ params }) {
   // thêm bình luận sản phẩm theo id người dùng và id sản phẩm
   // kiểm tra người dùng đã mua sản phẩm chưa mới được bình luận sản phẩm
   const addComment = async () => {
-    if (!user) {
-      if (commentText && star) {
+    if (user) {
+      if (commentText) {
         try {
           const response = await fetch(`http://localhost:5000/comment/add`, {
             method: "POST",
@@ -270,7 +270,6 @@ export default function Detail({ params }) {
             },
             body: JSON.stringify({
               noi_dung: commentText,
-              sao: star,
               id_nguoi_dung: user._id,
               id_san_pham: params.id,
             }),
@@ -289,7 +288,6 @@ export default function Detail({ params }) {
           console.log(data.message);
 
           setCommentText("");
-          setStar(0);
           Swal.fire({
             icon: "success",
             title: "Bình luận thành công!",
@@ -303,20 +301,20 @@ export default function Detail({ params }) {
       } else {
         Swal.fire({
           icon: "warning",
-          title: "Vui lòng đăng nhập để bình luận",
-        }).then(() => {
-          if (typeof window !== "undefined" && params?.id) {
-            const currentUrl = encodeURIComponent(`/components/product-detail/${params.id}`);
-            window.location.href = `/components/components-login/login?redirect=${currentUrl}`;
-          } else {
-            window.location.href = `/components/components-login/login`;
-          }
+          title: "Vui lòng nhập bình luận!",
         });
       }
     } else {
       Swal.fire({
         icon: "warning",
         title: "Vui lòng đăng nhập để bình luận",
+      }).then(() => {
+        if (typeof window !== "undefined" && params?.id) {
+          const currentUrl = encodeURIComponent(`/components/product-detail/${params.id}`);
+          window.location.href = `/components/components-login/login?redirect=${currentUrl}`;
+        } else {
+          window.location.href = `/components/components-login/login`;
+        }
       });
     }
   };
@@ -359,7 +357,6 @@ export default function Detail({ params }) {
     setActiveTab(tabId);
   };
 
-
   // lấy giá trị số lượng sản phẩm
   const handleInputChange = (e) => {
     let value = e.target.value;
@@ -380,41 +377,33 @@ export default function Detail({ params }) {
     return <p>Error:{error}</p>;
   }
   return (
-    <>  
-   
-      <div className="mb-[30px] container px-4 flex flex-wrap">
-      
-        {/* FrameLeft */}
-        <div className="w-full sm:w-1/2 lg:w-[34%] mb-6 relative">
-        <div
-          className={cx(
-            "flex",
-            "items-center uppercase  md:text-[16px] text-[10px] mb-5 mt-6"
-          )}
-        >
+    <>
+      <div className="container py-5">
+        <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5")}>
           <span className={cx("")}>
-            <Link
-              href="/"
-              className={cx(" text-gray-800", "hover:text-[#796752]")}
-            >
+            <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
               Trang chủ
             </Link>
           </span>
-          <span className={cx("separator", "mx-3", "text-stone-400")}>
-            {" "}
-            &gt;{" "}
-          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
 
+          <span className={cx("")}>
+            <Link href={`/components/product-detail/${params.id}`} className={cx("link", "text-gray-800")}>
+              Chi tiết sản phẩm
+            </Link>
+          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
           <span className={cx("", "text-red-500")}>
-            <Link
-              href="/components/components-thuonghieu/donghonam"
-              className={cx("link", "text-red-500")}
-            >
-              {" "}
-              ĐỒNG HỒ ĐÔI
+            <Link href={`/components/product-detail/${params.id}`} className={cx("link", "text-red-500")}>
+              {product.ten_san_pham}
             </Link>
           </span>
         </div>
+      </div>
+
+      <div className="mb-[30px] container px-4 flex flex-wrap">
+        {/* FrameLeft */}
+        <div className="w-full sm:w-1/2 lg:w-[34%] mb-6 relative mt-5">
           {product.gia_giam > 0 && (
             <div className="absolute right-2 top-2 bg-[#f9141e] text-white w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] text-[12px] sm:text-[13px] text-center z-[2] rounded-full box-border pt-[10px] sm:pt-[15px] leading-[18px] sm:leading-[20px]">
               -
@@ -2941,23 +2930,23 @@ export default function Detail({ params }) {
                             <span className={styles.duongKinh}>{duong_kinh}</span>
 
                             <div className={styles.priceArae}>
-                            {gia_giam > 0 ? (
-                              <>
-                              <div className={styles.priceOld}>
-                                Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
-                              </div>
-                              <div className={styles.priceCurrent}>Giá KM: {gia_giam.toLocaleString("vi-VN")}₫</div>
-                              </>
-                            ) : (
-                              <div className={styles.priceCurrent}>Giá: {gia_san_pham.toLocaleString("vi-VN")}₫</div>
-                            )}
+                              {gia_giam > 0 ? (
+                                <>
+                                  <div className={styles.priceOld}>
+                                    Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
+                                  </div>
+                                  <div className={styles.priceCurrent}>Giá KM: {gia_giam.toLocaleString("vi-VN")}₫</div>
+                                </>
+                              ) : (
+                                <div className={styles.priceCurrent}>Giá: {gia_san_pham.toLocaleString("vi-VN")}₫</div>
+                              )}
                             </div>
                             {gia_giam > 0 && (
-                            <div className={styles.discount}>
-                              <span>
-                                -{roundDiscount(Math.round(((gia_san_pham - gia_giam) / gia_san_pham) * 100))}%
-                              </span>
-                            </div>
+                              <div className={styles.discount}>
+                                <span>
+                                  -{roundDiscount(Math.round(((gia_san_pham - gia_giam) / gia_san_pham) * 100))}%
+                                </span>
+                              </div>
                             )}
 
                             <br />
@@ -2989,151 +2978,154 @@ export default function Detail({ params }) {
 
       {/* Đánh giá bình luận */}
       <div id="comments" className="container mx-auto px-4 py-4">
-        <div className="pb-1 text-[23px] relative">
-          <span>Đánh giá - Bình luận</span>
-        </div>
-
-        <div className="comments">
-          <div className="mb-[15px] mt-[11px]">
-            <span>
-              Có <strong>{comments.length}</strong> bình luận, đánh giá
-            </span>
-            <strong> về {product.ten}</strong>
-          </div>
-          <form
-            name="comment-add-form"
-            id="comment-add-form"
-            className="formComment"
-            onSubmit={(e) => {
-              e.preventDefault();
-              addComment();
-            }}
-          >
-            <label className="labelForm block font-semibold text-sm mb-4">Nhận xét và đánh giá</label>
-
-            <div className={styles.ratingArea}>
-              <span id="ratings" className="cursor-pointer">
-                {[1, 2, 3, 4, 5].map((value) => (
-                  <i
-                    key={value}
-                    className={`${styles.iconV1} ${value <= star ? styles.starOn : styles.starOff}`}
-                    onClick={() => setStar(value)}
-                    value={value}
-                  ></i>
-                ))}
-              </span>
-              <span className={styles.ratingNote}>Nhấn vào đây để đánh giá</span>
-            </div>
-
-            <div className="textarea mb-4">
-              <textarea
-                name="content"
-                id="cmt-content"
-                placeholder="Viết bình luận của bạn..."
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                className="w-full p-4 border border-gray-300 rounded-md min-h-[123px] resize-none text-sm text-gray-700"
-              ></textarea>
-            </div>
-
-            <input
-              type="submit"
-              className="bg-[#796752] text-white px-6 py-2 rounded transition duration-300 hover:bg-[#5a4a3d] cursor-pointer"
-              value="Gửi bình luận"
-            />
-
-            <div className="mt-6 bg-white p-4 border-2 border-gray-200 rounded-lg">
-              {Array.isArray(comments) && comments.length > 0 ? (
-                <>
-                  {comments.map((comment, index) => (
-                    <div key={index} className="comment flex items-start py-4 border-b border-gray-200 mb-6">
-                      <div className="profile mr-4">
-                        <img
-                          src={`http://localhost:5000/images/${comment.user?.hinh_anh}`}
-                          alt="Profile Picture"
-                          className="w-12 h-12 rounded-full object-cover"
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <div className=" flex items-center text-sm text-gray-600 mb-2">
-                          <span className="name font-bold">{comment.user?.ten_dang_nhap || "Ẩn danh"}</span>
-                          <span className="date ml-4 text-gray-400">
-                            {new Intl.DateTimeFormat("vi-VN", {
-                              year: "numeric",
-                              month: "2-digit",
-                              day: "2-digit",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              second: "2-digit",
-                            }).format(new Date(comment.ngay_binh_luan))}
-                          </span>
-                          <div className="rating flex ml-2 mb-[5px]">
-                            {Array.from({ length: 5 }, (_, i) => (
-                              <FontAwesomeIcon
-                                key={i}
-                                icon={i < comment.sao ? solidStar : regularStar}
-                                className="star text-yellow-400 text-sm ml-1"
-                              />
-                            ))}
-                          </div>
-                        </div>
-                        <p className="text-sm text-gray-700 mt-6 bg-white p-4 border-[1px] border-gray-200 rounded-lg">
-                          {comment.noi_dung}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-
-                  <div className="pagination flex justify-center items-center mt-6">
-                    <span
-                      title="First page"
-                      className={`cursor-pointer px-4 py-2 border rounded-md ${
-                        currentPage === 1 ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
-                      }`}
-                      onClick={() => currentPage > 1 && handlePageChange(1)}
-                    >
-                      ‹‹
-                    </span>
-
-                    <span
-                      className={`cursor-pointer px-4 py-2 border rounded-md ${
-                        currentPage === 1 ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
-                      }`}
-                      onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                    >
-                      ‹
-                    </span>
-
-                    <span className="currentPage px-4 py-2">{`Trang ${currentPage} / ${totalPages || 1}`}</span>
-
-                    <span
-                      className={`cursor-pointer px-4 py-2 border rounded-md ${
-                        currentPage === totalPages ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
-                      }`}
-                      onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
-                    >
-                      ›
-                    </span>
-
-                    <span
-                      className={`cursor-pointer px-4 py-2 border rounded-md ${
-                        currentPage === totalPages ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
-                      }`}
-                      onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
-                    >
-                      ››
-                    </span>
-                  </div>
-                </>
-              ) : (
-                <p className="text-gray-500 text-sm">
-                  Mời bạn nhận xét về sản phẩm, hãy bình luận có văn hoá để tránh bị khoá tài khoản.
-                </p>
-              )}
-            </div>
-          </form>
-        </div>
+      <div className="pb-1 text-[23px] relative">
+        <span>Đánh giá - Bình luận</span>
       </div>
+      <div className="comments">
+        <div className="mb-[15px] mt-[11px]">
+          <span>
+            Có <strong>{comments.length}</strong> bình luận, đánh giá
+          </span>
+          <strong> về {product.ten}</strong>
+        </div>
+        <form
+          name="comment-add-form"
+          id="comment-add-form"
+          className="formComment"
+          onSubmit={(e) => {
+            e.preventDefault();
+            addComment();
+          }}
+        >
+          <label className="labelForm block font-semibold text-sm mb-4">Nhận xét và đánh giá</label>
+    
+          <div className="textarea mb-4">
+            <textarea
+              name="content"
+              id="cmt-content"
+              placeholder="Viết bình luận của bạn..."
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              className="w-full p-4 border border-gray-300 rounded-md min-h-[123px] resize-none text-sm text-gray-700"
+            ></textarea>
+          </div>
+    
+          <input
+            type="submit"
+            className="bg-[#796752] text-white px-6 py-2 rounded transition duration-300 hover:bg-[#5a4a3d] cursor-pointer"
+            value="Gửi bình luận"
+          />
+    
+          <div className="mt-6 bg-white p-4 border-2 border-gray-200 rounded-lg">
+            {Array.isArray(comments) && comments.length > 0 ? (
+              <>
+                {comments.map((comment, index) => (
+                  <div key={index} className="comment flex items-start py-4 border-b border-gray-200 mb-6">
+                    <div className="profile mr-4">
+                      <img
+                        src={`http://localhost:5000/images/${comment.user?.hinh_anh}`}
+                        alt="Profile Picture"
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <div className=" flex items-center text-sm text-gray-600 mb-2">
+                        <span className="name font-bold">{comment.user?.ten_dang_nhap}</span>
+                        <span className="date ml-4 text-gray-400">
+                          {new Intl.DateTimeFormat("vi-VN", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                          }).format(new Date(comment.ngay_binh_luan))}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-700 mt-2 bg-white p-4 border-[1px] border-gray-200 rounded-lg">
+                        {comment.noi_dung}
+                      </p>
+    
+                      {/* Hiển thị câu trả lời nếu có */}
+                      {comment.tra_loi_binh_luan && comment.tra_loi_binh_luan.trim() !== "" && (
+                        <div className="reply mt-4 bg-gray-100 p-4 border-[1px] border-gray-200 rounded-lg">
+                          <div className="flex items-center text-sm text-gray-600 mb-2">
+                            <span className="name font-bold">{comment.traloi_user?.ten_dang_nhap}</span>
+                            <span className="date ml-4 text-gray-400">
+                              {comment.ngay_tra_loi && !isNaN(new Date(comment.ngay_tra_loi).getTime()) ? (
+                                new Intl.DateTimeFormat("vi-VN", {
+                                  year: "numeric",
+                                  month: "2-digit",
+                                  day: "2-digit",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  second: "2-digit",
+                                }).format(new Date(comment.ngay_tra_loi))
+                              ) : (
+                                "Ngày không hợp lệ"
+                              )}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-700">{comment.tra_loi_binh_luan}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+    
+                <div className="pagination flex justify-center items-center mt-6">
+                  <span
+                    title="First page"
+                    className={`cursor-pointer px-4 py-2 border rounded-md ${
+                      currentPage === 1 ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
+                    }`}
+                    onClick={() => currentPage > 1 && handlePageChange(1)}
+                  >
+                    ‹‹
+                  </span>
+    
+                  <span
+                    className={`cursor-pointer px-4 py-2 border rounded-md ${
+                      currentPage === 1 ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
+                    }`}
+                    onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                  >
+                    ‹
+                  </span>
+    
+                  <span className="currentPage px-4 py-2">{`Trang ${currentPage} / ${totalPages || 1}`}</span>
+    
+                  <span
+                    className={`cursor-pointer px-4 py-2 border rounded-md ${
+                      currentPage === totalPages ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
+                    }`}
+                    onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                  >
+                    ›
+                  </span>
+    
+                  <span
+                    className={`cursor-pointer px-4 py-2 border rounded-md ${
+                      currentPage === totalPages ? "text-gray-400 border-gray-300" : "hover:bg-gray-100"
+                    }`}
+                    onClick={() => currentPage < totalPages && handlePageChange(totalPages)}
+                  >
+                    ››
+                  </span>
+                </div>
+              </>
+            ) : (
+              <p className="text-gray-500 text-sm">
+                Mời bạn nhận xét về sản phẩm, hãy bình luận có văn hoá để tránh bị khoá tài khoản.
+              </p>
+            )}
+          </div>
+        </form>
+      </div>
+    </div>
+    
+
+    
     </>
   );
 }

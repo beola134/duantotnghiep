@@ -38,7 +38,7 @@ export default function TrangsucCK() {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/product/getProductByCate/e21693ed-8073-4739-af67-70064aed8d60"
+          "http://localhost:5000/getProductByCate/e21693ed-8073-4739-af67-70064aed8d60"
         );
         if (!response.ok) {
           throw new Error("Lỗi không thể tải dữ liệu");

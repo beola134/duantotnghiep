@@ -455,6 +455,7 @@ const exportToPDF = () => {
                               value={item.quyen}
                               onChange={(e) => handleRoleChange(item._id, Number(e.target.value))}
                               className={styles.roleSelect}
+                              disabled={item.quyen === 1}
                             >
                               <option value="1">Quản trị viên</option>
                               <option value="2">Khách hàng</option>

@@ -8,7 +8,7 @@ const client_id = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(client_id);
 
 if (!process.env.ACCESS_TOKEN_SECRET) {
-    throw new Error('lỗi ');
+    throw new Error('ACCESS_TOKEN_SECRET is not defined in environment variables');
 }
 
 async function verifyGoogleToken(token) {
@@ -34,11 +34,11 @@ const googleLogin = async (req, res) => {
             throw new Error('Mã thông báo Google không hợp lệ');
         }
 
-        const { email, name, given_name, sub, picture } = payload;
+        const { email, name, given_name, picture } = payload;
         let account = await Users.findOne({ where: { email } });
 
-        if (account && account.googleId === sub) {
-            // Nếu tài khoản đã liên kết với Google, thực hiện đăng nhập
+        if (account) {
+            // Nếu tài khoản đã tồn tại, thực hiện đăng nhập mà không cập nhật thông tin
             const tokenJwt = jwt.sign(
                 { _id: account._id, email: account.email, quyen: account.quyen },
                 process.env.ACCESS_TOKEN_SECRET,
@@ -48,14 +48,13 @@ const googleLogin = async (req, res) => {
             return res.status(200).json({ message: 'Login success', token: tokenJwt });
         }
 
-        // Nếu chưa có tài khoản với Google ID này, tạo tài khoản mới
+        // Nếu chưa có tài khoản, tạo tài khoản mới mà không bao gồm googleId
         account = await Users.create({
             ho_ten: name,
             ten_dang_nhap: given_name,
             hinh_anh: picture,
             email,
-            quyen: '2',
-            googleId: sub
+            quyen: '2', // Quyền mặc định cho người dùng mới là 2
         });
 
         const tokenJwt = jwt.sign(

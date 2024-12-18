@@ -16,7 +16,8 @@ export default function CommentsPage() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [reply, setReply] = useState("");
+  const [replyCommentId, setReplyCommentId] = useState(null);
   // gọi tất cả các bình luận từ API
   const fetchComments = async () => {
     try {
@@ -65,7 +66,69 @@ export default function CommentsPage() {
   const totalComment = comments.length;
   const startDanhmucIndex = (currentPage - 1) * 10 + 1;
   const endDanhmucIndex = currentPage * 10 > totalComment ? totalComment : currentPage * 10;
+  // Hàm trả lời bình luận
+  const handleReplyChange = (e) => {
+    setReply(e.target.value);
+  };
+  const handleReplySubmit = async () => {
+    if (reply.trim()) {
+      try {
+        const response = await fetch(`http://localhost:5000/comment/reply/${replyCommentId}`, {
+          method: "POST", // Sử dụng PUT nếu bạn đang cập nhật bình luận
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ tra_loi_binh_luan: reply.trim() }),
+        });
+        const data = await response.json();
+        if (response.ok && data.message === "Trả lời bình luận thành công") {
+          Swal.fire({
+            title: "Thành công",
+            text: "Trả lời bình luận thành công!",
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+          setReply("");
+          setReplyCommentId(null);
+          fetchComments(); 
+        } else {
+          Swal.fire({
+            title: "Lỗi",
+            text: "Không thể trả lời bình luận. Vui lòng thử lại!",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        }
+      } catch (error) {
+        console.error("Lỗi khi gửi trả lời:", error);
+        Swal.fire({
+          title: "Lỗi",
+          text: "Không thể trả lời bình luận. Vui lòng thử lại!",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
+    } else {
+      Swal.fire({
+        title: "Lỗi",
+        text: "Vui lòng nhập nội dung trả lời!",
+        icon: "warning",
+        confirmButtonText: "OK",
+      });
+    }
+  };
+  
+  
+  
+  const handleReplyClick = (commentId) => {
+    setReplyCommentId(commentId);
+  };
 
+  const handleCloseReply = () => {
+    // Đóng form trả lời bình luận
+    setReplyCommentId(null);
+ 
+  };
   // Hàm xuất dữ liệu ra Excel
   const exportToExcel = async () => {
     Swal.fire({
@@ -326,9 +389,9 @@ export default function CommentsPage() {
                     <th style={{ width: "10%", textAlign: "center" }}>Id sản phẩm</th>
                     <th style={{ width: "8%", textAlign: "center" }}>Họ và tên </th>
                     <th style={{ width: "12%", textAlign: "center" }}>Nội dung</th>
-                    <th style={{ width: "5%", textAlign: "center" }}>Sao</th>
                     <th style={{ width: "10%", textAlign: "center" }}>Ngày bình luận</th>
                     <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Trả lời bình luận</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -357,7 +420,6 @@ export default function CommentsPage() {
                           </td>
 
                           <td style={{ textAlign: "center" }}>{noi_dung}</td>
-                          <td style={{ textAlign: "center" }}>{sao}</td>
                           <td style={{ textAlign: "center" }}>
                             {new Date(ngay_binh_luan).toLocaleString("vi-VN", {
                               timeZone: "Asia/Ho_Chi_Minh",
@@ -372,12 +434,39 @@ export default function CommentsPage() {
                               <FontAwesomeIcon icon={trang_thai ? faEye : faEyeSlash} />
                             </button>
                           </td>
+                          <td style={{ textAlign: "center" }}>
+                          {comment.tra_loi_binh_luan.trim() === "" ? (
+                            <button
+                              onClick={() => handleReplyClick(comment._id)}
+                              className={styles.replyButton}
+                            >
+                              Trả lời
+                            </button>
+                          ) : (
+                            <span className={styles.repliedText}>Đã được trả lời</span>
+                          )}
+                           
+                        </td>
                         </tr>
                       );
                     })
                   )}
                 </tbody>
               </table>
+              {replyCommentId && <div className={styles.replyOverlay} onClick={handleCloseReply}></div>}
+              {replyCommentId && (
+                <div className={styles.replyContainer}>
+                  <textarea
+                    value={reply}
+                    onChange={handleReplyChange}
+                    placeholder="Nhập nội dung trả lời"
+                    className={styles.replyTextarea}
+                  />
+                  <button onClick={handleReplySubmit} className={styles.replySubmit}>
+                    Gửi trả lời
+                  </button>
+                </div>
+              )}
 
               <div className={styles.pagination}>
                 <span className={styles.totalComment}>

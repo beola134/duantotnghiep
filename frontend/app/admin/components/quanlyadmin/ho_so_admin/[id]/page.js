@@ -37,6 +37,7 @@ const ho_so_admin = ({ params }) => {
   };
 
   const handleSave = async (e) => {
+    e.preventDefault();
     const formData = new FormData();
     formData.append("ten_dang_nhap", userData.ten_dang_nhap);
     formData.append("ho_ten", userData.ho_ten);
@@ -56,7 +57,9 @@ const ho_so_admin = ({ params }) => {
           text: "Cập nhật thông tin thành công",
           icon: "success",
           confirmButtonText: "OK",
-        });
+        }).then(() => {
+          window.location.reload();
+        });      
         setIsEditing(false);
         setAvatarFile(null);
       } else {
