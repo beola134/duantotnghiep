@@ -99,25 +99,45 @@ const getVoucherById = async (req, res) => {
 const getAllVouchers = async (req, res) => {
   try {
     const { ma_voucher, limit = 2, page = 1 } = req.query;
-
-    let filter = {
-      [Op.and]: [],
-    };
-
+    let filter = { [Op.and]: [] };
     if (ma_voucher) {
       filter[Op.and].push({ ma_voucher: { [Op.like]: `%${ma_voucher}%` } });
     }
-
     const offset = (page - 1) * limit;
-    const { rows: vouchers, count: totalVouchers } =
-      await voucher.findAndCountAll({
-        where: filter,
-        limit: parseInt(limit),
-        offset: parseInt(offset),
-      });
+    const { rows: vouchers, count: totalVouchers } = await voucher.findAndCountAll({
+      where: filter,
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+    });
 
+    // Xử lý ngày hiện tại
+    const currentDate = new Date();
+    for (const voucherItem of vouchers) {
+      // Chuyển đổi ket_thuc sang kiểu Date
+      const ketThucDate = voucherItem.ket_thuc ? new Date(voucherItem.ket_thuc) : null;
+      // Kiểm tra dữ liệu null hoặc không hợp lệ
+      if (!ketThucDate || isNaN(ketThucDate)) {
+        console.warn(`Voucher có _id: ${voucherItem._id} có ngày kết thúc (ket_thuc) không hợp lệ`);
+        continue;
+      }
+      const soLuong = voucherItem.so_luong ?? 0; // Gán giá trị mặc định nếu null hoặc undefined
+      // Điều kiện xóa
+      const shouldDelete =
+        (soLuong <= 0 && ketThucDate >= currentDate) || 
+        (soLuong > 0 && ketThucDate <= currentDate); 
+
+      console.log(`Should delete: ${shouldDelete}`);
+
+      if (shouldDelete) {
+        console.log(`Deleting voucher with _id: ${voucherItem._id}`);
+        await voucher.destroy({ where: { _id: voucherItem._id } });
+        console.log(`Deleted voucher with _id: ${voucherItem._id}`);
+      }
+    }
+    // Tính tổng số trang
     const totalPages = Math.ceil(totalVouchers / limit);
-    if (!voucher || vouchers.length === 0) {
+    // Kết quả trả về nếu không có voucher
+    if (!vouchers || vouchers.length === 0) {
       return res.status(200).json({
         vouchers: [],
         currentPage: parseInt(page),
@@ -127,6 +147,7 @@ const getAllVouchers = async (req, res) => {
       });
     }
 
+    // Kết quả trả về nếu có voucher
     res.status(200).json({
       vouchers,
       currentPage: parseInt(page),
@@ -134,6 +155,7 @@ const getAllVouchers = async (req, res) => {
       totalVouchers,
     });
   } catch (error) {
+    console.error("Error in getAllVouchers:", error.message);
     res.status(500).json({ error: error.message });
   }
 };
@@ -150,7 +172,6 @@ const updateVoucher = async (req, res) => {
     phan_tram,
     mo_ta,
     mota2,
-    trang_thai,
     don_hang_toi_thieu,
   } = req.body;
 
@@ -213,27 +234,6 @@ const getvoucher = async (req, res) => {
 };
 
 //ẩn voucher và hiện voucher
-const getVoucherByStatus = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const voucherFound = await voucher.findOne({ where: { _id: id } });
-    if (!voucherFound) {
-      return res.status(404).json({ message: "Không tìm thấy voucher" });
-    }
-    const updatedVoucher = await voucherFound.update({
-      trang_thai: !voucherFound.trang_thai,
-    });
-    res
-      .status(200)
-      .json({
-        message: "Cập nhật trạng thái voucher thành công",
-        voucher: updatedVoucher,
-      });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: "Lỗi server" });
-  }
-};
 
 module.exports = {
   addVoucher,
@@ -243,5 +243,5 @@ module.exports = {
   deleteVouCher,
   getVoucherById,
   getvoucher,
-  getVoucherByStatus
+  
 };

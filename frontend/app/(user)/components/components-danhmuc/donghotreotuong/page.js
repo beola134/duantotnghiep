@@ -16,7 +16,15 @@ export default function DongHoTreoTuong() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+  const toggleDropdown = () => {
+      setIsDropdownVisible((prevState) => !prevState);
+    };
   const [filter, setFilter] = useState({
     muc_gia: "",
     phong_cach: "",
@@ -25,6 +33,7 @@ export default function DongHoTreoTuong() {
     mau_mat: "",
     kieu_dang: "",
   });
+  
 
   const roundDiscount = (discountPercentage) => {
     const discountLevels = [10, 15, 20, 25, 30, 40, 50];
@@ -37,7 +46,7 @@ export default function DongHoTreoTuong() {
     try {
       const queryParams = new URLSearchParams({ ...filter, page: currentPage });
       const response = await fetch(
-        `http://localhost:5000/filterTreoTuong/5307799c-55ae-4bfd-83d4-3ed6e219ff5f?${queryParams}`
+        `http://localhost:5000/product/filterTreoTuong/5307799c-55ae-4bfd-83d4-3ed6e219ff5f?${queryParams}`
       );
       if (!response.ok) {
         throw new Error("Lỗi không thể tải dữ liệu");
@@ -144,14 +153,13 @@ export default function DongHoTreoTuong() {
                 <div className={cx("clear")} />
                 <div className={cx("all-summary")}>
                   <div
-                    className={cx("summary-content-filter ")}
-                    style={{
-                      height: isExpanded ? "auto" : "75px",
-                      overflow: isExpanded ? "visible" : "hidden",
-                    }}
+                    className={cx("summary-content-filter ",`overflow-hidden lg:overflow-visible ${
+                    isExpanded ? "h-auto" : "h-[75px]"
+                  } lg:h-auto`)}
+                    
                   >
                     <div className={cx("banner-cat-manuf")}>
-                      <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px]")}>
+                      <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-4")}>
                         <span className={cx("")}>
                           <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
                             Trang chủ
@@ -208,13 +216,14 @@ export default function DongHoTreoTuong() {
                   </div>
                 )}
                 <div className={cx("clear")} />
-                <div className={cx("products-cat")}>
-                  <div className={cx("block-products-filter")}>
-                    <div className={cx("block-product-filter", "cls", "flex flex-wrap")}>
+                <div className={cx("product-cat")}>
+                  <div className={cx("border-t border-[#e5e5e5] border-b mt-[15px] mb-[5px]")}>
+                    <div className={cx("phone-sm:grid phone-sm:grid-cols-2 phone-sm:gap-x-4    sm:grid sm:grid-cols-2  lg:flex lg:space-x-4")}>
                       <div className={cx("field-area", "field-item")}>
-                        <div className={cx("field-name", "normal", "field", "field-opened")} data-id="id-field-loai">
+                        <div className={cx("cursor-pointer font-normal uppercase text-[12px] transition-all duration-300")} data-id="id-field-loai" onClick={toggleMenu}>
                           Loại
                         </div>
+                        {isOpen && (
                         <div
                           id="loai"
                           className={cx(
@@ -237,17 +246,19 @@ export default function DongHoTreoTuong() {
                               </Link>
                             </div>
                           </div>
-                        </div>
+                        </div>)}
                       </div>
 
                       {/* item2 */}
                       <div className={cx("field-area", "field-item")}>
                         <div
-                          className={cx("field-name", "normal", "field", "field-opened")}
+                          className={cx("cursor-pointer font-normal uppercase text-[12px] transition-all duration-300")}
                           data-id="id-field-manufactory"
+                          onClick={toggleMenu}
                         >
                           Thương hiệu
                         </div>
+                        {isOpen && (
                         <div
                           id="manufactory"
                           className={cx(
@@ -280,14 +291,15 @@ export default function DongHoTreoTuong() {
                               </Link>
                             </div>
                           </div>
-                        </div>
+                        </div>)}
                       </div>
 
                       {/* item3 */}
                       <div className={cx("field-area", "field-item")}>
-                        <div className={cx("field-name", "normal", "field", "field-opened")} data-id="id-field-price">
+                        <div className={cx("cursor-pointer font-normal uppercase text-[12px] transition-all duration-300")} data-id="id-field-price" onClick={toggleMenu}>
                           Mức giá
                         </div>
+                        {isOpen && (
                         <div
                           id="price"
                           className={cx(
@@ -330,13 +342,14 @@ export default function DongHoTreoTuong() {
                               </Link>
                             </div>
                           </div>
-                        </div>
+                        </div>)}
                       </div>
                       {/* item4 */}
                       <div className={cx("field-area", "field-item")}>
-                        <div className={cx("field-name", "normal", "field", "field-opened")} data-id="id-field-vo-may">
+                        <div className={cx("cursor-pointer font-normal uppercase text-[12px] transition-all duration-300")} data-id="id-field-vo-may" onClick={toggleMenu}>
                           Vỏ máy
                         </div>
+                        {isOpen && (
                         <div
                           id="vo-may"
                           className={cx(
@@ -379,17 +392,19 @@ export default function DongHoTreoTuong() {
                               </Link>
                             </div>
                           </div>
-                        </div>
+                        </div>)}
                       </div>
 
                       {/* item5 */}
                       <div className={cx("field-area", "field-item")}>
                         <div
-                          className={cx("field-name", "normal", "field", "field-opened")}
+                          className={cx("cursor-pointer font-normal uppercase text-[12px] transition-all duration-300")}
                           data-id="id-field-kieu-dang"
+                          onClick={toggleMenu}
                         >
                           Kiểu dáng
                         </div>
+                        {isOpen && (
                         <div
                           id="kieu-dang"
                           className={cx(
@@ -442,13 +457,14 @@ export default function DongHoTreoTuong() {
                               </Link>
                             </div>
                           </div>
-                        </div>
+                        </div>)}
                       </div>
                       {/* item6 */}
                       <div className={cx("field-area", "field-item")}>
-                        <div className={cx("field-name", "normal", "field", "field-opened")} data-id="id-field-mau-mat">
+                        <div className={cx("cursor-pointer font-normal uppercase text-[12px] transition-all duration-300")} data-id="id-field-mau-mat" onClick={toggleMenu}>
                           Màu mặt
                         </div>
+                        {isOpen && (
                         <div
                           id="mau-mat"
                           className={cx(
@@ -521,7 +537,7 @@ export default function DongHoTreoTuong() {
                               </Link>
                             </div>
                           </div>
-                        </div>
+                        </div>)}
                       </div>
                     </div>
                   </div>
@@ -537,7 +553,7 @@ export default function DongHoTreoTuong() {
                       </div>
                     </div>
                     <select
-                      className={cx("order-select", "max-w-[180px] lg:mt-[-40px] right-2 ")}
+                      className={cx("order-select", "max-w-[180px] lg:mt-0 mt-[40px] right-2 ")}
                       name="order-select"
                       onChange={handleSortChange}
                     >

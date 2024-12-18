@@ -35,15 +35,30 @@ export default function Login() {
   //thời gian khóa
   const [lockoutTimer, setLockoutTimer] = useState(0);
   useEffect(() => {
+    // Check for lockout end time in localStorage
+    const lockoutEnd = localStorage.getItem('lockoutEnd');
+    if (lockoutEnd) {
+      const remainingTime = Math.floor((new Date(lockoutEnd) - new Date()) / 1000);
+      if (remainingTime > 0) {
+        setIsLocked(true);
+        setLockoutTimer(remainingTime);
+      } else {
+        localStorage.removeItem('lockoutEnd');
+      }
+    }
+  
     let timer;
     if (isLocked) {
-      setLockoutTimer(120);
+      if (lockoutTimer === 0) {
+        setLockoutTimer(120);
+      }
       timer = setInterval(() => {
         setLockoutTimer((prev) => {
           if (prev <= 1) {
             clearInterval(timer);
             setIsLocked(false);
             setFailedAttempts(0);
+            localStorage.removeItem('lockoutEnd');
             return 0;
           }
           return prev - 1;
@@ -51,7 +66,8 @@ export default function Login() {
       }, 1000);
     }
     return () => clearInterval(timer);
-  }, [isLocked]);
+  }, [isLocked, lockoutTimer]);
+
 
   const formik = useFormik({
     initialValues: {
@@ -107,6 +123,8 @@ export default function Login() {
         setFailedAttempts((prev) => prev + 1);
         if (failedAttempts + 1 >= 3) {
           setIsLocked(true);
+          const lockoutEndTime = new Date(new Date().getTime() + 120 * 1000);
+          localStorage.setItem('lockoutEnd', lockoutEndTime);
         }
         setSubmitting(false);
         Swal.fire({

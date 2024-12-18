@@ -386,7 +386,12 @@ export default function ThanhToan() {
             </Link>
           </span>
           <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
-
+          <span className={cx("")}>
+            <Link href="/components/components-giaodich/giohang" className={cx("link", "text-gray-800")}>
+             Giỏ hàng
+            </Link>
+          </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}>&gt;</span>
           <span className={cx("")}>
             <Link href="/components/components-giaodich/thanhtoan" className={cx("link", "text-red-500")}>
              Thanh toán
