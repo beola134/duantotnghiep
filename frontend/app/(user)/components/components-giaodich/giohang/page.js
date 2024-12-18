@@ -10,7 +10,7 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import cx from "classnames";
 
-const CartPage = ({ params }) => {
+const CartPage = () => {
   const cartItems = useSelector((state) => state.cart?.items) || [];
   const dispatch = useDispatch();
 
@@ -155,7 +155,41 @@ const CartPage = ({ params }) => {
                               >
                                 -
                               </button>
-                              <input min="1" value={item.so_luong} className={styles.quantity} readonly />
+
+                              <input
+                                maxLength="2"
+                                value={item.so_luong === 0 ? "" : item.so_luong}
+                                className={styles.quantity}
+                                onChange={async (e) => {
+                                  const newQuantity = Math.max(0, Math.min(99, parseInt(e.target.value) || 0));
+                                  if (newQuantity === 0) {
+                                    dispatch(
+                                      updateCartItemQuantity({
+                                        _id: item._id,
+                                        so_luong: 0,
+                                      })
+                                    );
+                                  } else {
+                                    const isStockAvailable = await ktra(item, newQuantity);
+                                    if (isStockAvailable) {
+                                      dispatch(
+                                        updateCartItemQuantity({
+                                          _id: item._id,
+                                          so_luong: newQuantity,
+                                        })
+                                      );
+                                    } else {
+                                      Swal.fire({
+                                        title: "Không đủ hàng",
+                                        text: `Sản phẩm: ${item.ten_san_pham} Không đủ số lượng `,
+                                        icon: "error",
+                                        confirmButtonText: "OK",
+                                      });
+                                    }
+                                  }
+                                }}
+                              />
+
                               <button
                                 className={styles.increasebtn}
                                 onClick={async () => {
@@ -277,7 +311,40 @@ const CartPage = ({ params }) => {
                         >
                           -
                         </button>
-                        <input min="1" value={item.so_luong} className={styles.quantity} readonly />
+                        <input
+                          maxLength="2"
+                          value={item.so_luong === 0 ? "" : item.so_luong}
+                          className={styles.quantity}
+                          onChange={async (e) => {
+                            const newQuantity = Math.max(0, Math.min(99, parseInt(e.target.value) || 0));
+                            if (newQuantity === 0) {
+                              dispatch(
+                                updateCartItemQuantity({
+                                  _id: item._id,
+                                  so_luong: 0,
+                                })
+                              );
+                            } else {
+                              const isStockAvailable = await ktra(item, newQuantity);
+                              if (isStockAvailable) {
+                                dispatch(
+                                  updateCartItemQuantity({
+                                    _id: item._id,
+                                    so_luong: newQuantity,
+                                  })
+                                );
+                              } else {
+                                Swal.fire({
+                                  title: "Không đủ hàng",
+                                  text: `Sản phẩm: ${item.ten_san_pham} Không đủ số lượng `,
+                                  icon: "error",
+                                  confirmButtonText: "OK",
+                                });
+                              }
+                            }
+                          }}
+                        />
+
                         <button
                           className={styles.increasebtn}
                           onClick={async () => {
@@ -368,5 +435,3 @@ const CartPage = ({ params }) => {
   );
 };
 export default CartPage;
-
-
