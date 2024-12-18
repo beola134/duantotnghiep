@@ -5,7 +5,7 @@ import styles from "./chitietdanhmuc.module.css";
 import Loading from "../../../loading/page";
 import cx from "classnames";
 
-export default function DanhMuc({ params }) {
+export default function Chitietthuonghieu({ params }) {
   const { id: thuong_hieu } = params;
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
