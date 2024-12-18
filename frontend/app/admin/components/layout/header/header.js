@@ -182,16 +182,7 @@ export default function Menu() {
                   Quản Lý Đơn Hàng
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/admin/components/quanlyadmin/chitietdonhang"
-                  className={isActive("/components/quanlyadmin/chitietdonhang") ? styles.active : ""}
-                  onClick={() => handleLinkClick("/components/quanlyadmin/chitietdonhang")}
-                >
-                  <i className={`bx bxs-cart ${styles.icon}`}></i>
-                  Sản Phẩm Đã Bán
-                </Link>
-              </li>
+            
               <li className={styles.divider} data-text="Voucher">
                 Voucher
               </li>

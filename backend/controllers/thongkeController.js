@@ -20,12 +20,15 @@ exports.getNewUsersToday = async (req, res) => {
         createdAt: {
           [Op.gte]: today,
         },
+        quyen:{
+          [Op.ne]: 1
+        }
       },
       order: [["createdAt", "DESC"]],
     });
 
     if (usersToday.length === 0) {
-     console.log(usersToday, "Không có người dùng mới hôm");
+     console.log(usersToday, "Không có người dùng mới hôm nay");
      
     }
 
@@ -336,6 +339,26 @@ exports.getDoanhThuDonHangTheoThoiGian = async (req, res) => {
 
 
 
+//thonng kê tong so luong nguoi_dung trong tuan dung sum
+exports.getNewUsersThisWeek = async (req, res) => {
+  try {
+    const today = new Date();
+    const firstDayOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+    firstDayOfWeek.setHours(0, 0, 0, 0);
+
+    const totalUsersInWeek = await Users.count({
+      where: {
+        createdAt: {
+          [Op.gte]: firstDayOfWeek,
+        },
+      },
+    });
+    res.json({ totalUsersInWeek });
+  } catch (error) {
+    console.log("Error: ", error);
+    res.status(500).json({ error: error.message });
+  }
+};
 
 
 

@@ -33,7 +33,7 @@ export default function Daydongho() {
       }
       const data = await response.json();
       setProducts(data.products);
-      setTotalPages(data.totalPages);
+      setTotalPages(data.totalPages || 1);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -43,9 +43,8 @@ export default function Daydongho() {
   useEffect(() => {
     laySanPham();
   }, [filter, currentPage]);
-  const thayDoiTrang = (trang) => {
-    setCurrentPage(trang);
-    laySanPham();
+  const thayDoiTrang = (page) => {
+    setCurrentPage(page);
   };
   const capNhatBoLoc = (filterType, value) => {
     const newFilters = [...selectedFilter];
@@ -65,6 +64,7 @@ export default function Daydongho() {
     if (filterType === "danh_muc") {
       setCategoryName(value);
     }
+    setCurrentPage(1);
   };
   const xoaTatCaBoLoc = () => {
     setSelectedFilter([]);

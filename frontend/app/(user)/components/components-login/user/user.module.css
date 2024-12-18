@@ -373,3 +373,16 @@
 .conditions:hover {
   text-decoration: underline;
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 5px; /* Giảm khoảng cách giữa các phần tử */
+  margin: 10px auto;
+  padding: 5px; /* Giảm padding bên trong */
+  max-width: 20%;
+}
+
+
+
