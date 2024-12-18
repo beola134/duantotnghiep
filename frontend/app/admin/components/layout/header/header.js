@@ -95,7 +95,7 @@ export default function Menu() {
       ) : (
         <>
           <section id={styles.sidebar}>
-            <Link href="" className={styles.brand}>
+            <Link href="/admin" className={styles.brand}>
               <i className={`bx bxs-smile ${styles.icon}`}></i>
               AdminSite
             </Link>
@@ -119,7 +119,7 @@ export default function Menu() {
                   className={isActive("/components/quanlyadmin/sanpham") ? styles.active : ""}
                   onClick={() => handleLinkClick("/components/quanlyadmin/sanpham")}
                 >
-                <i className={`bx bxs-package ${styles.icon}`}></i>
+                  <i className={`bx bxs-package ${styles.icon}`}></i>
                   Quản lý sản phẩm
                 </Link>
               </li>
@@ -129,7 +129,7 @@ export default function Menu() {
                   className={isActive("/components/quanlyadmin/thuonghieu") ? styles.active : ""}
                   onClick={() => handleLinkClick("/components/quanlyadmin/thuonghieu")}
                 >
-                <i className={`bx bxs-tag ${styles.icon}`}></i>
+                  <i className={`bx bxs-tag ${styles.icon}`}></i>
                   Quản lý thương hiệu
                 </Link>
               </li>
@@ -139,7 +139,7 @@ export default function Menu() {
                   className={isActive("/components/quanlyadmin/danhmuc") ? styles.active : ""}
                   onClick={() => handleLinkClick("/components/quanlyadmin/danhmuc")}
                 >
-                <i className={`bx bxs-category ${styles.icon}`}></i>
+                  <i className={`bx bxs-category ${styles.icon}`}></i>
                   Quản lý danh mục
                 </Link>
               </li>
@@ -178,11 +178,11 @@ export default function Menu() {
                   className={isActive("/components/quanlyadmin/quanlydonhang") ? styles.active : ""}
                   onClick={() => handleLinkClick("/components/quanlyadmin/quanlydonhang")}
                 >
-                <i className={`bx bxs-cart-alt ${styles.icon}`}></i>
+                  <i className={`bx bxs-cart-alt ${styles.icon}`}></i>
                   Quản Lý Đơn Hàng
                 </Link>
               </li>
-            
+
               <li className={styles.divider} data-text="Voucher">
                 Voucher
               </li>

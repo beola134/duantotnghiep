@@ -467,7 +467,7 @@ const User = ({ params }) => {
               </span>
             </p>
 
-            <p style={{background:"#796752",cursor: "pointer" }}>
+            <p style={{background:"#796752",cursor: "pointer", padding:"10px",borderRadius:"5px", textAlign:"center" }}>
               <Link href={""} className="text-white" onClick={handleLayout}>
                 Đăng xuất
               </Link>

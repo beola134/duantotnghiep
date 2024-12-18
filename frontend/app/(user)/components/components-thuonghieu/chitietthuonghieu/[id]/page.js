@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./chitietdanhmuc.module.css";
 import Loading from "../../../loading/page";
-import cx from 'classnames';
+import cx from "classnames";
 
 export default function DanhMuc({ params }) {
   const { id: thuong_hieu } = params;
@@ -128,16 +128,16 @@ export default function DanhMuc({ params }) {
   const capNhatSapXep = (e) => {
     setSortOption(e.target.value);
   };
-// 9. Hiển thị mô tả
+  // 9. Hiển thị mô tả
 
-const toggleDescription = () => {
-  setIsExpanded(!isExpanded);
-};
+  const toggleDescription = () => {
+    setIsExpanded(!isExpanded);
+  };
 
-//dropdown menu
-const toggleDropdown = () => {
-  setIsDropdownVisible((prevState) => !prevState);
-};
+  //dropdown menu
+  const toggleDropdown = () => {
+    setIsDropdownVisible((prevState) => !prevState);
+  };
   if (loading) {
     return <Loading />;
   }
@@ -151,48 +151,29 @@ const toggleDropdown = () => {
   return (
     <>
       <div className="container">
-        <div
-          className={cx(
-            "flex",
-            "items-center uppercase  md:text-[16px] text-[10px] mb-5 mt-6"
-          )}
-        >
+        <div className={cx("flex", "items-center uppercase  md:text-[16px] text-[10px] mb-5 mt-6")}>
           <span className={cx("")}>
-            <Link
-              href="/"
-              className={cx(" text-gray-800", "hover:text-[#796752]")}
-            >
+            <Link href="/" className={cx(" text-gray-800", "hover:text-[#796752]")}>
               Trang chủ
             </Link>
           </span>
 
-          <span className={cx("separator", "mx-3", "text-stone-400")}>
-          {" "}
-          &gt;{" "}
-        </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}> &gt; </span>
 
           <span className={cx("")}>
-          <Link
-            href="/components/components-thuonghieu/thuonghieu"
-            className={cx(" text-gray-800", "hover:text-[#796752]")}
-          >
-            THƯƠNG HIỆU
-          </Link>
-        </span>    
-          <span className={cx("separator", "mx-3", "text-stone-400")}>
-            {" "}
-            &gt;{" "}
+            <Link
+              href="/components/components-thuonghieu/thuonghieu"
+              className={cx(" text-gray-800", "hover:text-[#796752]")}
+            >
+              THƯƠNG HIỆU
+            </Link>
           </span>
+          <span className={cx("separator", "mx-3", "text-stone-400")}> &gt; </span>
 
           <span className={cx("", "text-red-500")}>
-            <Link
-              href="/components/components-thuonghieu/donghonam"
-              className={cx("link", "text-red-500")}
-            >
+            <Link href="/components/components-thuonghieu/donghonam" className={cx("link", "text-red-500")}>
               {" "}
-              {categoryName === "Đồng hồ nam"
-                ? categoryName
-                : `${categoryName}`}
+              {categoryName === "Đồng hồ nam" ? categoryName : `${categoryName}`}
             </Link>
           </span>
         </div>
@@ -201,20 +182,14 @@ const toggleDropdown = () => {
         <div className={styles.clear}></div>
         {/* mô tả đồng hồ nữ */}
         <div className="relative">
-          {" "}
           {/*all-summary*/}
           <div
-            className="mt-[25px] mb-[20px] overflow-hidden relative view-more-content"
-            style={{
-              height: isExpanded ? "auto" : "55px",
-              overflow: isExpanded ? "visible" : "hidden",
-            }}
+            className={`mt-[25px] overflow-hidden relative view-more-content ${isExpanded ? "h-auto" : "h-[75px]"} `}
           >
-            {" "}
             {/*summary-content-filter*/}
-            <p className="sm:text-[16px] text-[14px] italic leading-[24px] mb-[10px]" >
-              Đến với thế giới <strong>đồng hồ nam, nữ</strong> của Wristly, bạn sẽ được sở hữu hàng nghìn sản
-              phẩm chất lượng, thiết kế bắt mắt đến từ các thương hiệu &nbsp;
+            <p className="sm:text-[16px] text-[14px] italic leading-[24px] mb-[10px]">
+              Đến với thế giới <strong>đồng hồ nam, nữ</strong> của Wristly, bạn sẽ được sở hữu hàng nghìn sản phẩm chất
+              lượng, thiết kế bắt mắt đến từ các thương hiệu &nbsp;
               <em>
                 <strong>
                   <Link href="#" target="_blank">
@@ -222,22 +197,15 @@ const toggleDropdown = () => {
                   </Link>
                 </strong>
               </em>
-              , Nhật Bản, Pháp, Mỹ…danh tiếng trên thế giới. Mọi sản phẩm đều
-              đảm bảo
-              <strong> &nbsp;100% hàng chính hãng&nbsp;</strong> kèm theo{" "}
-              <strong>chế độ bảo hành chính hãng</strong> đặc biệt với mức giá
-              hợp lý sẽ đem đến cho bạn phụ kiện hoàn hảo nhất; khẳng định đẳng
-              cấp, phong cách riêng của bản thân
+              , Nhật Bản, Pháp, Mỹ…danh tiếng trên thế giới. Mọi sản phẩm đều đảm bảo
+              <strong> &nbsp;100% hàng chính hãng&nbsp;</strong> kèm theo <strong>chế độ bảo hành chính hãng</strong>{" "}
+              đặc biệt với mức giá hợp lý sẽ đem đến cho bạn phụ kiện hoàn hảo nhất; khẳng định đẳng cấp, phong cách
+              riêng của bản thân
             </p>
             <br />
           </div>
-          <div
-            className={`${styles.viewMore} sm:block sm:h-auto lg:hidden `}
-            onClick={toggleDescription}
-          >
-            <span onClick={toggleDescription}>
-              {isExpanded ? "Thu gọn" : "Xem thêm"}
-            </span>
+          <div className={`${styles.viewMore} sm:block sm:h-auto lg:hidden `} onClick={toggleDescription}>
+            <span onClick={toggleDescription}>{isExpanded ? "Thu gọn" : "Xem thêm"}</span>
           </div>
         </div>
         <br />
@@ -275,9 +243,7 @@ const toggleDropdown = () => {
             <div className="phone-sm:grid phone-sm:grid-cols-2 phone-sm:gap-x-4    sm:grid sm:grid-cols-2  lg:flex lg:space-x-4">
               {/*block-product-filter*/}
               {/* Giới tính */}
-              <div
-                className={`${styles["field-item"]} ${"phone-sm:ml-[5px]"} `}
-              >
+              <div className={`${styles["field-item"]} ${"phone-sm:ml-[5px]"} `}>
                 {/*field-item*/}
                 <div
                   className="cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"
@@ -290,10 +256,7 @@ const toggleDropdown = () => {
                   <div
                     className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[400px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] `}
                   >
-                    <span
-                      className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}
-                    >
+                    <span className={`${styles["close"]} lg:hidden sm:block phone-sm:block`} onClick={toggleDropdown}>
                       x
                     </span>
                     {/*close*/}
@@ -305,25 +268,13 @@ const toggleDropdown = () => {
                       {" "}
                       {/*filters-in-field-inner*/}
                       {/*cls*/}
-                      <Link
-                        rel="nofollow"
-                        href="/components/components-thuonghieu/donghonam"
-                        title="Đồng hồ nam"
-                      >
+                      <Link rel="nofollow" href="/components/components-thuonghieu/donghonam" title="Đồng hồ nam">
                         <span>Đồng hồ nam</span>
                       </Link>
-                      <Link
-                        rel="nofollow"
-                        href="/components/components-thuonghieu/donghonu"
-                        title="Đồng hồ nữ"
-                      >
+                      <Link rel="nofollow" href="/components/components-thuonghieu/donghonu" title="Đồng hồ nữ">
                         <span>Đồng hồ nữ</span>
                       </Link>
-                      <Link
-                        rel="nofollow"
-                        href="/components/components-thuonghieu/donghodoi"
-                        title="Đồng hồ đôi"
-                      >
+                      <Link rel="nofollow" href="/components/components-thuonghieu/donghodoi" title="Đồng hồ đôi">
                         <span>Đồng hồ đôi</span>
                       </Link>
                     </div>
@@ -346,10 +297,7 @@ const toggleDropdown = () => {
                     {/**/}
                     {/*filters-in-field-3-column*/}
                     {/*filter-brand*/}
-                    <span
-                      className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}
-                    >
+                    <span className={`${styles["close"]} lg:hidden sm:block phone-sm:block`} onClick={toggleDropdown}>
                       x
                     </span>
                     <div
@@ -363,9 +311,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="LONGINES"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "LONGINES")
-                          }
+                          onClick={() => capNhatBoLoc("thuong_hieu", "LONGINES")}
                         >
                           LONGINES
                         </Link>
@@ -383,12 +329,7 @@ const toggleDropdown = () => {
                       </div>
                       {/* item3*/}
                       <div className={`${styles.cls} ${styles.item}`}>
-                        <Link
-                          rel="nofollow"
-                          href="#"
-                          title="MIDO"
-                          onClick={() => capNhatBoLoc("thuong_hieu", "MIDO")}
-                        >
+                        <Link rel="nofollow" href="#" title="MIDO" onClick={() => capNhatBoLoc("thuong_hieu", "MIDO")}>
                           MIDO
                         </Link>
                       </div>
@@ -409,9 +350,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="HAMILTON"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "HAMILTON")
-                          }
+                          onClick={() => capNhatBoLoc("thuong_hieu", "HAMILTON")}
                         >
                           HAMILTON
                         </Link>
@@ -433,9 +372,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="FREDERIQUECONSTANT"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "FREDERIQUECONSTANT")
-                          }
+                          onClick={() => capNhatBoLoc("thuong_hieu", "FREDERIQUECONSTANT")}
                         >
                           FREDERIQUE CONSTANT
                         </Link>
@@ -446,21 +383,14 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="CALVINKLEIN"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "CALVINKLEIN")
-                          }
+                          onClick={() => capNhatBoLoc("thuong_hieu", "CALVINKLEIN")}
                         >
                           CALVIN KLEIN
                         </Link>
                       </div>
                       {/* item9*/}
                       <div className={`${styles.cls} ${styles.item}`}>
-                        <Link
-                          rel="nofollow"
-                          href="#"
-                          title="EDOX"
-                          onClick={() => capNhatBoLoc("thuong_hieu", "EDOX")}
-                        >
+                        <Link rel="nofollow" href="#" title="EDOX" onClick={() => capNhatBoLoc("thuong_hieu", "EDOX")}>
                           EDOX
                         </Link>
                       </div>
@@ -470,9 +400,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="CLAUDEBERNARD"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "CLAUDEBERNARD")
-                          }
+                          onClick={() => capNhatBoLoc("thuong_hieu", "CLAUDEBERNARD")}
                         >
                           CLAUDE BERNARD
                         </Link>
@@ -527,9 +455,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="OLYMPIANUS"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "OLYMPIANUS")
-                          }
+                          onClick={() => capNhatBoLoc("thuong_hieu", "OLYMPIANUS")}
                         >
                           OLYM PIANUS
                         </Link>
@@ -540,9 +466,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="DANIELWELLINGTON"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "DANIELWELLINGTON")
-                          }
+                          onClick={() => capNhatBoLoc("thuong_hieu", "DANIELWELLINGTON")}
                         >
                           DANIEL WELLINGTON
                         </Link>
@@ -575,9 +499,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="MICHAELKORS"
-                          onClick={() =>
-                            capNhatBoLoc("thuong_hieu", "MICHAELKORS")
-                          }
+                          onClick={() => capNhatBoLoc("thuong_hieu", "MICHAELKORS")}
                         >
                           MICHAEL KORS
                         </Link>
@@ -588,9 +510,7 @@ const toggleDropdown = () => {
               </div>
 
               {/* Mức giá */}
-              <div
-                className={`${styles["field-item"]} ${"phone-sm:ml-[5px]"}  `}
-              >
+              <div className={`${styles["field-item"]} ${"phone-sm:ml-[5px]"}  `}>
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
                   onClick={toggleDropdown}
@@ -604,10 +524,7 @@ const toggleDropdown = () => {
                   >
                     {/*filters-in-field-1-column*/}
                     {/*filter-4-price*/}
-                    <span
-                      className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}
-                    >
+                    <span className={`${styles["close"]} lg:hidden sm:block phone-sm:block`} onClick={toggleDropdown}>
                       x
                     </span>
                     <div
@@ -621,9 +538,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Dưới 2 triệu"
-                          onClick={() =>
-                            capNhatBoLoc("muc_gia", "Dưới 2 triệu")
-                          }
+                          onClick={() => capNhatBoLoc("muc_gia", "Dưới 2 triệu")}
                         >
                           Dưới 2 triệu
                         </Link>
@@ -634,9 +549,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Từ 2 triệu đến 5 triệu"
-                          onClick={() =>
-                            capNhatBoLoc("muc_gia", "Từ 2 triệu đến 5 triệu")
-                          }
+                          onClick={() => capNhatBoLoc("muc_gia", "Từ 2 triệu đến 5 triệu")}
                         >
                           Từ 2 triệu đến 5 triệu
                         </Link>
@@ -647,9 +560,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Từ 5 triệu đến 10 triệu"
-                          onClick={() =>
-                            capNhatBoLoc("muc_gia", "Từ 5 triệu đến 10 triệu")
-                          }
+                          onClick={() => capNhatBoLoc("muc_gia", "Từ 5 triệu đến 10 triệu")}
                         >
                           Từ 5 triệu đến 10 triệu
                         </Link>
@@ -660,9 +571,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Từ 10 triệu đến 20 triệu"
-                          onClick={() =>
-                            capNhatBoLoc("muc_gia", "Từ 10 triệu đến 20 triệu")
-                          }
+                          onClick={() => capNhatBoLoc("muc_gia", "Từ 10 triệu đến 20 triệu")}
                         >
                           Từ 10 triệu đến 20 triệu
                         </Link>
@@ -673,9 +582,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Từ 20 triệu đến 30 triệu"
-                          onClick={() =>
-                            capNhatBoLoc("muc_gia", "Từ 20 triệu đến 30 triệu")
-                          }
+                          onClick={() => capNhatBoLoc("muc_gia", "Từ 20 triệu đến 30 triệu")}
                         >
                           Từ 20 triệu đến 30 triệu
                         </Link>
@@ -686,9 +593,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Từ 30 triệu đến 50 triệu"
-                          onClick={() =>
-                            capNhatBoLoc("muc_gia", "Từ 30 triệu đến 50 triệu")
-                          }
+                          onClick={() => capNhatBoLoc("muc_gia", "Từ 30 triệu đến 50 triệu")}
                         >
                           Từ 30 triệu đến 50 triệu
                         </Link>
@@ -699,9 +604,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Từ 50 triệu đến 100 triệu"
-                          onClick={() =>
-                            capNhatBoLoc("muc_gia", "Từ 50 triệu đến 100 triệu")
-                          }
+                          onClick={() => capNhatBoLoc("muc_gia", "Từ 50 triệu đến 100 triệu")}
                         >
                           Từ 50 triệu đến 100 triệu
                         </Link>
@@ -712,9 +615,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Trên 100 triệu"
-                          onClick={() =>
-                            capNhatBoLoc("muc_gia", "Trên 100 triệu")
-                          }
+                          onClick={() => capNhatBoLoc("muc_gia", "Trên 100 triệu")}
                         >
                           Trên 100 triệu
                         </Link>
@@ -737,10 +638,7 @@ const toggleDropdown = () => {
                     id="discount"
                     className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px]`}
                   >
-                    <span
-                      className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}
-                    >
+                    <span className={`${styles["close"]} lg:hidden sm:block phone-sm:block`} onClick={toggleDropdown}>
                       x
                     </span>
                     <div
@@ -824,11 +722,7 @@ const toggleDropdown = () => {
               </div>
 
               {/* Loại máy */}
-              <div
-                className={`${styles["field-area"]} ${
-                  styles["field-item"]
-                } ${"phone-sm:ml-[5px]"}`}
-              >
+              <div className={`${styles["field-area"]} ${styles["field-item"]} ${"phone-sm:ml-[5px]"}`}>
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} ${
                     styles.normal
@@ -843,10 +737,7 @@ const toggleDropdown = () => {
                     id="loai-may"
                     className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px]`}
                   >
-                    <span
-                      className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}
-                    >
+                    <span className={`${styles["close"]} lg:hidden sm:block phone-sm:block`} onClick={toggleDropdown}>
                       x
                     </span>
 
@@ -860,12 +751,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Automatic (Máy cơ tự động)"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "loai_may",
-                              "Automatic (Máy cơ tự động)"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("loai_may", "Automatic (Máy cơ tự động)")}
                         >
                           Automatic (Máy cơ tự động)
                         </Link>
@@ -875,12 +761,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Quartz (Máy pin - điện tử)"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "loai_may",
-                              "Quartz (Máy pin - điện tử)"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("loai_may", "Quartz (Máy pin - điện tử)")}
                         >
                           Quartz (Máy pin - điện tử)
                         </Link>
@@ -890,12 +771,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Eco-Drive (Năng lượng ánh sáng)"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "loai_may",
-                              "Eco-Drive (Năng lượng ánh sáng)"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("loai_may", "Eco-Drive (Năng lượng ánh sáng)")}
                         >
                           Eco-Drive (Năng lượng ánh sáng)
                         </Link>
@@ -905,12 +781,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Quartz Chronograph (Máy pin bấm giờ thể thao)"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "loai_may",
-                              "Quartz Chronograph (Máy pin bấm giờ thể thao)"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("loai_may", "Quartz Chronograph (Máy pin bấm giờ thể thao)")}
                         >
                           Quartz Chronograph (Máy pin bấm giờ thể thao)
                         </Link>
@@ -920,12 +791,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Automatic Chronometer (Máy cơ tự động chuẩn COSC)"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "loai_may",
-                              "Automatic Chronometer (Máy cơ tự động chuẩn COSC)"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("loai_may", "Automatic Chronometer (Máy cơ tự động chuẩn COSC)")}
                         >
                           Automatic Chronometer (Máy cơ tự động chuẩn COSC)
                         </Link>
@@ -935,12 +801,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Quartz Chronometer (Máy pin chuẩn COSC)"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "loai_may",
-                              "Quartz Chronometer (Máy pin chuẩn COSC)"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("loai_may", "Quartz Chronometer (Máy pin chuẩn COSC)")}
                         >
                           Quartz Chronometer (Máy pin chuẩn COSC)
                         </Link>
@@ -948,19 +809,11 @@ const toggleDropdown = () => {
                       <div
                         className={`${styles.cls} ${styles.item}`}
                         onClick={() =>
-                          capNhatBoLoc(
-                            "loai_may",
-                            "Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)"
-                          )
+                          capNhatBoLoc("loai_may", "Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)")
                         }
                       >
-                        <Link
-                          rel="nofollow"
-                          href="#"
-                          title="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)"
-                        >
-                          Automatic Chronograph (Máy cơ tự động bấm giờ thể
-                          thao)
+                        <Link rel="nofollow" href="#" title="Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)">
+                          Automatic Chronograph (Máy cơ tự động bấm giờ thể thao)
                         </Link>
                       </div>
                       <div className={`${styles.cls} ${styles.item}`}>
@@ -968,12 +821,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Quartz Solar (Năng lượng ánh sáng)"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "loai_may",
-                              "Quartz Solar (Năng lượng ánh sáng)"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("loai_may", "Quartz Solar (Năng lượng ánh sáng)")}
                         >
                           Quartz Solar (Năng lượng ánh sáng)
                         </Link>
@@ -984,10 +832,7 @@ const toggleDropdown = () => {
                           href="#"
                           title="Đồng hồ cơ lên giây cót bằng tay ( Manual winding )"
                           onClick={() =>
-                            capNhatBoLoc(
-                              "loai_may",
-                              "Đồng hồ cơ lên giây cót bằng tay ( Manual winding )"
-                            )
+                            capNhatBoLoc("loai_may", "Đồng hồ cơ lên giây cót bằng tay ( Manual winding )")
                           }
                         >
                           Đồng hồ cơ lên giây cót bằng tay ( Manual winding )
@@ -999,9 +844,7 @@ const toggleDropdown = () => {
               </div>
 
               {/*Đường kính */}
-              <div
-                className={`${styles["field-area"]} ${styles["field-item"]}`}
-              >
+              <div className={`${styles["field-area"]} ${styles["field-item"]}`}>
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} ${
                     styles.normal
@@ -1016,10 +859,7 @@ const toggleDropdown = () => {
                     id="duong-kinh"
                     className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filter-4-duong-kinh"]}`}
                   >
-                    <span
-                      className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}
-                    >
+                    <span className={`${styles["close"]} lg:hidden sm:block phone-sm:block`} onClick={toggleDropdown}>
                       x
                     </span>
 
@@ -1033,9 +873,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Dưới 25mm"
-                          onClick={() =>
-                            capNhatBoLoc("duong_kinh", "Dưới 25mm")
-                          }
+                          onClick={() => capNhatBoLoc("duong_kinh", "Dưới 25mm")}
                         >
                           Dưới 25mm
                         </Link>
@@ -1045,9 +883,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="25mm đến 30mm"
-                          onClick={() =>
-                            capNhatBoLoc("duong_kinh", "25mm đến 30mm")
-                          }
+                          onClick={() => capNhatBoLoc("duong_kinh", "25mm đến 30mm")}
                         >
                           25mm đến 30mm
                         </Link>
@@ -1057,9 +893,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="30mm đến 35mm"
-                          onClick={() =>
-                            capNhatBoLoc("duong_kinh", "30mm đến 35mm")
-                          }
+                          onClick={() => capNhatBoLoc("duong_kinh", "30mm đến 35mm")}
                         >
                           30mm đến 35mm
                         </Link>
@@ -1069,9 +903,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="35mm đến 38mm"
-                          onClick={() =>
-                            capNhatBoLoc("duong_kinh", "35mm đến 38mm")
-                          }
+                          onClick={() => capNhatBoLoc("duong_kinh", "35mm đến 38mm")}
                         >
                           35mm đến 38mm
                         </Link>
@@ -1081,9 +913,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="38mm đến 40mm"
-                          onClick={() =>
-                            capNhatBoLoc("duong_kinh", "38mm đến 40mm")
-                          }
+                          onClick={() => capNhatBoLoc("duong_kinh", "38mm đến 40mm")}
                         >
                           38mm đến 40mm
                         </Link>
@@ -1093,9 +923,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="40mm đến 42mm"
-                          onClick={() =>
-                            capNhatBoLoc("duong_kinh", "40mm đến 42mm")
-                          }
+                          onClick={() => capNhatBoLoc("duong_kinh", "40mm đến 42mm")}
                         >
                           40mm đến 42mm
                         </Link>
@@ -1105,9 +933,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="42mm đến 45mm"
-                          onClick={() =>
-                            capNhatBoLoc("duong_kinh", "42mm đến 45mm")
-                          }
+                          onClick={() => capNhatBoLoc("duong_kinh", "42mm đến 45mm")}
                         >
                           42mm đến 45mm
                         </Link>
@@ -1117,9 +943,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Từ 45mm trở lên"
-                          onClick={() =>
-                            capNhatBoLoc("duong_kinh", "Từ 45mm trở lên")
-                          }
+                          onClick={() => capNhatBoLoc("duong_kinh", "Từ 45mm trở lên")}
                         >
                           Từ 45mm trở lên
                         </Link>
@@ -1130,9 +954,7 @@ const toggleDropdown = () => {
               </div>
 
               {/*Chất liệu dây  */}
-              <div
-                className={`${styles["field-area"]} ${styles["field-item"]}  `}
-              >
+              <div className={`${styles["field-area"]} ${styles["field-item"]}  `}>
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"}`}
                   onClick={toggleDropdown}
@@ -1144,10 +966,7 @@ const toggleDropdown = () => {
                     id="duong-kinh"
                     className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[500px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filters-in-field-2-column"]} `}
                   >
-                    <span
-                      className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}
-                    >
+                    <span className={`${styles["close"]} lg:hidden sm:block phone-sm:block`} onClick={toggleDropdown}>
                       x
                     </span>
 
@@ -1162,9 +981,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Dây da"
-                          onClick={() =>
-                            capNhatBoLoc("chat_lieu_day", "Dây da")
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_day", "Dây da")}
                         >
                           Dây da
                         </Link>
@@ -1175,9 +992,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Thép không gỉ 316L"
-                          onClick={() =>
-                            capNhatBoLoc("chat_lieu_day", "Thép không gỉ 316L")
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_day", "Thép không gỉ 316L")}
                         >
                           Thép không gỉ 316L
                         </Link>
@@ -1188,12 +1003,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Thép không gỉ 316L mạ vàng công nghệ PVD"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_day",
-                              "Thép không gỉ 316L mạ vàng công nghệ PVD"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_day", "Thép không gỉ 316L mạ vàng công nghệ PVD")}
                         >
                           Thép không gỉ 316L mạ vàng công nghệ PVD
                         </Link>
@@ -1204,12 +1014,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Thép không gỉ 316L dạng lưới"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_day",
-                              "Thép không gỉ 316L dạng lưới"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_day", "Thép không gỉ 316L dạng lưới")}
                         >
                           Thép không gỉ 316L dạng lưới
                         </Link>
@@ -1220,12 +1025,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Thép không gỉ 316L dạng lắc"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_day",
-                              " Thép không gỉ 316L dạng lắc"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_day", " Thép không gỉ 316L dạng lắc")}
                         >
                           Thép không gỉ 316L dạng lắc
                         </Link>
@@ -1236,9 +1036,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Dây vải"
-                          onClick={() =>
-                            capNhatBoLoc("chat_lieu_day", " Dây vải")
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_day", " Dây vải")}
                         >
                           Dây vải
                         </Link>
@@ -1249,12 +1047,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Thép không gỉ 316L/ Vàng 18K"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_day",
-                              " Thép không gỉ 316L/ Vàng 18K"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_day", " Thép không gỉ 316L/ Vàng 18K")}
                         >
                           Thép không gỉ 316L/ Vàng 18K
                         </Link>
@@ -1265,12 +1058,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Thép không gỉ 316L/ Ceramic"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_day",
-                              " Thép không gỉ 316L/ Ceramic"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_day", " Thép không gỉ 316L/ Ceramic")}
                         >
                           Thép không gỉ 316L/ Ceramic
                         </Link>
@@ -1281,12 +1069,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Thép không gỉ mạ công nghệ PVD"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_day",
-                              "Thép không gỉ mạ công nghệ PVD"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_day", "Thép không gỉ mạ công nghệ PVD")}
                         >
                           Thép không gỉ mạ công nghệ PVD
                         </Link>
@@ -1297,9 +1080,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Dây cao su"
-                          onClick={() =>
-                            capNhatBoLoc("chat_lieu_day", " Dây cao su")
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_day", " Dây cao su")}
                         >
                           Dây cao su
                         </Link>
@@ -1310,9 +1091,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Dây dù"
-                          onClick={() =>
-                            capNhatBoLoc("chat_lieu_day", "  Dây dù")
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_day", "  Dây dù")}
                         >
                           Dây dù
                         </Link>
@@ -1323,9 +1102,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Titanium"
-                          onClick={() =>
-                            capNhatBoLoc("chat_lieu_day", " Titanium")
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_day", " Titanium")}
                         >
                           Titanium
                         </Link>
@@ -1336,12 +1113,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Titanium mạ vàng công nghệ PVD"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_day",
-                              "itanium mạ vàng công nghệ PVD"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_day", "itanium mạ vàng công nghệ PVD")}
                         >
                           Titanium mạ vàng công nghệ PVD
                         </Link>
@@ -1352,9 +1124,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Nhựa"
-                          onClick={() =>
-                            capNhatBoLoc("chat_lieu_day", "  Nhựa")
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_day", "  Nhựa")}
                         >
                           Nhựa
                         </Link>
@@ -1377,10 +1147,7 @@ const toggleDropdown = () => {
                     id="chat-lieu-vo"
                     className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[500px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filters-in-field-2-column"]}`}
                   >
-                    <span
-                      className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}
-                    >
+                    <span className={`${styles["close"]} lg:hidden sm:block phone-sm:block`} onClick={toggleDropdown}>
                       x
                     </span>
                     <div
@@ -1394,9 +1161,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Thép không gỉ 316L"
-                          onClick={() =>
-                            capNhatBoLoc("chat_lieu_vo", "Thép không gỉ 316L")
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_vo", "Thép không gỉ 316L")}
                         >
                           Thép không gỉ 316L
                         </Link>
@@ -1407,12 +1172,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Thép không gỉ mạ vàng công nghệ PVD"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_vo",
-                              "Thép không gỉ mạ vàng công nghệ PVD"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_vo", "Thép không gỉ mạ vàng công nghệ PVD")}
                         >
                           Thép không gỉ mạ vàng công nghệ PVD
                         </Link>
@@ -1423,9 +1183,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Vàng 18K"
-                          onClick={() =>
-                            capNhatBoLoc("chat_lieu_vo", "Vàng 18K")
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_vo", "Vàng 18K")}
                         >
                           Vàng 18K
                         </Link>
@@ -1436,12 +1194,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Thép không gỉ 316L/ Vàng 18K"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_vo",
-                              "Thép không gỉ 316L/ Vàng 18K"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_vo", "Thép không gỉ 316L/ Vàng 18K")}
                         >
                           Thép không gỉ 316L/ Vàng 18K
                         </Link>
@@ -1452,9 +1205,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Titanium"
-                          onClick={() =>
-                            capNhatBoLoc("chat_lieu_vo", "Titanium")
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_vo", "Titanium")}
                         >
                           Titanium
                         </Link>
@@ -1465,12 +1216,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Titanium mạ công nghệ PVD"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_vo",
-                              "Titanium mạ công nghệ PVD"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_vo", "Titanium mạ công nghệ PVD")}
                         >
                           Titanium mạ công nghệ PVD
                         </Link>
@@ -1481,9 +1227,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Ceramic"
-                          onClick={() =>
-                            capNhatBoLoc("chat_lieu_vo", "Ceramic")
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_vo", "Ceramic")}
                         >
                           Ceramic
                         </Link>
@@ -1494,12 +1238,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Thép không gỉ 316L/ Ceramic"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_vo",
-                              "Thép không gỉ 316L/ Ceramic"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_vo", "Thép không gỉ 316L/ Ceramic")}
                         >
                           Thép không gỉ 316L/ Ceramic
                         </Link>
@@ -1510,24 +1249,14 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Thép không gỉ mạ công nghệ PVD"
-                          onClick={() =>
-                            capNhatBoLoc(
-                              "chat_lieu_vo",
-                              "Thép không gỉ mạ công nghệ PVD"
-                            )
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_vo", "Thép không gỉ mạ công nghệ PVD")}
                         >
                           Thép không gỉ mạ công nghệ PVD
                         </Link>
                       </div>
                       {/*item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
-                        <Link
-                          rel="nofollow"
-                          href="#"
-                          title="Nhựa"
-                          onClick={() => capNhatBoLoc("chat_lieu_vo", "Nhựa")}
-                        >
+                        <Link rel="nofollow" href="#" title="Nhựa" onClick={() => capNhatBoLoc("chat_lieu_vo", "Nhựa")}>
                           Nhựa
                         </Link>
                       </div>
@@ -1537,9 +1266,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Titanium/ Vàng 18K"
-                          onClick={() =>
-                            capNhatBoLoc("chat_lieu_vo", "Titanium/ Vàng 18K")
-                          }
+                          onClick={() => capNhatBoLoc("chat_lieu_vo", "Titanium/ Vàng 18K")}
                         >
                           Titanium/ Vàng 18K
                         </Link>
@@ -1550,11 +1277,7 @@ const toggleDropdown = () => {
               </div>
 
               {/* Mặt kính */}
-              <div
-                className={`${
-                  styles["field-item"]
-                } ${"phone-sm:ml-[5px]"}${" "} `}
-              >
+              <div className={`${styles["field-item"]} ${"phone-sm:ml-[5px]"}${" "} `}>
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
                   data-id="id-field-mat-kinh"
@@ -1567,10 +1290,7 @@ const toggleDropdown = () => {
                     id="mat-kinh"
                     className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] `}
                   >
-                    <span
-                      className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}
-                    >
+                    <span className={`${styles["close"]} lg:hidden sm:block phone-sm:block`} onClick={toggleDropdown}>
                       x
                     </span>
 
@@ -1596,9 +1316,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Mặt kính cứng"
-                          onClick={() =>
-                            capNhatBoLoc("mat_kinh", "Mặt kính cứng")
-                          }
+                          onClick={() => capNhatBoLoc("mat_kinh", "Mặt kính cứng")}
                         >
                           Mặt kính cứng
                         </Link>
@@ -1609,21 +1327,14 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Hardlex Crystal"
-                          onClick={() =>
-                            capNhatBoLoc("mat_kinh", "Hardlex Crystal")
-                          }
+                          onClick={() => capNhatBoLoc("mat_kinh", "Hardlex Crystal")}
                         >
                           Hardlex Crystal
                         </Link>
                       </div>
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
-                        <Link
-                          rel="nofollow"
-                          href="#"
-                          title="Mica"
-                          onClick={() => capNhatBoLoc("mat_kinh", "Mica")}
-                        >
+                        <Link rel="nofollow" href="#" title="Mica" onClick={() => capNhatBoLoc("mat_kinh", "Mica")}>
                           Mica
                         </Link>
                       </div>
@@ -1656,10 +1367,7 @@ const toggleDropdown = () => {
                     id="mau-mat"
                     className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[500px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filters-in-field-2-column"]}`}
                   >
-                    <span
-                      className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}
-                    >
+                    <span className={`${styles["close"]} lg:hidden sm:block phone-sm:block`} onClick={toggleDropdown}>
                       x
                     </span>
 
@@ -1670,45 +1378,25 @@ const toggleDropdown = () => {
                     >
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
-                        <Link
-                          rel="nofollow"
-                          href="#"
-                          title="Trắng"
-                          onClick={() => capNhatBoLoc("mau_mat", "Trắng")}
-                        >
+                        <Link rel="nofollow" href="#" title="Trắng" onClick={() => capNhatBoLoc("mau_mat", "Trắng")}>
                           Trắng
                         </Link>
                       </div>
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
-                        <Link
-                          rel="nofollow"
-                          href="#"
-                          title="Hồng"
-                          onClick={() => capNhatBoLoc("mau_mat", "Hồng")}
-                        >
+                        <Link rel="nofollow" href="#" title="Hồng" onClick={() => capNhatBoLoc("mau_mat", "Hồng")}>
                           Hồng
                         </Link>
                       </div>
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
-                        <Link
-                          rel="nofollow"
-                          href="#"
-                          title="Xám"
-                          onClick={() => capNhatBoLoc("mau_mat", "Xám")}
-                        >
+                        <Link rel="nofollow" href="#" title="Xám" onClick={() => capNhatBoLoc("mau_mat", "Xám")}>
                           Xám
                         </Link>
                       </div>
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
-                        <Link
-                          rel="nofollow"
-                          href="#"
-                          title="Đen"
-                          onClick={() => capNhatBoLoc("mau_mat", "Đen")}
-                        >
+                        <Link rel="nofollow" href="#" title="Đen" onClick={() => capNhatBoLoc("mau_mat", "Đen")}>
                           Đen
                         </Link>
                       </div>
@@ -1725,12 +1413,7 @@ const toggleDropdown = () => {
                       </div>
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
-                        <Link
-                          rel="nofollow"
-                          href="#"
-                          title="Vàng"
-                          onClick={() => capNhatBoLoc("mau_mat", "Vàng")}
-                        >
+                        <Link rel="nofollow" href="#" title="Vàng" onClick={() => capNhatBoLoc("mau_mat", "Vàng")}>
                           Vàng
                         </Link>
                       </div>
@@ -1747,23 +1430,13 @@ const toggleDropdown = () => {
                       </div>
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
-                        <Link
-                          rel="nofollow"
-                          href="#"
-                          title="Đỏ"
-                          onClick={() => capNhatBoLoc("mau_mat", "Đỏ")}
-                        >
+                        <Link rel="nofollow" href="#" title="Đỏ" onClick={() => capNhatBoLoc("mau_mat", "Đỏ")}>
                           Đỏ
                         </Link>
                       </div>
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
-                        <Link
-                          rel="nofollow"
-                          href="#"
-                          title="Da Cam"
-                          onClick={() => capNhatBoLoc("mau_mat", "Da Cam")}
-                        >
+                        <Link rel="nofollow" href="#" title="Da Cam" onClick={() => capNhatBoLoc("mau_mat", "Da Cam")}>
                           Da Cam
                         </Link>
                       </div>
@@ -1780,12 +1453,7 @@ const toggleDropdown = () => {
                       </div>
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
-                        <Link
-                          rel="nofollow"
-                          href="#"
-                          title="Nâu"
-                          onClick={() => capNhatBoLoc("mau_mat", "Nâu")}
-                        >
+                        <Link rel="nofollow" href="#" title="Nâu" onClick={() => capNhatBoLoc("mau_mat", "Nâu")}>
                           Nâu
                         </Link>
                       </div>
@@ -1795,11 +1463,7 @@ const toggleDropdown = () => {
               </div>
 
               {/*Phong cách */}
-              <div
-                className={`${
-                  styles["field-item"]
-                } ${"phone-sm:ml-[5px]"}${" "} `}
-              >
+              <div className={`${styles["field-item"]} ${"phone-sm:ml-[5px]"}${" "} `}>
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} `}
                   data-id="id-field-phong-cach"
@@ -1812,10 +1476,7 @@ const toggleDropdown = () => {
                     id="phong-cach"
                     className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px]`}
                   >
-                    <span
-                      className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}
-                    >
+                    <span className={`${styles["close"]} lg:hidden sm:block phone-sm:block`} onClick={toggleDropdown}>
                       x
                     </span>
 
@@ -1830,9 +1491,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Sang trọng"
-                          onClick={() =>
-                            capNhatBoLoc("phong_cach", "Sang trọng")
-                          }
+                          onClick={() => capNhatBoLoc("phong_cach", "Sang trọng")}
                         >
                           Sang trọng
                         </Link>
@@ -1854,9 +1513,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Thể thao sang trọng"
-                          onClick={() =>
-                            capNhatBoLoc("phong_cach", "Thể thao sang trọng")
-                          }
+                          onClick={() => capNhatBoLoc("phong_cach", "Thể thao sang trọng")}
                         >
                           Thể thao sang trọng
                         </Link>
@@ -1878,9 +1535,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Thời trang"
-                          onClick={() =>
-                            capNhatBoLoc("phong_cach", "Thời trang")
-                          }
+                          onClick={() => capNhatBoLoc("phong_cach", "Thời trang")}
                         >
                           Thời trang
                         </Link>
@@ -1914,10 +1569,7 @@ const toggleDropdown = () => {
                     id="kieu-dang"
                     className={`${styles["field-label"]} ${styles["filters-in-field"]} w-full phone-sm:w-full sm:w-full phone-sm:text-[12px] sm:text-[14px]`}
                   >
-                    <span
-                      className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}
-                    >
+                    <span className={`${styles["close"]} lg:hidden sm:block phone-sm:block`} onClick={toggleDropdown}>
                       x
                     </span>
 
@@ -1954,9 +1606,7 @@ const toggleDropdown = () => {
                           rel="nofollow"
                           href="#"
                           title="Mặt chữ nhật"
-                          onClick={() =>
-                            capNhatBoLoc("kieu_dang", "Mặt chữ nhật")
-                          }
+                          onClick={() => capNhatBoLoc("kieu_dang", "Mặt chữ nhật")}
                         >
                           Mặt chữ nhật
                         </Link>
@@ -1974,12 +1624,7 @@ const toggleDropdown = () => {
                       </div>
                       {/* item1 */}
                       <div className={`${styles.cls} ${styles.item}`}>
-                        <Link
-                          rel="nofollow"
-                          href="#"
-                          title="Khác"
-                          onClick={() => capNhatBoLoc("kieu_dang", "Khác")}
-                        >
+                        <Link rel="nofollow" href="#" title="Khác" onClick={() => capNhatBoLoc("kieu_dang", "Khác")}>
                           Khác
                         </Link>
                       </div>
@@ -1989,11 +1634,7 @@ const toggleDropdown = () => {
               </div>
 
               {/*Xuất xứ thương hiệu */}
-              <div
-                className={`${styles["field-area"]} ${
-                  styles["field-item"]
-                } ${" "}`}
-              >
+              <div className={`${styles["field-area"]} ${styles["field-item"]} ${" "}`}>
                 <div
                   className={`${"cursor-pointer font-normal uppercase text-[12px] transition-all duration-300"} ${
                     styles.normal
@@ -2008,10 +1649,7 @@ const toggleDropdown = () => {
                     id="xuat-xu-thuong-hieu"
                     className={`${styles["field-label"]} ${styles["filters-in-field"]} lg:w-[320px] phone-sm:w-[180px] sm:w-[220px] phone-sm:text-[12px] sm:text-[14px] ${styles["filter-4-xuat-xu-thuong-hieu"]}`}
                   >
-                    <span
-                      className={`${styles["close"]} lg:hidden sm:block phone-sm:block`}
-                      onClick={toggleDropdown}
-                    >
+                    <span className={`${styles["close"]} lg:hidden sm:block phone-sm:block`} onClick={toggleDropdown}>
                       x
                     </span>
                     <div
@@ -2052,9 +1690,7 @@ const toggleDropdown = () => {
               {/*title-name*/}
               <h1 className=" text-[20px]">
                 {" "}
-                {categoryName === "Đồng hồ đôi"
-                  ? categoryName
-                  : `Đồng hồ ${categoryName}`}
+                {categoryName === "Đồng hồ đôi" ? categoryName : `Đồng hồ ${categoryName}`}
               </h1>
               <div className={styles.clear}></div>
             </div>
@@ -2083,31 +1719,16 @@ const toggleDropdown = () => {
                 className={`${styles["product-grid"]} grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-4 mt-3`}
               >
                 {sanPhamHienThi.map((product) => {
-                  const {
-                    _id,
-                    ten,
-                    ten_san_pham,
-                    ma_san_pham,
-                    gia_san_pham,
-                    gia_giam,
-                    hinh_anh,
-                    loai,
-                    duong_kinh,
-                  } = product;
+                  const { _id, ten, ten_san_pham, ma_san_pham, gia_san_pham, gia_giam, hinh_anh, loai, duong_kinh } =
+                    product;
                   const roundDiscount = (discountPercentage) => {
                     const discountLevels = [10, 15, 20, 25, 30, 40, 50];
                     return discountLevels.reduce((prev, curr) =>
-                      Math.abs(curr - discountPercentage) <
-                      Math.abs(prev - discountPercentage)
-                        ? curr
-                        : prev
+                      Math.abs(curr - discountPercentage) < Math.abs(prev - discountPercentage) ? curr : prev
                     );
                   };
                   return (
-                    <div
-                      key={_id}
-                      className="border-box relative overflow-hidden text-center mb-10"
-                    >
+                    <div key={_id} className="border-box relative overflow-hidden text-center mb-10">
                       <div className="relative">
                         <figure className="relative mb-4 min-h-[230px]">
                           <Link href={`/components/product-detail/${_id}`}>
@@ -2125,34 +1746,21 @@ const toggleDropdown = () => {
                           </Link>
                         </figure>
                         <h3>
-                          <Link
-                            className="text-[17px] font-semibold mb-2"
-                            href={`/san_pham/${_id}`}
-                            title={ten}
-                          >
+                          <Link className="text-[17px] font-semibold mb-2" href={`/san_pham/${_id}`} title={ten}>
                             <span className="text-gray-500 block text-[14px] mt-1.5 mb-2 font-normal leading-relaxed">
                               {ten_san_pham}
                             </span>
                             {ma_san_pham}
                           </Link>
                         </h3>
-                        <span className="inline-block text-[12px] uppercase text-gray-500 mb-1.5">
-                          {loai}
-                        </span>
-                        <span className="px-1.5 text-gray-500 text-[13px]">
-                          |
-                        </span>
-                        <span className="inline-block text-[12px] uppercase text-gray-500 mb-1.5">
-                          {duong_kinh}
-                        </span>
+                        <span className="inline-block text-[12px] uppercase text-gray-500 mb-1.5">{loai}</span>
+                        <span className="px-1.5 text-gray-500 text-[13px]">|</span>
+                        <span className="inline-block text-[12px] uppercase text-gray-500 mb-1.5">{duong_kinh}</span>
                         <div className={styles["price-area"]}>
                           {gia_giam > 0 ? (
                             <>
                               <div className="text-[15px] text-gray-400 mb-2 line-through">
-                                Giá:{" "}
-                                <span>
-                                  {gia_san_pham.toLocaleString("vi-VN")}₫
-                                </span>
+                                Giá: <span>{gia_san_pham.toLocaleString("vi-VN")}₫</span>
                               </div>
                               <div className="text-[18px] text-red-600 font-semibold">
                                 Giá KM: {gia_giam.toLocaleString("vi-VN")} ₫
@@ -2166,16 +1774,7 @@ const toggleDropdown = () => {
                         </div>
                         {gia_giam > 0 && (
                           <div className="absolute top-0 left-1.25 bg-red-600 text-white text-sm w-11 h-11 leading-[2.875rem] box-border rounded-full">
-                            <span>
-                              -
-                              {roundDiscount(
-                                Math.round(
-                                  ((gia_san_pham - gia_giam) / gia_san_pham) *
-                                    100
-                                )
-                              )}
-                              %
-                            </span>
+                            <span>-{roundDiscount(Math.round(((gia_san_pham - gia_giam) / gia_san_pham) * 100))}%</span>
                           </div>
                         )}
 
@@ -2195,49 +1794,31 @@ const toggleDropdown = () => {
             {/* Prev trang đâù */}
             <span
               title="First page"
-              className={
-                currentPage === 1 ? styles.disabled : styles["other-page"]
-              }
+              className={currentPage === 1 ? styles.disabled : styles["other-page"]}
               onClick={() => currentPage > 1 && thayDoiTrang(1)}
             >
               ‹‹
             </span>
             {/* Prev 1 trang */}
             <span
-              className={
-                currentPage === 1 ? styles.disabled : styles["other-page"]
-              }
+              className={currentPage === 1 ? styles.disabled : styles["other-page"]}
               onClick={() => currentPage > 1 && thayDoiTrang(currentPage - 1)}
             >
               ‹
             </span>
             {/* Trang hiện tại */}
-            <span className={styles.currentPage}>{`Trang ${currentPage} / ${
-              totalPages || 1
-            }`}</span>
+            <span className={styles.currentPage}>{`Trang ${currentPage} / ${totalPages || 1}`}</span>
             {/* Next 1 trang*/}
             <span
-              className={
-                currentPage === totalPages
-                  ? styles.disabled
-                  : styles["other-page"]
-              }
-              onClick={() =>
-                currentPage < totalPages && thayDoiTrang(currentPage + 1)
-              }
+              className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
+              onClick={() => currentPage < totalPages && thayDoiTrang(currentPage + 1)}
             >
               ›
             </span>
             {/* Next tới trang cuối */}
             <span
-              className={
-                currentPage === totalPages
-                  ? styles.disabled
-                  : styles["other-page"]
-              }
-              onClick={() =>
-                currentPage < totalPages && thayDoiTrang(totalPages)
-              }
+              className={currentPage === totalPages ? styles.disabled : styles["other-page"]}
+              onClick={() => currentPage < totalPages && thayDoiTrang(totalPages)}
             >
               ››
             </span>

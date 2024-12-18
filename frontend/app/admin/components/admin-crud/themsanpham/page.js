@@ -307,6 +307,19 @@ export default function ThemSanPham() {
                 )}
               </div>
               <div className={styles.formGroup}>
+                <label htmlFor="so_luong">Số lượng</label>
+                <input
+                  type="text"
+                  id="so_luong"
+                  name="so_luong"
+                  value={formData.so_luong}
+                  onChange={handleChange}
+                />
+                {errors.so_luong && (
+                  <span className="text-danger">{errors.so_luong}</span>
+                )}
+              </div>
+              <div className={styles.formGroup}>
                 <label htmlFor="do_chiu_nuoc">Độ chịu nước</label>
                 <input
                   type="text"
@@ -339,19 +352,7 @@ export default function ThemSanPham() {
                   onChange={handleChange}
                 />
               </div>
-              <div className={styles.formGroup}>
-                <label htmlFor="so_luong">Số lượng</label>
-                <input
-                  type="text"
-                  id="so_luong"
-                  name="so_luong"
-                  value={formData.so_luong}
-                  onChange={handleChange}
-                />
-                {errors.so_luong && (
-                  <span className="text-danger">{errors.so_luong}</span>
-                )}
-              </div>
+             
               <div className={styles.formGroup}>
                 <label htmlFor="loai">Loại</label>
                 <input

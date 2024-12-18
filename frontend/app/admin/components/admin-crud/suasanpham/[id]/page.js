@@ -93,7 +93,7 @@ export default function SuaSanPham({ params }) {
     e.preventDefault();
     setErrorMessage("");
 
-    const { ten_san_pham, gia_san_pham, id_thuong_hieu } = formData;
+    const { ten_san_pham, gia_san_pham, id_thuong_hieu, id_danh_muc } = formData;
     if (!ten_san_pham || !gia_san_pham || !id_thuong_hieu) {
       setErrorMessage("Vui lòng điền tất cả các trường bắt buộc.");
       return;
@@ -101,7 +101,11 @@ export default function SuaSanPham({ params }) {
 
     const data = new FormData();
     Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
+      if (key === "id_danh_muc") {
+        data.append(key, formData[key] || "");
+      } else {
+        data.append(key, formData[key]);
+      }
     });
 
     if (imageFile) {
@@ -147,8 +151,8 @@ export default function SuaSanPham({ params }) {
         <div className={styles.bg}>
           <form onSubmit={handleSubmit}>
             <div className={styles.container1}>
-            {/* Thương hiệu (Brand) Select */}
-            <div className={styles.formGroup}>
+              {/* Thương hiệu (Brand) Select */}
+              <div className={styles.formGroup}>
                 <label htmlFor="id_thuong_hieu">Thương hiệu *</label>
                 <select
                   id="id_thuong_hieu"
@@ -169,12 +173,7 @@ export default function SuaSanPham({ params }) {
               {/* Danh mục (Category) Select */}
               <div className={styles.formGroup}>
                 <label htmlFor="id_danh_muc">Danh mục</label>
-                <select
-                  id="id_danh_muc"
-                  name="id_danh_muc"
-                  value={formData.id_danh_muc || ""}
-                  onChange={handleChange}
-                >
+                <select id="id_danh_muc" name="id_danh_muc" value={formData.id_danh_muc || ""} onChange={handleChange}>
                   <option value="">Chọn danh mục (Không bắt buộc)</option>
                   {cates.map((category) => (
                     <option key={category._id} value={category._id}>
@@ -199,13 +198,7 @@ export default function SuaSanPham({ params }) {
               {/* Tên chi tiết */}
               <div className={styles.formGroup}>
                 <label htmlFor="ten">Tên chi tiết</label>
-                <input
-                  type="text"
-                  id="ten"
-                  name="ten"
-                  value={formData.ten}
-                  onChange={handleChange}
-                />
+                <input type="text" id="ten" name="ten" value={formData.ten} onChange={handleChange} />
               </div>
 
               {/* Giá sản phẩm */}
@@ -224,16 +217,8 @@ export default function SuaSanPham({ params }) {
               {/* Giá giảm */}
               <div className={styles.formGroup}>
                 <label htmlFor="gia_giam">Giá giảm</label>
-                <input
-                  type="text"
-                  id="gia_giam"
-                  name="gia_giam"
-                  value={formData.gia_giam}
-                  onChange={handleChange}
-                />
+                <input type="text" id="gia_giam" name="gia_giam" value={formData.gia_giam} onChange={handleChange} />
               </div>
-
-              
 
               {/* Mã sản phẩm */}
               <div className={styles.formGroup}>
@@ -245,6 +230,12 @@ export default function SuaSanPham({ params }) {
                   value={formData.ma_san_pham}
                   onChange={handleChange}
                 />
+              </div>
+
+              {/* Số lượng */}
+              <div className={styles.formGroup}>
+                <label htmlFor="so_luong">Số lượng</label>
+                <input type="text" id="so_luong" name="so_luong" value={formData.so_luong} onChange={handleChange} />
               </div>
 
               {/* Độ chịu nước */}
@@ -262,61 +253,25 @@ export default function SuaSanPham({ params }) {
               {/* Xuất xứ */}
               <div className={styles.formGroup}>
                 <label htmlFor="xuat_xu">Xuất xứ</label>
-                <input
-                  type="text"
-                  id="xuat_xu"
-                  name="xuat_xu"
-                  value={formData.xuat_xu}
-                  onChange={handleChange}
-                />
+                <input type="text" id="xuat_xu" name="xuat_xu" value={formData.xuat_xu} onChange={handleChange} />
               </div>
 
               {/* Giới tính */}
               <div className={styles.formGroup}>
                 <label htmlFor="gioi_tinh">Giới tính</label>
-                <input
-                  type="text"
-                  id="gioi_tinh"
-                  name="gioi_tinh"
-                  value={formData.gioi_tinh}
-                  onChange={handleChange}
-                />
-              </div>
-
-              {/* Số lượng */}
-              <div className={styles.formGroup}>
-                <label htmlFor="so_luong">Số lượng</label>
-                <input
-                  type="text"
-                  id="so_luong"
-                  name="so_luong"
-                  value={formData.so_luong}
-                  onChange={handleChange}
-                />
+                <input type="text" id="gioi_tinh" name="gioi_tinh" value={formData.gioi_tinh} onChange={handleChange} />
               </div>
 
               {/* Loại */}
               <div className={styles.formGroup}>
                 <label htmlFor="loai">Loại</label>
-                <input
-                  type="text"
-                  id="loai"
-                  name="loai"
-                  value={formData.loai}
-                  onChange={handleChange}
-                />
+                <input type="text" id="loai" name="loai" value={formData.loai} onChange={handleChange} />
               </div>
 
               {/* Loại máy */}
               <div className={styles.formGroup}>
                 <label htmlFor="loai_may">Loại máy</label>
-                <input
-                  type="text"
-                  id="loai_may"
-                  name="loai_may"
-                  value={formData.loai_may}
-                  onChange={handleChange}
-                />
+                <input type="text" id="loai_may" name="loai_may" value={formData.loai_may} onChange={handleChange} />
               </div>
 
               {/* Đường kính */}
@@ -358,25 +313,13 @@ export default function SuaSanPham({ params }) {
               {/* Mặt kính */}
               <div className={styles.formGroup}>
                 <label htmlFor="mat_kinh">Mặt kính</label>
-                <input
-                  type="text"
-                  id="mat_kinh"
-                  name="mat_kinh"
-                  value={formData.mat_kinh}
-                  onChange={handleChange}
-                />
+                <input type="text" id="mat_kinh" name="mat_kinh" value={formData.mat_kinh} onChange={handleChange} />
               </div>
 
               {/* Màu mặt */}
               <div className={styles.formGroup}>
                 <label htmlFor="mau_mat">Màu mặt</label>
-                <input
-                  type="text"
-                  id="mau_mat"
-                  name="mau_mat"
-                  value={formData.mau_mat}
-                  onChange={handleChange}
-                />
+                <input type="text" id="mau_mat" name="mau_mat" value={formData.mau_mat} onChange={handleChange} />
               </div>
 
               {/* Phong cách */}
@@ -394,37 +337,19 @@ export default function SuaSanPham({ params }) {
               {/* Kiểu dáng */}
               <div className={styles.formGroup}>
                 <label htmlFor="kieu_dang">Kiểu dáng</label>
-                <input
-                  type="text"
-                  id="kieu_dang"
-                  name="kieu_dang"
-                  value={formData.kieu_dang}
-                  onChange={handleChange}
-                />
+                <input type="text" id="kieu_dang" name="kieu_dang" value={formData.kieu_dang} onChange={handleChange} />
               </div>
 
               {/* Size dây */}
               <div className={styles.formGroup}>
                 <label htmlFor="size_day">Size dây</label>
-                <input
-                  type="text"
-                  id="size_day"
-                  name="size_day"
-                  value={formData.size_day}
-                  onChange={handleChange}
-                />
+                <input type="text" id="size_day" name="size_day" value={formData.size_day} onChange={handleChange} />
               </div>
 
               {/* Màu dây */}
               <div className={styles.formGroup}>
                 <label htmlFor="mau_day">Màu dây</label>
-                <input
-                  type="text"
-                  id="mau_day"
-                  name="mau_day"
-                  value={formData.mau_day}
-                  onChange={handleChange}
-                />
+                <input type="text" id="mau_day" name="mau_day" value={formData.mau_day} onChange={handleChange} />
               </div>
 
               {/* Độ dài dây */}
@@ -450,39 +375,25 @@ export default function SuaSanPham({ params }) {
                       style={{ width: "60px", height: "60px", objectFit: "cover" }}
                     />
                   )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
+                  <input type="file" accept="image/*" onChange={handleFileChange} />
                 </div>
               </div>
 
               {/* Mô tả sản phẩm */}
               <div className={styles.formGroup}>
                 <label htmlFor="mo_ta">Mô tả sản phẩm</label>
-                <textarea
-                  id="mo_ta"
-                  name="mo_ta"
-                  value={formData.mo_ta}
-                  onChange={handleChange}
-                />
+                <textarea id="mo_ta" name="mo_ta" value={formData.mo_ta} onChange={handleChange} />
               </div>
 
               {/* Hiển thị thông báo lỗi */}
-              {errorMessage && (
-                <div className="alert alert-danger">{errorMessage}</div>
-              )}
+              {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
 
               {/* Submit and Cancel Buttons */}
               <button type="submit" className="btn btn-outline-primary">
                 Cập Nhật
               </button>
               <Link href="/admin/components/quanlyadmin/sanpham">
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary w-100"
-                >
+                <button type="button" className="btn btn-outline-secondary w-100">
                   Hủy bỏ
                 </button>
               </Link>
