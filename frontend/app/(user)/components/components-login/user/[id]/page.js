@@ -38,7 +38,7 @@ const User = ({ params }) => {
     xac_nhan_mat_khau: false,
   });
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 3; // Define items per page
+  const itemsPerPage = 2;
 
   useEffect(() => {
     setMounted(true);
