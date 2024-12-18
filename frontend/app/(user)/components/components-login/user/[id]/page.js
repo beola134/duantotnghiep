@@ -37,6 +37,7 @@ const User = ({ params }) => {
     mat_khau_moi: false,
     xac_nhan_mat_khau: false,
   });
+
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 2;
 
@@ -215,7 +216,6 @@ const User = ({ params }) => {
     return isValid;
   };
 
-
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
     setPasswordData({ ...passwordData, [name]: value });
@@ -223,7 +223,6 @@ const User = ({ params }) => {
 
   const handleSubmitPasswordChange = async (e) => {
     e.preventDefault();
-
     Swal.fire({
       title: "Bạn có muốn cập nhật?",
       text: "Bạn có chắc muốn thay đổi mật khẩu?",
@@ -247,6 +246,18 @@ const User = ({ params }) => {
           setIsSubmitting(false);
           return;
         }
+        const passwordPattern =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,}$/;
+          if (!passwordPattern.test(mat_khau_moi)) {
+            Swal.fire({
+              title: "Lỗi",
+              text: "Mật khẩu mới phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.",
+              icon: "error",
+              confirmButtonText: "OK",
+            });
+            setIsSubmitting(false);
+            return;
+          }
         try {
           const res = await fetch(
             `http://localhost:5000/users/changepassword`,
@@ -267,13 +278,13 @@ const User = ({ params }) => {
 
           if (res.ok) {
             Swal.fire({
-              title: "Thành công",
+              title: "Đổi mật khẩu thành công vui lòng đăng nhập lại",
               text: data.message,
               icon: "success",
               confirmButtonText: "OK",
             }).then(() => {
-              localStorage.setItem("activeTab", "changePassword");
-              window.location.reload();
+              Cookies.remove("token");
+              window.location.href = "/";
             });
           } else if (data.message === "Mật khẩu không hợp lệ") {
             Swal.fire({
@@ -467,7 +478,14 @@ const User = ({ params }) => {
               </span>
             </p>
 
-            <p style={{background:"#796752",cursor: "pointer", padding:"10px",borderRadius:"5px", textAlign:"center" }}>
+            <p
+              style={{
+                background: "#796752",
+                cursor: "pointer",
+                padding: "10px",
+                borderRadius: "5px",
+                textAlign: "center",
+              }}>
               <Link href={""} className="text-white" onClick={handleLayout}>
                 Đăng xuất
               </Link>
@@ -519,7 +537,8 @@ const User = ({ params }) => {
                     value={userData.email}
                     onChange={handleChange}
                     disabled={!isEditing}
-                  />{!/^[\w.%+-]+@gmail\.com$/.test(userData.email) &&
+                  />
+                  {!/^[\w.%+-]+@gmail\.com$/.test(userData.email) &&
                     isEditing && (
                       <small style={{ color: "red" }}>
                         Email phải có định dạng @gmail.com
@@ -546,7 +565,8 @@ const User = ({ params }) => {
                     value={userData.dien_thoai}
                     onChange={handleChange}
                     disabled={!isEditing}
-                  />{!/^0\d{9}$/.test(userData.dien_thoai) && isEditing && (
+                  />
+                  {!/^0\d{9}$/.test(userData.dien_thoai) && isEditing && (
                     <small style={{ color: "red" }}>
                       Số điện thoại phải có 10 số và bắt đầu bằng 0
                     </small>
@@ -864,7 +884,7 @@ const User = ({ params }) => {
                     <span
                       onClick={() => togglePasswordVisibility("mat_khau")}
                       className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 cursor-pointer">
-                      {showPassword.mat_khau ? <FaEyeSlash /> : <FaEye />}
+                      {showPassword.mat_khau ? < FaEye/> : < FaEyeSlash/>}
                     </span>
                   </div>
                 </div>
@@ -883,7 +903,7 @@ const User = ({ params }) => {
                     <span
                       onClick={() => togglePasswordVisibility("mat_khau_moi")}
                       className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 cursor-pointer">
-                      {showPassword.mat_khau_moi ? <FaEyeSlash /> : <FaEye />}
+                      {showPassword.mat_khau_moi ? < FaEye/> : <FaEyeSlash />}
                     </span>
                   </div>
                 </div>
@@ -909,9 +929,9 @@ const User = ({ params }) => {
                       }
                       className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-600 cursor-pointer">
                       {showPassword.xac_nhan_mat_khau ? (
-                        <FaEyeSlash />
+                        < FaEye/>
                       ) : (
-                        <FaEye />
+                        <FaEyeSlash />
                       )}
                     </span>
                   </div>
