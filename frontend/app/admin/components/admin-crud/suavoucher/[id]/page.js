@@ -67,15 +67,8 @@ export default function SuaVoucher() {
       !ngayBD ||
       !ngayKT ||
       !mota2 ||
-      (!phantram && !giatri)
-    ) {
-      Swal.fire({
-        icon: "warning",
-        title: "Thiếu thông tin",
-        text: "Vui lòng nhập đầy đủ thông tin!",
-      });
-      return;
-    }
+      (phantram === "" && giatri === "")
+    )
     if (isNaN(giatri)) {
       Swal.fire("Error", "Giá trị voucher phải là số!", "error");
       return;

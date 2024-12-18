@@ -392,9 +392,9 @@ export default function AdminStatistics() {
               <table className={cx("customer-table")}>
                 <thead>
                   <tr>
-                    <th>User</th>
-                    <th>Date Order</th>
-                    <th>Status</th>
+                    <th>Người dùng</th>
+                    <th>Ngày đặc hàng</th>
+                    <th>Trạng Thái</th>
                   </tr>
                 </thead>
                 <tbody>

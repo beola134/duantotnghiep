@@ -203,3 +203,42 @@ exports.replyComment = async (req, res) => {
     res.status(500).json({ message: "Lỗi server" });
   }
 };
+
+//lấy chi tiết bình luận theo _id bình luận
+exports.getComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const comment = await CMT.findOne({ where: { _id: id } });
+    if (!comment) {
+      return res.status(404).json({ message: "Không tìm thấy bình luận" });
+    }
+    res.status(200).json({comment});
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Lỗi server" });
+  }
+};
+
+//cập nhật bình luận
+exports.updateComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { tra_loi_binh_luan } = req.body;  // Use tra_loi_binh_luan instead of noi_dung
+    const comment = await CMT.findOne({ where: { _id: id } });
+
+    if (!comment) {
+      return res.status(404).json({ message: "Không tìm thấy bình luận" });
+    }
+
+    // Update the reply to the comment (tra_loi_binh_luan)
+    const updatedComment = await comment.update({ tra_loi_binh_luan });
+
+    res.status(200).json({
+      message: "Cập nhật bình luận thành công",
+      comment: updatedComment,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Lỗi server" });
+  }
+};

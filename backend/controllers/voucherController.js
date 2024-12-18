@@ -191,9 +191,7 @@ const updateVoucher = async (req, res) => {
     voucherToUpdate.mo_ta = mo_ta || voucherToUpdate.mo_ta;
     voucherToUpdate.don_hang_toi_thieu =
       don_hang_toi_thieu || voucherToUpdate.don_hang_toi_thieu;
-    voucherToUpdate.trang_thai = trang_thai || voucherToUpdate.trang_thai;
-    voucherToUpdate.mota2 = mota2 || voucherToUpdate.mota
-
+    voucherToUpdate.mota2 = mota2 || voucherToUpdate.mota2
     await voucherToUpdate.save();
 
     res

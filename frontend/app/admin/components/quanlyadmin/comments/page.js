@@ -8,6 +8,7 @@ import ExcelJS from "exceljs";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import RobotoRegular from "./Roboto-Regular.base64";
+import Link  from "next/link";
 
 export default function CommentsPage() {
   const [comments, setComments] = useState([]);
@@ -390,6 +391,7 @@ export default function CommentsPage() {
                     <th style={{ width: "8%", textAlign: "center" }}>Họ và tên </th>
                     <th style={{ width: "12%", textAlign: "center" }}>Nội dung</th>
                     <th style={{ width: "10%", textAlign: "center" }}>Ngày bình luận</th>
+                    <th style={{ width: "10%", textAlign: "center" }}>Trạng thái</th>
                     <th style={{ width: "10%", textAlign: "center" }}>Chức năng</th>
                     <th style={{ width: "10%", textAlign: "center" }}>Trả lời bình luận</th>
                   </tr>
@@ -434,6 +436,16 @@ export default function CommentsPage() {
                               <FontAwesomeIcon icon={trang_thai ? faEye : faEyeSlash} />
                             </button>
                           </td>
+                          <td style={{ textAlign: "center" }}>
+                          <Link
+                          style={{ textAlign: "center" }}
+                          href={`/admin/components/admin-crud/suabl/${_id}`}
+                          className={`${styles.btn} ${styles.edit}`}
+                        >
+                          ✏️
+                        </Link>{" "}
+                          </td>
+                         
                           <td style={{ textAlign: "center" }}>
                           {comment.tra_loi_binh_luan.trim() === "" ? (
                             <button

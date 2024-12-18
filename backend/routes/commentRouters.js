@@ -19,5 +19,13 @@ router.put("/changeStatus/:id", commentController.toggleComment);
 //api trả lời bình luận bên phía admin
 //http://localhost:5000/comment/reply/:id
 router.post("/reply/:id", commentController.replyComment);
+//lấy chi tiết bình luận theo _id bình luận
+//http://localhost:5000/comment/get/:id
+router.get("/get/:id", commentController.getComment);
+
+//cập nhật bình luận
+//http://localhost:5000/comment/update/:id
+router.put("/update/:id", commentController.updateComment);
+
 
 module.exports = router;

@@ -40,7 +40,19 @@ exports.getNewUsersToday = async (req, res) => {
 // Hiển thị tất cả đơn hàng với hình ảnh và tên người dùng
 exports.getAllOrdersWithUserDetails = async (req, res) => {
   try {
-    const orders = await DonHang.findAll({});
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0); 
+
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
+    const orders = await DonHang.findAll({
+      where: {
+        thoi_gian_tao: { 
+          [Op.between]: [todayStart, todayEnd], 
+        },
+      },
+    });
+
     const result = await Promise.all(
       orders.map(async (order) => {
         const user = await Users.findOne({ where: { _id: order.id_nguoi_dung } });
