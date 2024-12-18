@@ -524,17 +524,30 @@ export default function Header() {
 
   return (
     <>
-      <header className={cx("header", "bg-black text-white text-sm py-2 max-h-[80px]")}>
-        <div className={cx("top-bar", "max-w-[1170px] grid grid-cols-12 items-center mx-auto gap-4")}>
+      <header
+        className={cx(
+          "header",
+          "bg-black text-white text-sm py-2 max-h-[80px] overflow-hidden"
+        )}
+      >
+        <div
+          className={cx(
+            "top-bar",
+            "max-w-[1170px] grid grid-cols-12 items-center mx-auto gap-4"
+          )}
+        >
           <div
             className={cx(
               "logo",
               "flex lg:col-span-5 lg:justify-self-start col-span-12 justify-self-center flex-col items-center text-center"
             )}
           >
-            <Link href="/" >
+            <Link href="/">
               <img
-                className={cx("img", "mt-[-55px] w-[250px] h-[170px] ml-[-40px]")}
+                className={cx(
+                  "img",
+                  "mt-[-55px] w-[250px] h-[170px] ml-[-40px]"
+                )}
                 src="/image/item/icons/logo.png"
                 alt="Wristly"
               />
@@ -543,7 +556,7 @@ export default function Header() {
           <div
             className={cx(
               "search-bar",
-              "mt-[-40px] col-span-2 lg:flex  hidden justify-end  items-center bg-[#ffffff24] rounded-full py-1 px-5 max-h-[30px] mr-[-70px]"
+              "mt-[-40px] col-span-2 lg:flex  relative hidden justify-end  items-center bg-[#ffffff24] rounded-full py-1 px-5 max-h-[30px] mr-[-70px]"
             )}
           >
             <input
@@ -552,11 +565,17 @@ export default function Header() {
               type="text"
               onKeyDown={handleSearch}
               placeholder="Bạn muốn tìm ..."
-              className={cx("input", "border-none bg-transparent text-white outline-none w-[300px] py-2 text-sm")}
+              className={cx(
+                "input",
+                "border-none bg-transparent text-white outline-none w-[300px] py-2 text-sm"
+              )}
             />
             <button
               type="button"
-              className={cx("button", "border-none bg-transparent text-white cursor-pointer")}
+              className={cx(
+                "button",
+                "border-none bg-transparent text-white cursor-pointer"
+              )}
               onClick={handleSearch}
               disabled={!inputData}
             >
@@ -576,7 +595,9 @@ export default function Header() {
                 src="/image/item/icons/icon_call.png"
                 alt="Phone"
               />
-              <span className={cx("phone-span", "text-left text-xs leading-[1.2]")}>
+              <span
+                className={cx("phone-span", "text-left text-xs leading-[1.2]")}
+              >
                 GỌI NGAY
                 <br />
                 084.5487.339
@@ -586,11 +607,13 @@ export default function Header() {
             {user ? (
               <div
                 className={cx(
-                  
                   "flex items-center justify-center max-w-[30px] border border-white rounded-full relative"
                 )}
               >
-                <Link href={`/components/components-login/user/${user.user._id}`} onClick={handleIconClick}>
+                <Link
+                  href={`/components/components-login/user/${user.user._id}`}
+                  onClick={handleIconClick}
+                >
                   <img
                     src={
                       user.user.hinh_anh.startsWith("http")
@@ -603,7 +626,7 @@ export default function Header() {
                       display: "inline-block",
                       width: "160px",
                       height: "29px",
-                     
+
                       borderRadius: "50%",
                       objectFit: "cover",
                     }}
@@ -617,14 +640,28 @@ export default function Header() {
                   "flex items-center justify-center w-[30px] h-[30px] border border-white rounded-full relative"
                 )}
               >
-                <Link href="/components/components-login/login" onClick={handleIconClick}>
+                <Link
+                  href="/components/components-login/login"
+                  onClick={handleIconClick}
+                >
                   <FontAwesomeIcon icon={faUser} style={{ color: "#ffffff" }} />
                 </Link>
               </div>
             )}
-            <Link href="/components/components-giaodich/giohang" onClick={handleIconClick}>
-              <div className={cx("cart", "flex items-center justify-center w-[30px] h-[30px] rounded-full relative")}>
-                <FontAwesomeIcon icon={faShoppingCart} style={{ color: "#ffffff" }} />
+            <Link
+              href="/components/components-giaodich/giohang"
+              onClick={handleIconClick}
+            >
+              <div
+                className={cx(
+                  "cart",
+                  "flex items-center justify-center w-[30px] h-[30px] rounded-full relative"
+                )}
+              >
+                <FontAwesomeIcon
+                  icon={faShoppingCart}
+                  style={{ color: "#ffffff" }}
+                />
 
                 <span
                   className={cx(
@@ -637,15 +674,17 @@ export default function Header() {
               </div>
             </Link>
           </div>
-          <div className="menu-icon fixed top-[20px] right-[20px]  lg:hidden flex  text-center">
+          <div className="menu-icon absolute top-[20px] right-[20px]  lg:hidden flex overflow-hidden  text-center">
             {user ? (
               <div
                 className={cx(
-                  "user",
-                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full relative"
+                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full"
                 )}
               >
-                <Link href={`/components/components-login/user/${user.user._id}`} onClick={handleIconClick}>
+                <Link
+                  href={`/components/components-login/user/${user.user._id}`}
+                  onClick={handleIconClick}
+                >
                   <img
                     src={
                       user.user.hinh_anh.startsWith("http")
@@ -658,7 +697,7 @@ export default function Header() {
                       display: "inline-block",
                       width: "160px",
                       height: "29px",
-                      
+
                       borderRadius: "50%",
                       objectFit: "cover",
                     }}
@@ -669,17 +708,31 @@ export default function Header() {
               <div
                 className={cx(
                   "user",
-                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full relative"
+                  "flex items-center justify-center mr-3 w-[30px] h-[30px] border border-white rounded-full "
                 )}
               >
-                <Link href="/components/components-login/login" onClick={handleIconClick}>
+                <Link
+                  href="/components/components-login/login"
+                  onClick={handleIconClick}
+                >
                   <FontAwesomeIcon icon={faUser} style={{ color: "#ffffff" }} />
                 </Link>
               </div>
             )}
-            <Link href="/components/components-giaodich/giohang" onClick={handleIconClick}>
-              <div className={cx("cart", "flex  items-center justify-center  w-[30px] h-[30px] rounded-full relative")}>
-                <FontAwesomeIcon icon={faShoppingCart} style={{ color: "#ffffff" }} />
+            <Link
+              href="/components/components-giaodich/giohang"
+              onClick={handleIconClick}
+            >
+              <div
+                className={cx(
+                  "cart",
+                  "flex  items-center justify-center  w-[30px] h-[30px] rounded-full relative"
+                )}
+              >
+                <FontAwesomeIcon
+                  icon={faShoppingCart}
+                  style={{ color: "#ffffff" }}
+                />
 
                 <span
                   className={cx(
@@ -694,28 +747,44 @@ export default function Header() {
           </div>
 
           <div className="menu-icon fixed top-[20px] left-[10px] w-[30px] h-[30px] lg:hidden block  text-center">
-            <img src="/image/item/icons/bars.png" onClick={() => setMenuOpen(!menuOpen)} />
+            <img
+              src="/image/item/icons/bars.png"
+              onClick={() => setMenuOpen(!menuOpen)}
+            />
           </div>
           {menuOpen && (
             <div className="mobile-menu absolute top-[70px] uppercase left-0 w-[70%]  bg-[#796752] py-4 z-50">
               <ul className="flex flex-col ml-5 leading-[1.5] space-y-2 mr-5">
                 <li>
-                  <div className={cx(" mb-5 border border-white  h-12 flex items-center  rounded-full py-1 px-5 ")}>
+                  <div
+                    className={cx(
+                      " mb-5 border border-white  h-12 flex items-center  rounded-full py-1 px-5 "
+                    )}
+                  >
                     <input
                       value={inputData}
                       onChange={(event) => setInputData(event.target.value)}
                       type="text"
                       onKeyDown={handleSearch}
                       placeholder="Bạn muốn tìm ..."
-                      className={cx("input", "border-none bg-transparent w-[80%] text-red outline-none  py-2 text-md")}
+                      className={cx(
+                        "input",
+                        "border-none bg-transparent w-[80%] text-red outline-none  py-2 text-md"
+                      )}
                     />
                     <button
                       type="button"
-                      className={cx("button", "border-none bg-transparent w-[10%] text-white ml-auto cursor-pointer")}
+                      className={cx(
+                        "button",
+                        "border-none bg-transparent w-[10%] text-white ml-auto cursor-pointer"
+                      )}
                       onClick={handleSearch}
                       disabled={!inputData}
                     >
-                      <i className="fas fa-search" style={{ color: "white" }}></i>
+                      <i
+                        className="fas fa-search"
+                        style={{ color: "white" }}
+                      ></i>
                     </button>
                   </div>
                 </li>
@@ -725,22 +794,34 @@ export default function Header() {
                   </Link>
                 </li>
                 <li className="border border-gray-600   h-12 flex items-center">
-                  <Link className="text-white    flex-1 px-3" href="/components/components-thuonghieu/thuonghieu">
+                  <Link
+                    className="text-white    flex-1 px-3"
+                    href="/components/components-thuonghieu/thuonghieu"
+                  >
                     Thương hiệu
                   </Link>
                 </li>
                 <li className="border border-gray-600  h-12 flex items-center">
-                  <Link className="text-white    flex-1 px-3" href="/components/components-thuonghieu/donghonam">
+                  <Link
+                    className="text-white    flex-1 px-3"
+                    href="/components/components-thuonghieu/donghonam"
+                  >
                     Đồng hồ nam
                   </Link>
                 </li>
                 <li className="border border-gray-600  h-12 flex items-center">
-                  <Link className="text-white    flex-1 px-3" href="/components/components-thuonghieu/donghonu">
+                  <Link
+                    className="text-white    flex-1 px-3"
+                    href="/components/components-thuonghieu/donghonu"
+                  >
                     Đồng hồ nữ
                   </Link>
                 </li>
                 <li className="border border-gray-600  h-12 flex items-center">
-                  <Link className="text-white    flex-1 px-3" href="/components/components-thuonghieu/donghodoi">
+                  <Link
+                    className="text-white    flex-1 px-3"
+                    href="/components/components-thuonghieu/donghodoi"
+                  >
                     Đồng hồ đôi
                   </Link>
                 </li>
@@ -753,17 +834,26 @@ export default function Header() {
                   </Link>
                 </li>
                 <li className="border border-gray-600  h-12 flex items-center">
-                  <Link className="text-white    flex-1 px-3" href="/components/components-danhmuc/daydongho">
+                  <Link
+                    className="text-white    flex-1 px-3"
+                    href="/components/components-danhmuc/daydongho"
+                  >
                     Dây đồng hồ
                   </Link>
                 </li>
                 <li className="border border-gray-600  h-12 flex items-center">
-                  <Link className="text-white    flex-1 px-3" href="/components/components-danhmuc/sanphamkhac">
+                  <Link
+                    className="text-white    flex-1 px-3"
+                    href="/components/components-danhmuc/sanphamkhac"
+                  >
                     Sản phẩm khác
                   </Link>
                 </li>
                 <li className="border border-gray-600  h-12 flex items-center">
-                  <Link className="text-white    flex-1 px-3" href="/components/suadongho">
+                  <Link
+                    className="text-white    flex-1 px-3"
+                    href="/components/suadongho"
+                  >
                     Sửa đồng hồ
                   </Link>
                 </li>
@@ -780,7 +870,11 @@ export default function Header() {
               active: selectedMenu === "HOME",
             })}
           >
-            <Link href="/" className={cx("nav-list-home")} onClick={() => handleMenuClick("HOME")}>
+            <Link
+              href="/"
+              className={cx("nav-list-home")}
+              onClick={() => handleMenuClick("HOME")}
+            >
               {/* Sử dụng cx để kết hợp class từ CSS Modules với các class toàn cục */}
               <i className={cx("nav-list-li-i", "fas", "fa-home")}></i>
             </Link>
@@ -798,20 +892,22 @@ export default function Header() {
               THƯƠNG HIỆU
             </Link>
             <ul className={cx("dropdown-menu")}>
-              {category .filter((item) => item.thuong_hieu !== "RHYTHM") .map((item) => (
-                <li className={cx("dropdown-menu-li")} key={item.thuong_hieu}>
-                  <Link
-                    href={`/components/components-thuonghieu/chitietthuonghieu/${item.thuong_hieu}`}
-                    style={{ color: "white" }}
-                  >
-                    <img
-                      className={cx("dropdown-menu-img")}
-                      src={`http://localhost:5000/images/${item.hinh_anh}`}
-                      alt=""
-                    />
-                  </Link>
-                </li>
-              ))}
+              {category
+                .filter((item) => item.thuong_hieu !== "RHYTHM")
+                .map((item) => (
+                  <li className={cx("dropdown-menu-li")} key={item.thuong_hieu}>
+                    <Link
+                      href={`/components/components-thuonghieu/chitietthuonghieu/${item.thuong_hieu}`}
+                      style={{ color: "white" }}
+                    >
+                      <img
+                        className={cx("dropdown-menu-img")}
+                        src={`http://localhost:5000/images/${item.hinh_anh}`}
+                        alt=""
+                      />
+                    </Link>
+                  </li>
+                ))}
             </ul>
           </li>
           <li
@@ -834,7 +930,9 @@ export default function Header() {
                   {locTHNam.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -852,7 +950,9 @@ export default function Header() {
                   {locgiaNam.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                       >
                         {item.title}
@@ -869,7 +969,9 @@ export default function Header() {
                   {locLoaiMayNam.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -887,7 +989,9 @@ export default function Header() {
                   {locDayNam.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -905,7 +1009,9 @@ export default function Header() {
                   {locPhongCachNam.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -938,7 +1044,9 @@ export default function Header() {
                   {locTHNu.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -954,7 +1062,9 @@ export default function Header() {
                   {locgiaNu.map((item) => (
                     <li key={item.gia} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                       >
                         {item.title}
@@ -969,7 +1079,9 @@ export default function Header() {
                   {locLoaiMayNu.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -985,7 +1097,9 @@ export default function Header() {
                   {locDayNu.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -1001,7 +1115,9 @@ export default function Header() {
                   {locPhongCachNu.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -1034,7 +1150,9 @@ export default function Header() {
                   {locTHDoi.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -1050,7 +1168,9 @@ export default function Header() {
                   {locgiaDoi.map((item) => (
                     <li key={item.gia} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                       >
                         {item.title}
@@ -1065,7 +1185,9 @@ export default function Header() {
                   {locLoaiMayDoi.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -1081,7 +1203,9 @@ export default function Header() {
                   {locDayDoi.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -1097,7 +1221,9 @@ export default function Header() {
                   {locPhongCachDoi.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-thuonghieu/locgia?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -1130,7 +1256,9 @@ export default function Header() {
                   {locttTH.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-danhmuc/loctreotuong?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-danhmuc/loctreotuong?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -1146,7 +1274,9 @@ export default function Header() {
                   {locttGia.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-danhmuc/loctreotuong?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-danhmuc/loctreotuong?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -1162,7 +1292,9 @@ export default function Header() {
                   {locttCL.map((item) => (
                     <li key={item.id} className={cx("dropdown-menu-dhn-li2")}>
                       <Link
-                        href={`/components/components-danhmuc/loctreotuong?query=${encodeURIComponent(item.id)}`}
+                        href={`/components/components-danhmuc/loctreotuong?query=${encodeURIComponent(
+                          item.id
+                        )}`}
                         className={cx("cxcx")}
                         style={{ textTransform: "uppercase" }}
                       >
@@ -1202,37 +1334,58 @@ export default function Header() {
             </Link>
             <ul className={cx("dropdown-menu-doc")}>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/components-thuonghieu/donghothuysi" className={cx("dropdown-menu-doc-a")}>
+                <Link
+                  href="/components/components-thuonghieu/donghothuysi"
+                  className={cx("dropdown-menu-doc-a")}
+                >
                   ĐỒNG HỒ THỤY SĨ
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/components-thuonghieu/donghonhatban" className={cx("dropdown-menu-doc-a")}>
+                <Link
+                  href="/components/components-thuonghieu/donghonhatban"
+                  className={cx("dropdown-menu-doc-a")}
+                >
                   ĐỒNG HỒ NHẬT BẢN
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/components-danhmuc/daydongho" className={cx("dropdown-menu-doc-a")}>
+                <Link
+                  href="/components/components-danhmuc/daydongho"
+                  className={cx("dropdown-menu-doc-a")}
+                >
                   DÂY TREO ĐỒNG HỒ
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/components-danhmuc/trangsucCK" className={cx("dropdown-menu-doc-a")}>
+                <Link
+                  href="/components/components-danhmuc/trangsucCK"
+                  className={cx("dropdown-menu-doc-a")}
+                >
                   TRANG SỨC CALVIN KLEIN
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/components-danhmuc/trangsucDW" className={cx("dropdown-menu-doc-a")}>
+                <Link
+                  href="/components/components-danhmuc/trangsucDW"
+                  className={cx("dropdown-menu-doc-a")}
+                >
                   TRANG SỨC DW
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/components-danhmuc/donghobaothuc" className={cx("dropdown-menu-doc-a")}>
+                <Link
+                  href="/components/components-danhmuc/donghobaothuc"
+                  className={cx("dropdown-menu-doc-a")}
+                >
                   ĐỒNG HỒ BÁO THỨC
                 </Link>
               </li>
               <li className={cx("dropdown-menu-doc-li")}>
-                <Link href="/components/components-danhmuc/donghodeban" className={cx("dropdown-menu-doc-a")}>
+                <Link
+                  href="/components/components-danhmuc/donghodeban"
+                  className={cx("dropdown-menu-doc-a")}
+                >
                   ĐỒNG HỒ ĐỂ BÀN
                 </Link>
               </li>
