@@ -469,6 +469,7 @@ export default function DonHang() {
                       <th style={{ width: "10%", textAlign: "center" }}>Ghi chú</th>
                       <th style={{ width: "10%", textAlign: "center" }}>Ngày mua</th>
                       <th style={{ width: "11%", textAlign: "center" }}>Tổng tiền</th>
+                      <th style={{ width: "10%", textAlign: "center" }}>Trạng thái thanh toán</th>
                       <th style={{ width: "18%", textAlign: "center" }}>Tình trạng</th>
                     </tr>
                   </thead>
@@ -490,6 +491,7 @@ export default function DonHang() {
                           }).format(new Date(item.thoi_gian_tao))}
                         </td>
                         <td style={{ "text-align": "center" }}>{item.tong_tien.toLocaleString("vi-VN")}₫</td>
+                        <td style={{ "text-align": "center" }}>{item.trang_thai_thanh_toan} </td>
 
                         <td style={{ "text-align": "center" }}>
                           <p className={styles.trangthai}>
