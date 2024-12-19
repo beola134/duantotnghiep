@@ -107,7 +107,7 @@ exports.zaloPay = async (req, res) => {
       }
     });
     const embed_data = {
-      redirecturl: "http://localhost:3000",
+      redirecturl: "http://localhost:3001",
     };
 
     const paymentData = {
@@ -120,7 +120,7 @@ exports.zaloPay = async (req, res) => {
       amount: amount,
       description: `Payment for order #${transID}`,
       bank_code: "",
-      callback_url: "https://wristlybackend-e89d41f05169.herokuapp.com/pttt/callback",
+      callback_url: " https://61c7-113-161-52-213.ngrok-free.app/pttt/callback",
     };
 
     const data = `${config.app_id}|${paymentData.app_trans_id}|${paymentData.app_user}|${paymentData.amount}|${paymentData.app_time}|${paymentData.embed_data}|${paymentData.item}`;
