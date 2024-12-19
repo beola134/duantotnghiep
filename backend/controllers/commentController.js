@@ -30,6 +30,7 @@ exports.showAllComment = async (req, res) => {
       filter = { id_nguoi_dung: { [Op.in]: userIds } };
     }
     const comments = await CMT.findAll({
+      order: [["ngay_binh_luan", "DESC"]],
       where: filter,
       limit,
       offset,

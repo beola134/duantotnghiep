@@ -299,7 +299,7 @@ const User = ({ params }) => {
           } else if (data.message === "Mật khẩu không hợp lệ") {
             Swal.fire({
               title: "Lỗi",
-              text: "Mật khẩu cũ không hợp lệ",
+              text: "Mật khẩu không được trùng mật khẩu cũ",
               icon: "error",
               confirmButtonText: "OK",
             });

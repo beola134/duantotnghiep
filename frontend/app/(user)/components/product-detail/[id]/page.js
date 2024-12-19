@@ -280,21 +280,25 @@ export default function Detail({ params }) {
               return Swal.fire({
                 icon: "warning",
                 title: "Bạn cần mua sản phẩm này để có thể bình luận",
+                timer: 3000, // Hiển thị 3 giây
+                showConfirmButton: false, // Ẩn nút xác nhận
               });
             }
             throw new Error(data.message || "Lỗi không thể thêm bình luận");
           }
-
+  
           console.log(data.message);
-
+  
           setCommentText("");
           Swal.fire({
             icon: "success",
             title: "Bình luận thành công!",
-            showConfirmButton: false,
-            timer: 1500,
+            showConfirmButton: false, 
+            timer: 1500, 
           });
-          window.location.reload();
+          setTimeout(() => {
+            window.location.reload(); 
+          }, 1500);
         } catch (error) {
           setError(error.message);
         }
@@ -302,12 +306,15 @@ export default function Detail({ params }) {
         Swal.fire({
           icon: "warning",
           title: "Vui lòng nhập bình luận!",
+          timer: 2000, 
+          showConfirmButton: false,
         });
       }
     } else {
       Swal.fire({
         icon: "warning",
         title: "Vui lòng đăng nhập để bình luận",
+        timer: 2500, 
       }).then(() => {
         if (typeof window !== "undefined" && params?.id) {
           const currentUrl = encodeURIComponent(`/components/product-detail/${params.id}`);

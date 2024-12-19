@@ -51,8 +51,8 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: "Email không tồn tại" });
     }
 
-    // Kiểm tra mật khẩu
-    const validPass = await bcrypt.compare(mat_khau, user.mat_khau);
+    // Kiểm tra mật khẩu có trùng với mật khẩu trong CSDL không
+    const validPass = await bcrypt.compare(mat_khau, user.mat_khau); 
     if (!validPass) {
       return res.status(400).json({ message: "Mật khẩu không hợp lệ" });
     }
