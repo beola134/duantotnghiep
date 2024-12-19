@@ -17,6 +17,7 @@ const config = {
 };
 // ZaloPay Callback
 exports.callback = async (req, res) => {
+  // Lấy dữ liệu và mac từ request body
   const result = {};
   try {
     const { data: dataStr, mac: reqMac } = req.body;
@@ -40,10 +41,10 @@ exports.callback = async (req, res) => {
         order.thanh_toan = true;
         await order.save();
         console.log(`Order ${appTransId} status updated to success.`);
-        result.return_code = 1;
+        result.return_code = 1;// Thông báo thành công
         result.return_message = "success";
       } else {
-        result.return_code = -2;
+        result.return_code = -2;// Không tìm thấy đơn hàn
         result.return_message = "Order not found";
       }
     }
@@ -58,7 +59,7 @@ exports.callback = async (req, res) => {
 
 // ZaloPay Payment
 exports.zaloPay = async (req, res) => {
-  const { amount, orderDetails } = req.body;
+  const { amount, orderDetails } = req.body; // Lấy thông tin số tiền và chi tiết đơn hàng từ request body
   //Xác thực chi tiết đơn hàng và số tiền
   if (!orderDetails || !orderDetails.id_nguoi_dung || !orderDetails.chi_tiet_don_hang || amount <= 0) {
     return res.status(400).json({ message: "Invalid order details or amount" });
@@ -80,9 +81,11 @@ exports.zaloPay = async (req, res) => {
       ghi_chu: orderDetails.ghi_chu || "",
       phi_ship: orderDetails.phi_ship || "Miễn phí",
     });
+        // Lưu chi tiết các sản phẩm trong đơn hàng
     const chiTietPromises = orderDetails.chi_tiet_don_hang.map(async (ct) => {
       const product = await Product.findByPk(ct.id_san_pham);
       if (product) {
+        // Lưu chi tiết đơn hàng
         await ChiTietDonHang.create({
           gia_san_pham: product.gia_giam > 0 ? product.gia_giam : product.gia_san_pham,
           ten_san_pham: product.ten_san_pham,
@@ -99,21 +102,27 @@ exports.zaloPay = async (req, res) => {
     };
 
     const paymentData = {
+      // Mã ứng dụng ZaloPay
       app_id: config.app_id,
+      // Mã giao dịch
       app_trans_id: app_trans_id,
+      // ID người dùng
       app_user: orderDetails.id_nguoi_dung,
       app_time: Date.now(),
+      // Chi tiết đơn hàng
       item: JSON.stringify(orderDetails.chi_tiet_don_hang),
       embed_data: JSON.stringify(embed_data),
       amount: amount,
+      // Mô tả thanh toán
       description: `Payment for order #${transID}`,
       bank_code: "",
       callback_url: "https://c4e2-171-243-48-82.ngrok-free.app/pttt/callback",
     };
-
+        // Tính toán MAC cho yêu cầu thanh toán
     const data = `${config.app_id}|${paymentData.app_trans_id}|${paymentData.app_user}|${paymentData.amount}|${paymentData.app_time}|${paymentData.embed_data}|${paymentData.item}`;
+    // Tạo MAC từ dữ liệu yêu cầu
     paymentData.mac = CryptoJS.HmacSHA256(data, config.key1).toString();
-
+        // Gửi yêu cầu thanh toán đến ZaloPay
     const response = await axios.post(config.endpoint, null, { params: paymentData });
 
     return res.status(200).json(response.data);

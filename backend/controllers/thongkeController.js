@@ -186,19 +186,26 @@ exports.getSanPhamBanChayNhat = async (req, res) => {
 
 
 exports.getDoanhThuDonHangTheoThoiGian = async (req, res) => {
+  // Lấy giá trị 'period' từ query string (ví dụ: day, month, year)
   const { period } = req.query; 
+    // Kiểm tra giá trị 'period' có hợp lệ không (phải là day, month, hoặc year)
   if (!['day', 'month', 'year'].includes(period)) {
     return res.status(400).json({ error: 'Không hợp lệ phải là ngày tháng năm' });
   }
   try {
+    //lấy doanh thu theo ngày, tháng, năm
     let attributes = [];
     let group = [];
+        // Xác định cột cần lấy và cách nhóm dữ liệu dựa vào 'period'
     switch (period) {
       case 'day':
         attributes = [
+          // Lấy ngày từ 'thoi_gian_tao'
           [sequelize.fn("day", sequelize.col("thoi_gian_tao")), "day"],
+           // Tính tổng doanh thu ('tong_tien')
           [sequelize.fn("sum", sequelize.col("tong_tien")), "total"],
         ];
+        // Nhóm dữ liệu theo ngày
         group = [sequelize.fn("day", sequelize.col("thoi_gian_tao"))];
         break;
       case 'month':
@@ -227,23 +234,29 @@ exports.getDoanhThuDonHangTheoThoiGian = async (req, res) => {
     });
 
     let result = [];
-
+    // Xử lý kết quả tùy theo "period"
     switch (period) {
       case 'day':
         const doanhThuNgay = new Array(31).fill(0);
         doanhThuDonHangTheo.forEach(item => {
           const day = item.get("day") - 1;
-          const totalRevenue = parseFloat(item.get("total")) || 0;
+          const totalRevenue = parseFloat(item.get("total")) || 0;// Lấy tổng doanh thu, nếu không có thì gán 0
+          // Kiểm tra ngày có hợp lệ không (từ 0 đến 30)
           if (day >= 0 && day < 31) {
+            // Gán doanh thu vào mảng theo ngày
             doanhThuNgay[day] = totalRevenue;
           }
         });
+        // Tạo mảng kết quả với ngày và doanh thu tương ứng
         result = doanhThuNgay.map((totalRevenue, index) => ({
+          // Ngày bắt đầu từ 1, nên cần cộng thêm 1
           day: index + 1,
+          // Doanh thu tương ứng
           totalRevenue,
         }));
         break;
       case 'month':
+        ///
         const doanhThuThang = new Array(12).fill(0);
         doanhThuDonHangTheo.forEach(item => {
           const month = item.get("month") - 1;
@@ -258,20 +271,28 @@ exports.getDoanhThuDonHangTheoThoiGian = async (req, res) => {
         }));
         break;
       case 'year':
+        // Lấy danh sách các năm từ kết quả truy vấn
         const years = doanhThuDonHangTheo.map(item => item.get("year"));
+        // Tìm năm nhỏ nhất và lớn nhất
         const minYear = Math.min(...years);
+        //tìm năm lớn nhất
         const maxYear = Math.max(...years);
         const numberOfYears = maxYear - minYear + 1;
         const doanhThuNam = Array.from({ length: numberOfYears }, (_, i) => ({
+          //tạo danh sách năm
           year: minYear + i,
+          //tổng doanh thu
           totalRevenue: 0,
         }));
 
         doanhThuDonHangTheo.forEach(item => {
           const year = item.get("year");
+          //lấy tổng doanh thu từ kết quả truy vấn hoặc gán 0 nếu không có
           const totalRevenue = parseFloat(item.get("total")) || 0;
+          //tìm vị trí của năm trong mảng doanhThuNam
           const index = year - minYear;
           if (index >= 0 && index < doanhThuNam.length) {
+            //gán tổng doanh thu vào mảng
             doanhThuNam[index].totalRevenue = totalRevenue;
           }
         });
