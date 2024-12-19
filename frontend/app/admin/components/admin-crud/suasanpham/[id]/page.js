@@ -35,6 +35,7 @@ export default function SuaSanPham({ params }) {
     mo_ta: "",
     hinh_anh: "",
   });
+  const [errors, setErrors] = useState({});
   const [thuongHieu, setThuongHieu] = useState([]);
   const [cates, setCates] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
@@ -45,18 +46,26 @@ export default function SuaSanPham({ params }) {
   useEffect(() => {
     const fetchProductAndData = async () => {
       try {
-        const brandResponse = await fetch("http://localhost:5000/thuonghieu/allthuonghieu");
+        const brandResponse = await fetch(
+          "http://localhost:5000/thuonghieu/allthuonghieu"
+        );
         const brandData = await brandResponse.json();
         setThuongHieu(brandData.th);
 
-        const cateResponse = await fetch("http://localhost:5000/cate/getAllCateadmin");
+        const cateResponse = await fetch(
+          "http://localhost:5000/cate/getAllCateadmin"
+        );
         const cateData = await cateResponse.json();
         setCates(cateData.cates);
 
-        const productResponse = await fetch(`http://localhost:5000/product/chitietsp/${id}`);
+        const productResponse = await fetch(
+          `http://localhost:5000/product/chitietsp/${id}`
+        );
         const productData = await productResponse.json();
         setFormData({ ...productData.product });
-        setPreviewImage(`http://localhost:5000/images/${productData.product.hinh_anh}`);
+        setPreviewImage(
+          `http://localhost:5000/images/${productData.product.hinh_anh}`
+        );
       } catch (error) {
         setErrorMessage("Đã xảy ra lỗi khi tải dữ liệu.");
       }
@@ -70,6 +79,10 @@ export default function SuaSanPham({ params }) {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
     }));
   };
 
@@ -87,21 +100,57 @@ export default function SuaSanPham({ params }) {
       reader.readAsDataURL(file);
     }
   };
+  const validateForm = () => {
+    const newErrors = {};
+    const {
+      ten_san_pham,
+      ten,
+      gia_san_pham,
+      ma_san_pham,
+      so_luong,
+      id_thuong_hieu,
+      hinh_anh,
+      mo_ta,
+    } = formData;
+
+    if (!ten_san_pham) newErrors.ten_san_pham = "Vui lòng nhập tên sản phẩm.";
+    if (!ten) newErrors.ten = "Vui lòng nhập tên chi tiết.";
+    if (!gia_san_pham || isNaN(gia_san_pham) || gia_san_pham <= 0) {
+      newErrors.gia_san_pham = "Vui lòng nhập giá sản phẩm hợp lệ.";
+    }
+    if (!ma_san_pham) newErrors.ma_san_pham = "Vui lòng nhập mã sản phẩm.";
+    if (so_luong === "" || isNaN(so_luong) || so_luong < 0) {
+      newErrors.so_luong = "Vui lòng nhập số lượng hợp lệ.";
+    }
+    if (!id_thuong_hieu)
+      newErrors.id_thuong_hieu = "Vui lòng chọn thương hiệu.";
+    if (!hinh_anh) newErrors.hinh_anh = "Vui lòng chọn hình ảnh sản phẩm.";
+    if (!mo_ta) newErrors.mo_ta = "Vui lòng nhập mô tả sản phẩm.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   // Xử lý submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
 
-    const { ten_san_pham, gia_san_pham, id_thuong_hieu } = formData;
-    if (!ten_san_pham || !gia_san_pham || !id_thuong_hieu) {
-      setErrorMessage("Vui lòng điền tất cả các trường bắt buộc.");
+    if (!validateForm()) {
+      Swal.fire({
+        title: "Lỗi",
+        text: "Vui lòng điền tất cả các trường bắt buộc.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
       return;
     }
-
     const data = new FormData();
     Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
+      if (key === "id_danh_muc") {
+        data.append(key, formData[key] || "");
+      } else {
+        data.append(key, formData[key]);
+      }
     });
 
     if (imageFile) {
@@ -109,17 +158,22 @@ export default function SuaSanPham({ params }) {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/product/capnhatsp/${id}`, {
-        method: "PUT",
-        body: data,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:5000/product/capnhatsp/${id}`,
+        {
+          method: "PUT",
+          body: data,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Cập nhật sản phẩm không thành công");
+        throw new Error(
+          errorData.error || "Cập nhật sản phẩm không thành công"
+        );
       }
 
       await Swal.fire({
@@ -131,7 +185,12 @@ export default function SuaSanPham({ params }) {
       window.location.href = "/admin/components/quanlyadmin/sanpham";
     } catch (error) {
       console.error("Lỗi khi cập nhật sản phẩm:", error.message);
-      setErrorMessage("Đã xảy ra lỗi khi cập nhật sản phẩm: " + error.message);
+      Swal.fire({
+        title: "Lỗi",
+        text: "Đã xảy ra lỗi khi thêm sản phẩm: " + error.message,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     }
   };
 
@@ -147,15 +206,14 @@ export default function SuaSanPham({ params }) {
         <div className={styles.bg}>
           <form onSubmit={handleSubmit}>
             <div className={styles.container1}>
-            {/* Thương hiệu (Brand) Select */}
-            <div className={styles.formGroup}>
-                <label htmlFor="id_thuong_hieu">Thương hiệu *</label>
+              {/* Thương hiệu (Brand) Select */}
+              <div className={styles.formGroup}>
+                <label htmlFor="id_thuong_hieu">Thương hiệu</label>
                 <select
                   id="id_thuong_hieu"
                   name="id_thuong_hieu"
                   value={formData.id_thuong_hieu}
                   onChange={handleChange}
-                  required
                 >
                   <option value="">Chọn thương hiệu</option>
                   {thuongHieu.map((brand) => (
@@ -164,6 +222,9 @@ export default function SuaSanPham({ params }) {
                     </option>
                   ))}
                 </select>
+                {errors.id_thuong_hieu && (
+                  <span className="text-danger">{errors.id_thuong_hieu}</span>
+                )}
               </div>
 
               {/* Danh mục (Category) Select */}
@@ -185,15 +246,17 @@ export default function SuaSanPham({ params }) {
               </div>
               {/* Tên sản phẩm */}
               <div className={styles.formGroup}>
-                <label htmlFor="ten_san_pham">Tên sản phẩm *</label>
+                <label htmlFor="ten_san_pham">Tên sản phẩm</label>
                 <input
                   type="text"
                   id="ten_san_pham"
                   name="ten_san_pham"
                   value={formData.ten_san_pham}
                   onChange={handleChange}
-                  required
                 />
+                {errors.ten_san_pham && (
+                  <span className="text-danger">{errors.ten_san_pham}</span>
+                )}
               </div>
 
               {/* Tên chi tiết */}
@@ -206,19 +269,24 @@ export default function SuaSanPham({ params }) {
                   value={formData.ten}
                   onChange={handleChange}
                 />
+                {errors.ten && (
+                  <span className="text-danger">{errors.ten}</span>
+                )}
               </div>
 
               {/* Giá sản phẩm */}
               <div className={styles.formGroup}>
-                <label htmlFor="gia_san_pham">Giá sản phẩm *</label>
+                <label htmlFor="gia_san_pham">Giá sản phẩm</label>
                 <input
                   type="text"
                   id="gia_san_pham"
                   name="gia_san_pham"
                   value={formData.gia_san_pham}
                   onChange={handleChange}
-                  required
                 />
+                {errors.gia_san_pham && (
+                  <span className="text-danger">{errors.gia_san_pham}</span>
+                )}
               </div>
 
               {/* Giá giảm */}
@@ -233,8 +301,6 @@ export default function SuaSanPham({ params }) {
                 />
               </div>
 
-              
-
               {/* Mã sản phẩm */}
               <div className={styles.formGroup}>
                 <label htmlFor="ma_san_pham">Mã sản phẩm</label>
@@ -245,8 +311,24 @@ export default function SuaSanPham({ params }) {
                   value={formData.ma_san_pham}
                   onChange={handleChange}
                 />
+                {errors.ma_san_pham && (
+                  <span className="text-danger">{errors.ma_san_pham}</span>
+                )}
               </div>
-
+              {/* Số lượng */}
+              <div className={styles.formGroup}>
+                <label htmlFor="so_luong">Số lượng</label>
+                <input
+                  type="text"
+                  id="so_luong"
+                  name="so_luong"
+                  value={formData.so_luong}
+                  onChange={handleChange}
+                />
+                {errors.so_luong && (
+                  <span className="text-danger">{errors.so_luong}</span>
+                )}
+              </div>
               {/* Độ chịu nước */}
               <div className={styles.formGroup}>
                 <label htmlFor="do_chiu_nuoc">Độ chịu nước</label>
@@ -279,18 +361,6 @@ export default function SuaSanPham({ params }) {
                   id="gioi_tinh"
                   name="gioi_tinh"
                   value={formData.gioi_tinh}
-                  onChange={handleChange}
-                />
-              </div>
-
-              {/* Số lượng */}
-              <div className={styles.formGroup}>
-                <label htmlFor="so_luong">Số lượng</label>
-                <input
-                  type="text"
-                  id="so_luong"
-                  name="so_luong"
-                  value={formData.so_luong}
                   onChange={handleChange}
                 />
               </div>
@@ -447,7 +517,11 @@ export default function SuaSanPham({ params }) {
                     <img
                       src={previewImage}
                       alt="Preview"
-                      style={{ width: "60px", height: "60px", objectFit: "cover" }}
+                      style={{
+                        width: "60px",
+                        height: "60px",
+                        objectFit: "cover",
+                      }}
                     />
                   )}
                   <input
@@ -455,6 +529,9 @@ export default function SuaSanPham({ params }) {
                     accept="image/*"
                     onChange={handleFileChange}
                   />
+                  {errors.hinh_anh && (
+                    <span className="text-danger">{errors.hinh_anh}</span>
+                  )}
                 </div>
               </div>
 
@@ -467,6 +544,9 @@ export default function SuaSanPham({ params }) {
                   value={formData.mo_ta}
                   onChange={handleChange}
                 />
+                {errors.mo_ta && (
+                  <span className="text-danger">{errors.mo_ta}</span>
+                )}
               </div>
 
               {/* Hiển thị thông báo lỗi */}

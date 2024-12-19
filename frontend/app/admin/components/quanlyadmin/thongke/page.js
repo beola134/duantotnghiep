@@ -2,6 +2,7 @@
 import styles from "./thongke.module.css";
 import classNames from 'classnames/bind';
 import { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 const cx = classNames.bind(styles);
@@ -415,9 +416,11 @@ export default function AdminStatistics() {
                         )}
                       </td>
                       <td>
-                        <span className={`${cx("status", "completed")}`}>
-                          {item.trang_thai}
-                        </span>
+                        <Link href="/admin/components/quanlyadmin/quanlydonhang">
+                          <span className={`${cx("status", "completed")}`}>
+                            {item.trang_thai}
+                          </span>
+                        </Link>
                       </td>
                     </tr>
                   ))}
