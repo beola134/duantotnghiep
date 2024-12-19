@@ -179,7 +179,7 @@ exports.deleteUser = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "Không thể xóa người dùng do có đơn hàng liên quan", 
+      message: "Không thể xóa người dùng", 
   });
   
   }
